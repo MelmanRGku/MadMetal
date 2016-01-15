@@ -66,8 +66,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Global\Debug.cpp" />
     <ClCompile Include="Files\FileReader.cpp" />
+    <ClCompile Include="Global\Debug.cpp" />
     <ClCompile Include="Files\FileWriter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Global\Settings.cpp" />
