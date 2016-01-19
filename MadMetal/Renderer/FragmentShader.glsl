@@ -4,7 +4,7 @@
 // CPSC 453 - Introduction to Computer Graphics
 // Assignment 3
 //
-// Fragment shader for phong illumination
+// Texture fragment shader for phong illumination
 // Note: This file should not need to be modified.
 //
 
@@ -15,6 +15,7 @@ in VS_OUT
     vec3 L;
     vec3 V;
     vec3 C;
+    vec2 uv;
 } fs_in;
 
 // Material properties
@@ -22,6 +23,11 @@ uniform vec3 diffuse_albedo = vec3(0.5, 0.2, 0.7);
 uniform vec3 specular_albedo = vec3(0.7);
 uniform float specular_power = 128.0;
 uniform vec3 ambient = vec3(0.1, 0.1, 0.1);
+
+// Texture Mapping
+uniform sampler2D texObject;
+uniform bool texValid;
+
 
 void main(void)
 {
@@ -36,6 +42,10 @@ void main(void)
     // Compute the diffuse and specular components for each fragment
     // May replace the colour value with diffuse albedo
     vec3 diffuse = max(dot(N, L), 0.0) * fs_in.C; // diffuse_albedo;
+	if (texValid)
+		diffuse *= vec3(texture(texObject, fs_in.uv));
+	else
+		diffuse *= vec3(1, 1, 1);
     vec3 specular = pow(max(dot(R, V), 0.0), specular_power) * specular_albedo;
 
     // Write final colour to the framebuffer

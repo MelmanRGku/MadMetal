@@ -4,7 +4,7 @@
 // CPSC 453 - Introduction to Computer Graphics
 // Assignment 3
 //
-// Vertex shader for phong illumination
+// Texture vertex shader for phong illumination
 // Note: This file should not need to be modified.
 //
 
@@ -12,6 +12,7 @@
 layout (location = 0) in vec4 position_attr;
 layout (location = 1) in vec3 colour_attr;
 layout (location = 2) in vec3 normal_attr;
+layout (location = 3) in vec3 texcoords_attr;
 
 // Matrices we'll need
 uniform highp mat4 model_matrix;
@@ -25,6 +26,7 @@ out VS_OUT
     vec3 L;
     vec3 V;
     vec3 C;
+    vec2 uv;
 } vs_out;
 
 // Position of light
@@ -49,6 +51,9 @@ void main(void)
 
     // Store the colour attribute
     vs_out.C = colour_attr;
+
+    // Pass along the texture coordinates
+    vs_out.uv = texcoords_attr.st;
 
     // Calculate the clip-space position of each vertex
     gl_Position = proj_matrix * P;

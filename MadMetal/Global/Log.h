@@ -2,17 +2,16 @@
 
 #include "..\Files\FileWriter.h"
 
-class Debug
+class Log
 {
 private:
 	static FileWriter *fw;
-	static bool debugMode;
+	static bool logEnabled;
 public:
-	Debug();
-	~Debug();
+	Log();
+	~Log();
 	static void init(const char* fileToWrite);
-	static void enableDebug() { debugMode = true; }
-	static void disableDebug() { debugMode = false; }
+	static void enableLogging(bool enable = true) { logEnabled = enable; }
 	static void writeLine(const std::string line);
 	static void writeLine(const char* line);
 };

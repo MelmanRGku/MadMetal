@@ -2,7 +2,7 @@
 
 #include "..\Libraries\glew\glew.h"
 #include "..\Files\FileReader.h"
-#include "..\Global\Debug.h"
+#include "..\Global\Log.h"
 #include <string>
 #include <vector>
 

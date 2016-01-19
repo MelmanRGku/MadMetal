@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\Global\Debug.h"
+#include "..\Global\Log.h"
 #include <fstream>
 #include <string>
 #include <vector>

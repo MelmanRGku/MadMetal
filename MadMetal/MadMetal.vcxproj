@@ -67,23 +67,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Files\FileReader.cpp" />
-    <ClCompile Include="Global\Debug.cpp" />
+    <ClCompile Include="Global\Log.cpp" />
     <ClCompile Include="Files\FileWriter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Global\Settings.cpp" />
+    <ClCompile Include="Objects\ObjModel.cpp" />
+    <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Global\Debug.h" />
+    <ClInclude Include="Global\Log.h" />
     <ClInclude Include="Files\FileReader.h" />
     <ClInclude Include="Files\FileWriter.h" />
     <ClInclude Include="Global\Settings.h" />
+    <ClInclude Include="Objects\ObjModel.h" />
+    <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Renderer\ShaderLoader.h" />
     <ClInclude Include="Renderer\ShaderProgram.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="settings.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
