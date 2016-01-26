@@ -67,24 +67,35 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Files\FileReader.cpp" />
+    <ClCompile Include="Objects\GameObject.cpp" />
     <ClCompile Include="Global\Log.cpp" />
     <ClCompile Include="Files\FileWriter.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Handler.cpp" />
     <ClCompile Include="Global\Settings.cpp" />
+    <ClCompile Include="Objects\Model.cpp" />
     <ClCompile Include="Objects\ObjModel.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
+    <ClCompile Include="Simulation\GameWorld.cpp" />
+    <ClCompile Include="Renderer\VAO.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="Objects\GameObject.h" />
+    <ClInclude Include="Objects\Model.h" />
+    <ClInclude Include="Simulation\GameWorld.h" />
     <ClInclude Include="Global\Log.h" />
     <ClInclude Include="Files\FileReader.h" />
     <ClInclude Include="Files\FileWriter.h" />
     <ClInclude Include="Global\Settings.h" />
+    <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Objects\ObjModel.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Renderer\ShaderLoader.h" />
     <ClInclude Include="Renderer\ShaderProgram.h" />
+    <ClInclude Include="Simulation\Simulation.h" />
+    <ClInclude Include="Renderer\VAO.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

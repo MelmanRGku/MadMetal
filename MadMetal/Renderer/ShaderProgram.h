@@ -8,11 +8,12 @@ class ShaderProgram
 {
 private:
 public:
+	static const GLuint POSITION_ATTRIBUTE_LOCATION = 0,
+		COLOUR_ATTRIBUTE_LOCATION = 1,
+		NORMAL_ATTRIBUTE_LOCATION = 2,
+		UV_ATTRIBUTE_LOCATION = 3,
+		TOTAL_NUMBER_OF_ATTRIBUTES = 4;
 	GLuint programID,					//ID of the program
-		positionAttribute,				//vertex position attribute
-		normalAttribute,				//vertex normal attribute
-		colourAttribute,				//vertex colour attribute
-		uvAttribute,					//vertex uv attribute
 		projectionMatrixUniform,		//projection matrix uniform
 		viewMatrixUniform,				//view matrix uniform
 		modelMatrixUniform,				//model matrix uniform

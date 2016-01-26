@@ -47,8 +47,9 @@ std::string Settings::getSetting(char *name) {
 	if (iter != settings.end())
 		return iter->second;
 	//otherwise nothing
-	else
+	else {
 		return NULL;
+	}
 }
 
 /*

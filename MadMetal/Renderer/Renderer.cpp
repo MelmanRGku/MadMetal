@@ -30,10 +30,10 @@ Renderer::~Renderer()
 /*
 	Draws a obj model
 */
-void Renderer::draw(ObjModel *model) {
-	long cBufferSize = model->colours.size() * sizeof(glm::vec3),
-		vBufferSize = model->vertices.size() * sizeof(glm::vec3),
-		nBufferSize = model->normals.size() * sizeof(glm::vec3);
+void Renderer::draw(GameObject *object) {
+	long cBufferSize = object->model->colours.size() * sizeof(glm::vec3),
+		vBufferSize = object->model->vertices.size() * sizeof(glm::vec3),
+		nBufferSize = object->model->normals.size() * sizeof(glm::vec3);
 
 	//set model matrix uniform
 	glUniformMatrix4fv(shader->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
@@ -42,35 +42,22 @@ void Renderer::draw(ObjModel *model) {
 	glUniform1i(shader->textureValidUniform, false);
 
 	// Bind to the correct context
-	glBindBuffer(GL_ARRAY_BUFFER, model->vbo);
-
-	// Enable the attribute arrays
-	glEnableVertexAttribArray(shader->positionAttribute);
-	glEnableVertexAttribArray(shader->colourAttribute);
-	glEnableVertexAttribArray(shader->normalAttribute);
-	glEnableVertexAttribArray(shader->uvAttribute);
-
-	// Specifiy where these are in the VBO
-	glVertexAttribPointer(shader->positionAttribute, 3, GL_FLOAT, 0, GL_FALSE,
-		(const GLvoid*)0);
-
-	glVertexAttribPointer(shader->colourAttribute, 3, GL_FLOAT, 0, GL_FALSE,
-		(const GLvoid*)(vBufferSize));
-
-	glVertexAttribPointer(shader->normalAttribute, 3, GL_FLOAT, 0, GL_FALSE,
-		(const GLvoid*)(vBufferSize + cBufferSize));
-
-	glVertexAttribPointer(shader->uvAttribute, 2, GL_FLOAT, 0, GL_FALSE,
-		(const GLvoid*)(vBufferSize + cBufferSize + nBufferSize));
+	glBindVertexArray(object->vao->getVaoId());
 
 	// Draw the triangles
-	glDrawArrays(GL_TRIANGLES, 0, model->vertices.size());
+	glDrawArrays(GL_TRIANGLES, 0, object->model->vertices.size());
 
-	// Disable attribute arrays
-	glDisableVertexAttribArray(shader->positionAttribute);
-	glDisableVertexAttribArray(shader->colourAttribute);
-	glDisableVertexAttribArray(shader->normalAttribute);
-	glDisableVertexAttribArray(shader->uvAttribute);
+	glBindVertexArray(0);
+
+}
+
+
+void Renderer::draw(std::vector<GameObject *> *objects) {
+	startDrawing();
+	for (int i = 0; i < objects->size(); i++) {
+		draw(objects->at(i));
+	}
+	stopDrawing();
 }
 
 /*

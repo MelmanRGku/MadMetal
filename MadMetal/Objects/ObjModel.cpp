@@ -5,20 +5,12 @@ ObjModel::ObjModel()
 {
 }
 
+ObjModel::ObjModel(const char* fileName){
+	loadFromFile(fileName);
+}
 
 ObjModel::~ObjModel()
 {
-}
-
-/*
-	Clears all the information about the model:
-	vertices, normals, colours and uvs
-*/
-void ObjModel::clearInfo() {
-	vertices.clear();
-	uvs.clear();
-	normals.clear();
-	colours.clear();
 }
 
 
@@ -98,47 +90,4 @@ void ObjModel::loadFromFile(const char* fileName) {
 	parseObjFile(fileName);
 	//set some default colour for all vertices
 	setColour(1.f, 0.f, 0.f);
-	//setup vbo
-	setupVBO();
-}
-
-/*
-	Sets the colour for all vertices to some value
-*/
-void ObjModel::setColour(glm::vec3 colour) {
-	colours.clear();
-	for (int i = 0; i < vertices.size(); i++) {
-		colours.push_back(glm::vec3(colour));
-	}
-}
-
-/*
-	@Overload
-*/
-void ObjModel::setColour(float r, float g, float b){
-	setColour(glm::vec3(r, g, b));
-}
-
-/*
-	Sets up a vbo for the object
-*/
-void ObjModel::setupVBO() {
-	long cBufferSize = colours.size() * sizeof(glm::vec3),
-		vBufferSize = vertices.size() * sizeof(glm::vec3),
-		nBufferSize = normals.size() * sizeof(glm::vec3),
-		uvBufferSize = uvs.size() * sizeof(glm::vec2);
-	
-	//create and bind the VBO
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-	// Allocate buffer
-	glBufferData(GL_ARRAY_BUFFER, vBufferSize + cBufferSize + nBufferSize + uvBufferSize, NULL,
-		GL_STATIC_DRAW);
-
-	// Upload the data to the GPU
-	glBufferSubData(GL_ARRAY_BUFFER, 0, vBufferSize, &vertices[0]);
-	glBufferSubData(GL_ARRAY_BUFFER, vBufferSize, cBufferSize, &colours[0]);
-	glBufferSubData(GL_ARRAY_BUFFER, vBufferSize + cBufferSize, nBufferSize, &normals[0]);
-	glBufferSubData(GL_ARRAY_BUFFER, vBufferSize + cBufferSize + nBufferSize, uvBufferSize, &vertices[0]);
 }

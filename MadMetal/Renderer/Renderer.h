@@ -3,7 +3,7 @@
 #include "..\Libraries\glm\mat4x4.hpp"
 #include "..\Libraries\glm\gtc\matrix_transform.hpp"
 #include "..\Global\Settings.h"
-#include "..\Objects\ObjModel.h"
+#include "..\Objects\GameObject.h"
 #include "ShaderProgram.h"
 
 class Renderer
@@ -15,7 +15,8 @@ public:
 	Renderer();
 	~Renderer();
 	void setShader(ShaderProgram *sp) { shader = sp; }
-	void draw(ObjModel *model);
+	void draw(GameObject *object);
+	void draw(std::vector<GameObject *> *objects);
 	void startDrawing();
 	void stopDrawing();
 };

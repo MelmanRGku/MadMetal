@@ -18,11 +18,7 @@ ShaderProgram::ShaderProgram(const char* vertexShaderPath, const char* fragmentS
 	Log::writeLine(line);
 	delete[] line;
 
-	//get and store all the attributes and uniforms
-	positionAttribute = glGetAttribLocation(programID, "position_attr");
-	colourAttribute = glGetAttribLocation(programID, "colour_attr");
-	normalAttribute = glGetAttribLocation(programID, "normal_attr");
-	uvAttribute = glGetAttribLocation(programID, "texcoords_attr");
+	//get and store all the uniforms
 	projectionMatrixUniform = glGetUniformLocation(programID, "proj_matrix");
 	viewMatrixUniform = glGetUniformLocation(programID, "view_matrix");
 	modelMatrixUniform = glGetUniformLocation(programID, "model_matrix");

@@ -5,39 +5,30 @@
 #include "Objects\ObjModel.h"
 #include "Global\Settings.h"
 #include "Global\Log.h"
+#include "Input\Input.h"
+#include "Simulation\Simulation.h"
 #include <iostream>
 
-Renderer *r;
-ObjModel *om;
+Renderer *renderer;
+Input *input;
+Simulation *simulation;
 
 void renderScene(void)
 {
-	std::cout << 1;
+	std::cout << "Begining new Game cycle.... \n";
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.3, 0.3, 1.0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	//initialize drawing
-	r->startDrawing();
-	//draw the obj model
-	r->draw(om);
-	//uninitialize drawing
-	r->stopDrawing();
+	input->update();
+	simulation->simulate();
+	renderer->draw(simulation->getGameWorld()->getGameObjects());
 
 	glutSwapBuffers();
+	std::cout << "Game Cycle finished.... \n\n";
 }
 
-void rendererTest() {
-	//create a renderer and give it the shader program
-	r = new Renderer();
-	ShaderProgram *sp = new ShaderProgram("Renderer/VertexShader.glsl", "Renderer/FragmentShader.glsl");
-	r->setShader(sp);
-	//load obj model from a file 
-	om = new ObjModel();
-	om->loadFromFile("Assets/Models/Stormtrooper.obj");
-}
-
-void init() {
+void initStatics() {
 	//load settings from a file
 	Settings::loadSettingsFromFile("settings.txt");
 	//initialize the debug (log)
@@ -46,18 +37,25 @@ void init() {
 	Log::enableLogging(std::stoi(Settings::getSetting("debugEnabled")));
 }
 
-int main(int argc, char **argv)
-{
-	//initialize our stuff
-	init();
+void initObjects() {
+	input = new Input();
+	simulation = new Simulation();
+	simulation->setupBasicGameWorldObjects();
 
+	//create a renderer and give it the shader program
+	renderer = new Renderer();
+	ShaderProgram *sp = new ShaderProgram("Renderer/VertexShader.glsl", "Renderer/FragmentShader.glsl");
+	renderer->setShader(sp);
+}
+
+void initOpengl(int argc, char **argv) {
 	//initialize the window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(500, 500);
 	glutInitWindowSize(std::stoi(Settings::getSetting("screenWidth")), std::stoi(Settings::getSetting("screenHeight")));
 	glutCreateWindow("OpenGL First Window");
-	
+
 	glEnable(GL_DEPTH_TEST);
 	// register callbacks
 	glutDisplayFunc(renderScene);
@@ -65,8 +63,14 @@ int main(int argc, char **argv)
 	//initialize opengl functions
 	glewInit();
 
-	//initialize the renderer test
-	rendererTest();
+}
+
+int main(int argc, char **argv)
+{
+	//initialize our stuff
+	initStatics();
+	initOpengl(argc, argv);
+	initObjects();
 
 	glutMainLoop();
 

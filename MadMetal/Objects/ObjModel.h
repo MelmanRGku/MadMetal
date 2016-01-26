@@ -4,23 +4,16 @@
 #include "../Libraries/glm/vec3.hpp"
 #include "../Libraries/glm/vec2.hpp"
 #include "../Global/Log.h"
-#include "../Libraries/glew/glew.h"
+#include "Model.h"
 
-class ObjModel
+class ObjModel : public Model
 {
 private:
-	void clearInfo();
 	void parseObjFile(const char* fileName);
-	void setupVBO();
 public:
-	std::vector<glm::vec3> vertices, normals, colours;
-	std::vector<glm::vec2> uvs;
-	GLuint vbo;
-
 	ObjModel();
+	ObjModel(const char* fileName);
 	~ObjModel();
 	void loadFromFile(const char* fileName);
-	void setColour(float r, float g, float b);
-	void setColour(glm::vec3 colour);
 };
 
