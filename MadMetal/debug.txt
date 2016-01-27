@@ -5,3 +5,5 @@ Compiling fragment shader.
 Linking program
 
 New shader loaded with program ID 3
+Controller at port 0 is now owned
+Handle for controller at port 0 is returned 
