@@ -1,13 +1,8 @@
 Compiling vertex shader.
 
 Compiling fragment shader.
-0(52) : warning C7533: global variable gl_FragColor is deprecated after version 120
 
 Linking program
-Fragment info
--------------
-0(52) : warning C7533: global variable gl_FragColor is deprecated after version 120
 
 New shader loaded with program ID 3
 Controller at port 0 is now owned
-Handle for controller at port 0 is returned 
