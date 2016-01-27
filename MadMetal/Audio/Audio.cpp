@@ -9,8 +9,6 @@ void Audio::update()
 	float sourceY;
 	int channelNum;
 
-	/*TODO Delete this comment */
-
 
 	for (unsigned int i = 0; i < positionalSources.size(); i++)
 	{
