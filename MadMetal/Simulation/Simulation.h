@@ -19,7 +19,7 @@ private:
 	{
 		std::cout << "Physics Simulated \n";
 		a.update();
-		a.playNewSound(0);
+		//a.playNewSound(0);
 
 	}
 
