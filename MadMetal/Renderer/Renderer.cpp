@@ -13,6 +13,8 @@ Renderer::Renderer()
 		100.f
 		);
 
+	//hello
+
 	viewMatrix = glm::lookAt(
 		glm::vec3(15, 0, 15),
 		glm::vec3(0, 0, 0),
