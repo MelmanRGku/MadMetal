@@ -14,6 +14,7 @@ Renderer::Renderer()
 		);
 
 	//hello
+	//bitches
 
 	viewMatrix = glm::lookAt(
 		glm::vec3(15, 0, 15),
