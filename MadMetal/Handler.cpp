@@ -18,6 +18,7 @@ GamePad *gamePad = new GamePad();
 int waitCounter = 0;
 int packet = 0;
 DummyPosition * position = new DummyPosition(0, 1);
+long lastDrawCallTime = 0;
 
 void updateSound() {
 
@@ -72,13 +73,17 @@ void initObjects() {
 
 void renderScene(void)
 {
+	long currentDrawCallTime = glutGet(GLUT_ELAPSED_TIME);
+	long dt = currentDrawCallTime - lastDrawCallTime;
+	lastDrawCallTime = currentDrawCallTime;
+
 	std::cout << "Begining new Game cycle.... \n";
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.3, 0.3, 1.0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	input->updateGamePads();
-	simulation->simulate();
+	simulation->simulate(dt);
 	renderer->draw(simulation->getGameWorld()->getGameObjects());
 
 	updateSound();

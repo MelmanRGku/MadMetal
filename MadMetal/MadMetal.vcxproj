@@ -44,6 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -73,6 +74,8 @@
     <ClCompile Include="Files\FileReader.cpp" />
     <ClCompile Include="Input\GamePad.cpp" />
     <ClCompile Include="Input\Input.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectRotationUpdater.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectPositionUpdater.cpp" />
     <ClCompile Include="Objects\GameObject.cpp" />
     <ClCompile Include="Global\Log.cpp" />
     <ClCompile Include="Files\FileWriter.cpp" />
@@ -80,6 +83,9 @@
     <ClCompile Include="Global\Settings.cpp" />
     <ClCompile Include="Objects\Model.cpp" />
     <ClCompile Include="Objects\ObjModel.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdater.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdaterParallel.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
@@ -89,8 +95,13 @@
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Input\GamePad.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectRotationUpdater.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectPositionUpdater.h" />
     <ClInclude Include="Objects\GameObject.h" />
     <ClInclude Include="Objects\Model.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdater.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdaterParallel.h" />
     <ClInclude Include="Simulation\GameWorld.h" />
     <ClInclude Include="Global\Log.h" />
     <ClInclude Include="Files\FileReader.h" />
