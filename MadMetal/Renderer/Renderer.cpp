@@ -14,7 +14,7 @@ Renderer::Renderer()
 		);
 
 	viewMatrix = glm::lookAt(
-		glm::vec3(15, 0, 15),
+		glm::vec3(0, 0, 15),
 		glm::vec3(0, 0, 0),
 		glm::vec3(0, 1, 0)
 		);
@@ -36,7 +36,7 @@ void Renderer::draw(GameObject *object) {
 		nBufferSize = object->model->normals.size() * sizeof(glm::vec3);
 
 	//set model matrix uniform
-	glUniformMatrix4fv(shader->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
+	glUniformMatrix4fv(shader->modelMatrixUniform, 1, false, &object->getModelMatrix()[0][0]);
 	
 	//we want to use color for now. Textures not supported yet
 	glUniform1i(shader->textureValidUniform, false);
@@ -54,7 +54,7 @@ void Renderer::draw(GameObject *object) {
 
 void Renderer::draw(std::vector<GameObject *> *objects) {
 	startDrawing();
-	for (int i = 0; i < objects->size(); i++) {
+	for (unsigned int i = 0; i < objects->size(); i++) {
 		draw(objects->at(i));
 	}
 	stopDrawing();
