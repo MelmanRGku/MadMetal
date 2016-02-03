@@ -38,17 +38,21 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ReferencePath>$(ProjectDir)\Libraries\physx\gpu;$(ProjectDir)\Libraries\physx\characterkinematic;$(ProjectDir)\Libraries\physx\geometry;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx;$(ReferencePath)</ReferencePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx\foundation\windows;$(ProjectDir)\Libraries\physx\common;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx;$(ProjectDir)\Libraries\physx\extensions;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>Libraries\glut;Libraries\glew</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glut32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Libraries\physx;Libraries\glut;Libraries\glew</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glut32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;LowLevelClothDEBUG.lib;LowLevelDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3CookingDEBUG_x86.lib;PhysX3DEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3Gpu_x86.lib;PhysX3GpuCHECKED_x86.lib;PhysX3GpuDEBUG_x86.lib;PhysX3GpuPROFILE_x86.lib;PhysX3VehicleDEBUG.lib;PhysXProfileSDKDEBUG.lib;PhysXVisualDebuggerSDKDEBUG.lib;PxTaskDEBUG.lib;SceneQueryDEBUG.lib;SimulationControllerDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,6 +83,7 @@
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
     <ClCompile Include="Simulation\GameWorld.cpp" />
     <ClCompile Include="Renderer\VAO.cpp" />
+    <ClCompile Include="Simulation\PhysicsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
@@ -94,6 +99,7 @@
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Renderer\ShaderLoader.h" />
     <ClInclude Include="Renderer\ShaderProgram.h" />
+    <ClInclude Include="Simulation\PhysicsManager.h" />
     <ClInclude Include="Simulation\Simulation.h" />
     <ClInclude Include="Renderer\VAO.h" />
   </ItemGroup>
