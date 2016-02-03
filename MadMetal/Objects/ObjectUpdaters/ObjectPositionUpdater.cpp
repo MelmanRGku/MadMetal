@@ -1,7 +1,7 @@
 #include "ObjectPositionUpdater.h"
 
 
-ObjectPositionUpdater::ObjectPositionUpdater(GameObject *obj, glm::vec3 offset, long duration)
+ObjectPositionUpdater::ObjectPositionUpdater(GameObject *obj, glm::vec3 offset, float duration)
 {
 
 	object = obj;
@@ -17,12 +17,12 @@ ObjectPositionUpdater::~ObjectPositionUpdater()
 }
 
 
-void ObjectPositionUpdater::update(long dt) {
+void ObjectPositionUpdater::update(float dt) {
 
 	if (ended())
 		return;
 
-	object->updatePosition(offset * ((float)dt / totalDuration));
+	object->updatePosition(offset * (dt / totalDuration));
 
 	currentDuration += dt;
 }

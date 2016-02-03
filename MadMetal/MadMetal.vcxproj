@@ -72,6 +72,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Audio\Audio.cpp" />
+    <ClCompile Include="Objects\Camera.cpp" />
     <ClCompile Include="Files\FileReader.cpp" />
     <ClCompile Include="Input\GamePad.cpp" />
     <ClCompile Include="Input\Input.cpp" />
@@ -93,9 +94,12 @@
     <ClCompile Include="Simulation\GameWorld.cpp" />
     <ClCompile Include="Renderer\VAO.cpp" />
     <ClCompile Include="Simulation\PhysicsManager.cpp" />
+    <ClCompile Include="Simulation\Scene.cpp" />
+    <ClCompile Include="Simulation\GameSimulation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="Objects\Camera.h" />
     <ClInclude Include="Input\GamePad.h" />
     <ClInclude Include="Objects\GameObject.h" />
     <ClInclude Include="Objects\Model.h" />
@@ -115,7 +119,8 @@
     <ClInclude Include="Renderer\ShaderLoader.h" />
     <ClInclude Include="Renderer\ShaderProgram.h" />
     <ClInclude Include="Simulation\PhysicsManager.h" />
-    <ClInclude Include="Simulation\Simulation.h" />
+    <ClInclude Include="Simulation\Scene.h" />
+    <ClInclude Include="Simulation\GameSimulation.h" />
     <ClInclude Include="Renderer\VAO.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

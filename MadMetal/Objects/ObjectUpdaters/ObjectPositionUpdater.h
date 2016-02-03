@@ -13,8 +13,8 @@ private:
 	glm::vec3 offset;
 
 public:
-	ObjectPositionUpdater(GameObject *obj, glm::vec3 offset, long duration);
+	ObjectPositionUpdater(GameObject *obj, glm::vec3 offset, float duration);
 	~ObjectPositionUpdater();
-	void update(long dt);
+	void update(float dt);
 };
 

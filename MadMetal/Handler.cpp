@@ -6,21 +6,22 @@
 #include "Global\Settings.h"
 #include "Global\Log.h"
 #include "Input\Input.h"
-#include "Simulation\Simulation.h"
+#include "Simulation\GameSimulation.h"
+#include "Simulation\Scene.h"
 #include <iostream>
 #include <windows.h>
 
 Renderer *renderer;
 Input *input;
-Simulation *simulation;
+std::vector<Scene *> *scenes;
 Audio *audio = new Audio();
 GamePad *gamePad = new GamePad();
-int waitCounter = 0;
+float lastDrawCallTime = 0;
+/*int waitCounter = 0;
 int packet = 0;
-DummyPosition * position = new DummyPosition(0, 1);
-long lastDrawCallTime = 0;
+DummyPosition * position = new DummyPosition(0, 1);*/
 
-void updateSound() {
+/*void updateSound() {
 
 	input->updateGamePads();
 	if (packet != gamePad->currentPacket){
@@ -49,7 +50,7 @@ void updateSound() {
 	}
 	position->setPosition(gamePad->getLeftStick().x, gamePad->getLeftStick().y);
 	audio->update();
-}
+}*/
 
 void initStatics() {
 	//load settings from a file
@@ -61,9 +62,11 @@ void initStatics() {
 }
 
 void initObjects() {
+	scenes = new std::vector<Scene *>();
 	input = new Input();
-	simulation = new Simulation();
-	simulation->setupBasicGameWorldObjects();
+	Scene *simulation = new GameSimulation();
+	simulation->initialize();
+	scenes->push_back(simulation);
 
 	//create a renderer and give it the shader program
 	renderer = new Renderer();
@@ -73,8 +76,8 @@ void initObjects() {
 
 void renderScene(void)
 {
-	long currentDrawCallTime = glutGet(GLUT_ELAPSED_TIME);
-	long dt = currentDrawCallTime - lastDrawCallTime;
+	float currentDrawCallTime = (float)glutGet(GLUT_ELAPSED_TIME);
+	float dt = currentDrawCallTime - lastDrawCallTime;
 	lastDrawCallTime = currentDrawCallTime;
 
 	std::cout << "Begining new Game cycle.... \n";
@@ -83,10 +86,11 @@ void renderScene(void)
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	input->updateGamePads();
-	simulation->simulate(dt);
-	renderer->draw(simulation->getGameWorld()->getGameObjects());
-
-	updateSound();
+	for (unsigned int i = 0; i < scenes->size(); i++) {
+		Scene *simulation = scenes->at(i);
+		simulation->simulate(dt);
+		renderer->draw(simulation->getGameWorld()->getGameObjects());
+	}
 
 	glutSwapBuffers();
 	std::cout << "Game Cycle finished.... \n\n";

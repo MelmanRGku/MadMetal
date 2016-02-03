@@ -19,7 +19,7 @@ public:
 	ObjectUpdaterSequence(int type);
 	ObjectUpdaterSequence(int type, int numberOfTimes);
 	~ObjectUpdaterSequence();
-	void update(long dt);
+	void update(float dt);
 	bool ended();
 	void addObjectUpdater(ObjectUpdater *obj);
 	void restart();

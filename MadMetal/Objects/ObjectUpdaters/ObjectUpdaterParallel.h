@@ -18,7 +18,7 @@ public:
 	ObjectUpdaterParallel(int type);
 	ObjectUpdaterParallel(int type, int numberOfTimes);
 	~ObjectUpdaterParallel();
-	void update(long dt);
+	void update(float dt);
 	bool ended();
 	void addObjectUpdater(ObjectUpdater *obj);
 	void restart();

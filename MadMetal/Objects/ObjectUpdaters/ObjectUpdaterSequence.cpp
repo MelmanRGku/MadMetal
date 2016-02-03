@@ -28,7 +28,7 @@ ObjectUpdaterSequence::~ObjectUpdaterSequence()
 }
 
 
-void ObjectUpdaterSequence::update(long dt) {
+void ObjectUpdaterSequence::update(float dt) {
 
 	if (updaters.at(currentStep)->ended())
 		currentStep++;
