@@ -5,6 +5,7 @@
 #include "Objects/GameObject.h"
 #include "Objects/Model.h"
 #include "Renderer/VAO.h"
+#include "PhysicsManager.h"
 #include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
 #include "Objects/ObjectUpdaters/ObjectRotationUpdater.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
@@ -17,13 +18,15 @@ private:
 	GameWorld * gw;
 	Audio a;
 	std::vector<ObjectUpdater *> updaters;
-	
+	PhysicsManager * pm;
 
 	void simulatePhysics()
 	{
 		std::cout << "Physics Simulated \n";
-		a.update();
+		//a.update();
+		//NOTE: a.update() doesn't belong here. Replace with some function that registers stuff to do with the audio engine
 		//a.playNewSound(0);
+		
 
 	}
 
@@ -54,6 +57,7 @@ public:
 	Simulation()
 	{
 		gw = new GameWorld();
+		pm = new PhysicsManager();
 	}
 	~Simulation()
 	{
@@ -102,14 +106,15 @@ public:
 
 		//--------------------TEST 3------------------------------------------------------------------------------------------------
 		
+
 		ObjectUpdaterSequence *upd1 = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
-		upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, 0.5, 0), 1000));
-		upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, -1, 0), 2000));
-		upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, 0.5, 0), 1000));
+		upd1->addObjectUpdater(new ObjectPositionUpdater(gw->getGameObjects()->at(0), glm::vec3(0, 0.5, 0), 1000)); //Note: this only works because we know the stormtrooper is index 0
+		upd1->addObjectUpdater(new ObjectPositionUpdater(gw->getGameObjects()->at(0), glm::vec3(0, -1, 0), 2000));
+		upd1->addObjectUpdater(new ObjectPositionUpdater(gw->getGameObjects()->at(0), glm::vec3(0, 0.5, 0), 1000));
 
 		ObjectUpdaterParallel *upd = new ObjectUpdaterParallel(ObjectUpdaterSequence::TYPE_INFINITE);
 		upd->addObjectUpdater(upd1);
-		upd->addObjectUpdater(new ObjectRotationUpdater(obj, glm::vec3(0, 180, 0), 1000, ObjectRotationUpdater::ANGLE_TYPE_DEGREES));
+		upd->addObjectUpdater(new ObjectRotationUpdater(gw->getGameObjects()->at(0), glm::vec3(0, 180, 0), 1000, ObjectRotationUpdater::ANGLE_TYPE_DEGREES));
 		updaters.push_back(upd);
 		
 	}

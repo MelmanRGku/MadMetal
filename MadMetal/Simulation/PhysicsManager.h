@@ -11,6 +11,7 @@ class PhysicsManager
 public:
 	PhysicsManager();
 	virtual ~PhysicsManager();
+	
 
 private:
 	void initPhysicsSimulation();
@@ -23,4 +24,6 @@ private: // members
 	PxDefaultErrorCallback* defaultErrorCallback_;
 
 	PxPhysics* topLevelPhysics_;
+
+	PxDefaultCpuDispatcher* mCpuDispatcher;
 };

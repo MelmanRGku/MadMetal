@@ -20,6 +20,8 @@ int packet = 0;
 DummyPosition * position = new DummyPosition(0, 1);
 long lastDrawCallTime = 0;
 
+using namespace std;
+
 void updateSound() {
 
 	input->updateGamePads();
@@ -70,6 +72,10 @@ void initObjects() {
 	ShaderProgram *sp = new ShaderProgram("Renderer/VertexShader.glsl", "Renderer/FragmentShader.glsl");
 	renderer->setShader(sp);
 }
+
+//MAIN GAME LOOP
+//TODO:: Clean up function be giving it a more accurate name, and moving rendering specif code to the renderer
+//TODO:: Enforce 60fps to ensure the physics system doesn't flip out. i.e. Insert a condition after the dt is calculated that ensures the correct timestep has passed
 
 void renderScene(void)
 {
