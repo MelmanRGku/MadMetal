@@ -16,6 +16,7 @@ public:
 private:
 	void initPhysicsSimulation();
 	void shutdownPhysicsSimualtion();
+	void updatePhysics(float dt);
 
 private: // members
 	PxFoundation* physicsFoundation_;
@@ -26,4 +27,8 @@ private: // members
 	PxPhysics* topLevelPhysics_;
 
 	PxDefaultCpuDispatcher* mCpuDispatcher;
+
+	PxScene* mScene;
+
+	PxSceneDesc* sceneDesc;
 };

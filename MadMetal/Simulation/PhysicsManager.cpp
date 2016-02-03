@@ -36,18 +36,18 @@ void PhysicsManager::initPhysicsSimulation()
 
 	//static PxDefaultSimulationFilterShader gDefaultFilterShader;
 
-	PxScene* mScene;
 
-	PxSceneDesc sceneDesc(topLevelPhysics_->getTolerancesScale());
-	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
+
+	sceneDesc = new PxSceneDesc(topLevelPhysics_->getTolerancesScale());
+	sceneDesc->gravity = PxVec3(0.0f, -9.81f, 0.0f);
 	//customizeSceneDesc(sceneDesc);
 
-	if (!sceneDesc.cpuDispatcher)
+	if (!sceneDesc->cpuDispatcher)
 	{
 		mCpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 		if (!mCpuDispatcher)
 			//fatalError("PxDefaultCpuDispatcherCreate failed!");
-		sceneDesc.cpuDispatcher = mCpuDispatcher;
+		sceneDesc->cpuDispatcher = mCpuDispatcher;
 	}
 //	if (!sceneDesc.filterShader)
 //		sceneDesc.filterShader = &gDefaultFilterShader;
@@ -61,7 +61,7 @@ void PhysicsManager::initPhysicsSimulation()
 	
 #endif
 	*/
-	mScene = topLevelPhysics_->createScene(sceneDesc);
+	mScene = topLevelPhysics_->createScene(*sceneDesc);
 //	if (!mScene)
 		//fatalError("createScene failed!");
 
@@ -75,4 +75,9 @@ void PhysicsManager::shutdownPhysicsSimualtion()
 	physicsFoundation_->release();
 	delete defaultErrorCallback_;
 	delete defaultAllocator_;
+}
+
+void PhysicsManager::updatePhysics(float dt)
+{
+	mScene->simulate(dt);
 }

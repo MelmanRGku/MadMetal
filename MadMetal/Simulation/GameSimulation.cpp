@@ -4,7 +4,9 @@
 void GameSimulation::simulatePhysics()
 {
 	std::cout << "Physics Simulated \n";
-	audio->update();
+	//audio.update();
+	//NOTE: a.update() doesn't belong here. Replace with some function that registers stuff to do with the audio engine
+	//a.playNewSound(0);
 	//a.playNewSound(0);
 
 }
@@ -34,6 +36,7 @@ void GameSimulation::updateObjects(double dt) {
 
 void GameSimulation::initialize() {
 	setupBasicGameWorldObjects();
+	physics = new PhysicsManager();
 }
 
 GameSimulation::GameSimulation()
@@ -82,15 +85,15 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	*/
 
 	//--------------------TEST 3------------------------------------------------------------------------------------------------
-
+	/*
 	ObjectUpdaterSequence *upd1 = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
-	upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, 0.5, 0), 1000));
-	upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, -1, 0), 2000));
-	upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, 0.5, 0), 1000));
+	upd1->addObjectUpdater(new ObjectPositionUpdater(world->getGameObjects()->at(0), glm::vec3(0, 0.5, 0), 1000));
+	upd1->addObjectUpdater(new ObjectPositionUpdater(world->getGameObjects()->at(0), glm::vec3(0, -1, 0), 2000));
+	upd1->addObjectUpdater(new ObjectPositionUpdater(world->getGameObjects()->at(0), glm::vec3(0, 0.5, 0), 1000));
 
 	ObjectUpdaterParallel *upd = new ObjectUpdaterParallel(ObjectUpdaterSequence::TYPE_INFINITE);
 	upd->addObjectUpdater(upd1);
-	upd->addObjectUpdater(new ObjectRotationUpdater(obj, glm::vec3(0, 180, 0), 1000, ObjectRotationUpdater::ANGLE_TYPE_DEGREES));
+	upd->addObjectUpdater(new ObjectRotationUpdater(world->getGameObjects()->at(0), glm::vec3(0, 180, 0), 1000, ObjectRotationUpdater::ANGLE_TYPE_DEGREES));
 	updaters.push_back(upd);
-
+	*/
 }

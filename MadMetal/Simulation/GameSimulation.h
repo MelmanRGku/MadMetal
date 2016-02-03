@@ -5,6 +5,7 @@
 #include "Objects/Model.h"
 #include "Objects/ObjModel.h"
 #include "Renderer/VAO.h"
+#include "PhysicsManager.h"
 #include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
 #include "Objects/ObjectUpdaters/ObjectRotationUpdater.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
@@ -16,6 +17,8 @@ private:
 
 	std::vector<ObjectUpdater *> updaters;
 	
+	PhysicsManager *physics;
+
 	void simulatePhysics();
 
 	void simulateAnimation();
