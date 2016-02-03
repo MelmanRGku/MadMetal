@@ -1,5 +1,5 @@
-#include "../Libraries/sdl/SDL.h"
-#include "../Libraries/sdl/SDL_mixer.h"
+#include "Libraries/sdl/SDL.h"
+#include "Libraries/sdl/SDL_mixer.h"
 #include <iostream>
 #include <vector>
 #include <cmath>

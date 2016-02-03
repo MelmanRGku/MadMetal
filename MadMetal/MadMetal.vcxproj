@@ -46,13 +46,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx\foundation\windows;$(ProjectDir)\Libraries\physx\common;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx;$(ProjectDir)\Libraries\physx\extensions;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx\foundation\windows;$(ProjectDir)\Libraries\physx\common;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx;$(ProjectDir)\Libraries\physx\extensions;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>Libraries\physx;Libraries\glut;Libraries\glew</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glut32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;LowLevelClothDEBUG.lib;LowLevelDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3CookingDEBUG_x86.lib;PhysX3DEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3Gpu_x86.lib;PhysX3GpuCHECKED_x86.lib;PhysX3GpuDEBUG_x86.lib;PhysX3GpuPROFILE_x86.lib;PhysX3VehicleDEBUG.lib;PhysXProfileSDKDEBUG.lib;PhysXVisualDebuggerSDKDEBUG.lib;PxTaskDEBUG.lib;SceneQueryDEBUG.lib;SimulationControllerDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Libraries\physx;Libraries\glut;Libraries\glew;Libraries\sdl</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glut32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;LowLevelClothDEBUG.lib;LowLevelDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3CookingDEBUG_x86.lib;PhysX3DEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3Gpu_x86.lib;PhysX3GpuCHECKED_x86.lib;PhysX3GpuDEBUG_x86.lib;PhysX3GpuPROFILE_x86.lib;PhysX3VehicleDEBUG.lib;PhysXProfileSDKDEBUG.lib;PhysXVisualDebuggerSDKDEBUG.lib;PxTaskDEBUG.lib;SceneQueryDEBUG.lib;SimulationControllerDEBUG.lib;SDL2.lib;SDL2_mixer.lib;SDL2main.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -70,13 +71,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="Files\FileReader.cpp" />
+    <ClCompile Include="Input\GamePad.cpp" />
+    <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Objects\GameObject.cpp" />
     <ClCompile Include="Global\Log.cpp" />
     <ClCompile Include="Files\FileWriter.cpp" />
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="Global\Settings.cpp" />
     <ClCompile Include="Objects\Model.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectPositionUpdater.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectRotationUpdater.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdater.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdaterParallel.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.cpp" />
     <ClCompile Include="Objects\ObjModel.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
@@ -87,8 +96,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="Input\GamePad.h" />
     <ClInclude Include="Objects\GameObject.h" />
     <ClInclude Include="Objects\Model.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectPositionUpdater.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectRotationUpdater.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdater.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdaterParallel.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.h" />
     <ClInclude Include="Simulation\GameWorld.h" />
     <ClInclude Include="Global\Log.h" />
     <ClInclude Include="Files\FileReader.h" />
