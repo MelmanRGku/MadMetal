@@ -1,7 +1,7 @@
 #include "ObjectRotationUpdater.h"
 
 
-ObjectRotationUpdater::ObjectRotationUpdater(GameObject *obj, glm::vec3 angles, long duration, int angleType)
+ObjectRotationUpdater::ObjectRotationUpdater(GameObject *obj, glm::vec3 angles, float duration, int angleType)
 {
 
 	object = obj;
@@ -24,12 +24,12 @@ ObjectRotationUpdater::~ObjectRotationUpdater()
 }
 
 
-void ObjectRotationUpdater::update(long dt) {
+void ObjectRotationUpdater::update(float dt) {
 
 	if (ended())
 		return;
 
-	object->updateRotation(angles * ((float)dt / totalDuration));
+	object->updateRotation(angles * (dt / totalDuration));
 
 	currentDuration += dt;
 }

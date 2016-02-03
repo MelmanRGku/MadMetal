@@ -15,8 +15,8 @@ public:
 	static const int ANGLE_TYPE_DEGREES = 0,
 		ANGLE_TYPE_RADIANS = 1;
 
-	ObjectRotationUpdater(GameObject *obj, glm::vec3 angles, long duration, int angleType);
+	ObjectRotationUpdater(GameObject *obj, glm::vec3 angles, float duration, int angleType);
 	~ObjectRotationUpdater();
-	void update(long dt);
+	void update(float dt);
 };
 

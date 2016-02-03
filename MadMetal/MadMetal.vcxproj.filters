@@ -81,6 +81,15 @@
     <ClCompile Include="Audio\Audio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Simulation\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulation\GameSimulation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Files\FileReader.h">
@@ -111,9 +120,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Audio\Audio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Simulation\Simulation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Simulation\GameWorld.h">
@@ -147,6 +153,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation\GameSimulation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

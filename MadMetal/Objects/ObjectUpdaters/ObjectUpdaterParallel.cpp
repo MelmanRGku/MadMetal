@@ -29,7 +29,7 @@ ObjectUpdaterParallel::~ObjectUpdaterParallel()
 }
 
 
-void ObjectUpdaterParallel::update(long dt) {
+void ObjectUpdaterParallel::update(float dt) {
 	if (ended())
 		return;
 
