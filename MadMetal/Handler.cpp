@@ -80,7 +80,6 @@ void renderScene(void)
 	float dt = currentDrawCallTime - lastDrawCallTime;
 	lastDrawCallTime = currentDrawCallTime;
 
-	std::cout << "Begining new Game cycle.... \n";
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.3, 0.3, 1.0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -93,7 +92,6 @@ void renderScene(void)
 	}
 
 	glutSwapBuffers();
-	std::cout << "Game Cycle finished.... \n\n";
 
 	glutPostRedisplay();
 }

@@ -3,25 +3,20 @@
 
 void GameSimulation::simulatePhysics()
 {
-	std::cout << "Physics Simulated \n";
 	audio->update();
-	//a.playNewSound(0);
 
 }
 
 void GameSimulation::simulateAnimation()
 {
-	std::cout << "Animation Simulated \n";
 }
 
 void GameSimulation::simulateAI()
 {
-	std::cout << "AI Simulated \n";
 }
 
 void GameSimulation::simulatePlayers()
 {
-	std::cout << "Players Simulated \n";
 }
 
 void GameSimulation::updateObjects(double dt) {
@@ -45,20 +40,21 @@ GameSimulation::~GameSimulation()
 
 void GameSimulation::simulate(double dt)
 {
-	std::cout << "Simulation Begun.... \n";
 	simulateAI();
 	simulatePlayers();
 	simulatePhysics();
 	simulateAnimation();
 	updateObjects(dt);
-	std::cout << "Simulation Ended.... \n";
 }
 
 
 void GameSimulation::setupBasicGameWorldObjects() {
+	Mesh *mesh = new Mesh();
+	mesh->loadFromFile("Assets/Models/police_car.obj");
 	Model *model = new ObjModel("Assets/Models/Stormtrooper.obj");
 	VAO *vao = new VAO(model);
 	GameObject *obj = new GameObject(vao, model);
+	obj->mesh = mesh;
 	world->addGameObject(obj);
 	//ObjectPositionUpdater *up = new ObjectPositionUpdater(obj, glm::vec3(-15, -15, -15), 3000);
 	//updaters.push_back(up);

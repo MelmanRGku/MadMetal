@@ -1,11 +1,11 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject()
+GameObject::GameObject() :renderable(false)
 {
 }
 
-GameObject::GameObject(VAO *vao, Model *model) {
+GameObject::GameObject(VAO *vao, Model *model) : renderable(true) {
 	setVAO(vao);
 	setModel(model);
 }

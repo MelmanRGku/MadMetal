@@ -14,7 +14,7 @@ Renderer::Renderer()
 		);
 
 	viewMatrix = glm::lookAt(
-		glm::vec3(0, 0, 15),
+		glm::vec3(30, 30, 30),
 		glm::vec3(0, 0, 0),
 		glm::vec3(0, 1, 0)
 		);
@@ -31,6 +31,12 @@ Renderer::~Renderer()
 	Draws a obj model
 */
 void Renderer::draw(GameObject *object) {
+	glm::mat4x4 m = glm::mat4x4(1.0f);
+	glUniformMatrix4fv(shader->modelMatrixUniform, 1, false, &m[0][0]);
+	glUniform1i(shader->textureValidUniform, true);
+	/*if (!object->isRenderable())
+		return;
+
 	long cBufferSize = object->model->colours.size() * sizeof(glm::vec3),
 		vBufferSize = object->model->vertices.size() * sizeof(glm::vec3),
 		nBufferSize = object->model->normals.size() * sizeof(glm::vec3);
@@ -47,7 +53,9 @@ void Renderer::draw(GameObject *object) {
 	// Draw the triangles
 	glDrawArrays(GL_TRIANGLES, 0, object->model->vertices.size());
 
-	glBindVertexArray(0);
+	glBindVertexArray(0);*/
+
+	object->mesh->Render();
 
 }
 

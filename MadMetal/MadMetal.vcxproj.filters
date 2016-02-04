@@ -90,6 +90,9 @@
     <ClCompile Include="Objects\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Files\FileReader.h">
@@ -162,6 +165,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
