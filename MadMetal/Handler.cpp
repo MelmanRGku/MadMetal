@@ -82,13 +82,19 @@ void renderScene(void)
 {
 	float currentDrawCallTime = (float)glutGet(GLUT_ELAPSED_TIME);
 	float dt = currentDrawCallTime - lastDrawCallTime;
+	if (dt < 60) {
+		glutPostRedisplay();
+		return;
+	}
 	lastDrawCallTime = currentDrawCallTime;
+
 
 	std::cout << "Begining new Game cycle.... \n";
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.3, 0.3, 1.0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	
 	input->updateGamePads();
 	for (unsigned int i = 0; i < scenes->size(); i++) {
 		Scene *simulation = scenes->at(i);

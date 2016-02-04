@@ -1,14 +1,22 @@
 #include "GameSimulation.h"
 
+using namespace std;
 
-void GameSimulation::simulatePhysics()
+void GameSimulation::simulatePhysics(float dt)
 {
 	std::cout << "Physics Simulated \n";
 	//audio.update();
 	//NOTE: a.update() doesn't belong here. Replace with some function that registers stuff to do with the audio engine
 	//a.playNewSound(0);
 	//a.playNewSound(0);
+	//world->getGameObjects()->at(0)->updatePosition(0.03f, 0.0f, 0.0f);
+	physics->updatePhysics(dt);
+	PxTransform temp = world->getGameObjects()->at(0)->physxActor->getGlobalPose();
+	world->getGameObjects()->at(0)->updatePosition(glm::vec3(temp.p.x, temp.p.y, temp.p.z));
 
+	cout << world->getGameObjects()->at(0)->position.x << endl;
+	cout << world->getGameObjects()->at(0)->position.y << endl;
+	cout << world->getGameObjects()->at(0)->position.z << endl;
 }
 
 void GameSimulation::simulateAnimation()
@@ -36,7 +44,7 @@ void GameSimulation::updateObjects(double dt) {
 
 void GameSimulation::initialize() {
 	setupBasicGameWorldObjects();
-	physics = new PhysicsManager();
+	physics = new PhysicsManager(* world);
 }
 
 GameSimulation::GameSimulation()
@@ -46,12 +54,12 @@ GameSimulation::~GameSimulation()
 {
 }
 
-void GameSimulation::simulate(double dt)
+void GameSimulation::simulate(float dt)
 {
 	std::cout << "Simulation Begun.... \n";
 	simulateAI();
 	simulatePlayers();
-	simulatePhysics();
+	simulatePhysics(dt);
 	simulateAnimation();
 	updateObjects(dt);
 	std::cout << "Simulation Ended.... \n";
@@ -97,3 +105,4 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	updaters.push_back(upd);
 	*/
 }
+

@@ -19,7 +19,7 @@ private:
 	
 	PhysicsManager *physics;
 
-	void simulatePhysics();
+	void simulatePhysics(float dt);
 
 	void simulateAnimation();
 
@@ -33,7 +33,7 @@ public:
 	GameSimulation();
 	~GameSimulation();
 
-	void simulate(double dt);
+	void simulate(float dt);
 
 	void initialize();
 

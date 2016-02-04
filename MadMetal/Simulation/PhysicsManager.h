@@ -3,23 +3,26 @@
 #include	<PxPhysicsAPI.h>
 #include	<PxFoundation.h>
 #include	<PxPhysics.h>
+class GameWorld;
 
 using namespace physx;
 
 class PhysicsManager
 {
 public:
-	PhysicsManager();
+	PhysicsManager(GameWorld & world);
 	virtual ~PhysicsManager();
-	
+	void updatePhysics(float dt);
 
 private:
 	void initPhysicsSimulation();
 	void shutdownPhysicsSimualtion();
-	void updatePhysics(float dt);
+
 
 private: // members
 	PxFoundation* physicsFoundation_;
+
+	GameWorld & world_;
 
 	PxDefaultAllocator* defaultAllocator_;
 	PxDefaultErrorCallback* defaultErrorCallback_;

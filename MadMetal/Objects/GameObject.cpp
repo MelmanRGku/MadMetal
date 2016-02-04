@@ -21,6 +21,10 @@ void GameObject::updatePosition(glm::vec3 dPos) {
 	this->position += dPos;
 }
 
+void GameObject::updatePosition(float vecx, float vecy, float vecz) {
+	glm::vec3 dPos = glm::vec3(vecx, vecy, vecz);
+	this->position += dPos;
+}
 
 glm::mat4x4 GameObject::getModelMatrix() {
 	glm::mat4x4 translate = glm::translate(glm::mat4x4(), position);
@@ -33,4 +37,9 @@ glm::mat4x4 GameObject::getModelMatrix() {
 
 void GameObject::updateRotation(glm::vec3 angles) {
 	this->rotation += angles;
+}
+
+void GameObject::setPhysxActor(PxRigidDynamic * physxActor)
+{
+	this->physxActor = physxActor;
 }
