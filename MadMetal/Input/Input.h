@@ -12,5 +12,6 @@ public:
 
 	void updateGamePads();
 	bool getGamePadHandle(int portNumber, GamePad** handle);
+	bool getGamePadHandle(GamePad** handle);
 	void releaseGamePadHandle(int portNumber, GamePad** handle);
 };

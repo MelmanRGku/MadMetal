@@ -38,14 +38,14 @@ public:
 
 	~GamePad(){}
 
-	const int XButton = XINPUT_GAMEPAD_X;
-	const int YButton = XINPUT_GAMEPAD_Y;
-	const int AButton = XINPUT_GAMEPAD_A;
-	const int BButton = XINPUT_GAMEPAD_B;
-	const int StartButton = XINPUT_GAMEPAD_START;
-	const int BackButton = XINPUT_GAMEPAD_BACK;
-	const int LShoulder = XINPUT_GAMEPAD_LEFT_SHOULDER;
-	const int RShoulder = XINPUT_GAMEPAD_RIGHT_SHOULDER;
+	static const int XButton = XINPUT_GAMEPAD_X;
+	static const int YButton = XINPUT_GAMEPAD_Y;
+	static const int AButton = XINPUT_GAMEPAD_A;
+	static const int BButton = XINPUT_GAMEPAD_B;
+	static const int StartButton = XINPUT_GAMEPAD_START;
+	static const int BackButton = XINPUT_GAMEPAD_BACK;
+	static const int LShoulder = XINPUT_GAMEPAD_LEFT_SHOULDER;
+	static const int RShoulder = XINPUT_GAMEPAD_RIGHT_SHOULDER;
 
 	int currentPacket = 0;
 	

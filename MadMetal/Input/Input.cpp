@@ -55,6 +55,8 @@ bool Input::getGamePadHandle(int portNum, GamePad** handle)
 	}
 }
 
+
+
 void Input::releaseGamePadHandle(int portNum, GamePad ** handle)
 {
 	char *line = new char[100];
@@ -64,4 +66,21 @@ void Input::releaseGamePadHandle(int portNum, GamePad ** handle)
 	*handle = new GamePad();
 	gamePads[portNum]->setOwned(false);
 	
+}
+
+bool Input::getGamePadHandle(GamePad ** handle)
+{
+
+	for (int portNum = 0; portNum < 4; portNum++)
+	{
+		if (gamePads[portNum]->checkConnection())
+		{
+			if (!gamePads[portNum]->isOwned())
+			{
+				*handle = gamePads[portNum];
+				return true;
+			}
+		}
+	}
+	return false;
 }
