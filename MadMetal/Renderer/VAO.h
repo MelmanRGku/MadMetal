@@ -15,6 +15,6 @@ public:
 	VAO(Model *model);
 	~VAO();
 	GLuint getVaoId() { return vao; }
-	void setupVao(Model *model);
+	virtual void setupVao(Model *model);
 };
 

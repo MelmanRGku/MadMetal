@@ -57,18 +57,18 @@ void ObjModel::parseObjFile(const char* fileName) {
 		//face - contains 3 pairs of 3 numbers: vertex index, uv index and normal index
 		else if (strcmp(lineIndentifier, "f") == 0){
 			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-			int matches = fscanf_s(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+			int matches = fscanf_s(file, "%d//%d %d//%d %d//%d\n", &vertexIndex[0], &normalIndex[0], &vertexIndex[1], &normalIndex[1], &vertexIndex[2], &normalIndex[2]);
 
 			if (matches != 9){
 				Log::writeLine("Unexpected OBJ face format.");
-				return;
+				//return;
 			}
 
 			//push the vertices, normals and uvs in the right order
 			for (int i = 0; i < 3; i++) {
 				vertices.push_back(listOfVertices.at(vertexIndex[i] - 1));
 				normals.push_back(listOfNormals.at(normalIndex[i] - 1));
-				uvs.push_back(listOfUVs.at(uvIndex[i] - 1));
+				//uvs.push_back(listOfUVs.at(uvIndex[i] - 1));
 			}
 		//something useless - skip it
 		} else {
@@ -78,6 +78,8 @@ void ObjModel::parseObjFile(const char* fileName) {
 
 		res = fscanf_s(file, "%s", lineIndentifier, 128);
 	}
+	
+	uvs.resize(vertices.size());
 }
 
 /*

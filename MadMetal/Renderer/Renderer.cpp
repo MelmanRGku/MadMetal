@@ -17,7 +17,7 @@ Renderer::Renderer()
 	//bitches
 
 	viewMatrix = glm::lookAt(
-		glm::vec3(15, 0, 15),
+		glm::vec3(10, 10, 10),
 		glm::vec3(0, 0, 0),
 		glm::vec3(0, 1, 0)
 		);
@@ -28,6 +28,27 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
+}
+
+void Renderer::draw(ParticleSystem * sys)
+{
+	startDrawing();
+	//set model matrix uniform
+	glUniformMatrix4fv(shader->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
+
+	glUniformMatrix4fv(shader->viewMatrixUniform, 1, false, &viewMatrix[0][0]);
+
+	//we want to use color for now. Textures not supported yet
+	glUniform1i(shader->textureValidUniform, false);
+
+	// Bind to the correct context
+	glBindVertexArray(sys->m_vao);
+
+	// Draw the triangles
+	glDrawArrays(GL_POINTS, 0, sys->p->m_countAlive);
+
+	glBindVertexArray(0);
+	stopDrawing();
 }
 
 /*

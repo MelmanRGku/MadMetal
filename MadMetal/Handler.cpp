@@ -1,5 +1,7 @@
+#pragma once
 #include "Libraries\glew\glew.h"
 #include "Libraries\glut\glut.h"
+#include "ParticleSystem\ParticleSystem.h"
 #include "Renderer\ShaderProgram.h"
 #include "Renderer\Renderer.h"
 #include "Objects\ObjModel.h"
@@ -10,6 +12,7 @@
 #include <iostream>
 #include <windows.h>
 
+
 Renderer *renderer;
 Input *input;
 Simulation *simulation;
@@ -18,6 +21,7 @@ GamePad *gamePad = new GamePad();
 int waitCounter = 0;
 int packet = 0;
 DummyPosition * position = new DummyPosition(0, 1);
+ParticleSystem * psystem = new ParticleSystem(10000);
 
 void updateSound() {
 
@@ -68,25 +72,29 @@ void initObjects() {
 	renderer = new Renderer();
 	ShaderProgram *sp = new ShaderProgram("Renderer/VertexShader.glsl", "Renderer/FragmentShader.glsl");
 	renderer->setShader(sp);
+
+	psystem->initSystem(glutGet(GLUT_ELAPSED_TIME));
 }
 
 void renderScene(void)
 {
-	std::cout << "Begining new Game cycle.... \n";
+	//std::cout << "Begining new Game cycle.... \n";
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0, 0.3, 0.3, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	input->updateGamePads();
-	simulation->simulate();
-	renderer->draw(simulation->getGameWorld()->getGameObjects());
+	//input->updateGamePads();
+	//simulation->simulate();
+	psystem->update(glutGet(GLUT_ELAPSED_TIME));
+	renderer->draw(psystem);
+	//renderer->draw(simulation->getGameWorld()->getGameObjects());
 
-	updateSound();
+	//updateSound();
 
 	glutSwapBuffers();
-	std::cout << "Game Cycle finished.... \n\n";
+	//std::cout << "Game Cycle finished.... \n\n";
 
-	glutPostRedisplay();
+	//glutPostRedisplay();
 }
 
 void initOpengl(int argc, char **argv) {
@@ -100,14 +108,14 @@ void initOpengl(int argc, char **argv) {
 	glEnable(GL_DEPTH_TEST);
 	// register callbacks
 	glutDisplayFunc(renderScene);
-
+	glutIdleFunc(renderScene);
 	//initialize opengl functions
 	glewInit();
 
 }
 
 void initGamepad() {
-	input->getGamePadHandle(0, &gamePad);
+	input->getGamePadHandle(&gamePad);
 }
 
 
