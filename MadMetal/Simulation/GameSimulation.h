@@ -1,14 +1,14 @@
 #pragma once
 #include <iostream>
 #include "Scene.h"
-#include "Objects/GameObject.h"
+#include "Objects/Object.h"
 #include "Objects/Model.h"
-#include "Objects/ObjModel.h"
-#include "Renderer/VAO.h"
 #include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
 #include "Objects/ObjectUpdaters/ObjectRotationUpdater.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
+#include "Objects/ObjectLoaders/ObjModelLoader.h"
+#include "Objects/RenderableObject.h"
 
 
 class GameSimulation : public Scene{

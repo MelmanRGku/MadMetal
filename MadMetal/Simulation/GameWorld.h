@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <vector>
-#include "../Objects/GameObject.h"
+#include "../Objects/Object.h"
 
 
 
@@ -10,14 +10,14 @@
 class GameWorld
 {
 private:
-	std::vector<GameObject*> *gameObjects;
+	std::vector<Object*> *gameObjects;
 public:
 	
 	GameWorld();
 	~GameWorld();
 	
 
-	std::vector<GameObject*> * getGameObjects()	{ return gameObjects; }
-	void addGameObject(GameObject *obj) { gameObjects->push_back(obj); }
+	std::vector<Object*> * getGameObjects()	{ return gameObjects; }
+	void addGameObject(Object *obj) { gameObjects->push_back(obj); }
 };
 

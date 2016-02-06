@@ -2,7 +2,6 @@
 #include "Libraries\glut\glut.h"
 #include "Renderer\ShaderProgram.h"
 #include "Renderer\Renderer.h"
-#include "Objects\ObjModel.h"
 #include "Global\Settings.h"
 #include "Global\Log.h"
 #include "Input\Input.h"

@@ -48,6 +48,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx\foundation\windows;$(ProjectDir)\Libraries\physx\common;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx;$(ProjectDir)\Libraries\physx\extensions;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -76,23 +77,25 @@
     <ClCompile Include="Files\FileReader.cpp" />
     <ClCompile Include="Input\GamePad.cpp" />
     <ClCompile Include="Input\Input.cpp" />
-    <ClCompile Include="Objects\GameObject.cpp" />
     <ClCompile Include="Global\Log.cpp" />
     <ClCompile Include="Files\FileWriter.cpp" />
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="Global\Settings.cpp" />
+    <ClCompile Include="Objects\Mesh.cpp" />
     <ClCompile Include="Objects\Model.cpp" />
+    <ClCompile Include="Objects\Object.cpp" />
+    <ClCompile Include="Objects\ObjectLoaders\ObjModelLoader.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectPositionUpdater.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectRotationUpdater.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdater.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdaterParallel.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.cpp" />
-    <ClCompile Include="Objects\ObjModel.cpp" />
+    <ClCompile Include="Objects\RenderableObject.cpp" />
+    <ClCompile Include="Objects\Texture.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
     <ClCompile Include="Simulation\GameWorld.cpp" />
-    <ClCompile Include="Renderer\VAO.cpp" />
     <ClCompile Include="Simulation\PhysicsManager.cpp" />
     <ClCompile Include="Simulation\Scene.cpp" />
     <ClCompile Include="Simulation\GameSimulation.cpp" />
@@ -103,27 +106,29 @@
     <ClInclude Include="Libraries\stb_image.h" />
     <ClInclude Include="Objects\Camera.h" />
     <ClInclude Include="Input\GamePad.h" />
-    <ClInclude Include="Objects\GameObject.h" />
+    <ClInclude Include="Objects\Mesh.h" />
     <ClInclude Include="Objects\Model.h" />
+    <ClInclude Include="Objects\Object.h" />
+    <ClInclude Include="Objects\ObjectLoaders\ObjModelLoader.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectPositionUpdater.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectRotationUpdater.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdater.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdaterParallel.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.h" />
+    <ClInclude Include="Objects\RenderableObject.h" />
+    <ClInclude Include="Objects\Texture.h" />
     <ClInclude Include="Simulation\GameWorld.h" />
     <ClInclude Include="Global\Log.h" />
     <ClInclude Include="Files\FileReader.h" />
     <ClInclude Include="Files\FileWriter.h" />
     <ClInclude Include="Global\Settings.h" />
     <ClInclude Include="Input\Input.h" />
-    <ClInclude Include="Objects\ObjModel.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Renderer\ShaderLoader.h" />
     <ClInclude Include="Renderer\ShaderProgram.h" />
     <ClInclude Include="Simulation\PhysicsManager.h" />
     <ClInclude Include="Simulation\Scene.h" />
     <ClInclude Include="Simulation\GameSimulation.h" />
-    <ClInclude Include="Renderer\VAO.h" />
     <ClInclude Include="Renderer\Texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

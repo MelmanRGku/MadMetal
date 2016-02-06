@@ -49,13 +49,17 @@ void GameSimulation::simulate(double dt)
 
 
 void GameSimulation::setupBasicGameWorldObjects() {
-	Mesh *mesh = new Mesh();
-	mesh->loadFromFile("Assets/Models/police_car.obj");
+	ObjModelLoader *loader = new ObjModelLoader();
+	RenderableObject *obj = new RenderableObject();
+	obj->model = loader->loadFromFile("Assets/Models/Avent.obj");
+	world->addGameObject(obj);
+/*	Mesh *mesh = new Mesh();
+	mesh->loadFromFile("Assets/Models/Avent.obj");
 	Model *model = new ObjModel("Assets/Models/Stormtrooper.obj");
 	VAO *vao = new VAO(model);
 	GameObject *obj = new GameObject(vao, model);
 	obj->mesh = mesh;
-	world->addGameObject(obj);
+	world->addGameObject(obj);*/
 	//ObjectPositionUpdater *up = new ObjectPositionUpdater(obj, glm::vec3(-15, -15, -15), 3000);
 	//updaters.push_back(up);
 	//ObjectRotationUpdater *up = new ObjectRotationUpdater(obj, glm::vec3(0, 180, 0), 10000, ObjectRotationUpdater::ANGLE_TYPE_DEGREES);
@@ -78,7 +82,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	*/
 
 	//--------------------TEST 3------------------------------------------------------------------------------------------------
-
+	
 	ObjectUpdaterSequence *upd1 = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
 	upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, 0.5, 0), 1000));
 	upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, -1, 0), 2000));
@@ -88,5 +92,5 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	upd->addObjectUpdater(upd1);
 	upd->addObjectUpdater(new ObjectRotationUpdater(obj, glm::vec3(0, 180, 0), 1000, ObjectRotationUpdater::ANGLE_TYPE_DEGREES));
 	updaters.push_back(upd);
-
+	
 }
