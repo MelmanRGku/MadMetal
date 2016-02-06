@@ -77,6 +77,8 @@ void renderScene(void)
 {
 	float currentDrawCallTime = (float)glutGet(GLUT_ELAPSED_TIME);
 	float dt = currentDrawCallTime - lastDrawCallTime;
+	if (dt > 33)
+		dt = 33;
 	lastDrawCallTime = currentDrawCallTime;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

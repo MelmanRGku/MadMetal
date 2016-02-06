@@ -51,7 +51,7 @@ void GameSimulation::simulate(double dt)
 void GameSimulation::setupBasicGameWorldObjects() {
 	ObjModelLoader *loader = new ObjModelLoader();
 	RenderableObject *obj = new RenderableObject();
-	obj->model = loader->loadFromFile("Assets/Models/Avent.obj");
+	obj->model = loader->loadFromFile("Assets/Models/Stormtrooper.obj");
 	world->addGameObject(obj);
 /*	Mesh *mesh = new Mesh();
 	mesh->loadFromFile("Assets/Models/Avent.obj");

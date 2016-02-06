@@ -12,6 +12,7 @@ void RenderableObject::draw(Renderer *renderer) {
 	std::vector<Mesh *> *meshes = model->getMeshes();
 
 	glm::mat4x4 modelMatrix = getModelMatrix();
+	std::cout << position.x << " " << position.y << " " << position.z << "\n";
 	// Now set the sampler to the correct texture unit
 	glUniform1i(renderer->getShaderProgram()->textureUniform, 0);
 	glUniformMatrix4fv(renderer->getShaderProgram()->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
