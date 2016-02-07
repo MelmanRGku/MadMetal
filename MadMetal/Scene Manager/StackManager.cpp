@@ -106,11 +106,14 @@ void StackManager::readMailBox()
 
 void StackManager::progressScene(int newTime)
 {
-	//update gamecontrollers
-	m_input->updateGamePads();
+	
 
 	//calculate delta time
-	double dt = (double)(newTime - m_currentTime) / 1000;
+	std::cout << newTime - m_currentTime << std::endl;
+	double dt = (double)(newTime - m_currentTime);
+	m_currentTime = newTime;
+	//update gamecontrollers
+	m_input->updateGamePads(dt);
 
 	//progress the state of the top scene on the stack
 	m_newMessage = m_currentScene->simulateScene(dt, *m_mailBox);

@@ -71,9 +71,6 @@ private:
 	GamePad * m_gamePad;
 	int m_currentSelection;
 	int m_selections[2];
-	bool m_rightPressed;
-	bool m_leftPressed;
-	bool m_aPressed;
 	
 public:
 	MainMenuScene(GamePad * gamePad);
@@ -90,10 +87,7 @@ private:
 	char * m_character2 = "Character2.txt";
 	char * m_character3 = "Character3.txt";
 	char * m_selections[3]; 
-	bool m_rightPressed;
-	bool m_leftPressed;
-	bool m_aPressed;
-	bool m_bPressed;
+	
 
 public:
 	SinglePlayerCharSelectScene(GamePad * gamePad);
@@ -105,7 +99,6 @@ class SinglePlayerGameScene : public Scene
 private:
 	GamePad * m_gamePad;
 	PlayerControllable * m_player;
-	bool m_bPressed;
 
 public:
 	SinglePlayerGameScene(PlayerControllable * player, int numPlayers);

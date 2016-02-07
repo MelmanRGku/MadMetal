@@ -15,13 +15,13 @@ Input::Input() {
 	std::cout << "Initialized Input. " << counter << " controllers connected \n";
 };
 
-void Input::updateGamePads()
+void Input::updateGamePads(double dt)
 {
 	for (int i = 0; i < XUSER_MAX_COUNT; i++)
 	{
 		if (gamePads[i]->checkConnection())
 		{
-			gamePads[i]->sampleState();
+			gamePads[i]->sampleState(dt);
 		}
 	}
 
