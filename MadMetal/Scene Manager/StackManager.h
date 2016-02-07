@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include <vector>
+#include "Renderer\Renderer.h"
 class SceneStack
 {
 private:
@@ -26,7 +27,8 @@ private:
 	Scene * m_currentScene;
 	bool m_newMessage;
 	SceneMessage * m_mailBox;
-	int m_currentTime;
+
+	Renderer* m_renderer;
 public:
 	StackManager();
 	//StackManager(Scene * startScene);

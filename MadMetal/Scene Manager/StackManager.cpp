@@ -1,4 +1,5 @@
 #include "StackManager.h"
+#include "Simulation\GameSimulation.h"
 
 SceneStack::SceneStack(Scene * scene)
 {
@@ -55,17 +56,23 @@ StackManager::StackManager()
 	//initaliaze inptu
 	m_input = new Input();
 	//set starting scene to Main Menu and pass a controller handle
-	m_currentScene = new MainMenuScene(m_input->getGamePadHandle());
+	m_currentScene = new GameSimulation();
+	//m_currentScene = new MainMenuScene(m_input->getGamePadHandle());
 	//intialize mail box
 	m_mailBox = new SceneMessage();
 	//set mail box to empty
 	m_newMessage = false;
 	//create stack with main menu on top
 	m_stack = new SceneStack(m_currentScene);
+	//create a renderer and give it the shader program
+	m_renderer = new Renderer();
+	ShaderProgram *sp = new ShaderProgram("Renderer/VertexShader.glsl", "Renderer/FragmentShader.glsl");
+	m_renderer->setShader(sp);
 }
 
 StackManager::~StackManager()
 {
+	delete m_renderer;
 	delete m_input;
 	delete m_currentScene;
 	delete m_mailBox;
@@ -109,14 +116,14 @@ void StackManager::progressScene(int newTime)
 	
 
 	//calculate delta time
-	std::cout << newTime - m_currentTime << std::endl;
-	double dt = (double)(newTime - m_currentTime);
-	m_currentTime = newTime;
+	double dt = static_cast<double>(newTime) / 1000;
+	std::cout << "Dt = " << dt << std::endl;
 	//update gamecontrollers
 	m_input->updateGamePads(dt);
 
 	//progress the state of the top scene on the stack
 	m_newMessage = m_currentScene->simulateScene(dt, *m_mailBox);
+	m_renderer->draw(m_currentScene->getWorld()->getGameObjects());
 	//check if the scene return a message for manager
 	if (m_newMessage)
 	{

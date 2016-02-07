@@ -73,6 +73,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Audio\Audio.cpp" />
+    <ClCompile Include="Game Logic\Controllable.cpp" />
+    <ClCompile Include="Game Logic\PlayerControllable.cpp" />
     <ClCompile Include="Objects\Camera.cpp" />
     <ClCompile Include="Files\FileReader.cpp" />
     <ClCompile Include="Input\GamePad.cpp" />
@@ -92,17 +94,25 @@
     <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.cpp" />
     <ClCompile Include="Objects\RenderableObject.cpp" />
     <ClCompile Include="Objects\Texture.cpp" />
+    <ClCompile Include="ParticleSystem\ParticleData.cpp" />
+    <ClCompile Include="ParticleSystem\ParticleEmitter.cpp" />
+    <ClCompile Include="ParticleSystem\ParticleGenerator.cpp" />
+    <ClCompile Include="ParticleSystem\ParticleUpdater.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
-    <ClCompile Include="Simulation\GameWorld.cpp" />
+    <ClCompile Include="Scene Manager\Scene.cpp" />
+    <ClCompile Include="Scene Manager\StackManager.cpp" />
+    <ClCompile Include="Simulation\World.cpp" />
     <ClCompile Include="Simulation\PhysicsManager.cpp" />
-    <ClCompile Include="Simulation\Scene.cpp" />
     <ClCompile Include="Simulation\GameSimulation.cpp" />
-    <ClCompile Include="Renderer\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="Game Logic\Controllable.h" />
+    <ClInclude Include="Game Logic\PlayerControllable.h" />
+    <ClInclude Include="Game Logic\PowerUp.h" />
+    <ClInclude Include="Game Logic\Projectile.h" />
     <ClInclude Include="Libraries\stb_image.h" />
     <ClInclude Include="Objects\Camera.h" />
     <ClInclude Include="Input\GamePad.h" />
@@ -117,8 +127,15 @@
     <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.h" />
     <ClInclude Include="Objects\RenderableObject.h" />
     <ClInclude Include="Objects\Texture.h" />
+    <ClInclude Include="ParticleSystem\ParticleData.h" />
+    <ClInclude Include="ParticleSystem\ParticleEmitter.h" />
+    <ClInclude Include="ParticleSystem\ParticleGenerator.h" />
+    <ClInclude Include="ParticleSystem\ParticleSystem.h" />
+    <ClInclude Include="ParticleSystem\ParticleUpdater.h" />
     <ClInclude Include="Renderer\Renderable.h" />
-    <ClInclude Include="Simulation\GameWorld.h" />
+    <ClInclude Include="Scene Manager\Scene.h" />
+    <ClInclude Include="Scene Manager\StackManager.h" />
+    <ClInclude Include="Simulation\World.h" />
     <ClInclude Include="Global\Log.h" />
     <ClInclude Include="Files\FileReader.h" />
     <ClInclude Include="Files\FileWriter.h" />
@@ -128,9 +145,7 @@
     <ClInclude Include="Renderer\ShaderLoader.h" />
     <ClInclude Include="Renderer\ShaderProgram.h" />
     <ClInclude Include="Simulation\PhysicsManager.h" />
-    <ClInclude Include="Simulation\Scene.h" />
     <ClInclude Include="Simulation\GameSimulation.h" />
-    <ClInclude Include="Renderer\Texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

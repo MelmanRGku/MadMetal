@@ -69,7 +69,7 @@ void Controllable::useSuper()
 	if (m_superGuage == 1)
 	{
 		m_superDurationRemaining = m_superMaxDuration;
-		m_currentModel = &m_superModel;
+	//	m_currentModel = &m_superModel;
 	}
 }
 
@@ -98,7 +98,7 @@ void Controllable::updateSuperRemaining(double dt)
 	{
 		if ((m_superDurationRemaining -= dt) <= 0)
 		{
-			m_currentModel = &m_normalModel;
+//			m_currentModel = &m_normalModel;
 		}
 
 	}

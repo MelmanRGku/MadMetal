@@ -1,16 +1,10 @@
+#pragma once
+
 #include "PowerUp.h"
-#include "..\Objects\GameObject.h"
-
-
-#ifndef CONTROLLABLE_H
-#define CONTROLLABLE_H
 
 class Controllable
 {
 protected:
-	GameObject * m_normalModel;
-	GameObject * m_superModel;
-	GameObject ** m_currentModel;
 
 	float m_currentTime;
 
@@ -59,5 +53,3 @@ public:
 	void receivePoints(float points);
 	
 };
-
-#endif

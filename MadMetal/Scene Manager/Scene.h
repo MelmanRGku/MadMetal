@@ -1,6 +1,7 @@
 #pragma once
 #include "..\Input\Input.h"
 #include "..\Game Logic\PlayerControllable.h"
+#include "Simulation\World.h"
 
 
 const int MAIN_MENU = 0;
@@ -49,19 +50,26 @@ public:
 
 };
 
-
-
 class Scene 
 {
 
 protected:
 	bool m_isPaused;
 	SceneMessage * m_message;
+	World *world;
 public:
+	Scene() {
+		world = new World();
+	}
+
+	virtual ~Scene() {
+		delete world;
+	}
 	virtual bool simulateScene(double dt, SceneMessage &newMessage) = 0;
 	bool isPaused() { return m_isPaused; }
 	//set paused will need to be updated to pause sound at the same time
 	void setPaused(bool paused) { m_isPaused = paused; }
+	World* getWorld() { return world; }
 	//virtual void loadFromFile();
 };
 

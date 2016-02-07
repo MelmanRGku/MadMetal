@@ -3,7 +3,7 @@
 
 void GameSimulation::simulatePhysics()
 {
-	audio->update();
+//	audio->update();
 
 }
 
@@ -34,25 +34,28 @@ void GameSimulation::initialize() {
 
 GameSimulation::GameSimulation()
 {
+	initialize();
 }
 GameSimulation::~GameSimulation()
 {
+	delete physics;
 }
 
-void GameSimulation::simulate(double dt)
+bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
 	simulateAI();
 	simulatePlayers();
 	simulatePhysics();
 	simulateAnimation();
 	updateObjects(dt);
+	return false;
 }
 
 
 void GameSimulation::setupBasicGameWorldObjects() {
 	ObjModelLoader *loader = new ObjModelLoader();
 	RenderableObject *obj = new RenderableObject();
-	obj->model = loader->loadFromFile("Assets/Models/Cyborx 10XLl.obj");
+	obj->model = loader->loadFromFile("Assets/Models/Stormtrooper.obj");
 	world->addGameObject(obj);
 /*	Mesh *mesh = new Mesh();
 	mesh->loadFromFile("Assets/Models/Avent.obj");
@@ -85,13 +88,13 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//--------------------TEST 3------------------------------------------------------------------------------------------------
 	/*
 	ObjectUpdaterSequence *upd1 = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
-	upd1->addObjectUpdater(new ObjectPositionUpdater(world->getGameObjects()->at(0), glm::vec3(0, 0.5, 0), 1000));
-	upd1->addObjectUpdater(new ObjectPositionUpdater(world->getGameObjects()->at(0), glm::vec3(0, -1, 0), 2000));
-	upd1->addObjectUpdater(new ObjectPositionUpdater(world->getGameObjects()->at(0), glm::vec3(0, 0.5, 0), 1000));
+	upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, 0.5, 0), 1));
+	upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, -1, 0), 2));
+	upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, 0.5, 0), 1));
 
 	ObjectUpdaterParallel *upd = new ObjectUpdaterParallel(ObjectUpdaterSequence::TYPE_INFINITE);
 	upd->addObjectUpdater(upd1);
-	upd->addObjectUpdater(new ObjectRotationUpdater(world->getGameObjects()->at(0), glm::vec3(0, 180, 0), 1000, ObjectRotationUpdater::ANGLE_TYPE_DEGREES));
-	updaters.push_back(upd);
-	*/
+	upd->addObjectUpdater(new ObjectRotationUpdater(obj, glm::vec3(0, 180, 0), 1, ObjectRotationUpdater::ANGLE_TYPE_DEGREES));
+	updaters.push_back(upd);*/
+	
 }

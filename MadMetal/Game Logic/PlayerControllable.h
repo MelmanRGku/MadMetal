@@ -9,7 +9,7 @@ private:
 
 public:
 	PlayerControllable(char * fileName, GamePad * gamePad);
-	~PlayerControllable();
+	virtual ~PlayerControllable();
 	void playFrame(double dt);
 	GamePad * getGamePad();
 };

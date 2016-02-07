@@ -1,4 +1,5 @@
 #include "PlayerControllable.h"
+#include <iostream>
 PlayerControllable::PlayerControllable(char * fileName, GamePad * gamePad)
 {
 	if (fileName == "")
@@ -21,9 +22,6 @@ PlayerControllable::PlayerControllable(char * fileName, GamePad * gamePad)
 
 PlayerControllable::~PlayerControllable()
 {
-	m_currentModel = NULL;
-	m_normalModel = NULL;
-	m_superModel = NULL;
 	m_gamePad = NULL;
 }
 

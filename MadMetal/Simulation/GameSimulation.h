@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "Scene.h"
+#include "Scene Manager\Scene.h"
 #include "Objects/Object.h"
 #include "Objects/Model.h"
 #include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
@@ -32,7 +32,7 @@ public:
 	GameSimulation();
 	~GameSimulation();
 
-	void simulate(double dt);
+	bool simulateScene(double dt, SceneMessage &newMessage);
 
 	void initialize();
 

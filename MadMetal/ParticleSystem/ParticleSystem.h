@@ -1,10 +1,9 @@
 #pragma once
 #include "ParticleEmitter.h"
 #include "ParticleUpdater.h"
-#include "..\Renderer/VAO.h"
-#include "..\Objects\GameObject.h"
+#include "Objects\RenderableObject.h"
 
-class ParticleSystem : public GameObject
+class ParticleSystem : public RenderableObject	
 {
 private:
 	
