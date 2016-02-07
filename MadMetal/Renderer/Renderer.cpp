@@ -14,7 +14,7 @@ Renderer::Renderer()
 		);
 
 	viewMatrix = glm::lookAt(
-		glm::vec3(0, 0, 15),
+		glm::vec3(10, 0, 10),
 		glm::vec3(0, 0, 0),
 		glm::vec3(0, 1, 0)
 		);
@@ -30,7 +30,10 @@ Renderer::~Renderer()
 /*
 	Draws a obj model
 */
-void Renderer::draw(GameObject *object) {
+void Renderer::draw(Renderable *object) {
+	/*if (!object->isRenderable())
+		return;
+
 	long cBufferSize = object->model->colours.size() * sizeof(glm::vec3),
 		vBufferSize = object->model->vertices.size() * sizeof(glm::vec3),
 		nBufferSize = object->model->normals.size() * sizeof(glm::vec3);
@@ -47,15 +50,21 @@ void Renderer::draw(GameObject *object) {
 	// Draw the triangles
 	glDrawArrays(GL_TRIANGLES, 0, object->model->vertices.size());
 
-	glBindVertexArray(0);
+	glBindVertexArray(0);*/
+
+	object->draw(this);
 
 }
 
 
-void Renderer::draw(std::vector<GameObject *> *objects) {
+void Renderer::draw(std::vector<Object *> *objects) {
 	startDrawing();
 	for (unsigned int i = 0; i < objects->size(); i++) {
-		draw(objects->at(i));
+		Object *obj = objects->at(i);
+		Renderable *robj = dynamic_cast<Renderable *>(obj);
+		if (robj) {
+			draw(robj);
+		}
 	}
 	stopDrawing();
 }

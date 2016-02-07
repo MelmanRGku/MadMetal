@@ -2,7 +2,7 @@
 
 
 GameWorld::GameWorld() {
-	gameObjects = new std::vector<GameObject*>;
+	gameObjects = new std::vector<Object*>;
 }
 
 

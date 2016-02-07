@@ -3,27 +3,20 @@
 
 void GameSimulation::simulatePhysics()
 {
-	std::cout << "Physics Simulated \n";
-	//audio.update();
-	//NOTE: a.update() doesn't belong here. Replace with some function that registers stuff to do with the audio engine
-	//a.playNewSound(0);
-	//a.playNewSound(0);
+	audio->update();
 
 }
 
 void GameSimulation::simulateAnimation()
 {
-	std::cout << "Animation Simulated \n";
 }
 
 void GameSimulation::simulateAI()
 {
-	std::cout << "AI Simulated \n";
 }
 
 void GameSimulation::simulatePlayers()
 {
-	std::cout << "Players Simulated \n";
 }
 
 void GameSimulation::updateObjects(double dt) {
@@ -48,21 +41,26 @@ GameSimulation::~GameSimulation()
 
 void GameSimulation::simulate(double dt)
 {
-	std::cout << "Simulation Begun.... \n";
 	simulateAI();
 	simulatePlayers();
 	simulatePhysics();
 	simulateAnimation();
 	updateObjects(dt);
-	std::cout << "Simulation Ended.... \n";
 }
 
 
 void GameSimulation::setupBasicGameWorldObjects() {
+	ObjModelLoader *loader = new ObjModelLoader();
+	RenderableObject *obj = new RenderableObject();
+	obj->model = loader->loadFromFile("Assets/Models/Cyborx 10XLl.obj");
+	world->addGameObject(obj);
+/*	Mesh *mesh = new Mesh();
+	mesh->loadFromFile("Assets/Models/Avent.obj");
 	Model *model = new ObjModel("Assets/Models/Stormtrooper.obj");
 	VAO *vao = new VAO(model);
 	GameObject *obj = new GameObject(vao, model);
-	world->addGameObject(obj);
+	obj->mesh = mesh;
+	world->addGameObject(obj);*/
 	//ObjectPositionUpdater *up = new ObjectPositionUpdater(obj, glm::vec3(-15, -15, -15), 3000);
 	//updaters.push_back(up);
 	//ObjectRotationUpdater *up = new ObjectRotationUpdater(obj, glm::vec3(0, 180, 0), 10000, ObjectRotationUpdater::ANGLE_TYPE_DEGREES);
