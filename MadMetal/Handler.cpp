@@ -1,5 +1,7 @@
+#pragma once
 #include "Libraries\glew\glew.h"
 #include "Libraries\glut\glut.h"
+#include "ParticleSystem\ParticleSystem.h"
 #include "Renderer\ShaderProgram.h"
 #include "Renderer\Renderer.h"
 #include "Global\Settings.h"
@@ -9,16 +11,13 @@
 #include "Simulation\Scene.h"
 #include <iostream>
 #include <windows.h>
+#include "Scene Manager\StackManager.h"
+
 
 Renderer *renderer;
-Input *input;
-std::vector<Scene *> *scenes;
-Audio *audio = new Audio();
-GamePad *gamePad = new GamePad();
+StackManager * m_stackManager;
 float lastDrawCallTime = 0;
-/*int waitCounter = 0;
-int packet = 0;
-DummyPosition * position = new DummyPosition(0, 1);*/
+//ParticleSystem * psystem = new ParticleSystem(10000);
 
 /*void updateSound() {
 
@@ -61,16 +60,17 @@ void initStatics() {
 }
 
 void initObjects() {
-	scenes = new std::vector<Scene *>();
-	input = new Input();
-	Scene *simulation = new GameSimulation();
-	simulation->initialize();
-	scenes->push_back(simulation);
+
+	//simulation = new Simulation();
+	//simulation->setupBasicGameWorldObjects();
 
 	//create a renderer and give it the shader program
 	renderer = new Renderer();
 	ShaderProgram *sp = new ShaderProgram("Renderer/VertexShader.glsl", "Renderer/FragmentShader.glsl");
 	renderer->setShader(sp);
+
+	psystem->initSystem(glutGet(GLUT_ELAPSED_TIME));
+	m_stackManager = new StackManager();
 }
 
 //MAIN GAME LOOP
@@ -86,19 +86,20 @@ void renderScene(void)
 	lastDrawCallTime = currentDrawCallTime;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0, 0.3, 0.3, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	input->updateGamePads();
-	for (unsigned int i = 0; i < scenes->size(); i++) {
-		Scene *simulation = scenes->at(i);
-	simulation->simulate(dt);
-	renderer->draw(simulation->getGameWorld()->getGameObjects());
-	}
+	//input->updateGamePads();
+	//simulation->simulate();
+	//psystem->update(glutGet(GLUT_ELAPSED_TIME));
+	//renderer->draw(psystem);
+	//renderer->draw(simulation->getGameWorld()->getGameObjects());
 
+	//updateSound();
+	m_stackManager->progressScene(glutGet(GLUT_ELAPSED_TIME));
 	glutSwapBuffers();
 
-	glutPostRedisplay();
+	//glutPostRedisplay();
 }
 
 void initOpengl(int argc, char **argv) {
@@ -112,15 +113,15 @@ void initOpengl(int argc, char **argv) {
 	glEnable(GL_DEPTH_TEST);
 	// register callbacks
 	glutDisplayFunc(renderScene);
-
+	glutIdleFunc(renderScene);
 	//initialize opengl functions
 	glewInit();
 
 }
 
-void initGamepad() {
-	input->getGamePadHandle(0, &gamePad);
-}
+//void initGamepad() {
+	//input->getGamePadHandle(&gamePad);
+//}
 
 
 int main(int argc, char **argv)
@@ -129,7 +130,7 @@ int main(int argc, char **argv)
 	initStatics();
 	initOpengl(argc, argv);
 	initObjects();
-	initGamepad();
+	
 
 	glutMainLoop();
 
@@ -138,69 +139,3 @@ int main(int argc, char **argv)
 
 
 
-/*
-
-int main(int argc, char* argv[])
-{
-
-	bool exit = false;
-	Input i = Input();
-	GamePad * gp = new GamePad();
-
-	Audio a;
-
-	int waitCounter = 0;
-	int packet = 0;
-
-	if (!i.getGamePadHandle(0, &gp))
-		exit = true;
-
-	DummyPosition * position = new DummyPosition(0, 1);
-	//a.quePositionalSource(&position);
-
-
-	while (!exit)
-	{
-		i.updateGamePads();
-		if (packet != gp->currentPacket){
-			packet = gp->currentPacket;
-			if (gp->isPressed(gp->AButton))
-				a.queStaticSource(0);
-			if (gp->isPressed(gp->BButton))
-				a.quePositionalSource(&position);
-
-			if (gp->isPressed(gp->XButton))
-				a.pauseSources();
-			if (gp->isPressed(gp->YButton))
-				a.resumeSources();
-			if (gp->isPressed(gp->LShoulder))
-				a.stopSources();
-			if (gp->isPressed(gp->RShoulder))
-
-				if (gp->isPressed(gp->StartButton))
-
-					if (gp->isPressed(gp->BackButton))
-					{
-						std::cout << "back button pressed \n";
-						i.releaseGamePadHandle(gp->getID(), &gp);
-					}
-
-		}
-		position->setPosition(gp->getLeftStickX(), gp->getLeftStickY());
-		a.update();
-
-
-		//position->movePosition(gp->getLeftStickX(), gp->getRightStickY());
-
-
-
-
-	}
-
-
-
-
-
-
-	return 0;
-}*/

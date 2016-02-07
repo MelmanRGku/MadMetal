@@ -1,6 +1,7 @@
 #include "Input.h"
 
 Input::Input() {
+	
 	int counter = 0;
 	for (int i = 0; i< XUSER_MAX_COUNT; i++)
 	{
@@ -11,15 +12,16 @@ Input::Input() {
 		}
 
 	}
+	std::cout << "Initialized Input. " << counter << " controllers connected \n";
 };
 
-void Input::updateGamePads()
+void Input::updateGamePads(double dt)
 {
 	for (int i = 0; i < XUSER_MAX_COUNT; i++)
 	{
 		if (gamePads[i]->checkConnection())
 		{
-			gamePads[i]->sampleState();
+			gamePads[i]->sampleState(dt);
 		}
 	}
 
@@ -55,6 +57,8 @@ bool Input::getGamePadHandle(int portNum, GamePad** handle)
 	}
 }
 
+
+
 void Input::releaseGamePadHandle(int portNum, GamePad ** handle)
 {
 	char *line = new char[100];
@@ -64,4 +68,17 @@ void Input::releaseGamePadHandle(int portNum, GamePad ** handle)
 	*handle = new GamePad();
 	gamePads[portNum]->setOwned(false);
 	
+}
+
+GamePad * Input::getGamePadHandle()
+{
+
+	for (int portNum = 0; portNum < 4; portNum++)
+	{
+		if (gamePads[portNum]->checkConnection())
+		{
+			return gamePads[portNum];
+		}
+	}
+	return NULL;
 }
