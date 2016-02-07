@@ -70,7 +70,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Audio\Audio.cpp" />
-    <ClCompile Include="Controllable.cpp" />
+    <ClCompile Include="Game Logic\Controllable.cpp" />
     <ClCompile Include="Files\FileReader.cpp" />
     <ClCompile Include="Input\GamePad.cpp" />
     <ClCompile Include="Input\Input.cpp" />
@@ -85,17 +85,18 @@
     <ClCompile Include="ParticleSystem\ParticleEmitter.cpp" />
     <ClCompile Include="ParticleSystem\ParticleGenerator.cpp" />
     <ClCompile Include="ParticleSystem\ParticleUpdater.cpp" />
-    <ClCompile Include="PlayerControllable.cpp" />
+    <ClCompile Include="Game Logic\PlayerControllable.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
+    <ClCompile Include="Scene Manager\Scene.cpp" />
+    <ClCompile Include="Scene Manager\StackManager.cpp" />
     <ClCompile Include="Simulation\GameWorld.cpp" />
     <ClCompile Include="Renderer\VAO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
-    <ClInclude Include="Controllable.h" />
-    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="Game Logic\Controllable.h" />
     <ClInclude Include="Input\GamePad.h" />
     <ClInclude Include="Objects\GameObject.h" />
     <ClInclude Include="Objects\Model.h" />
@@ -104,10 +105,11 @@
     <ClInclude Include="ParticleSystem\ParticleGenerator.h" />
     <ClInclude Include="ParticleSystem\ParticleSystem.h" />
     <ClInclude Include="ParticleSystem\ParticleUpdater.h" />
-    <ClInclude Include="PlayerControllable.h" />
-    <ClInclude Include="PowerUp.h" />
-    <ClInclude Include="Projectile.h" />
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Game Logic\PlayerControllable.h" />
+    <ClInclude Include="Game Logic\PowerUp.h" />
+    <ClInclude Include="Game Logic\Projectile.h" />
+    <ClInclude Include="Scene Manager\Scene.h" />
+    <ClInclude Include="Scene Manager\StackManager.h" />
     <ClInclude Include="Simulation\GameWorld.h" />
     <ClInclude Include="Global\Log.h" />
     <ClInclude Include="Files\FileReader.h" />

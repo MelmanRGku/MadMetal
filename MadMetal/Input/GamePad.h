@@ -1,7 +1,8 @@
 #include <windows.h>
 #include <Xinput.h>
 #include <cmath>
-
+#ifndef GAMEPAD_H
+#define GAMEPAD_H
 #define DEADZONE_X 0.05
 #define DEADZONE_Y 0.02
 
@@ -19,6 +20,7 @@ private:
 		rightStick;
 	float leftTrigger;
 	float rightTrigger;
+	int currentPacket;
 
 	XINPUT_STATE state;//data struct recturned from xinput of current controller state
 
@@ -42,17 +44,21 @@ public:
 	static const int YButton = XINPUT_GAMEPAD_Y;
 	static const int AButton = XINPUT_GAMEPAD_A;
 	static const int BButton = XINPUT_GAMEPAD_B;
+	static const int DPadRight = XINPUT_GAMEPAD_DPAD_RIGHT;
+	static const int DPadLeft = XINPUT_GAMEPAD_DPAD_LEFT;
 	static const int StartButton = XINPUT_GAMEPAD_START;
 	static const int BackButton = XINPUT_GAMEPAD_BACK;
 	static const int LShoulder = XINPUT_GAMEPAD_LEFT_SHOULDER;
 	static const int RShoulder = XINPUT_GAMEPAD_RIGHT_SHOULDER;
 
-	int currentPacket = 0;
+
 	
 
 	int getID();
+	int getPacket();
 	bool isOwned();
 	void setOwned(bool owned);
+	
 
 	bool checkConnection();
 	bool sampleState();
@@ -66,3 +72,4 @@ public:
 	float getRightTrigger();
 };
 
+#endif

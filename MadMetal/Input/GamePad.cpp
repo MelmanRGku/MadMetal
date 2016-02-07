@@ -28,8 +28,11 @@ bool GamePad::sampleState()
 	//if (state.dwPacketNumber == currentPacket)
 	//	return true;
 
-	
 	currentPacket = state.dwPacketNumber;
+		
+	
+	
+	
 	
 	//calculate displacements of left and right joysticks
 	float dispX = fmaxf(-1, (float)state.Gamepad.sThumbLX / 32767);
@@ -61,9 +64,13 @@ bool GamePad::sampleState()
 	
 }
 
+int GamePad::getPacket()
+{
+	return currentPacket;
+}
+
 bool GamePad::isPressed(int gamePadButton)
 {
-	
 	return (gamePadButton & state.Gamepad.wButtons);
 }
 

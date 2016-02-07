@@ -1,7 +1,9 @@
+#pragma once
 #include "GamePad.h"
 #include "../Global/Log.h"
 #include <iostream>
-
+#ifndef INPUT_H
+#define INPUT_H
 class Input
 {
 private:
@@ -12,6 +14,8 @@ public:
 
 	void updateGamePads();
 	bool getGamePadHandle(int portNumber, GamePad** handle);
-	bool getGamePadHandle(GamePad** handle);
+	GamePad * getGamePadHandle();
 	void releaseGamePadHandle(int portNumber, GamePad** handle);
 };
+
+#endif

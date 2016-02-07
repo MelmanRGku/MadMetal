@@ -7,23 +7,22 @@
 #include "Objects\ObjModel.h"
 #include "Global\Settings.h"
 #include "Global\Log.h"
-#include "Input\Input.h"
+
 #include "Simulation\Simulation.h"
 #include <iostream>
 #include <windows.h>
+#include "Scene Manager\StackManager.h"
 
 
 Renderer *renderer;
-Input *input;
 Simulation *simulation;
-Audio *audio = new Audio();
-GamePad *gamePad = new GamePad();
-int waitCounter = 0;
-int packet = 0;
+StackManager * m_stackManager;
+
+
 DummyPosition * position = new DummyPosition(0, 1);
 ParticleSystem * psystem = new ParticleSystem(10000);
 
-void updateSound() {
+/*void updateSound() {
 
 	input->updateGamePads();
 	if (packet != gamePad->currentPacket){
@@ -52,7 +51,7 @@ void updateSound() {
 	}
 	position->setPosition(gamePad->getLeftStick().x, gamePad->getLeftStick().y);
 	audio->update();
-}
+}*/
 
 void initStatics() {
 	//load settings from a file
@@ -64,9 +63,9 @@ void initStatics() {
 }
 
 void initObjects() {
-	input = new Input();
-	simulation = new Simulation();
-	simulation->setupBasicGameWorldObjects();
+	
+	//simulation = new Simulation();
+	//simulation->setupBasicGameWorldObjects();
 
 	//create a renderer and give it the shader program
 	renderer = new Renderer();
@@ -74,6 +73,7 @@ void initObjects() {
 	renderer->setShader(sp);
 
 	psystem->initSystem(glutGet(GLUT_ELAPSED_TIME));
+	m_stackManager = new StackManager();
 }
 
 void renderScene(void)
@@ -85,12 +85,12 @@ void renderScene(void)
 
 	//input->updateGamePads();
 	//simulation->simulate();
-	psystem->update(glutGet(GLUT_ELAPSED_TIME));
-	renderer->draw(psystem);
+	//psystem->update(glutGet(GLUT_ELAPSED_TIME));
+	//renderer->draw(psystem);
 	//renderer->draw(simulation->getGameWorld()->getGameObjects());
 
 	//updateSound();
-
+	m_stackManager->progressScene(glutGet(GLUT_ELAPSED_TIME));
 	glutSwapBuffers();
 	//std::cout << "Game Cycle finished.... \n\n";
 
@@ -114,9 +114,9 @@ void initOpengl(int argc, char **argv) {
 
 }
 
-void initGamepad() {
-	input->getGamePadHandle(&gamePad);
-}
+//void initGamepad() {
+	//input->getGamePadHandle(&gamePad);
+//}
 
 
 int main(int argc, char **argv)
@@ -125,7 +125,7 @@ int main(int argc, char **argv)
 	initStatics();
 	initOpengl(argc, argv);
 	initObjects();
-	initGamepad();
+	
 
 	glutMainLoop();
 
@@ -134,69 +134,3 @@ int main(int argc, char **argv)
 
 
 
-/*
-
-int main(int argc, char* argv[])
-{
-
-	bool exit = false;
-	Input i = Input();
-	GamePad * gp = new GamePad();
-
-	Audio a;
-
-	int waitCounter = 0;
-	int packet = 0;
-
-	if (!i.getGamePadHandle(0, &gp))
-		exit = true;
-
-	DummyPosition * position = new DummyPosition(0, 1);
-	//a.quePositionalSource(&position);
-
-
-	while (!exit)
-	{
-		i.updateGamePads();
-		if (packet != gp->currentPacket){
-			packet = gp->currentPacket;
-			if (gp->isPressed(gp->AButton))
-				a.queStaticSource(0);
-			if (gp->isPressed(gp->BButton))
-				a.quePositionalSource(&position);
-
-			if (gp->isPressed(gp->XButton))
-				a.pauseSources();
-			if (gp->isPressed(gp->YButton))
-				a.resumeSources();
-			if (gp->isPressed(gp->LShoulder))
-				a.stopSources();
-			if (gp->isPressed(gp->RShoulder))
-
-				if (gp->isPressed(gp->StartButton))
-
-					if (gp->isPressed(gp->BackButton))
-					{
-						std::cout << "back button pressed \n";
-						i.releaseGamePadHandle(gp->getID(), &gp);
-					}
-
-		}
-		position->setPosition(gp->getLeftStickX(), gp->getLeftStickY());
-		a.update();
-
-
-		//position->movePosition(gp->getLeftStickX(), gp->getRightStickY());
-
-
-
-
-	}
-
-
-
-
-
-
-	return 0;
-}*/

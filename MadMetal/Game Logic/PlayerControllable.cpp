@@ -1,12 +1,14 @@
 #include "PlayerControllable.h"
-PlayerControllable::PlayerControllable(GameObject * gameObject, GamePad * gamePad)
+PlayerControllable::PlayerControllable(char * fileName, GamePad * gamePad)
 {
-	if (gameObject == NULL)
+	if (fileName == "")
 		std::cout << "Passed null gameObject reference to Player Controllable Constructor ABORT!!!!!\n";
+	else
+		std::cout << "New Player created with character " << fileName << " \n";
 	if (gamePad == NULL)
 		std::cout << "Passed null gamePad reference to Player Controllable Constructor ABORT!!!!!\n";
-	m_currentModel = &gameObject;
-	m_normalModel = gameObject;
+	//m_currentModel = &gameObject;
+	//m_normalModel = gameObject;
 	m_gamePad = gamePad;
 
 	m_currentTime = 0;
@@ -25,6 +27,8 @@ PlayerControllable::~PlayerControllable()
 	m_gamePad = NULL;
 }
 
+GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
+
 void PlayerControllable::playFrame(double dt)
 {
 	update(dt);
@@ -34,47 +38,47 @@ void PlayerControllable::playFrame(double dt)
 		{
 			if (m_gamePad->isPressed(GamePad::XButton))
 			{
-
+				std::cout << "Xpressed \n";
 			}
 
 			if (m_gamePad->isPressed(GamePad::YButton))
 			{
-
+				std::cout << "Ypressed \n";
 			}
 
 			if (m_gamePad->isPressed(GamePad::AButton))
 			{
-
+				std::cout << "Apressed \n";
 			}
 
 			if (m_gamePad->isPressed(GamePad::BButton))
 			{
-
+				std::cout << "Bpressed \n";
 			}
 
 			if (m_gamePad->isPressed(GamePad::StartButton))
 			{
-
+				std::cout << "Startpressed \n";
 			}
 
 			if (m_gamePad->isPressed(GamePad::LShoulder))
 			{
-
+				std::cout << "LShoulderpressed \n";
 			}
 
 			if (m_gamePad->isPressed(GamePad::RShoulder))
 			{
-
+				std::cout << "RShoulderpressed \n";
 			}
 
 			if (m_gamePad->getRightTrigger())
 			{
-
+				std::cout << "RightTriggpressed \n";
 			}
 
 			if (m_gamePad->getLeftTrigger())
 			{
-
+				std::cout << "LeftTriggpressed \n";
 			}
 		}
 		else {

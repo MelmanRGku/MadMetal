@@ -62,7 +62,7 @@ public:
 
 
 	void setupBasicGameWorldObjects() {
-		Model *model = new ObjModel("Assets/Models/Stormtrooper.obj");
+		Model *model = new ObjModel("..\Assets/Models/Stormtrooper.obj");
 		VAO *vao = new VAO(model);
 		GameObject *obj = new GameObject(vao, model);
 		gw->addGameObject(obj);

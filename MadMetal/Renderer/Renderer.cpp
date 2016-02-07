@@ -45,6 +45,7 @@ void Renderer::draw(ParticleSystem * sys)
 	glBindVertexArray(sys->m_vao);
 
 	// Draw the triangles
+	glPointSize(2);
 	glDrawArrays(GL_POINTS, 0, sys->p->m_countAlive);
 
 	glBindVertexArray(0);

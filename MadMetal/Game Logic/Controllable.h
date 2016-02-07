@@ -1,5 +1,5 @@
 #include "PowerUp.h"
-#include "Objects\GameObject.h"
+#include "..\Objects\GameObject.h"
 
 
 #ifndef CONTROLLABLE_H
