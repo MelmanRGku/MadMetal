@@ -117,6 +117,7 @@
     <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.h" />
     <ClInclude Include="Objects\RenderableObject.h" />
     <ClInclude Include="Objects\Texture.h" />
+    <ClInclude Include="Renderer\Renderable.h" />
     <ClInclude Include="Simulation\GameWorld.h" />
     <ClInclude Include="Global\Log.h" />
     <ClInclude Include="Files\FileReader.h" />

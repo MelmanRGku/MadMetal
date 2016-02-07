@@ -4,6 +4,7 @@
 #include "..\Libraries\glm\gtc\matrix_transform.hpp"
 #include "..\Global\Settings.h"
 #include "..\Objects\RenderableObject.h"
+#include "Renderable.h"
 #include "ShaderProgram.h"
 
 class RenderableObject;
@@ -17,7 +18,7 @@ public:
 	Renderer();
 	~Renderer();
 	void setShader(ShaderProgram *sp) { shader = sp; }
-	void draw(RenderableObject *object);
+	void draw(Renderable *object);
 	void draw(std::vector<Object *> *objects);
 	void startDrawing();
 	void stopDrawing();

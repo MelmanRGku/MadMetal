@@ -30,7 +30,7 @@ Renderer::~Renderer()
 /*
 	Draws a obj model
 */
-void Renderer::draw(RenderableObject *object) {
+void Renderer::draw(Renderable *object) {
 	/*if (!object->isRenderable())
 		return;
 
@@ -61,7 +61,7 @@ void Renderer::draw(std::vector<Object *> *objects) {
 	startDrawing();
 	for (unsigned int i = 0; i < objects->size(); i++) {
 		Object *obj = objects->at(i);
-		RenderableObject *robj = dynamic_cast<RenderableObject *>(obj);
+		Renderable *robj = dynamic_cast<Renderable *>(obj);
 		if (robj) {
 			draw(robj);
 		}

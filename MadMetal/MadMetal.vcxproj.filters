@@ -185,5 +185,8 @@
     <ClInclude Include="Objects\ObjectLoaders\ObjModelLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\Renderable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
