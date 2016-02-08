@@ -56,10 +56,10 @@ StackManager::StackManager()
 	//initaliaze inptu
 	m_input = new Input();
 	//set starting scene to Main Menu and pass a controller handle
-	m_physicsCreator = new PhysicsManager();
-	PlayerControllable * toAdd = new PlayerControllable("", m_input->getGamePadHandle());
-	m_currentScene = new GameSimulation(*m_physicsCreator, toAdd);
-	//m_currentScene = new MainMenuScene(m_input->getGamePadHandle());
+	//m_physicsCreator = new PhysicsManager();
+	//PlayerControllable * toAdd = new PlayerControllable("", m_input->getGamePadHandle());
+	//m_currentScene = new GameSimulation(*m_physicsCreator, toAdd);
+	m_currentScene = new MainMenuScene(m_input->getGamePadHandle());
 	//intialize mail box
 	m_mailBox = new SceneMessage();
 	//set mail box to empty
@@ -120,7 +120,7 @@ void StackManager::progressScene(int newTime)
 
 	//calculate delta time
 	double dt = static_cast<double>(newTime) / 1000;
-	std::cout << "Dt = " << dt << std::endl;
+	
 	//update gamecontrollers
 	m_input->updateGamePads(dt);
 

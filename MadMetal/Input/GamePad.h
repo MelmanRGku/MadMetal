@@ -5,7 +5,7 @@
 #define GAMEPAD_H
 #define DEADZONE_X 0.2
 #define DEADZONE_Y 0.2
-#define UPDATE_DELAY 0.002
+
 
 struct AnalogStick {
 	float x, y;
@@ -56,13 +56,44 @@ private:
 	
 
 public:
+	
 	GamePad() : deadzoneX(DEADZONE_X), deadzoneY(DEADZONE_Y), controllerID(-1) 
 	{
 		owned = false;
+	
+		xState = IDLE;
+		bState = IDLE;
+		aState = IDLE;
+		yState = IDLE;
+		dprState = IDLE;
+		dplState = IDLE;
+		dpuState = IDLE;
+		dpdState = IDLE;
+		lsState = IDLE;
+		rsState = IDLE;
+		ljuState = IDLE;
+		ljdState = IDLE;
+		ljlState = IDLE;
+		ljrState = IDLE;
 	}
 	GamePad(int cID) : deadzoneX(DEADZONE_X), deadzoneY(DEADZONE_Y), controllerID(cID) 
 	{
 		owned = false;
+	
+		xState = IDLE;
+		bState = IDLE;
+		aState = IDLE;
+		yState = IDLE;
+		dprState = IDLE;
+		dplState = IDLE;
+		dpuState = IDLE;
+		dpdState = IDLE;
+		lsState = IDLE;
+		rsState = IDLE;
+		ljuState = IDLE;
+		ljdState = IDLE;
+		ljlState = IDLE;
+		ljrState = IDLE;
 	}
 
 	~GamePad(){}

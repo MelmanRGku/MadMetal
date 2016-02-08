@@ -61,7 +61,7 @@ void GameSimulation::initialize() {
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(m_physicsHandler.getScale());
-	sceneDesc.gravity = PxVec3(0.0f, 0.0f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -1.0f, 0.0f);
 	
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 

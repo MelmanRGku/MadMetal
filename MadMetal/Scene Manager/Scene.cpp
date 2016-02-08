@@ -18,10 +18,10 @@ bool MainMenuScene::simulateScene(double dt, SceneMessage &message)
 	if (m_gamePad->checkConnection())
 	{
 		
-		if (m_gamePad->isPressed(m_gamePad->DPadLeft))
+		if (m_gamePad->isPressed(m_gamePad->LJoyLeft))
 		{
 			m_currentSelection = ++m_currentSelection % 2;
-			std::cout << "Right arrow Pressed \n";
+			std::cout << "Left arrow Pressed \n";
 			std::cout << m_currentSelection << " \n";
 		}
 		
@@ -31,11 +31,12 @@ bool MainMenuScene::simulateScene(double dt, SceneMessage &message)
 			{
 				m_currentSelection = 1;
 			}
-			std::cout << "Left arrow Pressed \n";
+			std::cout << "Right arrow Pressed \n";
 			std::cout << m_currentSelection << " \n";
 		}
 		if (m_gamePad->isPressed(m_gamePad->AButton))
 		{	
+			
 				std::cout << "X Button Pressed \n";
 				message = SceneMessage(m_selections[m_currentSelection]);
 				return true;
