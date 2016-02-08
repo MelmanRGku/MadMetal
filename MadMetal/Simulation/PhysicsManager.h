@@ -11,12 +11,13 @@ class PhysicsManager
 public:
 	PhysicsManager();
 	virtual ~PhysicsManager();
-	
+	//void updatePhysics(float dt);
+	PxPhysics& getPhysicsInstance();
+	PxTolerancesScale& getScale();
 
 private:
 	void initPhysicsSimulation();
 	void shutdownPhysicsSimualtion();
-	void updatePhysics(float dt);
 
 private: // members
 	PxFoundation* physicsFoundation_;
@@ -28,7 +29,7 @@ private: // members
 
 	PxDefaultCpuDispatcher* mCpuDispatcher;
 
-	PxScene* mScene;
-
 	PxSceneDesc* sceneDesc;
+
+	PxTolerancesScale *m_scale;
 };

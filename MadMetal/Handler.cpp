@@ -13,7 +13,7 @@ float lastDrawCallTime = 0;
 //ParticleSystem * psystem = new ParticleSystem(10000);
 
 void initStatics()
-{
+				{
 	//load settings from a file
 	Settings::loadSettingsFromFile("settings.txt");
 	//initialize the debug (log)

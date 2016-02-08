@@ -13,12 +13,7 @@
 
 class GameSimulation : public Scene{
 private:
-
-	std::vector<ObjectUpdater *> updaters;
-	
-	PhysicsManager *physics;
-
-	void simulatePhysics();
+	void simulatePhysics(float dt);
 
 	void simulateAnimation();
 
@@ -28,8 +23,15 @@ private:
 
 	void updateObjects(double dt);
 
+	void createPhysicsScene();
+
+private: //members
+	std::vector<ObjectUpdater *> updaters;
+
+	PhysicsManager& m_physicsHandler;
+	PxScene* m_scene;
 public:
-	GameSimulation();
+	GameSimulation(PhysicsManager& physicsInstance);
 	~GameSimulation();
 
 	bool simulateScene(double dt, SceneMessage &newMessage);

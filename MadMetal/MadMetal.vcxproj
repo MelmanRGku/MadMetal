@@ -98,6 +98,7 @@
     <ClCompile Include="ParticleSystem\ParticleEmitter.cpp" />
     <ClCompile Include="ParticleSystem\ParticleGenerator.cpp" />
     <ClCompile Include="ParticleSystem\ParticleUpdater.cpp" />
+    <ClCompile Include="Objects\PhysicsObject.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
@@ -132,6 +133,7 @@
     <ClInclude Include="ParticleSystem\ParticleGenerator.h" />
     <ClInclude Include="ParticleSystem\ParticleSystem.h" />
     <ClInclude Include="ParticleSystem\ParticleUpdater.h" />
+    <ClInclude Include="Objects\PhysicsObject.h" />
     <ClInclude Include="Renderer\Renderable.h" />
     <ClInclude Include="Scene Manager\Scene.h" />
     <ClInclude Include="Scene Manager\StackManager.h" />

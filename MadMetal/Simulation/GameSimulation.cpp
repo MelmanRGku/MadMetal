@@ -1,10 +1,20 @@
 #include "GameSimulation.h"
+#include "PhysicsManager.h"
+#include "PxDefaultCpuDispatcher.h"
+#include "PxDefaultSimulationFilterShader.h"
 
+using namespace std;
 
-void GameSimulation::simulatePhysics()
+void GameSimulation::simulatePhysics(float dt)
 {
 //	audio->update();
 
+	m_scene->simulate(dt);
+	m_scene->fetchResults(true);
+
+	cout << m_world->getGameObjects()->at(0)->getPosition().x << " ";
+	cout << m_world->getGameObjects()->at(0)->getPosition().y << " ";
+	cout << m_world->getGameObjects()->at(0)->getPosition().z << endl;
 }
 
 void GameSimulation::simulateAnimation()
@@ -28,24 +38,43 @@ void GameSimulation::updateObjects(double dt) {
 }
 
 void GameSimulation::initialize() {
+	createPhysicsScene();
 	setupBasicGameWorldObjects();
-	physics = new PhysicsManager();
 }
 
-GameSimulation::GameSimulation()
+void GameSimulation::createPhysicsScene()
+{
+	PxSceneDesc sceneDesc(m_physicsHandler.getScale());
+	sceneDesc.gravity = PxVec3(0.0f, -1.0f, 0.0f);
+	
+	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
+
+	if (!sceneDesc.filterShader)
+	{
+		sceneDesc.filterShader = PxDefaultSimulationFilterShader;
+	}
+
+	m_scene = m_physicsHandler.getPhysicsInstance().createScene(sceneDesc);
+	if (!m_scene)
+	{
+		std::cout << "The scene is a lie. ERROR CODE: PX0005" << std::endl;
+	}
+}
+
+GameSimulation::GameSimulation(PhysicsManager& physicsInstance)
+: m_physicsHandler(physicsInstance)
 {
 	initialize();
 }
 GameSimulation::~GameSimulation()
 {
-	delete physics;
 }
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
 	simulateAI();
 	simulatePlayers();
-	simulatePhysics();
+	simulatePhysics(dt);
 	simulateAnimation();
 	updateObjects(dt);
 	return false;
@@ -56,7 +85,21 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	ObjModelLoader *loader = new ObjModelLoader();
 	RenderableObject *obj = new RenderableObject();
 	obj->model = loader->loadFromFile("Assets/Models/Stormtrooper.obj");
-	world->addGameObject(obj);
+	m_world->addGameObject(obj);
+	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 0, 0));
+	PxMaterial* mMaterial;
+
+	mMaterial = m_physicsHandler.getPhysicsInstance().createMaterial(0.5f, 0.5f, 0.1f);    //static friction, dynamic friction, restitution
+	if (!mMaterial)
+	{
+		std::cout << "Material failed to create. ERROR CODE: PX0006" << std::endl;
+	}
+	PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(0.2), *mMaterial);
+	PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
+	tmpActor->setLinearVelocity(PxVec3(PxReal(0.0), PxReal(1.0), PxReal(0.0)));
+	obj->setActor(tmpActor);
+
+	m_scene->addActor(*tmpActor);
 /*	Mesh *mesh = new Mesh();
 	mesh->loadFromFile("Assets/Models/Avent.obj");
 	Model *model = new ObjModel("Assets/Models/Stormtrooper.obj");
@@ -98,3 +141,4 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	updaters.push_back(upd);*/
 	
 }
+

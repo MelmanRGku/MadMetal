@@ -56,7 +56,8 @@ StackManager::StackManager()
 	//initaliaze inptu
 	m_input = new Input();
 	//set starting scene to Main Menu and pass a controller handle
-	m_currentScene = new GameSimulation();
+	m_physicsCreator = new PhysicsManager();
+	m_currentScene = new GameSimulation(*m_physicsCreator);
 	//m_currentScene = new MainMenuScene(m_input->getGamePadHandle());
 	//intialize mail box
 	m_mailBox = new SceneMessage();
@@ -72,6 +73,7 @@ StackManager::StackManager()
 
 StackManager::~StackManager()
 {
+	delete m_physicsCreator;
 	delete m_renderer;
 	delete m_input;
 	delete m_currentScene;

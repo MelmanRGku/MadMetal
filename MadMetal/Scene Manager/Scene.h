@@ -56,20 +56,20 @@ class Scene
 protected:
 	bool m_isPaused;
 	SceneMessage * m_message;
-	World *world;
+	World *m_world;
 public:
 	Scene() {
-		world = new World();
+		m_world = new World();
 	}
 
 	virtual ~Scene() {
-		delete world;
+		delete m_world;
 	}
 	virtual bool simulateScene(double dt, SceneMessage &newMessage) = 0;
 	bool isPaused() { return m_isPaused; }
 	//set paused will need to be updated to pause sound at the same time
 	void setPaused(bool paused) { m_isPaused = paused; }
-	World* getWorld() { return world; }
+	World* getWorld() { return m_world; }
 	//virtual void loadFromFile();
 };
 

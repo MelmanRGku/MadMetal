@@ -2,6 +2,9 @@
 #include "Scene.h"
 #include <vector>
 #include "Renderer\Renderer.h"
+#include "Simulation\PhysicsManager.h"
+
+
 class SceneStack
 {
 private:
@@ -29,6 +32,9 @@ private:
 	SceneMessage * m_mailBox;
 
 	Renderer* m_renderer;
+	PhysicsManager* m_physicsCreator;
+	
+	
 public:
 	StackManager();
 	//StackManager(Scene * startScene);
