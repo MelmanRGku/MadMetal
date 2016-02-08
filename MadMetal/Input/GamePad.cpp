@@ -208,15 +208,7 @@ void GamePad::setButtonStates()
 
 bool GamePad::sampleState(double dt)
 {
-	//std::cout << dt << std::endl;
-	if ((updateAccumulator += dt) > UPDATE_DELAY)
-	{
-		updateAccumulator -= UPDATE_DELAY;
-	}
-	else 
-	{
-		return true;
-	}
+	
 	ZeroMemory(&state, sizeof(XINPUT_STATE)); //zero memory of state
 	
 	//return if controller not connected 
@@ -273,9 +265,9 @@ bool GamePad::isPressed(int gamePadButton)
 	case(YButton) :
 		return yState == PRESSED;
 	case (DPadLeft) :
-		return dplState == PRESSED;
+		return DPadLeft & state.Gamepad.wButtons;
 	case (DPadRight) :
-		return dprState == PRESSED;
+		return DPadRight & state.Gamepad.wButtons;
 	case (DPadUp) :
 		return dpuState == PRESSED;
 	case (DPadDown) :

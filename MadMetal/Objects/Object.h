@@ -22,5 +22,6 @@ public:
 	void updatePosition(glm::vec3 dp) { position += dp; }
 	glm::vec3  getPosition(){ return position; };
 	void setActor(PxRigidDynamic *actor) { physicsActor = actor; }
+	PxRigidDynamic& getActor();
 };
 

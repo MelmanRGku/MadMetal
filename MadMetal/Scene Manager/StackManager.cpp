@@ -57,7 +57,8 @@ StackManager::StackManager()
 	m_input = new Input();
 	//set starting scene to Main Menu and pass a controller handle
 	m_physicsCreator = new PhysicsManager();
-	m_currentScene = new GameSimulation(*m_physicsCreator);
+	PlayerControllable * toAdd = new PlayerControllable("", m_input->getGamePadHandle());
+	m_currentScene = new GameSimulation(*m_physicsCreator, toAdd);
 	//m_currentScene = new MainMenuScene(m_input->getGamePadHandle());
 	//intialize mail box
 	m_mailBox = new SceneMessage();

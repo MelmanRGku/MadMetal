@@ -25,6 +25,8 @@ PlayerControllable::~PlayerControllable()
 	m_gamePad = NULL;
 }
 
+void PlayerControllable::setObject(Object* toAdd) { m_car = toAdd; }
+
 GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
 
 void PlayerControllable::playFrame(double dt)
@@ -32,9 +34,22 @@ void PlayerControllable::playFrame(double dt)
 	update(dt);
 	if (m_gamePad->checkConnection())
 	{
+		
 		if (m_isAlive)
 		{
-			if (m_gamePad->isPressed(GamePad::XButton))
+			
+			if (m_gamePad->isPressed(GamePad::DPadLeft))
+			{
+				
+				m_car->getActor().setLinearVelocity(PxVec3(-.5, 0, 0));
+			}
+
+			if (m_gamePad->isPressed(GamePad::DPadRight))
+			{
+				
+				m_car->getActor().setLinearVelocity(PxVec3(.5, 0, 0));
+			}
+			/*if (m_gamePad->isPressed(GamePad::XButton))
 			{
 				std::cout << "Xpressed \n";
 			}
@@ -77,7 +92,7 @@ void PlayerControllable::playFrame(double dt)
 			if (m_gamePad->getLeftTrigger())
 			{
 				std::cout << "LeftTriggpressed \n";
-			}
+			}*/
 		}
 		else {
 			//do nothing cause you dead bro

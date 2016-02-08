@@ -144,7 +144,7 @@ bool SinglePlayerGameScene::simulateScene(double dt, SceneMessage &message)
 		std::cout << "Controller is Disconnected \n";
 	}
 
-	m_player->playFrame(dt);
+	//m_player->playFrame(dt);
 	return false;
 }
 

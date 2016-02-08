@@ -19,7 +19,7 @@ private:
 
 	void simulateAI();
 
-	void simulatePlayers();
+	void simulatePlayers(double dt);
 
 	void updateObjects(double dt);
 
@@ -27,11 +27,12 @@ private:
 
 private: //members
 	std::vector<ObjectUpdater *> updaters;
+	std::vector<PlayerControllable *> m_players;
 
 	PhysicsManager& m_physicsHandler;
 	PxScene* m_scene;
 public:
-	GameSimulation(PhysicsManager& physicsInstance);
+	GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player);
 	~GameSimulation();
 
 	bool simulateScene(double dt, SceneMessage &newMessage);

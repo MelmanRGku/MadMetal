@@ -5,6 +5,21 @@
 
 using namespace std;
 
+GameSimulation::GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player)
+: m_physicsHandler(physicsInstance)
+{
+	m_players.push_back(player);
+	initialize();
+	
+	
+}
+
+GameSimulation::~GameSimulation()
+{
+}
+
+
+
 void GameSimulation::simulatePhysics(float dt)
 {
 //	audio->update();
@@ -12,9 +27,6 @@ void GameSimulation::simulatePhysics(float dt)
 	m_scene->simulate(dt);
 	m_scene->fetchResults(true);
 
-	cout << m_world->getGameObjects()->at(0)->getPosition().x << " ";
-	cout << m_world->getGameObjects()->at(0)->getPosition().y << " ";
-	cout << m_world->getGameObjects()->at(0)->getPosition().z << endl;
 }
 
 void GameSimulation::simulateAnimation()
@@ -25,8 +37,12 @@ void GameSimulation::simulateAI()
 {
 }
 
-void GameSimulation::simulatePlayers()
+void GameSimulation::simulatePlayers(double dt)
 {
+	for (int i = 0; i < m_players.size(); i++)
+	{
+		m_players[i]->playFrame(dt);
+	}
 }
 
 void GameSimulation::updateObjects(double dt) {
@@ -45,7 +61,7 @@ void GameSimulation::initialize() {
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(m_physicsHandler.getScale());
-	sceneDesc.gravity = PxVec3(0.0f, -1.0f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, 0.0f, 0.0f);
 	
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 
@@ -61,19 +77,12 @@ void GameSimulation::createPhysicsScene()
 	}
 }
 
-GameSimulation::GameSimulation(PhysicsManager& physicsInstance)
-: m_physicsHandler(physicsInstance)
-{
-	initialize();
-}
-GameSimulation::~GameSimulation()
-{
-}
+
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
 	simulateAI();
-	simulatePlayers();
+	simulatePlayers(dt);
 	simulatePhysics(dt);
 	simulateAnimation();
 	updateObjects(dt);
@@ -96,10 +105,11 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	}
 	PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(0.2), *mMaterial);
 	PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
-	tmpActor->setLinearVelocity(PxVec3(PxReal(0.0), PxReal(1.0), PxReal(0.0)));
+	tmpActor->setLinearVelocity(PxVec3(PxReal(0.0), PxReal(0.0), PxReal(0.0)));
 	obj->setActor(tmpActor);
 
 	m_scene->addActor(*tmpActor);
+	m_players[0]->setObject(obj);
 /*	Mesh *mesh = new Mesh();
 	mesh->loadFromFile("Assets/Models/Avent.obj");
 	Model *model = new ObjModel("Assets/Models/Stormtrooper.obj");
