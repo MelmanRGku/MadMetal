@@ -23,9 +23,11 @@ PlayerControllable::PlayerControllable(char * fileName, GamePad * gamePad)
 PlayerControllable::~PlayerControllable()
 {
 	m_gamePad = NULL;
+	delete m_camera;
 }
 
 void PlayerControllable::setObject(Object* toAdd) { m_car = toAdd; }
+void PlayerControllable::setCamera(Camera * camera){ m_camera = camera; }
 
 GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
 
@@ -49,6 +51,14 @@ void PlayerControllable::playFrame(double dt)
 				
 				m_car->getActor().setLinearVelocity(PxVec3(.5, 0, 0));
 			}
+
+			if (m_gamePad->isPressed(GamePad::DPadDown))
+			{
+
+				m_car->getActor().setLinearVelocity(PxVec3(0, 0, .5));
+			}
+
+
 			/*if (m_gamePad->isPressed(GamePad::XButton))
 			{
 				std::cout << "Xpressed \n";
@@ -93,6 +103,10 @@ void PlayerControllable::playFrame(double dt)
 			{
 				std::cout << "LeftTriggpressed \n";
 			}*/
+			if (m_camera != NULL)
+			{
+				m_camera->rotateCamera(m_gamePad->getRightStick().x);
+			}
 		}
 		else {
 			//do nothing cause you dead bro

@@ -126,6 +126,15 @@ void StackManager::progressScene(int newTime)
 
 	//progress the state of the top scene on the stack
 	m_newMessage = m_currentScene->simulateScene(dt, *m_mailBox);
+	if (m_currentScene->getMainCamera() != NULL)
+	{
+		
+		m_renderer->setViewMatrixLookAt(
+			m_currentScene->getMainCamera()->getPosition(), 
+			m_currentScene->getMainCamera()->getUpVector(), 
+			m_currentScene->getMainCamera()->getLookAt()
+			);
+	}
 	m_renderer->draw(m_currentScene->getWorld()->getGameObjects());
 	//check if the scene return a message for manager
 	if (m_newMessage)

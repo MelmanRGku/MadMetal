@@ -2,6 +2,7 @@
 #include "..\Input\Input.h"
 #include "..\Game Logic\PlayerControllable.h"
 #include "Simulation\World.h"
+#include "Objects\Camera.h"
 
 
 const int MAIN_MENU = 0;
@@ -57,12 +58,15 @@ protected:
 	bool m_isPaused;
 	SceneMessage * m_message;
 	World *m_world;
+	Camera * m_mainCamera;
+
 public:
 	Scene() {
 		m_world = new World();
 	}
 
 	virtual ~Scene() {
+		delete m_mainCamera;
 		delete m_world;
 	}
 	virtual bool simulateScene(double dt, SceneMessage &newMessage) = 0;
@@ -70,6 +74,7 @@ public:
 	//set paused will need to be updated to pause sound at the same time
 	void setPaused(bool paused) { m_isPaused = paused; }
 	World* getWorld() { return m_world; }
+	Camera* getMainCamera() { return m_mainCamera; }
 	//virtual void loadFromFile();
 };
 

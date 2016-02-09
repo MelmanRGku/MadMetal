@@ -9,6 +9,8 @@ using namespace std;
 GameSimulation::GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player)
 : m_physicsHandler(physicsInstance)
 {
+	m_mainCamera = new Camera();
+	player->setCamera(m_mainCamera);
 	m_players.push_back(player);
 	initialize();
 	
@@ -47,6 +49,8 @@ void GameSimulation::simulatePlayers(double dt)
 }
 
 void GameSimulation::updateObjects(double dt) {
+
+	m_mainCamera->update(dt);
 
 	for (unsigned int i = 0; i < updaters.size(); i++) {
 		updaters.at(i)->update(dt);
@@ -114,10 +118,10 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxRigidStatic * plane = PxCreatePlane(m_physicsHandler.getPhysicsInstance(), PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
 	if (!plane)
 	{
-		std::cout << "Something went wrong..\n";
+		std::cout << "Something went wrong loading the plane..\n";
 	}
 	m_scene->addActor(*plane);
-	
+	m_mainCamera->setToFollow(obj);
 	m_players[0]->setObject(obj);
 /*	Mesh *mesh = new Mesh();
 	mesh->loadFromFile("Assets/Models/Avent.obj");

@@ -14,7 +14,7 @@ Renderer::Renderer()
 		);
 
 	viewMatrix = glm::lookAt(
-		glm::vec3(10, 10, 10),
+		glm::vec3(0, 0, 10),
 		glm::vec3(0, 0, 0),
 		glm::vec3(0, 1, 0)
 		);
@@ -23,8 +23,19 @@ Renderer::Renderer()
 }
 
 
+
+
 Renderer::~Renderer()
 {
+}
+
+void Renderer::setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt)
+{
+	viewMatrix = glm::lookAt(
+		pos,
+		lookAt,
+		up
+		);
 }
 
 /*void Renderer::draw(ParticleSystem * sys)
