@@ -2,6 +2,7 @@
 #include "PhysicsManager.h"
 #include "PxDefaultCpuDispatcher.h"
 #include "PxDefaultSimulationFilterShader.h"
+#include "PxRigidStatic.h"
 
 using namespace std;
 
@@ -95,7 +96,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	RenderableObject *obj = new RenderableObject();
 	obj->model = loader->loadFromFile("Assets/Models/Stormtrooper.obj");
 	m_world->addGameObject(obj);
-	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 0, 0));
+	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 5, 0));
 	PxMaterial* mMaterial;
 
 	mMaterial = m_physicsHandler.getPhysicsInstance().createMaterial(0.5f, 0.5f, 0.1f);    //static friction, dynamic friction, restitution
@@ -109,6 +110,14 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	obj->setActor(tmpActor);
 
 	m_scene->addActor(*tmpActor);
+
+	PxRigidStatic * plane = PxCreatePlane(m_physicsHandler.getPhysicsInstance(), PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
+	if (!plane)
+	{
+		std::cout << "Something went wrong..\n";
+	}
+	m_scene->addActor(*plane);
+	
 	m_players[0]->setObject(obj);
 /*	Mesh *mesh = new Mesh();
 	mesh->loadFromFile("Assets/Models/Avent.obj");
