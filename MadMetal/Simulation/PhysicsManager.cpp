@@ -97,8 +97,15 @@ void PhysicsManager::initPhysicsSimulation()
 	//world_.getGameObjects()->at(0)->setPhysxActor(aSphereActor);
 }
 
+void PhysicsManager::initCarPhysics() {
+	PxInitVehicleSDK(*topLevelPhysics_);
+	PxVehicleSetBasisVectors(PxVec3(0, 1, 0), PxVec3(0, 0, 1));			//coordinate system defined here. positive y is up, positive z is forward
+	PxVehicleSetUpdateMode(PxVehicleUpdateMode::eACCELERATION);
+}
+
 void PhysicsManager::shutdownPhysicsSimualtion()
 {
+	PxCloseVehicleSDK();
 	topLevelPhysics_->release();
 	physicsFoundation_->release();
 	delete m_scale;

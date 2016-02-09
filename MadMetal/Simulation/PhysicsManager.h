@@ -18,6 +18,7 @@ public:
 private:
 	void initPhysicsSimulation();
 	void shutdownPhysicsSimualtion();
+	void initCarPhysics();
 
 private: // members
 	PxFoundation* physicsFoundation_;
