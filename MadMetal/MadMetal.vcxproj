@@ -73,7 +73,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Audio\Audio.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\CarCreator.cpp" />
     <ClCompile Include="Game Logic\Controllable.cpp" />
     <ClCompile Include="Game Logic\PlayerControllable.cpp" />
     <ClCompile Include="Objects\Camera.cpp" />
@@ -87,7 +86,6 @@
     <ClCompile Include="Objects\Mesh.cpp" />
     <ClCompile Include="Objects\Model.cpp" />
     <ClCompile Include="Objects\Object.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\CarConstructor.cpp" />
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicle4WCreate.cpp" />
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicleCreate.cpp" />
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicleFilterShader.cpp" />
@@ -119,7 +117,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
-    <ClInclude Include="Objects\ObjectCreators\CarCreator.h" />
     <ClInclude Include="Game Logic\Controllable.h" />
     <ClInclude Include="Game Logic\PlayerControllable.h" />
     <ClInclude Include="Game Logic\PowerUp.h" />
@@ -130,7 +127,6 @@
     <ClInclude Include="Objects\Mesh.h" />
     <ClInclude Include="Objects\Model.h" />
     <ClInclude Include="Objects\Object.h" />
-    <ClInclude Include="Objects\ObjectCreators\CarConstructor.h" />
     <ClInclude Include="Objects\ObjectCreators\SnippetVehicleConcurrency.h" />
     <ClInclude Include="Objects\ObjectCreators\SnippetVehicleCreate.h" />
     <ClInclude Include="Objects\ObjectCreators\SnippetVehicleFilterShader.h" />

@@ -4,4 +4,5 @@ public:
 	CarConstructor();
 	~CarConstructor();
 
+	void create();
 };

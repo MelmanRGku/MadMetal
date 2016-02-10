@@ -6,7 +6,6 @@
 #include "PxVehicleUpdate.h"
 #include "PxVehicleTireFriction.h"
 #include "PxVehicleUtilSetup.h"
-#include "PxToolkit.h"
 
 
 class CarCreator

@@ -129,3 +129,8 @@ PxTolerancesScale& PhysicsManager::getScale()
 {
 	return *m_scale;
 }
+
+PxFoundation& PhysicsManager::getFoundation()
+{
+	return *physicsFoundation_;
+}

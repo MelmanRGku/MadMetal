@@ -31,6 +31,7 @@ private: //members
 
 	PhysicsManager& m_physicsHandler;
 	PxScene* m_scene;
+	PxCooking* m_cooking;
 public:
 	GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player);
 	~GameSimulation();

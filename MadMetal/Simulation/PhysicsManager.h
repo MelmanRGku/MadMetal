@@ -15,6 +15,8 @@ public:
 	PxPhysics& getPhysicsInstance();
 	PxTolerancesScale& getScale();
 
+	PxFoundation& getFoundation();
+
 private:
 	void initPhysicsSimulation();
 	void shutdownPhysicsSimualtion();

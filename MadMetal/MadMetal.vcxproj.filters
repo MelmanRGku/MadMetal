@@ -120,12 +120,6 @@
     <ClCompile Include="Objects\PhysicsObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\ObjectCreators\CarCreator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\ObjectCreators\CarConstructor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicle4WCreate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -264,12 +258,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\PhysicsObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\CarCreator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\CarConstructor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\ObjectCreators\SnippetVehicleCreate.h">
