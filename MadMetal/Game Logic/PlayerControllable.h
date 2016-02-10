@@ -8,8 +8,9 @@ class PlayerControllable : public Controllable
 private:
 	char * m_fileName;
 	GamePad * m_gamePad;
-	Object * m_car;
+	
 	Camera * m_camera;
+	PxRigidDynamic * m_car;
 
 public:
 	PlayerControllable(char * fileName, GamePad * gamePad);
@@ -17,5 +18,5 @@ public:
 	void playFrame(double dt);
 	void setCamera(Camera * camera);
 	GamePad * getGamePad();
-	void setObject(Object * toAdd);
+	void setObject(PxRigidDynamic * toAdd);
 };

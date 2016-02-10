@@ -122,7 +122,13 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	}
 	m_scene->addActor(*plane);
 	m_mainCamera->setToFollow(obj);
-	m_players[0]->setObject(obj);
+	m_players[0]->setObject(tmpActor);
+
+	loader = new ObjModelLoader();
+	RenderableObject * drawPlane = new RenderableObject();
+	drawPlane->model = loader->loadFromFile("Assets/Models/plane.obj");
+	drawPlane->setActor(plane);
+	m_world->addGameObject(drawPlane);
 /*	Mesh *mesh = new Mesh();
 	mesh->loadFromFile("Assets/Models/Avent.obj");
 	Model *model = new ObjModel("Assets/Models/Stormtrooper.obj");

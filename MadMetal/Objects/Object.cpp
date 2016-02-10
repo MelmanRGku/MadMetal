@@ -27,7 +27,7 @@ glm::mat4x4 Object::getModelMatrix() {
 	return res;
 }
 
-PxRigidDynamic& Object::getActor(){ return *physicsActor; }
+PxRigidActor& Object::getActor(){ return *physicsActor; }
 
 
 

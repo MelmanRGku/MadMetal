@@ -26,7 +26,7 @@ PlayerControllable::~PlayerControllable()
 	delete m_camera;
 }
 
-void PlayerControllable::setObject(Object* toAdd) { m_car = toAdd; }
+void PlayerControllable::setObject(PxRigidDynamic * toAdd) { m_car = toAdd; }
 void PlayerControllable::setCamera(Camera * camera){ m_camera = camera; }
 
 GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
@@ -43,19 +43,20 @@ void PlayerControllable::playFrame(double dt)
 			if (m_gamePad->isPressed(GamePad::DPadLeft))
 			{
 				
-				m_car->getActor().setLinearVelocity(PxVec3(-.5, 0, 0));
+				m_car->setLinearVelocity(PxVec3(2, 0, 0));
+				//m_car->getActor().setAngularVelocity(PxVec3(10, 10, 10));
 			}
 
 			if (m_gamePad->isPressed(GamePad::DPadRight))
 			{
 				
-				m_car->getActor().setLinearVelocity(PxVec3(.5, 0, 0));
+				m_car->setLinearVelocity(PxVec3(-2, 0, 0));
 			}
 
 			if (m_gamePad->isPressed(GamePad::DPadDown))
 			{
 
-				m_car->getActor().setLinearVelocity(PxVec3(0, 0, .5));
+				//m_car->getActor().setLinearVelocity(PxVec3(0, 0, 0));
 			}
 
 
@@ -105,7 +106,7 @@ void PlayerControllable::playFrame(double dt)
 			}*/
 			if (m_camera != NULL)
 			{
-				m_camera->rotateCamera(m_gamePad->getRightStick().x);
+				m_camera->rotateCamera(m_gamePad->getRightStick().x, m_gamePad->getRightStick().y);
 			}
 		}
 		else {

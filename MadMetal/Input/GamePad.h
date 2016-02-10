@@ -3,7 +3,7 @@
 #include <cmath>
 #ifndef GAMEPAD_H
 #define GAMEPAD_H
-#define DEADZONE_X 0.2
+#define DEADZONE_X 0.1
 #define DEADZONE_Y 0.2
 
 

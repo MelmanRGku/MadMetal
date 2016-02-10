@@ -14,7 +14,7 @@ public:
 	Camera();
 	Camera(Object * object);
 	void setToFollow(Object * toFollow);
-	void rotateCamera(float degrees);
+	void rotateCamera(float xpos, float ypos);
 	void update(double dtMilli);
 	
 	glm::vec3 getPosition();
