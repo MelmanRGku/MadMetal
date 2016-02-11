@@ -18,5 +18,8 @@ public:
 	void playFrame(double dt);
 	void setCamera(Camera * camera);
 	GamePad * getGamePad();
+	PxRigidDynamic * getRigidActor() {
+		return m_car;
+	}
 	void setObject(PxRigidDynamic * toAdd);
 };

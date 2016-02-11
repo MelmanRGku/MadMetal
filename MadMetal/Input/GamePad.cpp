@@ -107,8 +107,8 @@ void GamePad::setButtonStates()
 		else if (dpuState == PRESSED) dpuState = HELD;
 	}
 	else {
-		if (dpuState == RELEASED) dpuState = IDLE;
-		else dpuState = RELEASED;
+		if (dpuState != RELEASED) dpuState = RELEASED;
+		else dpuState = IDLE;
 	}
 
 	//dpad down button

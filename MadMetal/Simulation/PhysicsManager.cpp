@@ -36,6 +36,8 @@ void PhysicsManager::initPhysicsSimulation()
 	{
 		std::cout << "PxCreatePhysics failed! This is a major issue. ERROR CODE:PX0002" << std::endl;
 	}
+
+	
 	/*
 	if (!PxInitExtensions(*topLevelPhysics_))
 		std::cout << "PxInitExtensions failed! This is a major issue. ERROR CODE:PX0003" << std::endl;

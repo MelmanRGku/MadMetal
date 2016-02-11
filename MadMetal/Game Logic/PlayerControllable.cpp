@@ -43,20 +43,26 @@ void PlayerControllable::playFrame(double dt)
 			if (m_gamePad->isPressed(GamePad::DPadLeft))
 			{
 				
-				m_car->setLinearVelocity(PxVec3(2, 0, 0));
+				m_car->setLinearVelocity(PxVec3(10, 0, 0));
 				//m_car->getActor().setAngularVelocity(PxVec3(10, 10, 10));
 			}
 
 			if (m_gamePad->isPressed(GamePad::DPadRight))
 			{
 				
-				m_car->setLinearVelocity(PxVec3(-2, 0, 0));
+				m_car->setLinearVelocity(PxVec3(-10, 0, 0 ));
+			}
+
+			if (m_gamePad->isPressed(GamePad::DPadUp))
+			{
+
+				m_car->setLinearVelocity(PxVec3(0, 0, 10));
 			}
 
 			if (m_gamePad->isPressed(GamePad::DPadDown))
 			{
 
-				//m_car->getActor().setLinearVelocity(PxVec3(0, 0, 0));
+				m_car->setLinearVelocity(PxVec3(0, 0, -10));
 			}
 
 

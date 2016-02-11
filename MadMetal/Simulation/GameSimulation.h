@@ -11,7 +11,7 @@
 #include "Objects/RenderableObject.h"
 #include "PhysicsManager.h"
 
-class GameSimulation : public Scene{
+class GameSimulation : public Scene, public PxSimulationEventCallback{
 private:
 	void simulatePhysics(float dt);
 
@@ -31,6 +31,8 @@ private: //members
 
 	PhysicsManager& m_physicsHandler;
 	PxScene* m_scene;
+	
+	
 public:
 	GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player);
 	~GameSimulation();
@@ -40,5 +42,18 @@ public:
 	void initialize();
 
 	void setupBasicGameWorldObjects();
+
+	void							onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs) {  }
+	void	onTrigger(PxTriggerPair* pairs, PxU32 count)
+	{
+		if (pairs[0].otherActor == m_players[0]->getRigidActor())
+		{
+			pairs[0].otherActor->setGlobalPose(PxTransform(0,1,-45));
+		}
+		
+	}
+	virtual void							onConstraintBreak(PxConstraintInfo*, PxU32) {}
+	virtual void							onWake(PxActor**, PxU32) {}
+	virtual void							onSleep(PxActor**, PxU32){}
 	
 };
