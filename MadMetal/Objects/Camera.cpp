@@ -94,7 +94,7 @@ void Camera::rotateCamera(float xpos, float ypos)
 				m_currentPos = m_lookAt + glm::rotate((m_desiredPos - m_lookAt), (float)(PI / 2 - rotate), glm::vec3(0, 1, 0));
 			}
 		}
-		m_currentPos.y = m_toFollow->getActor().getGlobalPose().p.y + 3;
+		m_currentPos.y = 3;
 	
 	
 	

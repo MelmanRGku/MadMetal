@@ -49,6 +49,7 @@ public:
 		if (pairs[0].otherActor == m_players[0]->getRigidActor())
 		{
 			pairs[0].otherActor->setGlobalPose(PxTransform(0,1,-45));
+			
 		}
 		
 	}

@@ -1,3 +1,4 @@
+
 #include "PlayerControllable.h"
 #include <iostream>
 PlayerControllable::PlayerControllable(char * fileName, GamePad * gamePad)
@@ -15,6 +16,7 @@ PlayerControllable::PlayerControllable(char * fileName, GamePad * gamePad)
 	m_currentTime = 0;
 	m_isAlive = true;
 	m_points = 0;
+	m_reloadRate = .500;
 
 	m_isSuperMode = false;
 
@@ -100,12 +102,20 @@ void PlayerControllable::playFrame(double dt)
 			{
 				std::cout << "RShoulderpressed \n";
 			}
-
+			*/
 			if (m_gamePad->getRightTrigger())
 			{
-				std::cout << "RightTriggpressed \n";
+				if (m_reloadRemaining <= 0)
+				{
+					m_reloadRemaining = m_reloadRate;
+					PxRigidDynamic * projectile = m_car->getScene()->getPhysics().createRigidDynamic(m_car->getGlobalPose());
+					projectile->setLinearVelocity(PxVec3(0, 0, 20));
+					projectile->createShape(PxSphereGeometry(0.5), *m_car->getScene()->getPhysics().createMaterial(0.1, 0.1, 0.1));
+					m_car->getScene()->addActor(*projectile);
+				}
+				
 			}
-
+			/*
 			if (m_gamePad->getLeftTrigger())
 			{
 				std::cout << "LeftTriggpressed \n";
@@ -119,7 +129,9 @@ void PlayerControllable::playFrame(double dt)
 			//do nothing cause you dead bro
 		}
 		
-
+		float speed = 20;
+		m_car->setLinearVelocity(PxVec3(-m_gamePad->getLeftStick().x * speed, 0, m_gamePad->getLeftStick().y * speed));
+		
 		//change force direction
 		//m_currentGameObject->setDirection(vec3(m_gamePad->getLeftStick().x, 0, m_gamePad->getLeftStick().y)
 

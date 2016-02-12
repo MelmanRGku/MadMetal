@@ -136,7 +136,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	RenderableObject *obj = new RenderableObject();
 	obj->model = loader->loadFromFile("Assets/Models/Stormtrooper.obj");
 	m_world->addGameObject(obj);
-	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(30, 5, 4));
+	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 5, -40));
 	PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(0.2), *mMaterial);
 	PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
 	tmpActor->setLinearVelocity(PxVec3(PxReal(0.0), PxReal(0.0), PxReal(0.0)));
@@ -144,6 +144,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_scene->addActor(*tmpActor);
 	//assign stormtrooper to main char
 	m_players[0]->setObject(tmpActor);
+	
 	//attach camera to stormtrooper
 	m_mainCamera->setToFollow(obj);
 
@@ -166,26 +167,24 @@ void GameSimulation::setupBasicGameWorldObjects() {
 				back
 	----------------------------------------------*/
 	float length = 50;
+	float width = 10;
 	//create a plane to run on
 	//PxRigidStatic * plane = PxCreatePlane(m_physicsHandler.getPhysicsInstance(), PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
 	PxRigidStatic * floor = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, 0));
-	floor->createShape(PxBoxGeometry(length, .5, length), *mMaterial);
+	floor->createShape(PxBoxGeometry(width, .5, length), *mMaterial);
 	m_scene->addActor(*floor);
 
-	PxRigidStatic * pillar = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, 0));
-	pillar->createShape(PxBoxGeometry(length / 3, length / 3, length / 3), *mMaterial);
-	m_scene->addActor(*pillar);
-	PxRigidStatic * leftWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(length, 0, 0));
-	leftWall->createShape(PxBoxGeometry(0.5, length, length), *mMaterial);
+	PxRigidStatic * leftWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(width, 0, 0));
+	leftWall->createShape(PxBoxGeometry(0.5, width, length), *mMaterial);
 	m_scene->addActor(*leftWall);
-	PxRigidStatic * rightWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(length, 0, 0));
-	rightWall->createShape(PxBoxGeometry(.5, length, length), *mMaterial);
+	PxRigidStatic * rightWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(-width, 0, 0));
+	rightWall->createShape(PxBoxGeometry(.5, width, length), *mMaterial);
 	m_scene->addActor(*rightWall);
 	PxRigidStatic * frontWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length));
-	frontWall->createShape(PxBoxGeometry(length, length, 0.5), *mMaterial);
+	frontWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
 	m_scene->addActor(*frontWall);
 	PxRigidStatic * backWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, -length));
-	backWall->createShape(PxBoxGeometry(length, length, 0.5), *mMaterial);
+	backWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
 	m_scene->addActor(*backWall);
 
 	
@@ -203,6 +202,21 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	drawPlane->setActor(floor);
 	m_world->addGameObject(drawPlane);
 
+	loader = new ObjModelLoader();
+	RenderableObject * leftPlane = new RenderableObject();
+	leftPlane->model = loader->loadFromFile("Assets/Models/plane.obj");
+	leftPlane->setActor(leftWall);
+	leftPlane->updateRotation(glm::vec3(0, 0, 3.14 / 2));
+	m_world->addGameObject(leftPlane);
+
+	loader = new ObjModelLoader();
+	RenderableObject * RightPlane = new RenderableObject();
+	RightPlane->model = loader->loadFromFile("Assets/Models/plane.obj");
+	RightPlane->setActor(rightWall);
+	RightPlane->updateRotation(glm::vec3(0, 0, 3.14 / 2));
+	m_world->addGameObject(RightPlane);
+
+
 	//drawthe finish line
 	loader = new ObjModelLoader();
 	RenderableObject * finishLine = new RenderableObject();
@@ -210,7 +224,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_world->addGameObject(finishLine);
 
 	//create a bounding box for storm tropper to run into
-	PxRigidStatic *boundVolume = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(40, 0, 0));
+	PxRigidStatic *boundVolume = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length - 5));
 	aSphereShape = boundVolume->createShape(PxBoxGeometry(PxVec3(2,5,3)), *mMaterial);
 	aSphereShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
 	aSphereShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
