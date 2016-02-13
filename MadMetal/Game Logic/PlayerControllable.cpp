@@ -25,7 +25,7 @@ PlayerControllable::~PlayerControllable()
 	m_gamePad = NULL;
 }
 
-void PlayerControllable::setObject(Object* toAdd) { m_car = toAdd; }
+void PlayerControllable::setObject(Car* toAdd) { m_car = toAdd; }
 
 GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
 

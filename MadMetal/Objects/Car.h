@@ -12,5 +12,6 @@ public:
 	~Car();
 
 	void setCar(PxVehicleDrive4W *car) { this->car = car; this->physicsActor = car->getRigidDynamicActor(); }
+	PxVehicleDrive4W *getCar() { return car; }
 };
 

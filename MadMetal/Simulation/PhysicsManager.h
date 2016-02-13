@@ -14,7 +14,7 @@ public:
 	//void updatePhysics(float dt);
 	PxPhysics& getPhysicsInstance();
 	PxTolerancesScale& getScale();
-
+	PxDefaultAllocator *getAllocator() { return defaultAllocator_; }
 	PxFoundation& getFoundation();
 
 private:

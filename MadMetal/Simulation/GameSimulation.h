@@ -40,6 +40,8 @@ private: //members
 	bool gVehicleOrderComplete = false;
 	PxVehicleDrivableSurfaceToTireFrictionPairs* gFrictionPairs = NULL; 
 	PxVehicleDrivableSurfaceToTireFrictionPairs* createFrictionPairs(const PxMaterial* defaultMaterial);
+	VehicleSceneQueryData*	gVehicleSceneQueryData = NULL;
+	PxBatchQuery* gBatchQuery = NULL;
 public:
 	GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player);
 	~GameSimulation();
