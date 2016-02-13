@@ -11,7 +11,7 @@ class Object
 protected:
 	std::vector<Object *> childObjects;
 	glm::vec3 position, rotation, scale;
-	PxRigidDynamic *physicsActor;
+	PxRigidActor *physicsActor;
 
 public:
 	Object();
@@ -21,7 +21,7 @@ public:
 	void updateRotation(glm::vec3 dr) { rotation += dr; }
 	void updatePosition(glm::vec3 dp) { position += dp; }
 	glm::vec3  getPosition(){ return position; };
-	void setActor(PxRigidDynamic *actor) { physicsActor = actor; }
-	PxRigidDynamic& getActor();
+	void setActor(PxRigidActor *actor) { physicsActor = actor; }
+	PxRigidActor& getActor();
 };
 

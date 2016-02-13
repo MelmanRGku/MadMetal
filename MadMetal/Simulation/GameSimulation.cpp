@@ -307,9 +307,9 @@ void GameSimulation::simulatePhysics(float dt)
 	//Raycasts.
 	
 	PxVehicleWheels* vehicles[1] = { car };
-//	PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
-//	const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
-//	PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
+	PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
+	const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
+	PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
 
 	//Vehicle update.
 	const PxVec3 grav = m_scene->getGravity();
@@ -376,6 +376,10 @@ void GameSimulation::createPhysicsScene()
 	{
 		std::cout << "A fatal error has occured. ERROR CODE PX0007" << std::endl;
 	}
+
+	PxInitVehicleSDK(m_physicsHandler.getPhysicsInstance());
+	PxVehicleSetBasisVectors(PxVec3(0, 1, 0), PxVec3(0, 0, 1));
+	PxVehicleSetUpdateMode(PxVehicleUpdateMode::eVELOCITY_CHANGE);
 }
 
 
@@ -419,7 +423,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	Car *obj = new Car();
 	obj->model = loader->loadFromFile("Assets/Models/Stormtrooper.obj");
 	m_world->addGameObject(obj);
-	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 0, 0));
 	PxMaterial* mMaterial;
 
 	mMaterial = m_physicsHandler.getPhysicsInstance().createMaterial(0.5f, 0.5f, 0.1f);    //static friction, dynamic friction, restitution
@@ -427,12 +430,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	{
 		std::cout << "Material failed to create. ERROR CODE: PX0006" << std::endl;
 	}
-	PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(0.2), *mMaterial);
-	PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
-	tmpActor->setLinearVelocity(PxVec3(PxReal(0.0), PxReal(0.0), PxReal(0.0)));
-	//obj->setActor(tmpActor);
 
-	m_scene->addActor(*tmpActor);
 	m_players[0]->setObject(obj);
 
 	//Set up the chassis mass, dimensions, moment of inertia, and center of mass offset.
@@ -454,6 +452,13 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	const PxF32 wheelMOI = 0.5f*wheelMass*wheelRadius*wheelRadius;
 	const PxU32 nbWheels = 6;
 
+
+
+	//Create the batched scene queries for the suspension raycasts.
+	//gVehicleSceneQueryData = VehicleSceneQueryData::allocate(1, PX_MAX_NB_WHEELS, 1, gAllocator);
+	//gBatchQuery = VehicleSceneQueryData::setUpBatchedSceneQuery(0, *gVehicleSceneQueryData, gScene);
+
+	//Create the friction table for each combination of tire and surface type.
 	gFrictionPairs = createFrictionPairs(mMaterial);
 
 	VehicleDesc vehicleDesc;
@@ -473,6 +478,11 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//Create a plane to drive on.
 	gGroundPlane = createDrivablePlane(mMaterial, &m_physicsHandler.getPhysicsInstance());
 	m_scene->addActor(*gGroundPlane);
+	loader = new ObjModelLoader();
+	RenderableObject *plane = new RenderableObject();
+	plane->model = loader->loadFromFile("Assets/Models/plane.obj");
+	plane->setActor(gGroundPlane);
+	m_world->addGameObject(plane);
 
 	//Create a vehicle that will drive on the plane.
 	gVehicle4W = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);

@@ -11,6 +11,7 @@
 #include "Objects/RenderableObject.h"
 #include "Objects/Car.h"
 #include "PhysicsManager.h"
+#include "Objects\ObjectCreators\SnippetVehicleRaycast.h"
 
 class GameSimulation : public Scene{
 private:
