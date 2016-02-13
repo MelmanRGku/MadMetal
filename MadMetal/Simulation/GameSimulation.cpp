@@ -173,8 +173,9 @@ void releaseAllControls()
 void GameSimulation::incrementDrivingMode(PxF32 dt)
 {
 	gVehicleModeTimer += dt;
-	std::cout << gVehicleModeTimer << std::endl;
-	if (gVehicleModeTimer > 4.f)
+//	std::cout << gVehicleModeTimer << std::endl;
+//	std::cout << gVehicleOrderProgress << std::endl;
+	if (gVehicleModeTimer > 2.f)
 	{
 		//If the mode just completed was eDRIVE_MODE_ACCEL_REVERSE then switch back to forward gears.
 		if (eDRIVE_MODE_ACCEL_REVERSE == gDriveModeOrder[gVehicleOrderProgress])
@@ -275,10 +276,11 @@ void GameSimulation::simulatePhysics(float dt)
 
 	//Work out if the vehicle is in the air.
 	gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
-
+	//gIsVehicleInAir = false;
 	m_scene->simulate(timestep);
 	m_scene->fetchResults(true);
 
+	cout << car->getRigidDynamicActor()->getGlobalPose().p.x << " " << car->getRigidDynamicActor()->getGlobalPose().p.y << " " << car->getRigidDynamicActor()->getGlobalPose().p.z << endl;
 }
 
 void GameSimulation::simulateAnimation()
@@ -430,7 +432,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	vehicleDesc.numWheels = nbWheels;
 	vehicleDesc.wheelMaterial = mMaterial;
 	PxRigidStatic* gGroundPlane = NULL;
-	PxVehicleDrive4W* gVehicle4W = NULL;
 	//Create a plane to drive on.
 	gGroundPlane = createDrivablePlane(mMaterial, &m_physicsHandler.getPhysicsInstance());
 	m_scene->addActor(*gGroundPlane);
@@ -441,24 +442,23 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_world->addGameObject(plane);
 
 	//Create a vehicle that will drive on the plane.
-	gVehicle4W = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);
-	PxTransform startTransform(PxVec3(0, 5+(vehicleDesc.chassisDims.y*0.5f + vehicleDesc.wheelRadius + 1.0f), 0), PxQuat(PxIdentity));
-	gVehicle4W->getRigidDynamicActor()->setGlobalPose(startTransform);
-	m_scene->addActor(*gVehicle4W->getRigidDynamicActor());
+	car = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);
+	PxTransform startTransform(PxVec3(0, (vehicleDesc.chassisDims.y*0.5f + vehicleDesc.wheelRadius + 1.0f), 0), PxQuat(PxIdentity));
+	car->getRigidDynamicActor()->setGlobalPose(startTransform);
+	m_scene->addActor(*car->getRigidDynamicActor());
 
 	//Set the vehicle to rest in first gear.
 	//Set the vehicle to use auto-gears.
-	gVehicle4W->setToRestState();
-	gVehicle4W->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
-	gVehicle4W->mDriveDynData.setUseAutoGears(true);
-	obj->setCar(gVehicle4W);
-	car = gVehicle4W;
+	car->setToRestState();
+	car->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
+	car->mDriveDynData.setUseAutoGears(true);
 
 	//	gVehicleInputData.setDigitalAccel(true); TOMS TODO
 
-	//	gVehicleModeTimer = 0.0f;
-	//	gVehicleOrderProgress = 0;
-	//	startBrakeMode();
+	gVehicleModeTimer = 0.0f;
+	gVehicleOrderProgress = 0;
+	startBrakeMode();
+	obj->setCar(car);
 
 
 	/*	Mesh *mesh = new Mesh();
