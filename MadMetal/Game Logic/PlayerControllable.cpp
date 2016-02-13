@@ -28,7 +28,7 @@ PlayerControllable::~PlayerControllable()
 	delete m_camera;
 }
 
-void PlayerControllable::setObject(PxRigidDynamic * toAdd) { m_car = toAdd; }
+void PlayerControllable::setObject(Car * toAdd) { m_car = toAdd; }
 void PlayerControllable::setCamera(Camera * camera){ m_camera = camera; }
 
 GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
@@ -45,26 +45,26 @@ void PlayerControllable::playFrame(double dt)
 			if (m_gamePad->isPressed(GamePad::DPadLeft))
 			{
 				
-				m_car->setLinearVelocity(PxVec3(10, 0, 0));
+				//m_car->getActor().setLinearVelocity(PxVec3(10, 0, 0));
 				//m_car->getActor().setAngularVelocity(PxVec3(10, 10, 10));
 			}
 
 			if (m_gamePad->isPressed(GamePad::DPadRight))
 			{
 				
-				m_car->setLinearVelocity(PxVec3(-10, 0, 0 ));
+				//m_car->getActor().setLinearVelocity(PxVec3(-10, 0, 0));
 			}
 
 			if (m_gamePad->isPressed(GamePad::DPadUp))
 			{
 
-				m_car->setLinearVelocity(PxVec3(0, 0, 10));
+				//m_car->getActor().setLinearVelocity(PxVec3(0, 0, 10));
 			}
 
 			if (m_gamePad->isPressed(GamePad::DPadDown))
 			{
 
-				m_car->setLinearVelocity(PxVec3(0, 0, -10));
+				//m_car->getActor().setLinearVelocity(PxVec3(0, 0, -10));
 			}
 
 
@@ -108,12 +108,12 @@ void PlayerControllable::playFrame(double dt)
 				if (m_reloadRemaining <= 0)
 				{
 					m_reloadRemaining = m_reloadRate;
-					PxRigidDynamic * projectile = m_car->getScene()->getPhysics().createRigidDynamic(m_car->getGlobalPose());
+					PxRigidDynamic * projectile = m_car->getActor().getScene()->getPhysics().createRigidDynamic(m_car->getActor().getGlobalPose());
 					projectile->setLinearVelocity(PxVec3(0, 0, 20));
-					projectile->createShape(PxSphereGeometry(0.5), *m_car->getScene()->getPhysics().createMaterial(0.1, 0.1, 0.1));
-					m_car->getScene()->addActor(*projectile);
-				}
-				
+					projectile->createShape(PxSphereGeometry(0.5), *m_car->getActor().getScene()->getPhysics().createMaterial(0.1, 0.1, 0.1));
+					m_car->getActor().getScene()->addActor(*projectile);
+			}
+
 			}
 			/*
 			if (m_gamePad->getLeftTrigger())
@@ -130,8 +130,8 @@ void PlayerControllable::playFrame(double dt)
 		}
 		
 		float speed = 20;
-		m_car->setLinearVelocity(PxVec3(-m_gamePad->getLeftStick().x * speed, 0, m_gamePad->getLeftStick().y * speed));
-		
+		//m_car->setLinearVelocity(PxVec3(-m_gamePad->getLeftStick().x * speed, 0, m_gamePad->getLeftStick().y * speed));
+
 		//change force direction
 		//m_currentGameObject->setDirection(vec3(m_gamePad->getLeftStick().x, 0, m_gamePad->getLeftStick().y)
 

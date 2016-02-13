@@ -23,8 +23,6 @@ Renderer::Renderer()
 }
 
 
-
-
 Renderer::~Renderer()
 {
 }
