@@ -9,6 +9,7 @@
 #include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
 #include "Objects/ObjectLoaders/ObjModelLoader.h"
 #include "Objects/RenderableObject.h"
+#include "Objects/Car.h"
 #include "PhysicsManager.h"
 
 class GameSimulation : public Scene{
@@ -32,6 +33,12 @@ private: //members
 	PhysicsManager& m_physicsHandler;
 	PxScene* m_scene;
 	PxCooking* m_cooking;
+	PxVehicleDrive4W *car;
+	PxF32 gVehicleModeTimer;
+	PxI32 gVehicleOrderProgress = 0;
+	bool gVehicleOrderComplete = false;
+	PxVehicleDrivableSurfaceToTireFrictionPairs* gFrictionPairs = NULL; 
+	PxVehicleDrivableSurfaceToTireFrictionPairs* createFrictionPairs(const PxMaterial* defaultMaterial);
 public:
 	GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player);
 	~GameSimulation();
@@ -41,5 +48,7 @@ public:
 	void initialize();
 
 	void setupBasicGameWorldObjects();
+
+	void incrementDrivingMode(float dt);
 	
 };

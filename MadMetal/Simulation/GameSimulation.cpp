@@ -3,9 +3,10 @@
 #include "PxDefaultCpuDispatcher.h"
 #include "PxDefaultSimulationFilterShader.h"
 #include "Objects\ObjectCreators\SnippetVehicleCreate.h"
-
+#include "Objects\ObjectCreators\SnippetVehicleTireFriction.h"
 
 using namespace std;
+bool gIsVehicleInAir = true;
 
 GameSimulation::GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player)
 : m_physicsHandler(physicsInstance)
@@ -15,16 +16,309 @@ GameSimulation::GameSimulation(PhysicsManager& physicsInstance, PlayerControllab
 
 
 }
-
+static PxF32 gTireFrictionMultipliers[MAX_NUM_SURFACE_TYPES][MAX_NUM_TIRE_TYPES] =
+{
+	//NORMAL,	WORN
+	{ 1.00f, 0.1f }//TARMAC
+};
 GameSimulation::~GameSimulation()
 {
 }
+//Drivable surface types.
+/*enum
+{
+	SURFACE_TYPE_TARMAC = 0,
+	MAX_NUM_SURFACE_TYPES
+};
+
+//Tire types.
+enum
+{
+	TIRE_TYPE_NORMAL = 0,
+	TIRE_TYPE_WORN,
+	MAX_NUM_TIRE_TYPES
+};*/
+PxF32 gSteerVsForwardSpeedData[2 * 8] =
+{
+	0.0f, 0.75f,
+	5.0f, 0.75f,
+	30.0f, 0.125f,
+	120.0f, 0.1f,
+	PX_MAX_F32, PX_MAX_F32,
+	PX_MAX_F32, PX_MAX_F32,
+	PX_MAX_F32, PX_MAX_F32,
+	PX_MAX_F32, PX_MAX_F32
+};
+PxFixedSizeLookupTable<8> gSteerVsForwardSpeedTable(gSteerVsForwardSpeedData, 4);
+
+PxVehicleDrive4WRawInputData gVehicleInputData;
+PxVehicleKeySmoothingData gKeySmoothingData =
+{
+	{
+		6.0f,	//rise rate eANALOG_INPUT_ACCEL
+		6.0f,	//rise rate eANALOG_INPUT_BRAKE		
+		6.0f,	//rise rate eANALOG_INPUT_HANDBRAKE	
+		2.5f,	//rise rate eANALOG_INPUT_STEER_LEFT
+		2.5f,	//rise rate eANALOG_INPUT_STEER_RIGHT
+	},
+	{
+		10.0f,	//fall rate eANALOG_INPUT_ACCEL
+		10.0f,	//fall rate eANALOG_INPUT_BRAKE		
+		10.0f,	//fall rate eANALOG_INPUT_HANDBRAKE	
+		5.0f,	//fall rate eANALOG_INPUT_STEER_LEFT
+		5.0f	//fall rate eANALOG_INPUT_STEER_RIGHT
+	}
+};
+
+PxVehiclePadSmoothingData gPadSmoothingData =
+{
+	{
+		6.0f,	//rise rate eANALOG_INPUT_ACCEL
+		6.0f,	//rise rate eANALOG_INPUT_BRAKE		
+		6.0f,	//rise rate eANALOG_INPUT_HANDBRAKE	
+		2.5f,	//rise rate eANALOG_INPUT_STEER_LEFT
+		2.5f,	//rise rate eANALOG_INPUT_STEER_RIGHT
+	},
+	{
+		10.0f,	//fall rate eANALOG_INPUT_ACCEL
+		10.0f,	//fall rate eANALOG_INPUT_BRAKE		
+		10.0f,	//fall rate eANALOG_INPUT_HANDBRAKE	
+		5.0f,	//fall rate eANALOG_INPUT_STEER_LEFT
+		5.0f	//fall rate eANALOG_INPUT_STEER_RIGHT
+	}
+};
+
+enum DriveMode
+{
+	eDRIVE_MODE_ACCEL_FORWARDS = 0,
+	eDRIVE_MODE_ACCEL_REVERSE,
+	eDRIVE_MODE_HARD_TURN_LEFT,
+	eDRIVE_MODE_HANDBRAKE_TURN_LEFT,
+	eDRIVE_MODE_HARD_TURN_RIGHT,
+	eDRIVE_MODE_HANDBRAKE_TURN_RIGHT,
+	eDRIVE_MODE_BRAKE,
+	eDRIVE_MODE_NONE
+};
+
+DriveMode gDriveModeOrder[] =
+{
+	eDRIVE_MODE_BRAKE,
+	eDRIVE_MODE_ACCEL_FORWARDS,
+	eDRIVE_MODE_BRAKE,
+	eDRIVE_MODE_ACCEL_REVERSE,
+	eDRIVE_MODE_BRAKE,
+	eDRIVE_MODE_HARD_TURN_LEFT,
+	eDRIVE_MODE_BRAKE,
+	eDRIVE_MODE_HARD_TURN_RIGHT,
+	eDRIVE_MODE_ACCEL_FORWARDS,
+	eDRIVE_MODE_HANDBRAKE_TURN_LEFT,
+	eDRIVE_MODE_ACCEL_FORWARDS,
+	eDRIVE_MODE_HANDBRAKE_TURN_RIGHT,
+	eDRIVE_MODE_NONE
+};
+
+/* Call this stuff from PlayerControlable
+void startAccelerateForwardsMode()
+{
+if (gMimicKeyInputs)
+{
+gVehicleInputData.setDigitalAccel(true);
+}
+else
+{
+gVehicleInputData.setAnalogAccel(1.0f);
+}
+}
+
+void startAccelerateReverseMode()
+{
+gVehicle4W->mDriveDynData.forceGearChange(PxVehicleGearsData::eREVERSE);
+
+if (gMimicKeyInputs)
+{
+gVehicleInputData.setDigitalAccel(true);
+}
+else
+{
+gVehicleInputData.setAnalogAccel(1.0f);
+}
+}
+
+void startBrakeMode()
+{
+if (gMimicKeyInputs)
+{
+gVehicleInputData.setDigitalBrake(true);
+}
+else
+{
+gVehicleInputData.setAnalogBrake(1.0f);
+}
+}
+
+void startTurnHardLeftMode()
+{
+if (gMimicKeyInputs)
+{
+gVehicleInputData.setDigitalAccel(true);
+gVehicleInputData.setDigitalSteerLeft(true);
+}
+else
+{
+gVehicleInputData.setAnalogAccel(true);
+gVehicleInputData.setAnalogSteer(-1.0f);
+}
+}
+
+void startTurnHardRightMode()
+{
+if (gMimicKeyInputs)
+{
+gVehicleInputData.setDigitalAccel(true);
+gVehicleInputData.setDigitalSteerRight(true);
+}
+else
+{
+gVehicleInputData.setAnalogAccel(1.0f);
+gVehicleInputData.setAnalogSteer(1.0f);
+}
+}
+
+void startHandbrakeTurnLeftMode()
+{
+if (gMimicKeyInputs)
+{
+gVehicleInputData.setDigitalSteerLeft(true);
+gVehicleInputData.setDigitalHandbrake(true);
+}
+else
+{
+gVehicleInputData.setAnalogSteer(-1.0f);
+gVehicleInputData.setAnalogHandbrake(1.0f);
+}
+}
+
+void startHandbrakeTurnRightMode()
+{
+if (gMimicKeyInputs)
+{
+gVehicleInputData.setDigitalSteerRight(true);
+gVehicleInputData.setDigitalHandbrake(true);
+}
+else
+{
+gVehicleInputData.setAnalogSteer(1.0f);
+gVehicleInputData.setAnalogHandbrake(1.0f);
+}
+}
 
 
+void releaseAllControls()
+{
+if (gMimicKeyInputs)
+{
+gVehicleInputData.setDigitalAccel(false);
+gVehicleInputData.setDigitalSteerLeft(false);
+gVehicleInputData.setDigitalSteerRight(false);
+gVehicleInputData.setDigitalBrake(false);
+gVehicleInputData.setDigitalHandbrake(false);
+}
+else
+{
+gVehicleInputData.setAnalogAccel(0.0f);
+gVehicleInputData.setAnalogSteer(0.0f);
+gVehicleInputData.setAnalogBrake(0.0f);
+gVehicleInputData.setAnalogHandbrake(0.0f);
+}
+}
+*/
+
+/*
+void GameSimulation::incrementDrivingMode(float dt)
+{
+	gVehicleModeTimer += dt;
+	if (gVehicleModeTimer > 0.0001)
+	{
+		//If the mode just completed was eDRIVE_MODE_ACCEL_REVERSE then switch back to forward gears.
+		if (eDRIVE_MODE_ACCEL_REVERSE == gDriveModeOrder[gVehicleOrderProgress])
+		{
+			car->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
+		}
+
+		//Increment to next driving mode.
+		gVehicleModeTimer = 0.0f;
+		gVehicleOrderProgress++;
+
+		//If we are at the end of the list of driving modes then start again.
+		if (eDRIVE_MODE_NONE == gDriveModeOrder[gVehicleOrderProgress])
+		{
+			gVehicleOrderProgress = 0;
+			gVehicleOrderComplete = true;
+		}
+
+		//Start driving in the selected mode.
+		DriveMode eDriveMode = gDriveModeOrder[gVehicleOrderProgress];
+		switch (eDriveMode)
+		{
+		case eDRIVE_MODE_ACCEL_FORWARDS:
+			startAccelerateForwardsMode();
+			break;
+		case eDRIVE_MODE_ACCEL_REVERSE:
+			startAccelerateReverseMode();
+			break;
+		case eDRIVE_MODE_HARD_TURN_LEFT:
+			startTurnHardLeftMode();
+			break;
+		case eDRIVE_MODE_HANDBRAKE_TURN_LEFT:
+			startHandbrakeTurnLeftMode();
+			break;
+		case eDRIVE_MODE_HARD_TURN_RIGHT:
+			startTurnHardRightMode();
+			break;
+		case eDRIVE_MODE_HANDBRAKE_TURN_RIGHT:
+			startHandbrakeTurnRightMode();
+			break;
+		case eDRIVE_MODE_BRAKE:
+			startBrakeMode();
+			break;
+		case eDRIVE_MODE_NONE:
+			break;
+		};
+
+		//If the mode about to start is eDRIVE_MODE_ACCEL_REVERSE then switch to reverse gears.
+		if (eDRIVE_MODE_ACCEL_REVERSE == gDriveModeOrder[gVehicleOrderProgress])
+		{
+			car->mDriveDynData.forceGearChange(PxVehicleGearsData::eREVERSE);
+		}
+	}
+}*/
 
 void GameSimulation::simulatePhysics(float dt)
 {
 	//	audio->update();
+
+	//incrementDrivingMode(dt);
+
+	//Update the control inputs for the vehicle.
+
+	gVehicleInputData.setDigitalAccel(true);
+	PxVehicleDrive4WSmoothAnalogRawInputsAndSetAnalogInputs(gPadSmoothingData, gSteerVsForwardSpeedTable, gVehicleInputData, dt, gIsVehicleInAir, *car);
+
+	//Raycasts.
+	
+	PxVehicleWheels* vehicles[1] = { car };
+//	PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
+//	const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
+//	PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
+
+	//Vehicle update.
+	const PxVec3 grav = m_scene->getGravity();
+	PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
+	PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, car->mWheelsSimData.getNbWheels() } };
+	PxVehicleUpdates(dt, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
+
+	//Work out if the vehicle is in the air.
+	gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : false;//PxVehicleIsInAir(vehicleQueryResults[0]);
 
 	m_scene->simulate(dt);
 	m_scene->fetchResults(true);
@@ -63,7 +357,7 @@ void GameSimulation::initialize() {
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(m_physicsHandler.getScale());
-	sceneDesc.gravity = PxVec3(0.0f, 0.0f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -1.0f, 0.0f);
 
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 
@@ -97,10 +391,32 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 }
 
 
+PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs(const PxMaterial* defaultMaterial)
+{
+	PxVehicleDrivableSurfaceType surfaceTypes[1];
+	surfaceTypes[0].mType = SURFACE_TYPE_TARMAC;
+
+	const PxMaterial* surfaceMaterials[1];
+	surfaceMaterials[0] = defaultMaterial;
+
+	PxVehicleDrivableSurfaceToTireFrictionPairs* surfaceTirePairs =
+		PxVehicleDrivableSurfaceToTireFrictionPairs::allocate(MAX_NUM_TIRE_TYPES, MAX_NUM_SURFACE_TYPES);
+
+	surfaceTirePairs->setup(MAX_NUM_TIRE_TYPES, MAX_NUM_SURFACE_TYPES, surfaceMaterials, surfaceTypes);
+
+	for (PxU32 i = 0; i < MAX_NUM_SURFACE_TYPES; i++)
+	{
+		for (PxU32 j = 0; j < MAX_NUM_TIRE_TYPES; j++)
+		{
+			surfaceTirePairs->setTypePairFriction(i, j, gTireFrictionMultipliers[i][j]);
+		}
+	}
+	return surfaceTirePairs;
+}
 
 void GameSimulation::setupBasicGameWorldObjects() {
 	ObjModelLoader *loader = new ObjModelLoader();
-	RenderableObject *obj = new RenderableObject();
+	Car *obj = new Car();
 	obj->model = loader->loadFromFile("Assets/Models/Stormtrooper.obj");
 	m_world->addGameObject(obj);
 	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 0, 0));
@@ -138,6 +454,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	const PxF32 wheelMOI = 0.5f*wheelMass*wheelRadius*wheelRadius;
 	const PxU32 nbWheels = 6;
 
+	gFrictionPairs = createFrictionPairs(mMaterial);
+
 	VehicleDesc vehicleDesc;
 	vehicleDesc.chassisMass = chassisMass;
 	vehicleDesc.chassisDims = chassisDims;
@@ -152,7 +470,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	vehicleDesc.wheelMaterial = mMaterial;
 	PxRigidStatic* gGroundPlane = NULL;
 	PxVehicleDrive4W* gVehicle4W = NULL;
-
 	//Create a plane to drive on.
 	gGroundPlane = createDrivablePlane(mMaterial, &m_physicsHandler.getPhysicsInstance());
 	m_scene->addActor(*gGroundPlane);
@@ -168,14 +485,15 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	gVehicle4W->setToRestState();
 	gVehicle4W->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 	gVehicle4W->mDriveDynData.setUseAutoGears(true);
+	obj->setCar(gVehicle4W);
+	car = gVehicle4W;
 
-	obj->setActor(gVehicle4W->getRigidDynamicActor());
 
-//	gVehicleInputData.setDigitalAccel(true); TOMS TODO
+	//	gVehicleInputData.setDigitalAccel(true); TOMS TODO
 
-//	gVehicleModeTimer = 0.0f;
-//	gVehicleOrderProgress = 0;
-//	startBrakeMode();
+	//	gVehicleModeTimer = 0.0f;
+	//	gVehicleOrderProgress = 0;
+	//	startBrakeMode();
 
 
 	/*	Mesh *mesh = new Mesh();
