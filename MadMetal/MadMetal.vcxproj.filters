@@ -287,5 +287,8 @@
     <ClInclude Include="Objects\Car.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+	<ClInclude Include="Game Logic\WayPointSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

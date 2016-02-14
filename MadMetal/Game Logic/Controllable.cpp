@@ -1,5 +1,5 @@
 #include "Controllable.h"
-
+#include <iostream>
 void Controllable::usePowerUp()
 {
 	//if not holding a power up do nothing
@@ -71,6 +71,46 @@ void Controllable::useSuper()
 		m_superDurationRemaining = m_superMaxDuration;
 	//	m_currentModel = &m_superModel;
 	}
+}
+
+void Controllable::setWayPoint(WayPoint * wayPoint, bool finishLine)
+{
+	//when players first spawn they will have no wayPoint so the first waypoint 
+	//they encounter will just set them up
+	if (m_currentWayPoint == NULL)
+	{
+		std::cout << "First way point set! \n";
+		m_currentWayPoint = wayPoint;
+		m_nextWayPoint = wayPoint->getNextWayPoint();
+	}
+	//check if the new way points previous waypoint is the players current waypoint
+	//if not the player is driving backwards or is skipping through the map some how. 
+	else {
+		if (m_currentWayPoint == wayPoint->getPreviousWayPoint())
+		{
+			std::cout << "Next way point set! \n";
+			m_currentWayPoint = wayPoint;
+			m_nextWayPoint = wayPoint->getNextWayPoint();
+			if (finishLine)
+			{
+				m_laps++;
+				std::cout << m_laps << std::endl;
+			}
+		}
+		else {
+			//std::cout << "Player missed a waypoint. Way point not updated \n";
+		}
+	}
+}
+
+void Controllable::setAmmunition(Projectile * newAmmo)
+{
+	m_ammuntion = newAmmo;
+}
+
+void Controllable::setGameWorld(World * world)
+{
+	m_gameWorld = world;
 }
 
 void Controllable::updatePowerUpRemaining(double dt)
