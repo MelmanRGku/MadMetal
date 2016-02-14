@@ -111,7 +111,7 @@ void Camera::update(double dtMilli)
 		-Need to look at turning forces on car?
 	*/
 
-	m_lookAt = glm::vec3(m_toFollow->getActor().getGlobalPose().p.x, m_toFollow->getActor().getGlobalPose().p.y, m_toFollow->getActor().getGlobalPose().p.z);
+	m_lookAt = glm::vec3(m_toFollow->getActor().getGlobalPose().p.x, 3, m_toFollow->getActor().getGlobalPose().p.z);
 	m_desiredPos = m_lookAt - m_toFollow->getForwardVector() * m_distance;
 	glm::vec3 temp = m_lookAt - m_currentPos;
 	float theta = glm::dot(glm::normalize(glm::vec2(m_desiredPos.x, m_desiredPos.z)), glm::normalize(glm::vec2(temp.x, temp.z)));

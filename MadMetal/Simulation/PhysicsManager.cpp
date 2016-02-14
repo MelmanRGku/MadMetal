@@ -36,67 +36,31 @@ void PhysicsManager::initPhysicsSimulation()
 	{
 		std::cout << "PxCreatePhysics failed! This is a major issue. ERROR CODE:PX0002" << std::endl;
 	}
+}
 
+/*word 0 = id of actor
+word 1 = what actor cares about hitting
+word 2 = actor dependant, but information relevent to actor. 
+	-index of player in array,
+	-owner of projectile (index of player in array)
+	-index of waypoint in array
+	-etc
+word 3 = also actor dependant, first thoughts would be:
+	- damage of projectile
+	- "Hello World" lol... jk
+*/
+void PhysicsManager::setupFiltering(PxRigidActor * actor, unsigned int actorId, unsigned int filterTarget, unsigned int extraActorInfo = 0, unsigned int extraInteractionInfo = 0)
+{
+	const PxU32 numShapes = actor->getNbShapes();
+	PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
+	actor->getShapes(shapes, numShapes);
+	PxFilterData data;
+	data.word0 = actorId;
+	data.word1 = filterTarget;
+	data.word2 = extraActorInfo;
+	data.word3 = extraInteractionInfo;
+	shapes[0]->setSimulationFilterData(data);
 	
-	/*
-	if (!PxInitExtensions(*topLevelPhysics_))
-		std::cout << "PxInitExtensions failed! This is a major issue. ERROR CODE:PX0003" << std::endl;
-		*/
-
-	//PxSceneDesc sceneDesc(scale);
-	//sceneDesc = new PxSceneDesc(topLevelPhysics_->getTolerancesScale());
-	//sceneDesc.gravity = PxVec3(0.0f, 0.0f, 0.0f);
-	//customizeSceneDesc(sceneDesc);
-
-	/*if (!sceneDesc.cpuDispatcher)
-	{
-		mCpuDispatcher = PxDefaultCpuDispatcherCreate(8);
-		if (!mCpuDispatcher)
-		{
-			std::cout << "mCpuDispatcher thing failed. ERROR CODE: PX0004" << std::endl;
-		}
-		sceneDesc.cpuDispatcher = mCpuDispatcher;
-	}
-	if (!sceneDesc.filterShader)
-	{
-		sceneDesc.filterShader = PxDefaultSimulationFilterShader;
-	}*/
-
-	/*
-#ifdef PX_WINDOWS
-	if (!sceneDesc.gpuDispatcher && mCudaContextManager)
-	{
-		sceneDesc.gpuDispatcher = mCudaContextManager->getGpuDispatcher();
-	}
-	
-#endif
-	*/
-	/*
-	mScene = topLevelPhysics_->createScene(sceneDesc);
-	if (!mScene)
-	{
-		std::cout << "The scene is a lie. ERROR CODE: PX0005" << std::endl;
-	}
-
-	PxMaterial* mMaterial;
-
-	mMaterial = topLevelPhysics_->createMaterial(0.5f, 0.5f, 0.1f);    //static friction, dynamic friction, restitution
-	if (!mMaterial)
-	{
-		std::cout << "Material failed to create. ERROR CODE: PX0006" << std::endl;
-	}
-
-	PxRigidDynamic* aSphereActor = topLevelPhysics_->createRigidDynamic(PxTransform(PxVec3(PxReal(0.0), PxReal(0.0), PxReal(0.0))));
-	PxShape* aSphereShape = aSphereActor->createShape(PxSphereGeometry(0.2), *mMaterial);
-
-	PxRigidBodyExt::updateMassAndInertia(*aSphereActor, 0.5);
-
-	aSphereActor->setLinearVelocity(PxVec3(PxReal(0.0), PxReal(0.0001), PxReal(0.0)));
-
-	mScene->addActor(*aSphereActor);
-
-	*/
-	//world_.getGameObjects()->at(0)->setPhysxActor(aSphereActor);
 }
 
 void PhysicsManager::shutdownPhysicsSimualtion()
