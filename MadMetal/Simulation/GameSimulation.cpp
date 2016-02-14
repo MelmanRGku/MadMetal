@@ -261,8 +261,8 @@ void GameSimulation::simulatePhysics(float dt)
 
 	//gVehicleInputData.setDigitalAccel(true); 
 	//PxVehicleDrive4WSmoothDigitalRawInputsAndSetAnalogInputs(gKeySmoothingData, gSteerVsForwardSpeedTable, gVehicleInputData, dt, gIsVehicleInAir, *car);
-	PxVehicleDrive4WSmoothAnalogRawInputsAndSetAnalogInputs(gPadSmoothingData, gSteerVsForwardSpeedTable, gVehicleInputData, timestep, gIsVehicleInAir, *car);
-	//car->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 1.0f);
+	//PxVehicleDrive4WSmoothAnalogRawInputsAndSetAnalogInputs(gPadSmoothingData, gSteerVsForwardSpeedTable, gVehicleInputData, timestep, gIsVehicleInAir, *car);
+	car->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 1.0f);
 	//Raycasts.
 	
 	PxVehicleWheels* vehicles[1] = { car };
@@ -277,12 +277,12 @@ void GameSimulation::simulatePhysics(float dt)
 	PxVehicleUpdates(timestep, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
 	//Work out if the vehicle is in the air.
-	//gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
-	gIsVehicleInAir = false;
+	gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
+	//gIsVehicleInAir = false;
 	m_scene->simulate(timestep);
 	m_scene->fetchResults(true);
 
-	//cout << car->getRigidDynamicActor()->getGlobalPose().p.x << " " << car->getRigidDynamicActor()->getGlobalPose().p.y << " " << car->getRigidDynamicActor()->getGlobalPose().p.z << endl;
+	cout << car->getRigidDynamicActor()->getGlobalPose().p.x << " -- " << car->getRigidDynamicActor()->getGlobalPose().p.y << " -- " << car->getRigidDynamicActor()->getGlobalPose().p.z << " address is " << car->getRigidDynamicActor() <<endl;
 }
 
 void GameSimulation::simulateAnimation()
@@ -375,6 +375,18 @@ PxFilterFlags TestFilterShader(
 	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
 	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
 {
+	// use a group-based mechanism for all other pairs:
+	// - Objects within the default group (mask 0) always collide
+	// - By default, objects of the default group do not collide
+	//   with any other group. If they should collide with another
+	//   group then this can only be specified through the filter
+	//   data of the default group objects (objects of a different
+	//   group can not choose to do so)
+	// - For objects that are not in the default group, a bitmask
+	//   is used to define the groups they should collide with
+	if ((filterData0.word0 != 0 || filterData1.word0 != 0) &&
+		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1))
+		return PxFilterFlag::eSUPPRESS;
 
 	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
 	{
@@ -401,7 +413,7 @@ void GameSimulation::createPhysicsScene()
 
 	if (!sceneDesc.filterShader)
 	{
-		sceneDesc.filterShader = SampleVehicleFilterShader;
+		sceneDesc.filterShader = TestFilterShader;
 	}
 
 	m_scene = m_physicsHandler.getPhysicsInstance().createScene(sceneDesc);
@@ -513,10 +525,12 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	gGroundPlane = createDrivablePlane(mMaterial, &m_physicsHandler.getPhysicsInstance());
 	m_scene->addActor(*gGroundPlane);
 	loader = new ObjModelLoader();
+	/*
 	RenderableObject *plane = new RenderableObject();
 	plane->model = loader->loadFromFile("Assets/Models/plane.obj");
 	plane->setActor(gGroundPlane);
 	m_world->addGameObject(plane);
+	*/
 
 	//Create a vehicle that will drive on the plane.
 	car = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);
@@ -537,12 +551,10 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	startBrakeMode();
 	obj->setCar(car);
 
-	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 5, -40));
-	PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(0.2), *mMaterial);
-	PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
-	tmpActor->setLinearVelocity(PxVec3(PxReal(0.0), PxReal(0.0), PxReal(0.0)));
-	obj->setActor(tmpActor);
-	m_scene->addActor(*tmpActor);
+	//PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 5, -40));
+	//PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(0.2), *mMaterial);
+	//PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
+	//m_scene->addActor(*tmpActor);
 	//assign stormtrooper to main char
 	m_players[0]->setObject(obj);
 	
@@ -614,7 +626,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 
 	//create a bounding box for storm tropper to run into
 	PxRigidStatic *boundVolume = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length - 5));
-	aSphereShape = boundVolume->createShape(PxBoxGeometry(PxVec3(2,5,3)), *mMaterial);
+	PxShape* aSphereShape = boundVolume->createShape(PxBoxGeometry(PxVec3(2, 5, 3)), *mMaterial);
 	aSphereShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
 	aSphereShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
 	m_scene->addActor(*boundVolume);
