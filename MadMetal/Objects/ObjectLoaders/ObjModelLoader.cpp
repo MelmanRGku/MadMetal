@@ -33,7 +33,7 @@ Model *ObjModelLoader::loadFromFile(std::string fileName) {
 
 Model *ObjModelLoader::processScene(const aiScene *scene) {
 	Model *model = new Model();
-	glm::vec3 min(-1e100), max(1e100);
+//	glm::vec3 min(-1e100), max(1e100);
 
 	// Process each mesh 
 	for (unsigned int i = 0; i < scene->mNumMeshes; i++)

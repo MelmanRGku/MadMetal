@@ -55,7 +55,7 @@ bool ObjectUpdaterSequence::ended() {
 		return false;
 	else if (type == TYPE_MULTIPLE_TIMES || type == TYPE_ONCE)
 		return currentNumberOfTimes >= totalNumberOfTimes;
-
+	else return true;
 }
 
 

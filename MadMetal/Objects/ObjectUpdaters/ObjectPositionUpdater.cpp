@@ -22,7 +22,7 @@ void ObjectPositionUpdater::update(float dt) {
 	if (ended())
 		return;
 
-	object->updatePosition(offset * (dt / totalDuration));
+	object->updatePosition(offset * (float)(dt / totalDuration));
 
 	currentDuration += dt;
 }

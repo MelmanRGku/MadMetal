@@ -29,7 +29,7 @@ void ObjectRotationUpdater::update(float dt) {
 	if (ended())
 		return;
 
-	object->updateRotation(angles * (dt / totalDuration));
+	object->updateRotation(angles * (float)(dt / totalDuration));
 
 	currentDuration += dt;
 }

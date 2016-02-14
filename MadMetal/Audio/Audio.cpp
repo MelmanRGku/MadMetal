@@ -70,7 +70,7 @@ void Audio::update()
 			distance = distance > 255 ? 255 : distance;
 			//-------------------------------
 
-			Mix_SetPosition(channelNum, angle, distance );
+			Mix_SetPosition(channelNum, Sint16(angle), Uint8(distance) );
 			
 		}
 	}

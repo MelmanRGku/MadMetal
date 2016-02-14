@@ -15,7 +15,7 @@ GameSimulation::GameSimulation(PhysicsManager& physicsInstance, PlayerControllab
 	player->setCamera(m_mainCamera);
 	m_players.push_back(player);
 	initialize();
-
+	
 
 }
 static PxF32 gTireFrictionMultipliers[MAX_NUM_SURFACE_TYPES][MAX_NUM_TIRE_TYPES] =
@@ -124,7 +124,7 @@ void startAccelerateForwardsMode()
 	gVehicleInputData.setAnalogAccel(1.0f);
 	
 }
-
+	
 void startAccelerateReverseMode()
 {
 	gVehicleInputData.setAnalogAccel(1.0f);
@@ -228,7 +228,7 @@ void GameSimulation::incrementDrivingMode(PxF32 dt)
 
 		//If the mode about to start is eDRIVE_MODE_ACCEL_REVERSE then switch to reverse gears.
 		if (eDRIVE_MODE_ACCEL_REVERSE == gDriveModeOrder[gVehicleOrderProgress])
-		{
+{
 			car->mDriveDynData.forceGearChange(PxVehicleGearsData::eREVERSE);
 		}
 	}
@@ -251,9 +251,9 @@ bool PxVehicleIsInAir(const PxVehicleWheelQueryResult& vehWheelQueryResults)
 	return true;
 }
 
-void GameSimulation::simulatePhysics(float dt)
+void GameSimulation::simulatePhysics(double dt)
 {
-	//	audio->update();
+//	audio->update();
 	const PxF32 timestep = 1.0f / 60.0f;
 	incrementDrivingMode(timestep);
 
@@ -295,7 +295,7 @@ void GameSimulation::simulateAI()
 
 void GameSimulation::simulatePlayers(double dt)
 {
-	for (int i = 0; i < m_players.size(); i++)
+	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
 		m_players[i]->playFrame(dt);
 	}
@@ -306,7 +306,7 @@ void GameSimulation::updateObjects(double dt) {
 	m_mainCamera->update(dt);
 
 	for (unsigned int i = 0; i < updaters.size(); i++) {
-		updaters.at(i)->update(dt);
+		updaters.at(i)->update( (float)dt);
 	}
 
 }
@@ -400,7 +400,7 @@ PxFilterFlags TestFilterShader(
 		pairFlags |= PxPairFlag::eTRIGGER_DEFAULT;
 
 	}
-
+		
 	return PxFilterFlag::eDEFAULT;
 }
 
@@ -632,13 +632,13 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_scene->addActor(*boundVolume);
 	finishLine->setActor(boundVolume);
 
-	/*	Mesh *mesh = new Mesh();
-		mesh->loadFromFile("Assets/Models/Avent.obj");
-		Model *model = new ObjModel("Assets/Models/Stormtrooper.obj");
-		VAO *vao = new VAO(model);
-		GameObject *obj = new GameObject(vao, model);
-		obj->mesh = mesh;
-		world->addGameObject(obj);*/
+/*	Mesh *mesh = new Mesh();
+	mesh->loadFromFile("Assets/Models/Avent.obj");
+	Model *model = new ObjModel("Assets/Models/Stormtrooper.obj");
+	VAO *vao = new VAO(model);
+	GameObject *obj = new GameObject(vao, model);
+	obj->mesh = mesh;
+	world->addGameObject(obj);*/
 	//ObjectPositionUpdater *up = new ObjectPositionUpdater(obj, glm::vec3(-15, -15, -15), 3000);
 	//updaters.push_back(up);
 	//ObjectRotationUpdater *up = new ObjectRotationUpdater(obj, glm::vec3(0, 180, 0), 10000, ObjectRotationUpdater::ANGLE_TYPE_DEGREES);
@@ -671,6 +671,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	upd->addObjectUpdater(upd1);
 	upd->addObjectUpdater(new ObjectRotationUpdater(obj, glm::vec3(0, 180, 0), 1, ObjectRotationUpdater::ANGLE_TYPE_DEGREES));
 	updaters.push_back(upd);*/
-
+	
 }
 

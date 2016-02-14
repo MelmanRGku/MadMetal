@@ -15,7 +15,7 @@
 
 class GameSimulation : public Scene, public PxSimulationEventCallback{
 private:
-	void simulatePhysics(float dt);
+	void simulatePhysics(double dt);
 
 	void simulateAnimation();
 
