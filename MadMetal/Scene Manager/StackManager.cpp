@@ -120,7 +120,8 @@ void StackManager::progressScene(int newTime)
 
 	//calculate delta time
 	double dt = static_cast<double>(newTime) / 1000;
-//	std::cout << "Dt = " << dt << std::endl;
+	if (dt > .1) dt = .1;
+	
 	//update gamecontrollers
 	m_input->updateGamePads(dt);
 

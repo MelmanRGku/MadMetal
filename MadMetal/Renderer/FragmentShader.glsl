@@ -28,6 +28,13 @@ uniform vec3 ambient = vec3(0.1, 0.1, 0.1);
 uniform sampler2D texObject;
 uniform bool texValid;
 
+// calculate specular component of lighting
+float specularSimple(vec3 L,vec3 N,vec3 H){
+   if(dot(N,L)>0){
+      return pow(clamp(dot(H,N),0.0,1.0),64.0);
+   }
+   return 0.0;
+}
 
 void main(void)
 {
@@ -48,6 +55,17 @@ void main(void)
 		diffuse *= vec3(1, 1, 1);
     vec3 specular = pow(max(dot(R, V), 0.0), specular_power) * specular_albedo;
 
+    // calculate total intensity of lighting
+    vec3 halfVector = normalize( L + V );
+
+    float iambi = 0.1;
+    float idiff = clamp(dot(L,N),0.0,1.0);
+    float ispec = specularSimple(L, N, halfVector);
+    float intensity = iambi + idiff + ispec;
+
+    // quantize intensity for cel shading
+    float shadeIntensity = ceil(intensity * 5)/ 5;
+
     // Write final colour to the framebuffer
-    gl_FragColor = vec4(ambient + diffuse + specular, 1.0);
+    gl_FragColor = vec4(ambient + diffuse * shadeIntensity + specular, 1.0);
 }

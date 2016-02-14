@@ -38,20 +38,20 @@ void PlayerControllable::playFrame(double dt)
 	update(dt);
 	if (m_gamePad->checkConnection())
 	{
-
+		
 		if (m_isAlive)
 		{
 			/*
 			if (m_gamePad->isPressed(GamePad::DPadLeft))
 			{
-
+				
 				//m_car->getActor().setLinearVelocity(PxVec3(10, 0, 0));
 				//m_car->getActor().setAngularVelocity(PxVec3(10, 10, 10));
 			}
 
 			if (m_gamePad->isPressed(GamePad::DPadRight))
 			{
-
+				
 				//m_car->getActor().setLinearVelocity(PxVec3(-10, 0, 0));
 			}
 
@@ -108,7 +108,8 @@ void PlayerControllable::playFrame(double dt)
 					m_car->getCar()->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getRightTrigger());
 			} else if (m_gamePad->getLeftTrigger())
-			{
+				{
+				m_reloadRemaining = m_reloadRate;
 				m_car->getCar()->mDriveDynData.forceGearChange(PxVehicleGearsData::eREVERSE);
 				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getLeftTrigger());
 			}
@@ -122,7 +123,7 @@ void PlayerControllable::playFrame(double dt)
 				{
 					m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
 					m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, m_gamePad->getLeftStick().x);
-				}
+			}
 
 				if (m_gamePad->getLeftStick().x > 0)
 				{
@@ -138,15 +139,15 @@ void PlayerControllable::playFrame(double dt)
 
 		}
 
-		if (m_camera != NULL)
-		{
-			m_camera->rotateCamera(m_gamePad->getRightStick().x, m_gamePad->getRightStick().y);
+			if (m_camera != NULL)
+			{
+				m_camera->rotateCamera(m_gamePad->getRightStick().x, m_gamePad->getRightStick().y);
+			}
 		}
-	}
 	else 
 	{
-		//do nothing cause you dead bro
+			//do nothing cause you dead bro
 	}
-
+	
 }
 
