@@ -11,7 +11,10 @@ GameSimulation::GameSimulation(PhysicsManager& physicsInstance, PlayerControllab
 {
 	m_mainCamera = new Camera();
 	player->setCamera(m_mainCamera);
+	
 	m_players.push_back(player);
+	player->setGameWorld(m_world);
+	
 	initialize();
 	
 	
@@ -26,9 +29,8 @@ GameSimulation::~GameSimulation()
 void GameSimulation::simulatePhysics(float dt)
 {
 //	audio->update();
-
-	m_scene->simulate(dt);
 	
+	m_scene->simulate(dt);
 	m_scene->fetchResults(true);
 
 }
@@ -72,25 +74,50 @@ PxFilterFlags TestFilterShader(
 
 	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
 	{
-		pairFlags =  PxPairFlag::eTRIGGER_DEFAULT;
-		pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
+		
+		if (filterData0.word0 & filterData1.word1 || filterData0.word1 & filterData1.word0)
+		{
+			pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+			
+		}
 	}
 	else {
-		std::cout << filterData1.word1 << std::endl;
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
-		pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
-		pairFlags |= PxPairFlag::eTRIGGER_DEFAULT;
+		if (filterData0.word0 & filterData1.word1 || filterData0.word1 & filterData1.word0)
+		{
+			pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
+		}
+		
 
 	}
-		
-	
 	return PxFilterFlag::eDEFAULT;
 }
+
+
+void GameSimulation::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
+{
+	
+}
+
+
+void GameSimulation::onTrigger(PxTriggerPair* pairs, PxU32 count)
+{
+	//Player Interactions. Shouldn't really be anyother type
+	if (pairs->otherShape->getSimulationFilterData().word0 == PhysicsManager::PLAYER)
+	{
+		PlayerControllable * player = m_players[pairs->otherShape->getSimulationFilterData().word2];
+		//std::cout << "hit waypoint " << pairs[0].triggerShape->getSimulationFilterData().word2 << std::endl;
+		player->setWayPoint(m_wayPoints->getWayPointAt(pairs[0].triggerShape->getSimulationFilterData().word2),
+			pairs[0].triggerShape->getSimulationFilterData().word3 == 1); // is it the finish line?
+		
+	}
+}
+
 
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(m_physicsHandler.getScale());
-	sceneDesc.gravity = PxVec3(0.0f, -1.0f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -18.81, 0.0f);
 	sceneDesc.simulationEventCallback = this;
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 
@@ -104,7 +131,7 @@ void GameSimulation::createPhysicsScene()
 	{
 		std::cout << "The scene is a lie. ERROR CODE: PX0005" << std::endl;
 	}
-	
+		
 }
 
 
@@ -124,7 +151,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 
 	//Create a default material
 	PxMaterial* mMaterial;
-	mMaterial = m_physicsHandler.getPhysicsInstance().createMaterial(0.5f, 0.5f, 0.1f);    //static friction, dynamic friction, restitution
+	mMaterial = m_physicsHandler.getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 	if (!mMaterial)
 	{
 		std::cout << "Material failed to create. ERROR CODE: PX0006" << std::endl;
@@ -136,10 +163,14 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	RenderableObject *obj = new RenderableObject();
 	obj->model = loader->loadFromFile("Assets/Models/Stormtrooper.obj");
 	m_world->addGameObject(obj);
-	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 5, -40));
-	PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(0.2), *mMaterial);
+	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 0, -45));
+	
+	PxShape* aSphereShape = tmpActor->createShape(PxBoxGeometry(1,.1,1), *mMaterial);
+	m_physicsHandler.setupFiltering(tmpActor,
+		PhysicsManager::PLAYER,
+		PhysicsManager::ENVIRONMENT | PhysicsManager::PROJECTILE | PhysicsManager::POWERUP | PhysicsManager::WAYPOINT,
+		0,0);
 	PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
-	tmpActor->setLinearVelocity(PxVec3(PxReal(0.0), PxReal(0.0), PxReal(0.0)));
 	obj->setActor(tmpActor);
 	m_scene->addActor(*tmpActor);
 	//assign stormtrooper to main char
@@ -148,29 +179,21 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//attach camera to stormtrooper
 	m_mainCamera->setToFollow(obj);
 
+	Projectile * ammo = new Projectile("");
+	RenderableObject *ammoModel = new RenderableObject();
+	ammoModel->model = loader->loadFromFile("Assets/Models/bullet.obj");
+	ammoModel->
+	ammo->setObject(ammoModel);
+	m_players[0]->setAmmunition(ammo);
 
-	// test if filter data works
-	//aSphereShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
-	//aSphereShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE,true);
-	//PxFilterData filterData;
-	//filterData.word0 = 0;
-	//filterData.word1 = 1;
-	//aSphereShape->setSimulationFilterData(filterData);
-	//-----------------------------------
+	
 	
 
-	/*--------------------------------------------
-				front
-			x		x		x
-	left	x		pillar	x	right
-			x		x		x
-				back
-	----------------------------------------------*/
 	float length = 50;
 	float width = 10;
 	//create a plane to run on
 	//PxRigidStatic * plane = PxCreatePlane(m_physicsHandler.getPhysicsInstance(), PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
-	PxRigidStatic * floor = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, 0));
+	PxRigidStatic * floor = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, -.5, 0));
 	floor->createShape(PxBoxGeometry(width, .5, length), *mMaterial);
 	m_scene->addActor(*floor);
 
@@ -188,12 +211,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_scene->addActor(*backWall);
 
 	
-	
-	//if (!plane)
-	//{
-		//std::cout << "Something went wrong loading the plane..\n";
-	//}
-	//m_scene->addActor(*plane);
 	
 	//draw the floor
 	loader = new ObjModelLoader();
@@ -228,10 +245,25 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	aSphereShape = boundVolume->createShape(PxBoxGeometry(PxVec3(2,5,3)), *mMaterial);
 	aSphereShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
 	aSphereShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
-	m_scene->addActor(*boundVolume);
+	//m_scene->addActor(*boundVolume);
 	finishLine->setActor(boundVolume);
+	m_physicsHandler.setupFiltering(boundVolume,
+		PhysicsManager::WAYPOINT,
+		PhysicsManager::PLAYER,
+		0,
+		0);
 
-
+	//create waypoints
+	
+	vector<glm::vec3> positions;
+	positions.push_back(glm::vec3(0, 0, 40));
+	positions.push_back(glm::vec3(0, 0, -40));
+	positions.push_back(glm::vec3(0, 0, -20));
+	positions.push_back(glm::vec3(0, 0, 0));
+	positions.push_back(glm::vec3(0, 0, 20));
+	
+	m_wayPoints = new WayPointSystem(m_scene, positions);
+	
 
 /*	Mesh *mesh = new Mesh();
 	mesh->loadFromFile("Assets/Models/Avent.obj");

@@ -46,7 +46,7 @@ void PlayerControllable::playFrame(double dt)
 			{
 				
 				m_car->setLinearVelocity(PxVec3(10, 0, 0));
-				//m_car->getActor().setAngularVelocity(PxVec3(10, 10, 10));
+				
 			}
 
 			if (m_gamePad->isPressed(GamePad::DPadRight))
@@ -57,7 +57,7 @@ void PlayerControllable::playFrame(double dt)
 
 			if (m_gamePad->isPressed(GamePad::DPadUp))
 			{
-
+				std::cout << "pressed";
 				m_car->setLinearVelocity(PxVec3(0, 0, 10));
 			}
 
@@ -109,9 +109,14 @@ void PlayerControllable::playFrame(double dt)
 				{
 					m_reloadRemaining = m_reloadRate;
 					PxRigidDynamic * projectile = m_car->getScene()->getPhysics().createRigidDynamic(m_car->getGlobalPose());
-					projectile->setLinearVelocity(PxVec3(0, 0, 20));
-					projectile->createShape(PxSphereGeometry(0.5), *m_car->getScene()->getPhysics().createMaterial(0.1, 0.1, 0.1));
+					projectile->setLinearVelocity(PxVec3(0, 10, 20));
+					projectile->createShape(PxSphereGeometry(0.1), *m_car->getScene()->getPhysics().createMaterial(0, 0, 0));
+					projectile->setGlobalPose(m_car->getGlobalPose());
 					m_car->getScene()->addActor(*projectile);
+					RenderableObject * newShot = new RenderableObject(*m_ammuntion->getObject());
+					newShot->setActor(projectile);
+					m_gameWorld->addGameObject(newShot);
+					
 				}
 				
 			}
@@ -129,14 +134,17 @@ void PlayerControllable::playFrame(double dt)
 			//do nothing cause you dead bro
 		}
 		
-		float speed = 20;
-		m_car->setLinearVelocity(PxVec3(-m_gamePad->getLeftStick().x * speed, 0, m_gamePad->getLeftStick().y * speed));
+		float speed = 50;
+		if (m_gamePad->getLeftStick().x || m_gamePad->getLeftStick().y)
+		{
+			m_car->setLinearVelocity(PxVec3(m_gamePad->getLeftStick().x * -speed, 0, m_gamePad->getLeftStick().y * speed));
+		}
+			
 		
-		//change force direction
-		//m_currentGameObject->setDirection(vec3(m_gamePad->getLeftStick().x, 0, m_gamePad->getLeftStick().y)
+		
+		
 
-		//change camera direction
-		//m_camera->rotate(vec3(m_gamePad->getRightStick().x, m_gamePad->getRightStick().y,0)
+		
 	}
 	else {
 		//pause(this);

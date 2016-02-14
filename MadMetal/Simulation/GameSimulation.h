@@ -10,6 +10,7 @@
 #include "Objects/ObjectLoaders/ObjModelLoader.h"
 #include "Objects/RenderableObject.h"
 #include "PhysicsManager.h"
+#include "Game Logic\WayPointSystem.h"
 
 class GameSimulation : public Scene, public PxSimulationEventCallback{
 private:
@@ -28,9 +29,10 @@ private:
 private: //members
 	std::vector<ObjectUpdater *> updaters;
 	std::vector<PlayerControllable *> m_players;
-
+	WayPointSystem * m_wayPoints;
 	PhysicsManager& m_physicsHandler;
 	PxScene* m_scene;
+
 	
 	
 public:
@@ -43,16 +45,10 @@ public:
 
 	void setupBasicGameWorldObjects();
 
-	void							onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs) {  }
-	void	onTrigger(PxTriggerPair* pairs, PxU32 count)
-	{
-		if (pairs[0].otherActor == m_players[0]->getRigidActor())
-		{
-			pairs[0].otherActor->setGlobalPose(PxTransform(0,1,-45));
-			
-		}
-		
-	}
+	void	onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs);
+
+	void	onTrigger(PxTriggerPair* pairs, PxU32 count);
+
 	virtual void							onConstraintBreak(PxConstraintInfo*, PxU32) {}
 	virtual void							onWake(PxActor**, PxU32) {}
 	virtual void							onSleep(PxActor**, PxU32){}
