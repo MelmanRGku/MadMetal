@@ -13,7 +13,10 @@ GameSimulation::GameSimulation(PhysicsManager& physicsInstance, PlayerControllab
 {
 	m_mainCamera = new Camera();
 	player->setCamera(m_mainCamera);
+	
 	m_players.push_back(player);
+	player->setGameWorld(m_world);
+	
 	initialize();
 	
 
@@ -162,7 +165,7 @@ void startHandbrakeTurnRightMode()
 	
 }
 
-
+	
 void releaseAllControls()
 {
 	gVehicleInputData.setAnalogAccel(0.0f);
@@ -390,19 +393,45 @@ PxFilterFlags TestFilterShader(
 
 	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
 	{
-		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
-		pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
+		
+		if (filterData0.word0 & filterData1.word1 || filterData0.word1 & filterData1.word0)
+		{
+			pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+			
+	}
 	}
 	else {
-		std::cout << filterData1.word1 << std::endl;
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		if (filterData0.word0 & filterData1.word1 || filterData0.word1 & filterData1.word0)
+		{
 		pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
-		pairFlags |= PxPairFlag::eTRIGGER_DEFAULT;
-
 	}
 		
+
+	}
 	return PxFilterFlag::eDEFAULT;
 }
+
+
+void GameSimulation::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
+{
+	
+}
+
+
+void GameSimulation::onTrigger(PxTriggerPair* pairs, PxU32 count)
+{
+	//Player Interactions. Shouldn't really be anyother type
+	if (pairs->otherShape->getSimulationFilterData().word0 == PhysicsManager::PLAYER)
+	{
+		PlayerControllable * player = m_players[pairs->otherShape->getSimulationFilterData().word2];
+		//std::cout << "hit waypoint " << pairs[0].triggerShape->getSimulationFilterData().word2 << std::endl;
+		player->setWayPoint(m_wayPoints->getWayPointAt(pairs[0].triggerShape->getSimulationFilterData().word2),
+			pairs[0].triggerShape->getSimulationFilterData().word3 == 1); // is it the finish line?
+		
+	}
+}
+
 
 void GameSimulation::createPhysicsScene()
 {
@@ -426,7 +455,7 @@ void GameSimulation::createPhysicsScene()
 	{
 		std::cout << "A fatal error has occured. ERROR CODE PX0007" << std::endl;
 	}
-
+	
 	PxInitVehicleSDK(m_physicsHandler.getPhysicsInstance());
 	PxVehicleSetBasisVectors(PxVec3(0, 1, 0), PxVec3(0, 0, 1));
 	PxVehicleSetUpdateMode(PxVehicleUpdateMode::eVELOCITY_CHANGE);
@@ -474,7 +503,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	obj->model = loader->loadFromFile("Assets/Models/Ugly_Car.obj");
 	m_world->addGameObject(obj);
 	PxMaterial* mMaterial;
-	mMaterial = m_physicsHandler.getPhysicsInstance().createMaterial(0.5f, 0.5f, 0.1f);    //static friction, dynamic friction, restitution
+	mMaterial = m_physicsHandler.getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 	if (!mMaterial)
 	{
 		std::cout << "Material failed to create. ERROR CODE: PX0006" << std::endl;
@@ -554,6 +583,26 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 5, -40));
 	//PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(0.2), *mMaterial);
 	//PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
+
+
+	// PETER!!!
+
+	//load stormtrooper
+	/*ObjModelLoader *loader = new ObjModelLoader();
+	RenderableObject *obj = new RenderableObject();
+	obj->model = loader->loadFromFile("Assets/Models/Stormtrooper.obj");
+	m_world->addGameObject(obj);
+	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 0, -45));
+
+	PxShape* aSphereShape = tmpActor->createShape(PxBoxGeometry(1, .1, 1), *mMaterial);
+	m_physicsHandler.setupFiltering(tmpActor,
+		PhysicsManager::PLAYER,
+		PhysicsManager::ENVIRONMENT | PhysicsManager::PROJECTILE | PhysicsManager::POWERUP | PhysicsManager::WAYPOINT,
+		0, 0);
+	PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
+	obj->setActor(tmpActor);
+	m_scene->addActor(*tmpActor);*/
+
 	//m_scene->addActor(*tmpActor);
 	//assign stormtrooper to main char
 	m_players[0]->setObject(obj);
@@ -561,19 +610,20 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//attach camera to stormtrooper
 	m_mainCamera->setToFollow(obj);
 
+	Projectile * ammo = new Projectile("");
+	RenderableObject *ammoModel = new RenderableObject();
+	ammoModel->model = loader->loadFromFile("Assets/Models/bullet.obj");
+	ammo->setObject(ammoModel);
+	m_players[0]->setAmmunition(ammo);
 
-	/*--------------------------------------------
-				front
-			x		x		x
-	left	x		pillar	x	right
-			x		x		x
-				back
-	----------------------------------------------*/
+
+	
+
 	float length = 50;
 	float width = 10;
 	//create a plane to run on
 	//PxRigidStatic * plane = PxCreatePlane(m_physicsHandler.getPhysicsInstance(), PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
-	PxRigidStatic * floor = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, 0));
+	PxRigidStatic * floor = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, -.5, 0));
 	floor->createShape(PxBoxGeometry(width, .5, length), *mMaterial);
 	m_scene->addActor(*floor);
 
@@ -589,7 +639,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxRigidStatic * backWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, -length));
 	backWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
 	m_scene->addActor(*backWall);
-	
+
 	//if (!plane)
 	//{
 		//std::cout << "Something went wrong loading the plane..\n";
@@ -629,8 +679,25 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxShape* aSphereShape = boundVolume->createShape(PxBoxGeometry(PxVec3(2, 5, 3)), *mMaterial);
 	aSphereShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
 	aSphereShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
-	m_scene->addActor(*boundVolume);
+	//m_scene->addActor(*boundVolume);
 	finishLine->setActor(boundVolume);
+	m_physicsHandler.setupFiltering(boundVolume,
+		PhysicsManager::WAYPOINT,
+		PhysicsManager::PLAYER,
+		0,
+		0);
+
+	//create waypoints
+	
+	vector<glm::vec3> positions;
+	positions.push_back(glm::vec3(0, 0, 40));
+	positions.push_back(glm::vec3(0, 0, -40));
+	positions.push_back(glm::vec3(0, 0, -20));
+	positions.push_back(glm::vec3(0, 0, 0));
+	positions.push_back(glm::vec3(0, 0, 20));
+
+	m_wayPoints = new WayPointSystem(m_scene, positions);
+	
 
 /*	Mesh *mesh = new Mesh();
 	mesh->loadFromFile("Assets/Models/Avent.obj");

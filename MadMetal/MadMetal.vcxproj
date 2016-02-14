@@ -123,6 +123,7 @@
     <ClInclude Include="Game Logic\PlayerControllable.h" />
     <ClInclude Include="Game Logic\PowerUp.h" />
     <ClInclude Include="Game Logic\Projectile.h" />
+    <ClInclude Include="Game Logic\WayPointSystem.h" />
     <ClInclude Include="Libraries\stb_image.h" />
     <ClInclude Include="Objects\Camera.h" />
     <ClInclude Include="Input\GamePad.h" />

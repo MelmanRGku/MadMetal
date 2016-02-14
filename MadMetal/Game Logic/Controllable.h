@@ -1,6 +1,8 @@
 #pragma once
-
+#include "Simulation\World.h"
+#include "Projectile.h"
 #include "PowerUp.h"
+#include "WayPointSystem.h"
 
 class Controllable
 {
@@ -10,7 +12,7 @@ protected:
 
 	bool m_isAlive;
 	float m_points;
-	
+	int m_laps;
 	float m_currentHealth;
 	float m_maxHealth;
 
@@ -30,9 +32,19 @@ protected:
 	double m_superDurationRemaining;
 	bool m_isSuperMode;
 
+
+
 	PowerUp m_heldPowerUp;
 	PowerUp m_activePowerUp;
-	double m_powerUpDurationRemaining;
+	
+	WayPoint * m_currentWayPoint;
+	WayPoint * m_nextWayPoint;
+
+	Projectile * m_ammuntion;
+
+	World * m_gameWorld;
+
+	float m_powerUpDurationRemaining;
 
 public:
 	Controllable(){};
@@ -45,7 +57,9 @@ public:
 	void updateSuperRemaining(double dt);
 	void usePowerUp();
 	void pickUpPowerUp(PowerUpType type);
-
+	void setWayPoint(WayPoint * wayPoint, bool finishLine);
+	void setAmmunition(Projectile * newAmmo);
+	void setGameWorld(World * world);
 	void useSuper();
 	
 	void fire();
