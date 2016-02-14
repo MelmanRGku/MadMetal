@@ -3,8 +3,8 @@
 #include <cmath>
 #ifndef GAMEPAD_H
 #define GAMEPAD_H
-#define DEADZONE_X 0.1f
-#define DEADZONE_Y 0.2f
+#define DEADZONE_X 0.3f
+#define DEADZONE_Y 0.3f
 
 
 struct AnalogStick {

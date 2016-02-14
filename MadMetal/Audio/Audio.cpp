@@ -83,7 +83,6 @@ bool Audio::quePositionalSource(DummyPosition **position)
 	Mix_Chunk * chunk = Mix_LoadWAV("Assets/Audio/laugh.wav");
 	if (chunk == NULL)
 	{
-		std::cout << "AHHHHH";
 		return false;
 	}
 
@@ -98,7 +97,6 @@ bool Audio::queStaticSource(int sourceID)
 	Mix_Chunk * staticChunk = Mix_LoadWAV("Assets/Audio/menu_sound_1.wav");
 	if (staticChunk == NULL)
 	{
-		std::cout << "AHHHHH";
 		return false;
 	}
 

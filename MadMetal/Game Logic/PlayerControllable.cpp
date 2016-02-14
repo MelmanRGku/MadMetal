@@ -38,20 +38,20 @@ void PlayerControllable::playFrame(double dt)
 	update(dt);
 	if (m_gamePad->checkConnection())
 	{
-		
+
 		if (m_isAlive)
 		{
-			
+			/*
 			if (m_gamePad->isPressed(GamePad::DPadLeft))
 			{
-				
+
 				//m_car->getActor().setLinearVelocity(PxVec3(10, 0, 0));
 				//m_car->getActor().setAngularVelocity(PxVec3(10, 10, 10));
 			}
 
 			if (m_gamePad->isPressed(GamePad::DPadRight))
 			{
-				
+
 				//m_car->getActor().setLinearVelocity(PxVec3(-10, 0, 0));
 			}
 
@@ -68,7 +68,7 @@ void PlayerControllable::playFrame(double dt)
 			}
 
 
-			/*if (m_gamePad->isPressed(GamePad::XButton))
+			if (m_gamePad->isPressed(GamePad::XButton))
 			{
 				std::cout << "Xpressed \n";
 			}
@@ -100,48 +100,53 @@ void PlayerControllable::playFrame(double dt)
 
 			if (m_gamePad->isPressed(GamePad::RShoulder))
 			{
-				std::cout << "RShoulderpressed \n";
-			}
-			*/
+			}*/
+
 			if (m_gamePad->getRightTrigger())
 			{
-				if (m_reloadRemaining <= 0)
+				if (m_car->getCar()->mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
+					m_car->getCar()->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
+				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getRightTrigger());
+			} else if (m_gamePad->getLeftTrigger())
+			{
+				m_car->getCar()->mDriveDynData.forceGearChange(PxVehicleGearsData::eREVERSE);
+				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getLeftTrigger());
+			}
+			else {
+				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
+			}
+
+			if (m_gamePad->getLeftStick().x)
+			{
+				if (m_gamePad->getLeftStick().x < 0) 
 				{
-					m_reloadRemaining = m_reloadRate;
-					PxRigidDynamic * projectile = m_car->getActor().getScene()->getPhysics().createRigidDynamic(m_car->getActor().getGlobalPose());
-					projectile->setLinearVelocity(PxVec3(0, 0, 20));
-					projectile->createShape(PxSphereGeometry(0.5), *m_car->getActor().getScene()->getPhysics().createMaterial(PxReal(0.1), PxReal(0.1), PxReal(0.1)));
-					m_car->getActor().getScene()->addActor(*projectile);
-			}
+					m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
+					m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, m_gamePad->getLeftStick().x);
+				}
 
+				if (m_gamePad->getLeftStick().x > 0)
+				{
+					m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
+					m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, -m_gamePad->getLeftStick().x);
+				}
 			}
-			/*
-			if (m_gamePad->getLeftTrigger())
+			else
 			{
-				std::cout << "LeftTriggpressed \n";
-			}*/
-			if (m_camera != NULL)
-			{
-				m_camera->rotateCamera(m_gamePad->getRightStick().x, m_gamePad->getRightStick().y);
+				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
+				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
 			}
-		}
-		else {
-			//do nothing cause you dead bro
-		}
-		
-		float speed = 20;
-		//m_car->setLinearVelocity(PxVec3(-m_gamePad->getLeftStick().x * speed, 0, m_gamePad->getLeftStick().y * speed));
 
-		//change force direction
-		//m_currentGameObject->setDirection(vec3(m_gamePad->getLeftStick().x, 0, m_gamePad->getLeftStick().y)
+		}
 
-		//change camera direction
-		//m_camera->rotate(vec3(m_gamePad->getRightStick().x, m_gamePad->getRightStick().y,0)
+		if (m_camera != NULL)
+		{
+			m_camera->rotateCamera(m_gamePad->getRightStick().x, m_gamePad->getRightStick().y);
+		}
 	}
-	else {
-		//pause(this);
+	else 
+	{
+		//do nothing cause you dead bro
 	}
-	
-	
+
 }
 

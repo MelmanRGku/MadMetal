@@ -10,7 +10,7 @@ Renderer::Renderer()
 		glm::radians(std::stof(Settings::getSetting("fovy"))),
 		std::stof(Settings::getSetting("screenWidth")) / std::stof(Settings::getSetting("screenHeight")),
 		0.5f,
-		100.f
+		10000.f
 		);
 
 	viewMatrix = glm::lookAt(

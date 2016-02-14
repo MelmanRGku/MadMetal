@@ -226,19 +226,19 @@ bool GamePad::sampleState(double dt)
 	//left joystick
 	//is displacement in each direction greater than the deadzone range?
 	leftStick.x = abs(dispX) < deadzoneX ? 0 : (abs(dispX) - deadzoneX)
-		* (dispX / (abs(dispX) * (1 - deadzoneX)));
+		* (abs(dispX)/dispX);
 	leftStick.y = abs(dispY) < deadzoneY ? 0 : (abs(dispY) - deadzoneY)
-		* (dispY / (abs(dispY) * (1 - deadzoneY)));
+		* (abs(dispY) / dispY);
 	
 	dispX = fmaxf(-1, (float)state.Gamepad.sThumbRX / 32767);
 	dispY = fmaxf(-1, (float)state.Gamepad.sThumbRY / 32767);
 
 	//right joystick
 	rightStick.x = abs(dispX) < deadzoneX ? 0 : (abs(dispX) - deadzoneX)
-		* (dispX / (abs(dispX) * (1 - deadzoneX)));
+		* (abs(dispX) / dispX);
 
 	rightStick.y = abs(dispY) < deadzoneY ? 0 : (abs(dispY) - deadzoneY)
-		* (dispY / (abs(dispY) * (1 - deadzoneY)));
+		* (abs(dispY) / dispY);
 
 	//calculate trigger depression
 	leftTrigger = (float)state.Gamepad.bLeftTrigger / 255;
