@@ -23,16 +23,16 @@ protected:
 	float m_defenseMultiplier;
 	
 	float m_reloadRate;
-	float m_reloadRemaining;
+	double m_reloadRemaining;
 
 	float m_superGuage;
 	float m_superMaxDuration;
-	float m_superDurationRemaining;
+	double m_superDurationRemaining;
 	bool m_isSuperMode;
 
 	PowerUp m_heldPowerUp;
 	PowerUp m_activePowerUp;
-	float m_powerUpDurationRemaining;
+	double m_powerUpDurationRemaining;
 
 public:
 	Controllable(){};

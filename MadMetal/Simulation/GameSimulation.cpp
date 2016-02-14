@@ -250,7 +250,7 @@ bool PxVehicleIsInAir(const PxVehicleWheelQueryResult& vehWheelQueryResults)
 	return true;
 }
 
-void GameSimulation::simulatePhysics(float dt)
+void GameSimulation::simulatePhysics(double dt)
 {
 //	audio->update();
 	const PxF32 timestep = 1.0f / 60.0f;
@@ -293,7 +293,7 @@ void GameSimulation::simulateAI()
 
 void GameSimulation::simulatePlayers(double dt)
 {
-	for (int i = 0; i < m_players.size(); i++)
+	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
 		m_players[i]->playFrame(dt);
 	}
@@ -304,7 +304,7 @@ void GameSimulation::updateObjects(double dt) {
 	m_mainCamera->update(dt);
 
 	for (unsigned int i = 0; i < updaters.size(); i++) {
-		updaters.at(i)->update(dt);
+		updaters.at(i)->update( (float)dt);
 	}
 
 }
@@ -484,7 +484,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//	startBrakeMode();
 
 	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 5, -40));
-	PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(0.2), *mMaterial);
+	PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(PxReal(0.2)), *mMaterial);
 	PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
 	tmpActor->setLinearVelocity(PxVec3(PxReal(0.0), PxReal(0.0), PxReal(0.0)));
 	obj->setActor(tmpActor);

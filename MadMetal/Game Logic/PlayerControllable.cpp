@@ -110,7 +110,7 @@ void PlayerControllable::playFrame(double dt)
 					m_reloadRemaining = m_reloadRate;
 					PxRigidDynamic * projectile = m_car->getActor().getScene()->getPhysics().createRigidDynamic(m_car->getActor().getGlobalPose());
 					projectile->setLinearVelocity(PxVec3(0, 0, 20));
-					projectile->createShape(PxSphereGeometry(0.5), *m_car->getActor().getScene()->getPhysics().createMaterial(0.1, 0.1, 0.1));
+					projectile->createShape(PxSphereGeometry(0.5), *m_car->getActor().getScene()->getPhysics().createMaterial(PxReal(0.1), PxReal(0.1), PxReal(0.1)));
 					m_car->getActor().getScene()->addActor(*projectile);
 			}
 

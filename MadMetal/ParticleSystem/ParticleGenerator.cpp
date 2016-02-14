@@ -43,7 +43,7 @@ void CirclePositionGenerator::generate(double dt, ParticleData *p, size_t startI
 		}
 	}
 	else {
-		m_circProg = fmod((m_circProg + dt * 5) ,360);
+		m_circProg = (float)fmod((m_circProg + dt * 5) ,360);
 		glm::vec3 position = glm::rotateZ(glm::vec3(1, 0,0) * m_radius, m_circProg);
 		for (size_t i = startId; i < endId; i++)
 		{

@@ -3,8 +3,8 @@
 #include "Libraries\glm\gtx\rotate_vector.hpp"
 
 
-#define CAMERA_ROTATION_SPEED 0.1
-#define CAMERA_GRAVITY_SPEED 0.001
+#define CAMERA_ROTATION_SPEED 0.1f
+#define CAMERA_GRAVITY_SPEED 0.001f
 #define PI 3.14159265359
 Camera::Camera()
 {

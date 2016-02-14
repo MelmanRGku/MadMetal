@@ -15,7 +15,7 @@ SceneStack::SceneStack()
 SceneStack::~SceneStack()
 {
 	delete m_top;
-	for (int i = 0; i < m_sceneStack.size(); i++)
+	for (unsigned int i = 0; i < m_sceneStack.size(); i++)
 	{
 		//handle deleting scene
 	}
@@ -23,7 +23,7 @@ SceneStack::~SceneStack()
 
 void SceneStack::clearStack()
 {
-	for (int i = 0; i < m_sceneStack.size(); i++)
+	for (unsigned int i = 0; i < m_sceneStack.size(); i++)
 	{
 		delete m_sceneStack[i];
 	}

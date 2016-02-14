@@ -2,7 +2,8 @@
 class ObjectUpdater
 {
 protected:
-	long totalDuration, currentDuration;			//in milliseconds
+	double totalDuration;				//in milliseconds
+	double currentDuration;			//in milliseconds
 
 public:
 	ObjectUpdater();
