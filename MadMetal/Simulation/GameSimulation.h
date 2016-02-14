@@ -13,7 +13,7 @@
 #include "PhysicsManager.h"
 #include "Objects\ObjectCreators\SnippetVehicleRaycast.h"
 
-class GameSimulation : public Scene{
+class GameSimulation : public Scene, public PxSimulationEventCallback{
 private:
 	void simulatePhysics(float dt);
 
@@ -53,5 +53,13 @@ public:
 	void setupBasicGameWorldObjects();
 
 	void incrementDrivingMode(float dt);
+
+	void							onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs) { std::cout << "contact reported \n"; }
+	virtual void							onTrigger(PxTriggerPair* pairs, PxU32 count){}
+	virtual void							onConstraintBreak(PxConstraintInfo*, PxU32) {}
+	virtual void							onWake(PxActor**, PxU32) {}
+	virtual void							onSleep(PxActor**, PxU32){}
+
+	
 	
 };

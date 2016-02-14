@@ -260,7 +260,7 @@ void GameSimulation::simulatePhysics(float dt)
 	//gVehicleInputData.setDigitalAccel(true); 
 	//PxVehicleDrive4WSmoothDigitalRawInputsAndSetAnalogInputs(gKeySmoothingData, gSteerVsForwardSpeedTable, gVehicleInputData, dt, gIsVehicleInAir, *car);
 	PxVehicleDrive4WSmoothAnalogRawInputsAndSetAnalogInputs(gPadSmoothingData, gSteerVsForwardSpeedTable, gVehicleInputData, timestep, gIsVehicleInAir, *car);
-
+	//car->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 1.0f);
 	//Raycasts.
 	
 	PxVehicleWheels* vehicles[1] = { car };
@@ -275,12 +275,12 @@ void GameSimulation::simulatePhysics(float dt)
 	PxVehicleUpdates(timestep, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
 	//Work out if the vehicle is in the air.
-	gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
-	//gIsVehicleInAir = false;
+	//gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
+	gIsVehicleInAir = false;
 	m_scene->simulate(timestep);
 	m_scene->fetchResults(true);
 
-	cout << car->getRigidDynamicActor()->getGlobalPose().p.x << " " << car->getRigidDynamicActor()->getGlobalPose().p.y << " " << car->getRigidDynamicActor()->getGlobalPose().p.z << endl;
+	//cout << car->getRigidDynamicActor()->getGlobalPose().p.x << " " << car->getRigidDynamicActor()->getGlobalPose().p.y << " " << car->getRigidDynamicActor()->getGlobalPose().p.z << endl;
 }
 
 void GameSimulation::simulateAnimation()
@@ -312,16 +312,70 @@ void GameSimulation::initialize() {
 	setupBasicGameWorldObjects();
 }
 
+PxFilterFlags testFilter(
+	PxFilterObjectAttributes attributes0, PxFilterData filterData0, 
+	PxFilterObjectAttributes attributes1, PxFilterData filterData1, 
+	PxPairFlags &pairFlags, const void *constantBlock, PxU32 constantBlockSize)
+{
+	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
+	{
+		std::cout << "Trigger Collision Occured \n";
+		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+	}
+	else {
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
+	}
+	return PxFilterFlag::eDEFAULT;
+}
+
+PxFilterFlags SampleVehicleFilterShader(
+	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
+	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
+{
+	PX_UNUSED(constantBlock);
+	PX_UNUSED(constantBlockSize);
+
+	// let triggers through
+	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
+	{
+		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+		return PxFilterFlags();
+	}
+
+
+
+	// use a group-based mechanism for all other pairs:
+	// - Objects within the default group (mask 0) always collide
+	// - By default, objects of the default group do not collide
+	//   with any other group. If they should collide with another
+	//   group then this can only be specified through the filter
+	//   data of the default group objects (objects of a different
+	//   group can not choose to do so)
+	// - For objects that are not in the default group, a bitmask
+	//   is used to define the groups they should collide with
+	if ((filterData0.word0 != 0 || filterData1.word0 != 0) &&
+		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1))
+		return PxFilterFlag::eSUPPRESS;
+
+	pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+
+	// The pairFlags for each object are stored in word2 of the filter data. Combine them.
+	pairFlags |= PxPairFlags(PxU16(filterData0.word2 | filterData1.word2));
+	return PxFilterFlags();
+}
+
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(m_physicsHandler.getScale());
 	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
-
+	sceneDesc.simulationEventCallback = this;
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 
 	if (!sceneDesc.filterShader)
 	{
-		sceneDesc.filterShader = PxDefaultSimulationFilterShader;
+		sceneDesc.filterShader = SampleVehicleFilterShader;
 	}
 
 	m_scene = m_physicsHandler.getPhysicsInstance().createScene(sceneDesc);
@@ -443,7 +497,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 
 	//Create a vehicle that will drive on the plane.
 	car = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);
-	PxTransform startTransform(PxVec3(0, (vehicleDesc.chassisDims.y*0.5f + vehicleDesc.wheelRadius + 1.0f), 0), PxQuat(PxIdentity));
+	PxTransform startTransform(PxVec3(0, 3+(vehicleDesc.chassisDims.y*0.5f + vehicleDesc.wheelRadius + 1.0f), 0), PxQuat(PxIdentity));
 	car->getRigidDynamicActor()->setGlobalPose(startTransform);
 	m_scene->addActor(*car->getRigidDynamicActor());
 
