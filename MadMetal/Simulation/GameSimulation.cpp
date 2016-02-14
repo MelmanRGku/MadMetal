@@ -471,7 +471,7 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 void GameSimulation::setupBasicGameWorldObjects() {
 	ObjModelLoader *loader = new ObjModelLoader();
 	Car *obj = new Car();
-	obj->model = loader->loadFromFile("Assets/Models/Stormtrooper.obj");
+	obj->model = loader->loadFromFile("Assets/Models/Ugly_Car.obj");
 	m_world->addGameObject(obj);
 	PxMaterial* mMaterial;
 	mMaterial = m_physicsHandler.getPhysicsInstance().createMaterial(0.5f, 0.5f, 0.1f);    //static friction, dynamic friction, restitution
