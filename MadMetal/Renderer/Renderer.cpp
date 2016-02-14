@@ -14,7 +14,7 @@ Renderer::Renderer()
 		);
 
 	viewMatrix = glm::lookAt(
-		glm::vec3(0, 0, 10),
+		glm::vec3(50, 3, 50),
 		glm::vec3(0, 0, 0),
 		glm::vec3(0, 1, 0)
 		);

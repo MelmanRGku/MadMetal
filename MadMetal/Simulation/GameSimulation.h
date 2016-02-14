@@ -51,7 +51,7 @@ public:
 	void initialize();
 
 	void setupBasicGameWorldObjects();
-	
+
 	void							onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs) {  }
 	void	onTrigger(PxTriggerPair* pairs, PxU32 count)
 	{

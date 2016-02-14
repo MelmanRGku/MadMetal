@@ -15,7 +15,7 @@ GameSimulation::GameSimulation(PhysicsManager& physicsInstance, PlayerControllab
 	player->setCamera(m_mainCamera);
 	m_players.push_back(player);
 	initialize();
-	
+
 
 }
 static PxF32 gTireFrictionMultipliers[MAX_NUM_SURFACE_TYPES][MAX_NUM_TIRE_TYPES] =
@@ -124,7 +124,7 @@ void startAccelerateForwardsMode()
 	gVehicleInputData.setAnalogAccel(1.0f);
 	
 }
-	
+
 void startAccelerateReverseMode()
 {
 	gVehicleInputData.setAnalogAccel(1.0f);
@@ -175,8 +175,9 @@ void releaseAllControls()
 void GameSimulation::incrementDrivingMode(PxF32 dt)
 {
 	gVehicleModeTimer += dt;
-	std::cout << gVehicleModeTimer << std::endl;
-	if (gVehicleModeTimer > 4.f)
+//	std::cout << gVehicleModeTimer << std::endl;
+//	std::cout << gVehicleOrderProgress << std::endl;
+	if (gVehicleModeTimer > 2.f)
 	{
 		//If the mode just completed was eDRIVE_MODE_ACCEL_REVERSE then switch back to forward gears.
 		if (eDRIVE_MODE_ACCEL_REVERSE == gDriveModeOrder[gVehicleOrderProgress])
@@ -227,7 +228,7 @@ void GameSimulation::incrementDrivingMode(PxF32 dt)
 
 		//If the mode about to start is eDRIVE_MODE_ACCEL_REVERSE then switch to reverse gears.
 		if (eDRIVE_MODE_ACCEL_REVERSE == gDriveModeOrder[gVehicleOrderProgress])
-{
+		{
 			car->mDriveDynData.forceGearChange(PxVehicleGearsData::eREVERSE);
 		}
 	}
@@ -252,7 +253,7 @@ bool PxVehicleIsInAir(const PxVehicleWheelQueryResult& vehWheelQueryResults)
 
 void GameSimulation::simulatePhysics(float dt)
 {
-//	audio->update();
+	//	audio->update();
 	const PxF32 timestep = 1.0f / 60.0f;
 	incrementDrivingMode(timestep);
 
@@ -261,7 +262,7 @@ void GameSimulation::simulatePhysics(float dt)
 	//gVehicleInputData.setDigitalAccel(true); 
 	//PxVehicleDrive4WSmoothDigitalRawInputsAndSetAnalogInputs(gKeySmoothingData, gSteerVsForwardSpeedTable, gVehicleInputData, dt, gIsVehicleInAir, *car);
 	PxVehicleDrive4WSmoothAnalogRawInputsAndSetAnalogInputs(gPadSmoothingData, gSteerVsForwardSpeedTable, gVehicleInputData, timestep, gIsVehicleInAir, *car);
-
+	//car->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 1.0f);
 	//Raycasts.
 	
 	PxVehicleWheels* vehicles[1] = { car };
@@ -276,11 +277,12 @@ void GameSimulation::simulatePhysics(float dt)
 	PxVehicleUpdates(timestep, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
 	//Work out if the vehicle is in the air.
-	gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
-
+	//gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
+	gIsVehicleInAir = false;
 	m_scene->simulate(timestep);
 	m_scene->fetchResults(true);
 
+	//cout << car->getRigidDynamicActor()->getGlobalPose().p.x << " " << car->getRigidDynamicActor()->getGlobalPose().p.y << " " << car->getRigidDynamicActor()->getGlobalPose().p.z << endl;
 }
 
 void GameSimulation::simulateAnimation()
@@ -314,6 +316,60 @@ void GameSimulation::initialize() {
 	setupBasicGameWorldObjects();
 }
 
+PxFilterFlags testFilter(
+	PxFilterObjectAttributes attributes0, PxFilterData filterData0, 
+	PxFilterObjectAttributes attributes1, PxFilterData filterData1, 
+	PxPairFlags &pairFlags, const void *constantBlock, PxU32 constantBlockSize)
+{
+	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
+	{
+		std::cout << "Trigger Collision Occured \n";
+		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+	}
+	else {
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
+	}
+	return PxFilterFlag::eDEFAULT;
+}
+
+PxFilterFlags SampleVehicleFilterShader(
+	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
+	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
+{
+	PX_UNUSED(constantBlock);
+	PX_UNUSED(constantBlockSize);
+
+	// let triggers through
+	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
+	{
+		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+		return PxFilterFlags();
+	}
+
+
+
+	// use a group-based mechanism for all other pairs:
+	// - Objects within the default group (mask 0) always collide
+	// - By default, objects of the default group do not collide
+	//   with any other group. If they should collide with another
+	//   group then this can only be specified through the filter
+	//   data of the default group objects (objects of a different
+	//   group can not choose to do so)
+	// - For objects that are not in the default group, a bitmask
+	//   is used to define the groups they should collide with
+	if ((filterData0.word0 != 0 || filterData1.word0 != 0) &&
+		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1))
+		return PxFilterFlag::eSUPPRESS;
+
+	pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+
+	// The pairFlags for each object are stored in word2 of the filter data. Combine them.
+	pairFlags |= PxPairFlags(PxU16(filterData0.word2 | filterData1.word2));
+	return PxFilterFlags();
+}
+
 PxFilterFlags TestFilterShader(
 	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
 	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
@@ -322,7 +378,7 @@ PxFilterFlags TestFilterShader(
 
 	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
 	{
-		pairFlags =  PxPairFlag::eTRIGGER_DEFAULT;
+		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
 		pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
 	}
 	else {
@@ -332,7 +388,7 @@ PxFilterFlags TestFilterShader(
 		pairFlags |= PxPairFlag::eTRIGGER_DEFAULT;
 
 	}
-		
+
 	return PxFilterFlag::eDEFAULT;
 }
 
@@ -345,7 +401,7 @@ void GameSimulation::createPhysicsScene()
 
 	if (!sceneDesc.filterShader)
 	{
-		sceneDesc.filterShader = TestFilterShader;
+		sceneDesc.filterShader = SampleVehicleFilterShader;
 	}
 
 	m_scene = m_physicsHandler.getPhysicsInstance().createScene(sceneDesc);
@@ -453,7 +509,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	vehicleDesc.numWheels = nbWheels;
 	vehicleDesc.wheelMaterial = mMaterial;
 	PxRigidStatic* gGroundPlane = NULL;
-	PxVehicleDrive4W* gVehicle4W = NULL;
 	//Create a plane to drive on.
 	gGroundPlane = createDrivablePlane(mMaterial, &m_physicsHandler.getPhysicsInstance());
 	m_scene->addActor(*gGroundPlane);
@@ -464,24 +519,23 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_world->addGameObject(plane);
 
 	//Create a vehicle that will drive on the plane.
-	gVehicle4W = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);
-	PxTransform startTransform(PxVec3(0, 5 + (vehicleDesc.chassisDims.y*0.5f + vehicleDesc.wheelRadius + 1.0f), 0), PxQuat(PxIdentity));
-	gVehicle4W->getRigidDynamicActor()->setGlobalPose(startTransform);
-	m_scene->addActor(*gVehicle4W->getRigidDynamicActor());
+	car = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);
+	PxTransform startTransform(PxVec3(0, 3+(vehicleDesc.chassisDims.y*0.5f + vehicleDesc.wheelRadius + 1.0f), 0), PxQuat(PxIdentity));
+	car->getRigidDynamicActor()->setGlobalPose(startTransform);
+	m_scene->addActor(*car->getRigidDynamicActor());
 
 	//Set the vehicle to rest in first gear.
 	//Set the vehicle to use auto-gears.
-	gVehicle4W->setToRestState();
-	gVehicle4W->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
-	gVehicle4W->mDriveDynData.setUseAutoGears(true);
-	obj->setCar(gVehicle4W);
-	car = gVehicle4W;
+	car->setToRestState();
+	car->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
+	car->mDriveDynData.setUseAutoGears(true);
 
 	//	gVehicleInputData.setDigitalAccel(true); TOMS TODO
 
-	//	gVehicleModeTimer = 0.0f;
-	//	gVehicleOrderProgress = 0;
-	//	startBrakeMode();
+	gVehicleModeTimer = 0.0f;
+	gVehicleOrderProgress = 0;
+	startBrakeMode();
+	obj->setCar(car);
 
 	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 5, -40));
 	PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(0.2), *mMaterial);
@@ -566,13 +620,13 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_scene->addActor(*boundVolume);
 	finishLine->setActor(boundVolume);
 
-/*	Mesh *mesh = new Mesh();
-	mesh->loadFromFile("Assets/Models/Avent.obj");
-	Model *model = new ObjModel("Assets/Models/Stormtrooper.obj");
-	VAO *vao = new VAO(model);
-	GameObject *obj = new GameObject(vao, model);
-	obj->mesh = mesh;
-	world->addGameObject(obj);*/
+	/*	Mesh *mesh = new Mesh();
+		mesh->loadFromFile("Assets/Models/Avent.obj");
+		Model *model = new ObjModel("Assets/Models/Stormtrooper.obj");
+		VAO *vao = new VAO(model);
+		GameObject *obj = new GameObject(vao, model);
+		obj->mesh = mesh;
+		world->addGameObject(obj);*/
 	//ObjectPositionUpdater *up = new ObjectPositionUpdater(obj, glm::vec3(-15, -15, -15), 3000);
 	//updaters.push_back(up);
 	//ObjectRotationUpdater *up = new ObjectRotationUpdater(obj, glm::vec3(0, 180, 0), 10000, ObjectRotationUpdater::ANGLE_TYPE_DEGREES);
@@ -605,6 +659,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	upd->addObjectUpdater(upd1);
 	upd->addObjectUpdater(new ObjectRotationUpdater(obj, glm::vec3(0, 180, 0), 1, ObjectRotationUpdater::ANGLE_TYPE_DEGREES));
 	updaters.push_back(upd);*/
-	
+
 }
 
