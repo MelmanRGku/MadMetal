@@ -58,6 +58,7 @@ void Camera::setToFollow(Object * object)
 {
 	m_toFollow = object;
 	m_currentPos = m_desiredPos = m_toFollow->getForwardVector() * (-m_distance);
+	m_currentPos.y = m_currentPos.y - 1.f;
 	m_lookAt = m_toFollow->getPosition();
 	m_up = glm::vec3(0, 1, 0);
 	m_rotation = glm::vec3(0, 0, 0);

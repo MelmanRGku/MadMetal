@@ -73,6 +73,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Audio\Audio.cpp" />
+    <ClCompile Include="Objects\BoundingBox.cpp" />
     <ClCompile Include="Objects\Car.cpp" />
     <ClCompile Include="Game Logic\Controllable.cpp" />
     <ClCompile Include="Game Logic\PlayerControllable.cpp" />
@@ -118,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="Objects\BoundingBox.h" />
     <ClInclude Include="Objects\Car.h" />
     <ClInclude Include="Game Logic\Controllable.h" />
     <ClInclude Include="Game Logic\PlayerControllable.h" />

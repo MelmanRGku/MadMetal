@@ -8,4 +8,5 @@ Model::Model()
 
 Model::~Model()
 {
+	delete boundingBox;
 }

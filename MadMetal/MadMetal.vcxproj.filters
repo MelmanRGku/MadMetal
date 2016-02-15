@@ -144,6 +144,9 @@
     <ClCompile Include="Objects\Car.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\BoundingBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Files\FileReader.h">
@@ -221,9 +224,6 @@
     <ClInclude Include="Objects\ObjectLoaders\ObjModelLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Renderable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Scene Manager\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -287,7 +287,13 @@
     <ClInclude Include="Objects\Car.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-	<ClInclude Include="Game Logic\WayPointSystem.h">
+    <ClInclude Include="Game Logic\WayPointSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\BoundingBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Renderable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
