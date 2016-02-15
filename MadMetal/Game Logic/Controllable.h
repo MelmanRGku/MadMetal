@@ -44,7 +44,7 @@ protected:
 
 	World * m_gameWorld;
 
-	float m_powerUpDurationRemaining;
+	double m_powerUpDurationRemaining;
 
 public:
 	Controllable(){};

@@ -451,7 +451,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	car->mDriveDynData.setUseAutoGears(true);
 	//std::cout << car->getRigidDynamicActor()->getWorldBounds().getDimensions().y << " " << car->getRigidDynamicActor()->getWorldBounds().minimum.y << " " << car->getRigidDynamicActor()->getWorldBounds().maximum.y << std::endl;
 	//obj->updatePosition(glm::vec3(0, -car->getRigidDynamicActor()->getWorldBounds().getDimensions().y / 2 , 0));
-	int k = car->mWheelsSimData.getWheelData(0).mRadius * 2;
+	int k = (int)car->mWheelsSimData.getWheelData(0).mRadius * 2;
 	obj->updateScale(glm::vec3(car->getRigidDynamicActor()->getWorldBounds().getDimensions().x, car->getRigidDynamicActor()->getWorldBounds().getDimensions().y + k, car->getRigidDynamicActor()->getWorldBounds().getDimensions().z));
 	//	gVehicleInputData.setDigitalAccel(true); TOMS TODO
 
