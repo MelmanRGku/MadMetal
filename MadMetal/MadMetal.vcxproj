@@ -72,6 +72,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Files\FilesFinder.cpp" />
+    <ClCompile Include="Global\Assets.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="Objects\Car.cpp" />
     <ClCompile Include="Game Logic\Controllable.cpp" />
@@ -117,7 +119,10 @@
     <ClCompile Include="Simulation\GameSimulation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Files\FilesFinder.h" />
+    <ClInclude Include="Global\Assets.h" />
     <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="Libraries\tinydir\tinydir.h" />
     <ClInclude Include="Objects\Car.h" />
     <ClInclude Include="Game Logic\Controllable.h" />
     <ClInclude Include="Game Logic\PlayerControllable.h" />

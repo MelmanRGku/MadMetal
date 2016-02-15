@@ -377,7 +377,8 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 void GameSimulation::setupBasicGameWorldObjects() {
 	ObjModelLoader *loader = new ObjModelLoader();
 	Car *obj = new Car();
-	obj->model = loader->loadFromFile("Assets/Models/Ugly_Car.obj");
+	obj->model = loader->loadFromFile("Assets/Models/Avent.obj");
+	obj->updateRotation(glm::vec3(0, 3.14 / 2, 0));
 	m_world->addGameObject(obj);
 	PxMaterial* mMaterial;
 	mMaterial = m_physicsHandler.getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution

@@ -144,6 +144,12 @@
     <ClCompile Include="Objects\Car.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Global\Assets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Files\FilesFinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Files\FileReader.h">
@@ -287,7 +293,16 @@
     <ClInclude Include="Objects\Car.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-	<ClInclude Include="Game Logic\WayPointSystem.h">
+    <ClInclude Include="Game Logic\WayPointSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Global\Assets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Files\FilesFinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\tinydir\tinydir.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
