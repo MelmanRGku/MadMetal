@@ -7,7 +7,6 @@
 #include "iostream"
 #include "PxDefaultSimulationFilterShader.h"
 #include "World.h"
-#include "Objects\PhysicsObject.h"
 
 
 PhysicsManager::PhysicsManager()
