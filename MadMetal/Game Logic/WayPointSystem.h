@@ -46,7 +46,7 @@ public:
 		PxMaterial * dummyMaterial = physicsScene->getPhysics().createMaterial(0, 0, 0);
 
 		//initialize waypoints
-		for (int i = 0; i < positions.size(); i++)
+		for (unsigned int i = 0; i < positions.size(); i++)
 		{
 			//add waypoint to the list
 			m_wayPoints.push_back(new WayPoint(positions[i]));
@@ -71,7 +71,7 @@ public:
 		if (m_wayPoints.size() > 1)
 		{
 			//connect way points
-			for (int i = 0; i < m_wayPoints.size(); i++)
+			for (unsigned int i = 0; i < m_wayPoints.size(); i++)
 			{
 				if (i == 0)
 				{
@@ -96,7 +96,7 @@ public:
 	}
 	~WayPointSystem()
 	{
-		for (int i = 0; i < m_wayPoints.size(); i++)
+		for (unsigned int i = 0; i < m_wayPoints.size(); i++)
 		{
 			delete m_wayPoints[i];
 		}

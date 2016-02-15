@@ -49,6 +49,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx\foundation\windows;$(ProjectDir)\Libraries\physx\common;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx;$(ProjectDir)\Libraries\physx\extensions;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+      <AdditionalUsingDirectories>$(ProjectDir)\Libraries\physx;$(ProjectDir)\Libraries\physx\foundation\windows;$(ProjectDir)\Libraries\physx\common;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx\extensions;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -75,6 +76,7 @@
     <ClCompile Include="Files\FilesFinder.cpp" />
     <ClCompile Include="Global\Assets.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
+    <ClCompile Include="Objects\BoundingBox.cpp" />
     <ClCompile Include="Objects\Car.cpp" />
     <ClCompile Include="Game Logic\Controllable.cpp" />
     <ClCompile Include="Game Logic\PlayerControllable.cpp" />
@@ -86,6 +88,7 @@
     <ClCompile Include="Files\FileWriter.cpp" />
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="Global\Settings.cpp" />
+    <ClCompile Include="Objects\DrivingStyleFast.cpp" />
     <ClCompile Include="Objects\Mesh.cpp" />
     <ClCompile Include="Objects\Model.cpp" />
     <ClCompile Include="Objects\Object.cpp" />
@@ -108,7 +111,6 @@
     <ClCompile Include="ParticleSystem\ParticleEmitter.cpp" />
     <ClCompile Include="ParticleSystem\ParticleGenerator.cpp" />
     <ClCompile Include="ParticleSystem\ParticleUpdater.cpp" />
-    <ClCompile Include="Objects\PhysicsObject.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
@@ -122,6 +124,7 @@
     <ClInclude Include="Files\FilesFinder.h" />
     <ClInclude Include="Global\Assets.h" />
     <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="Objects\BoundingBox.h" />
     <ClInclude Include="Libraries\tinydir\tinydir.h" />
     <ClInclude Include="Objects\Car.h" />
     <ClInclude Include="Game Logic\Controllable.h" />
@@ -132,6 +135,8 @@
     <ClInclude Include="Libraries\stb_image.h" />
     <ClInclude Include="Objects\Camera.h" />
     <ClInclude Include="Input\GamePad.h" />
+    <ClInclude Include="Objects\DrivingStyle.h" />
+    <ClInclude Include="Objects\DrivingStyleFast.h" />
     <ClInclude Include="Objects\Mesh.h" />
     <ClInclude Include="Objects\Model.h" />
     <ClInclude Include="Objects\Object.h" />
@@ -155,10 +160,10 @@
     <ClInclude Include="ParticleSystem\ParticleGenerator.h" />
     <ClInclude Include="ParticleSystem\ParticleSystem.h" />
     <ClInclude Include="ParticleSystem\ParticleUpdater.h" />
-    <ClInclude Include="Objects\PhysicsObject.h" />
     <ClInclude Include="Renderer\Renderable.h" />
     <ClInclude Include="Scene Manager\Scene.h" />
     <ClInclude Include="Scene Manager\StackManager.h" />
+    <ClInclude Include="Simulation\GameSimulationDefinitions.h" />
     <ClInclude Include="Simulation\World.h" />
     <ClInclude Include="Global\Log.h" />
     <ClInclude Include="Files\FileReader.h" />

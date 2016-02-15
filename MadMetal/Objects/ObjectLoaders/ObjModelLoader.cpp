@@ -33,7 +33,8 @@ Model *ObjModelLoader::loadFromFile(std::string fileName) {
 
 Model *ObjModelLoader::processScene(const aiScene *scene) {
 	Model *model = new Model();
-//	glm::vec3 min(-1e100), max(1e100);
+	BoundingBox *boundingBox = new BoundingBox();
+	model->boundingBox = boundingBox;
 
 	// Process each mesh 
 	for (unsigned int i = 0; i < scene->mNumMeshes; i++)
@@ -54,6 +55,9 @@ Model *ObjModelLoader::processScene(const aiScene *scene) {
 			vector.y = mesh->mVertices[j].y;
 			vector.z = mesh->mVertices[j].z;
 			vertices.push_back(vector);
+
+			//include in boundingBox;
+			boundingBox->addPosition(vector);
 
 			// Normals
 			vector.x = mesh->mNormals[j].x;
@@ -114,6 +118,7 @@ Model *ObjModelLoader::processScene(const aiScene *scene) {
 		Mesh *newMesh = new Mesh(vertices, uvs, colours, normals, indices, texture);
 		newMesh->setupVAO();
 		model->addMesh(newMesh);
+		boundingBox->finalize();
 	}
 
 	return model;

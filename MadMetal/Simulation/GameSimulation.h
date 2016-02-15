@@ -1,18 +1,14 @@
 #pragma once
 #include <iostream>
 #include "Scene Manager\Scene.h"
-#include "Objects/Object.h"
-#include "Objects/Model.h"
-#include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
-#include "Objects/ObjectUpdaters/ObjectRotationUpdater.h"
-#include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
-#include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
-#include "Objects/ObjectLoaders/ObjModelLoader.h"
-#include "Objects/RenderableObject.h"
-#include "Objects/Car.h"
-#include "PhysicsManager.h"
-#include "Game Logic\WayPointSystem.h"
-#include "Objects\ObjectCreators\SnippetVehicleRaycast.h"
+
+class Scene;
+class Car;
+class PhysicsManager;
+class WayPointSystem;
+class ObjectUpdater;
+class VehicleSceneQueryData; 
+class ObjModelLoader;
 
 class GameSimulation : public Scene, public PxSimulationEventCallback{
 private:
@@ -43,6 +39,7 @@ private: //members
 	PxVehicleDrivableSurfaceToTireFrictionPairs* createFrictionPairs(const PxMaterial* defaultMaterial);
 	VehicleSceneQueryData*	gVehicleSceneQueryData = NULL;
 	PxBatchQuery* gBatchQuery = NULL;
+	ObjModelLoader *m_objLoader;
 public:
 	GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player);
 	~GameSimulation();

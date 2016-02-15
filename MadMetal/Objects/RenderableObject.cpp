@@ -9,7 +9,7 @@ RenderableObject::~RenderableObject()
 }
 
 void RenderableObject::draw(Renderer *renderer) {
-	std::vector<Mesh *> *meshes = model->getMeshes();
+	std::vector<Mesh *> *meshes = getModel()->getMeshes();
 
 	glm::mat4x4 modelMatrix = getModelMatrix();
 	//std::cout << position.x << " " << position.y << " " << position.z << "\n";
@@ -34,4 +34,8 @@ void RenderableObject::draw(Renderer *renderer) {
 			mesh->getTexture()->unBind(GL_TEXTURE0);
 		}
 	}
+}
+
+glm::mat4x4 RenderableObject::getModelMatrix() {
+	return getPhysicsModelMatrix() * getLocalModelMatrix() * getInitialModelMatrix();
 }

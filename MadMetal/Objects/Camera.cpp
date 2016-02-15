@@ -11,9 +11,9 @@ Camera::Camera()
 
 	m_rotateScalar = CAMERA_ROTATION_SPEED;
 	m_gravityScalar = CAMERA_GRAVITY_SPEED;
-	m_distance = 10;
+	m_distance = 20;
 	m_recentlyMoved = false;
-
+	m_inclinationAngle = 70.0f;
 
 	m_currentPos = glm::vec3(0, 0, m_distance);
 
@@ -27,7 +27,7 @@ Camera::Camera(Object * object)
 {
 	m_rotateScalar = CAMERA_ROTATION_SPEED;
 	m_gravityScalar = CAMERA_GRAVITY_SPEED;
-	m_distance = 10;
+	m_distance = 20;
 	m_recentlyMoved = false;
 
 	if (object != NULL)
@@ -58,6 +58,7 @@ void Camera::setToFollow(Object * object)
 {
 	m_toFollow = object;
 	m_currentPos = m_desiredPos = m_toFollow->getForwardVector() * (-m_distance);
+	m_currentPos.y = m_currentPos.y - 1.f;
 	m_lookAt = m_toFollow->getPosition();
 	m_up = glm::vec3(0, 1, 0);
 	m_rotation = glm::vec3(0, 0, 0);
@@ -94,7 +95,7 @@ void Camera::rotateCamera(float xpos, float ypos)
 				m_currentPos = m_lookAt + glm::rotate((m_desiredPos - m_lookAt), (float)(PI / 2 - rotate), glm::vec3(0, 1, 0));
 			}
 		}
-		m_currentPos.y = 3;
+		//m_currentPos.y = 3;
 	
 	
 	
@@ -111,10 +112,10 @@ void Camera::update(double dtMilli)
 		-Need to look at turning forces on car?
 	*/
 
-	m_lookAt = glm::vec3(m_toFollow->getActor().getGlobalPose().p.x, 3, m_toFollow->getActor().getGlobalPose().p.z);
-	m_desiredPos = m_lookAt - m_toFollow->getForwardVector() * m_distance;
-	glm::vec3 temp = m_lookAt - m_currentPos;
-	float theta = glm::dot(glm::normalize(glm::vec2(m_desiredPos.x, m_desiredPos.z)), glm::normalize(glm::vec2(temp.x, temp.z)));
+	m_lookAt = glm::vec3(m_toFollow->getActor().getGlobalPose().p.x, m_toFollow->getActor().getGlobalPose().p.y, m_toFollow->getActor().getGlobalPose().p.z);
+	m_desiredPos = m_lookAt - glm::vec3((m_toFollow->getForwardVector() * m_distance).x, -tan(m_inclinationAngle * PI / 180.0f) * (m_lookAt - (m_toFollow->getForwardVector() * m_distance)).length(), (m_toFollow->getForwardVector() * m_distance).z);
+//	glm::vec3 temp = m_lookAt - m_currentPos;
+//	float theta = glm::dot(glm::normalize(glm::vec2(m_desiredPos.x, m_desiredPos.z)), glm::normalize(glm::vec2(temp.x, temp.z)));
 	
 	//std::cout << theta << std::endl;
 	//std::cout << temp.x * m_desiredPos.x + temp.z * m_desiredPos.z << std::endl;
