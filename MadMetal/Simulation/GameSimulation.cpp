@@ -78,7 +78,6 @@ void GameSimulation::simulatePhysics(double dt)
 	//gIsVehicleInAir = false;
 	m_scene->simulate(timestep);
 	m_scene->fetchResults(true);
-
 }
 
 void GameSimulation::simulateAnimation()
@@ -335,6 +334,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	car = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);
 	PxTransform startTransform(PxVec3(0, 3+(vehicleDesc.chassisDims.y*0.5f + vehicleDesc.wheelRadius + 1.0f), 0), PxQuat(PxIdentity));
 	car->getRigidDynamicActor()->setGlobalPose(startTransform);
+	car->getRigidDynamicActor()->createShape(PxBoxGeometry(car->getRigidDynamicActor()->getWorldBounds().getDimensions().x /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().y /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().z /2), *mMaterial);
 	m_scene->addActor(*car->getRigidDynamicActor());
 
 	//Set the vehicle to rest in first gear.
@@ -389,12 +389,13 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_players[0]->setAmmunition(ammo);
 
 	float length = 50;
-	float width = 10;
+	float width = 50;
 	//create a plane to run on
 	//PxRigidStatic * plane = PxCreatePlane(m_physicsHandler.getPhysicsInstance(), PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
 	PxRigidStatic * floor = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, -.5, 0));
 	floor->createShape(PxBoxGeometry(width, .5, length), *mMaterial);
 	m_scene->addActor(*floor);
+
 
 	PxRigidStatic * leftWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(width, 0, 0));
 	leftWall->createShape(PxBoxGeometry(0.5, width, length), *mMaterial);
