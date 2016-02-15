@@ -67,5 +67,5 @@ void main(void)
     float shadeIntensity = ceil(intensity * 5)/ 5;
 
     // Write final colour to the framebuffer
-    gl_FragColor = vec4(ambient + diffuse * shadeIntensity + specular, 1.0);
+    gl_FragColor = vec4(ambient + diffuse * shadeIntensity + specular * shadeIntensity, 1.0);
 }
