@@ -380,7 +380,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	
 
 	RenderableObject * FrontPlane = new RenderableObject();
-	FrontPlane->setModel(m_objLoader->loadFromFile("Assets/Models/plane.obj"), true, true);
+	FrontPlane->setModel(Assets::getModel("plane"), true, true);
 	FrontPlane->updateScale(glm::vec3(glm::vec3(frontWall->getWorldBounds().getDimensions().x, 1, frontWall->getWorldBounds().getDimensions().y)));
 	FrontPlane->setActor(frontWall);
 	FrontPlane->updateRotation(glm::vec3(3.14 / 2, 0, 0));
@@ -388,12 +388,11 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//draw the floor
 	RenderableObject * drawPlane = new RenderableObject();
 	drawPlane->setModel(Assets::getModel("plane"));
-	drawPlane->updateScale(glm::vec3(50, 1, 50));
 	drawPlane->setActor(floor);
 	m_world->addGameObject(drawPlane);
 
 	RenderableObject * groundPlane = new RenderableObject();
-	groundPlane->setModel(m_objLoader->loadFromFile("Assets/Models/plane.obj"), true, true);
+	groundPlane->setModel(Assets::getModel("plane"), true, true);
 	groundPlane->updateScale(glm::vec3(glm::vec3(ground->getWorldBounds().getDimensions().x, 1, ground->getWorldBounds().getDimensions().z)));
 	groundPlane->setActor(ground);
 	m_world->addGameObject(groundPlane);
@@ -416,7 +415,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//drawthe finish line
 	RenderableObject * finishLine = new RenderableObject();
 	finishLine->setModel(Assets::getModel("finishLine"));
-	//m_world->addGameObject(finishLine);
+	m_world->addGameObject(finishLine);
 
 	//create a bounding box for storm tropper to run into
 	PxRigidStatic *boundVolume = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length - 5));
