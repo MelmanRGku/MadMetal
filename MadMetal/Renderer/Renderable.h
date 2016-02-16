@@ -1,5 +1,7 @@
 #pragma once
 
+#define ZERO_TO_ONE(x) (x == 0 ? 1 : x)
+
 #include "Objects\Model.h"
 #include "Renderer.h"
 #include "Libraries\glm\mat4x4.hpp"
@@ -18,9 +20,9 @@ public:
 		this->model = model;
 
 		if (resize) {
-			double scaleX = 1 / model->boundingBox->getSizeX();
-			double scaleY = 1 / model->boundingBox->getSizeY();
-			double scaleZ = 1 / model->boundingBox->getSizeZ();
+			double scaleX = 1 / ZERO_TO_ONE(model->boundingBox->getSizeX());
+			double scaleY = 1 / ZERO_TO_ONE(model->boundingBox->getSizeY());
+			double scaleZ = 1 / ZERO_TO_ONE(model->boundingBox->getSizeZ());
 			initialModelMatrix = initialModelMatrix * glm::scale(glm::mat4x4(), glm::vec3(scaleX, scaleY, scaleZ));
 		}
 
