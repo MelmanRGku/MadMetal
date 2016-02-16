@@ -4,6 +4,8 @@
 #include "Global\Settings.h"
 #include "Global\Log.h"
 #include "Scene Manager\StackManager.h"
+#include "Global\Assets.h"
+#include "Global\Fonts.h"
 
 #define MAX_FPS (60)
 #define MIN_DT (1000 / MAX_FPS)
@@ -20,11 +22,16 @@ void initStatics()
 	Log::init("debug.txt");
 	//enable\disable logging based on the setting
 	Log::enableLogging(std::stoi(Settings::getSetting("debugEnabled")) == 0 ? false : true);
+	//initialize assets and load all objs
+	Assets::init();
+	Fonts::init();
 }
 
 void initObjects()
 {
 	//	psystem->initSystem(glutGet(GLUT_ELAPSED_TIME));
+	Assets::loadObjsFromDirectory("Assets/Models", true);
+	Fonts::loadTTFFontsFromDirectory("Assets/Fonts");
 	m_stackManager = new StackManager();
 }
 
@@ -69,7 +76,6 @@ int main(int argc, char **argv)
 	initStatics();
 	initOpengl(argc, argv);
 	initObjects();
-
 
 	glutMainLoop();
 

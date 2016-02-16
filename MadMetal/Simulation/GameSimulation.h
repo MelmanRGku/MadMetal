@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Scene Manager\Scene.h"
+#include "Global\Assets.h"
 
 class Scene;
 class Car;
