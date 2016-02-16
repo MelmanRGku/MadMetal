@@ -79,3 +79,28 @@ std::vector<std::string> FileHandlingHelpers::getFileContentsSeparatedByLines(st
 	}
 	return lines;
 }
+
+void FileHandlingHelpers::writeToFile(const char *fileName, const std::string contents) {
+	std::ofstream out(fileName);
+	out << contents;
+	out.close();
+}
+
+void FileHandlingHelpers::writeToFile(const char *fileName, const char* contents) {
+	writeToFile(fileName, std::string(contents));
+}
+
+void FileHandlingHelpers::appendToFile(const char *fileName, const std::string contents) {
+	std::ofstream out(fileName, std::fstream::out | std::fstream::app);
+	out << contents;
+	out.close();
+}
+
+void FileHandlingHelpers::appendToFile(const char *fileName, const char* contents) {
+	appendToFile(fileName, std::string(contents));
+}
+
+void FileHandlingHelpers::clearFileContents(const char *fileName) {
+	std::ofstream ofs(fileName, std::ofstream::out | std::ofstream::trunc);
+	ofs.close();
+}

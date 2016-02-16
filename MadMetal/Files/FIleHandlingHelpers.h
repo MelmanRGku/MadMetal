@@ -21,4 +21,28 @@ namespace FileHandlingHelpers
 	Returns file contents separated by new lines as a string
 	*/
 	std::vector<std::string> getFileContentsSeparatedByLines(std::string &fileContents);
+
+	/*
+	Writes a string to the file. This will remove all current
+	file contents
+	*/
+	void writeToFile(const char *fileName, const std::string contents);
+	/*
+	@Overload
+	*/
+	void writeToFile(const char *fileName, const char* contents);
+	/*
+	Appends a string to the end of the file.
+	*/
+	void appendToFile(const char *fileName, const std::string contents);
+
+	/*
+	@Overload
+	*/
+	void appendToFile(const char *fileName, const char* contents);
+	
+	/*
+	Deletes file contents
+	*/
+	void clearFileContents(const char *fileName);
 }

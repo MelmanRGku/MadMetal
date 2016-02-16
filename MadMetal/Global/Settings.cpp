@@ -87,7 +87,5 @@ void Settings::storeToFile(char *name) {
 	}
 
 	//write the whole string to the file
-	FileWriter *fw = new FileWriter(name);
-	fw->writeToFile(fileContents);
-	delete fw;
+	FileHandlingHelpers::writeToFile(name, fileContents);
 }

@@ -17,8 +17,6 @@ float lastDrawCallTime = 0;
 void initStatics(){
 	//load settings from a file
 	Settings::loadSettingsFromFile("settings.txt");
-	//initialize the debug (log)
-	Log::init("debug.txt");
 	//enable\disable logging based on the setting
 	Log::enableLogging(std::stoi(Settings::getSetting("debugEnabled")) == 0 ? false : true);
 	//initialize assets and load all objs

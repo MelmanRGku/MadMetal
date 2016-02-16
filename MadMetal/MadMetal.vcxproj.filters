@@ -18,9 +18,6 @@
     <ClCompile Include="Global\Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Files\FileWriter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer\ShaderLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -162,9 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global\Settings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Files\FileWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\ShaderLoader.h">

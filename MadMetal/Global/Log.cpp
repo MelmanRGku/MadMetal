@@ -1,40 +1,41 @@
 #include "Log.h"
+#include "Files\FIleHandlingHelpers.h"
 
-FileWriter *Log::fw;
 bool Log::logEnabled;
-
+const char* Log::m_fileToWrite = "debug.txt";
 Log::Log()
 {
 }
 
 
 Log::~Log(){
-	delete fw;
 }
 
 /*
 	Initializes the logger by creating a new file writer, deleting file
 	contents and disabling the logging by default
 */
-void Log::init(const char* fileToWrite) {
-	fw = new FileWriter(fileToWrite);
-	fw->clearFile();
+void Log::init() 
+{
+	FileHandlingHelpers::clearFileContents(m_fileToWrite);
 	logEnabled = false;
 }
 
 /*
 	Writes a line to the log
 */
-void Log::writeLine(const std::string line) {
+void Log::writeLine(const std::string line) 
+{
 	if (logEnabled) {
-		fw->appendToFile(line + "\n");
+		FileHandlingHelpers::appendToFile(m_fileToWrite, (line + "\n"));
 	}
 }
 
 /*
 	@Overload
 */
-void Log::writeLine(const char* line) {
+void Log::writeLine(const char* line) 
+{
 	if (logEnabled) {
 		writeLine(std::string(line));
 	}

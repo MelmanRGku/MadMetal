@@ -87,7 +87,6 @@
     <ClCompile Include="Input\GamePad.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Global\Log.cpp" />
-    <ClCompile Include="Files\FileWriter.cpp" />
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="Global\Settings.cpp" />
     <ClCompile Include="Objects\DrivingStyleFast.cpp" />
@@ -171,7 +170,6 @@
     <ClInclude Include="Simulation\GameSimulationDefinitions.h" />
     <ClInclude Include="Simulation\World.h" />
     <ClInclude Include="Global\Log.h" />
-    <ClInclude Include="Files\FileWriter.h" />
     <ClInclude Include="Global\Settings.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Renderer\Renderer.h" />
