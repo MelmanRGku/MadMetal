@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <mutex>
+#include <vector>
 
 #include "Objects\Model.h"
 #include "Files\FilesFinder.h"
@@ -44,8 +45,7 @@ class Assets
 {
 private:
 	static std::map<std::string, Model *> *models;
-	const static std::string list[];
-	const static int NUMBER_OF_ELEMENTS_IN_LIST = 4;
+	static const std::vector<std::string> list;
 
 public:
 	static LoadingStatus *status;

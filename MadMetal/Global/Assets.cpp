@@ -2,7 +2,7 @@
 #include <fstream>
 
 std::map<std::string, Model*> *Assets::models;
-const std::string Assets::list[] = { "Ugly_Car", "bullet", "plane", "finishLine" };
+const std::vector<std::string> Assets::list = { "Ugly_Car", "bullet", "plane", "finishLine" };
 LoadingStatus *Assets::status;
 
 Assets::~Assets()
@@ -30,7 +30,7 @@ void Assets::loadObjsFromDirectory(std::string path, bool fromList) {
 
 		if (fromList) {
 			bool isInList = false;
-			for (unsigned int j = 0; j < NUMBER_OF_ELEMENTS_IN_LIST; j++) {
+			for (unsigned int j = 0; j < list.size(); j++) {
 				isInList = isInList || objectName.compare(list[j]) == 0;
 			}
 			if (!isInList)
