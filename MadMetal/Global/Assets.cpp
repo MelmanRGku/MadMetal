@@ -15,7 +15,6 @@ void Assets::init() {
 }
 
 void Assets::loadObjsFromDirectory(std::string path, bool fromList) {
-	glewInit();
 	std::vector<std::string> files;
 	double totalFilesSize = FilesFinder::findFilesWithExtension(path, "obj", files);
 
@@ -44,5 +43,11 @@ void Assets::loadObjsFromDirectory(std::string path, bool fromList) {
 
 		loadedFilesSize += (std::ifstream((files.at(i)), std::ifstream::ate | std::ifstream::binary)).tellg();
 		status->setStatus(loadedFilesSize / totalFilesSize, "Loading file " + objectName);
+	}
+}
+
+void Assets::initializeVAOs() {
+	for (std::map<std::string, Model *>::iterator iterator = models->begin(); iterator != models->end(); iterator++) {
+		iterator->second->setupVAOs();
 	}
 }

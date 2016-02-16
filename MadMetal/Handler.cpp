@@ -1,6 +1,6 @@
 #pragma once
 #include "Libraries\glew\glew.h"
-#include "Libraries\glut\glut.h"
+#include "Libraries\freeglut\freeglut.h"
 #include "Global\Settings.h"
 #include "Global\Log.h"
 #include "Scene Manager\StackManager.h"
@@ -14,8 +14,7 @@ StackManager * m_stackManager;
 float lastDrawCallTime = 0;
 //ParticleSystem * psystem = new ParticleSystem(10000);
 
-void initStatics()
-				{
+void initStatics(){
 	//load settings from a file
 	Settings::loadSettingsFromFile("settings.txt");
 	//initialize the debug (log)

@@ -54,6 +54,7 @@ public:
 	~Assets();
 	static void init();
 	static void loadObjsFromDirectory(std::string path, bool fromList = false);
+	static void initializeVAOs();
 	static Model *getModel(std::string name) { return models->find(name)->second; }
 };
 

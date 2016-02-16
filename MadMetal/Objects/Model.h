@@ -15,5 +15,6 @@ public:
 	~Model();
 	void addMesh(Mesh *mesh) { meshes.push_back(mesh); }
 	std::vector<Mesh *> *getMeshes() { return &meshes; }
+	void setupVAOs();
 };
 

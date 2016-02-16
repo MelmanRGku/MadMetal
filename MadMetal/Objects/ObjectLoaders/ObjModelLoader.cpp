@@ -116,7 +116,6 @@ Model *ObjModelLoader::processScene(const aiScene *scene) {
 		}
 		
 		Mesh *newMesh = new Mesh(vertices, uvs, colours, normals, indices, texture);
-		newMesh->setupVAO();
 		model->addMesh(newMesh);
 		boundingBox->finalize();
 	}
