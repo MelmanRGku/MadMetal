@@ -1,5 +1,6 @@
 #include "Assets.h"
 #include <fstream>
+#include "Files\FileHandlingHelpers.h"
 
 std::map<std::string, Model*> *Assets::models;
 const std::vector<std::string> Assets::list = { "Ugly_Car", "bullet", "plane", "finishLine" };
@@ -16,7 +17,7 @@ void Assets::init() {
 
 void Assets::loadObjsFromDirectory(std::string path, bool fromList) {
 	std::vector<std::string> files;
-	double totalFilesSize = FilesFinder::findFilesWithExtension(path, "obj", files);
+	double totalFilesSize = findFilesWithExtension(path, "obj", files);
 
 	double loadedFilesSize = 0;
 

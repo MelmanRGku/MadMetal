@@ -335,5 +335,8 @@
     <ClInclude Include="Objects\LoadingBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Files\FIleHandlingHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

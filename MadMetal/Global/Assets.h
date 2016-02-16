@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "Objects\Model.h"
-#include "Files\FilesFinder.h"
 #include "Objects\ObjectLoaders\ObjModelLoader.h"
 
 class LoadingStatus {

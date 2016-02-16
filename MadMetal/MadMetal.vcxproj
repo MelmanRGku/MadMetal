@@ -124,6 +124,7 @@
     <ClCompile Include="Simulation\GameSimulation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Files\FIleHandlingHelpers.h" />
     <ClInclude Include="Files\FilesFinder.h" />
     <ClInclude Include="Global\Fonts.h" />
     <ClInclude Include="Global\Assets.h" />
