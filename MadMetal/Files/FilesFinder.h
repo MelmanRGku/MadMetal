@@ -11,7 +11,7 @@ private:
 public:
 	FilesFinder() = delete;
 	~FilesFinder();
-	static void findFilesWithExtension(std::string rootPath, std::string ext, std::vector<std::string> &files);
+	static double findFilesWithExtension(std::string rootPath, std::string ext, std::vector<std::string> &files);
 
 };
 

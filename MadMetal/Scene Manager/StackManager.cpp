@@ -58,18 +58,21 @@ StackManager::StackManager()
 	//set starting scene to Main Menu and pass a controller handle
 	m_physicsCreator = new PhysicsManager();
 	PlayerControllable * toAdd = new PlayerControllable("", m_input->getGamePadHandle());
-	m_currentScene = new GameSimulation(*m_physicsCreator, toAdd);
+	//m_currentScene = new GameSimulation(*m_physicsCreator, toAdd);
+	m_currentScene = new LoadingScreen(toAdd);
 	//m_currentScene = new MainMenuScene(m_input->getGamePadHandle());
 	//intialize mail box
 	m_mailBox = new SceneMessage();
 	//set mail box to empty
 	m_newMessage = false;
-	//create stack with main menu on top
-	m_stack = new SceneStack(m_currentScene);
+
 	//create a renderer and give it the shader program
 	m_renderer = new Renderer();
 	ShaderProgram *sp = new ShaderProgram("Renderer/VertexShader.glsl", "Renderer/FragmentShader.glsl");
 	m_renderer->setShader(sp);
+
+	//create stack with main menu on top
+	m_stack = new SceneStack(m_currentScene);
 }
 
 StackManager::~StackManager()
@@ -100,6 +103,9 @@ void StackManager::readMailBox()
 		m_stack->clearStack();
 		m_currentScene = m_stack->pushScene(new SinglePlayerGameScene(m_mailBox->getPlayers().front(), 4));
 		break;
+	case (NORMAL_GAME) :
+		m_stack->clearStack();
+		m_currentScene = m_stack->pushScene(new GameSimulation(*m_physicsCreator, m_mailBox->getPlayers().front()));
 	case (MULTI_CHAR_SELECT) :
 		
 		break;

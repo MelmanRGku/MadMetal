@@ -9,9 +9,10 @@ const int MAIN_MENU = 0;
 const int SINGLE_CHAR_SELECT = 1;
 const int START_SINGLE_GAME = 2;
 const int PAUSE_GAME = 3;
-const int MULTI_CHAR_SELECT = 4;
-const int START_MULTI_GAME = 5;
-const int POP = 6;
+const int NORMAL_GAME = 4;
+const int MULTI_CHAR_SELECT = 5;
+const int START_MULTI_GAME = 6;
+const int POP = 7;
 
 class SceneMessage
 {

@@ -257,7 +257,6 @@ void GameSimulation::createPhysicsScene()
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
-	std::cout << car->getRigidDynamicActor()->getGlobalPose().p.x << " " << car->getRigidDynamicActor()->getGlobalPose().p.y << " " << car->getRigidDynamicActor()->getGlobalPose().p.z << std::endl;
 	simulateAI();
 	simulatePlayers(dt);
 	simulatePhysics(dt);

@@ -20,6 +20,8 @@ Object::~Object()
 
 
 glm::mat4x4 Object::getPhysicsModelMatrix() {
+	if (!physicsActor)
+		return glm::mat4x4();
 	PxMat44 physModelMat(physicsActor->getGlobalPose());
 	glm::mat4x4 pModelMatrix;
 	for (unsigned int i = 0; i < 4; i++) {

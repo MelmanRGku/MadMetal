@@ -1,4 +1,5 @@
 #include "FilesFinder.h"
+#include <fstream>
 
 FilesFinder::~FilesFinder()
 {
@@ -14,7 +15,9 @@ bool FilesFinder::fileHasExtension(std::string const &fullString, std::string co
 	}
 }
 
-void FilesFinder::findFilesWithExtension(std::string rootPath, std::string ext, std::vector<std::string> &files) {
+double FilesFinder::findFilesWithExtension(std::string rootPath, std::string ext, std::vector<std::string> &files) {
+	double totalFilesSize = 0;
+
 	tinydir_dir dir;
 	tinydir_open(&dir, rootPath.c_str());
 
@@ -26,15 +29,19 @@ void FilesFinder::findFilesWithExtension(std::string rootPath, std::string ext, 
 		if (file.is_dir)
 		{
 			if (strcmp(file.name, ".") != 0 && strcmp(file.name, "..") != 0) {
-				findFilesWithExtension(rootPath + "/" + file.name, ext, files);
+				totalFilesSize += findFilesWithExtension(rootPath + "/" + file.name, ext, files);
 			}
 		}
 		else if (FilesFinder::fileHasExtension(file.name, ext)){
 			files.push_back(rootPath + "/" + file.name);
+			std::ifstream in((rootPath + "/" + file.name), std::ifstream::ate | std::ifstream::binary);
+			totalFilesSize += in.tellg();
 		}
 
 		tinydir_next(&dir);
 	}
 
 	tinydir_close(&dir);
+
+	return totalFilesSize;
 }

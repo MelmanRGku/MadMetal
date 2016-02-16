@@ -3,7 +3,7 @@
 #include <vector>
 #include "Renderer\Renderer.h"
 #include "Simulation\PhysicsManager.h"
-
+#include "Simulation\LoadingScreen.h"
 
 class SceneStack
 {

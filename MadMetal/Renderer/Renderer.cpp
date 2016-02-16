@@ -95,7 +95,7 @@ void Renderer::draw(std::vector<Object *> *objects) {
 	glLoadMatrixf(&(projectionMatrix)[0][0]);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(&(viewMatrix)[0][0]);
-	glMultMatrixf(&glm::rotate(glm::mat4x4(), 3.14f, glm::vec3(0, 1, 0))[0][0]);
+	//glMultMatrixf(&glm::rotate(glm::mat4x4(), 3.14f, glm::vec3(0, 1, 0))[0][0]);
 	FTFont *font = Fonts::getFont("leadcoat");
 	glColor3f(1.0, 1.0, 1.0);
 	font->Render("Hello World", -1, FTPoint(), FTPoint(1,0,0));

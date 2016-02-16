@@ -30,7 +30,6 @@ void initStatics()
 void initObjects()
 {
 	//	psystem->initSystem(glutGet(GLUT_ELAPSED_TIME));
-	Assets::loadObjsFromDirectory("Assets/Models", true);
 	Fonts::loadTTFFontsFromDirectory("Assets/Fonts");
 	m_stackManager = new StackManager();
 }
