@@ -1,5 +1,5 @@
 #include "ShaderLoader.h"
-
+#include "Files\FIleHandlingHelpers.h"
 
 ShaderLoader::ShaderLoader()
 {
@@ -23,10 +23,8 @@ GLuint ShaderLoader::loadShaders(const char* vertexShaderPath, const char* fragm
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
 	// Read shaders into strings
-	FileReader *vertexShaderReader = new FileReader(vertexShaderPath),
-		*fragmentShaderReader = new FileReader(fragmentShaderPath);
-	std::string vertexShaderCode = vertexShaderReader -> getFileContents();
-	std::string fragmentShaderCode = fragmentShaderReader -> getFileContents();
+	std::string vertexShaderCode = FileHandlingHelpers::readFile(vertexShaderPath);
+	std::string fragmentShaderCode = FileHandlingHelpers::readFile(fragmentShaderPath);
 	const char *vertexShaderCodeChar = vertexShaderCode.c_str();
 	const char *fragmentShaderCodeChar = fragmentShaderCode.c_str();
 

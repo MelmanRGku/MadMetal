@@ -12,7 +12,7 @@ void Fonts::init() {
 
 void Fonts::loadTTFFontsFromDirectory(std::string path) {
 	std::vector<std::string> files;
-	FilesFinder::findFilesWithExtension(path, "ttf", files);
+	FileHandlingHelpers::findFilesWithExtension(path, "ttf", files);
 
 	FTFont *font;
 	char buf[129];

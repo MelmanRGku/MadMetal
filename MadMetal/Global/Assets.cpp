@@ -17,7 +17,7 @@ void Assets::init() {
 
 void Assets::loadObjsFromDirectory(std::string path, bool fromList) {
 	std::vector<std::string> files;
-	double totalFilesSize = findFilesWithExtension(path, "obj", files);
+	double totalFilesSize = FileHandlingHelpers::findFilesWithExtension(path, "obj", files);
 
 	double loadedFilesSize = 0;
 

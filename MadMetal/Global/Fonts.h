@@ -1,9 +1,9 @@
 #pragma once
 
 #include <FTGL\ftgl.h>
-#include "Files\FilesFinder.h"
 #include <string>
 #include <map>
+#include "Files\FIleHandlingHelpers.h"
 
 class Fonts
 {

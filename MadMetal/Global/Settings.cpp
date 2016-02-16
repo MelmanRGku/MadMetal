@@ -1,5 +1,5 @@
 #include "Settings.h"
-
+#include "Files\FileHandlingHelpers.h"
 std::map<std::string, std::string> Settings::settings;		//map with all the settings
 
 Settings::Settings()
@@ -17,8 +17,8 @@ Settings::~Settings()
 */
 void Settings::loadSettingsFromFile(char *fileName) {
 	//create the file reader and get all lines from the file
-	FileReader *fr = new FileReader(fileName);
-	std::vector<std::string> fileLines = fr->getFileContentsSeparatedByLines();
+	std::string fileContent = FileHandlingHelpers::readFile(fileName);
+	std::vector<std::string> fileLines = FileHandlingHelpers::getFileContentsSeparatedByLines(fileContent);
 
 	//delimiter for separating name from its value is ":"
 	std::string delimiter = ":";
@@ -34,7 +34,6 @@ void Settings::loadSettingsFromFile(char *fileName) {
 		std::string settingValue = line.substr(line.find(delimiter) + 1);
 		settings.insert(std::pair<std::string, std::string>(settingName, settingValue));
 	}
-	delete fr;
 }
 
 /*

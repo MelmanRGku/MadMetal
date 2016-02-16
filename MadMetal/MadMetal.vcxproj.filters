@@ -27,9 +27,6 @@
     <ClCompile Include="Renderer\ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Files\FileReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -144,9 +141,6 @@
     <ClCompile Include="Global\Assets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Files\FilesFinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\BoundingBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -162,11 +156,11 @@
     <ClCompile Include="Objects\LoadingBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Files\FIleHandlingHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Files\FileReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Global\Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -306,9 +300,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Global\Assets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Files\FilesFinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Libraries\tinydir\tinydir.h">

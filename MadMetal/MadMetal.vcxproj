@@ -73,7 +73,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Files\FilesFinder.cpp" />
+    <ClCompile Include="Files\FIleHandlingHelpers.cpp" />
     <ClCompile Include="Global\Fonts.cpp" />
     <ClCompile Include="Global\Assets.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
@@ -84,7 +84,6 @@
     <ClCompile Include="Game Logic\Controllable.cpp" />
     <ClCompile Include="Game Logic\PlayerControllable.cpp" />
     <ClCompile Include="Objects\Camera.cpp" />
-    <ClCompile Include="Files\FileReader.cpp" />
     <ClCompile Include="Input\GamePad.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Global\Log.cpp" />
@@ -125,7 +124,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Files\FIleHandlingHelpers.h" />
-    <ClInclude Include="Files\FilesFinder.h" />
     <ClInclude Include="Global\Fonts.h" />
     <ClInclude Include="Global\Assets.h" />
     <ClInclude Include="Audio\Audio.h" />
@@ -173,7 +171,6 @@
     <ClInclude Include="Simulation\GameSimulationDefinitions.h" />
     <ClInclude Include="Simulation\World.h" />
     <ClInclude Include="Global\Log.h" />
-    <ClInclude Include="Files\FileReader.h" />
     <ClInclude Include="Files\FileWriter.h" />
     <ClInclude Include="Global\Settings.h" />
     <ClInclude Include="Input\Input.h" />
