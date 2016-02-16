@@ -19,6 +19,38 @@
 
 using namespace physx;
 
+
+/* Use this function to create a drivable box. Note: any object that is not drivable will NOT allow a car to drive on it! 
+Any object that is collidable, but should not be driven on (like walls) should not use this function.
+Arguments:	Material - the usual material is fine, but this will be the material of the object.
+			Physics - The physics object
+			Position - The location the new object will be placed at
+			PxBoxGeometry - The geometry of the new object
+*/
+PxRigidStatic* createDrivingBox(physx::PxMaterial* material, PxPhysics* physics, PxTransform position, PxBoxGeometry box)
+{
+	//Add a plane to the scene.
+	PxRigidStatic* collisionBox = physics->createRigidStatic(position);
+	collisionBox->createShape(box, *material);
+
+	//Get the plane shape so we can set query and simulation filter data.
+	PxShape* shapes[1];
+	collisionBox->getShapes(shapes, 1);
+
+	//Set the query filter data of the ground plane so that the vehicle raycasts can hit the ground.
+	physx::PxFilterData qryFilterData;
+	setupDrivableSurface(qryFilterData);
+	shapes[0]->setQueryFilterData(qryFilterData);
+
+	//Set the simulation filter data of the ground plane so that it collides with the chassis of a vehicle but not the wheels.
+	PxFilterData simFilterData;
+	simFilterData.word0 = COLLISION_FLAG_GROUND;
+	simFilterData.word1 = COLLISION_FLAG_GROUND_AGAINST;
+	shapes[0]->setSimulationFilterData(simFilterData);
+
+	return collisionBox;
+}
+
 PxRigidStatic* createDrivablePlane(physx::PxMaterial* material, PxPhysics* physics)
 {
 	//Add a plane to the scene.

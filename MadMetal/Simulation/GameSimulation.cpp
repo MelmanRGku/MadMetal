@@ -16,6 +16,8 @@
 using namespace std;
 bool gIsVehicleInAir = true;
 
+
+
 GameSimulation::GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player)
 : m_physicsHandler(physicsInstance)
 {
@@ -319,16 +321,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	vehicleDesc.wheelMOI = obj->getDrivingStyle().getWheelMOI();
 	vehicleDesc.numWheels = obj->getDrivingStyle().getNbWheels();
 	vehicleDesc.wheelMaterial = mMaterial;
-	PxRigidStatic* gGroundPlane = NULL;
-	//Create a plane to drive on.
-	gGroundPlane = createDrivablePlane(mMaterial, &m_physicsHandler.getPhysicsInstance());
-	m_scene->addActor(*gGroundPlane);
-	/*
-	RenderableObject *plane = new RenderableObject();
-	plane->model = m_objLoader->loadFromFile("Assets/Models/plane.obj");
-	plane->setActor(gGroundPlane);
-	m_world->addGameObject(plane);
-	*/
 
 	//Create a vehicle that will drive on the plane.
 	car = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);
@@ -351,32 +343,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	gVehicleModeTimer = 0.0f;
 	gVehicleOrderProgress = 0;
 	obj->setCar(car);
-
-	//PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 5, -40));
-	//PxShape* aSphereShape = tmpActor->createShape(PxSphereGeometry(0.2), *mMaterial);
-	//PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
-
-
-	// PETER!!!
-
-	//load stormtrooper
-	/*ObjModelLoader *m_objLoader = new ObjModelLoader();
-	RenderableObject *obj = new RenderableObject();
-	obj->model = m_objLoader->loadFromFile("Assets/Models/Stormtrooper.obj");
-	m_world->addGameObject(obj);
-	PxRigidDynamic *tmpActor = m_physicsHandler.getPhysicsInstance().createRigidDynamic(PxTransform(0, 0, -45));
-
-	PxShape* aSphereShape = tmpActor->createShape(PxBoxGeometry(1, .1, 1), *mMaterial);
-	m_physicsHandler.setupFiltering(tmpActor,
-		PhysicsManager::PLAYER,
-		PhysicsManager::ENVIRONMENT | PhysicsManager::PROJECTILE | PhysicsManager::POWERUP | PhysicsManager::WAYPOINT,
-		0, 0);
-	PxRigidBodyExt::updateMassAndInertia(*tmpActor, 0.5);
-	obj->setActor(tmpActor);
-	m_scene->addActor(*tmpActor);*/
-
-	//m_scene->addActor(*tmpActor);
-	//assign stormtrooper to main char
 	m_players[0]->setObject(obj);
 	
 	//attach camera to stormtrooper
@@ -389,27 +355,36 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_players[0]->setAmmunition(ammo);
 
 	float length = 50;
-	float width = 50;
-	//create a plane to run on
-	//PxRigidStatic * plane = PxCreatePlane(m_physicsHandler.getPhysicsInstance(), PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
-	PxRigidStatic * floor = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, -.5, 0));
-	floor->createShape(PxBoxGeometry(width, .5, length), *mMaterial);
+	float width = 10;
+
+	float dims = 200;
+
+	//Create the drivable geometry
+	PxRigidStatic * floor = createDrivingBox(mMaterial, &m_physicsHandler.getPhysicsInstance(), PxTransform(PxVec3(0, 0, 0)), PxBoxGeometry(width, 0.5, length));
 	m_scene->addActor(*floor);
 
 
-	PxRigidStatic * leftWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(width, 0, 0));
+	// Create the collidable walls
+	PxRigidStatic * leftWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));
 	leftWall->createShape(PxBoxGeometry(0.5, width, length), *mMaterial);
 	m_scene->addActor(*leftWall);
-	PxRigidStatic * rightWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(-width, 0, 0));
+	PxRigidStatic * rightWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(-width, width, 0));
 	rightWall->createShape(PxBoxGeometry(.5, width, length), *mMaterial);
 	m_scene->addActor(*rightWall);
-	PxRigidStatic * frontWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length));
+	PxRigidStatic * frontWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, width, length));
 	frontWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
 	m_scene->addActor(*frontWall);
-	PxRigidStatic * backWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, -length));
-	backWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
-	m_scene->addActor(*backWall);
+
+	PxRigidStatic * ground = createDrivingBox(mMaterial, &m_physicsHandler.getPhysicsInstance(), PxTransform(PxVec3(0, -10, 0)), PxBoxGeometry(dims, 0.5, dims));
+	m_scene->addActor(*ground);
 	
+
+	RenderableObject * FrontPlane = new RenderableObject();
+	FrontPlane->setModel(m_objLoader->loadFromFile("Assets/Models/plane.obj"), true, true);
+	FrontPlane->updateScale(glm::vec3(glm::vec3(frontWall->getWorldBounds().getDimensions().x, 1, frontWall->getWorldBounds().getDimensions().y)));
+	FrontPlane->setActor(frontWall);
+	FrontPlane->updateRotation(glm::vec3(3.14 / 2, 0, 0));
+	m_world->addGameObject(FrontPlane);
 	//draw the floor
 	RenderableObject * drawPlane = new RenderableObject();
 	drawPlane->setModel(Assets::getModel("plane"));
@@ -417,9 +392,16 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	drawPlane->setActor(floor);
 	m_world->addGameObject(drawPlane);
 
+	RenderableObject * groundPlane = new RenderableObject();
+	groundPlane->setModel(m_objLoader->loadFromFile("Assets/Models/plane.obj"), true, true);
+	groundPlane->updateScale(glm::vec3(glm::vec3(ground->getWorldBounds().getDimensions().x, 1, ground->getWorldBounds().getDimensions().z)));
+	groundPlane->setActor(ground);
+	m_world->addGameObject(groundPlane);
+
 	RenderableObject * leftPlane = new RenderableObject();
 	leftPlane->setModel(Assets::getModel("plane"));
 	leftPlane->setActor(leftWall);
+	leftPlane->updatePosition(glm::vec3(leftPlane->getPosition().x, leftPlane->getPosition().y, leftPlane->getPosition().z));
 	leftPlane->updateRotation(glm::vec3(0, 0, 3.14 / 2));
 	m_world->addGameObject(leftPlane);
 
@@ -428,6 +410,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	RightPlane->setActor(rightWall);
 	RightPlane->updateRotation(glm::vec3(0, 0, 3.14 / 2));
 	m_world->addGameObject(RightPlane);
+
 
 
 	//drawthe finish line

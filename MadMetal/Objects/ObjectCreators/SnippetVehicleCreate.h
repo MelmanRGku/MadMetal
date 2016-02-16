@@ -22,6 +22,8 @@ using namespace physx;
 ////////////////////////////////////////////////
 
 PxRigidStatic* createDrivablePlane(physx::PxMaterial* material, PxPhysics* physics);
+PxRigidStatic* createDrivingBox(physx::PxMaterial* material, PxPhysics* physics, PxTransform position, PxBoxGeometry box);
+
 
 ////////////////////////////////////////////////
 
