@@ -72,7 +72,8 @@ void Camera::rotateCamera(float xpos, float ypos)
 		*/
 	float rotate = (float)acos(xpos);
 		if (ypos > 0 )
-		{
+		{ 
+			m_lookAt += glm::vec3(0, ypos, 0);
 			if(xpos <= 0)
 			{
 				m_currentPos = m_lookAt + glm::rotate((m_desiredPos - m_lookAt), (float)(PI / 2 + rotate), glm::vec3(0, 1, 0));

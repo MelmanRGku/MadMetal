@@ -1,7 +1,7 @@
 #include "Assets.h"
 
 std::map<std::string, Model*> *Assets::models;
-const std::string Assets::list[] = { "Avent", "Ugly_Car" };
+const std::string Assets::list[] = { "Ugly_Car", "bullet", "plane", "finishLine" };
 
 Assets::~Assets()
 {
@@ -35,6 +35,4 @@ void Assets::loadObjsFromDirectory(std::string path, bool fromList) {
 		models->insert(std::pair<std::string, Model *>(objectName, model));
 		loader = new ObjModelLoader();
 	}
-
-	int k = 0;
 }

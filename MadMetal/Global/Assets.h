@@ -13,7 +13,7 @@ class Assets
 private:
 	static std::map<std::string, Model *> *models;
 	const static std::string list[];
-	const static int NUMBER_OF_ELEMENTS_IN_LIST = 2;
+	const static int NUMBER_OF_ELEMENTS_IN_LIST = 4;
 public:
 	Assets() = delete;
 	~Assets();

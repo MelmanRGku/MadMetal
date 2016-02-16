@@ -141,16 +141,22 @@
     <ClCompile Include="Objects\Car.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Global\Assets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Files\FilesFinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Objects\BoundingBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\DrivingStyleFast.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Global\Assets.cpp">
+    <ClCompile Include="Simulation\LoadingScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Files\FilesFinder.cpp">
+    <ClCompile Include="Global\Fonts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -230,6 +236,9 @@
     <ClInclude Include="Objects\ObjectLoaders\ObjModelLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\Renderable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Scene Manager\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -290,22 +299,7 @@
     <ClInclude Include="Objects\Car.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-	<ClInclude Include="Game Logic\WayPointSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\BoundingBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\Renderable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Simulation\GameSimulationDefinitions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\DrivingStyle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\DrivingStyleFast.h">
+    <ClInclude Include="Game Logic\WayPointSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Global\Assets.h">
@@ -315,6 +309,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Libraries\tinydir\tinydir.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\BoundingBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\DrivingStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\DrivingStyleFast.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation\GameSimulationDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation\LoadingScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Global\Fonts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

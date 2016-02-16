@@ -258,6 +258,7 @@ void GameSimulation::createPhysicsScene()
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
+	std::cout << car->getRigidDynamicActor()->getGlobalPose().p.x << " " << car->getRigidDynamicActor()->getGlobalPose().p.y << " " << car->getRigidDynamicActor()->getGlobalPose().p.z << std::endl;
 	simulateAI();
 	simulatePlayers(dt);
 	simulatePhysics(dt);
@@ -292,7 +293,7 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 
 void GameSimulation::setupBasicGameWorldObjects() {
 	Car *obj = new Car();
-	obj->setModel(m_objLoader->loadFromFile("Assets/Models/Ugly_Car.obj"), true, true);
+	obj->setModel(Assets::getModel("Ugly_Car"), true, true);
 	m_world->addGameObject(obj);
 	PxMaterial* mMaterial;
 	mMaterial = m_physicsHandler.getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
@@ -384,7 +385,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 
 	Projectile * ammo = new Projectile("");
 	RenderableObject *ammoModel = new RenderableObject();
-	ammoModel->setModel(m_objLoader->loadFromFile("Assets/Models/bullet.obj"), true);
+	ammoModel->setModel(Assets::getModel("bullet"), true);
 	ammo->setObject(ammoModel);
 	m_players[0]->setAmmunition(ammo);
 
@@ -411,18 +412,19 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	
 	//draw the floor
 	RenderableObject * drawPlane = new RenderableObject();
-	drawPlane->setModel(m_objLoader->loadFromFile("Assets/Models/plane.obj"));
+	drawPlane->setModel(Assets::getModel("plane"));
+	drawPlane->updateScale(glm::vec3(50, 1, 50));
 	drawPlane->setActor(floor);
 	m_world->addGameObject(drawPlane);
 
 	RenderableObject * leftPlane = new RenderableObject();
-	leftPlane->setModel(m_objLoader->loadFromFile("Assets/Models/plane.obj"));
+	leftPlane->setModel(Assets::getModel("plane"));
 	leftPlane->setActor(leftWall);
 	leftPlane->updateRotation(glm::vec3(0, 0, 3.14 / 2));
 	m_world->addGameObject(leftPlane);
 
 	RenderableObject * RightPlane = new RenderableObject();
-	RightPlane->setModel(m_objLoader->loadFromFile("Assets/Models/plane.obj"));
+	RightPlane->setModel(Assets::getModel("plane"));
 	RightPlane->setActor(rightWall);
 	RightPlane->updateRotation(glm::vec3(0, 0, 3.14 / 2));
 	m_world->addGameObject(RightPlane);
@@ -430,8 +432,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 
 	//drawthe finish line
 	RenderableObject * finishLine = new RenderableObject();
-	finishLine->setModel(m_objLoader->loadFromFile("Assets/Models/finishLine.obj"));
-	m_world->addGameObject(finishLine);
+	finishLine->setModel(Assets::getModel("finishLine"));
+	//m_world->addGameObject(finishLine);
 
 	//create a bounding box for storm tropper to run into
 	PxRigidStatic *boundVolume = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length - 5));
