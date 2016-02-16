@@ -99,7 +99,6 @@ Model *ObjModelLoader::processScene(const aiScene *scene) {
 			if (AI_SUCCESS == material->GetTexture(aiTextureType_DIFFUSE, 0, &str)) {
 				//vector<Texture> diffuseMaps = this->loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 				texture = new Texture(GL_TEXTURE_2D, (directory + '/' + std::string(str.C_Str())).c_str());
-				texture->Load();
 			}
 
 			aiColor3D colour;

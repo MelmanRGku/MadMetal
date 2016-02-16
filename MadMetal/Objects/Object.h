@@ -21,6 +21,9 @@ public:
 	virtual glm::mat4x4 getModelMatrix();
 	glm::mat4x4 getPhysicsModelMatrix();
 	glm::mat4x4 getLocalModelMatrix();
+	glm::vec3 getScale() { return scale; }
+	void setPosition(glm::vec3 pos) { position = pos; }
+	void setScale(glm::vec3 sc) { scale = sc; }
 	void updateRotation(glm::vec3 dr) { rotation += dr; }
 	void updatePosition(glm::vec3 dp) { position += dp; }
 	void updateScale(glm::vec3 ds) { scale += ds; }

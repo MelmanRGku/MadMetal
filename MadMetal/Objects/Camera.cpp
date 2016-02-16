@@ -147,3 +147,8 @@ void Camera::update(double dtMilli)
 
 }
 
+void Camera::setLookAt(glm::vec3 eye, glm::vec3 at, glm::vec3 up) {
+	m_currentPos = m_desiredPos = eye;
+	m_lookAt = at;
+	m_up = up;
+}

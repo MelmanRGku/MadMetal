@@ -15,6 +15,7 @@ public:
 	Camera();
 	Camera(Object * object);
 	void setToFollow(Object * toFollow);
+	void setLookAt(glm::vec3 eye, glm::vec3 at, glm::vec3 up);
 	void rotateCamera(float xpos, float ypos);
 	void update(double dtMilli);
 	

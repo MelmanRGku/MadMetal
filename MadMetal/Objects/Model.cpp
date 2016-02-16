@@ -3,7 +3,6 @@
 
 Model::Model()
 {
-	meshes = std::vector<Mesh *>();
 }
 
 
@@ -15,9 +14,8 @@ Model::~Model()
 
 void Model::setupVAOs() {
 
-	if (!meshes.empty())
-		for (unsigned int i = 0; i < meshes.size(); i++) {
-			meshes.at(i)->setupVAO();
-		}
+	for (unsigned int i = 0; i < meshes.size(); i++) {
+		meshes.at(i)->setupVAO();
+	}
 
 }

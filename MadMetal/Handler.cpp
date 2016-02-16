@@ -56,7 +56,7 @@ void initOpengl(int argc, char **argv) {
 	//initialize the window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowPosition(500, 500);
+	glutInitWindowPosition(300, 300);
 	glutInitWindowSize(std::stoi(Settings::getSetting("screenWidth")), std::stoi(Settings::getSetting("screenHeight")));
 	glutCreateWindow("OpenGL First Window");
 
