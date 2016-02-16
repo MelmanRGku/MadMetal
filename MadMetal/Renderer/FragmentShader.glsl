@@ -1,12 +1,6 @@
 #version 410 core
 
-//
-// CPSC 453 - Introduction to Computer Graphics
-// Assignment 3
-//
-// Texture fragment shader for phong illumination
-// Note: This file should not need to be modified.
-//
+//TODO:Rewrite shader so that diffuse doesn't change as per the camera
 
 // Input from vertex shader
 in VS_OUT
@@ -48,9 +42,12 @@ void main(void)
 
     // Compute the diffuse and specular components for each fragment
     // May replace the colour value with diffuse albedo
-    vec3 diffuse = max(dot(N, L), 0.0) * fs_in.C; // diffuse_albedo;
+    vec3 diffuse = max(dot(N, L), 0.7) * fs_in.C; // diffuse_albedo;
 	if (texValid)
+	{
 		diffuse *= vec3(texture(texObject, fs_in.uv));
+		//ambient *= vec3(texture(texObject, fs_in.uv));
+	}
 	else
 		diffuse *= vec3(1, 1, 1);
     vec3 specular = pow(max(dot(R, V), 0.0), specular_power) * specular_albedo;

@@ -115,7 +115,9 @@ void Camera::update(double dtMilli)
 
 	m_lookAt = glm::vec3(m_toFollow->getActor().getGlobalPose().p.x, m_toFollow->getActor().getGlobalPose().p.y, m_toFollow->getActor().getGlobalPose().p.z);
 	m_desiredPos = m_lookAt - glm::vec3((m_toFollow->getForwardVector() * m_distance).x, -tan(m_inclinationAngle * PI / 180.0f) * (m_lookAt - (m_toFollow->getForwardVector() * m_distance)).length(), (m_toFollow->getForwardVector() * m_distance).z);
-//	glm::vec3 temp = m_lookAt - m_currentPos;
+//	m_desiredPos = m_lookAt - m_toFollow->getForwardVector() * m_distance;
+
+	//	glm::vec3 temp = m_lookAt - m_currentPos;
 //	float theta = glm::dot(glm::normalize(glm::vec2(m_desiredPos.x, m_desiredPos.z)), glm::normalize(glm::vec2(temp.x, temp.z)));
 	
 	//std::cout << theta << std::endl;
