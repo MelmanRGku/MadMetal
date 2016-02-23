@@ -259,6 +259,14 @@ void GameSimulation::createPhysicsScene()
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
+	for (int i = 0; i < m_players.size(); i++)
+	{
+		if (m_players[i]->getGamePad()->isPressed(GamePad::StartButton))
+		{
+			newMessage.setTag(RESTART_GAME);
+			return true;
+		}
+	}
 	simulateAI();
 	simulatePlayers(dt);
 	simulatePhysics(dt);

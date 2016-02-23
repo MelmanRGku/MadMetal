@@ -40,9 +40,13 @@ Scene * SceneStack::pushScene(Scene * scene)
 void SceneStack::popScene()
 {
 	std::cout << "Popped top Scene. \n";
-	//delete m_top
+	delete m_top;
 	m_sceneStack.pop_back();
-	m_top = m_sceneStack.back();
+	if (m_sceneStack.size() > 0)
+	{
+		m_top = m_sceneStack.back();
+	}
+	
 }
 
 Scene * SceneStack::getTopScene()
@@ -58,9 +62,7 @@ StackManager::StackManager()
 	//set starting scene to Main Menu and pass a controller handle
 	m_physicsCreator = new PhysicsManager();
 	PlayerControllable * toAdd = new PlayerControllable("", m_input->getGamePadHandle());
-	//m_currentScene = new GameSimulation(*m_physicsCreator, toAdd);
 	m_currentScene = new LoadingScreen(toAdd);
-	//m_currentScene = new MainMenuScene(m_input->getGamePadHandle());
 	//intialize mail box
 	m_mailBox = new SceneMessage();
 	//set mail box to empty
@@ -111,6 +113,10 @@ void StackManager::readMailBox()
 		break;
 	case (START_MULTI_GAME) :
 		
+		break;
+	case (RESTART_GAME) :
+		m_stack->clearStack();
+		m_currentScene = m_stack->pushScene(new GameSimulation(*m_physicsCreator, new PlayerControllable("", m_input->getGamePadHandle()) ));
 		break;
 	case (POP) :
 		m_stack->popScene();

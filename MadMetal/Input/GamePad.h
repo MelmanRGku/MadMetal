@@ -52,6 +52,7 @@ private:
 	ButtonState ljdState;
 	ButtonState ljlState;
 	ButtonState ljrState;
+	ButtonState startState;
 
 	
 
@@ -75,6 +76,7 @@ public:
 		ljdState = IDLE;
 		ljlState = IDLE;
 		ljrState = IDLE;
+		startState = IDLE;
 	}
 	GamePad(int cID) : deadzoneX(DEADZONE_X), deadzoneY(DEADZONE_Y), controllerID(cID) 
 	{
@@ -94,6 +96,7 @@ public:
 		ljdState = IDLE;
 		ljlState = IDLE;
 		ljrState = IDLE;
+		startState = IDLE;
 	}
 
 	~GamePad(){}

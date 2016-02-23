@@ -65,5 +65,7 @@ public:
 	void fire();
 	void takeDamage(float damage);
 	void receivePoints(float points);
+
+	
 	
 };
