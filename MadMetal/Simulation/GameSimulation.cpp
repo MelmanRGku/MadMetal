@@ -12,6 +12,7 @@
 #include "Objects\ObjectCreators\SnippetVehicleCreate.h"
 #include "Objects\ObjectCreators\SnippetVehicleRaycast.h"
 #include "PhysicsManager.h"
+#include "Objects\ObjectCreators\VehicleCreator.h"
 
 using namespace std;
 bool gIsVehicleInAir = true;
@@ -309,22 +310,10 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//Create the friction table for each combination of tire and surface type.
 	gFrictionPairs = createFrictionPairs(mMaterial);
 
-	VehicleDesc vehicleDesc;
-	vehicleDesc.chassisMass = obj->getDrivingStyle().getChassisMass();
-	vehicleDesc.chassisDims = obj->getDrivingStyle().getChassisDimensions();
-	vehicleDesc.chassisMOI = obj->getDrivingStyle().getChassisMOI();
-	vehicleDesc.chassisCMOffset = obj->getDrivingStyle().getChassisCenterOfMassOffsset();
-	vehicleDesc.chassisMaterial = mMaterial;
-	vehicleDesc.wheelMass = obj->getDrivingStyle().getWheelMass();
-	vehicleDesc.wheelRadius = obj->getDrivingStyle().getWheelRadius();
-	vehicleDesc.wheelWidth = obj->getDrivingStyle().getWheelWidth();
-	vehicleDesc.wheelMOI = obj->getDrivingStyle().getWheelMOI();
-	vehicleDesc.numWheels = obj->getDrivingStyle().getNbWheels();
-	vehicleDesc.wheelMaterial = mMaterial;
-
 	//Create a vehicle that will drive on the plane.
-	car = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);
-	PxTransform startTransform(PxVec3(0, 3+(vehicleDesc.chassisDims.y*0.5f + vehicleDesc.wheelRadius + 1.0f), 0), PxQuat(PxIdentity));
+	VehicleCreator *vc = new VehicleCreator(&m_physicsHandler.getPhysicsInstance(), m_cooking);
+	car = vc -> create(&obj->getDrivingStyle());
+	PxTransform startTransform(PxVec3(0, 3 + (obj->getDrivingStyle().getChassisDimensions().y*0.5f + obj->getDrivingStyle().getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
 	car->getRigidDynamicActor()->setGlobalPose(startTransform);
 	car->getRigidDynamicActor()->createShape(PxBoxGeometry(car->getRigidDynamicActor()->getWorldBounds().getDimensions().x /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().y /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().z /2), *mMaterial);
 	m_scene->addActor(*car->getRigidDynamicActor());

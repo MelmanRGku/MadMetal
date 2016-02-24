@@ -77,6 +77,7 @@
     <ClCompile Include="Global\Fonts.cpp" />
     <ClCompile Include="Global\Assets.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
+    <ClCompile Include="Objects\DrivingStyle.cpp" />
     <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Simulation\LoadingScreen.cpp" />
     <ClCompile Include="Objects\BoundingBox.cpp" />
@@ -120,6 +121,7 @@
     <ClCompile Include="Simulation\World.cpp" />
     <ClCompile Include="Simulation\PhysicsManager.cpp" />
     <ClCompile Include="Simulation\GameSimulation.cpp" />
+    <ClCompile Include="Objects\ObjectCreators\VehicleCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Files\FIleHandlingHelpers.h" />
@@ -177,6 +179,7 @@
     <ClInclude Include="Renderer\ShaderProgram.h" />
     <ClInclude Include="Simulation\PhysicsManager.h" />
     <ClInclude Include="Simulation\GameSimulation.h" />
+    <ClInclude Include="Objects\ObjectCreators\VehicleCreator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

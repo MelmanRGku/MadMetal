@@ -20,3 +20,153 @@ Fragment info
 0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
 
 New shader loaded with program ID 3
+Compiling vertex shader.
+Error occurred when compiling vertex shader.
+ERROR: 0:? : '' :  Incorrect GLSL version: 410
+WARNING: 0:12: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:12: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:13: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:13: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:14: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:14: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:15: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:15: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:18: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:19: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:20: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:44: 'constructor' : constructing matrix from matrix is alowed from GLSL 1.20 (reserved in GLSL 1.10)
+
+
+Compiling fragment shader.
+Error occurred when compiling fragment shader.
+ERROR: 0:? : '' :  Incorrect GLSL version: 410
+WARNING: 0:27: 'assign' : implicit type conversion allowed from GLSL 1.20 
+WARNING: 0:48: 'texture' : function is not available in current GLSL version 
+WARNING: 0:64: 'assign' : implicit type conversion allowed from GLSL 1.20 
+WARNING: 0:64: 'assign' : implicit type conversion allowed from GLSL 1.20 
+
+
+Linking program
+Error occurred when linking shaders.
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+Error occurred when compiling vertex shader.
+ERROR: 0:? : '' :  Incorrect GLSL version: 410
+WARNING: 0:12: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:12: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:13: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:13: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:14: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:14: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:15: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:15: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:18: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:19: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:20: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:44: 'constructor' : constructing matrix from matrix is alowed from GLSL 1.20 (reserved in GLSL 1.10)
+
+
+Compiling fragment shader.
+Error occurred when compiling fragment shader.
+ERROR: 0:? : '' :  Incorrect GLSL version: 410
+WARNING: 0:27: 'assign' : implicit type conversion allowed from GLSL 1.20 
+WARNING: 0:48: 'texture' : function is not available in current GLSL version 
+WARNING: 0:64: 'assign' : implicit type conversion allowed from GLSL 1.20 
+WARNING: 0:64: 'assign' : implicit type conversion allowed from GLSL 1.20 
+
+
+Linking program
+Error occurred when linking shaders.
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+Error occurred when compiling vertex shader.
+ERROR: 0:? : '' :  Incorrect GLSL version: 410
+WARNING: 0:12: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:12: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:13: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:13: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:14: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:14: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:15: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:15: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:18: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:19: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:20: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:44: 'constructor' : constructing matrix from matrix is alowed from GLSL 1.20 (reserved in GLSL 1.10)
+
+
+Compiling fragment shader.
+Error occurred when compiling fragment shader.
+ERROR: 0:? : '' :  Incorrect GLSL version: 410
+WARNING: 0:27: 'assign' : implicit type conversion allowed from GLSL 1.20 
+WARNING: 0:48: 'texture' : function is not available in current GLSL version 
+WARNING: 0:64: 'assign' : implicit type conversion allowed from GLSL 1.20 
+WARNING: 0:64: 'assign' : implicit type conversion allowed from GLSL 1.20 
+
+
+Linking program
+Error occurred when linking shaders.
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+Error occurred when compiling vertex shader.
+ERROR: 0:? : '' :  Incorrect GLSL version: 410
+WARNING: 0:12: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:12: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:13: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:13: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:14: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:14: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:15: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:15: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:18: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:19: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:20: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:44: 'constructor' : constructing matrix from matrix is alowed from GLSL 1.20 (reserved in GLSL 1.10)
+
+
+Compiling fragment shader.
+Error occurred when compiling fragment shader.
+ERROR: 0:? : '' :  Incorrect GLSL version: 410
+WARNING: 0:27: 'assign' : implicit type conversion allowed from GLSL 1.20 
+WARNING: 0:48: 'texture' : function is not available in current GLSL version 
+WARNING: 0:64: 'assign' : implicit type conversion allowed from GLSL 1.20 
+WARNING: 0:64: 'assign' : implicit type conversion allowed from GLSL 1.20 
+
+
+Linking program
+Error occurred when linking shaders.
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+Error occurred when compiling vertex shader.
+ERROR: 0:? : '' :  Incorrect GLSL version: 410
+WARNING: 0:12: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:12: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:13: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:13: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:14: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:14: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:15: 'layout' : symbol not available in current GLSL version 
+WARNING: 0:15: extension GL_ARB_explicit_attrib_location is being used but no proper #version pragrma was used
+WARNING: 0:18: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:19: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:20: 'highp' : symbol not available in current GLSL version 
+WARNING: 0:44: 'constructor' : constructing matrix from matrix is alowed from GLSL 1.20 (reserved in GLSL 1.10)
+
+
+Compiling fragment shader.
+Error occurred when compiling fragment shader.
+ERROR: 0:? : '' :  Incorrect GLSL version: 410
+WARNING: 0:27: 'assign' : implicit type conversion allowed from GLSL 1.20 
+WARNING: 0:48: 'texture' : function is not available in current GLSL version 
+WARNING: 0:64: 'assign' : implicit type conversion allowed from GLSL 1.20 
+WARNING: 0:64: 'assign' : implicit type conversion allowed from GLSL 1.20 
+
+
+Linking program
+Error occurred when linking shaders.
+
+New shader loaded with program ID 3
