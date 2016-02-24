@@ -3,6 +3,7 @@
 #include "SnippetVehicleCreate.h"
 #include "SnippetVehicleTireFriction.h"
 #include "SnippetVehicleRaycast.h"
+#include "PhysicsObjectCreator.h"
 #include "../DrivingStyle.h"
 
 class VehicleCreator

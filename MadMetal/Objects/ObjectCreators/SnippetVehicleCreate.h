@@ -24,13 +24,6 @@ using namespace physx;
 PxRigidStatic* createDrivablePlane(physx::PxMaterial* material, PxPhysics* physics);
 PxRigidStatic* createDrivingBox(physx::PxMaterial* material, PxPhysics* physics, PxTransform position, PxBoxGeometry box);
 
-
-////////////////////////////////////////////////
-
-PxConvexMesh* createChassisMesh(const PxVec3 dims, PxPhysics& physics, PxCooking& cooking);
-
-PxConvexMesh* createWheelMesh(const PxF32 width, const PxF32 radius, PxPhysics& physics, PxCooking& cooking);
-
 ////////////////////////////////////////////////
 
 PxRigidDynamic* createVehicleActor
@@ -57,10 +50,6 @@ struct VehicleDesc
 };
 
 PxVehicleDrive4W* createVehicle4W(const VehicleDesc& vehDesc, PxPhysics* physics, PxCooking* cooking);
-
-PxVehicleDriveTank* createVehicleTank(const VehicleDesc& vehDesc, PxPhysics* physics, PxCooking* cooking);
-
-PxVehicleNoDrive* createVehicleNoDrive(const VehicleDesc& vehDesc, PxPhysics* physics, PxCooking* cooking);
 
 void customizeVehicleToLengthScale(const PxReal lengthScale, PxRigidDynamic* rigidDynamic, PxVehicleWheelsSimData* wheelsSimData, PxVehicleDriveSimData* driveSimData);
 

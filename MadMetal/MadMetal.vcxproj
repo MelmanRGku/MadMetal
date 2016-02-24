@@ -79,6 +79,7 @@
     <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="Objects\DrivingStyle.cpp" />
     <ClCompile Include="Objects\LoadingBar.cpp" />
+    <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp" />
     <ClCompile Include="Simulation\LoadingScreen.cpp" />
     <ClCompile Include="Objects\BoundingBox.cpp" />
     <ClCompile Include="Objects\Car.cpp" />
@@ -94,12 +95,8 @@
     <ClCompile Include="Objects\Mesh.cpp" />
     <ClCompile Include="Objects\Model.cpp" />
     <ClCompile Include="Objects\Object.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicle4WCreate.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleCreate.cpp" />
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicleFilterShader.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleNoDriveCreate.cpp" />
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicleRaycast.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleTankCreate.cpp" />
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicleTireFriction.cpp" />
     <ClCompile Include="Objects\ObjectLoaders\ObjModelLoader.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectPositionUpdater.cpp" />
@@ -129,6 +126,7 @@
     <ClInclude Include="Global\Assets.h" />
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Objects\LoadingBar.h" />
+    <ClInclude Include="Objects\ObjectCreators\PhysicsObjectCreator.h" />
     <ClInclude Include="Simulation\LoadingScreen.h" />
     <ClInclude Include="Objects\BoundingBox.h" />
     <ClInclude Include="Libraries\tinydir\tinydir.h" />

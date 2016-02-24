@@ -1,33 +1,18 @@
-/*
-* Copyright (c) 2008-2015, NVIDIA CORPORATION.  All rights reserved.
-*
-* NVIDIA CORPORATION and its licensors retain all intellectual property
-* and proprietary rights in and to this software, related documentation
-* and any modifications thereto.  Any use, reproduction, disclosure or
-* distribution of this software and related documentation without an express
-* license agreement from NVIDIA CORPORATION is strictly prohibited.
-*/
-// Copyright (c) 2004-2008 AGEIA Technologies, Inc. All rights reserved.
-// Copyright (c) 2001-2004 NovodeX AG. All rights reserved.  
-
-#include <new>
-#include "SnippetVehicleCreate.h"
-#include "SnippetVehicleRaycast.h"
-#include "SnippetVehicleFilterShader.h"
-#include "SnippetVehicleTireFriction.h"
-#include "PxPhysicsAPI.h"
-
-using namespace physx;
+#include "PhysicsObjectCreator.h"
 
 
-/* Use this function to create a drivable box. Note: any object that is not drivable will NOT allow a car to drive on it! 
-Any object that is collidable, but should not be driven on (like walls) should not use this function.
-Arguments:	Material - the usual material is fine, but this will be the material of the object.
-			Physics - The physics object
-			Position - The location the new object will be placed at
-			PxBoxGeometry - The geometry of the new object
-*/
-PxRigidStatic* createDrivingBox(physx::PxMaterial* material, PxPhysics* physics, PxTransform position, PxBoxGeometry box)
+PhysicsObjectCreator::PhysicsObjectCreator(PxPhysics *physics, PxCooking *cooking)
+{
+	this->physics = physics;
+	this->cooking = cooking;
+}
+
+
+PhysicsObjectCreator::~PhysicsObjectCreator()
+{
+}
+
+PxRigidStatic* PhysicsObjectCreator::createDrivingBox(physx::PxMaterial* material, PxTransform position, PxBoxGeometry box)
 {
 	//Add a plane to the scene.
 	PxRigidStatic* collisionBox = physics->createRigidStatic(position);
@@ -51,7 +36,7 @@ PxRigidStatic* createDrivingBox(physx::PxMaterial* material, PxPhysics* physics,
 	return collisionBox;
 }
 
-PxRigidStatic* createDrivablePlane(physx::PxMaterial* material, PxPhysics* physics)
+PxRigidStatic* PhysicsObjectCreator::createDrivablePlane(physx::PxMaterial* material)
 {
 	//Add a plane to the scene.
 	PxRigidStatic* groundPlane = PxCreatePlane(*physics, PxPlane(0, 1, 0, 0), *material);
@@ -74,7 +59,7 @@ PxRigidStatic* createDrivablePlane(physx::PxMaterial* material, PxPhysics* physi
 	return groundPlane;
 }
 
-static PxConvexMesh* createConvexMesh(const PxVec3* verts, const PxU32 numVerts, PxPhysics& physics, PxCooking& cooking)
+PxConvexMesh* PhysicsObjectCreator::createConvexMesh(const PxVec3* verts, const PxU32 numVerts)
 {
 	// Create descriptor for convex mesh
 	PxConvexMeshDesc convexDesc;
@@ -85,16 +70,17 @@ static PxConvexMesh* createConvexMesh(const PxVec3* verts, const PxU32 numVerts,
 
 	PxConvexMesh* convexMesh = NULL;
 	PxDefaultMemoryOutputStream buf;
-	if (cooking.cookConvexMesh(convexDesc, buf))
+	if (cooking->cookConvexMesh(convexDesc, buf))
 	{
 		PxDefaultMemoryInputData id(buf.getData(), buf.getSize());
-		convexMesh = physics.createConvexMesh(id);
+		convexMesh = physics->createConvexMesh(id);
 	}
 
 	return convexMesh;
 }
 
-PxConvexMesh* createChassisMesh(const PxVec3 dims, PxPhysics& physics, PxCooking& cooking)
+
+PxConvexMesh* PhysicsObjectCreator::createChassisMesh(const PxVec3 dims)
 {
 	const PxF32 x = dims.x*0.5f;
 	const PxF32 y = dims.y*0.5f;
@@ -111,10 +97,10 @@ PxConvexMesh* createChassisMesh(const PxVec3 dims, PxPhysics& physics, PxCooking
 		PxVec3(-x, -y, -z)
 	};
 
-	return createConvexMesh(verts, 8, physics, cooking);
+	return createConvexMesh(verts, 8);
 }
 
-PxConvexMesh* createWheelMesh(const PxF32 width, const PxF32 radius, PxPhysics& physics, PxCooking& cooking)
+PxConvexMesh* PhysicsObjectCreator::createWheelMesh(const PxF32 width, const PxF32 radius)
 {
 	PxVec3 points[2 * 16];
 	for (PxU32 i = 0; i < 16; i++)
@@ -127,18 +113,18 @@ PxConvexMesh* createWheelMesh(const PxF32 width, const PxF32 radius, PxPhysics& 
 		points[2 * i + 1] = PxVec3(+width / 2.0f, y, z);
 	}
 
-	return createConvexMesh(points, 32, physics, cooking);
+	return createConvexMesh(points, 32);
 }
 
-PxRigidDynamic* createVehicleActor
+
+PxRigidDynamic* PhysicsObjectCreator::createVehicleActor
 (const PxVehicleChassisData& chassisData,
 PxMaterial** wheelMaterials, PxConvexMesh** wheelConvexMeshes, const PxU32 numWheels,
-PxMaterial** chassisMaterials, PxConvexMesh** chassisConvexMeshes, const PxU32 numChassisMeshes,
-PxPhysics& physics)
+PxMaterial** chassisMaterials, PxConvexMesh** chassisConvexMeshes, const PxU32 numChassisMeshes)
 {
 	//We need a rigid body actor for the vehicle.
 	//Don't forget to add the actor to the scene after setting up the associated vehicle.
-	PxRigidDynamic* vehActor = physics.createRigidDynamic(PxTransform(PxIdentity));
+	PxRigidDynamic* vehActor = physics->createRigidDynamic(PxTransform(PxIdentity));
 
 	//Wheel and chassis simulation filter data.
 	PxFilterData wheelSimFilterData;
@@ -182,7 +168,7 @@ PxPhysics& physics)
 	return vehActor;
 }
 
-void customizeVehicleToLengthScale(const PxReal lengthScale, PxRigidDynamic* rigidDynamic, PxVehicleWheelsSimData* wheelsSimData, PxVehicleDriveSimData* driveSimData)
+void PhysicsObjectCreator::customizeVehicleToLengthScale(const PxReal lengthScale, PxRigidDynamic* rigidDynamic, PxVehicleWheelsSimData* wheelsSimData, PxVehicleDriveSimData* driveSimData)
 {
 	//Rigid body center of mass and moment of inertia.
 	{
@@ -197,35 +183,35 @@ void customizeVehicleToLengthScale(const PxReal lengthScale, PxRigidDynamic* rig
 
 	//Wheels, suspensions, wheel centers, tire/susp force application points.
 	{
-	for (PxU32 i = 0; i < wheelsSimData->getNbWheels(); i++)
-	{
-		PxVehicleWheelData wheelData = wheelsSimData->getWheelData(i);
-		wheelData.mRadius *= lengthScale;
-		wheelData.mWidth *= lengthScale;
-		wheelData.mDampingRate *= lengthScale*lengthScale;
-		wheelData.mMaxBrakeTorque *= lengthScale*lengthScale;
-		wheelData.mMaxHandBrakeTorque *= lengthScale*lengthScale;
-		wheelData.mMOI *= lengthScale*lengthScale;
-		wheelsSimData->setWheelData(i, wheelData);
+		for (PxU32 i = 0; i < wheelsSimData->getNbWheels(); i++)
+		{
+			PxVehicleWheelData wheelData = wheelsSimData->getWheelData(i);
+			wheelData.mRadius *= lengthScale;
+			wheelData.mWidth *= lengthScale;
+			wheelData.mDampingRate *= lengthScale*lengthScale;
+			wheelData.mMaxBrakeTorque *= lengthScale*lengthScale;
+			wheelData.mMaxHandBrakeTorque *= lengthScale*lengthScale;
+			wheelData.mMOI *= lengthScale*lengthScale;
+			wheelsSimData->setWheelData(i, wheelData);
 
-		PxVehicleSuspensionData suspData = wheelsSimData->getSuspensionData(i);
-		suspData.mMaxCompression *= lengthScale;
-		suspData.mMaxDroop *= lengthScale;
-		wheelsSimData->setSuspensionData(i, suspData);
+			PxVehicleSuspensionData suspData = wheelsSimData->getSuspensionData(i);
+			suspData.mMaxCompression *= lengthScale;
+			suspData.mMaxDroop *= lengthScale;
+			wheelsSimData->setSuspensionData(i, suspData);
 
-		PxVec3 v = wheelsSimData->getWheelCentreOffset(i);
-		v *= lengthScale;
-		wheelsSimData->setWheelCentreOffset(i, v);
+			PxVec3 v = wheelsSimData->getWheelCentreOffset(i);
+			v *= lengthScale;
+			wheelsSimData->setWheelCentreOffset(i, v);
 
-		v = wheelsSimData->getSuspForceAppPointOffset(i);
-		v *= lengthScale;
-		wheelsSimData->setSuspForceAppPointOffset(i, v);
+			v = wheelsSimData->getSuspForceAppPointOffset(i);
+			v *= lengthScale;
+			wheelsSimData->setSuspForceAppPointOffset(i, v);
 
-		v = wheelsSimData->getTireForceAppPointOffset(i);
-		v *= lengthScale;
-		wheelsSimData->setTireForceAppPointOffset(i, v);
+			v = wheelsSimData->getTireForceAppPointOffset(i);
+			v *= lengthScale;
+			wheelsSimData->setTireForceAppPointOffset(i, v);
+		}
 	}
-}
 
 	//Slow forward speed correction.
 	{
@@ -263,58 +249,58 @@ void customizeVehicleToLengthScale(const PxReal lengthScale, PxRigidDynamic* rig
 			{
 			case PxGeometryType::eSPHERE:
 			{
-											PxSphereGeometry sphere;
-											shapes[i]->getSphereGeometry(sphere);
-											sphere.radius *= lengthScale;
-											shapes[i]->setGeometry(sphere);
+				PxSphereGeometry sphere;
+				shapes[i]->getSphereGeometry(sphere);
+				sphere.radius *= lengthScale;
+				shapes[i]->setGeometry(sphere);
 			}
-				break;
+			break;
 			case PxGeometryType::ePLANE:
 				PX_ASSERT(false);
 				break;
 			case PxGeometryType::eCAPSULE:
 			{
-											 PxCapsuleGeometry capsule;
-											 shapes[i]->getCapsuleGeometry(capsule);
-											 capsule.radius *= lengthScale;
-											 capsule.halfHeight *= lengthScale;
-											 shapes[i]->setGeometry(capsule);
+				PxCapsuleGeometry capsule;
+				shapes[i]->getCapsuleGeometry(capsule);
+				capsule.radius *= lengthScale;
+				capsule.halfHeight *= lengthScale;
+				shapes[i]->setGeometry(capsule);
 			}
-				break;
+			break;
 			case PxGeometryType::eBOX:
 			{
-										 PxBoxGeometry box;
-										 shapes[i]->getBoxGeometry(box);
-										 box.halfExtents *= lengthScale;
-										 shapes[i]->setGeometry(box);
+				PxBoxGeometry box;
+				shapes[i]->getBoxGeometry(box);
+				box.halfExtents *= lengthScale;
+				shapes[i]->setGeometry(box);
 			}
-				break;
+			break;
 			case PxGeometryType::eCONVEXMESH:
 			{
-												PxConvexMeshGeometry convexMesh;
-												shapes[i]->getConvexMeshGeometry(convexMesh);
-												convexMesh.scale.scale *= lengthScale;
-												shapes[i]->setGeometry(convexMesh);
+				PxConvexMeshGeometry convexMesh;
+				shapes[i]->getConvexMeshGeometry(convexMesh);
+				convexMesh.scale.scale *= lengthScale;
+				shapes[i]->setGeometry(convexMesh);
 			}
-				break;
+			break;
 			case PxGeometryType::eTRIANGLEMESH:
 			{
-												  PxTriangleMeshGeometry triMesh;
-												  shapes[i]->getTriangleMeshGeometry(triMesh);
-												  triMesh.scale.scale *= lengthScale;
-												  shapes[i]->setGeometry(triMesh);
+				PxTriangleMeshGeometry triMesh;
+				shapes[i]->getTriangleMeshGeometry(triMesh);
+				triMesh.scale.scale *= lengthScale;
+				shapes[i]->setGeometry(triMesh);
 			}
-				break;
+			break;
 			case PxGeometryType::eHEIGHTFIELD:
 			{
-												 PxHeightFieldGeometry hf;
-												 shapes[i]->getHeightFieldGeometry(hf);
-												 hf.columnScale *= lengthScale;
-												 hf.heightScale *= lengthScale;
-												 hf.rowScale *= lengthScale;
-												 shapes[i]->setGeometry(hf);
+				PxHeightFieldGeometry hf;
+				shapes[i]->getHeightFieldGeometry(hf);
+				hf.columnScale *= lengthScale;
+				hf.heightScale *= lengthScale;
+				hf.rowScale *= lengthScale;
+				shapes[i]->setGeometry(hf);
 			}
-				break;
+			break;
 			case PxGeometryType::eINVALID:
 			case PxGeometryType::eGEOMETRY_COUNT:
 				break;
@@ -323,7 +309,7 @@ void customizeVehicleToLengthScale(const PxReal lengthScale, PxRigidDynamic* rig
 	}
 }
 
-void customizeVehicleToLengthScale(const PxReal lengthScale, PxRigidDynamic* rigidDynamic, PxVehicleWheelsSimData* wheelsSimData, PxVehicleDriveSimData4W* driveSimData)
+void PhysicsObjectCreator::customizeVehicleToLengthScale(const PxReal lengthScale, PxRigidDynamic* rigidDynamic, PxVehicleWheelsSimData* wheelsSimData, PxVehicleDriveSimData4W* driveSimData)
 {
 	customizeVehicleToLengthScale(lengthScale, rigidDynamic, wheelsSimData, (PxVehicleDriveSimData*)driveSimData);
 

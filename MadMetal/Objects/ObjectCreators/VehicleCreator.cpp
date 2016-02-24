@@ -23,8 +23,11 @@ PxVehicleDrive4W* VehicleCreator::create(DrivingStyle* style)
 	//Set the rigid body mass, moment of inertia, and center of mass offset.
 	PxRigidDynamic* veh4WActor = NULL;
 	{
+
+		PhysicsObjectCreator *physicsObjectCreator = new PhysicsObjectCreator(physics, cooking);
+
 		//Construct a convex mesh for a cylindrical wheel.
-		PxConvexMesh* wheelMesh = createWheelMesh(wheelWidth, wheelRadius, *physics, *cooking);
+		PxConvexMesh* wheelMesh = physicsObjectCreator->createWheelMesh(wheelWidth, wheelRadius);
 		//Assume all wheels are identical for simplicity.
 		PxConvexMesh* wheelConvexMeshes[PX_MAX_NB_WHEELS];
 		PxMaterial* wheelMaterials[PX_MAX_NB_WHEELS];
@@ -43,7 +46,7 @@ PxVehicleDrive4W* VehicleCreator::create(DrivingStyle* style)
 		}
 
 		//Chassis just has a single convex shape for simplicity.
-		PxConvexMesh* chassisConvexMesh = createChassisMesh(chassisDims, *physics, *cooking);
+		PxConvexMesh* chassisConvexMesh = physicsObjectCreator->createChassisMesh(chassisDims);
 		PxConvexMesh* chassisConvexMeshes[1] = { chassisConvexMesh };
 		PxMaterial* chassisMaterials[1] = { style->getChassisMaterial() };
 
@@ -53,11 +56,10 @@ PxVehicleDrive4W* VehicleCreator::create(DrivingStyle* style)
 		rigidBodyData.mMass = style->getChassisMass();
 		rigidBodyData.mCMOffset = style->getChassisCenterOfMassOffsset();
 
-		veh4WActor = createVehicleActor
+		veh4WActor = physicsObjectCreator->createVehicleActor
 			(rigidBodyData,
 			wheelMaterials, wheelConvexMeshes, numWheels,
-			chassisMaterials, chassisConvexMeshes, 1,
-			*physics);
+			chassisMaterials, chassisConvexMeshes, 1);
 	}
 
 	//Set up the sim data for the wheels.

@@ -293,6 +293,8 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
+	PhysicsObjectCreator *physicsObjectCreator = new PhysicsObjectCreator(&m_physicsHandler.getPhysicsInstance(), m_cooking);
+
 	Car *obj = new Car();
 	obj->setModel(Assets::getModel("Ugly_Car"), true, true);
 	m_world->addGameObject(obj);
@@ -349,7 +351,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	float dims = 200;
 
 	//Create the drivable geometry
-	PxRigidStatic * floor = createDrivingBox(mMaterial, &m_physicsHandler.getPhysicsInstance(), PxTransform(PxVec3(0, 0, 0)), PxBoxGeometry(width, 0.5, length));
+	PxRigidStatic * floor = physicsObjectCreator->createDrivingBox(mMaterial, PxTransform(PxVec3(0, 0, 0)), PxBoxGeometry(width, 0.5, length));
 	m_scene->addActor(*floor);
 
 
@@ -364,7 +366,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	frontWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
 	m_scene->addActor(*frontWall);
 
-	PxRigidStatic * ground = createDrivingBox(mMaterial, &m_physicsHandler.getPhysicsInstance(), PxTransform(PxVec3(0, -10, 0)), PxBoxGeometry(dims, 0.5, dims));
+	PxRigidStatic * ground = physicsObjectCreator->createDrivingBox(mMaterial, PxTransform(PxVec3(0, -10, 0)), PxBoxGeometry(dims, 0.5, dims));
 	m_scene->addActor(*ground);
 	
 
