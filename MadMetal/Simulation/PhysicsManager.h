@@ -28,6 +28,7 @@ public:
 	void static setupFiltering(PxRigidActor * actor, unsigned int actorId, unsigned int filterTargets, unsigned int extraActorInfo, unsigned int extraInteractionInfo);
 	PxDefaultAllocator *getAllocator() { return defaultAllocator_; }
 	PxFoundation& getFoundation();
+	PxCooking& getCookingInstance();
 
 private:
 	void initPhysicsSimulation();
@@ -41,6 +42,7 @@ private: // members
 	PxDefaultErrorCallback* defaultErrorCallback_;
 
 	PxPhysics* topLevelPhysics_;
+	PxCooking* m_cooking;
 
 	PxDefaultCpuDispatcher* mCpuDispatcher;
 

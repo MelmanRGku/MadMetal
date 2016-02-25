@@ -244,11 +244,6 @@ void GameSimulation::createPhysicsScene()
 	{
 		std::cout << "The scene is a lie. ERROR CODE: PX0005" << std::endl;
 	}
-	m_cooking = PxCreateCooking(PX_PHYSICS_VERSION, m_physicsHandler.getFoundation(), PxCookingParams(PxTolerancesScale()));
-	if (!m_cooking)
-	{
-		std::cout << "A fatal error has occured. ERROR CODE PX0007" << std::endl;
-	}
 
 	PxInitVehicleSDK(m_physicsHandler.getPhysicsInstance());
 	PxVehicleSetBasisVectors(PxVec3(0, 1, 0), PxVec3(0, 0, 1));
@@ -331,7 +326,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	vehicleDesc.wheelMaterial = mMaterial;
 
 	//Create a vehicle that will drive on the plane.
-	car = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);
+	car = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), &m_physicsHandler.getCookingInstance());
 	PxTransform startTransform(PxVec3(0, 3+(vehicleDesc.chassisDims.y*0.5f + vehicleDesc.wheelRadius + 1.0f), 0), PxQuat(PxIdentity));
 	car->getRigidDynamicActor()->setGlobalPose(startTransform);
 	car->getRigidDynamicActor()->createShape(PxBoxGeometry(car->getRigidDynamicActor()->getWorldBounds().getDimensions().x /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().y /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().z /2), *mMaterial);
