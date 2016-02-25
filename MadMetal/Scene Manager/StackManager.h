@@ -4,6 +4,7 @@
 #include "Renderer\Renderer.h"
 #include "Simulation\PhysicsManager.h"
 #include "Simulation\LoadingScreen.h"
+#include "Audio\Audio.h"
 
 class SceneStack
 {
@@ -33,6 +34,7 @@ private:
 
 	Renderer* m_renderer;
 	PhysicsManager* m_physicsCreator;
+	Audio *m_audio;
 	
 	
 public:

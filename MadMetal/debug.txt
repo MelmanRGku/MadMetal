@@ -146,3 +146,10 @@ Compiling fragment shader.
 Linking program
 
 New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3

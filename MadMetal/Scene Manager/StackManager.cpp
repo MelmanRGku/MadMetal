@@ -73,18 +73,21 @@ StackManager::StackManager()
 	ShaderProgram *sp = new ShaderProgram("Renderer/VertexShader.glsl", "Renderer/FragmentShader.glsl");
 	m_renderer->setShader(sp);
 
+	m_audio = new Audio();
+
 	//create stack with main menu on top
 	m_stack = new SceneStack(m_currentScene);
 }
 
 StackManager::~StackManager()
 {
-	delete m_physicsCreator;
-	delete m_renderer;
-	delete m_input;
-	delete m_currentScene;
-	delete m_mailBox;
 	delete m_stack;
+	delete m_audio;
+	delete m_renderer;
+	delete m_mailBox;
+	delete m_currentScene;
+	delete m_physicsCreator;
+	delete m_input;
 }
 
 void StackManager::readMailBox()
