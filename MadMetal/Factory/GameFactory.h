@@ -2,17 +2,41 @@
 #include "PhysicsFactory.h"
 #include "RenderFactory.h"
 #include "AudioFactory.h"
+#include "PxScene.h"
+#include "Simulation/World.h"
+#include "Simulation\PhysicsManager.h"
 
 class GameFactory
 {
 public:
-	GameFactory(){}
-	~GameFactory(){}
+	GameFactory(World& world, PxScene& scene, PhysicsManager manager) :m_world(world), m_scene(scene) 
+	{
+		m_physicsFactory = new PhysicsFactory(manager);
+		m_renderFactory = new RenderFactory();
+		m_audioFactory = new AudioFactory();
+	}
+	~GameFactory()
+	{
+		delete m_audioFactory;
+		delete m_renderFactory;
+		delete m_physicsFactory;
+	}
+
+	/*
+	Object * makeObject(Enum objectToMake)
+	{
+		Big switch statement utilizing the enum object types
+	}
+	*/
+
 private: //members
+	
 	PhysicsFactory * m_physicsFactory;
 	RenderFactory * m_renderFactory;
 	AudioFactory * m_audioFactory;
-	
-private:
+	World& m_world;
+	PxScene& m_scene;
+	//enum of objects to create
 
+private:
 };
