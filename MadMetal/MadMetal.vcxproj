@@ -122,6 +122,11 @@
     <ClCompile Include="Simulation\GameSimulation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Factory\AudioFactory.h" />
+    <ClInclude Include="Factory\GameFactory.h" />
+    <ClInclude Include="Factory\PhysicsFactory.h" />
+    <ClInclude Include="Factory\RenderFactory.h" />
     <ClInclude Include="Files\FIleHandlingHelpers.h" />
     <ClInclude Include="Global\Fonts.h" />
     <ClInclude Include="Global\Assets.h" />
