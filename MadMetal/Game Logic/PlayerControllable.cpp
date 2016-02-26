@@ -28,7 +28,7 @@ GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
 void PlayerControllable::playFrame(double dt)
 {
 	update(dt);
-	if (m_gamePad->checkConnection())
+	if (m_gamePad != NULL && m_gamePad->checkConnection())
 	{
 		
 		if (m_isAlive)

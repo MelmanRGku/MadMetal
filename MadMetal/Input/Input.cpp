@@ -1,4 +1,7 @@
 #include "Input.h"
+#include <sstream>
+#include <string>
+#include "Global\Log.h"
 
 Input::Input() {
 	
@@ -12,7 +15,10 @@ Input::Input() {
 		}
 
 	}
-	std::cout << "Initialized Input. " << counter << " controllers connected \n";
+	
+	std::stringstream ss;
+	ss << "Initialized Input. " << counter << " controllers connected";
+	Log::writeLine(ss.str());
 };
 
 void Input::updateGamePads(double dt)

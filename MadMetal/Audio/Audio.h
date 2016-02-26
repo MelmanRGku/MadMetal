@@ -1,3 +1,4 @@
+#pragma once
 #include "Libraries/sdl/SDL.h"
 #include "Libraries/sdl/SDL_mixer.h"
 #include <iostream>
@@ -12,6 +13,7 @@ class DummyPosition
 private:
 	float xpos;
 	float ypos;
+
 public:
 	DummyPosition()
 	{

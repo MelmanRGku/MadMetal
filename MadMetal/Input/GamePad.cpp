@@ -200,7 +200,16 @@ void GamePad::setButtonStates()
 		else ljdState = RELEASED;
 	}
 
-	
+	//startButton
+	if (StartButton & state.Gamepad.wButtons)
+	{
+		if (startState == IDLE) startState = PRESSED;
+		else if (startState == PRESSED) startState = HELD;
+	}
+	else {
+		if (startState == RELEASED) startState = IDLE;
+		else startState = RELEASED;
+	}
 
 
 }
@@ -276,7 +285,6 @@ bool GamePad::isPressed(int gamePadButton)
 	case (DPadDown) :
 		return dpdState == PRESSED;
 	case (LJoyLeft) :
-		
 		return ljlState == PRESSED;
 	case (LJoyRight) :
 		return ljrState == PRESSED;
@@ -284,6 +292,8 @@ bool GamePad::isPressed(int gamePadButton)
 		return ljuState == PRESSED;
 	case (LJoyDown) :
 		return ljdState == PRESSED;
+	case (StartButton) :
+		return startState == PRESSED;
 	default:
 		std::cout << "Checking for button not yet assigned \n";
 		return false;
@@ -318,6 +328,8 @@ bool GamePad::isHeld(int gamePadButton)
 		return ljuState == HELD;
 	case (LJoyDown) :
 		return ljdState == HELD;
+	case (StartButton) :
+		return startState == HELD;
 	default:
 		std::cout << "Checking for button not yet assigned \n";
 		return false;
@@ -352,6 +364,8 @@ bool GamePad::isReleased(int gamePadButton)
 		return ljuState == RELEASED;
 	case (LJoyDown) :
 		return ljdState == RELEASED;
+	case (StartButton) :
+		return startState == RELEASED;
 	default:
 		std::cout << "Checking for button not yet assigned \n";
 		return false;

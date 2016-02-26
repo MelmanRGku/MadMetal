@@ -35,6 +35,12 @@ void PhysicsManager::initPhysicsSimulation()
 	{
 		std::cout << "PxCreatePhysics failed! This is a major issue. ERROR CODE:PX0002" << std::endl;
 	}
+
+	m_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *physicsFoundation_, PxCookingParams(PxTolerancesScale()));
+	if (!m_cooking)
+	{
+		std::cout << "A fatal error has occured. ERROR CODE PX0007" << std::endl;
+	}
 }
 
 /*word 0 = id of actor
@@ -70,9 +76,10 @@ void PhysicsManager::initCarPhysics() {
 
 void PhysicsManager::shutdownPhysicsSimualtion()
 {
-	PxCloseVehicleSDK();
+	m_cooking->release();
 	topLevelPhysics_->release();
 	physicsFoundation_->release();
+	PxCloseVehicleSDK();
 	delete m_scale;
 	delete defaultErrorCallback_;
 	delete defaultAllocator_;
@@ -98,4 +105,9 @@ PxTolerancesScale& PhysicsManager::getScale()
 PxFoundation& PhysicsManager::getFoundation()
 {
 	return *physicsFoundation_;
+}
+
+PxCooking& PhysicsManager::getCookingInstance()
+{
+	return *m_cooking;
 }

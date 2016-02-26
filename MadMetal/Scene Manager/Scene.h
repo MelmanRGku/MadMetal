@@ -12,7 +12,9 @@ const int PAUSE_GAME = 3;
 const int NORMAL_GAME = 4;
 const int MULTI_CHAR_SELECT = 5;
 const int START_MULTI_GAME = 6;
-const int POP = 7;
+const int RESTART_GAME = 7;
+const int POP = 8;
+
 
 class SceneMessage
 {

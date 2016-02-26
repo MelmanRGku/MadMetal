@@ -9,7 +9,6 @@
 class Object
 {
 protected:
-	std::vector<Object *> childObjects;
 	glm::vec3 position, rotation, scale, forward, up;
 	PxRigidActor *physicsActor;
 
@@ -28,6 +27,7 @@ public:
 	void updatePosition(glm::vec3 dp) { position += dp; }
 	void updateScale(glm::vec3 ds) { scale += ds; }
 	glm::vec3  getPosition(){ return position; }
+	glm::vec3 getFullPosition() { return position + glm::vec3(physicsActor->getGlobalPose().p.x, physicsActor->getGlobalPose().p.y, physicsActor->getGlobalPose().p.z); }
 	glm::vec3 getForwardVector() { glm::vec4 toReturn = glm::normalize(getPhysicsModelMatrix() * glm::vec4(forward, 0.0f)); return glm::vec3(toReturn.x, toReturn.y, toReturn.z); }
 	void setActor(PxRigidActor *actor) { physicsActor = actor; }
 	PxRigidActor& getActor();
