@@ -33,7 +33,6 @@ private:
 	SceneMessage * m_mailBox;
 
 	Renderer* m_renderer;
-	PhysicsManager* m_physicsCreator;
 	Audio *m_audio;
 	
 	

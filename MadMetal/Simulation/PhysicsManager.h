@@ -4,14 +4,12 @@
 #include	<PxFoundation.h>
 #include	<PxPhysics.h>
 
-
-
 using namespace physx;
 
 class PhysicsManager
 {
 public:
-	enum ObjectID
+	static enum ObjectID
 	{
 		PLAYER = (1 << 0),
 		PROJECTILE = (1 << 1),
@@ -20,33 +18,40 @@ public:
 		POWERUP = (1 << 4)
 	};
 
+private:
 	PhysicsManager();
+	PhysicsManager(PhysicsManager & manager);
+
+public:
 	virtual ~PhysicsManager();
 	//void updatePhysics(float dt);
-	PxPhysics& getPhysicsInstance();
-	PxTolerancesScale& getScale();
-	void static setupFiltering(PxRigidActor * actor, unsigned int actorId, unsigned int filterTargets, unsigned int extraActorInfo, unsigned int extraInteractionInfo);
-	PxDefaultAllocator *getAllocator() { return defaultAllocator_; }
-	PxFoundation& getFoundation();
-	PxCooking& getCookingInstance();
+	static PxPhysics& getPhysicsInstance();
+	static PxTolerancesScale& getScale();
+	static void setupFiltering(PxRigidActor * actor, unsigned int actorId, unsigned int filterTargets, unsigned int extraActorInfo, unsigned int extraInteractionInfo);
+	static PxDefaultAllocator *getAllocator() { return defaultAllocator_; }
+	static PxFoundation& getFoundation();
+	static PxCooking& getCookingInstance();
+
+public:
+	static void init();
 
 private:
-	void initPhysicsSimulation();
-	void shutdownPhysicsSimualtion();
-	void initCarPhysics();
+	static void initPhysicsSimulation();
+	static void initCarPhysics();
+	static void shutdownPhysicsSimualtion();
 
 private: // members
-	PxFoundation* physicsFoundation_;
+	static PxFoundation* physicsFoundation_;
 
-	PxDefaultAllocator* defaultAllocator_;
-	PxDefaultErrorCallback* defaultErrorCallback_;
+	static PxDefaultAllocator* defaultAllocator_;
+	static PxDefaultErrorCallback* defaultErrorCallback_;
 
-	PxPhysics* topLevelPhysics_;
-	PxCooking* m_cooking;
+	static PxPhysics* topLevelPhysics_;
+	static PxCooking* m_cooking;
 
-	PxDefaultCpuDispatcher* mCpuDispatcher;
+	static PxDefaultCpuDispatcher* mCpuDispatcher;
 
-	PxSceneDesc* sceneDesc;
+	static PxTolerancesScale *m_scale;
 
-	PxTolerancesScale *m_scale;
+	static bool initialized;
 };

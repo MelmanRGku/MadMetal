@@ -10,7 +10,7 @@
 		m_chassisMOI = PxVec3((m_chassisDims.y*m_chassisDims.y + m_chassisDims.z*m_chassisDims.z)*m_chassisMass / 12.0f,
 			                  (m_chassisDims.x*m_chassisDims.x + m_chassisDims.z*m_chassisDims.z)*0.8f*m_chassisMass / 12.0f,
 			                  (m_chassisDims.x*m_chassisDims.x + m_chassisDims.y*m_chassisDims.y)*m_chassisMass / 12.0f);
-		m_chassisCMOffset = PxVec3(0.0f, -m_chassisDims.y*0.5f, 0.0f);
+		m_chassisCMOffset = PxVec3(0.0f, -m_chassisDims.y*2.f, 0.0f);
 
 		//Set up the wheel mass, radius, width, moment of inertia, and number of wheels.
 		//Moment of inertia is just the moment of inertia of a cylinder.

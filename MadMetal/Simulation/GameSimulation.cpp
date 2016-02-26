@@ -17,8 +17,7 @@
 using namespace std;
 bool gIsVehicleInAir = true;
 
-GameSimulation::GameSimulation(PhysicsManager& physicsInstance, vector<PlayerControllable *> humanPlayers, Audio& audioHandle)
-: m_physicsHandler(physicsInstance)
+GameSimulation::GameSimulation(vector<PlayerControllable *> humanPlayers, Audio& audioHandle)
 {
 	createPhysicsScene();
 
@@ -235,7 +234,7 @@ void GameSimulation::onTrigger(PxTriggerPair* pairs, PxU32 count)
 
 void GameSimulation::createPhysicsScene()
 {
-	PxSceneDesc sceneDesc(m_physicsHandler.getScale());
+	PxSceneDesc sceneDesc(PhysicsManager::getScale());
 	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
 	sceneDesc.simulationEventCallback = this;
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
@@ -245,13 +244,13 @@ void GameSimulation::createPhysicsScene()
 		sceneDesc.filterShader = TestFilterShader;
 	}
 
-	m_scene = m_physicsHandler.getPhysicsInstance().createScene(sceneDesc);
+	m_scene = PhysicsManager::getPhysicsInstance().createScene(sceneDesc);
 	if (!m_scene)
 	{
 		std::cout << "The scene is a lie. ERROR CODE: PX0005" << std::endl;
 	}
 
-	PxInitVehicleSDK(m_physicsHandler.getPhysicsInstance());
+	PxInitVehicleSDK(PhysicsManager::getPhysicsInstance());
 	PxVehicleSetBasisVectors(PxVec3(0, 1, 0), PxVec3(0, 0, 1));
 	PxVehicleSetUpdateMode(PxVehicleUpdateMode::eVELOCITY_CHANGE);
 }
@@ -265,6 +264,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
 		{
 			newMessage.setTag(RESTART_GAME);
+			newMessage.addPlayer(m_humanPlayers.at(0));
 			return true;
 		}
 	}
@@ -301,27 +301,27 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-	PhysicsObjectCreator *physicsObjectCreator = new PhysicsObjectCreator(&m_physicsHandler.getPhysicsInstance(), &m_physicsHandler.getCookingInstance());
+	PhysicsObjectCreator *physicsObjectCreator = new PhysicsObjectCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 
 	Car *obj = new MeowMix();
 	obj->setModel(Assets::getModel("Ugly_Car"), true, true);
 	m_world->addGameObject(obj);
 	PxMaterial* mMaterial;
-	mMaterial = m_physicsHandler.getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
+	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 	if (!mMaterial)
 	{
 		std::cout << "Material failed to create. ERROR CODE: PX0006" << std::endl;
 	}
 
 	//Create the batched scene queries for the suspension raycasts.
-	gVehicleSceneQueryData = VehicleSceneQueryData::allocate(1, PX_MAX_NB_WHEELS, 1, *m_physicsHandler.getAllocator());
+	gVehicleSceneQueryData = VehicleSceneQueryData::allocate(1, PX_MAX_NB_WHEELS, 1, *PhysicsManager::getAllocator());
 	gBatchQuery = VehicleSceneQueryData::setUpBatchedSceneQuery(0, *gVehicleSceneQueryData, m_scene);
 
 	//Create the friction table for each combination of tire and surface type.
 	gFrictionPairs = createFrictionPairs(mMaterial);
 
 	//Create a vehicle that will drive on the plane.
-	VehicleCreator *vc = new VehicleCreator(&m_physicsHandler.getPhysicsInstance(), &m_physicsHandler.getCookingInstance());
+	VehicleCreator *vc = new VehicleCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 	obj->getDrivingStyle().setChassisMaterial(mMaterial);
 	obj->getDrivingStyle().setWheelMaterial(mMaterial);
 	car = vc -> create(&obj->getDrivingStyle());
@@ -366,13 +366,13 @@ void GameSimulation::setupBasicGameWorldObjects() {
 
 
 	// Create the collidable walls
-	PxRigidStatic * leftWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));
+	PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));
 	leftWall->createShape(PxBoxGeometry(0.5, width, length), *mMaterial);
 	m_scene->addActor(*leftWall);
-	PxRigidStatic * rightWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(-width, width, 0));
+	PxRigidStatic * rightWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(-width, width, 0));
 	rightWall->createShape(PxBoxGeometry(.5, width, length), *mMaterial);
 	m_scene->addActor(*rightWall);
-	PxRigidStatic * frontWall = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, width, length));
+	PxRigidStatic * frontWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(0, width, length));
 	frontWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
 	m_scene->addActor(*frontWall);
 
@@ -419,13 +419,13 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_world->addGameObject(finishLine);
 
 	//create a bounding box for storm tropper to run into
-	PxRigidStatic *boundVolume = m_physicsHandler.getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length - 5));
+	PxRigidStatic *boundVolume = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length - 5));
 	PxShape* aSphereShape = boundVolume->createShape(PxBoxGeometry(PxVec3(2, 5, 3)), *mMaterial);
 	aSphereShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
 	aSphereShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
 	//m_scene->addActor(*boundVolume);
 	finishLine->setActor(boundVolume);
-	m_physicsHandler.setupFiltering(boundVolume,
+	PhysicsManager::setupFiltering(boundVolume,
 		PhysicsManager::WAYPOINT,
 		PhysicsManager::PLAYER,
 		0,

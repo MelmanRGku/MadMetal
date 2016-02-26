@@ -43,7 +43,6 @@ void renderScene(void)
 	glClearColor(0.3, 0.3, 0.3, 1.0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	//psystem->update(glutGet(GLUT_ELAPSED_TIME));
 	m_stackManager->progressScene(dt);
 	glutSwapBuffers();
 

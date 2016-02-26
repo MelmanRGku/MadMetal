@@ -61,7 +61,7 @@ StackManager::StackManager()
 	//initaliaze inptu
 	m_input = new Input();
 	//set starting scene to Main Menu and pass a controller handle
-	m_physicsCreator = new PhysicsManager();
+	PhysicsManager::init();
 	PlayerControllable * toAdd = new PlayerControllable("", m_input->getGamePadHandle());
 	m_currentScene = new LoadingScreen(toAdd);
 	//intialize mail box
@@ -87,7 +87,6 @@ StackManager::~StackManager()
 	delete m_renderer;
 	delete m_mailBox;
 	delete m_currentScene;
-	delete m_physicsCreator;
 	delete m_input;
 }
 
@@ -111,7 +110,7 @@ void StackManager::readMailBox()
 		break;
 	case (NORMAL_GAME) :
 		m_stack->clearStack();
-		m_currentScene = m_stack->pushScene(new GameSimulation(*m_physicsCreator, m_mailBox->getPlayers(), *m_audio));
+		m_currentScene = m_stack->pushScene(new GameSimulation(m_mailBox->getPlayers(), *m_audio));
 	case (MULTI_CHAR_SELECT) :
 		
 		break;
@@ -120,7 +119,7 @@ void StackManager::readMailBox()
 		break;
 	case (RESTART_GAME) :
 		m_stack->clearStack();
-		//m_currentScene = m_stack->pushScene(new GameSimulation(*m_physicsCreator, new PlayerControllable("", m_input->getGamePadHandle()), *m_audio));
+		m_currentScene = m_stack->pushScene(new GameSimulation(m_mailBox->getPlayers(), *m_audio));
 		break;
 	case (POP) :
 		m_stack->popScene();

@@ -8,13 +8,18 @@
 #include "PxDefaultSimulationFilterShader.h"
 #include "World.h"
 
+bool PhysicsManager::initialized = false; 
+PxFoundation* PhysicsManager::physicsFoundation_ = NULL;
+PxDefaultAllocator* PhysicsManager::defaultAllocator_ = NULL;
+PxDefaultErrorCallback* PhysicsManager::defaultErrorCallback_ = NULL;
+PxPhysics* PhysicsManager::topLevelPhysics_ = NULL;
+PxCooking* PhysicsManager::m_cooking = NULL;
+PxDefaultCpuDispatcher* PhysicsManager::mCpuDispatcher = NULL;
+PxTolerancesScale *PhysicsManager::m_scale = NULL;
 
 PhysicsManager::PhysicsManager()
 {
-	defaultAllocator_ = new PxDefaultAllocator();
-	defaultErrorCallback_ = new PxDefaultErrorCallback();
-	m_scale = new PxTolerancesScale();
-	initPhysicsSimulation();
+	
 }
 
 PhysicsManager::~PhysicsManager()
@@ -22,8 +27,21 @@ PhysicsManager::~PhysicsManager()
 	shutdownPhysicsSimualtion();
 }
 
+void PhysicsManager::init() {
+	if (initialized)
+		return;
+
+	defaultAllocator_ = new PxDefaultAllocator();
+	defaultErrorCallback_ = new PxDefaultErrorCallback();
+	m_scale = new PxTolerancesScale();
+	initPhysicsSimulation();
+
+	initialized = true;
+}
+
 void PhysicsManager::initPhysicsSimulation()
 {
+
 	physicsFoundation_ = PxCreateFoundation(PX_PHYSICS_VERSION, *defaultAllocator_, *defaultErrorCallback_);
 	if (!physicsFoundation_)
 	{

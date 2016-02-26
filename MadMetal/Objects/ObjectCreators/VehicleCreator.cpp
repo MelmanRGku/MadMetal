@@ -85,8 +85,8 @@ PxVehicleDrive4W* VehicleCreator::create(DrivingStyle* style)
 
 		//Engine
 		PxVehicleEngineData engine;
-		engine.mPeakTorque = 500.0f;
-		engine.mMaxOmega = 600.0f;//approx 6000 rpm
+		engine.mPeakTorque = 7000.0f;
+		engine.mMaxOmega = 1000.0f;//approx 10000 rpm
 		driveSimData.setEngineData(engine);
 
 		//Gears
@@ -142,8 +142,8 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 		wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxHandBrakeTorque = 4000.0f;
 		wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxHandBrakeTorque = 4000.0f;
 		//Enable steering for the front wheels only.
-		wheels[PxVehicleDrive4WWheelOrder::eFRONT_LEFT].mMaxSteer = PxPi*0.3333f;
-		wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mMaxSteer = PxPi*0.3333f;
+		wheels[PxVehicleDrive4WWheelOrder::eFRONT_LEFT].mMaxSteer = PxPi*0.06666f;
+		wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mMaxSteer = PxPi*0.06666f;
 	}
 
 	//Set up the tires.

@@ -29,7 +29,6 @@ private: //members
 	std::vector<Controllable *> m_players;
 	std::vector<PlayerControllable*> m_humanPlayers;
 	// TODO REMOVE FROM MEMBER VARIABLES
-	PhysicsManager& m_physicsHandler;
 	PxScene* m_scene;
 	// TODO REMOVE FROM MEMBER VARIABLES
 	PxVehicleDrive4W *car;
@@ -43,7 +42,7 @@ private: //members
 	GameFactory* m_gameFactory;
 
 public:
-	GameSimulation(PhysicsManager& physicsInstance, std::vector<PlayerControllable *> humanPlayers, Audio& audioHandle);
+	GameSimulation(std::vector<PlayerControllable *> humanPlayers, Audio& audioHandle);
 	~GameSimulation();
 
 	bool simulateScene(double dt, SceneMessage &newMessage);
