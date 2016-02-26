@@ -5,15 +5,16 @@
 #include "PxScene.h"
 #include "Simulation/World.h"
 #include "Simulation\PhysicsManager.h"
+#include "Audio\Audio.h"
 
 class GameFactory
 {
 public:
-	GameFactory(World& world, PxScene& scene, PhysicsManager manager) :m_world(world), m_scene(scene) 
+	GameFactory(World& world, PxScene& scene, PhysicsManager manager, Audio& audioHandle) :m_world(world), m_scene(scene)
 	{
 		m_physicsFactory = new PhysicsFactory(manager);
 		m_renderFactory = new RenderFactory();
-		m_audioFactory = new AudioFactory();
+		m_audioFactory = new AudioFactory(audioHandle);
 	}
 	~GameFactory()
 	{

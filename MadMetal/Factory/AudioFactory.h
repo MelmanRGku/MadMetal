@@ -4,7 +4,7 @@
 class AudioFactory
 {
 public:
-	AudioFactory(){}
+	AudioFactory(Audio& audioHandle) : m_audioHandle(audioHandle){}
 	~AudioFactory(){}
 
 	/*
@@ -14,6 +14,7 @@ public:
 		}
 	*/
 private: //members
+	Audio& m_audioHandle;
 	//todo:: make these!!!
 	//list of Sounds
 	//enum sound types

@@ -76,10 +76,10 @@ void PhysicsManager::initCarPhysics() {
 
 void PhysicsManager::shutdownPhysicsSimualtion()
 {
-	PxCloseVehicleSDK();
+	m_cooking->release();
 	topLevelPhysics_->release();
 	physicsFoundation_->release();
-	m_cooking->release();
+	PxCloseVehicleSDK();
 	delete m_scale;
 	delete defaultErrorCallback_;
 	delete defaultAllocator_;

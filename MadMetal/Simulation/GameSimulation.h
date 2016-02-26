@@ -2,12 +2,12 @@
 #include <iostream>
 #include "Scene Manager\Scene.h"
 #include "Global\Assets.h"
+#include "Factory\GameFactory.h"
 
 class Scene;
 class Car;
 class PhysicsManager;
 class WayPointSystem;
-class ObjectUpdater;
 class VehicleSceneQueryData; 
 class ObjModelLoader;
 
@@ -26,12 +26,12 @@ private:
 	void createPhysicsScene();
 
 private: //members
-	std::vector<ObjectUpdater *> updaters;
-	std::vector<PlayerControllable *> m_players;
-	WayPointSystem * m_wayPoints;
+	std::vector<Controllable *> m_players;
+	std::vector<PlayerControllable*> m_humanPlayers;
+	// TODO REMOVE FROM MEMBER VARIABLES
 	PhysicsManager& m_physicsHandler;
 	PxScene* m_scene;
-	PxCooking* m_cooking;
+	// TODO REMOVE FROM MEMBER VARIABLES
 	PxVehicleDrive4W *car;
 	PxF32 gVehicleModeTimer;
 	PxI32 gVehicleOrderProgress = 0;
@@ -40,9 +40,10 @@ private: //members
 	PxVehicleDrivableSurfaceToTireFrictionPairs* createFrictionPairs(const PxMaterial* defaultMaterial);
 	VehicleSceneQueryData*	gVehicleSceneQueryData = NULL;
 	PxBatchQuery* gBatchQuery = NULL;
-	ObjModelLoader *m_objLoader;
+	GameFactory* m_gameFactory;
+
 public:
-	GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player);
+	GameSimulation(PhysicsManager& physicsInstance, std::vector<PlayerControllable *> humanPlayers, Audio& audioHandle);
 	~GameSimulation();
 
 	bool simulateScene(double dt, SceneMessage &newMessage);
@@ -59,5 +60,4 @@ public:
 	virtual void							onWake(PxActor**, PxU32) {}
 	virtual void							onSleep(PxActor**, PxU32){}
 	
-	void incrementDrivingMode(float dt);
 };

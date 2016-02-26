@@ -13,21 +13,32 @@
 #include "Objects\ObjectCreators\SnippetVehicleRaycast.h"
 #include "PhysicsManager.h"
 
+#define NUM_OF_PLAYERS 8
+
 using namespace std;
 bool gIsVehicleInAir = true;
 
-
-
-GameSimulation::GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player)
+GameSimulation::GameSimulation(PhysicsManager& physicsInstance, vector<PlayerControllable *> humanPlayers, Audio& audioHandle)
 : m_physicsHandler(physicsInstance)
 {
-	m_mainCamera = new Camera();
-	m_objLoader = new ObjModelLoader();
+	createPhysicsScene();
 
-	player->setCamera(m_mainCamera);
-	
-	m_players.push_back(player);
-	player->setGameWorld(m_world);
+	//m_gameFactory = new GameFactory(*m_world, *m_scene, physicsInstance, audioHandle);
+
+	m_humanPlayers = humanPlayers;
+	for (int i = 0; i < humanPlayers.size(); i++)
+	{
+		// TODO Create a Car for each human player
+		m_players.push_back(humanPlayers[0]);
+
+	}
+	for (int i = 0; i < (NUM_OF_PLAYERS - humanPlayers.size()); i++)
+	{
+		//TODO ADD AI PLAYERS
+	}
+
+	m_mainCamera = new Camera();
+	m_humanPlayers[0]->setCamera(m_mainCamera);
 	
 	initialize();
 }
@@ -102,14 +113,9 @@ void GameSimulation::updateObjects(double dt) {
 
 	m_mainCamera->update(dt);
 
-	for (unsigned int i = 0; i < updaters.size(); i++) {
-		updaters.at(i)->update( (float)dt);
-	}
-
 }
 
 void GameSimulation::initialize() {
-	createPhysicsScene();
 	setupBasicGameWorldObjects();
 }
 
@@ -218,11 +224,12 @@ void GameSimulation::onTrigger(PxTriggerPair* pairs, PxU32 count)
 	//Player Interactions. Shouldn't really be anyother type
 	if (pairs->otherShape->getSimulationFilterData().word0 == PhysicsManager::PLAYER)
 	{
+		/*
 		PlayerControllable * player = m_players[pairs->otherShape->getSimulationFilterData().word2];
 		//std::cout << "hit waypoint " << pairs[0].triggerShape->getSimulationFilterData().word2 << std::endl;
 		player->setWayPoint(m_wayPoints->getWayPointAt(pairs[0].triggerShape->getSimulationFilterData().word2),
 			pairs[0].triggerShape->getSimulationFilterData().word3 == 1); // is it the finish line?
-		
+		*/
 	}
 }
 
@@ -256,7 +263,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
 	for (int i = 0; i < m_players.size(); i++)
 	{
-		if (m_players[i]->getGamePad()->isPressed(GamePad::StartButton))
+		if (m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
 		{
 			newMessage.setTag(RESTART_GAME);
 			return true;
@@ -346,7 +353,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	gVehicleModeTimer = 0.0f;
 	gVehicleOrderProgress = 0;
 	obj->setCar(car);
-	m_players[0]->setObject(obj);
+	m_humanPlayers[0]->setObject(obj);
 	
 	//attach camera to stormtrooper
 	m_mainCamera->setToFollow(obj);
@@ -440,8 +447,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	positions.push_back(glm::vec3(0, 0, -20));
 	positions.push_back(glm::vec3(0, 0, 0));
 	positions.push_back(glm::vec3(0, 0, 20));
-
-	m_wayPoints = new WayPointSystem(m_scene, positions);
 	
 	//--------------------TEST 3------------------------------------------------------------------------------------------------
 	/*

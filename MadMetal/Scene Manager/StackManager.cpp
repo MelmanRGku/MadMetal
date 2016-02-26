@@ -110,7 +110,7 @@ void StackManager::readMailBox()
 		break;
 	case (NORMAL_GAME) :
 		m_stack->clearStack();
-		m_currentScene = m_stack->pushScene(new GameSimulation(*m_physicsCreator, m_mailBox->getPlayers().front()));
+		m_currentScene = m_stack->pushScene(new GameSimulation(*m_physicsCreator, m_mailBox->getPlayers(), *m_audio));
 	case (MULTI_CHAR_SELECT) :
 		
 		break;
@@ -119,7 +119,7 @@ void StackManager::readMailBox()
 		break;
 	case (RESTART_GAME) :
 		m_stack->clearStack();
-		m_currentScene = m_stack->pushScene(new GameSimulation(*m_physicsCreator, new PlayerControllable("", m_input->getGamePadHandle()) ));
+		//m_currentScene = m_stack->pushScene(new GameSimulation(*m_physicsCreator, new PlayerControllable("", m_input->getGamePadHandle()), *m_audio));
 		break;
 	case (POP) :
 		m_stack->popScene();
