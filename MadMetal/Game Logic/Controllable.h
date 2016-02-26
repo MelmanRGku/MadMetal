@@ -1,13 +1,17 @@
 #pragma once
+#include "ControllableTemplate.h"
 #include "Simulation\World.h"
 #include "Projectile.h"
 #include "PowerUp.h"
 #include "WayPointSystem.h"
 
+
 class Controllable
 {
 protected:
 
+
+	ControllableTemplate& m_controllableTemplate;
 	float m_currentTime;
 
 	bool m_isAlive;
@@ -43,8 +47,9 @@ protected:
 	double m_powerUpDurationRemaining;
 
 public:
-	Controllable(){};
+	Controllable(ControllableTemplate& controllableTemplate, ) : m_controllableTemplate(controllableTemplate){};
 	~Controllable(){};
+
 	virtual void playFrame(double dt) = 0;
 
 	void update(double dt);
@@ -61,5 +66,7 @@ public:
 	void fire();
 	void takeDamage(float damage);
 	void receivePoints(float points);
+
+	ControllableTemplate& getControllableTemplate();
 	
 };

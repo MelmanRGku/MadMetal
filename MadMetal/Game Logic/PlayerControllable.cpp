@@ -1,17 +1,9 @@
 
 #include "PlayerControllable.h"
 #include <iostream>
-PlayerControllable::PlayerControllable(char * fileName, GamePad * gamePad)
+PlayerControllable::PlayerControllable(ControllableTemplate& controllableTemplate) : Controllable(controllableTemplate)
 {
-	if (fileName == "")
-		std::cout << "Passed null gameObject reference to Player Controllable Constructor ABORT!!!!!\n";
-	else
-		std::cout << "New Player created with character " << fileName << " \n";
-	if (gamePad == NULL)
-		std::cout << "Passed null gamePad reference to Player Controllable Constructor ABORT!!!!!\n";
-	//m_currentModel = &gameObject;
-	//m_normalModel = gameObject;
-	m_gamePad = gamePad;
+	m_gamePad = controllableTemplate.getGamePad();
 
 	m_currentTime = 0;
 	m_isAlive = true;

@@ -151,3 +151,8 @@ void Controllable::update(double dt)
 	updateSuperRemaining(dt);
 }
 
+ControllableTemplate& Controllable::getControllableTemplate()
+{
+	return m_controllableTemplate;
+}
+

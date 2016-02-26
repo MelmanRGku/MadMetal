@@ -5,6 +5,7 @@
 #include "Objects\Car.h"
 #include "Objects\Camera.h"
 
+
 class PlayerControllable : public Controllable
 {
 private:
@@ -15,7 +16,7 @@ private:
 	Camera * m_camera;
 
 public:
-	PlayerControllable(char * fileName, GamePad * gamePad);
+	PlayerControllable(ControllableTemplate& controllableTemplate) : Controllable(controllableTemplate);
 	virtual ~PlayerControllable();
 	void playFrame(double dt);
 	void setCamera(Camera * camera);
