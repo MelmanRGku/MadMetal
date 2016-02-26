@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PxVehicleDrive4W.h"
-#include "RenderableObject.h"
+#include "../RenderableObject.h"
 #include "Objects\DrivingStyle.h"
 
 class Car : public RenderableObject

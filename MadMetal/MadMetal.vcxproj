@@ -77,10 +77,11 @@
     <ClCompile Include="Global\Fonts.cpp" />
     <ClCompile Include="Global\Assets.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
+    <ClCompile Include="Objects\Cars\MeowMix.cpp" />
     <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Simulation\LoadingScreen.cpp" />
     <ClCompile Include="Objects\BoundingBox.cpp" />
-    <ClCompile Include="Objects\Car.cpp" />
+    <ClCompile Include="Objects\Cars\Car.cpp" />
     <ClCompile Include="Game Logic\Controllable.cpp" />
     <ClCompile Include="Game Logic\PlayerControllable.cpp" />
     <ClCompile Include="Objects\Camera.cpp" />
@@ -131,11 +132,13 @@
     <ClInclude Include="Global\Fonts.h" />
     <ClInclude Include="Global\Assets.h" />
     <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="Objects\Cars\MeowMix.h" />
+    <ClInclude Include="Objects\Weapons\HasWeapons.h" />
     <ClInclude Include="Objects\LoadingBar.h" />
     <ClInclude Include="Simulation\LoadingScreen.h" />
     <ClInclude Include="Objects\BoundingBox.h" />
     <ClInclude Include="Libraries\tinydir\tinydir.h" />
-    <ClInclude Include="Objects\Car.h" />
+    <ClInclude Include="Objects\Cars\Car.h" />
     <ClInclude Include="Game Logic\Controllable.h" />
     <ClInclude Include="Game Logic\PlayerControllable.h" />
     <ClInclude Include="Game Logic\PowerUp.h" />

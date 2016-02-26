@@ -1,7 +1,7 @@
 #include "Game Logic\WayPointSystem.h"
 #include "GameSimulation.h"
 #include "GameSimulationDefinitions.h"
-#include "Objects/Car.h"
+#include "Objects/Cars/Car.h"
 #include "Objects/Model.h"
 #include "Objects/ObjectLoaders/ObjModelLoader.h"
 #include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
@@ -263,7 +263,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
 	for (int i = 0; i < m_players.size(); i++)
 	{
-		if (m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
+		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
 		{
 			newMessage.setTag(RESTART_GAME);
 			return true;
