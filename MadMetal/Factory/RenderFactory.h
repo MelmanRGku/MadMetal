@@ -1,13 +1,19 @@
 #pragma once
-#include "Renderer\Renderer.h"
+#include "Objects\RenderableObject.h"
 
 class RenderFactory
 {
 public:
 	RenderFactory(){}
 	~RenderFactory(){}
+
+	/*
+	RenderableObject * makeRenderableObject(Enum objectToMake)
+	{
+		Big switch statement utilizing the enum object types
+	}
+	*/
 private: //members
-	Renderer * m_renderer;
-private:
-	//Make some game objects
+	//enum of different objects to make
+	
 };
