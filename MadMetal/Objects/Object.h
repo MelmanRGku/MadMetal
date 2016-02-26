@@ -9,7 +9,6 @@
 class Object
 {
 protected:
-	std::vector<Object *> childObjects;
 	glm::vec3 position, rotation, scale, forward, up;
 	PxRigidActor *physicsActor;
 

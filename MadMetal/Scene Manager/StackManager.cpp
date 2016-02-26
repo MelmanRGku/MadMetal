@@ -1,5 +1,6 @@
 #include "StackManager.h"
 #include "Simulation\GameSimulation.h"
+#include "Global\Log.h"
 
 SceneStack::SceneStack(Scene * scene)
 {
@@ -27,7 +28,7 @@ void SceneStack::clearStack()
 	{
 		delete m_sceneStack[i];
 	}
-	std::cout << "Cleared the Stack!! \n";
+	Log::writeLine("Cleared the Stack (SceneStack::clearStack())");
 	m_sceneStack.clear();
 }
 
@@ -39,7 +40,7 @@ Scene * SceneStack::pushScene(Scene * scene)
 
 void SceneStack::popScene()
 {
-	std::cout << "Popped top Scene. \n";
+	Log::writeLine("Popped top Scene (SceneStack::popScene())");
 	delete m_top;
 	m_sceneStack.pop_back();
 	if (m_sceneStack.size() > 0)
@@ -92,7 +93,7 @@ StackManager::~StackManager()
 
 void StackManager::readMailBox()
 {
-	std::cout << "New Message!! \n";
+	Log::writeLine("New Message (StackManager::readMailBox())");
 	switch (m_mailBox->getTag())
 	{
 	case(MAIN_MENU) :

@@ -13,4 +13,7 @@ public:
 
 	virtual void draw(Renderer *renderer);
 	virtual glm::mat4x4 getModelMatrix();
+
+private:
+	void drawThis(Renderer *renderer);
 };
