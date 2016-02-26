@@ -16,10 +16,6 @@ protected:
 	float m_currentHealth;
 	float m_maxHealth;
 
-	//float m_currentSpeed;
-	//float m_maxSpeed;
-	//float m_currentAcceleration;
-
 	float m_accelMultiplier;
 	float m_turnMultiplier;
 	float m_defenseMultiplier;

@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Files\FIleHandlingHelpers.h" />
+    <ClInclude Include="Game Logic\ControllableTemplate.h" />
     <ClInclude Include="Global\Fonts.h" />
     <ClInclude Include="Global\Assets.h" />
     <ClInclude Include="Audio\Audio.h" />
