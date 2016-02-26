@@ -78,7 +78,10 @@
     <ClCompile Include="Global\Assets.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="Objects\Cars\MeowMix.cpp" />
+    <ClCompile Include="Objects\DrivingStyle.cpp" />
     <ClCompile Include="Objects\LoadingBar.cpp" />
+    <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp" />
+    <ClCompile Include="Simulation\GameSimulationDefinitions.cpp" />
     <ClCompile Include="Simulation\LoadingScreen.cpp" />
     <ClCompile Include="Objects\BoundingBox.cpp" />
     <ClCompile Include="Objects\Cars\Car.cpp" />
@@ -94,13 +97,7 @@
     <ClCompile Include="Objects\Mesh.cpp" />
     <ClCompile Include="Objects\Model.cpp" />
     <ClCompile Include="Objects\Object.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicle4WCreate.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleCreate.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleFilterShader.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleNoDriveCreate.cpp" />
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicleRaycast.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleTankCreate.cpp" />
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleTireFriction.cpp" />
     <ClCompile Include="Objects\ObjectLoaders\ObjModelLoader.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectPositionUpdater.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectRotationUpdater.cpp" />
@@ -121,6 +118,7 @@
     <ClCompile Include="Simulation\World.cpp" />
     <ClCompile Include="Simulation\PhysicsManager.cpp" />
     <ClCompile Include="Simulation\GameSimulation.cpp" />
+    <ClCompile Include="Objects\ObjectCreators\VehicleCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
@@ -135,6 +133,7 @@
     <ClInclude Include="Objects\Cars\MeowMix.h" />
     <ClInclude Include="Objects\Weapons\HasWeapons.h" />
     <ClInclude Include="Objects\LoadingBar.h" />
+    <ClInclude Include="Objects\ObjectCreators\PhysicsObjectCreator.h" />
     <ClInclude Include="Simulation\LoadingScreen.h" />
     <ClInclude Include="Objects\BoundingBox.h" />
     <ClInclude Include="Libraries\tinydir\tinydir.h" />
@@ -152,13 +151,7 @@
     <ClInclude Include="Objects\Mesh.h" />
     <ClInclude Include="Objects\Model.h" />
     <ClInclude Include="Objects\Object.h" />
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleConcurrency.h" />
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleCreate.h" />
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleFilterShader.h" />
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleProfiler.h" />
     <ClInclude Include="Objects\ObjectCreators\SnippetVehicleRaycast.h" />
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleTireFriction.h" />
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleWheelQueryResult.h" />
     <ClInclude Include="Objects\ObjectLoaders\ObjModelLoader.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectPositionUpdater.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectRotationUpdater.h" />
@@ -185,6 +178,7 @@
     <ClInclude Include="Renderer\ShaderProgram.h" />
     <ClInclude Include="Simulation\PhysicsManager.h" />
     <ClInclude Include="Simulation\GameSimulation.h" />
+    <ClInclude Include="Objects\ObjectCreators\VehicleCreator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

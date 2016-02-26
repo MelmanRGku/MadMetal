@@ -14,14 +14,9 @@
 #define SNIPPET_VEHICLE_RAYCAST_H
 
 #include "PxPhysicsAPI.h"
+#include "Simulation\GameSimulationDefinitions.h"
 
 using namespace physx;
-
-enum
-{
-	DRIVABLE_SURFACE = 0xffff0000,
-	UNDRIVABLE_SURFACE = 0x0000ffff
-};
 
 void setupDrivableSurface(PxFilterData& filterData);
 

@@ -111,25 +111,10 @@
     <ClCompile Include="Simulation\World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicle4WCreate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleCreate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleFilterShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleNoDriveCreate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicleRaycast.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleTankCreate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleTireFriction.cpp">
+    <ClCompile Include="Objects\Car.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Global\Assets.cpp">
@@ -151,6 +136,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Files\FIleHandlingHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\ObjectCreators\VehicleCreator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\DrivingStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulation\GameSimulationDefinitions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\Cars\MeowMix.cpp">
@@ -269,25 +266,10 @@
     <ClInclude Include="Simulation\World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleCreate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleConcurrency.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleFilterShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleProfiler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\ObjectCreators\SnippetVehicleRaycast.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleTireFriction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleWheelQueryResult.h">
+    <ClInclude Include="Objects\Car.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Logic\WayPointSystem.h">
@@ -345,6 +327,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Cars\Car.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\ObjectCreators\VehicleCreator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\ObjectCreators\PhysicsObjectCreator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

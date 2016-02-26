@@ -1,7 +1,7 @@
 #include "Game Logic\WayPointSystem.h"
 #include "GameSimulation.h"
 #include "GameSimulationDefinitions.h"
-#include "Objects/Cars/Car.h"
+#include "Objects/Cars/MeowMix.h"
 #include "Objects/Model.h"
 #include "Objects/ObjectLoaders/ObjModelLoader.h"
 #include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
@@ -9,9 +9,8 @@
 #include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 #include "Objects/RenderableObject.h"
-#include "Objects\ObjectCreators\SnippetVehicleCreate.h"
-#include "Objects\ObjectCreators\SnippetVehicleRaycast.h"
 #include "PhysicsManager.h"
+#include "Objects\ObjectCreators\VehicleCreator.h"
 
 #define NUM_OF_PLAYERS 8
 
@@ -27,7 +26,7 @@ GameSimulation::GameSimulation(PhysicsManager& physicsInstance, vector<PlayerCon
 
 	m_humanPlayers = humanPlayers;
 	for (int i = 0; i < humanPlayers.size(); i++)
-	{
+{
 		// TODO Create a Car for each human player
 		m_players.push_back(humanPlayers[0]);
 
@@ -36,7 +35,7 @@ GameSimulation::GameSimulation(PhysicsManager& physicsInstance, vector<PlayerCon
 	{
 		//TODO ADD AI PLAYERS
 	}
-
+	
 	m_mainCamera = new Camera();
 	m_humanPlayers[0]->setCamera(m_mainCamera);
 	
@@ -88,7 +87,7 @@ void GameSimulation::simulatePhysics(double dt)
 
 	//Work out if the vehicle is in the air.
 	gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
-	//gIsVehicleInAir = false;
+
 	m_scene->simulate(timestep);
 	m_scene->fetchResults(true);
 }
@@ -113,7 +112,7 @@ void GameSimulation::updateObjects(double dt) {
 
 	m_mainCamera->update(dt);
 
-}
+	}
 
 void GameSimulation::initialize() {
 	setupBasicGameWorldObjects();
@@ -302,7 +301,9 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-	Car *obj = new Car();
+	PhysicsObjectCreator *physicsObjectCreator = new PhysicsObjectCreator(&m_physicsHandler.getPhysicsInstance(), &m_physicsHandler.getCookingInstance());
+
+	Car *obj = new MeowMix();
 	obj->setModel(Assets::getModel("Ugly_Car"), true, true);
 	m_world->addGameObject(obj);
 	PxMaterial* mMaterial;
@@ -319,22 +320,12 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//Create the friction table for each combination of tire and surface type.
 	gFrictionPairs = createFrictionPairs(mMaterial);
 
-	VehicleDesc vehicleDesc;
-	vehicleDesc.chassisMass = obj->getDrivingStyle().getChassisMass();
-	vehicleDesc.chassisDims = obj->getDrivingStyle().getChassisDimensions();
-	vehicleDesc.chassisMOI = obj->getDrivingStyle().getChassisMOI();
-	vehicleDesc.chassisCMOffset = obj->getDrivingStyle().getChassisCenterOfMassOffsset();
-	vehicleDesc.chassisMaterial = mMaterial;
-	vehicleDesc.wheelMass = obj->getDrivingStyle().getWheelMass();
-	vehicleDesc.wheelRadius = obj->getDrivingStyle().getWheelRadius();
-	vehicleDesc.wheelWidth = obj->getDrivingStyle().getWheelWidth();
-	vehicleDesc.wheelMOI = obj->getDrivingStyle().getWheelMOI();
-	vehicleDesc.numWheels = obj->getDrivingStyle().getNbWheels();
-	vehicleDesc.wheelMaterial = mMaterial;
-
 	//Create a vehicle that will drive on the plane.
-	car = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), &m_physicsHandler.getCookingInstance());
-	PxTransform startTransform(PxVec3(0, 3+(vehicleDesc.chassisDims.y*0.5f + vehicleDesc.wheelRadius + 1.0f), 0), PxQuat(PxIdentity));
+	VehicleCreator *vc = new VehicleCreator(&m_physicsHandler.getPhysicsInstance(), &m_physicsHandler.getCookingInstance());
+	obj->getDrivingStyle().setChassisMaterial(mMaterial);
+	obj->getDrivingStyle().setWheelMaterial(mMaterial);
+	car = vc -> create(&obj->getDrivingStyle());
+	PxTransform startTransform(PxVec3(0, 3 + (obj->getDrivingStyle().getChassisDimensions().y*0.5f + obj->getDrivingStyle().getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
 	car->getRigidDynamicActor()->setGlobalPose(startTransform);
 	car->getRigidDynamicActor()->createShape(PxBoxGeometry(car->getRigidDynamicActor()->getWorldBounds().getDimensions().x /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().y /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().z /2), *mMaterial);
 	m_scene->addActor(*car->getRigidDynamicActor());
@@ -370,7 +361,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	float dims = 200;
 
 	//Create the drivable geometry
-	PxRigidStatic * floor = createDrivingBox(mMaterial, &m_physicsHandler.getPhysicsInstance(), PxTransform(PxVec3(0, 0, 0)), PxBoxGeometry(width, 0.5, length));
+	PxRigidStatic * floor = physicsObjectCreator->createDrivingBox(mMaterial, PxTransform(PxVec3(0, 0, 0)), PxBoxGeometry(width, 0.5, length));
 	m_scene->addActor(*floor);
 
 
@@ -385,7 +376,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	frontWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
 	m_scene->addActor(*frontWall);
 
-	PxRigidStatic * ground = createDrivingBox(mMaterial, &m_physicsHandler.getPhysicsInstance(), PxTransform(PxVec3(0, -10, 0)), PxBoxGeometry(dims, 0.5, dims));
+	PxRigidStatic * ground = physicsObjectCreator->createDrivingBox(mMaterial, PxTransform(PxVec3(0, -10, 0)), PxBoxGeometry(dims, 0.5, dims));
 	m_scene->addActor(*ground);
 	
 
@@ -447,7 +438,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	positions.push_back(glm::vec3(0, 0, -20));
 	positions.push_back(glm::vec3(0, 0, 0));
 	positions.push_back(glm::vec3(0, 0, 20));
-	
+
 	//--------------------TEST 3------------------------------------------------------------------------------------------------
 	/*
 	ObjectUpdaterSequence *upd1 = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
