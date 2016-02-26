@@ -9,8 +9,6 @@
 #include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 #include "Objects/RenderableObject.h"
-#include "Objects\ObjectCreators\SnippetVehicleCreate.h"
-#include "Objects\ObjectCreators\SnippetVehicleRaycast.h"
 #include "PhysicsManager.h"
 #include "Objects\ObjectCreators\VehicleCreator.h"
 
@@ -78,7 +76,7 @@ void GameSimulation::simulatePhysics(double dt)
 
 	//Work out if the vehicle is in the air.
 	gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
-	//gIsVehicleInAir = false;
+
 	m_scene->simulate(timestep);
 	m_scene->fetchResults(true);
 }
@@ -314,6 +312,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 
 	//Create a vehicle that will drive on the plane.
 	VehicleCreator *vc = new VehicleCreator(&m_physicsHandler.getPhysicsInstance(), m_cooking);
+	obj->getDrivingStyle().setChassisMaterial(mMaterial);
+	obj->getDrivingStyle().setWheelMaterial(mMaterial);
 	car = vc -> create(&obj->getDrivingStyle());
 	PxTransform startTransform(PxVec3(0, 3 + (obj->getDrivingStyle().getChassisDimensions().y*0.5f + obj->getDrivingStyle().getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
 	car->getRigidDynamicActor()->setGlobalPose(startTransform);

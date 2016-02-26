@@ -111,13 +111,7 @@
     <ClCompile Include="Simulation\World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleFilterShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicleRaycast.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\ObjectCreators\SnippetVehicleTireFriction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\Car.cpp">
@@ -151,6 +145,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulation\GameSimulationDefinitions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -263,25 +260,7 @@
     <ClInclude Include="Simulation\World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleCreate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleConcurrency.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleFilterShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleProfiler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\ObjectCreators\SnippetVehicleRaycast.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleTireFriction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\ObjectCreators\SnippetVehicleWheelQueryResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Car.h">

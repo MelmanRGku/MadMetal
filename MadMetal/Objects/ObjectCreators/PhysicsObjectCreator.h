@@ -1,10 +1,7 @@
 #pragma once
 
-#include <new>
-#include "SnippetVehicleCreate.h"
-#include "SnippetVehicleRaycast.h"
-#include "SnippetVehicleFilterShader.h"
-#include "SnippetVehicleTireFriction.h"
+#include "Simulation\GameSimulationDefinitions.h"
+#include "Objects\ObjectCreators\SnippetVehicleRaycast.h"
 #include "PxPhysicsAPI.h"
 
 class PhysicsObjectCreator

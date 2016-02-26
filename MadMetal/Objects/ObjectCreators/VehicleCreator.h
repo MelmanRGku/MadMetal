@@ -1,10 +1,9 @@
 #pragma once
 
-#include "SnippetVehicleCreate.h"
-#include "SnippetVehicleTireFriction.h"
-#include "SnippetVehicleRaycast.h"
+//#include "SnippetVehicleRaycast.h"
 #include "PhysicsObjectCreator.h"
 #include "../DrivingStyle.h"
+#include "Simulation\GameSimulationDefinitions.h"
 
 class VehicleCreator
 {

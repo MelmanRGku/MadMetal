@@ -260,3 +260,157 @@ Linking program
 Error occurred when linking shaders.
 
 New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
