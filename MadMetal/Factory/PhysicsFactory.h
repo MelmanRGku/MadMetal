@@ -4,10 +4,18 @@
 class PhysicsFactory
 {
 public:
-	PhysicsFactory(){}
+	PhysicsFactory(PhysicsManager &manager) : m_physicsManager(manager) {}
 	~PhysicsFactory(){}
+
+	/*
+	PxRigidActor * makePhysicsActor(Enum actorToMake)
+	{
+		Big switch statement utilizing the enum physics types
+	}
+	*/
 private: //members
-	
-private:
-	//do something.. Physical, Physical..!
+	PhysicsManager & m_physicsManager;
+	//enum of physics objects to make
+
+
 };
