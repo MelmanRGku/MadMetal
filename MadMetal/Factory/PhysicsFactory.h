@@ -1,6 +1,6 @@
 #pragma once 
 #include "Simulation\PhysicsManager.h"
-#include "Objects\Physicable.h"
+#include "Objects\ObjectCreators\VehicleCreator.h"
 
 class PhysicsFactory
 {
@@ -39,31 +39,40 @@ public:
 		return collisionBox;
 	}
 
-	Physicable *makePhysicable(PhysicalObjects actorToMake, PxTransform pos, PxGeometry *geom, PxMaterial *material, DrivingStyle *style)
+	PxBase *makePhysicsObject(PhysicalObjects actorToMake, PxTransform *pos, PxGeometry *geom, PxMaterial *material, DrivingStyle *style)
 	{
+		PxBase *toReturn = NULL;
+
 		switch (actorToMake) {
 		case PHYSICAL_OBJECT_WALL:
-			PxRigidStatic * wall = PhysicsManager::getPhysicsInstance().createRigidStatic(pos);
+		{
+			PxRigidStatic * wall = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
 			wall->createShape(*geom, *material);
-			return new Physicable(wall);
+			toReturn = wall;
 			break;
+		}
 		case PHYSICAL_OBJECT_DRIVING_BOX:
-			PxRigidStatic * plane = createDrivingBox(material, pos, geom);
-			return new Physicable(plane);
+		{
+			PxRigidStatic * plane = createDrivingBox(material, *pos, geom);
+			toReturn = plane;
 			break;
+		}
 		case PHYSICAL_OBJECT_CAR:
+		{
 			VehicleCreator *vc = new VehicleCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 			PxVehicleDrive4W *car = vc->create(style);
 			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
 			car->getRigidDynamicActor()->setGlobalPose(startTransform);
-			car->getRigidDynamicActor()->createShape(PxBoxGeometry(car->getRigidDynamicActor()->getWorldBounds().getDimensions().x / 2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().y / 2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().z / 2), *material);
-			return new Physicable(car);
+			toReturn = car;
+			break;
 		}
+		}
+
+		return toReturn;
 	}
 
 	
 private: //members
-	PhysicsManager & m_physicsManager;
 	//enum of physics objects to make
 
 	

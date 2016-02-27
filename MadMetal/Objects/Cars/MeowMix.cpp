@@ -1,7 +1,7 @@
 #include "MeowMix.h"
 
 
-MeowMix::MeowMix()
+MeowMix::MeowMix(PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio) : Car(car, aable, pable, anable, rable, audio)
 {
 
 }

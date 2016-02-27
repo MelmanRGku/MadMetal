@@ -23,7 +23,7 @@ Camera::Camera()
 
 }
 
-Camera::Camera(Object * object)
+Camera::Camera(TestObject * object)
 {
 	m_rotateScalar = CAMERA_ROTATION_SPEED;
 	m_gravityScalar = CAMERA_GRAVITY_SPEED;
@@ -54,7 +54,7 @@ glm::vec3 Camera::getPosition(){ return m_currentPos; }
 glm::vec3 Camera::getUpVector() { return m_up; }
 
 
-void Camera::setToFollow(Object * object)
+void Camera::setToFollow(TestObject * object)
 {
 	m_toFollow = object;
 	m_currentPos = m_desiredPos = m_toFollow->getForwardVector() * (-m_distance);
@@ -113,7 +113,7 @@ void Camera::update(double dtMilli)
 		-Need to look at turning forces on car?
 	*/
 
-	m_lookAt = glm::vec3(m_toFollow->getActor().getGlobalPose().p.x, m_toFollow->getActor().getGlobalPose().p.y, m_toFollow->getActor().getGlobalPose().p.z);
+	m_lookAt = m_toFollow->getPosition();
 	m_desiredPos = m_lookAt - glm::vec3((m_toFollow->getForwardVector() * m_distance).x, -tan(m_inclinationAngle * PI / 180.0f) * (m_lookAt - (m_toFollow->getForwardVector() * m_distance)).length(), (m_toFollow->getForwardVector() * m_distance).z);
 //	m_desiredPos = m_lookAt - m_toFollow->getForwardVector() * m_distance;
 

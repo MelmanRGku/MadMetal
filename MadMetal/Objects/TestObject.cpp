@@ -20,7 +20,7 @@ TestObject::~TestObject()
 }
 
 glm::mat4x4 TestObject::getModelMatrix() {
-	return m_physicable.getPhysicsModelMatrix() * m_animatable.getModelMatrix();
+	return m_physicable.getPhysicsModelMatrix() * m_animatable.getModelMatrix() * m_renderable.getInitialModelMatrix();
 }
 
 void TestObject::draw(Renderer *renderer)
@@ -54,3 +54,7 @@ void TestObject::draw(Renderer *renderer)
 	}
 }
 
+glm::vec3 TestObject::getPosition() {
+	PxVec3 pos = m_physicable.getActor().getGlobalPose().p;
+	return glm::vec3(pos.x, pos.y, pos.z);
+}

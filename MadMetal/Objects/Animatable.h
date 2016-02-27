@@ -6,8 +6,8 @@
 class Animatable
 {
 public:
-	Animatable();
-	virtual ~Animatable();
+	Animatable() {}
+	virtual ~Animatable() {}
 
 	glm::mat4x4 getModelMatrix() {
 		glm::mat4x4 translate = glm::translate(glm::mat4x4(), position);

@@ -1,5 +1,5 @@
 #pragma once
-#include "Objects\RenderableObject.h"
+#include "Objects\Model.h"
 
 class RenderFactory
 {
@@ -7,12 +7,22 @@ public:
 	RenderFactory(){}
 	~RenderFactory(){}
 
-	/*
-	RenderableObject * makeRenderableObject(Enum objectToMake)
+	enum RenderableObjects {
+		RENDERABLE_OBJECT_CAR,
+		RENDERABLE_OBJECT_PLANE,
+	};
+
+	
+	Model *makeRenderableObject(RenderableObjects objectToMake)
 	{
-		Big switch statement utilizing the enum object types
+		switch (objectToMake) {
+		case RENDERABLE_OBJECT_CAR:
+			return Assets::getModel("Ugly_Car");
+		case RENDERABLE_OBJECT_PLANE:
+			return Assets::getModel("plane");
+		}
 	}
-	*/
+	
 private: //members
 	//enum of different objects to make
 	

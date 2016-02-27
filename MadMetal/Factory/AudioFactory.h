@@ -7,12 +7,19 @@ public:
 	AudioFactory(Audio& audioHandle) : m_audioHandle(audioHandle){}
 	~AudioFactory(){}
 
-	/*
-		Sound * makeSound(Enum soundToMake)
-		{
-			Big switch statement utilizing the enum sound types
+	enum Sounds {
+		SOUND_ACCELERATION,
+	};
+
+	Sound * makeSound(Sounds soundToMake)
+	{
+		switch (soundToMake) {
+		case SOUND_ACCELERATION:
+			return new AccelerationSound();
 		}
-	*/
+		
+	}
+	
 private: //members
 	Audio& m_audioHandle;
 	//todo:: make these!!!

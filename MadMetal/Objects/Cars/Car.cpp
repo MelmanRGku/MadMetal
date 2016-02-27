@@ -1,29 +1,16 @@
 #include "Car.h"
 #include "../DrivingStyleFast.h"
 
-Car::Car()
+Car::Car(PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio) : TestObject(aable, pable, anable, rable, audio), m_car(car)
 {
-	m_drivingStyle = new DrivingStyleFast();
 }
 
 
 Car::~Car()
 {
-	delete m_drivingStyle;
 }
 
-void Car::setCar(PxVehicleDrive4W *m_car)
-{ 
-	this->m_car = m_car; 
-	m_physicable.setActor(m_car->getRigidDynamicActor()); 
-}
-
-PxVehicleDrive4W* Car::getCar()
+PxVehicleDrive4W& Car::getCar()
 {
 	return m_car;
-}
-
-DrivingStyle& Car::getDrivingStyle()
-{
-	return *m_drivingStyle;
 }

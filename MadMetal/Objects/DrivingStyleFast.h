@@ -6,7 +6,7 @@ class DrivingStyleFast : public DrivingStyle
 private:
 	
 public:
-	DrivingStyleFast();
+	DrivingStyleFast(PxMaterial *chassisMaterial, PxMaterial *wheelMaterial);
 	virtual ~DrivingStyleFast();
 };
 

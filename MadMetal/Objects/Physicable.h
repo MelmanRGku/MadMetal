@@ -3,6 +3,7 @@
 #include "Simulation\PhysicsManager.h"
 #include "Libraries\glm\mat4x4.hpp"
 #include "Libraries\glm\gtc\matrix_transform.hpp"
+#include "Simulation\GameSimulationDefinitions.h"
 
 class Physicable {
 protected:
@@ -12,7 +13,7 @@ public:
 	Physicable(PxRigidActor *actor) {
 		physicsActor = actor;
 	};
-	virtual ~Physicable();
+	virtual ~Physicable() {}
 
 	glm::mat4x4 getPhysicsModelMatrix() {
 		if (!physicsActor)

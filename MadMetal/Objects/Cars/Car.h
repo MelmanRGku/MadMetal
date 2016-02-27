@@ -7,16 +7,12 @@
 class Car : public TestObject
 {
 private:
-	PxVehicleDrive4W *m_car;
-	DrivingStyle* m_drivingStyle;
+	PxVehicleDrive4W &m_car;
 
 public:
-	Car();
+	Car(PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	~Car();
 
-	void setCar(PxVehicleDrive4W *m_car);
-	PxVehicleDrive4W *getCar();
-
-	DrivingStyle& getDrivingStyle();
+	PxVehicleDrive4W &getCar();
 };
 
