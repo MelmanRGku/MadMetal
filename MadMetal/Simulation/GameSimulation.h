@@ -28,7 +28,6 @@ private:
 private: //members
 	std::vector<Controllable *> m_players;
 	std::vector<PlayerControllable*> m_humanPlayers;
-	// TODO REMOVE FROM MEMBER VARIABLES
 	PxScene* m_scene;
 	// TODO REMOVE FROM MEMBER VARIABLES
 	PxVehicleDrive4W *car;

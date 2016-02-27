@@ -1,6 +1,11 @@
 #pragma once
 
 #include "PxPhysicsAPI.h"
+#include "Libraries\glm\vec3.hpp"
+
+
+extern glm::vec3 forwardVector;
+extern glm::vec3 upVector;
 
 enum
 {

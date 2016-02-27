@@ -15,7 +15,7 @@ Car::~Car()
 void Car::setCar(PxVehicleDrive4W *m_car)
 { 
 	this->m_car = m_car; 
-	this->physicsActor = m_car->getRigidDynamicActor(); 
+	m_physicable.setActor(m_car->getRigidDynamicActor()); 
 }
 
 PxVehicleDrive4W* Car::getCar()

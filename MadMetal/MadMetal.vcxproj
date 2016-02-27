@@ -82,6 +82,7 @@
     <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp" />
     <ClCompile Include="Objects\TestObject.cpp" />
+    <ClCompile Include="Renderer\Renderable.cpp" />
     <ClCompile Include="Simulation\GameSimulationDefinitions.cpp" />
     <ClCompile Include="Simulation\LoadingScreen.cpp" />
     <ClCompile Include="Objects\BoundingBox.cpp" />

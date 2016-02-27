@@ -1,10 +1,10 @@
 #pragma once
 
 #include "PxVehicleDrive4W.h"
-#include "../RenderableObject.h"
+#include "../TestObject.h"
 #include "Objects\DrivingStyle.h"
 
-class Car : public RenderableObject
+class Car : public TestObject
 {
 private:
 	PxVehicleDrive4W *m_car;

@@ -1,14 +1,15 @@
 #include "Renderable.h"
 
+Renderable::Renderable() {}
 
-Renderable::Renderable(Model* Model)
+Renderable::Renderable(Model* Model, bool resize, bool reposition)
 {
-	m_model = Model;
+	setModel(Model, resize, reposition);
 }
 
-void Renderable::setModel(Model *model, bool resize = false, bool reposition = false)
+void Renderable::setModel(Model *model, bool resize, bool reposition)
 {
-	this->model = model;
+	m_model = model;
 
 	if (model != NULL) {
 		if (resize) {

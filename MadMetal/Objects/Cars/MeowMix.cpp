@@ -13,10 +13,10 @@ MeowMix::~MeowMix()
 
 void MeowMix::shoot() {
 	if (m_lastWeaponShot == LAST_WEAPON_SHOT_LEFT) {
-		m_lastWeaponShot == LAST_WEAPON_SHOT_RIGHT;
+		m_lastWeaponShot = LAST_WEAPON_SHOT_RIGHT;
 	}
 	else if (m_lastWeaponShot == LAST_WEAPON_SHOT_RIGHT) {
-		m_lastWeaponShot == LAST_WEAPON_SHOT_LEFT;
+		m_lastWeaponShot = LAST_WEAPON_SHOT_LEFT;
 	}
 	else {
 		exit(5);										//hopefully will never happen

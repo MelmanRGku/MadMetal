@@ -2,7 +2,7 @@
 
 
 World::World() {
-	gameObjects = new std::vector<Object*>;
+	gameObjects = new std::vector<TestObject*>;
 }
 
 

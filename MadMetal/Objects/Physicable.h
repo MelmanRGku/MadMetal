@@ -7,10 +7,11 @@
 class Physicable {
 protected:
 	PxRigidActor *physicsActor;
-	glm::vec3 forward, up;
 
 public:
-	Physicable() {};
+	Physicable(PxRigidActor *actor) {
+		physicsActor = actor;
+	};
 	virtual ~Physicable();
 
 	glm::mat4x4 getPhysicsModelMatrix() {
@@ -27,7 +28,7 @@ public:
 	}
 
 	glm::vec3 getForwardVector() {
-		glm::vec4 toReturn = glm::normalize(getPhysicsModelMatrix() * glm::vec4(forward, 0.0f)); 
+		glm::vec4 toReturn = glm::normalize(getPhysicsModelMatrix() * glm::vec4(forwardVector, 0.0f)); 
 		return glm::vec3(toReturn.x, toReturn.y, toReturn.z);
 	}
 	void setActor(PxRigidActor *actor) { physicsActor = actor; }

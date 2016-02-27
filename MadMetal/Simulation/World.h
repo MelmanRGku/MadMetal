@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <vector>
-#include "../Objects/Object.h"
+#include "../Objects/TestObject.h"
 
 
 
@@ -10,14 +10,14 @@
 class World
 {
 private:
-	std::vector<Object*> *gameObjects;
+	std::vector<TestObject*> *gameObjects;
 public:
 	
 	World();
 	~World();
 	
 	//TODO::Build a more robust system for accessing and altering game objects, such that programs aren't forced to calculate the indicies of objects and then find them in the gameObjects vector
-	std::vector<Object*> * getGameObjects()	{ return gameObjects; }
-	void addGameObject(Object *obj) { gameObjects->push_back(obj); }
+	std::vector<TestObject*> * getGameObjects()	{ return gameObjects; }
+	void addGameObject(TestObject *obj) { gameObjects->push_back(obj); }
 };
 
