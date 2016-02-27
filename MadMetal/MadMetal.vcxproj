@@ -81,6 +81,7 @@
     <ClCompile Include="Objects\DrivingStyle.cpp" />
     <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp" />
+    <ClCompile Include="Objects\TestObject.cpp" />
     <ClCompile Include="Simulation\GameSimulationDefinitions.cpp" />
     <ClCompile Include="Simulation\LoadingScreen.cpp" />
     <ClCompile Include="Objects\BoundingBox.cpp" />
@@ -130,7 +131,11 @@
     <ClInclude Include="Global\Fonts.h" />
     <ClInclude Include="Global\Assets.h" />
     <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="Objects\Animatable.h" />
+    <ClInclude Include="Objects\Audioable.h" />
     <ClInclude Include="Objects\Cars\MeowMix.h" />
+    <ClInclude Include="Objects\Physicable.h" />
+    <ClInclude Include="Objects\TestObject.h" />
     <ClInclude Include="Objects\Weapons\HasWeapons.h" />
     <ClInclude Include="Objects\LoadingBar.h" />
     <ClInclude Include="Objects\ObjectCreators\PhysicsObjectCreator.h" />

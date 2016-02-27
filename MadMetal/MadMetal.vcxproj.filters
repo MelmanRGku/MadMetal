@@ -114,9 +114,6 @@
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicleRaycast.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Car.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Global\Assets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -154,6 +151,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\Cars\Car.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\TestObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -269,9 +269,6 @@
     <ClInclude Include="Objects\ObjectCreators\SnippetVehicleRaycast.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Car.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game Logic\WayPointSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -333,6 +330,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\ObjectCreators\PhysicsObjectCreator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\TestObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Animatable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Physicable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Audioable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
