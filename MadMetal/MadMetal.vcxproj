@@ -133,6 +133,7 @@
     <ClInclude Include="Global\Assets.h" />
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Objects\Cars\MeowMix.h" />
+    <ClInclude Include="Objects\Track.h" />
     <ClInclude Include="Objects\Weapons\HasWeapons.h" />
     <ClInclude Include="Objects\LoadingBar.h" />
     <ClInclude Include="Objects\ObjectCreators\PhysicsObjectCreator.h" />
