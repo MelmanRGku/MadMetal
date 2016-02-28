@@ -1,57 +1,60 @@
 #pragma once
 #include "..\Input\Input.h"
-#include "..\Game Logic\PlayerControllable.h"
+#include "..\Game Logic\ControllableTemplate.h"
 #include "Simulation\World.h"
 #include "Objects\Camera.h"
 
-
-const int MAIN_MENU = 0;
-const int SINGLE_CHAR_SELECT = 1;
-const int START_SINGLE_GAME = 2;
-const int PAUSE_GAME = 3;
-const int NORMAL_GAME = 4;
-const int MULTI_CHAR_SELECT = 5;
-const int START_MULTI_GAME = 6;
-const int RESTART_GAME = 7;
-const int POP = 8;
-
+#define NUM_CHARACTERS_AVAILABLE 3
+#define MAX_NUM_HUMAN_PLAYERS 4
 
 class SceneMessage
 {
-
-
-	int m_tag;
-	int m_numPlayers;
-
-	std::vector<PlayerControllable *> m_players;
-
-
 public:
-	
 
-	//used for main menu, single char select, multi char select and pop
-	SceneMessage(int tag) : m_tag(tag)
+	enum SceneEnum
 	{
-		m_players.clear();
-	}
-	SceneMessage() : m_tag(-1){}
+		eMainMenu,
+		eSingleCharSelect,
+		eMultiCharSelect,
+		eLoadScreen,
+		eGameSimulation,
+		ePause,
+		eRestart,
+		ePop,
+		eDefault
+	};
 
-	//used for starting new single game, starting new multi game
-	SceneMessage(int tag, int numPlayers, std::vector<PlayerControllable *> players) : m_tag(tag), m_numPlayers(numPlayers), m_players(players){}
-
-
-	int getTag() { return m_tag; } //message type
-	int getNumPlayers() { return m_numPlayers; } //max number of players 
-	std::vector<PlayerControllable *> getPlayers() { return m_players; } //player controllable characters for new game
-
-	void setTag(int tag) {
-		m_tag = tag;
-	}
-	void addPlayer(PlayerControllable * toAdd)
+	SceneMessage()
 	{
-		m_players.push_back(toAdd);
+		m_sceneType = eDefault;
 	}
 
+	SceneEnum getTag() { return m_sceneType; } //message type
+
+	std::vector<ControllableTemplate *> getPlayerTemplates() { return m_playerTemplates; }
+
+	void setTag(SceneEnum sceneType) {
+		m_sceneType = sceneType;
+	}
+	void setPlayerTemplates(std::vector<ControllableTemplate *> playerTempaltes)
+	{
+		m_playerTemplates = playerTempaltes;
+	}
+
+	void addPlayerTemplate(ControllableTemplate* playerTemplate)
+	{
+		m_playerTemplates.push_back(playerTemplate);
+	}
+
+	void resetMessage()
+	{
+		m_sceneType = eDefault;
+		m_playerTemplates.clear();
+
+	}
+private://members
+	SceneEnum m_sceneType;
+	std::vector<ControllableTemplate *> m_playerTemplates;
 };
 
 class Scene 
@@ -66,6 +69,7 @@ protected:
 public:
 	Scene() {
 		m_world = new World();
+		m_mainCamera = new Camera(); //dummy camera?
 	}
 
 	virtual ~Scene() {
@@ -73,9 +77,7 @@ public:
 		delete m_world;
 	}
 	virtual bool simulateScene(double dt, SceneMessage &newMessage) = 0;
-	bool isPaused() { return m_isPaused; }
-	//set paused will need to be updated to pause sound at the same time
-	void setPaused(bool paused) { m_isPaused = paused; }
+
 	World* getWorld() { return m_world; }
 	Camera* getMainCamera() { return m_mainCamera; }
 	//virtual void loadFromFile();
@@ -86,50 +88,44 @@ class MainMenuScene : public Scene
 private:
 	GamePad * m_gamePad;
 	int m_currentSelection;
-	int m_selections[2];
+	SceneMessage::SceneEnum m_selections[2];
 	
 public:
-	MainMenuScene(GamePad * gamePad);
+	MainMenuScene(Input * input);
 	bool simulateScene(double dt, SceneMessage &newMessage);
 };
 
 class SinglePlayerCharSelectScene : public Scene
 {
 private:
-	GamePad * m_gamePad;
-	int m_currentSelection;
+	GamePad * m_gamePad; //handle for menu interaction
+	std::vector<ControllableTemplate * > m_playerTemplates; //templates to pass to game simulation
 	
-	char * m_character1 = "Character1.txt";
-	char * m_character2 = "Character2.txt";
-	char * m_character3 = "Character3.txt";
-	char * m_selections[3]; 
+	bool m_charConfirmed; //has a character been selected?
+	int m_currentSelection; //the current character selected
+	int m_selections[NUM_CHARACTERS_AVAILABLE]; //fill with car enums later
 	
 
 public:
-	SinglePlayerCharSelectScene(GamePad * gamePad);
+	SinglePlayerCharSelectScene(Input * input);
 	bool simulateScene(double dt, SceneMessage &newMessage);
 };
 
-class SinglePlayerGameScene : public Scene
+
+
+class MultiPlayerCharSelectScene : public Scene
 {
 private:
-	GamePad * m_gamePad;
-	PlayerControllable * m_player;
+	GamePad * m_gamePads[MAX_NUM_HUMAN_PLAYERS];
+	bool m_charConfirmed[MAX_NUM_HUMAN_PLAYERS];
+	int m_currentSelection[MAX_NUM_HUMAN_PLAYERS];
+	int m_selections[NUM_CHARACTERS_AVAILABLE];
+
+	std::vector<ControllableTemplate *> m_playerTemplates;
 
 public:
-	SinglePlayerGameScene(PlayerControllable * player, int numPlayers);
+	MultiPlayerCharSelectScene(Input * input);
 	bool simulateScene(double dt, SceneMessage &newMessage);
+	
 };
 
-/*
-class MultiPlayerCharSelectionScene : Scene
-{
-private:
-	GamePad * m_gamePads[4];
-	int * m_charSelections[4];
-	std::vector<PlayerControllable *> m_players;
-public:
-	MultiPlayerCharSelectionScene(GamePad * gamePads);
-	bool simulateScene(SceneMessage &newMessage);
-	
-};*/

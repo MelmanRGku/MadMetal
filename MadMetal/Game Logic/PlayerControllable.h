@@ -9,18 +9,28 @@
 class PlayerControllable : public Controllable
 {
 private:
-	char * m_fileName;
 	GamePad * m_gamePad;
 	Car* m_car;
-
-	Camera * m_camera;
+	Camera* m_camera;
 
 public:
-	PlayerControllable(ControllableTemplate& controllableTemplate) : Controllable(controllableTemplate);
-	virtual ~PlayerControllable();
+	
+	PlayerControllable(ControllableTemplate& controllableTemplate) : Controllable(controllableTemplate)
+	{
+		m_gamePad = controllableTemplate.getGamePad();
+		m_camera = new Camera();
+	}
+
+	PlayerControllable::~PlayerControllable()
+	{
+		m_gamePad = NULL;
+		delete m_camera;
+		delete m_car;
+	}
+
 	void playFrame(double dt);
-	void setCamera(Camera * camera);
 	GamePad * getGamePad();
-	void setObject(Car * toAdd);
-	Car *getObject() { return m_car; }
+	Camera * getCamera() { return m_camera; }
+	void setCar(Car * toAdd);
+	Car *getCar() { return m_car; }
 };

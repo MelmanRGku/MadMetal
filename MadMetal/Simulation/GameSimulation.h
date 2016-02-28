@@ -3,6 +3,10 @@
 #include "Scene Manager\Scene.h"
 #include "Global\Assets.h"
 #include "Factory\GameFactory.h"
+#include "Game Logic\ControllableTemplate.h"
+#include "Game Logic\Controllable.h"
+#include "Game Logic\PlayerControllable.h"
+#include "Game Logic\AIControllable.h"
 
 class Scene;
 class Car;
@@ -43,7 +47,7 @@ private: //members
 	GameFactory* m_gameFactory;
 
 public:
-	GameSimulation(PhysicsManager& physicsInstance, std::vector<PlayerControllable *> humanPlayers, Audio& audioHandle);
+	GameSimulation(PhysicsManager& physicsInstance, std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle);
 	~GameSimulation();
 
 	bool simulateScene(double dt, SceneMessage &newMessage);

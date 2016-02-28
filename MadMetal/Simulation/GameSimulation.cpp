@@ -1,7 +1,7 @@
 #include "Game Logic\WayPointSystem.h"
 #include "GameSimulation.h"
 #include "GameSimulationDefinitions.h"
-#include "Objects/Car.h"
+#include "Objects/Cars/MeowMix.h"
 #include "Objects/Model.h"
 #include "Objects/ObjectLoaders/ObjModelLoader.h"
 #include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
@@ -9,25 +9,40 @@
 #include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 #include "Objects/RenderableObject.h"
-#include "Objects\ObjectCreators\SnippetVehicleCreate.h"
-#include "Objects\ObjectCreators\SnippetVehicleRaycast.h"
 #include "PhysicsManager.h"
+#include "Objects\ObjectCreators\VehicleCreator.h"
+
+#define NUM_OF_PLAYERS 8
 
 using namespace std;
 bool gIsVehicleInAir = true;
 
-
-
-GameSimulation::GameSimulation(PhysicsManager& physicsInstance, PlayerControllable * player)
+GameSimulation::GameSimulation(PhysicsManager& physicsInstance, vector<ControllableTemplate *> playerTemplates, Audio& audioHandle)
 : m_physicsHandler(physicsInstance)
 {
-	m_mainCamera = new Camera();
-	m_objLoader = new ObjModelLoader();
+	createPhysicsScene();
 
-	player->setCamera(m_mainCamera);
+	//m_gameFactory = new GameFactory(*m_world, *m_scene, physicsInstance, audioHandle);
+
+	//create characters for game from templates
+	for (int i = 0; i < playerTemplates.size(); i++)
+	{
+		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
+		{
+			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
+			//make a car for player based off template
+			m_humanPlayers.push_back(humanPlayer);
+			m_players.push_back(humanPlayer);
+		}
+		else {
+			m_players.push_back(new AIControllable(*playerTemplates[i]));
+			//make a car for ai based off template
+		}
+	}
+
 	
-	m_players.push_back(player);
-	player->setGameWorld(m_world);
+	//add when car is created by this point. 
+	//m_mainCamera = m_humanPlayers[0]->getCamera();
 	
 	initialize();
 }
@@ -77,7 +92,7 @@ void GameSimulation::simulatePhysics(double dt)
 
 	//Work out if the vehicle is in the air.
 	gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
-	//gIsVehicleInAir = false;
+
 	m_scene->simulate(timestep);
 	m_scene->fetchResults(true);
 }
@@ -102,14 +117,9 @@ void GameSimulation::updateObjects(double dt) {
 
 	m_mainCamera->update(dt);
 
-	for (unsigned int i = 0; i < updaters.size(); i++) {
-		updaters.at(i)->update( (float)dt);
 	}
 
-}
-
 void GameSimulation::initialize() {
-	createPhysicsScene();
 	setupBasicGameWorldObjects();
 }
 
@@ -218,11 +228,12 @@ void GameSimulation::onTrigger(PxTriggerPair* pairs, PxU32 count)
 	//Player Interactions. Shouldn't really be anyother type
 	if (pairs->otherShape->getSimulationFilterData().word0 == PhysicsManager::PLAYER)
 	{
+		/*
 		PlayerControllable * player = m_players[pairs->otherShape->getSimulationFilterData().word2];
 		//std::cout << "hit waypoint " << pairs[0].triggerShape->getSimulationFilterData().word2 << std::endl;
 		player->setWayPoint(m_wayPoints->getWayPointAt(pairs[0].triggerShape->getSimulationFilterData().word2),
 			pairs[0].triggerShape->getSimulationFilterData().word3 == 1); // is it the finish line?
-		
+		*/
 	}
 }
 
@@ -244,11 +255,6 @@ void GameSimulation::createPhysicsScene()
 	{
 		std::cout << "The scene is a lie. ERROR CODE: PX0005" << std::endl;
 	}
-	m_cooking = PxCreateCooking(PX_PHYSICS_VERSION, m_physicsHandler.getFoundation(), PxCookingParams(PxTolerancesScale()));
-	if (!m_cooking)
-	{
-		std::cout << "A fatal error has occured. ERROR CODE PX0007" << std::endl;
-	}
 
 	PxInitVehicleSDK(m_physicsHandler.getPhysicsInstance());
 	PxVehicleSetBasisVectors(PxVec3(0, 1, 0), PxVec3(0, 0, 1));
@@ -259,6 +265,20 @@ void GameSimulation::createPhysicsScene()
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
+	for (int i = 0; i < m_humanPlayers.size(); i++)
+	{
+		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
+		{
+			newMessage.setTag(SceneMessage::eRestart);
+			std::vector<ControllableTemplate *> playerTemplates;
+			for (int i = 0; i < m_players.size(); i++)
+			{
+				playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+			}
+			newMessage.setPlayerTemplates(playerTemplates);
+			return true;
+		}
+	}
 	simulateAI();
 	simulatePlayers(dt);
 	simulatePhysics(dt);
@@ -292,7 +312,9 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-	Car *obj = new Car();
+	PhysicsObjectCreator *physicsObjectCreator = new PhysicsObjectCreator(&m_physicsHandler.getPhysicsInstance(), &m_physicsHandler.getCookingInstance());
+
+	Car *obj = new MeowMix();
 	obj->setModel(Assets::getModel("Ugly_Car"), true, true);
 	m_world->addGameObject(obj);
 	PxMaterial* mMaterial;
@@ -309,22 +331,12 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//Create the friction table for each combination of tire and surface type.
 	gFrictionPairs = createFrictionPairs(mMaterial);
 
-	VehicleDesc vehicleDesc;
-	vehicleDesc.chassisMass = obj->getDrivingStyle().getChassisMass();
-	vehicleDesc.chassisDims = obj->getDrivingStyle().getChassisDimensions();
-	vehicleDesc.chassisMOI = obj->getDrivingStyle().getChassisMOI();
-	vehicleDesc.chassisCMOffset = obj->getDrivingStyle().getChassisCenterOfMassOffsset();
-	vehicleDesc.chassisMaterial = mMaterial;
-	vehicleDesc.wheelMass = obj->getDrivingStyle().getWheelMass();
-	vehicleDesc.wheelRadius = obj->getDrivingStyle().getWheelRadius();
-	vehicleDesc.wheelWidth = obj->getDrivingStyle().getWheelWidth();
-	vehicleDesc.wheelMOI = obj->getDrivingStyle().getWheelMOI();
-	vehicleDesc.numWheels = obj->getDrivingStyle().getNbWheels();
-	vehicleDesc.wheelMaterial = mMaterial;
-
 	//Create a vehicle that will drive on the plane.
-	car = createVehicle4W(vehicleDesc, &m_physicsHandler.getPhysicsInstance(), m_cooking);
-	PxTransform startTransform(PxVec3(0, 3+(vehicleDesc.chassisDims.y*0.5f + vehicleDesc.wheelRadius + 1.0f), 0), PxQuat(PxIdentity));
+	VehicleCreator *vc = new VehicleCreator(&m_physicsHandler.getPhysicsInstance(), &m_physicsHandler.getCookingInstance());
+	obj->getDrivingStyle().setChassisMaterial(mMaterial);
+	obj->getDrivingStyle().setWheelMaterial(mMaterial);
+	car = vc -> create(&obj->getDrivingStyle());
+	PxTransform startTransform(PxVec3(0, 3 + (obj->getDrivingStyle().getChassisDimensions().y*0.5f + obj->getDrivingStyle().getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
 	car->getRigidDynamicActor()->setGlobalPose(startTransform);
 	car->getRigidDynamicActor()->createShape(PxBoxGeometry(car->getRigidDynamicActor()->getWorldBounds().getDimensions().x /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().y /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().z /2), *mMaterial);
 	m_scene->addActor(*car->getRigidDynamicActor());
@@ -343,16 +355,16 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	gVehicleModeTimer = 0.0f;
 	gVehicleOrderProgress = 0;
 	obj->setCar(car);
-	m_players[0]->setObject(obj);
+	m_humanPlayers[0]->setCar(obj);
+	m_mainCamera = m_humanPlayers[0]->getCamera();
 	
-	//attach camera to stormtrooper
-	m_mainCamera->setToFollow(obj);
 
-	Projectile * ammo = new Projectile("");
+
+	/*Projectile * ammo = new Projectile("");
 	RenderableObject *ammoModel = new RenderableObject();
 	ammoModel->setModel(Assets::getModel("bullet"), true);
 	ammo->setObject(ammoModel);
-	m_players[0]->setAmmunition(ammo);
+	m_players[0]->setAmmunition(ammo);*/
 
 	float length = 50;
 	float width = 10;
@@ -360,7 +372,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	float dims = 200;
 
 	//Create the drivable geometry
-	PxRigidStatic * floor = createDrivingBox(mMaterial, &m_physicsHandler.getPhysicsInstance(), PxTransform(PxVec3(0, 0, 0)), PxBoxGeometry(width, 0.5, length));
+	PxRigidStatic * floor = physicsObjectCreator->createDrivingBox(mMaterial, PxTransform(PxVec3(0, 0, 0)), PxBoxGeometry(width, 0.5, length));
 	m_scene->addActor(*floor);
 
 
@@ -375,7 +387,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	frontWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
 	m_scene->addActor(*frontWall);
 
-	PxRigidStatic * ground = createDrivingBox(mMaterial, &m_physicsHandler.getPhysicsInstance(), PxTransform(PxVec3(0, -10, 0)), PxBoxGeometry(dims, 0.5, dims));
+	PxRigidStatic * ground = physicsObjectCreator->createDrivingBox(mMaterial, PxTransform(PxVec3(0, -10, 0)), PxBoxGeometry(dims, 0.5, dims));
 	m_scene->addActor(*ground);
 	
 
@@ -438,8 +450,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	positions.push_back(glm::vec3(0, 0, 0));
 	positions.push_back(glm::vec3(0, 0, 20));
 
-	m_wayPoints = new WayPointSystem(m_scene, positions);
-	
 	//--------------------TEST 3------------------------------------------------------------------------------------------------
 	/*
 	ObjectUpdaterSequence *upd1 = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);

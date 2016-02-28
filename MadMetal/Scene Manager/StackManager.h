@@ -28,7 +28,6 @@ class StackManager
 private:
 	Input * m_input;
 	SceneStack * m_stack;
-	Scene * m_currentScene;
 	bool m_newMessage;
 	SceneMessage * m_mailBox;
 

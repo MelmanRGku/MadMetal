@@ -1,5 +1,6 @@
 #include "StackManager.h"
 #include "Simulation\GameSimulation.h"
+#include "Global\Log.h"
 
 SceneStack::SceneStack(Scene * scene)
 {
@@ -27,7 +28,7 @@ void SceneStack::clearStack()
 	{
 		delete m_sceneStack[i];
 	}
-	std::cout << "Cleared the Stack!! \n";
+	Log::writeLine("Cleared the Stack (SceneStack::clearStack())");
 	m_sceneStack.clear();
 }
 
@@ -39,10 +40,14 @@ Scene * SceneStack::pushScene(Scene * scene)
 
 void SceneStack::popScene()
 {
-	std::cout << "Popped top Scene. \n";
-	//delete m_top
+	Log::writeLine("Popped top Scene (SceneStack::popScene())");
+	delete m_top;
 	m_sceneStack.pop_back();
-	m_top = m_sceneStack.back();
+	if (m_sceneStack.size() > 0)
+	{
+		m_top = m_sceneStack.front();
+	}
+	
 }
 
 Scene * SceneStack::getTopScene()
@@ -53,14 +58,11 @@ Scene * SceneStack::getTopScene()
 
 StackManager::StackManager()
 {
-	//initaliaze inptu
+	//initaliaze input
 	m_input = new Input();
 	//set starting scene to Main Menu and pass a controller handle
 	m_physicsCreator = new PhysicsManager();
-	PlayerControllable * toAdd = new PlayerControllable("", m_input->getGamePadHandle());
-	//m_currentScene = new GameSimulation(*m_physicsCreator, toAdd);
-	m_currentScene = new LoadingScreen(toAdd);
-	//m_currentScene = new MainMenuScene(m_input->getGamePadHandle());
+	
 	//intialize mail box
 	m_mailBox = new SceneMessage();
 	//set mail box to empty
@@ -71,59 +73,70 @@ StackManager::StackManager()
 	ShaderProgram *sp = new ShaderProgram("Renderer/VertexShader.glsl", "Renderer/FragmentShader.glsl");
 	m_renderer->setShader(sp);
 
+	m_audio = new Audio();
+
 	//create stack with main menu on top
-	m_stack = new SceneStack(m_currentScene);
+	m_stack = new SceneStack(new MainMenuScene(m_input));
 }
 
 StackManager::~StackManager()
 {
-	delete m_physicsCreator;
-	delete m_renderer;
-	delete m_input;
-	delete m_currentScene;
-	delete m_mailBox;
 	delete m_stack;
+	delete m_audio;
+	delete m_renderer;
+	delete m_mailBox;
+	delete m_physicsCreator;
+	delete m_input;
 }
 
 void StackManager::readMailBox()
 {
-	std::cout << "New Message!! \n";
+	Log::writeLine("New Message (StackManager::readMailBox())");
 	switch (m_mailBox->getTag())
 	{
-	case(MAIN_MENU) :
+	case(SceneMessage::eMainMenu) :
 		m_stack->clearStack();
-		m_stack->pushScene(new MainMenuScene(m_input->getGamePadHandle()));
+		m_stack->pushScene(new MainMenuScene(m_input));
 		break;
-	case(SINGLE_CHAR_SELECT) :
-		m_currentScene->setPaused(true);
-		m_stack->pushScene(new SinglePlayerCharSelectScene(m_input->getGamePadHandle()));
-		m_currentScene = m_stack->getTopScene();
+	case(SceneMessage::eSingleCharSelect) :
+		m_stack->pushScene(new SinglePlayerCharSelectScene(m_input));
 		break;
-	case (START_SINGLE_GAME) :
+			
+	case (SceneMessage::eMultiCharSelect):
+		m_stack->pushScene(new MultiPlayerCharSelectScene(m_input));
+		break;
+
+	case (SceneMessage::eLoadScreen) :
+		m_stack->pushScene(new LoadingScreen(*m_mailBox));
+		break;
+	case (SceneMessage::eGameSimulation) :
 		m_stack->clearStack();
-		m_currentScene = m_stack->pushScene(new SinglePlayerGameScene(m_mailBox->getPlayers().front(), 4));
+		m_stack->pushScene(new GameSimulation(*m_physicsCreator, m_mailBox->getPlayerTemplates(), *m_audio));
 		break;
-	case (NORMAL_GAME) :
-		m_stack->clearStack();
-		m_currentScene = m_stack->pushScene(new GameSimulation(*m_physicsCreator, m_mailBox->getPlayers().front()));
-	case (MULTI_CHAR_SELECT) :
+
+	case (SceneMessage::ePause):
 		
 		break;
-	case (START_MULTI_GAME) :
-		
+
+	case (SceneMessage::eRestart):
+		m_stack->clearStack();
+		m_stack->pushScene(new GameSimulation(*m_physicsCreator, m_mailBox->getPlayerTemplates(), *m_audio));
 		break;
-	case (POP) :
+
+	case (SceneMessage::ePop) :
 		m_stack->popScene();
-		m_currentScene = m_stack->getTopScene();
-		m_currentScene->setPaused(false);
+		break;
+	case (SceneMessage::eDefault) :
+		std::cout << "Got a Default message.. Something went wrong \n";
 		break;
 	}
+	//set message to blank
+	m_mailBox->resetMessage();
 }
 
 void StackManager::progressScene(int newTime)
 {
 	
-
 	//calculate delta time
 	double dt = static_cast<double>(newTime) / 1000;
 	if (dt > .1) dt = .1;
@@ -132,17 +145,18 @@ void StackManager::progressScene(int newTime)
 	m_input->updateGamePads(dt);
 
 	//progress the state of the top scene on the stack
-	m_newMessage = m_currentScene->simulateScene(dt, *m_mailBox);
-	if (m_currentScene->getMainCamera() != NULL)
+	m_newMessage = m_stack->getTopScene()->simulateScene(dt, *m_mailBox);
+	Scene * currentScene = m_stack->getTopScene();
+	if (currentScene->getMainCamera() != NULL)
 	{
 		
 		m_renderer->setViewMatrixLookAt(
-			m_currentScene->getMainCamera()->getPosition(), 
-			m_currentScene->getMainCamera()->getUpVector(), 
-			m_currentScene->getMainCamera()->getLookAt()
+			currentScene->getMainCamera()->getPosition(),
+			currentScene->getMainCamera()->getUpVector(),
+			currentScene->getMainCamera()->getLookAt()
 			);
 	}
-	m_renderer->draw(m_currentScene->getWorld()->getGameObjects());
+	m_renderer->draw(currentScene->getWorld()->getGameObjects());
 	//check if the scene return a message for manager
 	if (m_newMessage)
 	{

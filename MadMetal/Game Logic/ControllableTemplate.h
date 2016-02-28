@@ -4,7 +4,9 @@
 class ControllableTemplate
 {
 public:
+	ControllableTemplate(int carSelection): m_carSelection(carSelection){};
 	ControllableTemplate(GamePad * gamePad) : m_gamePad(gamePad){};
+	
 	~ControllableTemplate()
 	{
 		m_gamePad = NULL;

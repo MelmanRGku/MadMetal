@@ -114,9 +114,6 @@
     <ClCompile Include="Objects\ObjectCreators\SnippetVehicleRaycast.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Car.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Global\Assets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -269,9 +266,6 @@
     <ClInclude Include="Objects\ObjectCreators\SnippetVehicleRaycast.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Car.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game Logic\WayPointSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -335,7 +329,10 @@
     <ClInclude Include="Objects\ObjectCreators\PhysicsObjectCreator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-	<ClInclude Include="Game Logic\ControllableTemplate.h">
+    <ClInclude Include="Game Logic\ControllableTemplate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Logic\AIControllable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
