@@ -107,10 +107,15 @@ void GameSimulation::simulateAI()
 
 void GameSimulation::simulatePlayers(double dt)
 {
+	
 	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
-		m_players[i]->playFrame(dt);
+		
+		//m_players[i]->playFrame(dt);
+		
 	}
+	m_humanPlayers[0]->playFrame(dt);
+	
 }
 
 void GameSimulation::updateObjects(double dt) {
@@ -269,12 +274,15 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	{
 		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
 		{
-			newMessage.setTag(SceneMessage::eRestart);
+			newMessage.setTag(SceneMessage::ePause);
 			std::vector<ControllableTemplate *> playerTemplates;
+			//put the controllables into the vector incase the player trys to restart
 			for (int i = 0; i < m_players.size(); i++)
 			{
 				playerTemplates.push_back(&m_players[i]->getControllableTemplate());
 			}
+			//put a dummy controllable at the front of the vector so the pause screen knows who paused
+			playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
 			newMessage.setPlayerTemplates(playerTemplates);
 			return true;
 		}

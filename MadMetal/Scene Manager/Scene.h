@@ -108,6 +108,7 @@ private:
 
 public:
 	SinglePlayerCharSelectScene(Input * input);
+	~SinglePlayerCharSelectScene(){ m_gamePad = NULL; }
 	bool simulateScene(double dt, SceneMessage &newMessage);
 };
 
@@ -125,7 +126,27 @@ private:
 
 public:
 	MultiPlayerCharSelectScene(Input * input);
+	~MultiPlayerCharSelectScene()
+	{
+		for (int i = 0; i < MAX_NUM_HUMAN_PLAYERS; i++)
+		{
+			m_gamePads[i] = NULL;
+		}
+	}
 	bool simulateScene(double dt, SceneMessage &newMessage);
 	
+};
+
+class PauseScene : public Scene
+{
+private:
+	GamePad * m_gamePad;
+	SceneMessage toDeliver;
+
+public:
+	PauseScene(std::vector<ControllableTemplate *> playerTemplates);
+	~PauseScene() { m_gamePad = NULL; }
+	
+	bool simulateScene(double dt, SceneMessage &newMessage);
 };
 

@@ -117,7 +117,7 @@ void PlayerControllable::playFrame(double dt)
 
 			if (m_camera != NULL)
 			{
-				std::cout << "got here \n";
+				
 				m_camera->rotateCamera(m_gamePad->getRightStick().x, m_gamePad->getRightStick().y);
 			}
 		}

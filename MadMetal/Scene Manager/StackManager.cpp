@@ -114,8 +114,8 @@ void StackManager::readMailBox()
 		m_stack->pushScene(new GameSimulation(*m_physicsCreator, m_mailBox->getPlayerTemplates(), *m_audio));
 		break;
 
-	case (SceneMessage::ePause):
-		
+	case (SceneMessage::ePause) :
+		m_stack->pushScene(new PauseScene(m_mailBox->getPlayerTemplates()));
 		break;
 
 	case (SceneMessage::eRestart):
