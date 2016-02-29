@@ -11,12 +11,12 @@ class LoadingScreen :
 private:
 	std::thread t;
 	LoadingStatus *status;
-	PlayerControllable *pc;
 	LoadingBar *bar;
+	SceneMessage m_toDeliver;
 
 	void createProgressBar();
 public:
-	LoadingScreen(PlayerControllable *pc);
+	LoadingScreen(SceneMessage &toDeliver);
 	~LoadingScreen();
 	bool simulateScene(double dt, SceneMessage &newMessage);
 };

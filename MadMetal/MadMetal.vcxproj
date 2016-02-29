@@ -128,6 +128,8 @@
     <ClInclude Include="Factory\PhysicsFactory.h" />
     <ClInclude Include="Factory\RenderFactory.h" />
     <ClInclude Include="Files\FIleHandlingHelpers.h" />
+    <ClInclude Include="Game Logic\AIControllable.h" />
+    <ClInclude Include="Game Logic\ControllableTemplate.h" />
     <ClInclude Include="Global\Fonts.h" />
     <ClInclude Include="Global\Assets.h" />
     <ClInclude Include="Audio\Audio.h" />

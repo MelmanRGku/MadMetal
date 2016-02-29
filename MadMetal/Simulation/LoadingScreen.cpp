@@ -1,18 +1,19 @@
 #include "LoadingScreen.h"
 
 
-LoadingScreen::LoadingScreen(PlayerControllable *pc)
+LoadingScreen::LoadingScreen(SceneMessage& toDeliver)
 {
 
 	m_mainCamera = new Camera();
 	m_mainCamera->setLookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -3), glm::vec3(0, 1, 0));
+	m_toDeliver = toDeliver;
 
 	createProgressBar();
 
 	status = new LoadingStatus();
 	Assets::status = status;
 	t = std::thread(Assets::loadObjsFromDirectory, "Assets/Models", false );
-	this->pc = pc;
+	
 }
 
 
@@ -28,8 +29,8 @@ bool LoadingScreen::simulateScene(double dt, SceneMessage &newMessage) {
 
 		Assets::initializeVAOs();
 
-		newMessage.setTag(NORMAL_GAME);
-		newMessage.addPlayer(pc);
+		newMessage.setTag(SceneMessage::eGameSimulation);
+		newMessage.setPlayerTemplates(m_toDeliver.getPlayerTemplates());
 		return true;
 	}
 	return false;

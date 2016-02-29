@@ -17,26 +17,31 @@
 using namespace std;
 bool gIsVehicleInAir = true;
 
-GameSimulation::GameSimulation(vector<PlayerControllable *> humanPlayers, Audio& audioHandle)
+GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle)
 {
 	createPhysicsScene();
 
 	//m_gameFactory = new GameFactory(*m_world, *m_scene, physicsInstance, audioHandle);
 
-	m_humanPlayers = humanPlayers;
-	for (int i = 0; i < humanPlayers.size(); i++)
+	//create characters for game from templates
+	for (int i = 0; i < playerTemplates.size(); i++)
 {
-		// TODO Create a Car for each human player
-		m_players.push_back(humanPlayers[0]);
-
-	}
-	for (int i = 0; i < (NUM_OF_PLAYERS - humanPlayers.size()); i++)
+		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 	{
-		//TODO ADD AI PLAYERS
+			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
+			//make a car for player based off template
+			m_humanPlayers.push_back(humanPlayer);
+			m_players.push_back(humanPlayer);
+	}
+		else {
+			m_players.push_back(new AIControllable(*playerTemplates[i]));
+			//make a car for ai based off template
+		}
 	}
 	
-	m_mainCamera = new Camera();
-	m_humanPlayers[0]->setCamera(m_mainCamera);
+	
+	//add when car is created by this point. 
+	//m_mainCamera = m_humanPlayers[0]->getCamera();
 	
 	initialize();
 }
@@ -259,12 +264,17 @@ void GameSimulation::createPhysicsScene()
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
-	for (int i = 0; i < m_players.size(); i++)
+	for (int i = 0; i < m_humanPlayers.size(); i++)
 	{
 		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
 		{
-			newMessage.setTag(RESTART_GAME);
-			newMessage.addPlayer(m_humanPlayers.at(0));
+			newMessage.setTag(SceneMessage::eRestart);
+			std::vector<ControllableTemplate *> playerTemplates;
+			for (int i = 0; i < m_players.size(); i++)
+			{
+				playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+			}
+			newMessage.setPlayerTemplates(playerTemplates);
 			return true;
 		}
 	}
@@ -344,16 +354,16 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	gVehicleModeTimer = 0.0f;
 	gVehicleOrderProgress = 0;
 	obj->setCar(car);
-	m_humanPlayers[0]->setObject(obj);
+	m_humanPlayers[0]->setCar(obj);
+	m_mainCamera = m_humanPlayers[0]->getCamera();
 	
-	//attach camera to stormtrooper
-	m_mainCamera->setToFollow(obj);
+	
 
-	Projectile * ammo = new Projectile("");
+	/*Projectile * ammo = new Projectile("");
 	RenderableObject *ammoModel = new RenderableObject();
 	ammoModel->setModel(Assets::getModel("bullet"), true);
 	ammo->setObject(ammoModel);
-	m_players[0]->setAmmunition(ammo);
+	m_players[0]->setAmmunition(ammo);*/
 
 	float length = 50;
 	float width = 10;

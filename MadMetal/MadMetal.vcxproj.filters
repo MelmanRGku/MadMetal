@@ -344,5 +344,11 @@
     <ClInclude Include="Objects\Audioable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game Logic\ControllableTemplate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Logic\AIControllable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
