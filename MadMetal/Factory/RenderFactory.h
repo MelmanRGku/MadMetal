@@ -1,5 +1,6 @@
 #pragma once
 #include "Objects\Model.h"
+#include "Global\Assets.h"
 
 class RenderFactory
 {

@@ -10,7 +10,7 @@ private:
 	PxVehicleDrive4W &m_car;
 
 public:
-	Car(PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
+	Car(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	~Car();
 
 	PxVehicleDrive4W &getCar();

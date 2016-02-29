@@ -39,7 +39,20 @@ public:
 		return collisionBox;
 	}
 
-	PxBase *makePhysicsObject(PhysicalObjects actorToMake, PxTransform *pos, PxGeometry *geom, PxMaterial *material, DrivingStyle *style)
+	void setFilterDataId(long id, PxRigidActor *actor) {
+		const PxU32 numShapes = actor->getNbShapes();
+		PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
+		actor->getShapes(shapes, numShapes);
+
+
+		for (PxU32 i = 0; i < numShapes; i++) {
+			PxFilterData filterData = shapes[i]->getQueryFilterData();
+			filterData.word2 = id;
+			shapes[i]->setQueryFilterData(filterData);
+		}
+	}
+		 
+	PxBase *makePhysicsObject(PhysicalObjects actorToMake, long objectId, PxTransform *pos, PxGeometry *geom, PxMaterial *material, DrivingStyle *style)
 	{
 		PxBase *toReturn = NULL;
 
@@ -48,12 +61,14 @@ public:
 		{
 			PxRigidStatic * wall = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
 			wall->createShape(*geom, *material);
+			setFilterDataId(objectId, wall);
 			toReturn = wall;
 			break;
 		}
 		case PHYSICAL_OBJECT_DRIVING_BOX:
 		{
 			PxRigidStatic * plane = createDrivingBox(material, *pos, geom);
+			setFilterDataId(objectId, plane);
 			toReturn = plane;
 			break;
 		}
@@ -63,6 +78,7 @@ public:
 			PxVehicleDrive4W *car = vc->create(style);
 			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
 			car->getRigidDynamicActor()->setGlobalPose(startTransform);
+			setFilterDataId(objectId, car->getRigidDynamicActor());
 			toReturn = car;
 			break;
 		}

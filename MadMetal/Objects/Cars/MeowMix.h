@@ -6,7 +6,7 @@
 class MeowMix : public Car, public HasWeapons
 {
 public:
-	MeowMix(PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
+	MeowMix(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	~MeowMix();
 
 	glm::vec3 getNextBulletPos();

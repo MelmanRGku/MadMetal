@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Factory\GameFactory.cpp" />
     <ClCompile Include="Files\FIleHandlingHelpers.cpp" />
     <ClCompile Include="Global\Fonts.cpp" />
     <ClCompile Include="Global\Assets.cpp" />

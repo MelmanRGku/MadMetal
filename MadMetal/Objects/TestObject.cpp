@@ -4,12 +4,13 @@
 #include <iostream>
 #include "Cars/Car.h"
 
-TestObject::TestObject(Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio)
+TestObject::TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio)
 : m_renderable(rable)
 , m_physicable(pable)
 , m_animatable(anable)
 , m_audioable(aable)
 , m_audio(audio)
+, id(id)
 {
 
 }

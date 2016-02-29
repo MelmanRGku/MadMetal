@@ -117,60 +117,6 @@ void GameSimulation::initialize() {
 	setupBasicGameWorldObjects();
 }
 
-PxFilterFlags testFilter(
-	PxFilterObjectAttributes attributes0, PxFilterData filterData0, 
-	PxFilterObjectAttributes attributes1, PxFilterData filterData1, 
-	PxPairFlags &pairFlags, const void *constantBlock, PxU32 constantBlockSize)
-{
-	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
-	{
-		std::cout << "Trigger Collision Occured \n";
-		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
-	}
-	else {
-		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
-		pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
-	}
-	return PxFilterFlag::eDEFAULT;
-}
-
-PxFilterFlags SampleVehicleFilterShader(
-	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
-	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
-	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
-{
-	PX_UNUSED(constantBlock);
-	PX_UNUSED(constantBlockSize);
-
-	// let triggers through
-	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
-	{
-		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
-		return PxFilterFlags();
-	}
-
-
-
-	// use a group-based mechanism for all other pairs:
-	// - Objects within the default group (mask 0) always collide
-	// - By default, objects of the default group do not collide
-	//   with any other group. If they should collide with another
-	//   group then this can only be specified through the filter
-	//   data of the default group objects (objects of a different
-	//   group can not choose to do so)
-	// - For objects that are not in the default group, a bitmask
-	//   is used to define the groups they should collide with
-	if ((filterData0.word0 != 0 || filterData1.word0 != 0) &&
-		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1))
-		return PxFilterFlag::eSUPPRESS;
-
-	pairFlags = PxPairFlag::eCONTACT_DEFAULT;
-
-	// The pairFlags for each object are stored in word2 of the filter data. Combine them.
-	pairFlags |= PxPairFlags(PxU16(filterData0.word2 | filterData1.word2));
-	return PxFilterFlags();
-}
-
 PxFilterFlags TestFilterShader(
 	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
 	PxFilterObjectAttributes attributes1, PxFilterData filterData1,

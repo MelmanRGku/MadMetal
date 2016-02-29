@@ -14,7 +14,7 @@
 class TestObject
 {
 protected:
-	//glm::vec3 position, rotation, scale, forward, up;
+	long id;
 	Renderable &m_renderable;
 	Physicable &m_physicable;
 	Animatable &m_animatable;
@@ -22,7 +22,7 @@ protected:
 	Audio& m_audio;
 
 public:
-	TestObject(Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
+	TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	virtual ~TestObject();
 
 	virtual void draw(Renderer *renderer);
@@ -33,5 +33,6 @@ public:
 	glm::vec3 getPosition();
 	void updateScale(glm::vec3 ds) { m_animatable.updateScale(ds); }
 	PxBounds3 getWorldBounds() { return m_physicable.getActor().getWorldBounds(); }
+	long getId() { return id; }
 };
 

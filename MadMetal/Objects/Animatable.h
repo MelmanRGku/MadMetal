@@ -6,7 +6,9 @@
 class Animatable
 {
 public:
-	Animatable() {}
+	Animatable() {
+		scale = glm::vec3(1, 1, 1);
+	}
 	virtual ~Animatable() {}
 
 	glm::mat4x4 getModelMatrix() {
