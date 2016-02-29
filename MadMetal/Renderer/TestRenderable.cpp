@@ -1,12 +1,12 @@
-#include "Renderable.h"
+#include "TestRenderable.h"
 
 
-Renderable::Renderable(Model* Model)
+TestRenderable::TestRenderable(Model* Model)
 {
 	m_model = Model;
 }
 
-void Renderable::setModel(Model *model, bool resize = false, bool reposition = false)
+void TestRenderable::setModel(Model *model, bool resize = false, bool reposition = false)
 {
 	this->model = model;
 

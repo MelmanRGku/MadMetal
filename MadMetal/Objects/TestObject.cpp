@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Cars/Car.h"
 
-TestObject::TestObject(Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio)
+TestObject::TestObject(Audioable &aable, Physicable &pable, Animatable &anable, TestRenderable &rable, Audio& audio)
 : m_renderable(rable)
 , m_physicable(pable)
 , m_animatable(anable)

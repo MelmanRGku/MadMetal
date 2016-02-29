@@ -109,7 +109,7 @@ void StackManager::readMailBox()
 		break;
 	case (SceneMessage::eGameSimulation) :
 		m_stack->clearStack();
-		m_stack->pushScene(new GameSimulation(*m_physicsCreator, m_mailBox->getPlayerTemplates(), *m_audio));
+		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), *m_audio));
 		break;
 
 	case (SceneMessage::ePause):
@@ -118,7 +118,7 @@ void StackManager::readMailBox()
 		
 	case (SceneMessage::eRestart):
 		m_stack->clearStack();
-		m_currentScene = m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), *m_audio));
+		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), *m_audio));
 		break;
 
 	case (SceneMessage::ePop) :
