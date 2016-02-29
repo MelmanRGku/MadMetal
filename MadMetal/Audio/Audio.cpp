@@ -10,13 +10,13 @@ void Audio::update()
 	int channelNum;
 
 
-	for (unsigned int i = 0; i < positionalSources.size(); i++)
+	for (unsigned int i = 0; i < m_audioSources.size(); i++)
 	{
 		
-		if (!Mix_Playing(channelNum = positionalSources[i].getChannelNum()))
+		if (!Mix_Playing(channelNum = m_audioSources[i].getChannelNum()))
 		{
 			std::cout << "removed a dynamic source \n";
-			positionalSources.erase(positionalSources.begin() + i);
+			m_audioSources.erase(m_audioSources.begin() + i);
 			
 
 		}
@@ -28,7 +28,8 @@ void Audio::update()
 		else 
 		{
 			//get position of dynamic source
-			positionalSources[i].getSourcePosition(sourceX, sourceY);
+
+			m_audioSources[i].getSourcePosition(sourceX, sourceY);
 			listener->getPosition(listenerX, listenerY);
 
 			//get distance in relation to listener

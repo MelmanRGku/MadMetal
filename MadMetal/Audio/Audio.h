@@ -4,36 +4,29 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#define NUM_CHANNELS 20
+#include "Objects\Object.h"
+#include "Sound.h"
+#define NUM_CHANNELS 50
 
-class PositionalAudioSource;
-
-class DummyPosition
-{
-private:
-	float xpos;
-	float ypos;
-
-public:
-	DummyPosition()
-	{
-		xpos = ypos = 0;
-	}
-	DummyPosition(float x, float y) : xpos(x), ypos(y){}
-
-	void getPosition(float &x, float &y);
-	void movePosition(float x, float y);
-	void setPosition(float x, float y);
-};
-
+class DynamicAudioSource;
 
 class Audio
 {
 private:
-	std::vector<PositionalAudioSource> positionalSources;
-	DummyPosition * listener;
+	std::vector<AudioSource> m_audioSources;
+	std::vector<Mix_Chunk *> m_library;
+	PxRigidActor * m_listener;
+
 
 public:
+
+	enum SourceType
+	{
+		eStaticLocation, //source doesn't move after started
+		eDynamicLocation, //source can move after starting
+		eInteractive //source may interupt after starting ie. braking?
+	};
+
 	Audio()
 	{
 		SDL_Init(SDL_INIT_AUDIO);
@@ -44,7 +37,7 @@ public:
 		}
 		//set max amount of channels to mix
 		Mix_AllocateChannels(NUM_CHANNELS);
-		listener = new DummyPosition(0,0);
+		
 	}
 
 	~Audio()
@@ -52,14 +45,14 @@ public:
 		Mix_CloseAudio();
 		SDL_Quit();
 	}
-	void assignListener(DummyPosition **listener);
+	void assignListener(PxRigidActor* listener);
 	void removeListener();
 	void stopSources();
 	void pauseSources();
 	void resumeSources();
+	void initialize();
+	bool queAudioSource(PxRigidActor * audioSource, Sound& toPlay, SourceType audioType, int loopCount = 0);
 	
-	bool quePositionalSource(DummyPosition **position);
-	bool queStaticSource(int sourceID);
 	void update();
 
 };
@@ -68,20 +61,20 @@ public:
 
 
 
-class PositionalAudioSource
+class AudioSource
 {
 private:
-	DummyPosition * audioSource = new DummyPosition();
-
-	int channelNum;
+	int &m_channelNum;
+	PxRigidActor * m_audioSource;
 public:
-	PositionalAudioSource(DummyPosition ** position, int channel) : channelNum(channel), audioSource(*position){}
-	~PositionalAudioSource(){}
+	AudioSource(PxRigidActor * source, int &channel) : m_audioSource(m_audioSource), m_channelNum(channel){}
+	~AudioSource(){ m_audioSource = NULL; }
 
 	int getChannelNum();
-	void getSourcePosition(float &x, float &y);
+	virtual bool updateAudio(PxRigidActor * listener);
 
 };
+
 
 
 

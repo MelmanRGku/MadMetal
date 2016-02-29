@@ -7,12 +7,12 @@ class Sound
 public:
 	Sound() {}
 	virtual ~Sound(){}
-	virtual int getIndex() = 0;
+	int getIndex() {
+		return m_index;
+	}
 
 protected: //members
 	int m_index;
-
-	
 };
 
 class AccelerationSound : public Sound
