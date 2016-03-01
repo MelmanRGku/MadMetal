@@ -21,7 +21,7 @@ GameSimulation::GameSimulation(vector<PlayerControllable *> humanPlayers, Audio&
 {
 	createPhysicsScene();
 
-	m_gameFactory = new GameFactory(*m_world, *m_scene, audioHandle);
+	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 
 	m_humanPlayers = humanPlayers;
 	for (int i = 0; i < humanPlayers.size(); i++)
@@ -137,10 +137,10 @@ PxFilterFlags TestFilterShader(
 
 	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
 	{
-		
+
 		if (filterData0.word0 & filterData1.word1 || filterData0.word1 & filterData1.word0)
 		{
-		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+			pairFlags = PxPairFlag::eNOTIFY_TOUCH_FOUND;
 			
 	}
 	}
@@ -148,7 +148,7 @@ PxFilterFlags TestFilterShader(
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		if (filterData0.word0 & filterData1.word1 || filterData0.word1 & filterData1.word0)
 		{
-		pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
+			pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND; 
 	}
 		
 
@@ -159,12 +159,21 @@ PxFilterFlags TestFilterShader(
 
 void GameSimulation::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
 {
-	
+	int i = 0;
+	PxShape *shapes[1];
+	pairHeader.actors[0]->getShapes(shapes, 1);
+	i = shapes[0]->getSimulationFilterData().word2;
+	std::cout << i << std::endl;
+	pairHeader.actors[1]->getShapes(shapes, 1);
+	i = shapes[0]->getSimulationFilterData().word2;
+	std::cout << i << std::endl;
 }
 
 
 void GameSimulation::onTrigger(PxTriggerPair* pairs, PxU32 count)
 {
+	
+	
 	//Player Interactions. Shouldn't really be anyother type
 	if (pairs->otherShape->getSimulationFilterData().word0 == PhysicsManager::PLAYER)
 	{
@@ -262,7 +271,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
-	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, NULL, NULL));
+	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, NULL, NULL, NULL));
 	m_humanPlayers[0]->setObject(meowMix);
 	m_mainCamera->setToFollow(meowMix);
 
@@ -278,8 +287,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	float dims = 200;
 
 	//Create the drivable geometry
-	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length));
-	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, -10, 0)), new PxBoxGeometry(dims, 0.5, dims));
+	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
+	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, -10, 0)), new PxBoxGeometry(dims, 0.5, dims), NULL);
 
 	// Create the collidable walls
 	/*PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));

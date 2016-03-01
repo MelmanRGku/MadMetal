@@ -22,4 +22,5 @@ public:
 	GamePad * getGamePad();
 	void setObject(Car * toAdd);
 	Car *getObject() { return m_car; }
+	void fire();
 };

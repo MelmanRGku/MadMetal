@@ -11,6 +11,7 @@ public:
 	enum RenderableObjects {
 		RENDERABLE_OBJECT_CAR,
 		RENDERABLE_OBJECT_PLANE,
+		RENDERABLE_OBJECT_BULLET,
 	};
 
 	
@@ -21,6 +22,8 @@ public:
 			return Assets::getModel("Ugly_Car");
 		case RENDERABLE_OBJECT_PLANE:
 			return Assets::getModel("plane");
+		case RENDERABLE_OBJECT_BULLET:
+			return Assets::getModel("bullet");
 		}
 	}
 	

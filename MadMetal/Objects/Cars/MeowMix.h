@@ -1,15 +1,12 @@
 #pragma once
 
 #include "Car.h"
-#include "../Weapons/HasWeapons.h"
 
-class MeowMix : public Car, public HasWeapons
+class MeowMix : public Car
 {
 public:
 	MeowMix(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	~MeowMix();
-
-	glm::vec3 getNextBulletPos();
 
 	void shoot();
 

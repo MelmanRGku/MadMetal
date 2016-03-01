@@ -14,5 +14,6 @@ public:
 	~Car();
 
 	PxVehicleDrive4W &getCar();
+	virtual void shoot() = 0;
 };
 

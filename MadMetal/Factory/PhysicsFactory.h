@@ -9,6 +9,7 @@ public:
 		PHYSICAL_OBJECT_CAR,
 		PHYSICAL_OBJECT_WALL,
 		PHYSICAL_OBJECT_DRIVING_BOX,
+		PHYSICAL_OBJECT_BULLET,
 	};
 
 public:
@@ -52,7 +53,7 @@ public:
 		}
 	}
 		 
-	PxBase *makePhysicsObject(PhysicalObjects actorToMake, long objectId, PxTransform *pos, PxGeometry *geom, PxMaterial *material, DrivingStyle *style)
+	PxBase *makePhysicsObject(PhysicalObjects actorToMake, long objectId, PxTransform *pos, PxGeometry *geom, PxMaterial *material, DrivingStyle *style, PxVec3 *velocity)
 	{
 		PxBase *toReturn = NULL;
 
@@ -80,6 +81,27 @@ public:
 			car->getRigidDynamicActor()->setGlobalPose(startTransform);
 			setFilterDataId(objectId, car->getRigidDynamicActor());
 			toReturn = car;
+			break;
+		}
+		case PHYSICAL_OBJECT_BULLET:
+		{
+			PxRigidDynamic * bullet = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+			PxFilterData simFilterData;
+			simFilterData.word0 = COLLISION_FLAG_BULLET;
+			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
+			//bullet->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
+			
+			bullet->createShape(PxBoxGeometry(1, 1, 2), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			setFilterDataId(objectId, bullet);
+			bullet->setLinearVelocity(*velocity);
+
+			PxShape* shapes[1];
+			bullet->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+			toReturn = bullet;
 			break;
 		}
 		}

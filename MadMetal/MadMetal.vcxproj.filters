@@ -323,9 +323,6 @@
     <ClInclude Include="Audio\Sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Weapons\HasWeapons.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\Cars\MeowMix.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -22,6 +22,10 @@ PlayerControllable::PlayerControllable(char * fileName, GamePad * gamePad)
 
 }
 
+void PlayerControllable::fire() {
+	m_car->shoot();
+}
+
 PlayerControllable::~PlayerControllable()
 {
 	m_gamePad = NULL;
@@ -65,15 +69,15 @@ void PlayerControllable::playFrame(double dt)
 			{
 
 				//m_car->getActor().setLinearVelocity(PxVec3(0, 0, -10));
-			}
+			}*/
 
 
 			if (m_gamePad->isPressed(GamePad::XButton))
 			{
-				std::cout << "Xpressed \n";
+				fire();
 			}
 
-			if (m_gamePad->isPressed(GamePad::YButton))
+			/*if (m_gamePad->isPressed(GamePad::YButton))
 			{
 				std::cout << "Ypressed \n";
 			}

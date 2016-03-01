@@ -3,6 +3,7 @@
 #include "TestObject.h"
 #include <iostream>
 #include "Cars/Car.h"
+#include "Factory\GameFactory.h"
 
 TestObject::TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio)
 : m_renderable(rable)
@@ -12,7 +13,6 @@ TestObject::TestObject(long id, Audioable &aable, Physicable &pable, Animatable 
 , m_audio(audio)
 , id(id)
 {
-
 }
 
 

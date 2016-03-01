@@ -62,7 +62,7 @@ public:
 	void setGameWorld(World * world);
 	void useSuper();
 	
-	void fire();
+	virtual void fire();
 	void takeDamage(float damage);
 	void receivePoints(float points);
 
