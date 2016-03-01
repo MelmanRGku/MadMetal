@@ -52,12 +52,13 @@ void PlayerControllable::playFrame(double dt)
 			{
 				std::cout << "Ypressed \n";
 			}
-
+			*/
 			if (m_gamePad->isPressed(GamePad::AButton))
 			{
-				std::cout << "Apressed \n";
+				
+			
 			}
-
+			/*
 			if (m_gamePad->isPressed(GamePad::BButton))
 			{
 				std::cout << "Bpressed \n";

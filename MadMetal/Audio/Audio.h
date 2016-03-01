@@ -8,25 +8,19 @@
 #include "Sound.h"
 #define NUM_CHANNELS 50
 
-class DynamicAudioSource;
+class AudioChannel;
+class Sound;
 
 class Audio
 {
 private:
-	std::vector<AudioSource> m_audioSources;
+	
 	std::vector<Mix_Chunk *> m_library;
 	PxRigidActor * m_listener;
 
 
 public:
-
-	enum SourceType
-	{
-		eStaticLocation, //source doesn't move after started
-		eDynamicLocation, //source can move after starting
-		eInteractive //source may interupt after starting ie. braking?
-	};
-
+	std::vector<AudioChannel *> m_audioChannels;
 	Audio()
 	{
 		SDL_Init(SDL_INIT_AUDIO);
@@ -37,7 +31,8 @@ public:
 		}
 		//set max amount of channels to mix
 		Mix_AllocateChannels(NUM_CHANNELS);
-		
+		//todo:: load from file?
+		initializeLibrary("");
 	}
 
 	~Audio()
@@ -45,14 +40,15 @@ public:
 		Mix_CloseAudio();
 		SDL_Quit();
 	}
-	void assignListener(PxRigidActor* listener);
+
+	void assignListener(PxRigidActor* listener) { m_listener = listener; }
 	void removeListener();
 	void stopSources();
+	void stopSource(int channel);
 	void pauseSources();
 	void resumeSources();
-	void initialize();
-	bool queAudioSource(PxRigidActor * audioSource, Sound& toPlay, SourceType audioType, int loopCount = 0);
-	
+	void initializeLibrary(char * fileToLoad);
+	void queAudioSource(PxRigidActor * sourcePosition, Sound& toPlay, int loopCount = 0);
 	void update();
 
 };
@@ -61,17 +57,22 @@ public:
 
 
 
-class AudioSource
+class AudioChannel
 {
 private:
-	int &m_channelNum;
-	PxRigidActor * m_audioSource;
+	int &m_channelNum; 
+	PxRigidActor * m_audioPosition;
 public:
-	AudioSource(PxRigidActor * source, int &channel) : m_audioSource(m_audioSource), m_channelNum(channel){}
-	~AudioSource(){ m_audioSource = NULL; }
+	AudioChannel(PxRigidActor * position, int &channel) : m_audioPosition(position), m_channelNum(channel){}
+	~AudioChannel()
+	{ 
+		m_channelNum = -1;
+		m_audioPosition = NULL;
+	}
 
-	int getChannelNum();
-	virtual bool updateAudio(PxRigidActor * listener);
+	int getChannelNum() { return m_channelNum; }
+	void setChannelNum(int channel) { m_channelNum = channel; }
+	bool updateAudio(PxRigidActor * listener);
 
 };
 

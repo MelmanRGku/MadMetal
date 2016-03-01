@@ -17,7 +17,7 @@
 using namespace std;
 bool gIsVehicleInAir = true;
 
-GameSimulation::GameSimulation(PhysicsManager& physicsInstance, vector<ControllableTemplate *> playerTemplates, Audio& audioHandle)
+GameSimulation::GameSimulation(PhysicsManager& physicsInstance, vector<ControllableTemplate *> playerTemplates, Audio* audioHandle)
 : m_physicsHandler(physicsInstance)
 {
 	createPhysicsScene();
@@ -30,6 +30,9 @@ GameSimulation::GameSimulation(PhysicsManager& physicsInstance, vector<Controlla
 		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
+			//test
+			
+			
 			//make a car for player based off template
 			m_humanPlayers.push_back(humanPlayer);
 			m_players.push_back(humanPlayer);
@@ -74,7 +77,7 @@ bool PxVehicleIsInAir(const PxVehicleWheelQueryResult& vehWheelQueryResults)
 
 void GameSimulation::simulatePhysics(double dt)
 {
-//	audio->update();
+
 	const PxF32 timestep = 1.0f / 60.0f;
 
 	//Raycasts.

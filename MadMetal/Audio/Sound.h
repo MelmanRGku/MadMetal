@@ -5,23 +5,48 @@
 class Sound
 {
 public:
-	Sound() {}
+	Sound() 
+	{
+		m_currentChannel = -1;
+	}
 	virtual ~Sound(){}
-	int getIndex() {
-		return m_index;
+
+	virtual int& getChannel()
+	{
+		return m_currentChannel;
 	}
 
+	virtual void setChannel(int channel)
+	{
+		m_currentChannel = channel;
+	}
+
+	virtual int getLibraryIndex() {
+		return m_libraryIndex;
+	}
+	
+
 protected: //members
-	int m_index;
+	int m_libraryIndex;
+	int m_currentChannel;
 };
 
 class AccelerationSound : public Sound
 {
 	AccelerationSound()
 	{
-		m_index = 1;
+		m_libraryIndex = 2;
 	};
 	virtual ~AccelerationSound(){};
-	int getIndex() { return m_index; };
-	
+};
+
+class CarIdleSound : public Sound
+{
+public:
+	CarIdleSound()
+	{
+		m_libraryIndex = 0;
+	};
+	virtual ~CarIdleSound(){};
+
 };

@@ -1,109 +1,62 @@
 #include "Audio.h"
 #include <iostream>
 
+//set up audio library
+void Audio::initializeLibrary(char * fileToLoad)
+{
+	//to do: make into a file parsing method? 
+	//to do: fill with sounds
+	Mix_Chunk * chunk = Mix_LoadWAV("Assets/Audio/car_idle.wav");
+	if (chunk == NULL)
+	{
+		std::cout << "ABORT \n";
+	}
+	m_library.push_back(chunk);
+
+	Mix_Chunk * chunk2 = Mix_LoadWAV("Assets/Audio/menu_sound_1.wav");
+	if (chunk == NULL)
+	{
+		std::cout << "ABORT \n";
+	}
+	m_library.push_back(chunk2);
+}
+
+
 void Audio::update()
 {
-	float listenerX;
-	float listenerY;
-	float sourceX;
-	float sourceY;
-	int channelNum;
-
-
-	for (unsigned int i = 0; i < m_audioSources.size(); i++)
+	
+	
+	for (unsigned int i = 0; i < m_audioChannels.size(); i++)
 	{
-		
-		if (!Mix_Playing(channelNum = m_audioSources[i].getChannelNum()))
+		if (!Mix_Playing(m_audioChannels[i]->getChannelNum()))
 		{
-			std::cout << "removed a dynamic source \n";
-			m_audioSources.erase(m_audioSources.begin() + i);
-			
-
+			delete m_audioChannels[i];
+			m_audioChannels.erase(m_audioChannels.begin() + i);
 		}
-		else if (Mix_Paused(channelNum))
+		else if (Mix_Paused(m_audioChannels[i]->getChannelNum()))
 		{
-			//do nothing
-			
+			//do nothing for now
 		}
 		else 
 		{
-			//get position of dynamic source
-
-			m_audioSources[i].getSourcePosition(sourceX, sourceY);
-			listener->getPosition(listenerX, listenerY);
-
-			//get distance in relation to listener
-			sourceX = sourceX - listenerX;
-			sourceY = sourceY - listenerY;
-			float distance = sqrt((powf(sourceX, 2) + powf(sourceY, 2)));
-			double angle;
-
-			//convert position of source relative to listener to SDL_Mixer orientation:
-			/*
-			0/360 - in front
-			90 - to the left
-			180 - behind
-			270 - to the left
-			*/
-
-			if (sourceX == 0)
-			{
-				if (sourceY < 0)
-					angle = 180;
-				else
-					angle = 0;
-			}
-			else
-			{
-				
-				angle = atan((sourceY / sourceX));
-				angle *= 180 / 3.14;
-
-				//convert to Mixer orientation
-				if (sourceX < 0)
-					angle =270 - angle;
-				else
-					angle = 90 - angle;
-			}
-
-			//------ remove later-----------
-			distance *= 190; // used for testing with analog joystick, remove when replacing with real object
-			distance = distance > 255 ? 255 : distance;
-			//-------------------------------
-
-			Mix_SetPosition(channelNum, Sint16(angle), Uint8(distance) );
-			
+			m_audioChannels[i]->updateAudio(m_listener);
 		}
 	}
 }
 
-
-bool Audio::quePositionalSource(DummyPosition **position)
+void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound& toPlay, int loopCount)
 {
+	//pass a refrence of the channel number in 'toPlay' to the audio channel 
+	//will allow channel changes to be mirrored in the toPlay bookmark
+	AudioChannel * toAdd = new AudioChannel(sourcePosition, toPlay.getChannel());
 
-	Mix_Chunk * chunk = Mix_LoadWAV("Assets/Audio/laugh.wav");
-	if (chunk == NULL)
-	{
-		return false;
-	}
+	//set the audio channel to the next available channel, and play the specified sound
+	toAdd->setChannelNum(Mix_PlayChannel(-1, m_library[toPlay.getLibraryIndex()], loopCount));
 
-	positionalSources.push_back(PositionalAudioSource(position, Mix_PlayChannel(-1, chunk, 0)));
-	return true;
+	//add new channel to the list of currently playing sounds
+	m_audioChannels.push_back(toAdd);
 }
 
-
-
-bool Audio::queStaticSource(int sourceID)
-{
-	Mix_Chunk * staticChunk = Mix_LoadWAV("Assets/Audio/menu_sound_1.wav");
-	if (staticChunk == NULL)
-	{
-		return false;
-	}
-
-	Mix_PlayChannel(-1, staticChunk, 0);
-	return true;
-}
 
 void Audio::pauseSources()
 {
@@ -117,36 +70,71 @@ void Audio::resumeSources()
 
 void Audio::stopSources()
 {
-		Mix_HaltChannel(-1);	
+	Mix_HaltChannel(-1);	
 }
 
-/////////////////////////// getter functions for positional audio source wrapper /////////////////////////
-void PositionalAudioSource::getSourcePosition(float &x, float &y)
+void Audio::stopSource(int channel)
 {
-	audioSource->getPosition(x, y);
+	Mix_HaltChannel(channel);
 }
 
-int PositionalAudioSource::getChannelNum()
+//todo:: need to incorporate forward vector into calculations!!
+
+bool AudioChannel::updateAudio(PxRigidActor * listener)
 {
-	return channelNum;
-}
+	float listenerX = 0 , listenerY =0, sourceX =0, sourceY =0;
+	if (listener != NULL)
+	{
+		listenerX = listener->getGlobalPose().p.x;
+		listenerY = listener->getGlobalPose().p.y;
+	}
+	if (m_audioPosition != NULL)
+	{
+		sourceX = m_audioPosition->getGlobalPose().p.x;
+		sourceY = m_audioPosition->getGlobalPose().p.y;
+	}
 
+	//get distance in relation to listener
+	sourceX = sourceX - listenerX;
+	sourceY = sourceY - listenerY;
+	float distance = sqrt((powf(sourceX, 2) + powf(sourceY, 2)));
+	distance = distance == 0 ? 0.1 : distance;
+	
+	double angle;
 
-/////////////////////////// Temp functions to simulate a positional object //////////////////////////
-void DummyPosition::getPosition(float &x, float &y)
-{
-	x = xpos;
-	y = ypos;
-}
+	//convert position of source relative to listener to SDL_Mixer orientation:
+	/*
+	0/360 - in front
+	90 - to the left
+	180 - behind
+	270 - to the left
+	*/
 
-void DummyPosition::movePosition(float x, float y)
-{
-	xpos += x;
-	ypos += y;
-}
-void DummyPosition::setPosition(float x, float y)
-{
-	xpos = x;
-	ypos = y;
-}
+	if (sourceX == 0)
+	{
+		if (sourceY < 0)
+			angle = 180;
+		else
+			angle = 0;
+	}
+	else
+	{
 
+		angle = atan((sourceY / sourceX));
+		angle *= 180 / 3.14;
+
+		//convert to Mixer orientation
+		if (sourceX < 0)
+			angle = 270 - angle;
+		else
+			angle = 90 - angle;
+	}
+
+	//------ remove later-----------
+	
+	distance = distance > 255 ? 255 : distance;
+	//-------------------------------
+	std::cout << distance << std::endl;
+	Mix_SetPosition(m_channelNum, Sint16(angle), Uint8(distance));
+	return true;
+}
