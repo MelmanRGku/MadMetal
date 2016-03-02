@@ -103,9 +103,10 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		glm::vec3 pos = parent->getFullPosition();
 		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET, objectId, new PxTransform(pos.x, pos.y, pos.z), NULL, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
 		animatable->setRotation(parent->getFullRotation());
+		animatable->updateScale(glm::vec3(-.5, -.5, -.5));
 		Physicable *physicable = new Physicable(physicalBullet);
 
-		TestObject *bullet = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+		Bullet *bullet = new Bullet(objectId, *audioable, *physicable, *animatable, *renderable, *audio, static_cast<Car *>(parent));
 
 		m_world.addGameObject(bullet);
 		m_scene.addActor(*physicalBullet);

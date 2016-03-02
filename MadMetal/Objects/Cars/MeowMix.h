@@ -8,8 +8,8 @@ public:
 	MeowMix(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	~MeowMix();
 
-	void shoot();
-
+	void fire();
+	void update(float dt);
 private:
 	enum LastWeaponShot {
 		LAST_WEAPON_SHOT_LEFT,

@@ -43,7 +43,7 @@ void PlayerControllable::playFrame(double dt)
 			}*/
 
 
-			if (m_gamePad->isPressed(GamePad::XButton))
+			if (m_gamePad->isHeld(GamePad::XButton))
 			{
 				m_car->fire();
 			}

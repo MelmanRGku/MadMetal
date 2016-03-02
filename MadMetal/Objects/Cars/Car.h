@@ -47,9 +47,10 @@ public:
 	
 	//void usePowerUp();
 	void useSuper();
-	void fire();
+	virtual void fire() = 0;
 	void takeDamage(float damage);
 	void increaseDamageDealt(float damage);
+	virtual void update(float dt);
 	
 	
 };

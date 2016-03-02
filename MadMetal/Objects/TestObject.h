@@ -37,5 +37,7 @@ public:
 	void updateScale(glm::vec3 ds) { m_animatable.updateScale(ds); }
 	PxBounds3 getWorldBounds() { return m_physicable.getActor().getWorldBounds(); }
 	long getId() { return id; }
+	virtual void update(float dt) {}
+	PxRigidActor &getActor() { return m_physicable.getActor(); }
 };
 

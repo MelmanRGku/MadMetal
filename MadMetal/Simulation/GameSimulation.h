@@ -15,7 +15,7 @@ class WayPointSystem;
 class VehicleSceneQueryData; 
 class ObjModelLoader;
 
-class GameSimulation : public Scene, public PxSimulationEventCallback{
+class GameSimulation : public Scene{
 private:
 	void simulatePhysics(double dt);
 
@@ -49,13 +49,5 @@ public:
 	void initialize();
 
 	void setupBasicGameWorldObjects();
-
-	void	onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs);
-			
-	void	onTrigger(PxTriggerPair* pairs, PxU32 count);
-		
-	virtual void							onConstraintBreak(PxConstraintInfo*, PxU32) {}
-	virtual void							onWake(PxActor**, PxU32) {}
-	virtual void							onSleep(PxActor**, PxU32){}
 	
 };

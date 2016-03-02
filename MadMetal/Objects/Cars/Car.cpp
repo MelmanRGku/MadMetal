@@ -37,44 +37,11 @@ void Controllable::pickUpPowerUp(PowerUpType type)
 }
 */
 
-void Car::fire()
-{
-	m_reloadRemaining = 0;
-	if (m_reloadRemaining > 0)
-		return;
-
-
-	GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET, new PxTransform(getFullPosition().x, getFullPosition().y, getFullPosition().z), NULL, this);
-
-	/*if (m_superDurationRemaining > 0)
-	{
-		if (m_activePowerUp.getType() == ATTACK)
-		{
-			//spawn a super projectile with vampiric callback
-		}
-
-		else {
-			//spawn a super projectile
-		}
-	}
-	else {
-		if (m_activePowerUp.getType() == ATTACK)
-		{
-			//spawn a regular projectile with vampiric callback
-		}
-
-		else {
-			//spawn a regular projectile
-		}
-	}
-	*/
-
-}
-
 void Car::takeDamage(float damage)
 {
 	//car set to dead will be dealt with in the update function
 	m_currentHealth -= damage;
+	std::cout << "Oh no, my health just decreased to " << m_currentHealth << std::endl;
 }
 
 void Car::increaseDamageDealt(float damage)
@@ -119,4 +86,8 @@ void Car::updateSuper(float dt)
 		}
 
 	}
+}
+
+void Car::update(float dt) {
+	m_reloadRemaining -= dt;
 }

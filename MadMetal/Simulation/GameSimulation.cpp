@@ -11,6 +11,7 @@
 #include "Objects/RenderableObject.h"
 #include "PhysicsManager.h"
 #include "Objects\ObjectCreators\VehicleCreator.h"
+#include "CollisionManager.h"
 
 #define NUM_OF_PLAYERS 8
 
@@ -20,7 +21,7 @@ bool gIsVehicleInAir = true;
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle)
 {
 	createPhysicsScene();
-
+	audioHandle.queStaticSource(1);
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 
 	//create characters for game from templates
@@ -115,6 +116,7 @@ void GameSimulation::simulatePlayers(double dt)
 void GameSimulation::updateObjects(double dt) {
 
 	m_mainCamera->update(dt);
+	m_world->update(dt);
 
 }
 
@@ -162,41 +164,13 @@ PxFilterFlags TestFilterShader(
 }
 
 
-void GameSimulation::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
-{
-	/*int i = 0;
-	PxShape *shapes[1];
-	pairHeader.actors[0]->getShapes(shapes, 1);
-	i = shapes[0]->getSimulationFilterData().word2;
-	std::cout << i << std::endl;
-	pairHeader.actors[1]->getShapes(shapes, 1);
-	i = shapes[0]->getSimulationFilterData().word2;
-	std::cout << i << std::endl;*/
-}
-
-
-void GameSimulation::onTrigger(PxTriggerPair* pairs, PxU32 count)
-{
-	
-	std::cout << "JI" << std::endl;
-	//Player Interactions. Shouldn't really be anyother type
-	if (pairs->otherShape->getSimulationFilterData().word0 == PhysicsManager::PLAYER)
-	{
-		/*
-		PlayerControllable * player = m_players[pairs->otherShape->getSimulationFilterData().word2];
-		//std::cout << "hit waypoint " << pairs[0].triggerShape->getSimulationFilterData().word2 << std::endl;
-		player->setWayPoint(m_wayPoints->getWayPointAt(pairs[0].triggerShape->getSimulationFilterData().word2),
-			pairs[0].triggerShape->getSimulationFilterData().word3 == 1); // is it the finish line?
-		*/
-	}
-}
-
-
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(PhysicsManager::getScale());
 	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
-	sceneDesc.simulationEventCallback = this;
+
+	//sceneDesc.simulationEventCallback = manager;
+
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 
 	if (!sceneDesc.filterShader)
@@ -209,6 +183,9 @@ void GameSimulation::createPhysicsScene()
 	{
 		std::cout << "The scene is a lie. ERROR CODE: PX0005" << std::endl;
 	}
+
+	CollisionManager *manager = new CollisionManager(*m_world, *m_scene);
+	m_scene->setSimulationEventCallback(manager);
 
 	PxInitVehicleSDK(PhysicsManager::getPhysicsInstance());
 	PxVehicleSetBasisVectors(PxVec3(0, 1, 0), PxVec3(0, 0, 1));
@@ -277,7 +254,6 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 	

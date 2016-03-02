@@ -20,5 +20,7 @@ public:
 	std::vector<TestObject*> * getGameObjects()	{ return gameObjects; }
 	void addGameObject(TestObject *obj) { gameObjects->push_back(obj); }
 	TestObject *findObject(long id);
+	void deleteObject(long id);
+	void update(float dt);
 };
 

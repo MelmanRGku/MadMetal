@@ -12,6 +12,7 @@
 #include "Renderer\Renderable.h"
 #include "Objects\DrivingStyleFast.h"
 #include "Objects\Cars\MeowMix.h"
+#include "Objects\Bullet.h"
 
 class GameFactory
 {

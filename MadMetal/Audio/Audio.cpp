@@ -94,13 +94,14 @@ bool Audio::quePositionalSource(DummyPosition **position)
 
 bool Audio::queStaticSource(int sourceID)
 {
-	Mix_Chunk * staticChunk = Mix_LoadWAV("Assets/Audio/menu_sound_1.wav");
+	Mix_Music * staticChunk = Mix_LoadMUS("Assets/Audio/smb_mariodie.wav");
 	if (staticChunk == NULL)
 	{
+		std::cout << Mix_GetError() << std::endl;
 		return false;
 	}
 
-	Mix_PlayChannel(-1, staticChunk, 0);
+	Mix_PlayMusic(staticChunk, -1);
 	return true;
 }
 

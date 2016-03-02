@@ -74,6 +74,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\Bullet.cpp" />
+    <ClCompile Include="Simulation\CollisionManager.cpp" />
     <ClCompile Include="Factory\GameFactory.cpp" />
     <ClCompile Include="Files\FIleHandlingHelpers.cpp" />
     <ClCompile Include="Global\Fonts.cpp" />
@@ -84,7 +86,6 @@
     <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp" />
     <ClCompile Include="Objects\TestObject.cpp" />
-    <ClCompile Include="Renderer\Renderable.cpp" />
     <ClCompile Include="Renderer\Renderable.cpp" />
     <ClCompile Include="Simulation\GameSimulationDefinitions.cpp" />
     <ClCompile Include="Simulation\LoadingScreen.cpp" />
@@ -127,6 +128,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Objects\Bullet.h" />
+    <ClInclude Include="Simulation\CollisionManager.h" />
     <ClInclude Include="Factory\AudioFactory.h" />
     <ClInclude Include="Factory\GameFactory.h" />
     <ClInclude Include="Factory\PhysicsFactory.h" />
