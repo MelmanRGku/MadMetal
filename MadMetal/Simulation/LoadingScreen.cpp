@@ -4,8 +4,8 @@
 LoadingScreen::LoadingScreen(SceneMessage& toDeliver)
 {
 
-	m_mainCamera = new Camera();
-	m_mainCamera->setLookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -3), glm::vec3(0, 1, 0));
+	
+	m_defaultSceneCamera->setLookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -3), glm::vec3(0, 1, 0));
 	m_toDeliver = toDeliver;
 
 	createProgressBar();

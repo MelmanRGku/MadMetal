@@ -20,6 +20,7 @@ bool gIsVehicleInAir = true;
 GameSimulation::GameSimulation(PhysicsManager& physicsInstance, vector<ControllableTemplate *> playerTemplates, Audio* audioHandle)
 : m_physicsHandler(physicsInstance)
 {
+	std::cout << "GameSimulation pushed onto the stack \n";
 	createPhysicsScene();
 
 	//m_gameFactory = new GameFactory(*m_world, *m_scene, physicsInstance, audioHandle);
@@ -30,12 +31,13 @@ GameSimulation::GameSimulation(PhysicsManager& physicsInstance, vector<Controlla
 		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
-			//test
-			
-			
-			//make a car for player based off template
+			//todo: make a car for player based off template
 			m_humanPlayers.push_back(humanPlayer);
 			m_players.push_back(humanPlayer);
+
+			//pass players camera to scene cameras
+			m_sceneCameras.push_back(humanPlayer->getCamera());
+
 		}
 		else {
 			m_players.push_back(new AIControllable(*playerTemplates[i]));
@@ -123,7 +125,7 @@ void GameSimulation::simulatePlayers(double dt)
 
 void GameSimulation::updateObjects(double dt) {
 
-	m_mainCamera->update(dt);
+	//do stuff
 
 	}
 
@@ -367,7 +369,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	gVehicleOrderProgress = 0;
 	obj->setCar(car);
 	m_humanPlayers[0]->setCar(obj);
-	m_mainCamera = m_humanPlayers[0]->getCamera();
+	
 	
 
 

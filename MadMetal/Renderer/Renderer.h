@@ -6,6 +6,7 @@
 #include "..\Objects\RenderableObject.h"
 #include "Renderable.h"
 #include "ShaderProgram.h"
+#include "Objects\Camera.h"
 
 class RenderableObject;
 
@@ -20,6 +21,7 @@ public:
 	void setShader(ShaderProgram *sp) { shader = sp; }
 	void draw(Renderable *object);
 	void draw(std::vector<Object *> *objects);
+	void setViewMatrixLookAt(std::vector<Camera *> cameras);
 	void setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt);
 	void startDrawing();
 	void stopDrawing();

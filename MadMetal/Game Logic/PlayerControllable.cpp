@@ -6,7 +6,7 @@
 void PlayerControllable::setCar(Car * toAdd) 
 { 
 	m_car = toAdd; 
-	m_camera = new Camera(toAdd);
+	m_camera->setToFollow(toAdd);
 	
 }
 
@@ -14,6 +14,8 @@ GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
 
 void PlayerControllable::playFrame(double dt)
 {
+	m_camera->update(dt);
+
 	if (m_gamePad != NULL && m_gamePad->checkConnection())
 	{
 			/*

@@ -145,29 +145,22 @@ void StackManager::progressScene(int newTime)
 	m_input->updateGamePads(dt);
 
 	//update Audio
-	
 	m_audio->update();
 	
-
 	//progress the state of the top scene on the stack
 	m_newMessage = m_stack->getTopScene()->simulateScene(dt, *m_mailBox);
-	Scene * currentScene = m_stack->getTopScene();
-	if (currentScene->getMainCamera() != NULL)
-	{
-		
-		m_renderer->setViewMatrixLookAt(
-			currentScene->getMainCamera()->getPosition(),
-			currentScene->getMainCamera()->getUpVector(),
-			currentScene->getMainCamera()->getLookAt()
-			);
-	}
-	m_renderer->draw(currentScene->getWorld()->getGameObjects());
+
+	
+	//get cameras from the scene
+	m_renderer->setViewMatrixLookAt(m_stack->getTopScene()->getSceneCameras());
+	//get objects from the scene and draw
+	m_renderer->draw(m_stack->getTopScene()->getWorld()->getGameObjects());
+
 	//check if the scene return a message for manager
 	if (m_newMessage)
 	{
 		m_newMessage = false;
 		readMailBox();
-		
 	}
 }
 

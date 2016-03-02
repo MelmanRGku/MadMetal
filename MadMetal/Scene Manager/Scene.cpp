@@ -9,7 +9,6 @@ MainMenuScene::MainMenuScene(Input * input)
 	m_currentSelection = 0;
 	m_selections[0] = SceneMessage::eSingleCharSelect;
 	m_selections[1] = SceneMessage::eMultiCharSelect;
-	
 
 }
 

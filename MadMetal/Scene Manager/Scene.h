@@ -64,22 +64,38 @@ protected:
 	bool m_isPaused;
 	SceneMessage * m_message;
 	World *m_world;
-	Camera * m_mainCamera;
+	Camera * m_defaultSceneCamera;
+	std::vector<Camera *> m_sceneCameras;
 
 public:
 	Scene() {
 		m_world = new World();
-		m_mainCamera = new Camera(); //dummy camera?
+		m_defaultSceneCamera = new Camera();
 	}
 
 	virtual ~Scene() {
-		delete m_mainCamera;
+
+		delete m_defaultSceneCamera;
 		delete m_world;
+
+		for (int i = 0; i < m_sceneCameras.size(); i++)
+		{
+			m_sceneCameras[i] == NULL;
+		}
+		m_sceneCameras.clear();
 	}
 	virtual bool simulateScene(double dt, SceneMessage &newMessage) = 0;
 
 	World* getWorld() { return m_world; }
-	Camera* getMainCamera() { return m_mainCamera; }
+
+	std::vector<Camera *> getSceneCameras() 
+	{
+		if (m_sceneCameras.size() == 0)
+		{
+			m_sceneCameras.push_back(m_defaultSceneCamera);
+		}
+		return m_sceneCameras; 
+	}
 	//virtual void loadFromFile();
 };
 
