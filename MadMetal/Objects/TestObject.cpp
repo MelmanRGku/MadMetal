@@ -3,15 +3,16 @@
 #include "TestObject.h"
 #include <iostream>
 #include "Cars/Car.h"
+#include "Factory\GameFactory.h"
 
-TestObject::TestObject(Audioable &aable, Physicable &pable, Animatable &anable, TestRenderable &rable, Audio& audio)
+TestObject::TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio)
 : m_renderable(rable)
 , m_physicable(pable)
 , m_animatable(anable)
 , m_audioable(aable)
 , m_audio(audio)
+, id(id)
 {
-
 }
 
 
@@ -20,7 +21,13 @@ TestObject::~TestObject()
 }
 
 glm::mat4x4 TestObject::getModelMatrix() {
-	return m_physicable.getPhysicsModelMatrix() * m_animatable.getModelMatrix();
+	return m_physicable.getPhysicsModelMatrix() * m_animatable.getModelMatrix() * m_renderable.getInitialModelMatrix();
+}
+
+
+glm::vec3 TestObject::getFullRotation() { 
+	PxQuat rotation = m_physicable.getActor().getGlobalPose().q;
+	return glm::eulerAngles(glm::quat(rotation.w, rotation.x, rotation.y, rotation.z)) + m_animatable.getRotation(); 
 }
 
 void TestObject::draw(Renderer *renderer)
@@ -54,3 +61,7 @@ void TestObject::draw(Renderer *renderer)
 	}
 }
 
+glm::vec3 TestObject::getPosition() {
+	PxVec3 pos = m_physicable.getActor().getGlobalPose().p;
+	return glm::vec3(pos.x, pos.y, pos.z);
+}

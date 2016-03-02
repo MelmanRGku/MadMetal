@@ -45,7 +45,7 @@ glm::mat4x4 RenderableObject::getModelMatrix() {
 
 void RenderableObject::setModel(Model *model, bool resize, bool reposition)
 {
-	this->model = model;
+	m_model = model;
 
 	if (model != NULL) {
 		if (resize) {

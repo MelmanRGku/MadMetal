@@ -49,6 +49,6 @@ void LoadingScreen::createProgressBar() {
 	bar = new LoadingBar(glm::vec3(5, 1, 1), glm::vec3(0, -2, -10), progressModel);
 	bar->setModel(barModel, true, true);
 
-	m_world->addGameObject(bar);
+//	m_world->addGameObject(bar);
 	delete loader;
 }

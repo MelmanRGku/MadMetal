@@ -21,7 +21,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 {
 	createPhysicsScene();
 
-	//m_gameFactory = new GameFactory(*m_world, *m_scene, physicsInstance, audioHandle);
+	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 
 	//create characters for game from templates
 	for (int i = 0; i < playerTemplates.size(); i++)
@@ -78,7 +78,7 @@ void GameSimulation::simulatePhysics(double dt)
 
 	//Raycasts.
 	
-	PxVehicleWheels* vehicles[1] = { car };
+	PxVehicleWheels* vehicles[1] = { &m_humanPlayers[0]->getCar()->getCar() };
 	PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
 	const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
 	PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
@@ -86,11 +86,11 @@ void GameSimulation::simulatePhysics(double dt)
 	//Vehicle update.
 	const PxVec3 grav = m_scene->getGravity();
 	PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
-	PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, car->mWheelsSimData.getNbWheels() } };
+	PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, m_humanPlayers[0]->getCar()->getCar().mWheelsSimData.getNbWheels() } };
 	PxVehicleUpdates(timestep, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
 	//Work out if the vehicle is in the air.
-	gIsVehicleInAir = car->getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
+	gIsVehicleInAir = m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
 
 	m_scene->simulate(timestep);
 	m_scene->fetchResults(true);
@@ -116,64 +116,10 @@ void GameSimulation::updateObjects(double dt) {
 
 	m_mainCamera->update(dt);
 
-	}
+}
 
 void GameSimulation::initialize() {
 	setupBasicGameWorldObjects();
-}
-
-PxFilterFlags testFilter(
-	PxFilterObjectAttributes attributes0, PxFilterData filterData0, 
-	PxFilterObjectAttributes attributes1, PxFilterData filterData1, 
-	PxPairFlags &pairFlags, const void *constantBlock, PxU32 constantBlockSize)
-{
-	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
-	{
-		std::cout << "Trigger Collision Occured \n";
-		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
-	}
-	else {
-		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
-		pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
-	}
-	return PxFilterFlag::eDEFAULT;
-}
-
-PxFilterFlags SampleVehicleFilterShader(
-	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
-	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
-	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
-{
-	PX_UNUSED(constantBlock);
-	PX_UNUSED(constantBlockSize);
-
-	// let triggers through
-	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
-	{
-		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
-		return PxFilterFlags();
-	}
-
-
-
-	// use a group-based mechanism for all other pairs:
-	// - Objects within the default group (mask 0) always collide
-	// - By default, objects of the default group do not collide
-	//   with any other group. If they should collide with another
-	//   group then this can only be specified through the filter
-	//   data of the default group objects (objects of a different
-	//   group can not choose to do so)
-	// - For objects that are not in the default group, a bitmask
-	//   is used to define the groups they should collide with
-	if ((filterData0.word0 != 0 || filterData1.word0 != 0) &&
-		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1))
-		return PxFilterFlag::eSUPPRESS;
-
-	pairFlags = PxPairFlag::eCONTACT_DEFAULT;
-
-	// The pairFlags for each object are stored in word2 of the filter data. Combine them.
-	pairFlags |= PxPairFlags(PxU16(filterData0.word2 | filterData1.word2));
-	return PxFilterFlags();
 }
 
 PxFilterFlags TestFilterShader(
@@ -199,7 +145,7 @@ PxFilterFlags TestFilterShader(
 		
 		if (filterData0.word0 & filterData1.word1 || filterData0.word1 & filterData1.word0)
 		{
-		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+			pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
 			
 	}
 	}
@@ -218,12 +164,21 @@ PxFilterFlags TestFilterShader(
 
 void GameSimulation::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
 {
-	
+	/*int i = 0;
+	PxShape *shapes[1];
+	pairHeader.actors[0]->getShapes(shapes, 1);
+	i = shapes[0]->getSimulationFilterData().word2;
+	std::cout << i << std::endl;
+	pairHeader.actors[1]->getShapes(shapes, 1);
+	i = shapes[0]->getSimulationFilterData().word2;
+	std::cout << i << std::endl;*/
 }
 
 
 void GameSimulation::onTrigger(PxTriggerPair* pairs, PxU32 count)
 {
+	
+	std::cout << "JI" << std::endl;
 	//Player Interactions. Shouldn't really be anyother type
 	if (pairs->otherShape->getSimulationFilterData().word0 == PhysicsManager::PLAYER)
 	{
@@ -258,6 +213,17 @@ void GameSimulation::createPhysicsScene()
 	PxInitVehicleSDK(PhysicsManager::getPhysicsInstance());
 	PxVehicleSetBasisVectors(PxVec3(0, 1, 0), PxVec3(0, 0, 1));
 	PxVehicleSetUpdateMode(PxVehicleUpdateMode::eVELOCITY_CHANGE);
+
+
+	PxMaterial* mMaterial;
+	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
+
+	//Create the batched scene queries for the suspension raycasts.
+	gVehicleSceneQueryData = VehicleSceneQueryData::allocate(NUM_OF_PLAYERS, PX_MAX_NB_WHEELS, NUM_OF_PLAYERS, *PhysicsManager::getAllocator());
+	gBatchQuery = VehicleSceneQueryData::setUpBatchedSceneQuery(0, *gVehicleSceneQueryData, m_scene);
+
+	//Create the friction table for each combination of tire and surface type.
+	gFrictionPairs = createFrictionPairs(mMaterial);
 }
 
 
@@ -311,53 +277,13 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-	PhysicsObjectCreator *physicsObjectCreator = new PhysicsObjectCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 
-	Car *obj = new MeowMix();
-	obj->setModel(Assets::getModel("Ugly_Car"), true, true);
-	m_world->addGameObject(obj);
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
-	if (!mMaterial)
-	{
-		std::cout << "Material failed to create. ERROR CODE: PX0006" << std::endl;
-	}
-
-	//Create the batched scene queries for the suspension raycasts.
-	gVehicleSceneQueryData = VehicleSceneQueryData::allocate(1, PX_MAX_NB_WHEELS, 1, *PhysicsManager::getAllocator());
-	gBatchQuery = VehicleSceneQueryData::setUpBatchedSceneQuery(0, *gVehicleSceneQueryData, m_scene);
-
-	//Create the friction table for each combination of tire and surface type.
-	gFrictionPairs = createFrictionPairs(mMaterial);
-
-	//Create a vehicle that will drive on the plane.
-	VehicleCreator *vc = new VehicleCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
-	obj->getDrivingStyle().setChassisMaterial(mMaterial);
-	obj->getDrivingStyle().setWheelMaterial(mMaterial);
-	car = vc -> create(&obj->getDrivingStyle());
-	PxTransform startTransform(PxVec3(0, 3 + (obj->getDrivingStyle().getChassisDimensions().y*0.5f + obj->getDrivingStyle().getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
-	car->getRigidDynamicActor()->setGlobalPose(startTransform);
-	car->getRigidDynamicActor()->createShape(PxBoxGeometry(car->getRigidDynamicActor()->getWorldBounds().getDimensions().x /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().y /2, car->getRigidDynamicActor()->getWorldBounds().getDimensions().z /2), *mMaterial);
-	m_scene->addActor(*car->getRigidDynamicActor());
-
-	//Set the vehicle to rest in first gear.
-	//Set the vehicle to use auto-gears.
-	car->setToRestState();
-	car->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
-	car->mDriveDynData.setUseAutoGears(true);
-	//std::cout << car->getRigidDynamicActor()->getWorldBounds().getDimensions().y << " " << car->getRigidDynamicActor()->getWorldBounds().minimum.y << " " << car->getRigidDynamicActor()->getWorldBounds().maximum.y << std::endl;
-	//obj->updatePosition(glm::vec3(0, -car->getRigidDynamicActor()->getWorldBounds().getDimensions().y / 2 , 0));
-	int k = (int)car->mWheelsSimData.getWheelData(0).mRadius * 2;
-	obj->updateScale(glm::vec3(car->getRigidDynamicActor()->getWorldBounds().getDimensions().x, car->getRigidDynamicActor()->getWorldBounds().getDimensions().y + k, car->getRigidDynamicActor()->getWorldBounds().getDimensions().z));
-	//	gVehicleInputData.setDigitalAccel(true); TOMS TODO
-
-	gVehicleModeTimer = 0.0f;
-	gVehicleOrderProgress = 0;
-	obj->setCar(car);
-	m_humanPlayers[0]->setCar(obj);
-	m_mainCamera = m_humanPlayers[0]->getCamera();
 	
-	
+	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, NULL, NULL, NULL));
+	m_humanPlayers[0]->setCar(meowMix);
+	m_mainCamera->setToFollow(meowMix);
 
 	/*Projectile * ammo = new Projectile("");
 	RenderableObject *ammoModel = new RenderableObject();
@@ -371,12 +297,11 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	float dims = 200;
 
 	//Create the drivable geometry
-	PxRigidStatic * floor = physicsObjectCreator->createDrivingBox(mMaterial, PxTransform(PxVec3(0, 0, 0)), PxBoxGeometry(width, 0.5, length));
-	m_scene->addActor(*floor);
-
+	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
+	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, -10, 0)), new PxBoxGeometry(dims, 0.5, dims), NULL);
 
 	// Create the collidable walls
-	PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));
+	/*PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));
 	leftWall->createShape(PxBoxGeometry(0.5, width, length), *mMaterial);
 	m_scene->addActor(*leftWall);
 	PxRigidStatic * rightWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(-width, width, 0));
@@ -386,9 +311,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	frontWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
 	m_scene->addActor(*frontWall);
 
-	PxRigidStatic * ground = physicsObjectCreator->createDrivingBox(mMaterial, PxTransform(PxVec3(0, -10, 0)), PxBoxGeometry(dims, 0.5, dims));
-	m_scene->addActor(*ground);
-	
 
 	RenderableObject * FrontPlane = new RenderableObject();
 	FrontPlane->setModel(Assets::getModel("plane"), true, true);
@@ -396,17 +318,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	FrontPlane->setActor(frontWall);
 	FrontPlane->updateRotation(glm::vec3(3.14 / 2, 0, 0));
 	m_world->addGameObject(FrontPlane);
-	//draw the floor
-	RenderableObject * drawPlane = new RenderableObject();
-	drawPlane->setModel(Assets::getModel("plane"));
-	drawPlane->setActor(floor);
-	m_world->addGameObject(drawPlane);
-
-	RenderableObject * groundPlane = new RenderableObject();
-	groundPlane->setModel(Assets::getModel("plane"), true, true);
-	groundPlane->updateScale(glm::vec3(glm::vec3(ground->getWorldBounds().getDimensions().x, 1, ground->getWorldBounds().getDimensions().z)));
-	groundPlane->setActor(ground);
-	m_world->addGameObject(groundPlane);
 
 	RenderableObject * leftPlane = new RenderableObject();
 	leftPlane->setModel(Assets::getModel("plane"));
@@ -420,16 +331,16 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	RightPlane->setActor(rightWall);
 	RightPlane->updateRotation(glm::vec3(0, 0, 3.14 / 2));
 	m_world->addGameObject(RightPlane);
-
+	*/
 
 
 	//drawthe finish line
-	RenderableObject * finishLine = new RenderableObject();
+	/*RenderableObject * finishLine = new RenderableObject();
 	finishLine->setModel(Assets::getModel("finishLine"));
-	m_world->addGameObject(finishLine);
+	m_world->addGameObject(finishLine);*/
 
 	//create a bounding box for storm tropper to run into
-	PxRigidStatic *boundVolume = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length - 5));
+	/*PxRigidStatic *boundVolume = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length - 5));
 	PxShape* aSphereShape = boundVolume->createShape(PxBoxGeometry(PxVec3(2, 5, 3)), *mMaterial);
 	aSphereShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
 	aSphereShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
@@ -447,19 +358,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	positions.push_back(glm::vec3(0, 0, -40));
 	positions.push_back(glm::vec3(0, 0, -20));
 	positions.push_back(glm::vec3(0, 0, 0));
-	positions.push_back(glm::vec3(0, 0, 20));
-
-	//--------------------TEST 3------------------------------------------------------------------------------------------------
-	/*
-	ObjectUpdaterSequence *upd1 = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
-	upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, 0.5, 0), 1));
-	upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, -1, 0), 2));
-	upd1->addObjectUpdater(new ObjectPositionUpdater(obj, glm::vec3(0, 0.5, 0), 1));
-
-	ObjectUpdaterParallel *upd = new ObjectUpdaterParallel(ObjectUpdaterSequence::TYPE_INFINITE);
-	upd->addObjectUpdater(upd1);
-	upd->addObjectUpdater(new ObjectRotationUpdater(obj, glm::vec3(0, 180, 0), 1, ObjectRotationUpdater::ANGLE_TYPE_DEGREES));
-	updaters.push_back(upd);*/
+	positions.push_back(glm::vec3(0, 0, 20));*/
 	
 }
 

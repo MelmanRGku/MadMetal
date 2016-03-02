@@ -4,10 +4,10 @@
 
 // assign car to player and set camera to follow it
 void PlayerControllable::setCar(Car * toAdd) 
-{ 
+{
 	m_car = toAdd; 
 	m_camera = new Camera(toAdd);
-	
+
 }
 
 GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
@@ -40,15 +40,15 @@ void PlayerControllable::playFrame(double dt)
 			{
 
 				//m_car->getActor().setLinearVelocity(PxVec3(0, 0, -10));
-			}
+			}*/
 
 
 			if (m_gamePad->isPressed(GamePad::XButton))
 			{
-				std::cout << "Xpressed \n";
+				m_car->fire();
 			}
 
-			if (m_gamePad->isPressed(GamePad::YButton))
+			/*if (m_gamePad->isPressed(GamePad::YButton))
 			{
 				std::cout << "Ypressed \n";
 			}
@@ -79,45 +79,44 @@ void PlayerControllable::playFrame(double dt)
 
 			if (m_gamePad->getRightTrigger())
 			{
-				if (m_car->getCar()->mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
+				if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
 				{
-					m_car->getCar()->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
+					m_car->getCar().mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 				}
-				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getRightTrigger());
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getRightTrigger());
 			} 
 			else if (m_gamePad->getLeftTrigger())
-			{
-				m_car->getCar()->mDriveDynData.forceGearChange(PxVehicleGearsData::eREVERSE);
-				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getLeftTrigger());
+				{
+				m_car->getCar().mDriveDynData.forceGearChange(PxVehicleGearsData::eREVERSE);
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getLeftTrigger());
 			}
 			else 
 			{
-				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
 			}
 
 			if (m_gamePad->getLeftStick().x)
 			{
 				if (m_gamePad->getLeftStick().x < 0) 
 				{
-					m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
-					m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, m_gamePad->getLeftStick().x);
-				}
+					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
+					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, m_gamePad->getLeftStick().x);
+			}
 
 				if (m_gamePad->getLeftStick().x > 0)
 				{
-					m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
-					m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, -m_gamePad->getLeftStick().x);
+					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
+					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, -m_gamePad->getLeftStick().x);
 				}
 			}
 			else
 			{
-				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
-				m_car->getCar()->mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
 			}
 
 			if (m_camera != NULL)
 			{
-				std::cout << "got here \n";
 				m_camera->rotateCamera(m_gamePad->getRightStick().x, m_gamePad->getRightStick().y);
 			}
 		}

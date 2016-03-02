@@ -50,6 +50,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
       <AdditionalUsingDirectories>$(ProjectDir)\Libraries\physx;$(ProjectDir)\Libraries\physx\foundation\windows;$(ProjectDir)\Libraries\physx\common;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx\extensions;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -73,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Factory\GameFactory.cpp" />
     <ClCompile Include="Files\FIleHandlingHelpers.cpp" />
     <ClCompile Include="Global\Fonts.cpp" />
     <ClCompile Include="Global\Assets.cpp" />
@@ -82,6 +84,8 @@
     <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp" />
     <ClCompile Include="Objects\TestObject.cpp" />
+    <ClCompile Include="Renderer\Renderable.cpp" />
+    <ClCompile Include="Renderer\Renderable.cpp" />
     <ClCompile Include="Simulation\GameSimulationDefinitions.cpp" />
     <ClCompile Include="Simulation\LoadingScreen.cpp" />
     <ClCompile Include="Objects\BoundingBox.cpp" />
@@ -138,7 +142,6 @@
     <ClInclude Include="Objects\Cars\MeowMix.h" />
     <ClInclude Include="Objects\Physicable.h" />
     <ClInclude Include="Objects\TestObject.h" />
-    <ClInclude Include="Objects\Weapons\HasWeapons.h" />
     <ClInclude Include="Objects\LoadingBar.h" />
     <ClInclude Include="Objects\ObjectCreators\PhysicsObjectCreator.h" />
     <ClInclude Include="Simulation\LoadingScreen.h" />

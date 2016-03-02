@@ -23,11 +23,11 @@ Camera::Camera()
 
 }
 
-Camera::Camera(Object * object)
+Camera::Camera(TestObject * object)
 {
 	m_rotateScalar = CAMERA_ROTATION_SPEED;
 	m_gravityScalar = CAMERA_GRAVITY_SPEED;
-	m_distance = 20;
+	m_distance = 50;
 	m_recentlyMoved = false;
 
 	if (object != NULL)
@@ -54,7 +54,7 @@ glm::vec3 Camera::getPosition(){ return m_currentPos; }
 glm::vec3 Camera::getUpVector() { return m_up; }
 
 
-void Camera::setToFollow(Object * object)
+void Camera::setToFollow(TestObject * object)
 {
 	m_toFollow = object;
 	m_currentPos = m_desiredPos = m_toFollow->getForwardVector() * (-m_distance);
@@ -101,9 +101,10 @@ void Camera::rotateCamera(float xpos, float ypos)
 
 void Camera::update(double dtMilli)
 {
-	
-	m_lookAt = glm::vec3(m_toFollow->getActor().getGlobalPose().p.x, m_toFollow->getActor().getGlobalPose().p.y, m_toFollow->getActor().getGlobalPose().p.z);
-	m_desiredPos = m_toFollow->getForwardVector() * (-m_distance);
+
+	m_lookAt = glm::vec3(m_toFollow->getGlobalPose().x, m_toFollow->getGlobalPose().y, m_toFollow->getGlobalPose().z);
+	m_currentPos = m_desiredPos = (m_toFollow->getFullPosition() - m_toFollow->getForwardVector() * m_distance);
+	m_currentPos += glm::vec3(0, 7.f, 0);
 }
 
 void Camera::setLookAt(glm::vec3 eye, glm::vec3 at, glm::vec3 up) {

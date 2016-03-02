@@ -6,38 +6,43 @@
 #include "Simulation/World.h"
 #include "Simulation\PhysicsManager.h"
 #include "Audio\Audio.h"
+#include "Objects\Audioable.h"
+#include "Objects\Animatable.h"
+#include "Objects\Physicable.h"
+#include "Renderer\Renderable.h"
+#include "Objects\DrivingStyleFast.h"
+#include "Objects\Cars\MeowMix.h"
 
 class GameFactory
 {
 public:
-	GameFactory(World& world, PxScene& scene, PhysicsManager manager, Audio& audioHandle) :m_world(world), m_scene(scene)
-	{
-		m_physicsFactory = new PhysicsFactory(manager);
-		m_renderFactory = new RenderFactory();
-		m_audioFactory = new AudioFactory(audioHandle);
-	}
-	~GameFactory()
-	{
-		delete m_audioFactory;
-		delete m_renderFactory;
-		delete m_physicsFactory;
-	}
+	enum Objects {
+		OBJECT_MEOW_MIX,
+		OBJECT_PLANE,
+		OBJECT_WALL,
+		OBJECT_BULLET,
+	};
 
-	/*
-	Object * makeObject(Enum objectToMake)
-	{
-		Big switch statement utilizing the enum object types
-	}
-	*/
+	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry *geom, TestObject *parent);
+
+	static long getNextId() { return ++lastId; }
+
+	static GameFactory *instance();
+
+	static GameFactory *instance(World& world, PxScene& scene, Audio& audioHandle);
+
+private:
+	GameFactory(World& world, PxScene& scene, Audio& audioHandle);
+	~GameFactory();
 
 private: //members
-	
+
 	PhysicsFactory * m_physicsFactory;
 	RenderFactory * m_renderFactory;
 	AudioFactory * m_audioFactory;
 	World& m_world;
 	PxScene& m_scene;
+	static long lastId;
+	static GameFactory *m_factory;
 	//enum of objects to create
-
-private:
 };

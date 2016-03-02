@@ -1,14 +1,17 @@
-#include "TestRenderable.h"
+#include "Renderable.h"
 
+#define ZERO_TO_ONE(x) (x == 0 ? 1 : x)
 
-TestRenderable::TestRenderable(Model* Model)
+Renderable::Renderable() {}
+
+Renderable::Renderable(Model* Model, bool resize, bool reposition)
 {
-	m_model = Model;
+	setModel(Model, resize, reposition);
 }
 
-void TestRenderable::setModel(Model *model, bool resize = false, bool reposition = false)
+void Renderable::setModel(Model *model, bool resize, bool reposition)
 {
-	this->model = model;
+	m_model = model;
 
 	if (model != NULL) {
 		if (resize) {

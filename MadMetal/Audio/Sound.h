@@ -17,6 +17,7 @@ protected: //members
 
 class AccelerationSound : public Sound
 {
+public:
 	AccelerationSound()
 	{
 		m_index = 1;

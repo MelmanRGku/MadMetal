@@ -32,13 +32,8 @@ private:
 private: //members
 	std::vector<Controllable *> m_players;
 	std::vector<PlayerControllable*> m_humanPlayers;
-	// TODO REMOVE FROM MEMBER VARIABLES
 	PxScene* m_scene;
-	// TODO REMOVE FROM MEMBER VARIABLES
-	PxVehicleDrive4W *car;
-	PxF32 gVehicleModeTimer;
-	PxI32 gVehicleOrderProgress = 0;
-	bool gVehicleOrderComplete = false;
+
 	PxVehicleDrivableSurfaceToTireFrictionPairs* gFrictionPairs = NULL; 
 	PxVehicleDrivableSurfaceToTireFrictionPairs* createFrictionPairs(const PxMaterial* defaultMaterial);
 	VehicleSceneQueryData*	gVehicleSceneQueryData = NULL;

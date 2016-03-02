@@ -1,26 +1,14 @@
 #include "Car.h"
 #include "../DrivingStyleFast.h"
+#include "Factory\GameFactory.h"
 
-Car::Car()
+Car::Car(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio) : TestObject(id, aable, pable, anable, rable, audio), m_car(car)
 {
-	m_drivingStyle = new DrivingStyleFast();
 }
 
 
 Car::~Car()
 {
-	delete m_drivingStyle;
-}
-
-void Car::setCar(PxVehicleDrive4W *m_car)
-{ 
-	this->m_car = m_car; 
-	this->physicsActor = m_car->getRigidDynamicActor(); 
-}
-
-PxVehicleDrive4W* Car::getCar()
-{
-	return m_car;
 }
 
 DrivingStyle& Car::getDrivingStyle()
@@ -51,10 +39,13 @@ void Controllable::pickUpPowerUp(PowerUpType type)
 
 void Car::fire()
 {
+	m_reloadRemaining = 0;
 	if (m_reloadRemaining > 0)
 		return;
 
-	m_reloadRemaining = m_reloadRate;
+
+	GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET, new PxTransform(getFullPosition().x, getFullPosition().y, getFullPosition().z), NULL, this);
+
 	/*if (m_superDurationRemaining > 0)
 	{
 		if (m_activePowerUp.getType() == ATTACK)

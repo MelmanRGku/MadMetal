@@ -3,6 +3,6 @@
 class Audioable {
 
 public:
-	Audioable();
-	virtual ~Audioable();
+	Audioable() {}
+	virtual ~Audioable() {}
 };

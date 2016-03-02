@@ -6,8 +6,10 @@
 class Animatable
 {
 public:
-	Animatable();
-	virtual ~Animatable();
+	Animatable() {
+		scale = glm::vec3(1, 1, 1);
+	}
+	virtual ~Animatable() {}
 
 	glm::mat4x4 getModelMatrix() {
 		glm::mat4x4 translate = glm::translate(glm::mat4x4(), position);
@@ -26,6 +28,7 @@ public:
 	void updateRotation(glm::vec3 dr) { rotation += dr; }
 	void updatePosition(glm::vec3 dp) { position += dp; }
 	void updateScale(glm::vec3 ds) { scale += ds; }
+	glm::vec3 getRotation() { return rotation; }
 	glm::vec3  getPosition(){ return position; }
 
 protected:

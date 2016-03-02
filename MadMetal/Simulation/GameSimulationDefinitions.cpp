@@ -1,5 +1,9 @@
 #include "GameSimulationDefinitions.h"
 
+
+glm::vec3 forwardVector = glm::vec3(0, 0, 1);
+glm::vec3 upVector = glm::vec3(0, 1, 0);
+
 PxF32 gSteerVsForwardSpeedData[2 * 8] =
 {
 	0.0f, 0.75f,

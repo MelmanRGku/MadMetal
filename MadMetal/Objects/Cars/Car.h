@@ -1,18 +1,17 @@
 #pragma once
 
 #include "PxVehicleDrive4W.h"
-#include "../RenderableObject.h"
+#include "../TestObject.h"
 #include "Objects\DrivingStyle.h"
 #include "Game Logic\PowerUp.h"
 
-
-class Car : public RenderableObject
+class Car : public TestObject
 {
 protected: //members
 
 	//physics object
-	PxVehicleDrive4W *m_car;
 	DrivingStyle* m_drivingStyle;
+	PxVehicleDrive4W &m_car;
 
 	//score based
 	float m_damageDealt;
@@ -40,11 +39,10 @@ private:
 	void updateSuper(float dt);
 
 public:
-	Car();
+	Car(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	~Car();
 
-	void setCar(PxVehicleDrive4W *m_car);
-	PxVehicleDrive4W *getCar();
+	PxVehicleDrive4W &getCar() { return m_car; }
 	DrivingStyle& getDrivingStyle();
 	
 	//void usePowerUp();

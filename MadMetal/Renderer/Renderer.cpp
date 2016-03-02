@@ -63,7 +63,7 @@ void Renderer::setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt
 /*
 	Draws a obj model
 */
-void Renderer::draw(Renderable *object) {
+void Renderer::draw(TestObject *object) {
 	/*if (!object->isRenderable())
 		return;
 
@@ -90,14 +90,11 @@ void Renderer::draw(Renderable *object) {
 }
 
 
-void Renderer::draw(std::vector<Object *> *objects) {
+void Renderer::draw(std::vector<TestObject *> *objects) {
 	startDrawing();
 	for (unsigned int i = 0; i < objects->size(); i++) {
-		Object *obj = objects->at(i);
-		Renderable *robj = dynamic_cast<Renderable *>(obj);
-		if (robj) {
-			draw(robj);
-		}
+		TestObject *obj = objects->at(i);
+		draw(obj);
 	}
 	stopDrawing();
 }

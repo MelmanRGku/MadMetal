@@ -1,6 +1,6 @@
 #include "DrivingStyleFast.h"	
 
-	DrivingStyleFast::DrivingStyleFast()
+	DrivingStyleFast::DrivingStyleFast(PxMaterial *chassisMaterial, PxMaterial *wheelMaterial)
 	{
 		//Set up the chassis mass, dimensions, moment of inertia, and center of mass offset.
 		//The moment of inertia is just the moment of inertia of a cuboid but modified for easier steering.
@@ -11,6 +11,7 @@
 			                  (m_chassisDims.x*m_chassisDims.x + m_chassisDims.z*m_chassisDims.z)*0.8f*m_chassisMass / 12.0f,
 			                  (m_chassisDims.x*m_chassisDims.x + m_chassisDims.y*m_chassisDims.y)*m_chassisMass / 12.0f);
 		m_chassisCMOffset = PxVec3(0.0f, -m_chassisDims.y*2.f, 0.0f);
+		m_chassisMaterial = chassisMaterial;
 
 		//Set up the wheel mass, radius, width, moment of inertia, and number of wheels.
 		//Moment of inertia is just the moment of inertia of a cylinder.
@@ -18,6 +19,7 @@
 		m_wheelRadius = 0.7f;
 		m_wheelWidth = 0.6f;
 		m_wheelMOI = 0.5f*m_wheelMass*m_wheelRadius*m_wheelRadius;
+		m_wheelMaterial = wheelMaterial;
 		m_nbWheels = 4;
 	}
 
