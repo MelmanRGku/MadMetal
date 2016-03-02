@@ -4,6 +4,8 @@
 #include "Objects\Object.h"
 #include "Objects\Cars\Car.h"
 #include "Objects\Camera.h"
+#include "Audio\Audio.h"
+#include "Audio\Sound.h"
 
 
 class PlayerControllable : public Controllable
@@ -12,6 +14,7 @@ private:
 	GamePad * m_gamePad;
 	Car* m_car;
 	Camera* m_camera;
+	
 
 public:
 	
@@ -27,7 +30,7 @@ public:
 		delete m_camera;
 		delete m_car;
 	}
-
+	
 	void playFrame(double dt);
 	GamePad * getGamePad();
 	Camera * getCamera() { return m_camera; }

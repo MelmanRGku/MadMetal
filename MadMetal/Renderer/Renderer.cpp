@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include <FTGL/ftgl.h>
 #include "Global\Fonts.h"
+#include "Objects\Camera.h"
 
 /*
 	Constructor. 
@@ -36,6 +37,19 @@ void Renderer::setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt
 		lookAt,
 		up
 		);
+}
+
+//todo: split screen
+void Renderer::setViewMatrixLookAt(std::vector<Camera *> cameras)
+{
+	//currently will just get the first camera in the list and set view matrix to that
+	viewMatrix = glm::lookAt(
+		cameras[0]->getPosition(),
+		cameras[0]->getLookAt(),
+		cameras[0]->getUpVector()
+		
+		);
+	//std::cout << cameras[0]->getLookAt().x << "," << cameras[0]->getLookAt().z << std::endl;
 }
 
 /*void Renderer::draw(ParticleSystem * sys)

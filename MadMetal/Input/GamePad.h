@@ -32,7 +32,7 @@ private:
 	int currentPacket;
 	double updateAccumulator;
 
-	XINPUT_STATE state;//data struct recturned from xinput of current controller state
+	XINPUT_STATE m_state;//data struct recturned from xinput of current controller state
 
 	float deadzoneX; //minimum range joysticks must exceed to register activity
 	float deadzoneY;
@@ -132,6 +132,7 @@ public:
 
 
 	void setButtonStates();
+	void updateButtonState(ButtonState &state, bool isPressed);
 	bool isPressed(int gamePadButton);
 	bool isHeld(int gamePadButton);
 	bool isReleased(int gamePadButton);

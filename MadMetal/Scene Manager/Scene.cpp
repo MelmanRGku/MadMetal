@@ -9,7 +9,6 @@ MainMenuScene::MainMenuScene(Input * input)
 	m_currentSelection = 0;
 	m_selections[0] = SceneMessage::eSingleCharSelect;
 	m_selections[1] = SceneMessage::eMultiCharSelect;
-	
 
 }
 
@@ -75,6 +74,7 @@ bool SinglePlayerCharSelectScene::simulateScene(double dt, SceneMessage &message
 		m_playerTemplates.push_back(new ControllableTemplate(m_selections[0]));
 	}
 	message.setPlayerTemplates(m_playerTemplates);
+	
 	return true;
 
 
@@ -249,6 +249,40 @@ bool MultiPlayerCharSelectScene::simulateScene(double dt, SceneMessage &message)
 	*/
 	return false;
 }
+
+PauseScene::PauseScene(std::vector<ControllableTemplate *> playerTemplates)
+{
+	std::cout << "Paused the game. A to restart, B to resume \n";
+	m_gamePad = playerTemplates.back()->getGamePad();
+	playerTemplates.pop_back();
+	toDeliver.setPlayerTemplates(playerTemplates);
+}
+
+bool PauseScene::simulateScene(double dt, SceneMessage& newMessage)
+{
+
+
+	//skip straight to reset
+	toDeliver.setTag(SceneMessage::eRestart);
+	newMessage = toDeliver;
+	return true;
+
+	if (m_gamePad->checkConnection())
+	{
+		if (m_gamePad->isPressed(GamePad::AButton))
+		{
+			toDeliver.setTag(SceneMessage::eRestart);
+			newMessage = toDeliver;
+			return true;
+		}
+		if (m_gamePad->isPressed(GamePad::BButton))
+		{
+			newMessage.setTag(SceneMessage::ePop);
+			return true;
+		}
+	}
+}
+
 
 
 

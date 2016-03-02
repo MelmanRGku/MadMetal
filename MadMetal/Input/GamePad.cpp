@@ -15,202 +15,67 @@ bool GamePad::checkConnection()
 	return connected = false;
 }
 
+void GamePad::updateButtonState(ButtonState &state, bool isPressed)
+{
+	if (isPressed)
+	{
+		if (state == IDLE || state == RELEASED) state = PRESSED;
+		else if (state == PRESSED) state = HELD;
+	}
+	else {
+		if (state == RELEASED) state = IDLE;
+		else state = RELEASED;
+	}
+}
+
 void GamePad::setButtonStates()
 {
 	//xbutton
-	if (state.Gamepad.wButtons & XButton)
-	{
-		if (xState == IDLE) xState = PRESSED;
-		else if (xState == PRESSED) xState = HELD;
-	}
-	else {
-		if (xState == RELEASED) xState = IDLE;
-		else xState = RELEASED;
-	}
+	updateButtonState(xState, m_state.Gamepad.wButtons & XButton);
 
 	//ybutton
-	if (state.Gamepad.wButtons & YButton)
-	{
-		if (yState == IDLE) yState = PRESSED;
-		else if (yState == PRESSED) yState = HELD;
-	}
-	else {
-		if (yState == RELEASED) yState = IDLE;
-		else yState = RELEASED;
-	}
+	updateButtonState(yState, m_state.Gamepad.wButtons & YButton);
 
 	//abutton
-	if (state.Gamepad.wButtons & AButton)
-	{
-		if (aState == IDLE) aState = PRESSED;
-		else if (aState == PRESSED) aState = HELD;
-	}
-	else {
-		if (aState == RELEASED) aState = IDLE;
-		else aState = RELEASED;
-	}
+	updateButtonState(aState, m_state.Gamepad.wButtons & AButton);
 
 	//bbutton
-	if (state.Gamepad.wButtons & BButton)
-	{
-		if (bState == IDLE) bState = PRESSED;
-		else if (bState == PRESSED) bState = HELD;
-	}
-	else {
-		if (bState == RELEASED) bState = IDLE;
-		else bState = RELEASED;
-	}
+	updateButtonState(bState, m_state.Gamepad.wButtons & BButton);
 
-	
-	if (state.Gamepad.wButtons & DPadLeft)
-	{
-		if (dplState == IDLE)
-		{
-			
-			dplState = PRESSED;
-		}
-		else if (dplState == PRESSED)
-		{
-		
-			dplState = HELD;
-		}
-		else {}
-		
-	} else {
-		
-		if (dplState == PRESSED || dplState == HELD)
-		{
-			
-			dplState = RELEASED;
-		}
-		else {
-			
-			dplState = IDLE;
-		}
-	}
+	//dpad left
+	updateButtonState(dplState, m_state.Gamepad.wButtons & DPadLeft);
 
 	//dpad right button
-	if (state.Gamepad.wButtons & DPadRight)
-	{
-		if (dprState == IDLE) dprState = PRESSED;
-		else if (dprState == PRESSED) dprState = HELD;
-	}
-	else if (dprState != IDLE) {
-		if (dprState != RELEASED) dprState = RELEASED;
-		else dprState = IDLE;
-	}
+	updateButtonState(dprState, m_state.Gamepad.wButtons & DPadRight);
 
 	//dpad up button
-	if (state.Gamepad.wButtons & DPadUp)
-	{
-		if (dpuState == IDLE) dpuState = PRESSED;
-		else if (dpuState == PRESSED) dpuState = HELD;
-	}
-	else {
-		if (dpuState != RELEASED) dpuState = RELEASED;
-		else dpuState = IDLE;
-	}
+	updateButtonState(dpuState, m_state.Gamepad.wButtons & DPadUp);
 
 	//dpad down button
-	if (state.Gamepad.wButtons & DPadDown)
-	{
-		if (dpdState == IDLE) dpdState = PRESSED;
-		else if (dpdState == PRESSED) dpdState = HELD;
-	}
-	else {
-		if (dpdState == RELEASED) dpdState = IDLE;
-		else dpdState = RELEASED;
-	}
+	updateButtonState(dpdState, m_state.Gamepad.wButtons & DPadDown);
 
 	//left Shoulder button
-	if (state.Gamepad.wButtons & LShoulder)
-	{
-		if (lsState == IDLE) lsState = PRESSED;
-		else if (lsState == PRESSED) lsState = HELD;
-	}
-	else {
-		if (lsState == RELEASED) lsState = IDLE;
-		else lsState = RELEASED;
-	}
+	updateButtonState(lsState, m_state.Gamepad.wButtons & LShoulder);
 
 	//right shoulder button
-	if (state.Gamepad.wButtons & RShoulder)
-	{
-		if (rsState == IDLE) rsState = PRESSED;
-		else if (rsState == PRESSED) rsState = HELD;
-	}
-	else {
-		if (rsState == RELEASED) rsState = IDLE;
-		else rsState = RELEASED;
-	}
-
-	//Left JoyStick Left
-	//std::cout << leftStick.x << std::endl;
-	if (leftStick.x < -.4)
-	{
-		
-		if (ljlState == IDLE)
-		{
-			ljlState = PRESSED;
-		}
-		else {
-			ljlState = HELD;
-		}
-	}
-	else {
-		if (ljlState == RELEASED)
-		{
-			ljlState = IDLE;
-		}
-		else{
-			ljlState = RELEASED;
-		}
-	}
-
-	//Left Joystick Right
-	if (leftStick.x > 0.5)
-	{
-		if (ljrState == IDLE) ljrState = PRESSED;
-		else if (ljrState == PRESSED) ljrState = HELD;
-	}
-	else {
-		if (ljrState == RELEASED) ljrState = IDLE;
-		else ljrState = RELEASED;
-	}
-
-	//Left Joystick Up
-	if (leftStick.y > 0)
-	{
-		if (ljuState == IDLE) ljuState = PRESSED;
-		else if (ljuState == PRESSED) ljuState = HELD;
-	}
-	else {
-		if (ljuState == RELEASED) ljuState = IDLE;
-		else ljuState = RELEASED;
-	}
-
-	//Left Joystick Down
-	if (leftStick.y < 0)
-	{
-		if (ljdState == IDLE) ljdState = PRESSED;
-		else if (ljdState == PRESSED) ljdState = HELD;
-	}
-	else {
-		if (ljdState == RELEASED) ljdState = IDLE;
-		else ljdState = RELEASED;
-	}
+	updateButtonState(rsState, m_state.Gamepad.wButtons & RShoulder);
 
 	//startButton
-	if (StartButton & state.Gamepad.wButtons)
-	{
-		if (startState == IDLE) startState = PRESSED;
-		else if (startState == PRESSED) startState = HELD;
-	}
-	else {
-		if (startState == RELEASED) startState = IDLE;
-		else startState = RELEASED;
-	}
+	updateButtonState(startState, m_state.Gamepad.wButtons & StartButton);
 
+
+#define JOYSTICK_SENSITIVITY 0.3
+	//Left JoyStick Left
+	updateButtonState(ljlState, leftStick.x < -JOYSTICK_SENSITIVITY);
+
+	//Left Joystick Right
+	updateButtonState(ljrState, leftStick.x > JOYSTICK_SENSITIVITY);
+
+	//Left Joystick Up
+	updateButtonState(ljuState, leftStick.y > JOYSTICK_SENSITIVITY);
+
+	//Left Joystick Down
+	updateButtonState(ljdState, leftStick.y < -JOYSTICK_SENSITIVITY);
 
 }
 
@@ -218,19 +83,19 @@ void GamePad::setButtonStates()
 bool GamePad::sampleState(double dt)
 {
 	
-	ZeroMemory(&state, sizeof(XINPUT_STATE)); //zero memory of state
+	ZeroMemory(&m_state, sizeof(XINPUT_STATE)); //zero memory of state
 	
 	//return if controller not connected 
-	if (XInputGetState(controllerID, &state) != ERROR_SUCCESS)
+	if (XInputGetState(controllerID, &m_state) != ERROR_SUCCESS)
 		return false;
 		
-	currentPacket = state.dwPacketNumber;
+	currentPacket = m_state.dwPacketNumber;
 	setButtonStates();
 	
 		
 	//calculate displacements of left and right joysticks
-	float dispX = fmaxf(-1, (float)state.Gamepad.sThumbLX / 32767);
-	float dispY = fmaxf(-1, (float)state.Gamepad.sThumbLY / 32767);
+	float dispX = fmaxf(-1, (float)m_state.Gamepad.sThumbLX / 32767);
+	float dispY = fmaxf(-1, (float)m_state.Gamepad.sThumbLY / 32767);
 	
 	//left joystick
 	//is displacement in each direction greater than the deadzone range?
@@ -239,8 +104,8 @@ bool GamePad::sampleState(double dt)
 	leftStick.y = abs(dispY) < deadzoneY ? 0 : (abs(dispY) - deadzoneY)
 		* (abs(dispY) / dispY);
 	
-	dispX = fmaxf(-1, (float)state.Gamepad.sThumbRX / 32767);
-	dispY = fmaxf(-1, (float)state.Gamepad.sThumbRY / 32767);
+	dispX = fmaxf(-1, (float)m_state.Gamepad.sThumbRX / 32767);
+	dispY = fmaxf(-1, (float)m_state.Gamepad.sThumbRY / 32767);
 
 	//right joystick
 	rightStick.x = abs(dispX) < deadzoneX ? 0 : (abs(dispX) - deadzoneX)
@@ -250,8 +115,8 @@ bool GamePad::sampleState(double dt)
 		* (abs(dispY) / dispY);
 
 	//calculate trigger depression
-	leftTrigger = (float)state.Gamepad.bLeftTrigger / 255;
-	rightTrigger = (float)state.Gamepad.bRightTrigger / 255;
+	leftTrigger = (float)m_state.Gamepad.bLeftTrigger / 255;
+	rightTrigger = (float)m_state.Gamepad.bRightTrigger / 255;
 	
 	
 	

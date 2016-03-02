@@ -4,22 +4,24 @@
 
 // assign car to player and set camera to follow it
 void PlayerControllable::setCar(Car * toAdd) 
-{
+{ 
 	m_car = toAdd; 
-	m_camera = new Camera(toAdd);
-
+	m_camera->setToFollow(toAdd);
+	
 }
 
 GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
 
 void PlayerControllable::playFrame(double dt)
 {
+	m_camera->update(dt);
+
 	if (m_gamePad != NULL && m_gamePad->checkConnection())
 	{
 			/*
-			if (m_gamePad->isPressed(GamePad::DPadLeft))
+			if (m_gamePad->isPressed(GamePad::LJoyRight))
 			{
-				
+				std::cout << "Left Joy Pressed \n";
 				//m_car->getActor().setLinearVelocity(PxVec3(10, 0, 0));
 				//m_car->getActor().setAngularVelocity(PxVec3(10, 10, 10));
 			}
@@ -50,12 +52,13 @@ void PlayerControllable::playFrame(double dt)
 
 			/*if (m_gamePad->isPressed(GamePad::YButton))
 			{
-				std::cout << "Ypressed \n";
+				//std::cout << "Ypressed \n";
 			}
 
 			if (m_gamePad->isPressed(GamePad::AButton))
 			{
-				std::cout << "Apressed \n";
+				
+			
 			}
 
 			if (m_gamePad->isPressed(GamePad::BButton))
@@ -86,7 +89,7 @@ void PlayerControllable::playFrame(double dt)
 				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getRightTrigger());
 			} 
 			else if (m_gamePad->getLeftTrigger())
-				{
+			{
 				m_car->getCar().mDriveDynData.forceGearChange(PxVehicleGearsData::eREVERSE);
 				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getLeftTrigger());
 			}
@@ -101,7 +104,7 @@ void PlayerControllable::playFrame(double dt)
 				{
 					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
 					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, m_gamePad->getLeftStick().x);
-			}
+				}
 
 				if (m_gamePad->getLeftStick().x > 0)
 				{
