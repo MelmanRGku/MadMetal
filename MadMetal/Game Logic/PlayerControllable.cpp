@@ -18,14 +18,14 @@ void PlayerControllable::playFrame(double dt)
 
 	if (m_gamePad != NULL && m_gamePad->checkConnection())
 	{
-			/*
-			if (m_gamePad->isPressed(GamePad::DPadLeft))
+		/*
+			if (m_gamePad->isPressed(GamePad::LJoyRight))
 			{
-				
+				std::cout << "Left Joy Pressed \n";
 				//m_car->getActor().setLinearVelocity(PxVec3(10, 0, 0));
 				//m_car->getActor().setAngularVelocity(PxVec3(10, 10, 10));
 			}
-
+			
 			if (m_gamePad->isPressed(GamePad::DPadRight))
 			{
 				
@@ -44,23 +44,24 @@ void PlayerControllable::playFrame(double dt)
 				//m_car->getActor().setLinearVelocity(PxVec3(0, 0, -10));
 			}
 
-
+			
 			if (m_gamePad->isPressed(GamePad::XButton))
 			{
-				std::cout << "Xpressed \n";
+				//std::cout << "Xpressed \n";
 			}
-
+			
+			
 			if (m_gamePad->isPressed(GamePad::YButton))
 			{
-				std::cout << "Ypressed \n";
+				//std::cout << "Ypressed \n";
 			}
-			*/
+			
 			if (m_gamePad->isPressed(GamePad::AButton))
 			{
 				
 			
 			}
-			/*
+			
 			if (m_gamePad->isPressed(GamePad::BButton))
 			{
 				std::cout << "Bpressed \n";
