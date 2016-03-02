@@ -124,46 +124,6 @@ void GameSimulation::initialize() {
 	setupBasicGameWorldObjects();
 }
 
-PxFilterFlags TestFilterShader(
-	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
-	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
-	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
-{
-	// use a group-based mechanism for all other pairs:
-	// - Objects within the default group (mask 0) always collide
-	// - By default, objects of the default group do not collide
-	//   with any other group. If they should collide with another
-	//   group then this can only be specified through the filter
-	//   data of the default group objects (objects of a different
-	//   group can not choose to do so)
-	// - For objects that are not in the default group, a bitmask
-	//   is used to define the groups they should collide with
-	if ((filterData0.word0 != 0 || filterData1.word0 != 0) &&
-		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1))
-		return PxFilterFlag::eSUPPRESS;
-
-	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
-	{
-		
-		if (filterData0.word0 & filterData1.word1 || filterData0.word1 & filterData1.word0)
-		{
-			pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
-			
-	}
-	}
-	else {
-		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
-		if (filterData0.word0 & filterData1.word1 || filterData0.word1 & filterData1.word0)
-		{
-		pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
-	}
-		
-
-	}
-	return PxFilterFlag::eDEFAULT;
-}
-
-
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(PhysicsManager::getScale());
@@ -175,7 +135,7 @@ void GameSimulation::createPhysicsScene()
 
 	if (!sceneDesc.filterShader)
 	{
-		sceneDesc.filterShader = TestFilterShader;
+		sceneDesc.filterShader = CollisionManager::TestFilterShader;
 	}
 
 	m_scene = PhysicsManager::getPhysicsInstance().createScene(sceneDesc);
@@ -260,12 +220,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, NULL, NULL, NULL));
 	m_humanPlayers[0]->setCar(meowMix);
 	m_mainCamera->setToFollow(meowMix);
-
-	/*Projectile * ammo = new Projectile("");
-	RenderableObject *ammoModel = new RenderableObject();
-	ammoModel->setModel(Assets::getModel("bullet"), true);
-	ammo->setObject(ammoModel);
-	m_players[0]->setAmmunition(ammo);*/
 
 	float length = 50;
 	float width = 10;

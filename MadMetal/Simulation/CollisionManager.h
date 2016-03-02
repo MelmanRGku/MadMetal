@@ -16,6 +16,11 @@ public:
 	~CollisionManager();
 
 
+	static PxFilterFlags TestFilterShader(
+		PxFilterObjectAttributes attributes0, PxFilterData filterData0,
+		PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+		PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize);
+
 	//PxSumlationEventCallback
 	void	onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs);
 	void	onTrigger(PxTriggerPair* pairs, PxU32 count);

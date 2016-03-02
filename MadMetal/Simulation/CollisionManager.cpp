@@ -11,6 +11,46 @@ CollisionManager::~CollisionManager()
 {
 }
 
+PxFilterFlags CollisionManager::TestFilterShader(
+	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
+	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
+{
+	// use a group-based mechanism for all other pairs:
+	// - Objects within the default group (mask 0) always collide
+	// - By default, objects of the default group do not collide
+	//   with any other group. If they should collide with another
+	//   group then this can only be specified through the filter
+	//   data of the default group objects (objects of a different
+	//   group can not choose to do so)
+	// - For objects that are not in the default group, a bitmask
+	//   is used to define the groups they should collide with
+	if ((filterData0.word0 != 0 || filterData1.word0 != 0) &&
+		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1))
+		return PxFilterFlag::eSUPPRESS;
+
+	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
+	{
+
+		if (filterData0.word0 & filterData1.word1 || filterData0.word1 & filterData1.word0)
+		{
+			pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+
+		}
+	}
+	else {
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		if (filterData0.word0 & filterData1.word1 || filterData0.word1 & filterData1.word0)
+		{
+			pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
+		}
+
+
+	}
+	return PxFilterFlag::eDEFAULT;
+}
+
+
 void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	Bullet *bullet = static_cast<Bullet *>(m_world.findObject(bulletId));
 
