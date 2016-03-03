@@ -29,7 +29,7 @@ public:
 	TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	virtual ~TestObject();
 
-	virtual void draw(Renderer *renderer);
+	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	
 	virtual glm::mat4x4 getModelMatrix();
 	glm::vec3 getFullPosition() { return m_animatable.getPosition() + glm::vec3(m_physicable.getActor().getGlobalPose().p.x, m_physicable.getActor().getGlobalPose().p.y, m_physicable.getActor().getGlobalPose().p.z); }
