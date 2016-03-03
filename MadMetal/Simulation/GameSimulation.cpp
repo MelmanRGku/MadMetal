@@ -18,28 +18,33 @@
 using namespace std;
 bool gIsVehicleInAir = true;
 
-GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle)
+GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio* audioHandle)
 {
+	std::cout << "GameSimulation pushed onto the stack \n";
 	createPhysicsScene();
-	audioHandle.queStaticSource(1);
-	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
+	
+	m_gameFactory = GameFactory::instance(*m_world, *m_scene, *audioHandle);
 
 	//create characters for game from templates
 	for (int i = 0; i < playerTemplates.size(); i++)
-{
-		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 	{
+		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
+		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
-			//make a car for player based off template
+			//todo: make a car for player based off template
 			m_humanPlayers.push_back(humanPlayer);
 			m_players.push_back(humanPlayer);
-	}
+
+			//pass players camera to scene cameras
+			m_sceneCameras.push_back(humanPlayer->getCamera());
+
+		}
 		else {
 			m_players.push_back(new AIControllable(*playerTemplates[i]));
 			//make a car for ai based off template
 		}
 	}
-	
+
 	
 	//add when car is created by this point. 
 	//m_mainCamera = m_humanPlayers[0]->getCamera();
@@ -74,7 +79,7 @@ bool PxVehicleIsInAir(const PxVehicleWheelQueryResult& vehWheelQueryResults)
 
 void GameSimulation::simulatePhysics(double dt)
 {
-//	audio->update();
+
 	const PxF32 timestep = 1.0f / 60.0f;
 
 	//Raycasts.
@@ -107,18 +112,22 @@ void GameSimulation::simulateAI()
 
 void GameSimulation::simulatePlayers(double dt)
 {
+	
 	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
-		m_players[i]->playFrame(dt);
+		
+		//m_players[i]->playFrame(dt);
+		
 	}
+	m_humanPlayers[0]->playFrame(dt);
+	
 }
 
 void GameSimulation::updateObjects(double dt) {
 
-	m_mainCamera->update(dt);
 	m_world->update(dt);
 
-}
+	}
 
 void GameSimulation::initialize() {
 	setupBasicGameWorldObjects();
@@ -170,12 +179,15 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	{
 		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
 		{
-			newMessage.setTag(SceneMessage::eRestart);
+			newMessage.setTag(SceneMessage::ePause);
 			std::vector<ControllableTemplate *> playerTemplates;
+			//put the controllables into the vector incase the player trys to restart
 			for (int i = 0; i < m_players.size(); i++)
 			{
 				playerTemplates.push_back(&m_players[i]->getControllableTemplate());
 			}
+			//put a dummy controllable at the front of the vector so the pause screen knows who paused
+			playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
 			newMessage.setPlayerTemplates(playerTemplates);
 			return true;
 		}
@@ -215,10 +227,9 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 void GameSimulation::setupBasicGameWorldObjects() {
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
-	
+
 	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, NULL, NULL, NULL));
 	m_humanPlayers[0]->setCar(meowMix);
-	m_mainCamera->setToFollow(meowMix);
 
 	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-15, 0, -15), NULL, NULL));
 
@@ -242,7 +253,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	frontWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
 	m_scene->addActor(*frontWall);
 
-
+	
 	RenderableObject * FrontPlane = new RenderableObject();
 	FrontPlane->setModel(Assets::getModel("plane"), true, true);
 	FrontPlane->updateScale(glm::vec3(glm::vec3(frontWall->getWorldBounds().getDimensions().x, 1, frontWall->getWorldBounds().getDimensions().y)));

@@ -109,16 +109,16 @@ void StackManager::readMailBox()
 		break;
 	case (SceneMessage::eGameSimulation) :
 		m_stack->clearStack();
-		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), *m_audio));
+		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), m_audio));
 		break;
 
-	case (SceneMessage::ePause):
-		
+	case (SceneMessage::ePause) :
+		m_stack->pushScene(new PauseScene(m_mailBox->getPlayerTemplates()));
 		break;
-		
+
 	case (SceneMessage::eRestart):
 		m_stack->clearStack();
-		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), *m_audio));
+		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), m_audio));
 		break;
 
 	case (SceneMessage::ePop) :
@@ -142,25 +142,23 @@ void StackManager::progressScene(int newTime)
 	//update gamecontrollers
 	m_input->updateGamePads(dt);
 
+	//update Audio
+	m_audio->update();
+	
 	//progress the state of the top scene on the stack
 	m_newMessage = m_stack->getTopScene()->simulateScene(dt, *m_mailBox);
-	Scene * currentScene = m_stack->getTopScene();
-	if (currentScene->getMainCamera() != NULL)
-	{
+
+	
+	//get cameras from the scene
+	m_renderer->setViewMatrixLookAt(m_stack->getTopScene()->getSceneCameras());
+	//get objects from the scene and draw
+	m_renderer->draw(m_stack->getTopScene()->getWorld()->getGameObjects());
 		
-		m_renderer->setViewMatrixLookAt(
-			currentScene->getMainCamera()->getPosition(),
-			currentScene->getMainCamera()->getUpVector(),
-			currentScene->getMainCamera()->getLookAt()
-			);
-	}
-	m_renderer->draw(currentScene->getWorld()->getGameObjects());
 	//check if the scene return a message for manager
 	if (m_newMessage)
 	{
 		m_newMessage = false;
 		readMailBox();
-		
 	}
 }
 

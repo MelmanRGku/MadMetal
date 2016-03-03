@@ -8,6 +8,7 @@
 #include "ShaderProgram.h"
 
 class TestObject;
+class Camera;
 
 class Renderer
 {
@@ -20,6 +21,7 @@ public:
 	void setShader(ShaderProgram *sp) { shader = sp; }
 	void draw(TestObject *object);
 	void draw(std::vector<TestObject *> *objects);
+	void setViewMatrixLookAt(std::vector<Camera *> cameras);
 	void setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt);
 	void startDrawing();
 	void stopDrawing();

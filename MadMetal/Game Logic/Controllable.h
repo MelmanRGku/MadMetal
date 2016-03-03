@@ -5,8 +5,7 @@
 class Controllable
 {
 protected:
-
-
+	
 	ControllableTemplate& m_controllableTemplate;
 
 	WayPoint* m_currentWayPoint;
