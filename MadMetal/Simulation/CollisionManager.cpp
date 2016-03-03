@@ -61,8 +61,8 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	Car *car = dynamic_cast<Car *>(otherObj);
 
 	if (car != NULL && car->getId() != bullet->getOwner()->getId()) {
-		car->takeDamage(15);
-		bullet->getOwner()->addDamageDealt(15);
+		car->takeDamage(bullet->getDamage());
+		bullet->getOwner()->addDamageDealt(bullet->getDamage());
 		bullet->setHasToBeDeleted(true);
 		
 	}

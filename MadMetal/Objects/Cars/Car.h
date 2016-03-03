@@ -4,6 +4,9 @@
 #include "../TestObject.h"
 #include "Objects\DrivingStyle.h"
 #include "Game Logic\PowerUp.h"
+#include "Objects\HealthBar2D.h"
+#include "Objects\GaugeBar.h"
+#include "Objects\Text2D.h"
 
 class Car : public TestObject
 {
@@ -39,6 +42,13 @@ private:
 	void updateSuper(float dt);
 
 public:
+
+	//TODO: change to separate UI class
+	HealthBar2D *healthBar;
+	GaugeBar *gaugeBar;
+	Text2D *score;
+
+
 	Car(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	~Car();
 
@@ -54,6 +64,7 @@ public:
 	void addDamageDealt(float damage);
 	bool superReady() { return m_superGauge >= 1.f; }
 	float getSuperGauge() { return m_superGauge > 1.f ? 1.f : m_superGauge; }
+	int getScore();
 	
 	
 };

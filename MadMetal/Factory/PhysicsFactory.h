@@ -9,8 +9,8 @@ public:
 		PHYSICAL_OBJECT_CAR,
 		PHYSICAL_OBJECT_WALL,
 		PHYSICAL_OBJECT_DRIVING_BOX,
-		PHYSICAL_OBJECT_BULLET,
-		PHYSICAL_OBJECT_SUPER_MOON,
+		PHYSICAL_OBJECT_BULLET_MEOW_MIX,
+		PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO,
 	};
 
 public:
@@ -85,7 +85,7 @@ public:
 			toReturn = car;
 			break;
 		}
-		case PHYSICAL_OBJECT_BULLET:
+		case PHYSICAL_OBJECT_BULLET_MEOW_MIX:
 		{
 			PxRigidDynamic * bullet = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
 			PxFilterData simFilterData;
@@ -106,7 +106,7 @@ public:
 			toReturn = bullet;
 			break;
 		}
-		case PHYSICAL_OBJECT_SUPER_MOON:
+		case PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO:
 		{
 			PxRigidDynamic * bullet = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
 			PxFilterData simFilterData;

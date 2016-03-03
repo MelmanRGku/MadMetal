@@ -1,6 +1,7 @@
 #include "Car.h"
 #include "../DrivingStyleFast.h"
 #include "Factory\GameFactory.h"
+#include <sstream>
 
 Car::Car(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio) : TestObject(id, aable, pable, anable, rable, audio), m_car(car)
 {
@@ -41,7 +42,6 @@ void Car::takeDamage(float damage)
 {
 	//car set to dead will be dealt with in the update function
 	m_currentHealth -= damage;
-	std::cout << "Oh no, my health just decreased to " << m_currentHealth << std::endl;
 }
 
 void Car::increaseDamageDealt(float damage)
@@ -81,8 +81,12 @@ void Car::updateSuper(float dt)
 
 void Car::update(float dt) {
 	m_reloadRemainingSeconds -= dt;
+	healthBar->setHealthPercentage(m_currentHealth / m_maxHealth);
+	gaugeBar->setGaugePercentage(getSuperGauge());
+	std::stringstream s;
+	s << "Score: " << getScore();
+	score->setString(s.str());
 	if (m_currentHealth < 0) {
-		std::cout << "Oh no, I dies :(" << std::endl;
 		hasToBeDeleted = true;
 	}
 }
@@ -90,7 +94,8 @@ void Car::update(float dt) {
 void Car::addDamageDealt(float damage) {
 	m_damageDealt += damage;
 	m_superGauge += damage / 1000;
-	std::cout << "My gauge is " << m_superGauge << std::endl;
-	if (superReady())
-		std::cout << "Give 'er" << std::endl;
+}
+
+int Car::getScore() {
+	return m_damageDealt;
 }

@@ -13,8 +13,8 @@ class Renderer
 {
 public:
 	enum ShaderType {
-		SHADER_TYPE_CELL,
 		SHADER_TYPE_NONE,
+		SHADER_TYPE_CELL,
 		NUMBER_OF_SHADER_TYPES
 	};
 

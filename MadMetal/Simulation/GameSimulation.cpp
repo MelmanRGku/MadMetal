@@ -8,7 +8,6 @@
 #include "Objects/ObjectUpdaters/ObjectRotationUpdater.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
-#include "Objects/RenderableObject.h"
 #include "PhysicsManager.h"
 #include "Objects\ObjectCreators\VehicleCreator.h"
 #include "CollisionManager.h"
