@@ -98,6 +98,49 @@ void GameSimulation::simulatePhysics(double dt)
 	//Work out if the vehicle is in the air.
 	gIsVehicleInAir = m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
 
+	// PLUG IN PITCH CORRECTION CODE HERE
+
+	/*
+	PxVec3 angularVelocity = m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity();
+
+
+	PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
+	m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
+
+	bool carTilt = false;
+	float lowest = 100000;
+	float highest = -100000;
+	for (int i = 0; i < 4; i++)
+	{
+		if (tempBuffer[i]->getLocalPose().p.y > highest) highest = tempBuffer[i]->getLocalPose().p.y;
+		if (tempBuffer[i]->getLocalPose().p.y < highest) lowest = tempBuffer[i]->getLocalPose().p.y;
+		cout << tempBuffer[i]->getLocalPose().p.y << endl;;
+	}
+	cout << endl << endl;
+	//cout << lowest << " " << highest << endl;
+
+	float pitchDist = abs(highest - lowest);
+
+	if (gIsVehicleInAir && pitchDist > 1 )
+	{
+		//m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.0000001 * pitchDist, 0, 0));
+	}
+	*/
+	PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
+	m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
+
+	PxVec3 test = m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getGlobalPose().q.getBasisVector1();
+
+	if (test.y < 0.9 && gIsVehicleInAir)
+	{
+		cout << "PITCH ME" << endl;
+		m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.01, 0, 0));
+
+	}
+//	cout << test.x << " " << test.y << " " << test.z << endl;
+
+
+
 	m_scene->simulate(timestep);
 	m_scene->fetchResults(true);
 }
@@ -240,7 +283,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 
 	//Create the drivable geometry
 	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
-	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, -10, 0)), new PxBoxGeometry(dims, 0.5, dims), NULL);
+	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, -100, 0)), new PxBoxGeometry(dims, 0.5, dims), NULL);
 
 	// Create the collidable walls
 	/*PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));
