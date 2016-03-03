@@ -12,6 +12,7 @@ public:
 		RENDERABLE_OBJECT_CAR,
 		RENDERABLE_OBJECT_PLANE,
 		RENDERABLE_OBJECT_BULLET,
+		RENDERABLE_OBJECT_SUPER_MOON,
 	};
 
 	
@@ -24,6 +25,8 @@ public:
 			return Assets::getModel("plane");
 		case RENDERABLE_OBJECT_BULLET:
 			return Assets::getModel("bullet");
+		case RENDERABLE_OBJECT_SUPER_MOON:
+			return Assets::getModel("scareMoon");
 		}
 	}
 	

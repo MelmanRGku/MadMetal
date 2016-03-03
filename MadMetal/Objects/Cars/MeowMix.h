@@ -10,6 +10,7 @@ public:
 
 	void fire();
 	void update(float dt);
+	void useSuper();
 private:
 	enum LastWeaponShot {
 		LAST_WEAPON_SHOT_LEFT,

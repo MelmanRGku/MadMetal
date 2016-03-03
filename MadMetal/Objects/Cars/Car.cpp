@@ -49,19 +49,10 @@ void Car::increaseDamageDealt(float damage)
 	m_damageDealt += damage;
 }
 
-void Car::useSuper()
-{
-	if (m_superGuage == 1)
-	{
-		m_superDurationRemaining = m_superMaxDuration;
-		//	Handle swaping character model
-	}
-}
-
 void Car::updateReload(float dt)
 {
-	if (m_reloadRemaining > 0)
-		m_reloadRemaining -= dt;
+	if (m_reloadRemainingSeconds > 0)
+		m_reloadRemainingSeconds -= dt;
 }
 
 void Car::updatePowerUp(float dt)
@@ -78,9 +69,9 @@ void Car::updatePowerUp(float dt)
 
 void Car::updateSuper(float dt)
 {
-	if (m_superDurationRemaining > 0)
+	if (m_superDurationRemainingSeconds > 0)
 	{
-		if ((m_superDurationRemaining -= dt) <= 0)
+		if ((m_superDurationRemainingSeconds -= dt) <= 0)
 		{
 			//m_currentModel = &m_normalModel;
 		}
@@ -89,5 +80,17 @@ void Car::updateSuper(float dt)
 }
 
 void Car::update(float dt) {
-	m_reloadRemaining -= dt;
+	m_reloadRemainingSeconds -= dt;
+	if (m_currentHealth < 0) {
+		std::cout << "Oh no, I dies :(" << std::endl;
+		hasToBeDeleted = true;
+	}
+}
+
+void Car::addDamageDealt(float damage) {
+	m_damageDealt += damage;
+	m_superGauge += damage / 1000;
+	std::cout << "My gauge is " << m_superGauge << std::endl;
+	if (superReady())
+		std::cout << "Give 'er" << std::endl;
 }

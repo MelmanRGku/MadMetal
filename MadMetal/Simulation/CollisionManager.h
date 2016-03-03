@@ -6,13 +6,12 @@ class CollisionManager : public PxSimulationEventCallback
 {
 private:
 	World &m_world;
-	PxScene &m_scene;
 
 private:
 	void processBulletHit(long bulletId, long otherId);
 
 public:
-	CollisionManager(World &world, PxScene &scene);
+	CollisionManager(World &world);
 	~CollisionManager();
 
 

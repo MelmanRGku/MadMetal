@@ -129,8 +129,8 @@ void GameSimulation::createPhysicsScene()
 	PxSceneDesc sceneDesc(PhysicsManager::getScale());
 	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
 
-	//sceneDesc.simulationEventCallback = manager;
-
+	CollisionManager *manager = new CollisionManager(*m_world);
+	sceneDesc.simulationEventCallback = manager;
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 
 	if (!sceneDesc.filterShader)
@@ -144,8 +144,7 @@ void GameSimulation::createPhysicsScene()
 		std::cout << "The scene is a lie. ERROR CODE: PX0005" << std::endl;
 	}
 
-	CollisionManager *manager = new CollisionManager(*m_world, *m_scene);
-	m_scene->setSimulationEventCallback(manager);
+	m_world->setScene(m_scene);
 
 	PxInitVehicleSDK(PhysicsManager::getPhysicsInstance());
 	PxVehicleSetBasisVectors(PxVec3(0, 1, 0), PxVec3(0, 0, 1));
@@ -220,6 +219,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, NULL, NULL, NULL));
 	m_humanPlayers[0]->setCar(meowMix);
 	m_mainCamera->setToFollow(meowMix);
+
+	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-15, 0, -15), NULL, NULL));
 
 	float length = 50;
 	float width = 10;

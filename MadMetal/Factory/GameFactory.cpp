@@ -25,93 +25,117 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	switch (objectToMake) {
 	case OBJECT_MEOW_MIX:
 	{
-		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_CAR), true, true);
-		Audioable *audioable = new Audioable();
-		Animatable *animatable = new Animatable();
-		Audio *audio = new Audio();
+							Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_CAR), true, true);
+							Audioable *audioable = new Audioable();
+							Animatable *animatable = new Animatable();
+							Audio *audio = new Audio();
 
-		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5f, 0.3f, 0.1f);    //static friction, dynamic friction, restitution
-		PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, NULL, NULL, NULL, new DrivingStyleFast(material, material), NULL);
+							PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5f, 0.3f, 0.1f);    //static friction, dynamic friction, restitution
+							PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, NULL, new DrivingStyleFast(material, material), NULL);
 
-		PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
-		Physicable *physicable = new Physicable(physicalCar->getRigidDynamicActor());
+							PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
+							Physicable *physicable = new Physicable(physicalCar->getRigidDynamicActor());
 
 
-		MeowMix *car = new MeowMix(objectId, *physicalCar, *audioable, *physicable, *animatable, *renderable, *audio);
+							MeowMix *car = new MeowMix(objectId, *physicalCar, *audioable, *physicable, *animatable, *renderable, *audio);
 
-		int k = (int)physicalCar->mWheelsSimData.getWheelData(0).mRadius * 2;
-		PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();
-		car->updateScale(glm::vec3(physicalCarDimensions.x, physicalCarDimensions.y + k, physicalCarDimensions.z));
+							int k = (int)physicalCar->mWheelsSimData.getWheelData(0).mRadius * 2;
+							PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();
+							car->setScale(glm::vec3(physicalCarDimensions.x, physicalCarDimensions.y + k, physicalCarDimensions.z));
 
-		m_world.addGameObject(car);
-		m_scene.addActor(*physicalCar->getRigidDynamicActor());
+							m_world.addGameObject(car);
+							m_scene.addActor(*physicalCar->getRigidDynamicActor());
 
-		//Set the vehicle to rest in first gear.
-		//Set the vehicle to use auto-gears.
-		physicalCar->setToRestState();
-		physicalCar->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
-		physicalCar->mDriveDynData.setUseAutoGears(true);
+							//Set the vehicle to rest in first gear.
+							//Set the vehicle to use auto-gears.
+							physicalCar->setToRestState();
+							physicalCar->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
+							physicalCar->mDriveDynData.setUseAutoGears(true);
 
-		return car;
+							return car;
 	}
 	case OBJECT_PLANE:
 	{
-		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PLANE), true, true);
-		Audioable *audioable = new Audioable();
-		Animatable *animatable = new Animatable();
-		Audio *audio = new Audio();
+						 Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PLANE), true, true);
+						 Audioable *audioable = new Audioable();
+						 Animatable *animatable = new Animatable();
+						 Audio *audio = new Audio();
 
-		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-		PxRigidStatic *physicalPlane = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_DRIVING_BOX, objectId, pos, geom, material, NULL, NULL));
-		Physicable *physicable = new Physicable(physicalPlane);
+						 PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+						 PxRigidStatic *physicalPlane = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_DRIVING_BOX, objectId, pos, geom, material, NULL, NULL));
+						 Physicable *physicable = new Physicable(physicalPlane);
 
-		TestObject *plane = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+						 TestObject *plane = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
 
-		plane->updateScale(glm::vec3(glm::vec3(plane->getWorldBounds().getDimensions().x, 1, plane->getWorldBounds().getDimensions().z)));
+						 plane->setScale(glm::vec3(glm::vec3(plane->getWorldBounds().getDimensions().x, 1, plane->getWorldBounds().getDimensions().z)));
 
-		m_world.addGameObject(plane);
-		m_scene.addActor(*physicalPlane);
+						 m_world.addGameObject(plane);
+						 m_scene.addActor(*physicalPlane);
 
-		return plane;
+						 return plane;
 	}
 	case OBJECT_WALL:
 	{
-		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PLANE), true, true);
-		Audioable *audioable = new Audioable();
-		Animatable *animatable = new Animatable();
-		Audio *audio = new Audio();
+						Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PLANE), true, true);
+						Audioable *audioable = new Audioable();
+						Animatable *animatable = new Animatable();
+						Audio *audio = new Audio();
 
-		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-		PxRigidStatic *physicalWall = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_WALL, objectId, pos, NULL, NULL, NULL, NULL));
-		Physicable *physicable = new Physicable(physicalWall);
+						PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+						PxRigidStatic *physicalWall = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_WALL, objectId, pos, NULL, NULL, NULL, NULL));
+						Physicable *physicable = new Physicable(physicalWall);
 
-		TestObject *wall = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+						TestObject *wall = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
 
-		m_world.addGameObject(wall);
-		m_scene.addActor(*physicalWall);
+						m_world.addGameObject(wall);
+						m_scene.addActor(*physicalWall);
 
-		return wall;
+						return wall;
 	}
 	case OBJECT_BULLET:
-		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_BULLET), true, true);
-		Audioable *audioable = new Audioable();
-		Animatable *animatable = new Animatable();
-		Audio *audio = new Audio();
+	{
+						  Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_BULLET), true, true);
+						  Audioable *audioable = new Audioable();
+						  Animatable *animatable = new Animatable();
+						  Audio *audio = new Audio();
 
-		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-		glm::vec3 speed = 100.f * parent->getForwardVector(); speed += glm::vec3(0, 15.f, 0);
-		glm::vec3 pos = parent->getFullPosition();
-		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET, objectId, new PxTransform(pos.x, pos.y, pos.z), NULL, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
-		animatable->setRotation(parent->getFullRotation());
-		animatable->updateScale(glm::vec3(-.5, -.5, -.5));
-		Physicable *physicable = new Physicable(physicalBullet);
+						  PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+						  glm::vec3 speed = 500.f * parent->getForwardVector(); speed += glm::vec3(0, 1.f, 0);
+						  glm::vec3 pos = parent->getFullPosition();
+						  PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET, objectId, new PxTransform(pos.x, pos.y, pos.z), NULL, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
+						  animatable->setRotation(parent->getFullRotation());
+						  animatable->setScale(glm::vec3(.2, .2, .7));
+						  Physicable *physicable = new Physicable(physicalBullet);
 
-		Bullet *bullet = new Bullet(objectId, *audioable, *physicable, *animatable, *renderable, *audio, static_cast<Car *>(parent));
+						  Bullet *bullet = new Bullet(objectId, *audioable, *physicable, *animatable, *renderable, *audio, static_cast<Car *>(parent));
 
-		m_world.addGameObject(bullet);
-		m_scene.addActor(*physicalBullet);
+						  m_world.addGameObject(bullet);
+						  m_scene.addActor(*physicalBullet);
 
-		return bullet;
+						  return bullet;
+	}
+	case OBJECT_BULLET_SUPER_MOON:
+	{
+									 Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_SUPER_MOON), true, true);
+									 Audioable *audioable = new Audioable();
+									 Animatable *animatable = new Animatable();
+									 Audio *audio = new Audio();
+
+									 PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+									 glm::vec3 speed = 50.f * parent->getForwardVector(); speed += glm::vec3(0, 30.f, 0);
+									 glm::vec3 pos = parent->getFullPosition();
+									 PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_SUPER_MOON, objectId, new PxTransform(pos.x, pos.y + 2.f, pos.z), NULL, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
+									 animatable->setRotation(parent->getFullRotation());
+									 animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
+									 Physicable *physicable = new Physicable(physicalBullet);
+
+									 Bullet *bullet = new Bullet(objectId, *audioable, *physicable, *animatable, *renderable, *audio, static_cast<Car *>(parent));
+
+									 m_world.addGameObject(bullet);
+									 m_scene.addActor(*physicalBullet);
+
+									 return bullet;
+	}
 	}
 }
 

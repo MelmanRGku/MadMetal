@@ -4,7 +4,8 @@
 MeowMix::MeowMix(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio) : Car(id, car, aable, pable, anable, rable, audio)
 {
 	m_lastWeaponShot = LAST_WEAPON_SHOT_LEFT;
-	m_reloadRate = 0.15;						//in s
+	m_reloadRateSeconds = 0.15;						//in s
+	m_currentHealth = m_maxHealth = 20000;
 }
 
 
@@ -14,10 +15,10 @@ MeowMix::~MeowMix()
 
 void MeowMix::fire()
 {
-	if (m_reloadRemaining > 0)
+	if (m_reloadRemainingSeconds > 0)
 		return;
 
-	m_reloadRemaining = m_reloadRate;
+	m_reloadRemainingSeconds = m_reloadRateSeconds;
 
 	GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET, new PxTransform(getFullPosition().x, getFullPosition().y, getFullPosition().z), NULL, this);
 
@@ -48,4 +49,9 @@ void MeowMix::fire()
 
 void MeowMix::update(float dt) {
 	Car::update(dt);
+}
+
+void MeowMix::useSuper() {
+	m_superGauge = 0;
+	GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_SUPER_MOON, NULL, NULL, this);
 }

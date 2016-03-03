@@ -11,6 +11,7 @@ class World
 {
 private:
 	std::vector<TestObject*> *gameObjects;
+	PxScene *scene;
 public:
 	
 	World();
@@ -20,7 +21,9 @@ public:
 	std::vector<TestObject*> * getGameObjects()	{ return gameObjects; }
 	void addGameObject(TestObject *obj) { gameObjects->push_back(obj); }
 	TestObject *findObject(long id);
-	void deleteObject(long id);
+	void deleteObjectById(long id);
+	void deleteObjectByIndex(int index);
 	void update(float dt);
+	void setScene(PxScene *scene) { this->scene = scene; }
 };
 

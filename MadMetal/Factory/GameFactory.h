@@ -22,6 +22,7 @@ public:
 		OBJECT_PLANE,
 		OBJECT_WALL,
 		OBJECT_BULLET,
+		OBJECT_BULLET_SUPER_MOON,
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry *geom, TestObject *parent);
