@@ -133,7 +133,7 @@ void GameSimulation::simulatePhysics(double dt)
 
 	if (test.y < 0.9 && gIsVehicleInAir)
 	{
-		cout << "PITCH ME" << endl;
+		//cout << "PITCH ME" << endl;
 		m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.01, 0, 0));
 
 	}

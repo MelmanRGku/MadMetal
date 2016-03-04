@@ -198,6 +198,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Waypoint *waypoint = new Waypoint(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
 
 		m_world.addGameObject(waypoint);
+		m_scene.addActor(*waypointTriggerVolume);
 
 		return waypoint;
 	}

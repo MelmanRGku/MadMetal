@@ -33,7 +33,7 @@ private: //members
 	//peices of the physics track and the renderable surface
 	Object * m_track;
 	//load from file
-	WayPointSystem * m_wayPointSystem;
+	WaypointSystem * m_wayPointSystem;
 	std::vector<Object *> m_powerUps;
 	std::vector<Object *> m_collisionsVolumes;
 	Sound * m_trackMusic;
