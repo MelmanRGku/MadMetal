@@ -11,6 +11,7 @@
 #include "PhysicsManager.h"
 #include "Objects\ObjectCreators\VehicleCreator.h"
 #include "CollisionManager.h"
+#include "Waypoint.h"
 
 #define NUM_OF_PLAYERS 8
 
@@ -284,6 +285,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
 	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, -100, 0)), new PxBoxGeometry(dims, 0.5, dims), NULL);
 
+	createWaypointPositions(glm::vec3(0, -100, 0), dims, dims);
+
 	// Create the collidable walls
 	/*PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));
 	leftWall->createShape(PxBoxGeometry(0.5, width, length), *mMaterial);
@@ -346,3 +349,94 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	
 }
 
+void GameSimulation::createWaypointPositions(glm::vec3 centerOfPlane, float length, float width)
+{
+	float maxLength = (length / 2);
+	float maxWidth = (width / 2);
+
+	float minLength = -maxLength;
+	float minWidth = -maxWidth;
+
+	std::vector<std::vector<Waypoint*>> waypointMap;
+
+	int id = 0;
+	int index = 0;
+	for(int i = minWidth + 20.0; i < maxWidth; i += 40.0)
+	{
+		std::vector<Waypoint*> newVectorWaypoint;
+		waypointMap.push_back(newVectorWaypoint);
+		for (int j = minLength + 20.0; j < maxLength; j += 40.0)
+		{
+			waypointMap[index].push_back(new Waypoint(glm::vec3(i, 0.5, j), id));
+			id++;
+		}
+		index++;
+	}
+
+	// Populate Waypoints
+	for(int i = 0; i < waypointMap.size(); i++)
+	{
+		for(int j = 0; j < waypointMap[i].size(); j++)
+		{
+			// Row 1
+			if((i - 1) >= 0)
+			{
+				if((j-1) >= 0)
+				{
+					waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i-1][j-1]);
+				}
+
+				waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i-1][j]);
+
+				if((j+1) < waypointMap[i].size())
+				{
+					waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i-1][j+1]);
+				}
+			} 
+
+			// Row 2
+			if((j-1) >= 0)
+			{
+				waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i][j-1]);
+			}
+
+			if((j+1) < waypointMap[i].size())
+			{
+				waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i][j+1]);
+			}
+
+			//Row 3
+			if((i + 1) < waypointMap.size())
+			{
+				if((j-1) >= 0)
+				{
+					waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i+1][j-1]);
+				}
+
+				waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i+1][j]);
+
+				if((j+1) < waypointMap[i].size())
+				{
+					waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i+1][j+1]);
+				}
+			} 
+		}
+	}
+	// cout << "size: " << waypointMap.size() << std::endl;
+
+	for(int i = 0; i < waypointMap.size(); i++)
+	{
+		// cout << "size2: " << waypointMap[i].size() << std::endl;
+		for(int j = 0; j < waypointMap[i].size(); j++)
+		{
+			// std::cout << "waypoint: " << waypointMap[i][j]->getId() << " " << "and is connected to: ";
+			// std::cout << waypointMap[i][j]->getWaypointPosition().x << " " << waypointMap[i][j]->getWaypointPosition().y << " " << waypointMap[i][j]->getWaypointPosition().z << " || "; 
+			for(int k = 0; k < waypointMap[i][j]->getListOfAdjacentWaypoints().size(); k++)
+			{
+				std::cout << waypointMap[i][j]->getListOfAdjacentWaypoints().at(k)->getId() << ", ";
+			}
+			std::cout << "\n";
+		}
+	}
+
+}

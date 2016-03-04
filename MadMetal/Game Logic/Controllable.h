@@ -1,6 +1,7 @@
 #pragma once
 #include "ControllableTemplate.h"
-#include "WayPointSystem.h"
+#include "WaypointSystem.h"
+#include "Simulation\Waypoint.h"
 
 class Controllable
 {
@@ -8,8 +9,8 @@ protected:
 	
 	ControllableTemplate& m_controllableTemplate;
 
-	WayPoint* m_currentWayPoint;
-	WayPoint* m_nextWayPoint;
+	Waypoint* m_currentWaypoint;
+	Waypoint* m_nextWaypoint;
 
 	
 public:
@@ -17,7 +18,7 @@ public:
 	~Controllable(){};
 
 	virtual void playFrame(double dt) = 0;
-	void setWayPoint(WayPoint * wayPoint, bool finishLine);
+	void setWaypoint(Waypoint * waypoint, bool finishLine);
 	
 	ControllableTemplate& getControllableTemplate();
 	
