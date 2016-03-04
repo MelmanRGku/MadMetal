@@ -11,7 +11,6 @@
 class Scene;
 class Car;
 class PhysicsManager;
-class WayPointSystem;
 class VehicleSceneQueryData; 
 class ObjModelLoader;
 

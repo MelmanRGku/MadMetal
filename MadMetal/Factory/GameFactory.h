@@ -28,6 +28,7 @@ public:
 		OBJECT_HEALTH_BAR,
 		OBJECT_GAUGE_BAR,
 		OBJECT_TEXT_2D,
+		OBJECT_WAYPOINT,
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry *geom, TestObject *parent);

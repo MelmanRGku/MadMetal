@@ -1,7 +1,7 @@
 #pragma once
 #include "ControllableTemplate.h"
 #include "WaypointSystem.h"
-#include "Simulation\Waypoint.h"
+#include "Objects\Waypoint.h"
 
 class Controllable
 {

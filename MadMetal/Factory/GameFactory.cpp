@@ -1,4 +1,5 @@
 #include "GameFactory.h"
+#include "Objects\Waypoint.h"
 
 long GameFactory::lastId = 0;
 
@@ -182,6 +183,23 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		m_world.addGameObject(bar);
 
 		return bar;
+	}
+
+	case OBJECT_WAYPOINT:
+	{
+		Renderable *renderable = new Renderable(NULL);
+		Audioable *audioable = new Audioable();
+		Animatable *animatable = new Animatable();
+		Audio *audio = new Audio();
+
+		PxRigidDynamic *waypointTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::WAYPOINT_COLLISION_VOLUME, objectId, pos, geom, NULL, NULL, NULL));
+		Physicable *physicable = new Physicable(waypointTriggerVolume);
+
+		Waypoint *waypoint = new Waypoint(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+
+		m_world.addGameObject(waypoint);
+
+		return waypoint;
 	}
 	}
 }

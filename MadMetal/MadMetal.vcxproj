@@ -74,9 +74,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game Logic\WayPointSystem.cpp" />
     <ClCompile Include="Objects\MeowMixBullet.cpp" />
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
+    <ClCompile Include="Objects\Waypoint.cpp" />
     <ClCompile Include="Renderer\NoShaderProgram.cpp" />
     <ClCompile Include="Objects\Bullet.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
@@ -136,6 +138,7 @@
     <ClInclude Include="Objects\MeowMixBullet.h" />
     <ClInclude Include="Objects\GaugeBar.h" />
     <ClInclude Include="Objects\HealthBar2D.h" />
+    <ClInclude Include="Objects\Waypoint.h" />
     <ClInclude Include="Renderer\NoShaderProgram.h" />
     <ClInclude Include="Objects\Bullet.h" />
     <ClInclude Include="Renderer\ShaderProgram.h" />

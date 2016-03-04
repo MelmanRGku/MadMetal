@@ -11,6 +11,7 @@ public:
 		PHYSICAL_OBJECT_DRIVING_BOX,
 		PHYSICAL_OBJECT_BULLET_MEOW_MIX,
 		PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO,
+		WAYPOINT_COLLISION_VOLUME,
 	};
 
 public:
@@ -125,6 +126,26 @@ public:
 			bullet->setLinearVelocity(*velocity);
 
 			toReturn = bullet;
+			break;
+		}
+		case WAYPOINT_COLLISION_VOLUME:
+		{
+			PxRigidStatic * wapoint = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+			PxFilterData simFilterData;
+			simFilterData.word0 = COLLISION_FLAG_WAYPOINT;
+			simFilterData.word1 = COLLISION_FLAG_WAYPOINT_AGAINST;
+
+			wapoint->createShape(*geom, *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			wapoint->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+			setFilterDataId(objectId, wapoint);
+
+			toReturn = wapoint;
 			break;
 		}
 		}
