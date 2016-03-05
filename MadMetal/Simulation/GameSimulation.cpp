@@ -241,7 +241,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//Create the drivable geometry
 	//m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
 	m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, NULL, NULL, NULL);
-
+	m_gameFactory->makeObject(GameFactory::OBJECT_BUILDING, &PxTransform(PxVec3(0,0,0)), NULL, NULL);
 	// Create the collidable walls
 	/*PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));
 	leftWall->createShape(PxBoxGeometry(0.5, width, length), *mMaterial);

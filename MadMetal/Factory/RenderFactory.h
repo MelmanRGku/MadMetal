@@ -26,7 +26,7 @@ public:
 		case RENDERABLE_OBJECT_BULLET:
 			return Assets::getModel("bullet");
 		case RENDERABLE_OBJECT_TRACK:
-			return Assets::getModel("TRACK");
+			return Assets::getModel("plane");
 
 		}
 	}

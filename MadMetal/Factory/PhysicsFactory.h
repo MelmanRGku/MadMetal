@@ -9,6 +9,7 @@ public:
 		PHYSICAL_OBJECT_CAR,
 		PHYSICAL_OBJECT_WALL,
 		PHYSICAL_OBJECT_DRIVING_BOX,
+		PHYSICAL_OBJECT_BOX,
 		PHYSICAL_OBJECT_BULLET,
 		PHYSICAL_TRIANGLE_MESH,
 	};
@@ -67,6 +68,14 @@ public:
 			toReturn = wall;
 			break;
 		}
+		case PHYSICAL_OBJECT_BOX:
+		{
+			PxRigidStatic * box = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+			box->createShape(*geom, *material);
+			setFilterDataId(objectId, box);
+			toReturn = box;
+			break;
+		}
 		case PHYSICAL_OBJECT_DRIVING_BOX:
 		{
 			PxRigidStatic * plane = createDrivingBox(material, *pos, geom);
@@ -109,35 +118,61 @@ public:
 			//triangle mesh
 			PxVec3 points[] =
 			{
-				PxVec3(-10, 0, -10),
-				PxVec3(-10, -1, -10),
-				PxVec3(-10, -1, 10),
-				PxVec3(-10, 0, 10),
-				PxVec3(10, 0, -10),
-				PxVec3(10, -1, -10),
-				PxVec3(10, -1, 10),
-				PxVec3(10, 0, 10)
+				//track box
+				PxVec3(-200, 0, -200),
+				PxVec3(-200, -1, -200),
+				PxVec3(-200, -1, 200),
+				PxVec3(-200, 0, 200),
+				PxVec3(200, 0, -200),
+				PxVec3(200, -1, -200),
+				PxVec3(200, -1, 200),
+				PxVec3(200, 0, 200),
+
+				//inner pillar
+				//PxVec3(-160, 5, -160),
+				//PxVec3(-160, 0, -160),
+				//PxVec3(-160, 0, 160),
+				//PxVec3(-200, 5, 160),
+				//PxVec3(160, 5, -160),
+				//PxVec3(160, 0, -160),
+				//PxVec3(160, 0, 160),
+				//PxVec3(160, 5, 160),
+
+				
+
 			};
 
 			PxU32 indices[] =
 			{
-				0, 1, 3,
-				1, 2, 3,
-				3, 2, 7,
-				2, 6, 7,
-				7, 6, 4,
-				6, 5, 4,
-				4, 5, 0,
-				5, 1, 0,
+				//track
+				//0, 1, 3,
+				//1, 2, 3,
+				//3, 2, 7,
+				//2, 6, 7,
+				//7, 6, 4,
+				//6, 5, 4,
+				//4, 5, 0,
+				//5, 1, 0,
 				4, 0, 7,
 				0, 3, 7,
-				1, 5, 2,
-				5, 6, 2
+				//1, 5, 2,
+				//5, 6, 2
+
+				//pillar
+				//8, 9, 11,
+				//9, 10,11,
+				//11, 10, 15,
+				//10, 14, 15,
+				//15, 14, 12,
+				//14, 13, 12,
+				//12, 13, 8,
+				//13, 9, 8,
+
 			};
 
 
 			PhysicsObjectCreator * creator = new PhysicsObjectCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
-			PxTriangleMesh * mesh = creator->createTriangleMesh(points, 8, indices, 12);
+			PxTriangleMesh * mesh = creator->createTriangleMesh(points, 8, indices, 2);
 			PxTriangleMeshGeometry * geo = new PxTriangleMeshGeometry(mesh);
 			PxRigidStatic * plane = createDrivingBox(material, PxTransform(PxVec3(0,0,0)), geo);
 			setFilterDataId(objectId, plane);

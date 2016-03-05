@@ -74,6 +74,27 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return plane;
 	}
+	case OBJECT_BUILDING:
+	{
+		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PLANE), true, true);
+		Audioable *audioable = new Audioable();
+		Animatable *animatable = new Animatable();
+		Audio *audio = new Audio();
+
+		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+		PxBoxGeometry* geo = new PxBoxGeometry(PxVec3(60, 80, 60));
+		PxRigidStatic *physicalBox = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BOX, objectId, pos, geo, material, NULL, NULL));
+		Physicable *physicable = new Physicable(physicalBox);
+
+		TestObject *box = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+
+		box->updateScale(glm::vec3(glm::vec3(box->getWorldBounds().getDimensions().x, 80, box->getWorldBounds().getDimensions().z)));
+
+		m_world.addGameObject(box);
+		m_scene.addActor(*physicalBox);
+
+		return box;
+	}
 	case OBJECT_TRACK:
 	{
 		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRACK), true, true);

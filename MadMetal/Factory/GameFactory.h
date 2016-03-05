@@ -23,6 +23,7 @@ public:
 		OBJECT_WALL,
 		OBJECT_BULLET,
 		OBJECT_TRACK,
+		OBJECT_BUILDING
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry *geom, TestObject *parent);
