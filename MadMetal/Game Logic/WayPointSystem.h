@@ -16,8 +16,13 @@ public:
 
 public: // member functions
 	Waypoint * getWaypointAt(int index) { return m_waypoints[index]; }
+	std::vector<std::vector<Waypoint*>>& getWaypointMap() { return m_waypointMap; }
 
 private: // members
+	std::vector<std::vector<Waypoint*>> m_waypointMap;
 	std::vector<Waypoint *> m_waypoints;
 	GameFactory& m_gameFactory;
+
+
+	void test();
 };

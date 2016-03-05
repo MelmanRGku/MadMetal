@@ -1,4 +1,5 @@
 #include "WaypointSystem.h"
+#include "Game Logic\PathFinding.h"
 
 static const int WAYPOINT_RADIUS = 10;
 
@@ -7,67 +8,65 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 	float minLength = -trackWidth;
 	float minWidth = -trackLength;
 
-	std::vector<std::vector<Waypoint*>> waypointMap;
-
 	int index = 0;
 	for (int i = minWidth + WAYPOINT_RADIUS + 10; i < trackWidth; i += ((WAYPOINT_RADIUS+ 10)  * 2))
 	{
 		std::vector<Waypoint*> newVectorWaypoint;
-		waypointMap.push_back(newVectorWaypoint);
+		m_waypointMap.push_back(newVectorWaypoint);
 		for (int j = minLength + WAYPOINT_RADIUS + 10; j < trackLength; j += ((WAYPOINT_RADIUS + 10) * 2))
 		{
 			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, new PxTransform(i, -100, j), new PxSphereGeometry(static_cast<float>(WAYPOINT_RADIUS)), NULL));
-			waypointMap[index].push_back(tempWaypoint);
+			m_waypointMap[index].push_back(tempWaypoint);
 			m_waypoints.push_back(tempWaypoint);
 		}
 		index++;
 	}
 
 	// Populate Waypoints
-	for (int i = 0; i < waypointMap.size(); i++)
+	for (int i = 0; i < m_waypointMap.size(); i++)
 	{
-		for (int j = 0; j < waypointMap[i].size(); j++)
+		for (int j = 0; j < m_waypointMap[i].size(); j++)
 		{
 			// Row 1
 			if ((i - 1) >= 0)
 			{
 				if ((j - 1) >= 0)
 				{
-					waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i - 1][j - 1]);
+					m_waypointMap[i][j]->addAdjecentWaypoint(m_waypointMap[i - 1][j - 1]);
 				}
 
-				waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i - 1][j]);
+				m_waypointMap[i][j]->addAdjecentWaypoint(m_waypointMap[i - 1][j]);
 
-				if ((j + 1) < waypointMap[i].size())
+				if ((j + 1) < m_waypointMap[i].size())
 				{
-					waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i - 1][j + 1]);
+					m_waypointMap[i][j]->addAdjecentWaypoint(m_waypointMap[i - 1][j + 1]);
 				}
 			}
 
 			// Row 2
 			if ((j - 1) >= 0)
 			{
-				waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i][j - 1]);
+				m_waypointMap[i][j]->addAdjecentWaypoint(m_waypointMap[i][j - 1]);
 			}
 
-			if ((j + 1) < waypointMap[i].size())
+			if ((j + 1) < m_waypointMap[i].size())
 			{
-				waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i][j + 1]);
+				m_waypointMap[i][j]->addAdjecentWaypoint(m_waypointMap[i][j + 1]);
 			}
 
 			//Row 3
-			if ((i + 1) < waypointMap.size())
+			if ((i + 1) < m_waypointMap.size())
 			{
 				if ((j - 1) >= 0)
 				{
-					waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i + 1][j - 1]);
+					m_waypointMap[i][j]->addAdjecentWaypoint(m_waypointMap[i + 1][j - 1]);
 				}
 
-				waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i + 1][j]);
+				m_waypointMap[i][j]->addAdjecentWaypoint(m_waypointMap[i + 1][j]);
 
-				if ((j + 1) < waypointMap[i].size())
+				if ((j + 1) < m_waypointMap[i].size())
 				{
-					waypointMap[i][j]->addAdjecentWaypoint(waypointMap[i + 1][j + 1]);
+					m_waypointMap[i][j]->addAdjecentWaypoint(m_waypointMap[i + 1][j + 1]);
 				}
 			}
 		}
@@ -83,6 +82,8 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 	//	std::cout << "\n";
 	//}
 
+	test();
+
 }
 
 WaypointSystem::~WaypointSystem()
@@ -92,4 +93,22 @@ WaypointSystem::~WaypointSystem()
 		delete m_waypoints[i];
 	}
 	m_waypoints.clear();
+}
+
+void WaypointSystem::test()
+{
+	PathFinding* pathFinding = new PathFinding();
+
+	std::vector<Waypoint*> result = pathFinding->findPath(m_waypoints[0], m_waypoints[24]);
+
+	std::cout << "The optimal path is: ";
+
+	for (int i = 0; i < result.size(); i++)
+	{
+		std::cout << result[i]->getId() << ", ";
+	}
+
+	std::cout << "\n";
+
+	delete pathFinding;
 }
