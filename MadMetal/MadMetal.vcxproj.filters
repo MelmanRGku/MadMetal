@@ -362,14 +362,20 @@
     <ClInclude Include="Game Logic\AIControllable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Track.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-	<ClInclude Include="Simulation\CollisionManager.h">
+    <ClInclude Include="Simulation\CollisionManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Track.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Weapons\HasWeapons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Files\test.txt" />
   </ItemGroup>
 </Project>

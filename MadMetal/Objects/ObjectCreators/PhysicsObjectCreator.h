@@ -25,6 +25,7 @@ public:
 	PxRigidStatic* createDrivingBox(physx::PxMaterial* material, PxTransform position, PxBoxGeometry box);
 	PxRigidStatic* createDrivablePlane(physx::PxMaterial* material);
 	PxConvexMesh* createConvexMesh(const PxVec3* verts, const PxU32 numVerts);
+	PxTriangleMesh* createTriangleMesh(const PxVec3* verts, const PxU32 numVerts, const PxU32* indices, const PxU32 numTriangles);
 	PxConvexMesh* createChassisMesh(const PxVec3 dims);
 	PxConvexMesh* createWheelMesh(const PxF32 width, const PxF32 radius);
 	PxRigidDynamic* createVehicleActor (const PxVehicleChassisData& chassisData,

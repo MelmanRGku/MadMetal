@@ -55,6 +55,7 @@ std::string FileHandlingHelpers::readFile(const char * filename) {
 	std::ifstream ifs(filename);
 
 	if (ifs.fail()) {
+		std::cout << "Couldn't load the file " << filename << std::endl;
 		Log::writeLine(std::string("Could not open file ") + filename);
 		return "";
 	}

@@ -1,4 +1,5 @@
 #include "PhysicsObjectCreator.h"
+#include <iostream>
 
 
 PhysicsObjectCreator::PhysicsObjectCreator(PxPhysics *physics, PxCooking *cooking)
@@ -77,6 +78,29 @@ PxConvexMesh* PhysicsObjectCreator::createConvexMesh(const PxVec3* verts, const 
 	}
 
 	return convexMesh;
+}
+
+PxTriangleMesh* PhysicsObjectCreator::createTriangleMesh(const PxVec3* verts, const PxU32 numVerts, const PxU32* indices, const PxU32 numTriangles)
+{
+	// Create descriptor for convex mesh
+	PxTriangleMeshDesc description;
+	description.points.count = numVerts;
+	description.triangles.count = numTriangles;
+	description.points.stride = sizeof(PxVec3);
+	description.triangles.stride = 3*sizeof(PxU32);
+	description.points.data = verts;
+	description.triangles.data = indices;
+	
+	PxTriangleMesh* triangleMesh = NULL;
+	PxDefaultMemoryOutputStream buf;
+	if (cooking->cookTriangleMesh(description, buf))
+	{
+		std::cout << "created the triangle mesh \n";
+		PxDefaultMemoryInputData id(buf.getData(), buf.getSize());
+		triangleMesh = physics->createTriangleMesh(id);
+	}
+
+	return triangleMesh;
 }
 
 

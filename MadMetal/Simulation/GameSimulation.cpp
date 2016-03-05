@@ -13,6 +13,7 @@
 #include "Objects\ObjectCreators\VehicleCreator.h"
 #include "CollisionManager.h"
 
+
 #define NUM_OF_PLAYERS 8
 
 using namespace std;
@@ -238,8 +239,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	float dims = 200;
 
 	//Create the drivable geometry
-	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
-	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, -10, 0)), new PxBoxGeometry(dims, 0.5, dims), NULL);
+	//m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
+	m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, NULL, NULL, NULL);
 
 	// Create the collidable walls
 	/*PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));

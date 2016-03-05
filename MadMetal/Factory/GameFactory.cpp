@@ -56,7 +56,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	}
 	case OBJECT_PLANE:
 	{
-		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PLANE), true, true);
+		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRACK), true, true);
 		Audioable *audioable = new Audioable();
 		Animatable *animatable = new Animatable();
 		Audio *audio = new Audio();
@@ -68,6 +68,26 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		TestObject *plane = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
 
 		plane->updateScale(glm::vec3(glm::vec3(plane->getWorldBounds().getDimensions().x, 1, plane->getWorldBounds().getDimensions().z)));
+
+		m_world.addGameObject(plane);
+		m_scene.addActor(*physicalPlane);
+
+		return plane;
+	}
+	case OBJECT_TRACK:
+	{
+		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRACK), true, true);
+		Audioable *audioable = new Audioable();
+		Animatable *animatable = new Animatable();
+		Audio *audio = new Audio();
+		
+		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+		PxRigidStatic *physicalPlane = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_TRIANGLE_MESH, objectId, pos, NULL, material, NULL, NULL));
+		Physicable *physicable = new Physicable(physicalPlane);
+
+		TestObject *plane = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+
+		plane->updateScale(glm::vec3(glm::vec3(plane->getWorldBounds().getDimensions().x, plane->getWorldBounds().getDimensions().y, plane->getWorldBounds().getDimensions().z)));
 
 		m_world.addGameObject(plane);
 		m_scene.addActor(*physicalPlane);

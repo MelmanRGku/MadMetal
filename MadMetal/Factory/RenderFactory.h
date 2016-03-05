@@ -12,6 +12,7 @@ public:
 		RENDERABLE_OBJECT_CAR,
 		RENDERABLE_OBJECT_PLANE,
 		RENDERABLE_OBJECT_BULLET,
+		RENDERABLE_OBJECT_TRACK,
 	};
 
 	
@@ -24,6 +25,9 @@ public:
 			return Assets::getModel("plane");
 		case RENDERABLE_OBJECT_BULLET:
 			return Assets::getModel("bullet");
+		case RENDERABLE_OBJECT_TRACK:
+			return Assets::getModel("TRACK");
+
 		}
 	}
 	

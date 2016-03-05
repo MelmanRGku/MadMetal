@@ -10,6 +10,7 @@ public:
 		PHYSICAL_OBJECT_WALL,
 		PHYSICAL_OBJECT_DRIVING_BOX,
 		PHYSICAL_OBJECT_BULLET,
+		PHYSICAL_TRIANGLE_MESH,
 	};
 
 public:
@@ -77,7 +78,7 @@ public:
 		{
 			VehicleCreator *vc = new VehicleCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 			PxVehicleDrive4W *car = vc->create(style);
-			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
+			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 15.0f), 0), PxQuat(PxIdentity));
 			car->getRigidDynamicActor()->setGlobalPose(startTransform);
 			setFilterDataId(objectId, car->getRigidDynamicActor());
 			toReturn = car;
@@ -104,6 +105,44 @@ public:
 			toReturn = bullet;
 			break;
 		}
+		case PHYSICAL_TRIANGLE_MESH:
+			//triangle mesh
+			PxVec3 points[] =
+			{
+				PxVec3(-10, 0, -10),
+				PxVec3(-10, -1, -10),
+				PxVec3(-10, -1, 10),
+				PxVec3(-10, 0, 10),
+				PxVec3(10, 0, -10),
+				PxVec3(10, -1, -10),
+				PxVec3(10, -1, 10),
+				PxVec3(10, 0, 10)
+			};
+
+			PxU32 indices[] =
+			{
+				0, 1, 3,
+				1, 2, 3,
+				3, 2, 7,
+				2, 6, 7,
+				7, 6, 4,
+				6, 5, 4,
+				4, 5, 0,
+				5, 1, 0,
+				4, 0, 7,
+				0, 3, 7,
+				1, 5, 2,
+				5, 6, 2
+			};
+
+
+			PhysicsObjectCreator * creator = new PhysicsObjectCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
+			PxTriangleMesh * mesh = creator->createTriangleMesh(points, 8, indices, 12);
+			PxTriangleMeshGeometry * geo = new PxTriangleMeshGeometry(mesh);
+			PxRigidStatic * plane = createDrivingBox(material, PxTransform(PxVec3(0,0,0)), geo);
+			setFilterDataId(objectId, plane);
+			toReturn = plane;
+			break;
 		}
 
 		return toReturn;
