@@ -11,6 +11,7 @@ class Waypoint : public TestObject
 {
 	static int globalID;
 	int m_id;
+	bool m_isValid;
 	std::vector<Waypoint*> m_adjecentWaypoints;
 
 public:
@@ -18,6 +19,8 @@ public:
 	~Waypoint();
 	std::vector<Waypoint*>& getListOfAdjacentWaypoints(){ return m_adjecentWaypoints; }
 	const int& getId();
+	bool isValid();
+	void setValid(bool isValid);
 
 	void addAdjecentWaypoint(Waypoint* waypoint);
 };

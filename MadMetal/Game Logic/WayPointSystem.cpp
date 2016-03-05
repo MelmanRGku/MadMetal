@@ -72,6 +72,11 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 		}
 	}
 
+	for (int i = 33; i < 37; i++)
+	{
+		m_waypoints[i]->setValid(false);
+	}
+
 	//for (int i = 0; i < m_waypoints.size(); i++)
 	//{
 	//	std::cout << "waypoint: " << m_waypoints[i]->getId() << " " << " and is connected to ";
@@ -99,7 +104,7 @@ void WaypointSystem::test()
 {
 	PathFinding* pathFinding = new PathFinding();
 
-	std::vector<Waypoint*> result = pathFinding->findPath(m_waypoints[0], m_waypoints[24]);
+	std::vector<Waypoint*> result = pathFinding->findPath(m_waypoints[0], m_waypoints[46]);
 
 	std::cout << "The optimal path is: ";
 

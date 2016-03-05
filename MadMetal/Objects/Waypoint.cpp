@@ -6,6 +6,7 @@ Waypoint::Waypoint(long id, Audioable &aable, Physicable &pable, Animatable &ana
 {
 	m_id = Waypoint::globalID;
 	Waypoint::globalID++;
+	m_isValid = true;
 }
 
 
@@ -21,4 +22,14 @@ const int& Waypoint::getId()
 void Waypoint::addAdjecentWaypoint(Waypoint* waypoint)
 {
 	m_adjecentWaypoints.push_back(waypoint);
+}
+
+bool Waypoint::isValid()
+{
+	return m_isValid;
+}
+
+void Waypoint::setValid(bool isValid)
+{
+	m_isValid = isValid;
 }

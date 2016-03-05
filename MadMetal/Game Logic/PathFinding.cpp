@@ -92,10 +92,10 @@ SearchWaypoint* PathFinding::getNextCell()
 
 void PathFinding::pathOpened(Waypoint& waypoint, float newCost, SearchWaypoint *parent)
 {
-	//if (CELL_BLOCKED)
-	//{
-	//	return;
-	//}
+	if (!waypoint.isValid())
+	{
+		return;
+	}
 
 	for (int i = 0; i < m_visitedList.size(); i++)
 	{
