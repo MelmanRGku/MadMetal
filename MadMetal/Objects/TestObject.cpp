@@ -30,25 +30,30 @@ glm::vec3 TestObject::getFullRotation() {
 	return glm::eulerAngles(glm::quat(rotation.w, rotation.x, rotation.y, rotation.z)) + m_animatable.getRotation(); 
 }
 
-void TestObject::draw(Renderer *renderer)
+bool TestObject::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
 {
+	if (type != Renderer::ShaderType::SHADER_TYPE_CELL || passNumber > 1)
+		return false;
+
 	if (m_renderable.getModel() == NULL)
-		return;
+		return false;
 
 	std::vector<Mesh *> *meshes = m_renderable.getModel()->getMeshes();
 
 	glm::mat4x4 modelMatrix = getModelMatrix();
 
-	glUniform1i(renderer->getShaderProgram()->textureUniform, 0);
-	glUniformMatrix4fv(renderer->getShaderProgram()->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
+	CellShaderProgram *program = static_cast<CellShaderProgram *>(renderer->getShaderProgram(Renderer::ShaderType::SHADER_TYPE_CELL));
+
+	glUniform1i(program->textureUniform, 0);
+	glUniformMatrix4fv(program->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
 	for (unsigned int i = 0; i < meshes->size(); i++) {
 		Mesh *mesh = meshes->at(i);
 		if (mesh->hasTexture()) {
 			mesh->getTexture()->Bind(GL_TEXTURE0);
-			glUniform1i(renderer->getShaderProgram()->textureValidUniform, true);
+			glUniform1i(program->textureValidUniform, true);
 		}
 		else {
-			glUniform1i(renderer->getShaderProgram()->textureValidUniform, false);
+			glUniform1i(program->textureValidUniform, false);
 		}
 		// Draw mesh
 		glBindVertexArray(mesh->getVAO());
@@ -59,6 +64,8 @@ void TestObject::draw(Renderer *renderer)
 			mesh->getTexture()->unBind(GL_TEXTURE0);
 		}
 	}
+
+	return false;
 }
 
 glm::vec3 TestObject::getPosition() {

@@ -50,6 +50,13 @@ void PlayerControllable::playFrame(double dt)
 				m_car->fire();
 			}
 
+			if (m_gamePad->isPressed(GamePad::YButton)) {
+				if (m_car->superReady()) {
+					m_car->useSuper();
+					std::cout << "I shot" << std::endl;
+				}
+			}
+
 			/*if (m_gamePad->isPressed(GamePad::YButton))
 			{
 				//std::cout << "Ypressed \n";

@@ -74,7 +74,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\MeowMixBullet.cpp" />
+    <ClCompile Include="Objects\GaugeBar.cpp" />
+    <ClCompile Include="Objects\HealthBar2D.cpp" />
+    <ClCompile Include="Renderer\NoShaderProgram.cpp" />
     <ClCompile Include="Objects\Bullet.cpp" />
+    <ClCompile Include="Renderer\ShaderProgram.cpp" />
     <ClCompile Include="Simulation\CollisionManager.cpp" />
     <ClCompile Include="Factory\GameFactory.cpp" />
     <ClCompile Include="Files\FIleHandlingHelpers.cpp" />
@@ -83,12 +88,10 @@
     <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="Objects\Cars\MeowMix.cpp" />
     <ClCompile Include="Objects\DrivingStyle.cpp" />
-    <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp" />
     <ClCompile Include="Objects\TestObject.cpp" />
     <ClCompile Include="Renderer\Renderable.cpp" />
     <ClCompile Include="Simulation\GameSimulationDefinitions.cpp" />
-    <ClCompile Include="Simulation\LoadingScreen.cpp" />
     <ClCompile Include="Objects\BoundingBox.cpp" />
     <ClCompile Include="Objects\Cars\Car.cpp" />
     <ClCompile Include="Game Logic\Controllable.cpp" />
@@ -110,7 +113,6 @@
     <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdater.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdaterParallel.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.cpp" />
-    <ClCompile Include="Objects\RenderableObject.cpp" />
     <ClCompile Include="Objects\Texture.cpp" />
     <ClCompile Include="ParticleSystem\ParticleData.cpp" />
     <ClCompile Include="ParticleSystem\ParticleEmitter.cpp" />
@@ -118,17 +120,25 @@
     <ClCompile Include="ParticleSystem\ParticleUpdater.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
-    <ClCompile Include="Renderer\ShaderProgram.cpp" />
+    <ClCompile Include="Renderer\CellShaderProgram.cpp" />
     <ClCompile Include="Scene Manager\Scene.cpp" />
     <ClCompile Include="Scene Manager\StackManager.cpp" />
+    <ClCompile Include="Simulation\LoadingScreen.cpp" />
     <ClCompile Include="Simulation\World.cpp" />
     <ClCompile Include="Simulation\PhysicsManager.cpp" />
     <ClCompile Include="Simulation\GameSimulation.cpp" />
     <ClCompile Include="Objects\ObjectCreators\VehicleCreator.cpp" />
+    <ClCompile Include="Objects\Text2D.cpp" />
+    <ClCompile Include="Objects\VolcanoGuySuperBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Objects\MeowMixBullet.h" />
+    <ClInclude Include="Objects\GaugeBar.h" />
+    <ClInclude Include="Objects\HealthBar2D.h" />
+    <ClInclude Include="Renderer\NoShaderProgram.h" />
     <ClInclude Include="Objects\Bullet.h" />
+    <ClInclude Include="Renderer\ShaderProgram.h" />
     <ClInclude Include="Simulation\CollisionManager.h" />
     <ClInclude Include="Factory\AudioFactory.h" />
     <ClInclude Include="Factory\GameFactory.h" />
@@ -145,11 +155,9 @@
     <ClInclude Include="Objects\Cars\MeowMix.h" />
     <ClInclude Include="Objects\Physicable.h" />
     <ClInclude Include="Objects\TestObject.h" />
-    <ClInclude Include="Objects\Track.h" />
+	<ClInclude Include="Objects\Track.h" />
     <ClInclude Include="Objects\Weapons\HasWeapons.h" />
-    <ClInclude Include="Objects\LoadingBar.h" />
     <ClInclude Include="Objects\ObjectCreators\PhysicsObjectCreator.h" />
-    <ClInclude Include="Simulation\LoadingScreen.h" />
     <ClInclude Include="Objects\BoundingBox.h" />
     <ClInclude Include="Libraries\tinydir\tinydir.h" />
     <ClInclude Include="Objects\Cars\Car.h" />
@@ -173,7 +181,6 @@
     <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdater.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdaterParallel.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.h" />
-    <ClInclude Include="Objects\RenderableObject.h" />
     <ClInclude Include="Objects\Texture.h" />
     <ClInclude Include="ParticleSystem\ParticleData.h" />
     <ClInclude Include="ParticleSystem\ParticleEmitter.h" />
@@ -184,16 +191,19 @@
     <ClInclude Include="Scene Manager\Scene.h" />
     <ClInclude Include="Scene Manager\StackManager.h" />
     <ClInclude Include="Simulation\GameSimulationDefinitions.h" />
+    <ClInclude Include="Simulation\LoadingScreen.h" />
     <ClInclude Include="Simulation\World.h" />
     <ClInclude Include="Global\Log.h" />
     <ClInclude Include="Global\Settings.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Renderer\ShaderLoader.h" />
-    <ClInclude Include="Renderer\ShaderProgram.h" />
+    <ClInclude Include="Renderer\CellShaderProgram.h" />
     <ClInclude Include="Simulation\PhysicsManager.h" />
     <ClInclude Include="Simulation\GameSimulation.h" />
     <ClInclude Include="Objects\ObjectCreators\VehicleCreator.h" />
+    <ClInclude Include="Objects\Text2D.h" />
+    <ClInclude Include="Objects\VolcanoGuySuperBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />

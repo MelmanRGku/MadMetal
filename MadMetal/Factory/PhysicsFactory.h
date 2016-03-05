@@ -10,8 +10,9 @@ public:
 		PHYSICAL_OBJECT_WALL,
 		PHYSICAL_OBJECT_DRIVING_BOX,
 		PHYSICAL_OBJECT_BOX,
-		PHYSICAL_OBJECT_BULLET,
 		PHYSICAL_TRIANGLE_MESH,
+		PHYSICAL_OBJECT_BULLET_MEOW_MIX,
+		PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO,
 	};
 
 public:
@@ -87,19 +88,20 @@ public:
 		{
 			VehicleCreator *vc = new VehicleCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 			PxVehicleDrive4W *car = vc->create(style);
-			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 15.0f), 0), PxQuat(PxIdentity));
-			car->getRigidDynamicActor()->setGlobalPose(startTransform);
+			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
+			PxTransform anotherTransform = pos == NULL ? PxTransform(PxVec3(0), PxQuat(PxIdentity)) : *pos;
+			car->getRigidDynamicActor()->setGlobalPose(PxTransform(startTransform.p.x + anotherTransform.p.x, startTransform.p.y + anotherTransform.p.y, startTransform.p.z + anotherTransform.p.z));
 			setFilterDataId(objectId, car->getRigidDynamicActor());
 			toReturn = car;
 			break;
 		}
-		case PHYSICAL_OBJECT_BULLET:
+		case PHYSICAL_OBJECT_BULLET_MEOW_MIX:
 		{
 			PxRigidDynamic * bullet = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
 			PxFilterData simFilterData;
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
-			
+
 			bullet->createShape(PxBoxGeometry(1, 1, 2), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
@@ -115,6 +117,7 @@ public:
 			break;
 		}
 		case PHYSICAL_TRIANGLE_MESH:
+		{
 			//triangle mesh
 			PxVec3 points[] =
 			{
@@ -138,7 +141,7 @@ public:
 				//PxVec3(160, 0, 160),
 				//PxVec3(160, 5, 160),
 
-				
+
 
 			};
 
@@ -174,13 +177,36 @@ public:
 			PhysicsObjectCreator * creator = new PhysicsObjectCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 			PxTriangleMesh * mesh = creator->createTriangleMesh(points, 8, indices, 2);
 			PxTriangleMeshGeometry * geo = new PxTriangleMeshGeometry(mesh);
-			PxRigidStatic * plane = createDrivingBox(material, PxTransform(PxVec3(0,0,0)), geo);
+			PxRigidStatic * plane = createDrivingBox(material, PxTransform(PxVec3(0, 0, 0)), geo);
 			setFilterDataId(objectId, plane);
 			toReturn = plane;
 			break;
 		}
 
-		return toReturn;
+		case PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO:
+		{
+			PxRigidDynamic * bullet = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+			PxFilterData simFilterData;
+			simFilterData.word0 = COLLISION_FLAG_BULLET;
+			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
+
+			bullet->createShape(PxSphereGeometry(3.f), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			bullet->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+			setFilterDataId(objectId, bullet);
+			bullet->setLinearVelocity(*velocity);
+
+			toReturn = bullet;
+			break;
+		}
+
+			return toReturn;
+		}
 	}
 
 	

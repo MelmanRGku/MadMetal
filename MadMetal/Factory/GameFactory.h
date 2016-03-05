@@ -13,6 +13,8 @@
 #include "Objects\DrivingStyleFast.h"
 #include "Objects\Cars\MeowMix.h"
 #include "Objects\Bullet.h"
+#include "Objects\MeowMixBullet.h"
+#include "Objects\VolcanoGuySuperBullet.h"
 
 class GameFactory
 {
@@ -21,7 +23,11 @@ public:
 		OBJECT_MEOW_MIX,
 		OBJECT_PLANE,
 		OBJECT_WALL,
-		OBJECT_BULLET,
+		OBJECT_BULLET_MEOW_MIX,
+		OBJECT_BULLET_SUPER_VOLCANO,
+		OBJECT_HEALTH_BAR,
+		OBJECT_GAUGE_BAR,
+		OBJECT_TEXT_2D,
 		OBJECT_TRACK,
 		OBJECT_BUILDING
 	};

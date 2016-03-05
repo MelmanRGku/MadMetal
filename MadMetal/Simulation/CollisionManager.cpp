@@ -2,7 +2,7 @@
 #include "Objects\Cars\Car.h"
 #include "Objects\Bullet.h"
 
-CollisionManager::CollisionManager(World &world, PxScene &scene) : m_world(world), m_scene(scene)
+CollisionManager::CollisionManager(World &world) : m_world(world)
 {
 }
 
@@ -61,12 +61,13 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	Car *car = dynamic_cast<Car *>(otherObj);
 
 	if (car != NULL && car->getId() != bullet->getOwner()->getId()) {
-		car->takeDamage(15);
-		m_world.deleteObject(bulletId);
+		car->takeDamage(bullet->getDamage());
+		bullet->getOwner()->addDamageDealt(bullet->getDamage());
+		bullet->setHasToBeDeleted(true);
 		
 	}
 	else if (car == NULL) {
-		m_world.deleteObject(bulletId);
+		bullet->setHasToBeDeleted(true);
 	}
 
 }

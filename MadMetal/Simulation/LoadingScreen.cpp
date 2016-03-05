@@ -23,7 +23,7 @@ LoadingScreen::~LoadingScreen()
 
 
 bool LoadingScreen::simulateScene(double dt, SceneMessage &newMessage) {
-	bar->setProgress(status->getPercentage());
+	//bar->setProgress(status->getPercentage());
 	if (status->getPercentage() >= 1){
 		t.join();
 
@@ -46,8 +46,8 @@ void LoadingScreen::createProgressBar() {
 	Model *progressModel = loader->loadFromFile("Assets/Models/GGO.obj");
 	progressModel->setupVAOs();
 
-	bar = new LoadingBar(glm::vec3(5, 1, 1), glm::vec3(0, -2, -10), progressModel);
-	bar->setModel(barModel, true, true);
+	//bar = new LoadingBar(glm::vec3(5, 1, 1), glm::vec3(0, -2, -10), progressModel);
+	//bar->setModel(barModel, true, true);
 
 //	m_world->addGameObject(bar);
 	delete loader;

@@ -1,0 +1,50 @@
+# Material file for obj created with LeoPoly.
+
+newmtl mat0
+Ka 1 1 1
+Kd 1 1 1
+map_Kd tex0.tga
+Ks 0.200000 0.200000 0.200000
+Ns 16.000000
+
+newmtl mat1
+Ka 1 1 1
+Kd 1 1 1
+map_Kd tex1.tga
+Ks 0.200000 0.200000 0.200000
+Ns 16.000000
+
+newmtl mat2
+Ka 1 1 1
+Kd 1 1 1
+map_Kd tex2.tga
+Ks 0.200000 0.200000 0.200000
+Ns 16.000000
+
+newmtl mat3
+Ka 1 1 1
+Kd 1 1 1
+map_Kd tex3.tga
+Ks 0.200000 0.200000 0.200000
+Ns 16.000000
+
+newmtl mat4
+Ka 1 1 1
+Kd 1 1 1
+map_Kd tex4.tga
+Ks 0.200000 0.200000 0.200000
+Ns 16.000000
+
+newmtl mat5
+Ka 1 1 1
+Kd 1 1 1
+map_Kd tex5.tga
+Ks 0.200000 0.200000 0.200000
+Ns 16.000000
+
+newmtl mat6
+Ka 1 1 1
+Kd 1 1 1
+map_Kd tex6.tga
+Ks 0.200000 0.200000 0.200000
+Ns 16.000000

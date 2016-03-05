@@ -4,6 +4,9 @@
 #include "../TestObject.h"
 #include "Objects\DrivingStyle.h"
 #include "Game Logic\PowerUp.h"
+#include "Objects\HealthBar2D.h"
+#include "Objects\GaugeBar.h"
+#include "Objects\Text2D.h"
 
 class Car : public TestObject
 {
@@ -20,11 +23,11 @@ protected: //members
 	//current state 
 	float m_currentHealth;
 	float m_maxHealth;
-	float m_reloadRate; //milliseconds
-	float m_reloadRemaining;
-	float m_superGuage; // 0-1
-	float m_superMaxDuration; //milliseconds
-	float m_superDurationRemaining; //milliseconds
+	float m_reloadRateSeconds; //seconds
+	float m_reloadRemainingSeconds;
+	float m_superGauge; // 0-1
+	float m_superMaxDurationSeconds; //seconds
+	float m_superDurationRemainingSeconds; //seconds
 
 	/*
 		Need to be implemented
@@ -39,6 +42,13 @@ private:
 	void updateSuper(float dt);
 
 public:
+
+	//TODO: change to separate UI class
+	HealthBar2D *healthBar;
+	GaugeBar *gaugeBar;
+	Text2D *score;
+
+
 	Car(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	~Car();
 
@@ -46,11 +56,15 @@ public:
 	DrivingStyle& getDrivingStyle();
 	
 	//void usePowerUp();
-	void useSuper();
+	virtual void useSuper() = 0;
 	virtual void fire() = 0;
 	void takeDamage(float damage);
 	void increaseDamageDealt(float damage);
 	virtual void update(float dt);
+	void addDamageDealt(float damage);
+	bool superReady() { return m_superGauge >= 1.f; }
+	float getSuperGauge() { return m_superGauge > 1.f ? 1.f : m_superGauge; }
+	int getScore();
 	
 	
 };

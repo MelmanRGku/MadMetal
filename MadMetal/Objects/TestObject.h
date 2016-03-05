@@ -21,12 +21,15 @@ protected:
 	Animatable &m_animatable;
 	Audioable &m_audioable;
 	Audio& m_audio;
+	bool hasToBeDeleted = false;
+	float totalLifeTime = 0;
+	float maxLifeTime = -1;
 
 public:
 	TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	virtual ~TestObject();
 
-	virtual void draw(Renderer *renderer);
+	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	
 	virtual glm::mat4x4 getModelMatrix();
 	glm::vec3 getFullPosition() { return m_animatable.getPosition() + glm::vec3(m_physicable.getActor().getGlobalPose().p.x, m_physicable.getActor().getGlobalPose().p.y, m_physicable.getActor().getGlobalPose().p.z); }
@@ -34,10 +37,13 @@ public:
 	glm::vec3 getForwardVector() { return m_physicable.getForwardVector(); }
 	glm::vec3 getPosition();
 	glm::vec3 getFullRotation();
+	void setScale(glm::vec3 scale) { m_animatable.setScale(scale); }
 	void updateScale(glm::vec3 ds) { m_animatable.updateScale(ds); }
 	PxBounds3 getWorldBounds() { return m_physicable.getActor().getWorldBounds(); }
 	long getId() { return id; }
-	virtual void update(float dt) {}
+	virtual void update(float dt) { totalLifeTime += dt; if (maxLifeTime != -1 && totalLifeTime > maxLifeTime) hasToBeDeleted = true; }
 	PxRigidActor &getActor() { return m_physicable.getActor(); }
+	void setHasToBeDeleted(bool hasToBeDeleted) { this->hasToBeDeleted = hasToBeDeleted; }
+	bool getHasToBeDeleted() { return hasToBeDeleted; }
 };
 

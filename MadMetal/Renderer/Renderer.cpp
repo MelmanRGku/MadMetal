@@ -2,6 +2,7 @@
 #include <FTGL/ftgl.h>
 #include "Global\Fonts.h"
 #include "Objects\Camera.h"
+#include "Objects\TestObject.h"
 
 /*
 	Constructor. 
@@ -30,6 +31,10 @@ Renderer::~Renderer()
 {
 }
 
+void Renderer::setShader(ShaderType type, ShaderProgram *sp) {
+	shader[type] = sp;
+}
+
 void Renderer::setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt)
 {
 	viewMatrix = glm::lookAt(
@@ -47,9 +52,7 @@ void Renderer::setViewMatrixLookAt(std::vector<Camera *> cameras)
 		cameras[0]->getPosition(),
 		cameras[0]->getLookAt(),
 		cameras[0]->getUpVector()
-		
-		);
-	//std::cout << cameras[0]->getLookAt().x << "," << cameras[0]->getLookAt().z << std::endl;
+	);
 }
 
 /*void Renderer::draw(ParticleSystem * sys)
@@ -74,62 +77,21 @@ void Renderer::setViewMatrixLookAt(std::vector<Camera *> cameras)
 	stopDrawing();
 }*/
 
-/*
-	Draws a obj model
-*/
-void Renderer::draw(TestObject *object) {
-	/*if (!object->isRenderable())
-		return;
-
-	long cBufferSize = object->model->colours.size() * sizeof(glm::vec3),
-		vBufferSize = object->model->vertices.size() * sizeof(glm::vec3),
-		nBufferSize = object->model->normals.size() * sizeof(glm::vec3);
-
-	//set model matrix uniform
-	glUniformMatrix4fv(shader->modelMatrixUniform, 1, false, &object->getModelMatrix()[0][0]);
-	
-	//we want to use color for now. Textures not supported yet
-	glUniform1i(shader->textureValidUniform, false);
-
-	// Bind to the correct context
-	glBindVertexArray(object->vao->getVaoId());
-
-	// Draw the triangles
-	glDrawArrays(GL_TRIANGLES, 0, object->model->vertices.size());
-
-	glBindVertexArray(0);*/
-
-	object->draw(this);
-
-}
-
 
 void Renderer::draw(std::vector<TestObject *> *objects) {
-	startDrawing();
-	for (unsigned int i = 0; i < objects->size(); i++) {
-		TestObject *obj = objects->at(i);
-		draw(obj);
+	for (int i = 0; i < NUMBER_OF_SHADER_TYPES; i++) {
+		if (shader[i] != NULL) {
+			shader[i]->start(&viewMatrix, &projectionMatrix);
+			int passNumber = 1; bool keepGoing;
+			do {
+				keepGoing = false;
+				for (unsigned int j = 0; j < objects->size(); j++) {
+					TestObject *obj = objects->at(j);
+					keepGoing = keepGoing || obj->draw(this, (ShaderType)i, passNumber);
+				}
+				passNumber++;
+			} while (keepGoing);
+			shader[i]->end();
+		}
 	}
-	stopDrawing();
-}
-
-/*
-	Performs the setup for drawing. 
-	Has to be called before the draw() method
-*/
-void Renderer::startDrawing() {
-	//tether the program
-	glUseProgram(shader->programID);
-
-	//set view and projection matrices
-	glUniformMatrix4fv(shader->viewMatrixUniform, 1, false, &viewMatrix[0][0]);
-	glUniformMatrix4fv(shader->projectionMatrixUniform, 1, false, &projectionMatrix[0][0]);
-}
-
-/*
-	Performs the cleanup after drawing
-	Has to be called after drawing process is done
-*/
-void Renderer::stopDrawing() {
-	glUseProgram(0);
 }

@@ -31,7 +31,7 @@ TestObject *World::findObject(long id) {
 }
 
 
-void World::deleteObject(long id) {
+void World::deleteObjectById(long id) {
 	long mid, left = 0;
 	long right = gameObjects->size();
 	while (left < right) {
@@ -43,14 +43,31 @@ void World::deleteObject(long id) {
 			right = mid;
 		}
 		else {
+			TestObject *obj = gameObjects->at(mid);
 			gameObjects->erase(gameObjects->begin()+mid);
+			scene->removeActor(obj->getActor());
+			delete obj;
 			break;
 		}
 	}
 }
 
+void World::deleteObjectByIndex(int index) {
+	TestObject *obj = gameObjects->at(index);
+	gameObjects->erase(gameObjects->begin() + index);
+	scene->removeActor(obj->getActor());
+	delete obj;
+}
+
 void World::update(float dt) {
 	for (int i = 0; i < gameObjects->size(); i++) {
-		gameObjects->at(i)->update(dt);
+		TestObject *obj = gameObjects->at(i);
+
+		if (obj->getHasToBeDeleted()) {
+			deleteObjectByIndex(i);
+			continue;
+		}
+
+		obj->update(dt);
 	}
 }
