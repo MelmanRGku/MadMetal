@@ -83,7 +83,9 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 	TestObject *otherObj = m_world.findObject(otherId);
 	Car *car = dynamic_cast<Car *>(otherObj);
 
-	if (car != NULL) {
+	if (car != NULL) 
+	{
+		car->setCurrentWaypoint(waypoint);
 		std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getId() << "\n";
 	}
 }

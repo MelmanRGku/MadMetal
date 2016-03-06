@@ -17,6 +17,7 @@
 
 using namespace std;
 bool gIsVehicleInAir = true;
+static const float TRACK_DIMENSIONS = 200;
 
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio* audioHandle)
 {
@@ -25,6 +26,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, *audioHandle);
 
+	WaypointSystem* m_waypoinySystem = new WaypointSystem(*m_gameFactory, TRACK_DIMENSIONS, TRACK_DIMENSIONS);
 	//create characters for game from templates
 	for (int i = 0; i < playerTemplates.size(); i++)
 	{
@@ -40,7 +42,8 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
-			m_players.push_back(new AIControllable(*playerTemplates[i]));
+			cout << "ai player added\n";
+			m_players.push_back(new AIControllable(*playerTemplates[i], *m_waypoinySystem));
 			//make a car for ai based off template
 		}
 	}
@@ -79,66 +82,68 @@ bool PxVehicleIsInAir(const PxVehicleWheelQueryResult& vehWheelQueryResults)
 
 void GameSimulation::simulatePhysics(double dt)
 {
-
 	const PxF32 timestep = 1.0f / 60.0f;
 
-	//Raycasts.
-	
-	PxVehicleWheels* vehicles[1] = { &m_humanPlayers[0]->getCar()->getCar() };
-	PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
-	const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
-	PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
-
-	//Vehicle update.
-	const PxVec3 grav = m_scene->getGravity();
-	PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
-	PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, m_humanPlayers[0]->getCar()->getCar().mWheelsSimData.getNbWheels() } };
-	PxVehicleUpdates(timestep, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
-
-	//Work out if the vehicle is in the air.
-	gIsVehicleInAir = m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
-
-	// PLUG IN PITCH CORRECTION CODE HERE
-
-	/*
-	PxVec3 angularVelocity = m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity();
-
-
-	PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
-	m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
-
-	bool carTilt = false;
-	float lowest = 100000;
-	float highest = -100000;
-	for (int i = 0; i < 4; i++)
+	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
+
+		//Raycasts.
+
+		PxVehicleWheels* vehicles[1] = { &m_players[i]->getCar()->getCar() };
+		PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
+		const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
+		PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
+
+		//Vehicle update.
+		const PxVec3 grav = m_scene->getGravity();
+		PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
+		PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, m_players[i]->getCar()->getCar().mWheelsSimData.getNbWheels() } };
+		PxVehicleUpdates(timestep, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
+
+		//Work out if the vehicle is in the air.
+		gIsVehicleInAir = m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
+
+		// PLUG IN PITCH CORRECTION CODE HERE
+
+		/*
+		PxVec3 angularVelocity = m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity();
+
+
+		PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
+		m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
+
+		bool carTilt = false;
+		float lowest = 100000;
+		float highest = -100000;
+		for (int i = 0; i < 4; i++)
+		{
 		if (tempBuffer[i]->getLocalPose().p.y > highest) highest = tempBuffer[i]->getLocalPose().p.y;
 		if (tempBuffer[i]->getLocalPose().p.y < highest) lowest = tempBuffer[i]->getLocalPose().p.y;
 		cout << tempBuffer[i]->getLocalPose().p.y << endl;;
-	}
-	cout << endl << endl;
-	//cout << lowest << " " << highest << endl;
+		}
+		cout << endl << endl;
+		//cout << lowest << " " << highest << endl;
 
-	float pitchDist = abs(highest - lowest);
+		float pitchDist = abs(highest - lowest);
 
-	if (gIsVehicleInAir && pitchDist > 1 )
-	{
+		if (gIsVehicleInAir && pitchDist > 1 )
+		{
 		//m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.0000001 * pitchDist, 0, 0));
+		}
+		*/
+		PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
+		m_players[i]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_players[i]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
+
+		PxVec3 test = m_players[i]->getCar()->getCar().getRigidDynamicActor()->getGlobalPose().q.getBasisVector1();
+
+		if (test.y < 0.9 && gIsVehicleInAir)
+		{
+			//cout << "PITCH ME" << endl;
+			m_players[i]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_players[i]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.01, 0, 0));
+
+		}
+		//	cout << test.x << " " << test.y << " " << test.z << endl;
 	}
-	*/
-	PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
-	m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
-
-	PxVec3 test = m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getGlobalPose().q.getBasisVector1();
-
-	if (test.y < 0.9 && gIsVehicleInAir)
-	{
-		//cout << "PITCH ME" << endl;
-		m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.01, 0, 0));
-
-	}
-//	cout << test.x << " " << test.y << " " << test.z << endl;
-
 
 
 	m_scene->simulate(timestep);
@@ -158,11 +163,12 @@ void GameSimulation::simulatePlayers(double dt)
 	
 	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
-		
-		//m_players[i]->playFrame(dt);
+		//cout << "size of players: " << m_players.size() << "\n";
+		m_players[i]->playFrame(dt);
 		
 	}
-	m_humanPlayers[0]->playFrame(dt);
+	//m_humanPlayers[0]->playFrame(dt);
+	//m_players[1]->playFrame(dt);
 	
 }
 
@@ -271,10 +277,11 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
-	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, NULL, NULL, NULL));
-	m_humanPlayers[0]->setCar(meowMix);
-
+	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-80, 0, -80), NULL, NULL));
 	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-15, 0, -15), NULL, NULL));
+
+	m_players[1]->setCar(meowMixAi);
+	m_players[0]->setCar(meowMix);
 
 	float length = 50;
 	float width = 10;
@@ -283,9 +290,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 
 	//Create the drivable geometry
 	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
-	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, -100, 0)), new PxBoxGeometry(dims, 0.5, dims), NULL);
+	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, -100, 0)), new PxBoxGeometry(TRACK_DIMENSIONS, 0.5, TRACK_DIMENSIONS), NULL);
 
-	WaypointSystem* system = new WaypointSystem(*m_gameFactory, dims, dims);
 	// Create the collidable walls
 	/*PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));
 	leftWall->createShape(PxBoxGeometry(0.5, width, length), *mMaterial);

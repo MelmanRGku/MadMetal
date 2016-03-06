@@ -13,6 +13,7 @@ class Car;
 class PhysicsManager;
 class VehicleSceneQueryData; 
 class ObjModelLoader;
+class WaypointSytem;
 
 class GameSimulation : public Scene{
 private:
@@ -40,6 +41,7 @@ private: //members
 	VehicleSceneQueryData*	gVehicleSceneQueryData = NULL;
 	PxBatchQuery* gBatchQuery = NULL;
 	GameFactory* m_gameFactory;
+	WaypointSytem* m_waypoinySystem;
 
 public:
 	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio* audioHandle);

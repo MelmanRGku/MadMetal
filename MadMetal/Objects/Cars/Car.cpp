@@ -107,5 +107,6 @@ void Car::setCurrentWaypoint(Waypoint* waypoint)
 }
 Waypoint* Car::getCurrentWaypoint()
 {
-	return m_currentWaypoint;
+	//if (m_currentWaypoint!=NULL)
+		return m_currentWaypoint;
 }

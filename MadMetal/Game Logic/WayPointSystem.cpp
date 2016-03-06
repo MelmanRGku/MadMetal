@@ -1,7 +1,7 @@
 #include "WaypointSystem.h"
 #include "Game Logic\PathFinding.h"
 
-static const int WAYPOINT_RADIUS = 10;
+static const int WAYPOINT_RADIUS = 20;
 
 WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int trackLength) : m_gameFactory(gameFactory)
 {
@@ -9,11 +9,11 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 	float minWidth = -trackLength;
 
 	int index = 0;
-	for (int i = minWidth + WAYPOINT_RADIUS + 10; i < trackWidth; i += ((WAYPOINT_RADIUS+ 10)  * 2))
+	for (int i = minWidth + WAYPOINT_RADIUS + 20; i < trackWidth; i += ((WAYPOINT_RADIUS+ 20)  * 2))
 	{
 		std::vector<Waypoint*> newVectorWaypoint;
 		m_waypointMap.push_back(newVectorWaypoint);
-		for (int j = minLength + WAYPOINT_RADIUS + 10; j < trackLength; j += ((WAYPOINT_RADIUS + 10) * 2))
+		for (int j = minLength + WAYPOINT_RADIUS + 20; j < trackLength; j += ((WAYPOINT_RADIUS + 20) * 2))
 		{
 			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, new PxTransform(i, -100, j), new PxSphereGeometry(static_cast<float>(WAYPOINT_RADIUS)), NULL));
 			m_waypointMap[index].push_back(tempWaypoint);
@@ -72,10 +72,10 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 		}
 	}
 
-	for (int i = 33; i < 37; i++)
-	{
-		m_waypoints[i]->setValid(false);
-	}
+	//for (int i = 33; i < 37; i++)
+	//{
+	//	m_waypoints[i]->setValid(false);
+	//}
 
 	//for (int i = 0; i < m_waypoints.size(); i++)
 	//{
@@ -87,7 +87,7 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 	//	std::cout << "\n";
 	//}
 
-	test();
+	//test();
 
 }
 

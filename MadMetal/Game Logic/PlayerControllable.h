@@ -12,7 +12,7 @@ class PlayerControllable : public Controllable
 {
 private:
 	GamePad * m_gamePad;
-	Car* m_car;
+	//Car* m_car;
 	Camera* m_camera;
 	
 
@@ -28,12 +28,12 @@ public:
 	{
 		m_gamePad = NULL;
 		delete m_camera;
-		delete m_car;
+		//delete m_car;
 	}
 	
 	void playFrame(double dt);
 	GamePad * getGamePad();
 	Camera * getCamera() { return m_camera; }
 	void setCar(Car * toAdd);
-	Car *getCar() { return m_car; }
+	//Car *getCar() { return m_car; }
 };

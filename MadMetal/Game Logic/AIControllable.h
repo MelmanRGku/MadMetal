@@ -14,16 +14,18 @@ public:
 
 	void playFrame(double dt);//todo: fearless leader <3
 	void setCar(Car * toAdd);
-	Car *getCar() { return m_car; }
+	//Car *getCar() { return m_car; }
 	Waypoint* getGoalWaypoint(Waypoint* waypoint);
 	void setGoalWaypoint();
 	void updateNextWaypoint();
+private: //helper functions
+	void accelerate();
 
 private: //members
-	Car* m_car;
+	//Car* m_car;
 	PathFinding* m_pathFinder;
 	Waypoint* m_goalWaypoint;
 	WaypointSystem& m_waypointSystem;
-	Waypoint* m_Nextwaypoint;
+	Waypoint* m_nextWaypoint;
 	std::vector<Waypoint*> m_currentPath;
 };
