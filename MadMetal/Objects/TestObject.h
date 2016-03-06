@@ -46,7 +46,7 @@ public:
 	PxRigidActor &getActor() { return m_physicable.getActor(); }
 	void setHasToBeDeleted(bool hasToBeDeleted) { this->hasToBeDeleted = hasToBeDeleted; }
 	bool getHasToBeDeleted() { return hasToBeDeleted; }
-	Audio getAudio() { return m_audio; }
+	Audio& getAudio() { return m_audio; }
 	void playSound();
 	void setSound(Sound theSound);
 };

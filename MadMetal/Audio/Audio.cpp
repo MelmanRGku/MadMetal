@@ -19,13 +19,19 @@ void Audio::initializeLibrary(char * fileToLoad)
 		std::cout << "ABORT \n";
 	}
 	m_library.push_back(chunk2);
+
+	Mix_Chunk * chunk3 = Mix_LoadWAV("Assets/Audio/mario.wav");
+	if (chunk == NULL)
+	{
+		std::cout << "ABORT \n";
+	}
+	m_library.push_back(chunk3);
 }
 
 
 void Audio::update()
 {
 
-	/*
 	for (unsigned int i = 0; i < m_audioChannels.size(); i++)
 	{
 		if (!Mix_Playing(m_audioChannels[i]->getChannelNum()))
@@ -42,33 +48,22 @@ void Audio::update()
 			m_audioChannels[i]->updateAudio(m_listener);
 		}
 	}
-	*/
+	
 }
 		
 void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound& toPlay, int loopCount)
-		{
+{
 	//pass a refrence of the channel number in 'toPlay' to the audio channel 
 	//will allow channel changes to be mirrored in the toPlay bookmark
 	AudioChannel * toAdd = new AudioChannel(sourcePosition, toPlay.getChannel());
 			
 	//set the audio channel to the next available channel, and play the specified sound
-//	toAdd->setChannelNum(Mix_PlayChannel(-1, m_library[toPlay.getLibraryIndex()], loopCount));
-	if (!Mix_PlayChannel(-1, m_library[0], 0))
-	{
-		std::cout << "ERROR" << std::endl;
-	}
+	toAdd->setChannelNum(Mix_PlayChannel(-1, m_library[toPlay.getLibraryIndex()], loopCount));
 	
-	Mix_Music * staticChunk = Mix_LoadMUS("Assets/Audio/smb_mariodie.wav");
-
-	Mix_PlayMusic(staticChunk, -1);
-
-//	Mix_Chunk * test = Mix_LoadWAV("Assets/Audio/car_idle.wav");
-//	if (test == NULL) std::cout << "FATAL ERROR" << std::endl;
-
-
 	//add new channel to the list of currently playing sounds
 	m_audioChannels.push_back(toAdd);
-		}
+
+}
 
 
 void Audio::pauseSources()
