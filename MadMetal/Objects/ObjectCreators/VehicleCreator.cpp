@@ -140,11 +140,15 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 		}
 
 		//Enable the handbrake for the rear wheels only.
-		wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxHandBrakeTorque = 50000.0f;
-		wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxHandBrakeTorque = 50000.0f;
+		wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxHandBrakeTorque = 25000.0f;
+		wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxHandBrakeTorque = 25000.0f;
 		//Enable steering for the front wheels only.
 		wheels[PxVehicleDrive4WWheelOrder::eFRONT_LEFT].mMaxSteer = PxPi*0.06666f / 2;
-		wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mMaxSteer = PxPi*0.06666f / 2;
+		wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mMaxSteer = PxPi*0.06666f /2;
+		wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxSteer = 0;
+		wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxSteer = 0;
+		//wheels[PxVehicleDrive4WWheelOrder::eFRONT_LEFT].mToeAngle = -1.0 / (2 * 3.14);
+		//wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mToeAngle = 1.0 / (2 * 3.14);
 	}
 
 	//Set up the tires.
@@ -169,17 +173,17 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 		//Set the suspension data.
 		for (PxU32 i = 0; i < style->getNbWheels(); i++)
 		{
-			suspensions[i].mMaxCompression = 0.3f;
+			suspensions[i].mMaxCompression = 0.1f;
 			suspensions[i].mMaxDroop = 0.1f;
-			suspensions[i].mSpringStrength = 35000.0f;
-			suspensions[i].mSpringDamperRate = 4500.0f;
+			suspensions[i].mSpringStrength = 150000.0f;
+			suspensions[i].mSpringDamperRate = 20000.0f;
 			suspensions[i].mSprungMass = suspSprungMasses[i];
 		}
 
 		//Set the camber angles.
 		const PxF32 camberAngleAtRest = 0.0;
-		const PxF32 camberAngleAtMaxDroop = 0.01f;
-		const PxF32 camberAngleAtMaxCompression = -0.01f;
+		const PxF32 camberAngleAtMaxDroop = 2.14;
+		const PxF32 camberAngleAtMaxCompression = -2.14;
 		for (PxU32 i = 0; i < style->getNbWheels(); i += 2)
 		{
 			suspensions[i + 0].mCamberAtRest = camberAngleAtRest;
@@ -200,8 +204,6 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 		//Set the geometry data.
 		for (PxU32 i = 0; i < style->getNbWheels(); i++)
 		{
-			//Vertical suspension travel.
-			suspTravelDirections[i] = PxVec3(0, -1, 0);
 
 			//Wheel center offset is offset from rigid body center of mass.
 			wheelCentreCMOffsets[i] =
@@ -210,13 +212,19 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 			//Suspension force application point 0.3 metres below 
 			//rigid body center of mass.
 			suspForceAppCMOffsets[i] =
-				PxVec3(wheelCentreCMOffsets[i].x, -0.3f, wheelCentreCMOffsets[i].z);
+				PxVec3(wheelCentreCMOffsets[i].x, -0.3f, wheelCentreCMOffsets[i].z);	
 
 			//Tire force application point 0.3 metres below 
 			//rigid body center of mass.
 			tireForceAppCMOffsets[i] =
 				PxVec3(wheelCentreCMOffsets[i].x, -0.3f, wheelCentreCMOffsets[i].z);
 		}
+#define WHEEL_Z_ROTATION 0.15
+		//Vertical suspension travel.
+		suspTravelDirections[PxVehicleDrive4WWheelOrder::eREAR_LEFT] = PxVec3(-WHEEL_Z_ROTATION, -1, 0).getNormalized();
+		suspTravelDirections[PxVehicleDrive4WWheelOrder::eREAR_RIGHT] = PxVec3(WHEEL_Z_ROTATION, -1, 0).getNormalized();
+		suspTravelDirections[PxVehicleDrive4WWheelOrder::eFRONT_LEFT] = PxVec3(-WHEEL_Z_ROTATION, -1, 0).getNormalized();
+		suspTravelDirections[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT] = PxVec3(WHEEL_Z_ROTATION, -1, 0).getNormalized();
 	}
 
 	//Set up the filter data of the raycast that will be issued by each suspension.

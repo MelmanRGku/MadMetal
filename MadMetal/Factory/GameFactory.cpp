@@ -29,15 +29,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Audioable *audioable = new Audioable();
 		Animatable *animatable = new Animatable();
 		Audio *audio = new Audio();
-
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5f, 0.3f, 0.1f);    //static friction, dynamic friction, restitution
-							PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, NULL, new DrivingStyleFast(material, material), NULL);
+		DrivingStyle * drivingStyle = new DrivingStyleFast(material, material);
+		PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, NULL, drivingStyle, NULL);
 
 		PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
 		Physicable *physicable = new Physicable(physicalCar->getRigidDynamicActor());
 
 
-		MeowMix *car = new MeowMix(objectId, *physicalCar, *audioable, *physicable, *animatable, *renderable, *audio);
+		MeowMix *car = new MeowMix(objectId, *drivingStyle, *physicalCar, *audioable, *physicable, *animatable, *renderable, *audio);
 
 		int k = (int)physicalCar->mWheelsSimData.getWheelData(0).mRadius * 2;
 		PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();
@@ -140,7 +140,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	}
 	case OBJECT_BULLET_MEOW_MIX:
 	{
-						  Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_BULLET_MEOW_MIX), true, true);
+		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_BULLET_MEOW_MIX), true, true);
 		Audioable *audioable = new Audioable();
 		Animatable *animatable = new Animatable();
 		Audio *audio = new Audio();
@@ -153,16 +153,13 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 						  animatable->setScale(glm::vec3(.2, .2, .7));
 		Physicable *physicable = new Physicable(physicalBullet);
 
-						  Bullet *bullet = new MeowMixBullet(objectId, *audioable, *physicable, *animatable, *renderable, *audio, static_cast<Car *>(parent));
-						  Sound nativeSound = Sound();
-						  nativeSound.setLibraryIndex(1);
-						  nativeSound.setChannel(0);
-						  bullet->setSound(nativeSound);
-						  bullet->playSound();
-						  m_world.addGameObject(bullet);
-						  m_scene.addActor(*physicalBullet);
+		Bullet *bullet = new MeowMixBullet(objectId, *audioable, *physicable, *animatable, *renderable, *audio, static_cast<Car *>(parent));
+		bullet->setSound(Sound(1));
+		bullet->playSound();
+		m_world.addGameObject(bullet);
+		m_scene.addActor(*physicalBullet);
 
-						  return bullet;
+		return bullet;
 	}
 	case OBJECT_BULLET_SUPER_VOLCANO:
 	{

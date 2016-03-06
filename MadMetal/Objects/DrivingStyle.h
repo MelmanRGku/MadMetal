@@ -29,6 +29,8 @@ public:
 	PxMaterial *getChassisMaterial();
 	void setWheelMaterial(PxMaterial *material);
 	PxMaterial *getWheelMaterial();
+	float getMaxSpeed();
+	void setMaxSpeed(float maxSpeed);
 
 protected: //members
 	float m_chassisMass;
@@ -40,6 +42,7 @@ protected: //members
 	float m_wheelWidth;
 	float m_wheelMOI;
 	float m_nbWheels;
+	float m_maxSpeed;
 	PxMaterial* m_chassisMaterial;
 	PxMaterial* m_wheelMaterial;
 

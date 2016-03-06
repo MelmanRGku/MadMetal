@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Objects\Audioable.h" />
     <ClInclude Include="Objects\MeowMixBullet.h" />
     <ClInclude Include="Objects\GaugeBar.h" />
     <ClInclude Include="Objects\HealthBar2D.h" />
@@ -152,7 +153,6 @@
     <ClInclude Include="Global\Assets.h" />
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Objects\Animatable.h" />
-    <ClInclude Include="Objects\Audioable.h" />
     <ClInclude Include="Objects\Cars\MeowMix.h" />
     <ClInclude Include="Objects\Physicable.h" />
     <ClInclude Include="Objects\TestObject.h" />

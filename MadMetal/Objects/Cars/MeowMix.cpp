@@ -1,7 +1,7 @@
 #include "MeowMix.h"
 #include "Factory\GameFactory.h"
 
-MeowMix::MeowMix(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio) : Car(id, car, aable, pable, anable, rable, audio)
+MeowMix::MeowMix(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio) : Car(id, style, car, aable, pable, anable, rable, audio)
 {
 	m_lastWeaponShot = LAST_WEAPON_SHOT_LEFT;
 	m_reloadRateSeconds = 0.15;						//in s

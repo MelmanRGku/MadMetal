@@ -1,5 +1,15 @@
 #include "DrivingStyle.h"
 
+void DrivingStyle::setMaxSpeed(float maxSpeed)
+{
+	m_maxSpeed = maxSpeed;
+}
+
+float DrivingStyle::getMaxSpeed()
+{
+	return m_maxSpeed;
+}
+
 void DrivingStyle::setChassisMass(float mass)
 {
 	m_chassisMass = mass;

@@ -3,7 +3,7 @@
 #include "Factory\GameFactory.h"
 #include <sstream>
 
-Car::Car(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio) : TestObject(id, aable, pable, anable, rable, audio), m_car(car)
+Car::Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio) : TestObject(id, aable, pable, anable, rable, audio), m_car(car), m_drivingStyle(style)
 {
 }
 
@@ -14,7 +14,7 @@ Car::~Car()
 
 DrivingStyle& Car::getDrivingStyle()
 {
-	return *m_drivingStyle;
+	return m_drivingStyle;
 }
 
 /*

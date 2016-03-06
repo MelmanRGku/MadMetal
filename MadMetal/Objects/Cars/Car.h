@@ -13,7 +13,7 @@ class Car : public TestObject
 protected: //members
 
 	//physics object
-	DrivingStyle* m_drivingStyle;
+	DrivingStyle& m_drivingStyle;
 	PxVehicleDrive4W &m_car;
 
 	//score based
@@ -49,7 +49,7 @@ public:
 	Text2D *score;
 
 
-	Car(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
+	Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
 	~Car();
 
 	PxVehicleDrive4W &getCar() { return m_car; }
