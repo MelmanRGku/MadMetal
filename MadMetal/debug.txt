@@ -5308,3 +5308,159 @@ New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())

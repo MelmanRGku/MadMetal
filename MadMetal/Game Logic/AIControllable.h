@@ -12,11 +12,12 @@ public:
 	};
 	~AIControllable()
 	{
-
+		m_car = NULL;
 	};
 
-	void playFrame(double dt){};//todo: fearless leader <3
-
+	void playFrame(double dt);
+	void setCar(Car * toAdd);
+	
 private: //members
 	Car* m_car;
 

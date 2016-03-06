@@ -1,8 +1,6 @@
 #pragma once
 #include "Controllable.h"
 #include "..\Input\GamePad.h"
-#include "Objects\Object.h"
-#include "Objects\Cars\Car.h"
 #include "Objects\Camera.h"
 #include "Audio\Audio.h"
 #include "Audio\Sound.h"
@@ -12,7 +10,7 @@ class PlayerControllable : public Controllable
 {
 private:
 	GamePad * m_gamePad;
-	Car* m_car;
+	
 	Camera* m_camera;
 	
 
@@ -32,8 +30,8 @@ public:
 	}
 	
 	void playFrame(double dt);
+	void setCar(Car* toAdd);
 	GamePad * getGamePad();
 	Camera * getCamera() { return m_camera; }
-	void setCar(Car * toAdd);
-	Car *getCar() { return m_car; }
+	
 };

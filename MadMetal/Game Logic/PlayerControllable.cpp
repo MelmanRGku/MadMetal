@@ -18,6 +18,7 @@ void PlayerControllable::playFrame(double dt)
 
 	if (m_gamePad != NULL && m_gamePad->checkConnection())
 	{
+		std::cout << m_car->getCar().computeForwardSpeed() << std::endl;
 			/*
 			if (m_gamePad->isPressed(GamePad::LJoyRight))
 			{
@@ -57,11 +58,16 @@ void PlayerControllable::playFrame(double dt)
 				}
 			}
 
-			/*if (m_gamePad->isPressed(GamePad::YButton))
+			if (m_gamePad->isHeld(GamePad::BButton))
 			{
-				//std::cout << "Ypressed \n";
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 1);
 			}
+			else {
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 0);
 
+			}
+			
+			/*
 			if (m_gamePad->isPressed(GamePad::AButton))
 			{
 				
@@ -111,6 +117,7 @@ void PlayerControllable::playFrame(double dt)
 				{
 					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
 					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, m_gamePad->getLeftStick().x);
+
 				}
 
 				if (m_gamePad->getLeftStick().x > 0)

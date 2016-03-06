@@ -93,7 +93,7 @@ void Car::update(float dt) {
 
 void Car::addDamageDealt(float damage) {
 	m_damageDealt += damage;
-	m_superGauge += damage / 1000;
+	m_superGauge += damage / 100;
 }
 
 int Car::getScore() {

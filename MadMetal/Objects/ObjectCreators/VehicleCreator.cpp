@@ -136,14 +136,15 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 			wheels[i].mMOI = style->getWheelMOI();
 			wheels[i].mRadius = style->getWheelRadius();
 			wheels[i].mWidth = style->getWheelWidth();
+		
 		}
 
 		//Enable the handbrake for the rear wheels only.
-		wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxHandBrakeTorque = 4000.0f;
-		wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxHandBrakeTorque = 4000.0f;
+		wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxHandBrakeTorque = 50000.0f;
+		wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxHandBrakeTorque = 50000.0f;
 		//Enable steering for the front wheels only.
-		wheels[PxVehicleDrive4WWheelOrder::eFRONT_LEFT].mMaxSteer = PxPi*0.06666f;
-		wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mMaxSteer = PxPi*0.06666f;
+		wheels[PxVehicleDrive4WWheelOrder::eFRONT_LEFT].mMaxSteer = PxPi*0.06666f / 2;
+		wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mMaxSteer = PxPi*0.06666f / 2;
 	}
 
 	//Set up the tires.
