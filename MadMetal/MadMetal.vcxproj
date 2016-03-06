@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\Audioable.cpp" />
     <ClCompile Include="Objects\MeowMixBullet.cpp" />
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />

@@ -9,6 +9,8 @@ public:
 
 	enum Sounds {
 		SOUND_ACCELERATION,
+		SOUND_SHOOT,
+		SOUND_IMPACT
 	};
 
 	Sound * makeSound(Sounds soundToMake)

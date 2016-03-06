@@ -136,6 +136,7 @@ void GameSimulation::simulatePhysics(double dt)
 		m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.01, 0, 0));
 
 	}
+
 //	cout << test.x << " " << test.y << " " << test.z << endl;
 
 
@@ -283,6 +284,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//Create the drivable geometry
 	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
 	m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, -100, 0)), new PxBoxGeometry(dims, 0.5, dims), NULL);
+
 
 	// Create the collidable walls
 	/*PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));

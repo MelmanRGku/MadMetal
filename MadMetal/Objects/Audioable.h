@@ -1,8 +1,12 @@
 #pragma once
 
+#include <string>
+
+
+using namespace std;
+
 class Audioable {
 
 public:
-	Audioable() {}
-	virtual ~Audioable() {}
+	virtual ~Audioable();
 };

@@ -69,7 +69,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	else if (car == NULL) {
 		bullet->setHasToBeDeleted(true);
 	}
-
+	bullet->playSound();
 }
 
 void CollisionManager::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)

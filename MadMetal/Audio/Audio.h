@@ -24,9 +24,9 @@ public:
 	Audio()
 	{
 		SDL_Init(SDL_INIT_AUDIO);
-		SDL_Init(MIX_INIT_MP3);
-		SDL_Init(MUS_MP3);
-		SDL_Init(MUS_WAV);
+		//SDL_Init(MIX_INIT_MP3);
+		//SDL_Init(MUS_MP3);
+		//SDL_Init(MUS_WAV);
 		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 20000) < 0)
 		{
 			std::cout << "Error: " << Mix_GetError() << std::endl;
