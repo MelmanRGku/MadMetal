@@ -5,6 +5,7 @@
 
 Car::Car(long id, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio) : TestObject(id, aable, pable, anable, rable, audio), m_car(car)
 {
+	m_currentWaypoint = NULL;
 }
 
 
@@ -98,4 +99,13 @@ void Car::addDamageDealt(float damage) {
 
 int Car::getScore() {
 	return m_damageDealt;
+}
+
+void Car::setCurrentWaypoint(Waypoint* waypoint)
+{
+	m_currentWaypoint = waypoint;
+}
+Waypoint* Car::getCurrentWaypoint()
+{
+	return m_currentWaypoint;
 }
