@@ -102,19 +102,19 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	}
 	case OBJECT_TRACK:
 	{
-		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRACK), true, true);
+		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRACK));
 		Audioable *audioable = new Audioable();
 		Animatable *animatable = new Animatable();
 		Audio *audio = new Audio();
 		
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-		PxRigidStatic *physicalPlane = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_TRIANGLE_MESH, objectId, pos, NULL, material, NULL, NULL));
+		PxTriangleMesh * mesh = renderable->getModel()->getPhysicsTriangleMesh();
+		PxTriangleMeshGeometry * geom = new PxTriangleMeshGeometry(mesh);
+		PxRigidStatic *physicalPlane = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_TRACK, objectId, pos, geom, material, NULL, NULL));
 		Physicable *physicable = new Physicable(physicalPlane);
-
 		TestObject *plane = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, audio);
 
-		plane->updateScale(glm::vec3(glm::vec3(plane->getWorldBounds().getDimensions().x, plane->getWorldBounds().getDimensions().y, plane->getWorldBounds().getDimensions().z)));
-
+		float k = plane->getWorldBounds().getDimensions().y;
 		m_world.addGameObject(plane);
 		m_scene.addActor(*physicalPlane);
 
