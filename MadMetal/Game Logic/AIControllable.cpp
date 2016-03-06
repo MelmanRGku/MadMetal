@@ -71,16 +71,18 @@ void AIControllable::playFrame(double dt)
 			//glm::vec4 vectorToNextWaypoint4 = glm::vec4(m_nextWaypoint->getPosition() - m_car->getPosition(), 1.0);
 			glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
 			//glm::normalize(vectorToNextWaypoint4);
-			glm::normalize(vectorToNextWaypoint3);
+			vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
 			//glm::vec4 vectorOfSideOfCar = m_car->getModelMatrix() * glm::vec4(1.0, 0.0, 0.0, 1.0);
 			//glm::normalize(vectorOfSideOfCar);
 			glm::vec3 forwardVector = m_car->getForwardVector();
-			glm::normalize(forwardVector);
+			forwardVector = glm::normalize(forwardVector);
 
 			glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
 			//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
 			float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
 
+			std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
+			std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
 			float amountToSteerBy = fabs(amountOfDotProduct - 1);
 			amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
 			float amountToAccelerate;
