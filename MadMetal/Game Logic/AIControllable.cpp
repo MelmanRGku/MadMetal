@@ -68,28 +68,36 @@ void AIControllable::playFrame(double dt)
 
 		if (m_car->getCurrentWaypoint()->getId() != m_goalWaypoint->getId())
 		{
-			glm::vec4 vectorToNextWaypoint = glm::vec4(m_nextWaypoint->getPosition() - m_car->getPosition(), 1.0);
-			glm::normalize(vectorToNextWaypoint);
-			glm::vec4 vectorOfSideOfCar = m_car->getModelMatrix() * glm::vec4(1.0, 0.0, 0.0, 1.0);
-			glm::normalize(vectorOfSideOfCar);
-			float dotVectorResult = glm::dot(vectorToNextWaypoint, vectorOfSideOfCar);
+			//glm::vec4 vectorToNextWaypoint4 = glm::vec4(m_nextWaypoint->getPosition() - m_car->getPosition(), 1.0);
+			glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
+			//glm::normalize(vectorToNextWaypoint4);
+			glm::normalize(vectorToNextWaypoint3);
+			//glm::vec4 vectorOfSideOfCar = m_car->getModelMatrix() * glm::vec4(1.0, 0.0, 0.0, 1.0);
+			//glm::normalize(vectorOfSideOfCar);
+			glm::vec3 forwardVector = m_car->getForwardVector();
+			glm::normalize(forwardVector);
 
-			float amountToSteerBy = fabs(dotVectorResult - 1);
+			glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
+			//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
+			float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
+
+			float amountToSteerBy = fabs(amountOfDotProduct - 1);
 			amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
 			float amountToAccelerate;
 			amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
 			accelerate(amountToAccelerate);
 
-			//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
+			std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
+			std::cout << "z value: " << crossProductResult.z << "\n";
 
-			if (dotVectorResult > 0)
+			if (crossProductResult.y < 0)
 			{
 				//std::cout << "turning Left\n";
 				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
 				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, amountToSteerBy);
 			}
-			else if (dotVectorResult < 0)
+			else if (crossProductResult.y > 0)
 			{
 				//std::cout << "turning right\n";
 				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
@@ -115,8 +123,8 @@ void AIControllable::playFrame(double dt)
 
 		}
 	}
-	//if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
-	//	std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";
+	if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
+		std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";
 }
 
 void AIControllable::updateNextWaypoint()
