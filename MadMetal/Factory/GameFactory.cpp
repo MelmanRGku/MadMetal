@@ -154,7 +154,11 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Physicable *physicable = new Physicable(physicalBullet);
 
 						  Bullet *bullet = new MeowMixBullet(objectId, *audioable, *physicable, *animatable, *renderable, *audio, static_cast<Car *>(parent));
-
+						  Sound nativeSound = Sound();
+						  nativeSound.setLibraryIndex(1);
+						  nativeSound.setChannel(0);
+						  bullet->setSound(nativeSound);
+						  bullet->playSound();
 						  m_world.addGameObject(bullet);
 						  m_scene.addActor(*physicalBullet);
 

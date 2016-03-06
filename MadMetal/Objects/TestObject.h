@@ -24,6 +24,7 @@ protected:
 	bool hasToBeDeleted = false;
 	float totalLifeTime = 0;
 	float maxLifeTime = -1;
+	Sound sound;
 
 public:
 	TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio);
@@ -45,5 +46,8 @@ public:
 	PxRigidActor &getActor() { return m_physicable.getActor(); }
 	void setHasToBeDeleted(bool hasToBeDeleted) { this->hasToBeDeleted = hasToBeDeleted; }
 	bool getHasToBeDeleted() { return hasToBeDeleted; }
+	Audio& getAudio() { return m_audio; }
+	void playSound();
+	void setSound(Sound theSound);
 };
 

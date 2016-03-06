@@ -72,3 +72,13 @@ glm::vec3 TestObject::getPosition() {
 	PxVec3 pos = m_physicable.getActor().getGlobalPose().p;
 	return glm::vec3(pos.x, pos.y, pos.z);
 }
+
+void TestObject::setSound(Sound theSound)
+{
+	sound = theSound;
+}
+
+void TestObject::playSound()
+{
+	getAudio().queAudioSource(&this->getActor(), sound);
+}

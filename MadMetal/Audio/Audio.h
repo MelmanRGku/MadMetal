@@ -52,6 +52,7 @@ public:
 	void resumeSources();
 	void initializeLibrary(char * fileToLoad);
 	void queAudioSource(PxRigidActor * sourcePosition, Sound& toPlay, int loopCount = 0);
+//	bool queAudioSource(int sourceID);
 	void update();
 
 };

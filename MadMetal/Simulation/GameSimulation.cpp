@@ -137,6 +137,7 @@ void GameSimulation::simulatePhysics(double dt)
 		m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.01, 0, 0));
 
 	}
+
 //	cout << test.x << " " << test.y << " " << test.z << endl;
 
 

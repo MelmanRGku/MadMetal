@@ -24,7 +24,10 @@ public:
 	virtual int getLibraryIndex() {
 		return m_libraryIndex;
 	}
-	
+
+	virtual void setLibraryIndex(int index){
+		m_libraryIndex = index;
+	}
 
 protected: //members
 	int m_libraryIndex;

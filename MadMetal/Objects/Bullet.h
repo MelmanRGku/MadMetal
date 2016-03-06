@@ -14,5 +14,6 @@ public:
 	void setOwner(Car *car) { m_owner = car; }
 	Car *getOwner() { return m_owner; }
 	int getDamage() { return m_damage; }
+
 };
 
