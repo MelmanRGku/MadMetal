@@ -18,13 +18,13 @@
 using namespace std;
 bool gIsVehicleInAir = true;
 
-GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio* audioHandle)
+GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle)
 {
 	std::cout << "GameSimulation pushed onto the stack \n";
 	createPhysicsScene();
 	
-	m_gameFactory = GameFactory::instance(*m_world, *m_scene, *audioHandle);
-
+	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
+	
 	//create characters for game from templates
 	for (int i = 0; i < playerTemplates.size(); i++)
 	{
@@ -269,14 +269,15 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
+	
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
 	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, NULL, NULL, NULL));
 	m_humanPlayers[0]->setCar(meowMix);
-
+	std::cout << "got here\n";
 	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-15, 0, -15), NULL, NULL));
-
+	
 	float length = 50;
 	float width = 10;
 

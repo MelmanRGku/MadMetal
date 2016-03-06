@@ -1,7 +1,7 @@
 #include "Text2D.h"
 #include "FTGL\ftgl.h"
 
-Text2D::Text2D(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio* audio) : TestObject(id, aable, pable, anable, rable, audio)
+Text2D::Text2D(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable)
 {
 }
 

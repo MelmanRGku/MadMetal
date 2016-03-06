@@ -11,6 +11,7 @@
 #include "Animatable.h"
 #include "Audioable.h"
 #include "Audio\Audio.h"
+#include "Audio\Sound.h"
 
 class TestObject
 {
@@ -20,14 +21,13 @@ protected:
 	Physicable &m_physicable;
 	Animatable &m_animatable;
 	Audioable &m_audioable;
-	Audio* m_audio;
 	bool hasToBeDeleted = false;
 	float totalLifeTime = 0;
 	float maxLifeTime = -1;
-	Sound sound;
+	Sound *m_sound;
 
 public:
-	TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio* audio);
+	TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
 	virtual ~TestObject();
 
 	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
@@ -46,8 +46,7 @@ public:
 	PxRigidActor &getActor() { return m_physicable.getActor(); }
 	void setHasToBeDeleted(bool hasToBeDeleted) { this->hasToBeDeleted = hasToBeDeleted; }
 	bool getHasToBeDeleted() { return hasToBeDeleted; }
-	Audio* getAudio() { return m_audio; }
 	void playSound();
-	void setSound(Sound theSound);
+	void setSound(Sound* theSound);
 };
 

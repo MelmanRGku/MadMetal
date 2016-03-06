@@ -1,13 +1,10 @@
 #pragma once
-#include "Audio.h"
-
 
 class Sound
 {
 public:
-	Sound(int index = 0)
+	Sound()
 	{
-		m_libraryIndex = index;
 		m_currentChannel = -1;
 	}
 	virtual ~Sound(){}
@@ -17,7 +14,7 @@ public:
 		return m_currentChannel;
 	}
 
-	virtual void setChannel(int channel)
+	void setChannel(int channel)
 	{
 		m_currentChannel = channel;
 	}
@@ -38,9 +35,10 @@ protected: //members
 class AccelerationSound : public Sound
 {
 public:
-	AccelerationSound()
+	AccelerationSound() : Sound()
 	{
-		m_libraryIndex = 2;
+		
+		m_libraryIndex = 1;
 	};
 	virtual ~AccelerationSound(){};
 };
@@ -48,10 +46,30 @@ public:
 class CarIdleSound : public Sound
 {
 public:
-	CarIdleSound()
+	CarIdleSound() : Sound()
 	{
 		m_libraryIndex = 0;
 	};
 	virtual ~CarIdleSound(){};
 
+};
+
+class GunShotSound : public Sound
+{
+public:
+	GunShotSound() : Sound()
+	{
+		m_libraryIndex = 1;
+	};
+	virtual ~GunShotSound(){};
+};
+
+class ExplosionSound: public Sound
+{
+public:
+	ExplosionSound() : Sound()
+	{
+		m_libraryIndex = 3;
+	};
+	virtual ~ExplosionSound(){};
 };
