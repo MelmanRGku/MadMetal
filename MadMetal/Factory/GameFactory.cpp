@@ -37,7 +37,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Physicable *physicable = new Physicable(physicalCar->getRigidDynamicActor());
 
 
-		MeowMix *car = new MeowMix(objectId, *drivingStyle, *physicalCar, *audioable, *physicable, *animatable, *renderable, *audio);
+		MeowMix *car = new MeowMix(objectId, *drivingStyle, *physicalCar, *audioable, *physicable, *animatable, *renderable, audio);
 
 		int k = (int)physicalCar->mWheelsSimData.getWheelData(0).mRadius * 2;
 		PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();
@@ -70,7 +70,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		PxRigidStatic *physicalPlane = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_DRIVING_BOX, objectId, pos, geom, material, NULL, NULL));
 		Physicable *physicable = new Physicable(physicalPlane);
 
-		TestObject *plane = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+		TestObject *plane = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, audio);
 
 						 plane->setScale(glm::vec3(glm::vec3(plane->getWorldBounds().getDimensions().x, 1, plane->getWorldBounds().getDimensions().z)));
 
@@ -91,7 +91,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		PxRigidStatic *physicalBox = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BOX, objectId, pos, geo, material, NULL, NULL));
 		Physicable *physicable = new Physicable(physicalBox);
 
-		TestObject *box = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+		TestObject *box = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, audio);
 
 		box->updateScale(glm::vec3(glm::vec3(box->getWorldBounds().getDimensions().x, 80, box->getWorldBounds().getDimensions().z)));
 
@@ -111,7 +111,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		PxRigidStatic *physicalPlane = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_TRIANGLE_MESH, objectId, pos, NULL, material, NULL, NULL));
 		Physicable *physicable = new Physicable(physicalPlane);
 
-		TestObject *plane = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+		TestObject *plane = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, audio);
 
 		plane->updateScale(glm::vec3(glm::vec3(plane->getWorldBounds().getDimensions().x, plane->getWorldBounds().getDimensions().y, plane->getWorldBounds().getDimensions().z)));
 
@@ -131,7 +131,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		PxRigidStatic *physicalWall = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_WALL, objectId, pos, NULL, NULL, NULL, NULL));
 		Physicable *physicable = new Physicable(physicalWall);
 
-		TestObject *wall = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+		TestObject *wall = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable, audio);
 
 		m_world.addGameObject(wall);
 		m_scene.addActor(*physicalWall);
@@ -153,7 +153,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 						  animatable->setScale(glm::vec3(.2, .2, .7));
 		Physicable *physicable = new Physicable(physicalBullet);
 
-		Bullet *bullet = new MeowMixBullet(objectId, *audioable, *physicable, *animatable, *renderable, *audio, static_cast<Car *>(parent));
+		Bullet *bullet = new MeowMixBullet(objectId, *audioable, *physicable, *animatable, *renderable, audio, static_cast<Car *>(parent));
 		bullet->setSound(Sound(1));
 		bullet->playSound();
 		m_world.addGameObject(bullet);
@@ -176,7 +176,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 									 animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
 									 Physicable *physicable = new Physicable(physicalBullet);
 
-									 Bullet *bullet = new VolcanoGuySuperBullet(objectId, *audioable, *physicable, *animatable, *renderable, *audio, static_cast<Car *>(parent));
+									 Bullet *bullet = new VolcanoGuySuperBullet(objectId, *audioable, *physicable, *animatable, *renderable, audio, static_cast<Car *>(parent));
 
 		m_world.addGameObject(bullet);
 		m_scene.addActor(*physicalBullet);
@@ -191,7 +191,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Audio *audio = new Audio();
 		Physicable *physicable = new Physicable(NULL);
 
-		HealthBar2D *bar = new HealthBar2D(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+		HealthBar2D *bar = new HealthBar2D(objectId, *audioable, *physicable, *animatable, *renderable, audio);
 
 		m_world.addGameObject(bar);
 
@@ -205,7 +205,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Audio *audio = new Audio();
 		Physicable *physicable = new Physicable(NULL);
 
-		GaugeBar *bar = new GaugeBar(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+		GaugeBar *bar = new GaugeBar(objectId, *audioable, *physicable, *animatable, *renderable, audio);
 
 		m_world.addGameObject(bar);
 
@@ -219,7 +219,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Audio *audio = new Audio();
 		Physicable *physicable = new Physicable(NULL);
 
-		Text2D *bar = new Text2D(objectId, *audioable, *physicable, *animatable, *renderable, *audio);
+		Text2D *bar = new Text2D(objectId, *audioable, *physicable, *animatable, *renderable, audio);
 
 		m_world.addGameObject(bar);
 

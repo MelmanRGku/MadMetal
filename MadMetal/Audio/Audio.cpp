@@ -62,7 +62,7 @@ void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound& toPlay, int loo
 	
 	//add new channel to the list of currently playing sounds
 	m_audioChannels.push_back(toAdd);
-
+	std::cout << "Qued Sound \n";
 }
 
 

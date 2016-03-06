@@ -61,6 +61,7 @@ void PlayerControllable::playFrame(double dt)
 			if (m_gamePad->isHeld(GamePad::BButton))
 			{
 				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 1);
+				
 			}
 			else {
 				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 0);

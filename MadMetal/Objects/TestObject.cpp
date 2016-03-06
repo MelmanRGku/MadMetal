@@ -5,7 +5,7 @@
 #include "Cars/Car.h"
 #include "Factory\GameFactory.h"
 
-TestObject::TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio& audio)
+TestObject::TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio* audio)
 : m_renderable(rable)
 , m_physicable(pable)
 , m_animatable(anable)
@@ -80,5 +80,5 @@ void TestObject::setSound(Sound theSound)
 
 void TestObject::playSound()
 {
-	getAudio().queAudioSource(&this->getActor(), sound);
+	m_audio->queAudioSource(&this->getActor(), sound);
 }

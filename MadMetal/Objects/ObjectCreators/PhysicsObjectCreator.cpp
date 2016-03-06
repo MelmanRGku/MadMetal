@@ -80,6 +80,8 @@ PxConvexMesh* PhysicsObjectCreator::createConvexMesh(const PxVec3* verts, const 
 	return convexMesh;
 }
 
+
+
 PxTriangleMesh* PhysicsObjectCreator::createTriangleMesh(const PxVec3* verts, const PxU32 numVerts, const PxU32* indices, const PxU32 numTriangles)
 {
 	// Create descriptor for convex mesh

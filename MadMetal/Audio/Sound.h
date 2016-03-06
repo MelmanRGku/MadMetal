@@ -5,8 +5,9 @@
 class Sound
 {
 public:
-	Sound() 
+	Sound(int index = 0)
 	{
+		m_libraryIndex = index;
 		m_currentChannel = -1;
 	}
 	virtual ~Sound(){}
