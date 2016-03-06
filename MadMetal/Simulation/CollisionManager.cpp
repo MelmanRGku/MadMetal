@@ -86,7 +86,7 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 	if (car != NULL) 
 	{
 		car->setCurrentWaypoint(waypoint);
-		std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getId() << "\n";
+		//std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getId() << "\n";
 	}
 }
 

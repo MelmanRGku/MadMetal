@@ -19,7 +19,7 @@ public:
 	void setGoalWaypoint();
 	void updateNextWaypoint();
 private: //helper functions
-	void accelerate();
+	void accelerate(float amount);
 
 private: //members
 	//Car* m_car;

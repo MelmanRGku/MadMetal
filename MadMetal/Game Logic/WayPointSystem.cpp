@@ -1,7 +1,7 @@
 #include "WaypointSystem.h"
 #include "Game Logic\PathFinding.h"
 
-static const int WAYPOINT_RADIUS = 20;
+static const int WAYPOINT_RADIUS = 35;
 
 WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int trackLength) : m_gameFactory(gameFactory)
 {
@@ -9,11 +9,11 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 	float minWidth = -trackLength;
 
 	int index = 0;
-	for (int i = minWidth + WAYPOINT_RADIUS + 20; i < trackWidth; i += ((WAYPOINT_RADIUS+ 20)  * 2))
+	for (int i = minWidth + WAYPOINT_RADIUS + 5; i < trackWidth; i += ((WAYPOINT_RADIUS+ 5)  * 2))
 	{
 		std::vector<Waypoint*> newVectorWaypoint;
 		m_waypointMap.push_back(newVectorWaypoint);
-		for (int j = minLength + WAYPOINT_RADIUS + 20; j < trackLength; j += ((WAYPOINT_RADIUS + 20) * 2))
+		for (int j = minLength + WAYPOINT_RADIUS + 5; j < trackLength; j += ((WAYPOINT_RADIUS + 5) * 2))
 		{
 			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, new PxTransform(i, -100, j), new PxSphereGeometry(static_cast<float>(WAYPOINT_RADIUS)), NULL));
 			m_waypointMap[index].push_back(tempWaypoint);

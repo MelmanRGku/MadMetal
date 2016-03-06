@@ -35,9 +35,8 @@ std::vector<Waypoint*> PathFinding::findPath(Waypoint * currentPosition, Waypoin
 
 		for (int i = 0; i < m_pathToGoal.size(); i++)
 		{
-			delete m_pathToGoal[i];
+			m_pathToGoal.clear();
 		}
-		m_pathToGoal.clear();
 
 		m_foundGoal = false;
 		setStartAndGoal(*currentPosition, *targetPosition);
@@ -50,6 +49,7 @@ std::vector<Waypoint*> PathFinding::findPath(Waypoint * currentPosition, Waypoin
 		continuePath();
 	}
 
+	m_initializedStartGOal = false; 
 	return m_pathToGoal;
 }
 
