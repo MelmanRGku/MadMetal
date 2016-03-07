@@ -17,6 +17,7 @@ public:
 	virtual glm::mat4x4 getInitialModelMatrix() { return initialModelMatrix; }
 	Model *getModel() { return m_model; }
 	void setModel(Model *model, bool resize = false, bool reposition = false);
+	void setAlpha(float alpha);
 };
 
 

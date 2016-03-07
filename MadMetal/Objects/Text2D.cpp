@@ -18,10 +18,15 @@ bool Text2D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
 
-	FTGLPixmapFont font("Assets/Fonts/OpenSans-Bold.ttf");
+	FTGLBitmapFont font("Assets/Fonts/OpenSans-Bold.ttf");
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	glDisable(GL_LIGHTING);
 
+	glColor4f(1.0, 0.0, 0.0, 1.0);
 	// Set the font size and render a small text.
 	font.FaceSize(72);
 	font.Render(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z));
+
+	glPopAttrib();
 	return false;
 }

@@ -18,6 +18,6 @@ public:
 	std::vector<Mesh *> *getMeshes() { return &meshes; }
 	void setupVAOs();
 	PxTriangleMesh **getPhysicsTriangleMesh();
-
+	void setAlpha(float alpha);
 };
 

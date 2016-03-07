@@ -1,14 +1,21 @@
 #include "LoadingBar.h"
+#include "ObjectLoaders\ObjModelLoader.h"
 
-
-LoadingBar::LoadingBar(glm::vec3 size, glm::vec3 position, Model *completeBarModel)
+LoadingBar::LoadingBar(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable)
 {
-	updateRotation(glm::vec3(0, 3.14/2, 0));
-	updatePosition(position);
-	setScale(glm::vec3(size.z, size.y, size.x));
+	m_animatable.updatePosition(glm::vec3(0, -2, -10));
+	m_animatable.setScale(glm::vec3(5, 1, 1));
 
-	completeBar = new RenderableObject();
-	completeBar->setModel(completeBarModel, true, true);
+	ObjModelLoader *loader = new ObjModelLoader();
+	Model *progressModel = loader->loadFromFile("Assets/Models/GGO.obj");
+	progressModel->setupVAOs();
+
+	Animatable *animatable = new Animatable();
+	Renderable *renderable = new Renderable(NULL);
+	renderable->setModel(progressModel, true, true);
+	Audioable *audioable = new Audioable(m_audioable.getAudioHandle());
+	Physicable *physicable = new Physicable(NULL);
+	completeBar = new TestObject(id+1, *audioable, *physicable, *animatable, *renderable);
 }
 
 
@@ -16,12 +23,17 @@ LoadingBar::~LoadingBar()
 {
 }
 
-void LoadingBar::draw(Renderer *renderer) {
-	RenderableObject::draw(renderer);
-	completeBar->draw(renderer);
+bool LoadingBar::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
+	if (type != Renderer::ShaderType::SHADER_TYPE_CELL || passNumber > 1)
+		return false;
+
+	TestObject::draw(renderer, type, passNumber);
+	completeBar->draw(renderer, type, passNumber);
+
+	return false;
 }
 
 void LoadingBar::setProgress(float percentage) {
-	completeBar->setScale(glm::vec3(percentage * (scale.z - 2 * LOADING_BAR_BORDER_SIZE), 1 - 2 * LOADING_BAR_BORDER_SIZE, 1));
-	completeBar->setPosition(glm::vec3(position.x - scale.z / 2 + completeBar->getScale().x / 2 + LOADING_BAR_BORDER_SIZE, position.y, position.z));
+	completeBar->setScale(glm::vec3(percentage * (getScale().x - 2 * LOADING_BAR_BORDER_SIZE), 1 - 2 * LOADING_BAR_BORDER_SIZE, 1));
+	completeBar->setPosition(glm::vec3(getAnimatablePos().x - getScale().x / 2 + completeBar->getScale().x / 2 + LOADING_BAR_BORDER_SIZE, getAnimatablePos().y, getAnimatablePos().z));
 }

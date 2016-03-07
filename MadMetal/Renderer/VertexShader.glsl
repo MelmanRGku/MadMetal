@@ -10,7 +10,7 @@
 
 // Per-vertex inputs
 layout (location = 0) in vec4 position_attr;
-layout (location = 1) in vec3 colour_attr;
+layout (location = 1) in vec4 colour_attr;
 layout (location = 2) in vec3 normal_attr;
 layout (location = 3) in vec3 texcoords_attr;
 
@@ -25,7 +25,7 @@ out VS_OUT
     vec3 N;
     vec3 L;
     vec3 V;
-    vec3 C;
+    vec4 C;
     vec2 uv;
 } vs_out;
 

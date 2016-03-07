@@ -42,3 +42,10 @@ void Waypoint::setValid(bool isValid)
 void Waypoint::setFinish(bool finish) {
 	m_isFinish = finish;
 }
+
+/*bool Waypoint::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
+	if (Renderer::ShaderType::SHADER_TYPE_CELL != type || passNumber > 1)
+		return false;
+
+
+}*/

@@ -1,7 +1,7 @@
 #include "LoadingScreen.h"
+#include "Factory\GameFactory.h"
 
-
-LoadingScreen::LoadingScreen(SceneMessage& toDeliver)
+LoadingScreen::LoadingScreen(SceneMessage& toDeliver, Audio &audio) : m_audio(audio)
 {
 
 	
@@ -23,7 +23,7 @@ LoadingScreen::~LoadingScreen()
 
 
 bool LoadingScreen::simulateScene(double dt, SceneMessage &newMessage) {
-	//bar->setProgress(status->getPercentage());
+	bar->setProgress(status->getPercentage());
 	if (status->getPercentage() >= 1){
 		t.join();
 
@@ -42,13 +42,13 @@ void LoadingScreen::createProgressBar() {
 	Model *barModel = loader->loadFromFile("Assets/Models/loadingBox.obj");
 	barModel->setupVAOs();
 
-	loader = new ObjModelLoader();
-	Model *progressModel = loader->loadFromFile("Assets/Models/GGO.obj");
-	progressModel->setupVAOs();
+	Animatable *animatable = new Animatable();
+	Renderable *renderable = new Renderable(NULL);
+	renderable->setModel(barModel, true, true);
+	Audioable *audioable = new Audioable(m_audio);
+	Physicable *physicable = new Physicable(NULL);
+	bar = new LoadingBar(1, *audioable, *physicable, *animatable, *renderable);
 
-	//bar = new LoadingBar(glm::vec3(5, 1, 1), glm::vec3(0, -2, -10), progressModel);
-	//bar->setModel(barModel, true, true);
-
-//	m_world->addGameObject(bar);
+	m_world->addGameObject(bar);
 	delete loader;
 }
