@@ -8,7 +8,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, WaypointSystem*
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
 	m_waypointSystem = waypointSystem;
-	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
+	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
 	m_currentPath.clear();
 }
 AIControllable::~AIControllable()
@@ -27,7 +27,23 @@ void AIControllable::playFrame(double dt)
 
 		if (m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId())
 		{
-			m_goalWaypoint->getId() == 7 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(23) : m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
+			if (m_goalWaypoint->getId() == 26)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(27);
+			}
+			else if (m_goalWaypoint->getId() == 27)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
+			}
+			else if (m_goalWaypoint->getId() == 12)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(23);
+			}
+			else if (m_goalWaypoint->getId() == 23)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
+			}
+			//m_goalWaypoint->getId() == 38 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(42) : m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
 			//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
 		}
 		std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
@@ -180,5 +196,5 @@ void AIControllable::setCar(Car * toAdd)
 void AIControllable::setWaypointSystem(WaypointSystem* waypointSystem)
 {
 	m_waypointSystem = waypointSystem;
-	m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
+	m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
 }

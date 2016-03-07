@@ -280,8 +280,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
-	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-80, -100, -80), NULL, NULL));
-	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-70, -100, -70), NULL, NULL));
+	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-70, -900, -70), NULL, NULL));
+	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-80, -900, -80), NULL, NULL));
 
 	m_players[1]->setCar(meowMixAi);
 	m_players[0]->setCar(meowMix);
@@ -289,7 +289,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	TestObject* testObject = m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL);
 	//GameFactory& gameFactory, int trackWidth, int trackLength
 
-	m_waypointSystem = new WaypointSystem(*m_gameFactory, testObject->getWorldBounds().getDimensions().x, testObject->getWorldBounds().getDimensions().z);
+	m_waypointSystem = new WaypointSystem(*m_gameFactory, testObject->getWorldBounds().getDimensions().x, testObject->getWorldBounds().getDimensions().z, testObject->getGlobalPose().y);
 
 	for (int i = 0; i < m_players.size(); i++)
 	{

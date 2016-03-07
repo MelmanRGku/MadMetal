@@ -3,10 +3,10 @@
 
 static const int WAYPOINT_RADIUS = 35;
 
-WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int trackLength) : m_gameFactory(gameFactory)
+WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int trackLength, int yposition) : m_gameFactory(gameFactory)
 {
-	float minLength = -trackWidth;
-	float minWidth = -trackLength;
+	float minLength = -trackLength;
+	float minWidth = -trackWidth;
 
 	int index = 0;
 	for (int i = minWidth + WAYPOINT_RADIUS + 5; i < trackWidth; i += ((WAYPOINT_RADIUS+ 5)  * 2))
@@ -15,7 +15,7 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 		m_waypointMap.push_back(newVectorWaypoint);
 		for (int j = minLength + WAYPOINT_RADIUS + 5; j < trackLength; j += ((WAYPOINT_RADIUS + 5) * 2))
 		{
-			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, new PxTransform(i, -100, j), new PxSphereGeometry(static_cast<float>(WAYPOINT_RADIUS)), NULL));
+			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, new PxTransform(i, yposition, j), new PxSphereGeometry(static_cast<float>(WAYPOINT_RADIUS)), NULL));
 			m_waypointMap[index].push_back(tempWaypoint);
 			m_waypoints.push_back(tempWaypoint);
 		}
@@ -24,6 +24,8 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 
 
 	std::cout << "number of waypoints" << m_waypoints.size() << "\n";
+	std::cout << "Rows" << m_waypointMap.size() << "\n";
+	std::cout << "Columns: " << m_waypointMap[0].size() << "\n";
 	std::cout << "width: " << trackWidth << " | " << "tack length: " << trackLength << "\n";
 	// Populate Waypoints
 	for (int i = 0; i < m_waypointMap.size(); i++)
