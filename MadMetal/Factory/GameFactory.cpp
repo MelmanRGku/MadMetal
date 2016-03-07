@@ -257,7 +257,19 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return bar;
 	}
+	case OBJECT_TEXT_3D:
+	{
+		Renderable *renderable = new Renderable(NULL);
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		Physicable *physicable = new Physicable(NULL);
 
+		Text3D *text = new Text3D(objectId, *audioable, *physicable, *animatable, *renderable, 1);
+
+		m_world.addGameObject(text);
+
+		return text;
+	}
 	case OBJECT_WAYPOINT:
 	{
 		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GGO), true, true);

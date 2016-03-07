@@ -31,7 +31,7 @@ public:
 		case RENDERABLE_OBJECT_TRACK_DRIVABLE:
 			return Assets::getModel("texturedTrack");
 		case RENDERABLE_OBJECT_TRACK_NON_DRIVABLE:
-			return Assets::getModel("border");
+			return Assets::getModel("texturedBorder");
 		case RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO:
 			return Assets::getModel("scareMoon");
 		case RENDERABLE_OBJECT_GGO:

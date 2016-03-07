@@ -9,7 +9,8 @@ LoadingScreen::LoadingScreen(SceneMessage& toDeliver, Audio &audio) : m_audio(au
 	m_toDeliver = toDeliver;
 
 	createProgressBar();
-
+	createLoadingString();
+	createLoadingInfoString();
 	status = new LoadingStatus();
 	Assets::status = status;
 	t = std::thread(Assets::loadObjsFromDirectory, "Assets/Models", false );
@@ -24,6 +25,7 @@ LoadingScreen::~LoadingScreen()
 
 bool LoadingScreen::simulateScene(double dt, SceneMessage &newMessage) {
 	bar->setProgress(status->getPercentage());
+	loadingInfoString->setString(status->getMessage());
 	if (status->getPercentage() >= 1){
 		t.join();
 
@@ -51,4 +53,27 @@ void LoadingScreen::createProgressBar() {
 
 	m_world->addGameObject(bar);
 	delete loader;
+}
+
+void LoadingScreen::createLoadingString() {
+	Renderable *renderable = new Renderable(NULL);
+	Audioable *audioable = new Audioable(m_audio);
+	Animatable *animatable = new Animatable();
+	Physicable *physicable = new Physicable(NULL);
+
+	loadingString = new Text3D(3, *audioable, *physicable, *animatable, *renderable, 1);
+	loadingString->setString("Loading");
+	loadingString->setPos(glm::vec3(0, 0, -10));
+	m_world->addGameObject(loadingString);
+}
+
+void LoadingScreen::createLoadingInfoString() {
+	Renderable *renderable = new Renderable(NULL);
+	Audioable *audioable = new Audioable(m_audio);
+	Animatable *animatable = new Animatable();
+	Physicable *physicable = new Physicable(NULL);
+
+	loadingInfoString = new Text3D(4, *audioable, *physicable, *animatable, *renderable, 1);
+	loadingInfoString->setPos(glm::vec3(0, -4.5, -20));
+	m_world->addGameObject(loadingInfoString);
 }
