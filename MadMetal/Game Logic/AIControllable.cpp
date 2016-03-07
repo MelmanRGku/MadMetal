@@ -48,14 +48,14 @@ void AIControllable::playFrame(double dt)
 			//m_goalWaypoint->getId() == 38 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(42) : m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
 			//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
 		}
-		std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
+		//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
 		m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-		std::cout << "The optimal path is: ";
+		//std::cout << "The optimal path is: ";
 
 		for (int i = 0; i < m_currentPath.size(); i++)
 		{
-			std::cout << m_currentPath[i]->getId() << ", ";
+			//std::cout << m_currentPath[i]->getId() << ", ";
 		}
 
 		//std::cout << "\n";
@@ -99,8 +99,8 @@ void AIControllable::playFrame(double dt)
 			//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
 			float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
 
-			std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
-			std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
+			//std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
+			//std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
 			float amountToSteerBy = fabs(amountOfDotProduct - 1);
 			amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
 			float amountToAccelerate;
@@ -108,8 +108,8 @@ void AIControllable::playFrame(double dt)
 
 			accelerate(amountToAccelerate);
 
-				std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy << "\n";
-			std::cout << "z value: " << crossProductResult.z << "\n";
+			//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
+			//std::cout << "z value: " << crossProductResult.z << "\n";
 
 			if (crossProductResult.y < 0)
 			{
@@ -148,8 +148,8 @@ void AIControllable::playFrame(double dt)
 	} else {
 		m_car->respawn();
 	}
-	if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
-		std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";
+	//if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
+		//std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";
 }
 
 void AIControllable::updateNextWaypoint()

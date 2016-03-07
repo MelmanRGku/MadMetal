@@ -1,7 +1,7 @@
 #include "WaypointSystem.h"
 #include "Game Logic\PathFinding.h"
 
-static const int WAYPOINT_RADIUS = 35;
+static const float WAYPOINT_RADIUS = 35;
 
 WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int trackLength, int yposition) : m_gameFactory(gameFactory)
 {
@@ -16,7 +16,7 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 		for (int j = minLength + WAYPOINT_RADIUS + 5; j < trackLength; j += ((WAYPOINT_RADIUS + 5) * 2))
 		{
 			PxGeometry **geom = new PxGeometry * [1];
-			geom[0] = new PxSphereGeometry(static_cast<float>(WAYPOINT_RADIUS));
+			geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_RADIUS, yposition, WAYPOINT_RADIUS));
 			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, new PxTransform(i, yposition, j), geom, NULL));
 			m_waypointMap[index].push_back(tempWaypoint);
 			m_waypoints.push_back(tempWaypoint);
@@ -113,14 +113,14 @@ void WaypointSystem::test()
 
 	std::vector<Waypoint*> result = pathFinding->findPath(m_waypoints[0], m_waypoints[46]);
 
-	std::cout << "The optimal path is: ";
+	//std::cout << "The optimal path is: ";
 
 	for (int i = 0; i < result.size(); i++)
 	{
-		std::cout << result[i]->getId() << ", ";
+		//std::cout << result[i]->getId() << ", ";
 	}
 
-	std::cout << "\n";
+	//std::cout << "\n";
 
 	delete pathFinding;
 }
