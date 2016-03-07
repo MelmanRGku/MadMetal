@@ -182,7 +182,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		glm::vec3 pos = parent->getFullPosition();
 						  PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_MEOW_MIX, objectId, new PxTransform(pos.x, pos.y, pos.z), NULL, 0, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
 		animatable->setRotation(parent->getFullRotation());
-						  animatable->setScale(glm::vec3(.2, .2, .7));
+		animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
 		Physicable *physicable = new Physicable(physicalBullet);
 
 		Bullet *bullet = new MeowMixBullet(objectId, *audioable, *physicable, *animatable, *renderable, static_cast<Car *>(parent));

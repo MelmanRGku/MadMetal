@@ -50,6 +50,7 @@ void Audio::initializeLibrary(char * fileToLoad)
 				std::cout << "File Failed to Load \n";
 			}
 			m_library.push_back(chunk);
+			
 
 			pos = 0;
 			reached = false;

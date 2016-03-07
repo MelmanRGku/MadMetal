@@ -21,14 +21,14 @@ using namespace std;
 bool gIsVehicleInAir = true;
 static const float TRACK_DIMENSIONS = 200;
 
-GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle)
+GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audioHandle(audioHandle)
 {
 	std::cout << "GameSimulation pushed onto the stack \n";
 	createPhysicsScene();
-	audioHandle.loadMusic("mus_mettaton_neo.ogg");
 	
 	m_waypointSystem = NULL;
-	m_isPaused = true;
+	m_isPaused = false;
+
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 
 	//create characters for game from templates
@@ -59,6 +59,8 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	initialize();
 
 	audioHandle.assignListener(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor());
+	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), new StartBeepSound());
+	pauseControls(true);
 }
 
 GameSimulation::~GameSimulation()
@@ -239,6 +241,12 @@ void GameSimulation::createPhysicsScene()
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
+	m_sceneGameTimeSeconds += dt;
+	if (m_sceneGameTimeSeconds > 3 && m_controlsPaused) {
+		pauseControls(false);
+		m_audioHandle.loadMusic("mus_mettaton_neo.ogg");
+	}
+
 	for (int i = 0; i < m_humanPlayers.size(); i++)
 	{
 		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
@@ -263,6 +271,13 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	simulateAnimation();
 	updateObjects(dt);
 	return false;
+}
+
+void GameSimulation::pauseControls(bool pause) {
+	for (unsigned int i = 0; i < m_players.size(); i++) {
+		m_players[i]->pauseControls(pause);
+	}
+	m_controlsPaused = pause;
 }
 
 

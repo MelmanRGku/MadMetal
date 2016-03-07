@@ -6,3 +6,4 @@
 5 carcollision.wav
 6 countdown.wav
 7 shot.wav
+8 start-beep.wav

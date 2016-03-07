@@ -31,6 +31,8 @@ private:
 
 	void createWaypointPositions(glm::vec3 centerOfPlane, float length, float width);
 
+	void pauseControls(bool pause);
+
 private: //members
 	std::vector<Controllable *> m_players;
 	std::vector<PlayerControllable*> m_humanPlayers;
@@ -42,6 +44,8 @@ private: //members
 	PxBatchQuery* gBatchQuery = NULL;
 	GameFactory* m_gameFactory;
 	WaypointSystem* m_waypointSystem;
+	bool m_controlsPaused;
+	Audio &m_audioHandle;
 
 public:
 	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle);

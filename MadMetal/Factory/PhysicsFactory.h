@@ -126,7 +126,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
 			
-			bullet->createShape(PxBoxGeometry(1, 1, 2), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			bullet->createShape(PxBoxGeometry(.3, .3, 1), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			bullet->getShapes(shapes, 1);
