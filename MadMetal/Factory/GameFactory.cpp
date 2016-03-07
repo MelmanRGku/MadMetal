@@ -226,14 +226,14 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	case OBJECT_WAYPOINT:
 	{
 		Renderable *renderable = new Renderable(NULL);
-		Audioable *audioable = new Audioable();
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 		Audio *audio = new Audio();
 
 		PxRigidDynamic *waypointTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::WAYPOINT_COLLISION_VOLUME, objectId, pos, geom, NULL, NULL, NULL));
 		Physicable *physicable = new Physicable(waypointTriggerVolume);
 
-		Waypoint *waypoint = new Waypoint(objectId, *audioable, *physicable, *animatable, *renderable, audio);
+		Waypoint *waypoint = new Waypoint(objectId, *audioable, *physicable, *animatable, *renderable);
 
 		m_world.addGameObject(waypoint);
 		m_scene.addActor(*waypointTriggerVolume);

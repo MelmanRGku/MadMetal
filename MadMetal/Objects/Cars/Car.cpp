@@ -19,6 +19,25 @@ DrivingStyle& Car::getDrivingStyle()
 	return m_drivingStyle;
 }
 
+void Car::respawn()
+{
+	m_currentHealth = m_maxHealth;
+	
+	if (m_currentWaypoint != NULL)
+	{
+		std::cout << "here" << std::endl;
+		glm::vec3 currentPos = m_currentWaypoint->getGlobalPose();
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPos.x, currentPos.y + 50, currentPos.z)));
+	}
+	else {
+		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, currentPosition.p.y + 50, currentPosition.p.z)));
+	}
+
+	
+	
+}
+
 /*
 void Car::usePowerUp()
 {
@@ -97,7 +116,8 @@ void Car::update(float dt) {
 
 void Car::addDamageDealt(float damage) {
 	m_damageDealt += damage;
-	m_superGauge += damage / 100;
+	if (m_superDurationRemainingSeconds == 0)
+		m_superGauge += damage / 100;
 }
 
 int Car::getScore() {

@@ -71,6 +71,7 @@ public:
 	float getSuperGauge() { return m_superGauge > 1.f ? 1.f : m_superGauge; }
 	int getScore();
 	void setCurrentWaypoint(Waypoint* waypoint);
+	void respawn();
 	Waypoint* getCurrentWaypoint();
 	
 	
