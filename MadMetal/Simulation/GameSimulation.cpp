@@ -1,4 +1,3 @@
-#include "Game Logic\WayPointSystem.h"
 #include "GameSimulation.h"
 #include "GameSimulationDefinitions.h"
 #include "Objects/Cars/MeowMix.h"
@@ -11,18 +10,22 @@
 #include "PhysicsManager.h"
 #include "Objects\ObjectCreators\VehicleCreator.h"
 #include "CollisionManager.h"
+#include "Objects\Waypoint.h"
+#include "Game Logic\WayPointSystem.h"
+#include "Objects\TestObject.h"
 
 
 #define NUM_OF_PLAYERS 8
 
 using namespace std;
 bool gIsVehicleInAir = true;
+static const float TRACK_DIMENSIONS = 200;
 
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio* audioHandle)
 {
 	std::cout << "GameSimulation pushed onto the stack \n";
 	createPhysicsScene();
-	
+	m_waypointSystem = NULL;
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, *audioHandle);
 
 	//create characters for game from templates
@@ -40,6 +43,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
+			cout << "ai player added\n";
 			m_players.push_back(new AIControllable(*playerTemplates[i]));
 			//make a car for ai based off template
 		}
@@ -54,6 +58,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 GameSimulation::~GameSimulation()
 {
+	delete m_waypointSystem;
 }
 
 PxFixedSizeLookupTable<8> gSteerVsForwardSpeedTable(gSteerVsForwardSpeedData, 4);
@@ -79,12 +84,14 @@ bool PxVehicleIsInAir(const PxVehicleWheelQueryResult& vehWheelQueryResults)
 
 void GameSimulation::simulatePhysics(double dt)
 {
-
 	const PxF32 timestep = 1.0f / 60.0f;
+
+	for (unsigned int i = 0; i < m_players.size(); i++)
+	{
 
 	//Raycasts.
 	
-	PxVehicleWheels* vehicles[1] = { &m_humanPlayers[0]->getCar()->getCar() };
+		PxVehicleWheels* vehicles[1] = { &m_players[i]->getCar()->getCar() };
 	PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
 	const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
 	PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
@@ -92,11 +99,11 @@ void GameSimulation::simulatePhysics(double dt)
 	//Vehicle update.
 	const PxVec3 grav = m_scene->getGravity();
 	PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
-	PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, m_humanPlayers[0]->getCar()->getCar().mWheelsSimData.getNbWheels() } };
+		PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, m_players[i]->getCar()->getCar().mWheelsSimData.getNbWheels() } };
 	PxVehicleUpdates(timestep, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
 	//Work out if the vehicle is in the air.
-	gIsVehicleInAir = m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
+		gIsVehicleInAir = m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
 
 	// PLUG IN PITCH CORRECTION CODE HERE
 
@@ -127,19 +134,19 @@ void GameSimulation::simulatePhysics(double dt)
 	}
 	*/
 	PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
-	m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
+		m_players[i]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_players[i]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
 
-	PxVec3 test = m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getGlobalPose().q.getBasisVector1();
+		PxVec3 test = m_players[i]->getCar()->getCar().getRigidDynamicActor()->getGlobalPose().q.getBasisVector1();
 
 	if (test.y < 0.9 && gIsVehicleInAir)
 	{
-		cout << "PITCH ME" << endl;
-		m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.01, 0, 0));
+			//cout << "PITCH ME" << endl;
+			m_players[i]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_players[i]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.01, 0, 0));
 
 	}
 
 //	cout << test.x << " " << test.y << " " << test.z << endl;
-
+	}
 
 
 	m_scene->simulate(timestep);
@@ -159,11 +166,12 @@ void GameSimulation::simulatePlayers(double dt)
 	
 	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
-		
-		//m_players[i]->playFrame(dt);
+		//cout << "size of players: " << m_players.size() << "\n";
+		m_players[i]->playFrame(dt);
 		
 	}
-	m_humanPlayers[0]->playFrame(dt);
+	//m_humanPlayers[0]->playFrame(dt);
+	//m_players[1]->playFrame(dt);
 	
 }
 
@@ -272,19 +280,28 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
-	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, NULL, NULL, NULL));
-	m_humanPlayers[0]->setCar(meowMix);
+	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-80, -100, -80), NULL, NULL));
+	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-70, -100, -70), NULL, NULL));
 
-	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-15, 0, -15), NULL, NULL));
+	m_players[1]->setCar(meowMixAi);
+	m_players[0]->setCar(meowMix);
 
-	float length = 50;
-	float width = 10;
+	TestObject* testObject = m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL);
+	//GameFactory& gameFactory, int trackWidth, int trackLength
 
-	float dims = 5000;
+	m_waypointSystem = new WaypointSystem(*m_gameFactory, testObject->getWorldBounds().getDimensions().x, testObject->getWorldBounds().getDimensions().z);
+
+	for (int i = 0; i < m_players.size(); i++)
+	{
+		AIControllable *aiPlayer = dynamic_cast<AIControllable *>(m_players[i]);
+		if (aiPlayer != NULL)
+		{
+			aiPlayer->setWaypointSystem(m_waypointSystem);
+		}
+	}
 
 	//Create the drivable geometry
 	//m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
-	m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL);
 	//m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, NULL, NULL, NULL);
 	//m_gameFactory->makeObject(GameFactory::OBJECT_BUILDING, &PxTransform(PxVec3(0,0,0)), NULL, NULL);
 	// Create the collidable walls

@@ -11,9 +11,9 @@
 class Scene;
 class Car;
 class PhysicsManager;
-class WayPointSystem;
 class VehicleSceneQueryData; 
 class ObjModelLoader;
+class WaypointSystem;
 
 class GameSimulation : public Scene{
 private:
@@ -29,6 +29,8 @@ private:
 
 	void createPhysicsScene();
 
+	void createWaypointPositions(glm::vec3 centerOfPlane, float length, float width);
+
 private: //members
 	std::vector<Controllable *> m_players;
 	std::vector<PlayerControllable*> m_humanPlayers;
@@ -39,6 +41,7 @@ private: //members
 	VehicleSceneQueryData*	gVehicleSceneQueryData = NULL;
 	PxBatchQuery* gBatchQuery = NULL;
 	GameFactory* m_gameFactory;
+	WaypointSystem* m_waypointSystem;
 
 public:
 	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio* audioHandle);

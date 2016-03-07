@@ -2,9 +2,11 @@
 #include "../DrivingStyleFast.h"
 #include "Factory\GameFactory.h"
 #include <sstream>
+#include "Objects\Waypoint.h"
 
 Car::Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio* audio) : TestObject(id, aable, pable, anable, rable, audio), m_car(car), m_drivingStyle(style)
 {
+	m_currentWaypoint = NULL;
 }
 
 
@@ -98,4 +100,15 @@ void Car::addDamageDealt(float damage) {
 
 int Car::getScore() {
 	return m_damageDealt;
+}
+
+void Car::setCurrentWaypoint(Waypoint* waypoint)
+{
+	std::cout << "current waypoint is " << waypoint->getId() << "\n";
+	m_currentWaypoint = waypoint;
+}
+Waypoint* Car::getCurrentWaypoint()
+{
+	//if (m_currentWaypoint!=NULL)
+		return m_currentWaypoint;
 }

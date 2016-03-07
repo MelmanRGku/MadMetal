@@ -14,6 +14,7 @@ public:
 		PHYSICAL_OBJECT_BULLET_MEOW_MIX,
 		PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO,
 		PHYSICAL_OBJECT_TRACK,
+		WAYPOINT_COLLISION_VOLUME,
 	};
 
 public:
@@ -56,7 +57,7 @@ public:
 			shapes[i]->setSimulationFilterData(filterData);
 		}
 	}
-
+		 
 	void makeDrivable(PxRigidActor *actor) {
 		const PxU32 numShapes = actor->getNbShapes();
 		PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
@@ -120,7 +121,7 @@ public:
 			PxFilterData simFilterData;
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
-
+			
 			bullet->createShape(PxBoxGeometry(1, 1, 2), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
@@ -208,7 +209,7 @@ public:
 			PxFilterData simFilterData;
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
-
+			
 			bullet->createShape(PxSphereGeometry(3.f), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
@@ -223,7 +224,26 @@ public:
 			toReturn = bullet;
 			break;
 		}
+		case WAYPOINT_COLLISION_VOLUME:
+		{
+			PxRigidStatic * wapoint = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+			PxFilterData simFilterData;
+			simFilterData.word0 = COLLISION_FLAG_WAYPOINT;
+			simFilterData.word1 = COLLISION_FLAG_WAYPOINT_AGAINST;
 
+			wapoint->createShape(*geom, *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			wapoint->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+			setFilterDataId(objectId, wapoint);
+
+			toReturn = wapoint;
+			break;
+		}
 		case PHYSICAL_OBJECT_TRACK:
 		{
 			PxRigidStatic* plane = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
@@ -233,9 +253,9 @@ public:
 
 			toReturn = plane;
 		}
-
-			return toReturn;
 		}
+
+		return toReturn;
 	}
 
 	
