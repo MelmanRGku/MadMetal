@@ -82,6 +82,7 @@
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
     <ClCompile Include="Objects\Waypoint.cpp" />
+    <ClCompile Include="Objects\Track.cpp" />
     <ClCompile Include="Renderer\NoShaderProgram.cpp" />
     <ClCompile Include="Objects\Bullet.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
@@ -140,7 +141,7 @@
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
-	<ClInclude Include="Objects\Audioable.h" />
+    <ClInclude Include="Objects\Audioable.h" />
     <ClInclude Include="Objects\MeowMixBullet.h" />
     <ClInclude Include="Objects\GaugeBar.h" />
     <ClInclude Include="Objects\HealthBar2D.h" />
