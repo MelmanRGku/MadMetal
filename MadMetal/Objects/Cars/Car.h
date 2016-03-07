@@ -33,6 +33,8 @@ protected: //members
 	float m_superDurationRemainingSeconds; //seconds
 	Waypoint* m_currentWaypoint;
 
+	Sound * soundChassis;
+
 	/*
 		Need to be implemented
 		Projectile * m_ammuntion;
@@ -72,7 +74,8 @@ public:
 	int getScore();
 	void setCurrentWaypoint(Waypoint* waypoint);
 	Waypoint* getCurrentWaypoint();
-	
+	void setSoundChassis(Sound * sound);
+	void playSoundChassis();
 	
 };
 

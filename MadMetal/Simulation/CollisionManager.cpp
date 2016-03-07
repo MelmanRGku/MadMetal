@@ -116,6 +116,10 @@ void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 		{
 			processWaypointHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
 		}
+		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_CHASSIS)
+		{
+
+		}
 	}
 
 }

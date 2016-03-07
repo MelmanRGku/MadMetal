@@ -114,3 +114,14 @@ Waypoint* Car::getCurrentWaypoint()
 	//if (m_currentWaypoint!=NULL)
 		return m_currentWaypoint;
 }
+
+void Car::setSoundChassis(Sound *theSound)
+{
+	soundChassis = theSound;
+}
+
+void Car::playSoundChassis()
+{
+
+	m_audioable.getAudioHandle().queAudioSource(&this->getActor(), soundChassis);
+}

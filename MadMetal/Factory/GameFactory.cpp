@@ -57,6 +57,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							car->score = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
 							car->score->setString("Score: 0");
 
+
+							car->setSoundChassis(new ChassisCrashSound());
 		return car;
 	}
 	case OBJECT_BUILDING:
