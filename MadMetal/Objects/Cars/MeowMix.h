@@ -5,7 +5,7 @@
 class MeowMix : public Car
 {
 public:
-	MeowMix(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio* audio);
+	MeowMix(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
 	
 	~MeowMix();
 

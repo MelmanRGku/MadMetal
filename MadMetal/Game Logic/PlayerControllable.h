@@ -26,7 +26,7 @@ public:
 	{
 		m_gamePad = NULL;
 		delete m_camera;
-		delete m_car;
+		//delete m_car;
 	}
 	
 	void playFrame(double dt);

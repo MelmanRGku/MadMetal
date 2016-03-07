@@ -3,22 +3,30 @@
 #include "ControllableTemplate.h"
 #include "Objects\Cars\Car.h"
 
+class PathFinding;
+class m_waypointSystem;
+
 class AIControllable : public Controllable
 {
 public:
-	AIControllable(ControllableTemplate& aiTemplate) : Controllable(aiTemplate)
-	{
+	AIControllable(ControllableTemplate& aiTemplate, WaypointSystem* waypointSystem = NULL);
+	~AIControllable();
 
-	};
-	~AIControllable()
-	{
-		m_car = NULL;
-	};
-
-	void playFrame(double dt);
+	void playFrame(double dt);//todo: fearless leader <3
 	void setCar(Car * toAdd);
-	
-private: //members
-	Car* m_car;
+	//Car *getCar() { return m_car; }
+	Waypoint* getGoalWaypoint(Waypoint* waypoint);
+	void setGoalWaypoint();
+	void updateNextWaypoint();
+	void setWaypointSystem(WaypointSystem* waypointSystem);
+private: //helper functions
+	void accelerate(float amount);
 
+private: //members
+	//Car* m_car;
+	PathFinding* m_pathFinder;
+	Waypoint* m_goalWaypoint;
+	WaypointSystem* m_waypointSystem;
+	Waypoint* m_nextWaypoint;
+	std::vector<Waypoint*> m_currentPath;
 };

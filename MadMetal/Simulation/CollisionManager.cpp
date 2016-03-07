@@ -1,6 +1,7 @@
 #include "CollisionManager.h"
 #include "Objects\Cars\Car.h"
 #include "Objects\Bullet.h"
+#include "Objects\Waypoint.h"
 
 CollisionManager::CollisionManager(World &world) : m_world(world)
 {
@@ -69,7 +70,24 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	else if (car == NULL) {
 		bullet->setHasToBeDeleted(true);
 	}
-	bullet->playSound();
+	
+}
+
+void CollisionManager::processWaypointHit(long waypointId, long otherId)
+{
+	Waypoint *waypoint = dynamic_cast<Waypoint *>(m_world.findObject(waypointId));
+
+	if (waypoint == NULL)
+		return;
+
+	TestObject *otherObj = m_world.findObject(otherId);
+	Car *car = dynamic_cast<Car *>(otherObj);
+
+	if (car != NULL) 
+	{
+		car->setCurrentWaypoint(waypoint);
+		//std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getId() << "\n";
+	}
 }
 
 void CollisionManager::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
@@ -90,6 +108,10 @@ void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 	for (int i = 0; i < count; i++) {
 		if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_BULLET) {
 			processBulletHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
+		}
+		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_WAYPOINT)
+		{
+			processWaypointHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
 		}
 	}
 

@@ -13,6 +13,8 @@ public:
 		PHYSICAL_TRIANGLE_MESH,
 		PHYSICAL_OBJECT_BULLET_MEOW_MIX,
 		PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO,
+		PHYSICAL_OBJECT_TRACK,
+		WAYPOINT_COLLISION_VOLUME,
 		PHYSICAL_OBJECT_TRACK_DRIVABLE,
 		PHYSICAL_OBJECT_TRACK_NON_DRIVABLE,
 	};
@@ -66,9 +68,9 @@ public:
 
 		for (PxU32 i = 0; i < numShapes; i++) {
 			if (drivable) {
-				physx::PxFilterData qryFilterData = shapes[i]->getQueryFilterData();
-				setupDrivableSurface(qryFilterData);
-				shapes[i]->setQueryFilterData(qryFilterData);
+			physx::PxFilterData qryFilterData = shapes[i]->getQueryFilterData();
+			setupDrivableSurface(qryFilterData);
+			shapes[i]->setQueryFilterData(qryFilterData);
 			}
 
 			PxFilterData simFilterData = shapes[i]->getSimulationFilterData();
@@ -110,7 +112,7 @@ public:
 		{
 			VehicleCreator *vc = new VehicleCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 			PxVehicleDrive4W *car = vc->create(style);
-			PxTransform startTransform(PxVec3(0 - 140, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1.0f + 50), 0), PxQuat(PxIdentity));
+			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
 			PxTransform anotherTransform = pos == NULL ? PxTransform(PxVec3(0), PxQuat(PxIdentity)) : *pos;
 			car->getRigidDynamicActor()->setGlobalPose(PxTransform(startTransform.p.x + anotherTransform.p.x, startTransform.p.y + anotherTransform.p.y, startTransform.p.z + anotherTransform.p.z));
 			setFilterDataId(objectId, car->getRigidDynamicActor());
@@ -138,72 +140,6 @@ public:
 			toReturn = bullet;
 			break;
 		}
-		case PHYSICAL_TRIANGLE_MESH:
-		{
-			//triangle mesh
-			PxVec3 points[] =
-			{
-				//track box
-				PxVec3(-200, 0, -200),
-				PxVec3(-200, -1, -200),
-				PxVec3(-200, -1, 200),
-				PxVec3(-200, 0, 200),
-				PxVec3(200, 0, -200),
-				PxVec3(200, -1, -200),
-				PxVec3(200, -1, 200),
-				PxVec3(200, 0, 200),
-
-				//inner pillar
-				//PxVec3(-160, 5, -160),
-				//PxVec3(-160, 0, -160),
-				//PxVec3(-160, 0, 160),
-				//PxVec3(-200, 5, 160),
-				//PxVec3(160, 5, -160),
-				//PxVec3(160, 0, -160),
-				//PxVec3(160, 0, 160),
-				//PxVec3(160, 5, 160),
-
-
-
-			};
-
-			PxU32 indices[] =
-			{
-				//track
-				//0, 1, 3,
-				//1, 2, 3,
-				//3, 2, 7,
-				//2, 6, 7,
-				//7, 6, 4,
-				//6, 5, 4,
-				//4, 5, 0,
-				//5, 1, 0,
-				4, 0, 7,
-				0, 3, 7,
-				//1, 5, 2,
-				//5, 6, 2
-
-				//pillar
-				//8, 9, 11,
-				//9, 10,11,
-				//11, 10, 15,
-				//10, 14, 15,
-				//15, 14, 12,
-				//14, 13, 12,
-				//12, 13, 8,
-				//13, 9, 8,
-
-			};
-
-
-			PhysicsObjectCreator * creator = new PhysicsObjectCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
-			PxTriangleMesh * mesh = creator->createTriangleMesh(points, 8, indices, 2);
-			PxTriangleMeshGeometry * geo = new PxTriangleMeshGeometry(mesh);
-			PxRigidStatic * plane = createDrivingBox(material, PxTransform(PxVec3(0, 0, 0)), geo);
-			setFilterDataId(objectId, plane);
-			toReturn = plane;
-			break;
-		}
 
 		case PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO:
 		{
@@ -226,7 +162,26 @@ public:
 			toReturn = bullet;
 			break;
 		}
+		case WAYPOINT_COLLISION_VOLUME:
+		{
+			PxRigidStatic * wapoint = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+			PxFilterData simFilterData;
+			simFilterData.word0 = COLLISION_FLAG_WAYPOINT;
+			simFilterData.word1 = COLLISION_FLAG_WAYPOINT_AGAINST;
 
+			wapoint->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			wapoint->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+			setFilterDataId(objectId, wapoint);
+
+			toReturn = wapoint;
+			break;
+		}
 		case PHYSICAL_OBJECT_TRACK_DRIVABLE:
 		{
 			PxRigidStatic* plane = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
@@ -257,8 +212,8 @@ public:
 		}
 		}
 
-		return toReturn;
-	}
+			return toReturn;
+		}
 
 	
 private: //members

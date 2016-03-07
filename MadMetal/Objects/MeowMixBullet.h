@@ -5,7 +5,7 @@
 class MeowMixBullet : public Bullet
 {
 public:
-	MeowMixBullet(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio* audio, Car *owner);
+	MeowMixBullet(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Car *owner);
 	~MeowMixBullet();
 };
 

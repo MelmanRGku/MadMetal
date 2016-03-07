@@ -32,7 +32,8 @@ public:
 		OBJECT_TRACK,
 		OBJECT_TRACK_DRIVABLE,
 		OBJECT_TRACK_NON_DRIVABLE,
-		OBJECT_BUILDING
+		OBJECT_BUILDING,
+		OBJECT_WAYPOINT,
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);

@@ -5,16 +5,17 @@
 #include <vector>
 #include <cmath>
 #include "Objects\Object.h"
-#include "Sound.h"
 #define NUM_CHANNELS 50
 
 class AudioChannel;
 class Sound;
 
+
+
 class Audio
 {
 private:
-	
+	Mix_Music * music;
 	std::vector<Mix_Chunk *> m_library;
 	PxRigidActor * m_listener;
 
@@ -23,11 +24,13 @@ public:
 	std::vector<AudioChannel *> m_audioChannels;
 	Audio()
 	{
+		
 		SDL_Init(SDL_INIT_AUDIO);
 		SDL_Init(MIX_INIT_MP3);
 		SDL_Init(MUS_MP3);
 		SDL_Init(MUS_WAV);
-		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 20000) < 0)
+		SDL_Init(MUS_OGG);
+		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 		{
 			std::cout << "Error: " << Mix_GetError() << std::endl;
 			
@@ -51,9 +54,10 @@ public:
 	void pauseSources();
 	void resumeSources();
 	void initializeLibrary(char * fileToLoad);
-	void queAudioSource(PxRigidActor * sourcePosition, Sound& toPlay, int loopCount = 0);
+	void queAudioSource(PxRigidActor * sourcePosition, Sound* toPlay, int loopCount = 0);
 //	bool queAudioSource(int sourceID);
 	void update();
+	void loadMusic(char * file);
 
 };
 
@@ -64,18 +68,13 @@ public:
 class AudioChannel
 {
 private:
-	int &m_channelNum; 
+	Sound* m_sound;
 	PxRigidActor * m_audioPosition;
 public:
-	AudioChannel(PxRigidActor * position, int &channel) : m_audioPosition(position), m_channelNum(channel){}
-	~AudioChannel()
-	{ 
-		m_channelNum = -1;
-		m_audioPosition = NULL;
-	}
+	AudioChannel(PxRigidActor * position, Sound* sound) : m_audioPosition(position), m_sound(sound){}
+	~AudioChannel();
 
-	int getChannelNum() { return m_channelNum; }
-	void setChannelNum(int channel) { m_channelNum = channel; }
+	Sound* getSound() { return m_sound; }
 	bool updateAudio(PxRigidActor * listener);
 
 };
