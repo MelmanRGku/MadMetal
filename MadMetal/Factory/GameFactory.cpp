@@ -54,6 +54,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 							
 
+
+							car->setSoundChassis(new ChassisCrashSound());
 		return car;
 	}
 	case OBJECT_UI:
