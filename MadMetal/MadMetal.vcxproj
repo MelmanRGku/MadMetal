@@ -78,6 +78,7 @@
     <ClCompile Include="Objects\MeowMixBullet.cpp" />
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
+    <ClCompile Include="Objects\Track.cpp" />
     <ClCompile Include="Renderer\NoShaderProgram.cpp" />
     <ClCompile Include="Objects\Bullet.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />

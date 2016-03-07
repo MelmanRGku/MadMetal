@@ -13,7 +13,8 @@ public:
 		PHYSICAL_TRIANGLE_MESH,
 		PHYSICAL_OBJECT_BULLET_MEOW_MIX,
 		PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO,
-		PHYSICAL_OBJECT_TRACK,
+		PHYSICAL_OBJECT_TRACK_DRIVABLE,
+		PHYSICAL_OBJECT_TRACK_NON_DRIVABLE,
 	};
 
 public:
@@ -57,16 +58,18 @@ public:
 		}
 	}
 
-	void makeDrivable(PxRigidActor *actor) {
+	void makeGround(PxRigidActor *actor, bool drivable) {
 		const PxU32 numShapes = actor->getNbShapes();
 		PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
 		actor->getShapes(shapes, numShapes);
 
 
 		for (PxU32 i = 0; i < numShapes; i++) {
-			physx::PxFilterData qryFilterData = shapes[i]->getQueryFilterData();
-			setupDrivableSurface(qryFilterData);
-			shapes[i]->setQueryFilterData(qryFilterData);
+			if (drivable) {
+				physx::PxFilterData qryFilterData = shapes[i]->getQueryFilterData();
+				setupDrivableSurface(qryFilterData);
+				shapes[i]->setQueryFilterData(qryFilterData);
+			}
 
 			PxFilterData simFilterData = shapes[i]->getSimulationFilterData();
 			simFilterData.word0 = COLLISION_FLAG_GROUND;
@@ -75,7 +78,7 @@ public:
 		}
 	}
 		 
-	PxBase *makePhysicsObject(PhysicalObjects actorToMake, long objectId, PxTransform *pos, PxGeometry *geom, PxMaterial *material, DrivingStyle *style, PxVec3 *velocity)
+	PxBase *makePhysicsObject(PhysicalObjects actorToMake, long objectId, PxTransform *pos, PxGeometry **geom, PxU32 nbGeom, PxMaterial *material, DrivingStyle *style, PxVec3 *velocity)
 	{
 		PxBase *toReturn = NULL;
 
@@ -83,7 +86,7 @@ public:
 		case PHYSICAL_OBJECT_WALL:
 		{
 			PxRigidStatic * wall = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
-			wall->createShape(*geom, *material);
+			wall->createShape(*geom[0], *material);
 			setFilterDataId(objectId, wall);
 			toReturn = wall;
 			break;
@@ -91,14 +94,14 @@ public:
 		case PHYSICAL_OBJECT_BOX:
 		{
 			PxRigidStatic * box = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
-			box->createShape(*geom, *material);
+			box->createShape(*geom[0], *material);
 			setFilterDataId(objectId, box);
 			toReturn = box;
 			break;
 		}
 		case PHYSICAL_OBJECT_DRIVING_BOX:
 		{
-			PxRigidStatic * plane = createDrivingBox(material, *pos, geom);
+			PxRigidStatic * plane = createDrivingBox(material, *pos, geom[0]);
 			setFilterDataId(objectId, plane);
 			toReturn = plane;
 			break;
@@ -107,7 +110,7 @@ public:
 		{
 			VehicleCreator *vc = new VehicleCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 			PxVehicleDrive4W *car = vc->create(style);
-			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1000.0f), 0), PxQuat(PxIdentity));
+			PxTransform startTransform(PxVec3(0 - 140, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1.0f + 50), 0), PxQuat(PxIdentity));
 			PxTransform anotherTransform = pos == NULL ? PxTransform(PxVec3(0), PxQuat(PxIdentity)) : *pos;
 			car->getRigidDynamicActor()->setGlobalPose(PxTransform(startTransform.p.x + anotherTransform.p.x, startTransform.p.y + anotherTransform.p.y, startTransform.p.z + anotherTransform.p.z));
 			setFilterDataId(objectId, car->getRigidDynamicActor());
@@ -224,18 +227,37 @@ public:
 			break;
 		}
 
-		case PHYSICAL_OBJECT_TRACK:
+		case PHYSICAL_OBJECT_TRACK_DRIVABLE:
 		{
 			PxRigidStatic* plane = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
-			plane->createShape(*geom, *material);
+			for (PxU32 i = 0; i < nbGeom; i++) {
+				plane->createShape(*geom[i], *material);
+			}
 			setFilterDataId(objectId, plane);
-			makeDrivable(plane);
+			makeGround(plane, true);
+			PxVec3 p = plane->getGlobalPose().p;
+			PxBounds3 s = plane->getWorldBounds();
+			PxVec3 z = s.getCenter();
+			PxVec3 l = s.getDimensions();
+			toReturn = plane;
+			break;
+		}
+
+		case PHYSICAL_OBJECT_TRACK_NON_DRIVABLE:
+		{
+			PxRigidStatic* plane = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+			for (PxU32 i = 0; i < nbGeom; i++) {
+				plane->createShape(*geom[i], *material);
+			}
+			setFilterDataId(objectId, plane);
+			makeGround(plane, false);
 
 			toReturn = plane;
+			break;
+		}
 		}
 
-			return toReturn;
-		}
+		return toReturn;
 	}
 
 	

@@ -272,7 +272,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
-	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, NULL, NULL, NULL));
+	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, NULL/*new PxTransform(-140, 50, 0)*/, NULL, NULL));
 	m_humanPlayers[0]->setCar(meowMix);
 
 	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-15, 0, -15), NULL, NULL));
