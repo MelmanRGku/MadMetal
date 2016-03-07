@@ -202,7 +202,7 @@ void GameSimulation::initialize() {
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(PhysicsManager::getScale());
-	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -18.0f, 0.0f);
 
 	CollisionManager *manager = new CollisionManager(*m_world);
 	sceneDesc.simulationEventCallback = manager;
@@ -309,8 +309,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
-	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 0), NULL, NULL));
-	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-115, 100, 10), NULL, NULL));
+	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 40, 0), NULL, NULL));
+	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-105, 40, 15), NULL, NULL));
 	UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
 	meowMix->ui = ui;
 	m_world->addGameObject(ui);
@@ -320,7 +320,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_players[0]->setCar(meowMix);
 
 	Track* testObject = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL));
-	//GameFactory& gameFactory, int trackWidth, int trackLength
 
 	m_waypointSystem = new WaypointSystem(*m_gameFactory, 
 										  testObject->getDrivablePart()->getWorldBounds().minimum.x, 
@@ -337,70 +336,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 			aiPlayer->setWaypointSystem(m_waypointSystem);
 		}
 	}
-
-	//Create the drivable geometry
-	//m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
-	//m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, NULL, NULL, NULL);
-	//m_gameFactory->makeObject(GameFactory::OBJECT_BUILDING, &PxTransform(PxVec3(0,0,0)), NULL, NULL);
-	// Create the collidable walls
-	/*PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));
-	leftWall->createShape(PxBoxGeometry(0.5, width, length), *mMaterial);
-	m_scene->addActor(*leftWall);
-	PxRigidStatic * rightWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(-width, width, 0));
-	rightWall->createShape(PxBoxGeometry(.5, width, length), *mMaterial);
-	m_scene->addActor(*rightWall);
-	PxRigidStatic * frontWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(0, width, length));
-	frontWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
-	m_scene->addActor(*frontWall);
-
-	
-	RenderableObject * FrontPlane = new RenderableObject();
-	FrontPlane->setModel(Assets::getModel("plane"), true, true);
-	FrontPlane->updateScale(glm::vec3(glm::vec3(frontWall->getWorldBounds().getDimensions().x, 1, frontWall->getWorldBounds().getDimensions().y)));
-	FrontPlane->setActor(frontWall);
-	FrontPlane->updateRotation(glm::vec3(3.14 / 2, 0, 0));
-	m_world->addGameObject(FrontPlane);
-
-	RenderableObject * leftPlane = new RenderableObject();
-	leftPlane->setModel(Assets::getModel("plane"));
-	leftPlane->setActor(leftWall);
-	leftPlane->updatePosition(glm::vec3(leftPlane->getPosition().x, leftPlane->getPosition().y, leftPlane->getPosition().z));
-	leftPlane->updateRotation(glm::vec3(0, 0, 3.14 / 2));
-	m_world->addGameObject(leftPlane);
-
-	RenderableObject * RightPlane = new RenderableObject();
-	RightPlane->setModel(Assets::getModel("plane"));
-	RightPlane->setActor(rightWall);
-	RightPlane->updateRotation(glm::vec3(0, 0, 3.14 / 2));
-	m_world->addGameObject(RightPlane);
-	*/
-
-
-	//drawthe finish line
-	/*RenderableObject * finishLine = new RenderableObject();
-	finishLine->setModel(Assets::getModel("finishLine"));
-	m_world->addGameObject(finishLine);*/
-
-	//create a bounding box for storm tropper to run into
-	/*PxRigidStatic *boundVolume = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length - 5));
-	PxShape* aSphereShape = boundVolume->createShape(PxBoxGeometry(PxVec3(2, 5, 3)), *mMaterial);
-	aSphereShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
-	aSphereShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
-	//m_scene->addActor(*boundVolume);
-	finishLine->setActor(boundVolume);
-	PhysicsManager::setupFiltering(boundVolume,
-		PhysicsManager::WAYPOINT,
-		PhysicsManager::PLAYER,
-		0,
-		0);
-
-	//create waypoints
-	vector<glm::vec3> positions;
-	positions.push_back(glm::vec3(0, 0, 40));
-	positions.push_back(glm::vec3(0, 0, -40));
-	positions.push_back(glm::vec3(0, 0, -20));
-	positions.push_back(glm::vec3(0, 0, 0));
-	positions.push_back(glm::vec3(0, 0, 20));*/
 	
 }
 
