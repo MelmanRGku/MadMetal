@@ -444,4 +444,15 @@
   <ItemGroup>
     <Text Include="Files\test.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Models\asphalt_texture409.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\Building_texture4.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\Terrain-Road.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
