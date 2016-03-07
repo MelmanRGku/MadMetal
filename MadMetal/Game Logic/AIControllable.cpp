@@ -216,10 +216,10 @@ void AIControllable::accelerate(float amount)
 	else if (amount < 0 && m_car->getCar().computeForwardSpeed() > 10.0)
 	{
 		//std::cout << "Applying break with : " << -amount << "\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, -amount * 0.5);
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
 	}
-	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 50.0)
+	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
 	{
 		//std::cout << "Applying acceleration : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
