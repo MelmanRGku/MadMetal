@@ -51,11 +51,13 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		}
 	}
 
-	
+
 	//add when car is created by this point. 
 	//m_mainCamera = m_humanPlayers[0]->getCamera();
 	
 	initialize();
+
+	audioHandle.assignListener(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor());
 }
 
 GameSimulation::~GameSimulation()
@@ -286,7 +288,9 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-80, -100, -80), NULL, NULL));
 	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-70, -100, -70), NULL, NULL));
 
+
 	m_players[1]->setCar(meowMixAi);
+
 	m_players[0]->setCar(meowMix);
 
 	TestObject* testObject = m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL);

@@ -63,36 +63,6 @@ void Audio::initializeLibrary(char * fileToLoad)
 		std::cout << "File reading error" << std::endl;
 	}
 
-
-	//to do: make into a file parsing method? 
-	//to do: fill with sounds
-	Mix_Chunk * chunk = Mix_LoadWAV("Assets/Audio/car_idle.wav");
-	if (chunk == NULL)
-	{
-		std::cout << "ABORT \n";
-	}
-	m_library.push_back(chunk);
-
-	Mix_Chunk * chunk1 = Mix_LoadWAV("Assets/Audio/gun_shot_1.wav");
-	if (chunk == NULL)
-	{
-		std::cout << "ABORT \n";
-	}
-	m_library.push_back(chunk1);
-
-	Mix_Chunk * chunk2 = Mix_LoadWAV("Assets/Audio/mario.wav");
-	if (chunk == NULL)
-	{
-		std::cout << "ABORT \n";
-	}
-	m_library.push_back(chunk2);
-
-	Mix_Chunk * chunk3 = Mix_LoadWAV("Assets/Audio/explosion_1.wav");
-	if (chunk == NULL)
-	{
-		std::cout << "ABORT \n";
-	}
-	m_library.push_back(chunk3);
 }
 
 

@@ -240,6 +240,24 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return waypoint;
 	}
+	case OBJECT_BULLET_CAR_COLLISION:
+	{
+		Renderable *renderable = new Renderable(NULL);
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+//		PxRigidDynamic * actor = ;
+
+		Physicable *physicable = new Physicable(NULL);
+
+
+		BulletCarCollision * col = new BulletCarCollision(objectId, *audioable, *physicable, *animatable, *renderable);
+		col->setSound(new BulletCarCollisionSound());
+		col->playSound();
+
+//		m_world.addGameObject(col);
+
+		return col;
+	}
 	}
 }
 

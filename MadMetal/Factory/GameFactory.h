@@ -15,6 +15,7 @@
 #include "Objects\Bullet.h"
 #include "Objects\MeowMixBullet.h"
 #include "Objects\VolcanoGuySuperBullet.h"
+#include "Objects\BulletCarCollision.h"
 
 class GameFactory
 {
@@ -31,6 +32,7 @@ public:
 		OBJECT_TRACK,
 		OBJECT_BUILDING,
 		OBJECT_WAYPOINT,
+		OBJECT_BULLET_CAR_COLLISION
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry *geom, TestObject *parent);
