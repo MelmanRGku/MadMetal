@@ -14,7 +14,7 @@ class Sound;
 class Audio
 {
 private:
-	
+	Mix_Music * music;
 	std::vector<Mix_Chunk *> m_library;
 	PxRigidActor * m_listener;
 
@@ -27,6 +27,7 @@ public:
 		SDL_Init(MIX_INIT_MP3);
 		SDL_Init(MUS_MP3);
 		SDL_Init(MUS_WAV);
+		SDL_Init(MUS_OGG);
 		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 20000) < 0)
 		{
 			std::cout << "Error: " << Mix_GetError() << std::endl;
@@ -54,6 +55,7 @@ public:
 	void queAudioSource(PxRigidActor * sourcePosition, Sound& toPlay, int loopCount = 0);
 //	bool queAudioSource(int sourceID);
 	void update();
+	void loadMusic(char * file);
 
 };
 

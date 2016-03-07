@@ -22,7 +22,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 {
 	std::cout << "GameSimulation pushed onto the stack \n";
 	createPhysicsScene();
-	
+	audioHandle->loadMusic("mus_mettaton_neo.ogg");
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, *audioHandle);
 
 	//create characters for game from templates

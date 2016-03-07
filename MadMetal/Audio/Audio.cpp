@@ -1,9 +1,59 @@
 #include "Audio.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 
 //set up audio library
 void Audio::initializeLibrary(char * fileToLoad)
 {
+
+	std::ifstream stream;
+	stream.open("Audio/Library.txt");
+	std::string line;
+	if (stream.is_open())
+	{
+		std::string filename;
+		bool reached= false;;
+		int pos = 0;
+		Mix_Chunk * chunk;
+		while (getline(stream, line))
+		{
+			while (pos < line.length())
+			{
+				if (reached)
+				{
+					filename = filename + line[pos];
+				}
+				if (line[pos] == ' ')
+				{
+					reached = true;
+				}
+
+				pos++;
+			}
+			std::cout << filename << std::endl;
+			char * test = "Assets/Audio/";
+			std::string thefile = test + filename;
+			chunk = Mix_LoadWAV(thefile.c_str());
+			if (chunk == NULL)
+			{
+				std::cout << "File Failed to Load \n";
+			}
+			m_library.push_back(chunk);
+
+			pos = 0;
+			reached = false;
+			filename.clear();
+		}
+
+
+	}
+	else
+	{
+		std::cout << "File reading error" << std::endl;
+	}
+
+
 	//to do: make into a file parsing method? 
 	//to do: fill with sounds
 	Mix_Chunk * chunk = Mix_LoadWAV("Assets/Audio/car_idle.wav");
@@ -145,4 +195,10 @@ bool AudioChannel::updateAudio(PxRigidActor * listener)
 	std::cout << distance << std::endl;
 	Mix_SetPosition(m_channelNum, Sint16(angle), Uint8(distance));
 	return true;
+}
+
+void Audio::loadMusic(char * file)
+{
+	music = Mix_LoadMUS("Assets/Audio/musmettatonneo.wav");
+	Mix_PlayMusic(music, -1);
 }
