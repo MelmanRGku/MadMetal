@@ -180,6 +180,9 @@ void AIControllable::playFrame(double dt)
 		}
 		else {
 		m_car->respawn();
+		m_currentPath.clear();
+		m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(),m_goalWaypoint);
+		updateNextWaypoint();
 	}
 	}
 	//if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)

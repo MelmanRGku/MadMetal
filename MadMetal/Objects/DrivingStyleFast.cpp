@@ -10,7 +10,8 @@
 		m_chassisMOI = PxVec3((m_chassisDims.y*m_chassisDims.y + m_chassisDims.z*m_chassisDims.z)*m_chassisMass / 12.0f,
 			                  (m_chassisDims.x*m_chassisDims.x + m_chassisDims.z*m_chassisDims.z)*0.8f*m_chassisMass / 12.0f,
 			                  (m_chassisDims.x*m_chassisDims.x + m_chassisDims.y*m_chassisDims.y)*m_chassisMass / 12.0f);
-		m_chassisMOI.z *= 1;
+		m_chassisMOI.x *= 1.1;
+		m_chassisMOI.z *= 1.2;
 		m_chassisCMOffset = PxVec3(0.0f, -m_chassisDims.y*2.f, 0.0f);
 		m_chassisMaterial = chassisMaterial;
 

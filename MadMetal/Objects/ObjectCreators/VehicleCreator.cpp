@@ -173,9 +173,9 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 		//Set the suspension data.
 		for (PxU32 i = 0; i < style->getNbWheels(); i++)
 		{
-			suspensions[i].mMaxCompression = 0.1f;
+			suspensions[i].mMaxCompression = 0.01;
 			suspensions[i].mMaxDroop = 0.1f;
-			suspensions[i].mSpringStrength = 150000.0f;
+			suspensions[i].mSpringStrength = 100000.0f;
 			suspensions[i].mSpringDamperRate = 20000.0f;
 			suspensions[i].mSprungMass = suspSprungMasses[i];
 		}
