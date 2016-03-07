@@ -6,8 +6,8 @@ MeowMix::MeowMix(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable 
 	m_lastWeaponShot = LAST_WEAPON_SHOT_LEFT;
 	m_reloadRateSeconds = 0.15;						//in s
 	m_superReloadRateSeconds = 1;
-	m_currentHealth = m_maxHealth = 2000;
-	m_currentHealth -= 500;
+	m_currentHealth = m_maxHealth = 100;
+	
 
 	m_superMaxDurationSeconds = 5;
 	m_superDurationRemainingSeconds = 0;

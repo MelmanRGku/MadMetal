@@ -46,8 +46,8 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
-			//cout << "ai player added\n";
-			//m_players.push_back(new AIControllable(*playerTemplates[i]));
+			
+			m_players.push_back(new AIControllable(*playerTemplates[i]));
 			//make a car for ai based off template
 		}
 	}
@@ -63,7 +63,14 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 GameSimulation::~GameSimulation()
 {
+	for (int i = 0; i < m_players.size(); i++)
+	{
+		delete m_players[i];
+	}
+	m_scene->release();
+	
 	delete m_waypointSystem;
+	
 }
 
 PxFixedSizeLookupTable<8> gSteerVsForwardSpeedTable(gSteerVsForwardSpeedData, 4);
@@ -246,6 +253,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 			//put a dummy controllable at the front of the vector so the pause screen knows who paused
 			playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
 			newMessage.setPlayerTemplates(playerTemplates);
+			
 			return true;
 		}
 	}
@@ -287,10 +295,10 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
 	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 0), NULL, NULL));
-	//MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 10), NULL, NULL));
+	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 10), NULL, NULL));
 
 
-	//m_players[1]->setCar(meowMixAi);
+	m_players[1]->setCar(meowMixAi);
 
 	m_players[0]->setCar(meowMix);
 

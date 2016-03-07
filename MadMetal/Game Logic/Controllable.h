@@ -23,6 +23,7 @@ public:
 	
 	ControllableTemplate& getControllableTemplate();
 	virtual void setCar(Car * toAdd) = 0;
+	
 	Car *getCar() { return m_car; }
 protected:
 	Car* m_car;

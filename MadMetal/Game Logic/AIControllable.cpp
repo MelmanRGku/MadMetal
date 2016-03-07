@@ -18,6 +18,8 @@ AIControllable::~AIControllable()
 
 void AIControllable::playFrame(double dt)
 {
+	if (m_car->isAlive())
+	{
 	if (m_car->getCurrentWaypoint() == NULL || m_goalWaypoint == NULL)
 	{
 		return;
@@ -140,6 +142,11 @@ void AIControllable::playFrame(double dt)
 
 
 		}
+		}
+		
+
+	} else {
+		m_car->respawn();
 	}
 	//if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
 		//std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";

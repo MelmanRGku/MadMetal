@@ -59,7 +59,7 @@ public:
 			shapes[i]->setSimulationFilterData(filterData);
 		}
 	}
-
+		 
 	void makeGround(PxRigidActor *actor, bool drivable) {
 		const PxU32 numShapes = actor->getNbShapes();
 		PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
@@ -125,7 +125,7 @@ public:
 			PxFilterData simFilterData;
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
-
+			
 			bullet->createShape(PxBoxGeometry(1, 1, 2), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
@@ -147,7 +147,7 @@ public:
 			PxFilterData simFilterData;
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
-
+			
 			bullet->createShape(PxSphereGeometry(3.f), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
@@ -209,8 +209,8 @@ public:
 		}
 		}
 
-			return toReturn;
-		}
+		return toReturn;
+	}
 
 	
 private: //members

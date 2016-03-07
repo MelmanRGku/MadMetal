@@ -95,7 +95,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
 		track = new Track(objectId, *audioable, *physicable, *animatable, *renderable, drivableTrack, nonDrivableTrack);
-
+		
 		return track;
 	}
 	case OBJECT_TRACK_DRIVABLE:
@@ -126,7 +126,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRACK_NON_DRIVABLE));
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
-		
+
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 		PxTriangleMesh ** mesh = renderable->getModel()->getPhysicsTriangleMesh();
 		PxGeometry ** geom = new PxGeometry *[renderable->getModel()->getMeshes()->size()];

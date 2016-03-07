@@ -84,6 +84,7 @@ public:
 		}
 		m_sceneCameras.clear();
 	}
+
 	virtual bool simulateScene(double dt, SceneMessage &newMessage) = 0;
 
 	World* getWorld() { return m_world; }

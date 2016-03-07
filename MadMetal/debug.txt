@@ -9446,16 +9446,6 @@ Linking program
 New shader loaded with program ID 3
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
-Initialized Input. 2 controllers connected
-Compiling vertex shader.
-
-Compiling fragment shader.
-
-Linking program
-
-New shader loaded with program ID 3
-New Message (StackManager::readMailBox())
-New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 Cleared the Stack (SceneStack::clearStack())
 Initialized Input. 2 controllers connected
@@ -9468,25 +9458,8 @@ Linking program
 New shader loaded with program ID 3
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
-Initialized Input. 2 controllers connected
-Compiling vertex shader.
-
-Compiling fragment shader.
-
-Linking program
-
-New shader loaded with program ID 3
 New Message (StackManager::readMailBox())
-New Message (StackManager::readMailBox())
-Initialized Input. 2 controllers connected
-Compiling vertex shader.
-
-Compiling fragment shader.
-
-Linking program
-
-New shader loaded with program ID 3
-New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 Cleared the Stack (SceneStack::clearStack())
@@ -9502,6 +9475,9 @@ New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 Cleared the Stack (SceneStack::clearStack())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
 Initialized Input. 2 controllers connected
 Compiling vertex shader.
 
@@ -9514,6 +9490,9 @@ New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 Cleared the Stack (SceneStack::clearStack())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
 Initialized Input. 2 controllers connected
 Compiling vertex shader.
 
@@ -9522,6 +9501,13 @@ Compiling fragment shader.
 Linking program
 
 New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
@@ -9538,103 +9524,9 @@ New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 Cleared the Stack (SceneStack::clearStack())
-Initialized Input. 2 controllers connected
-Compiling vertex shader.
-
-Compiling fragment shader.
-
-Linking program
-
-New shader loaded with program ID 3
-New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 Cleared the Stack (SceneStack::clearStack())
-Initialized Input. 2 controllers connected
-Compiling vertex shader.
-
-Compiling fragment shader.
-
-Linking program
-
-New shader loaded with program ID 3
-New Message (StackManager::readMailBox())
-New Message (StackManager::readMailBox())
-New Message (StackManager::readMailBox())
-Cleared the Stack (SceneStack::clearStack())
-Initialized Input. 2 controllers connected
-Compiling vertex shader.
-
-Compiling fragment shader.
-
-Linking program
-
-New shader loaded with program ID 3
-New Message (StackManager::readMailBox())
-New Message (StackManager::readMailBox())
-New Message (StackManager::readMailBox())
-Cleared the Stack (SceneStack::clearStack())
-Initialized Input. 2 controllers connected
-Compiling vertex shader.
-
-Compiling fragment shader.
-Error occurred when compiling fragment shader.
-Fragment shader failed to compile with the following errors:
-ERROR: 0:67: error(#314) No such field in interface block c
-ERROR: 0:67: error(#162) Wrong operand types: no operation "-" exists that takes a left-hand operand of type "const int" and a right operand of type "default in interface block" (or there is no acceptable conversion)
-ERROR: 0:67: error(#314) No such field in interface block c
-ERROR: 0:67: error(#162) Wrong operand types: no operation "*" exists that takes a left-hand operand of type "default in interface block" and a right operand of type "FragColor mediump 4-component vector of vec4" (or there is no acceptable conversion)
-ERROR: 0:67: error(#162) Wrong operand types: no operation "+" exists that takes a left-hand operand of type "4-component vector of vec4" and a right operand of type "default in interface block" (or there is no acceptable conversion)
-ERROR: error(#273) 5 compilation errors.  No code generated
-
-
-Linking program
-Error occurred when linking shaders.
-Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
-
-New shader loaded with program ID 3
-New Message (StackManager::readMailBox())
-New Message (StackManager::readMailBox())
-New Message (StackManager::readMailBox())
-Cleared the Stack (SceneStack::clearStack())
-Initialized Input. 2 controllers connected
-Compiling vertex shader.
-
-Compiling fragment shader.
-
-Linking program
-
-New shader loaded with program ID 3
-New Message (StackManager::readMailBox())
-New Message (StackManager::readMailBox())
-Initialized Input. 2 controllers connected
-Compiling vertex shader.
-
-Compiling fragment shader.
-
-Linking program
-
-New shader loaded with program ID 3
-New Message (StackManager::readMailBox())
-New Message (StackManager::readMailBox())
-Initialized Input. 2 controllers connected
-Compiling vertex shader.
-
-Compiling fragment shader.
-
-Linking program
-
-New shader loaded with program ID 3
-New Message (StackManager::readMailBox())
-New Message (StackManager::readMailBox())
-Initialized Input. 2 controllers connected
-Compiling vertex shader.
-
-Compiling fragment shader.
-
-Linking program
-
-New shader loaded with program ID 3
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 Initialized Input. 2 controllers connected
@@ -9705,6 +9597,99 @@ Compiling fragment shader.
 Linking program
 
 New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Initialized Input. 2 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+
+Linking program
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
