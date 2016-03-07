@@ -14,7 +14,6 @@ Text2D::~Text2D()
 bool Text2D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 	if (type != Renderer::ShaderType::SHADER_TYPE_NONE || passNumber > 1)
 		return false;
-	glEnable(GL_BLEND);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
@@ -24,6 +23,5 @@ bool Text2D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
 	// Set the font size and render a small text.
 	font.FaceSize(72);
 	font.Render(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z));
-	glDisable(GL_BLEND);
 	return false;
 }

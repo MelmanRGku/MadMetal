@@ -29,7 +29,16 @@ bool Waypoint::isValid()
 	return m_isValid;
 }
 
+bool Waypoint::isFinish() {
+	return m_isFinish;
+}
+
 void Waypoint::setValid(bool isValid)
 {
 	m_isValid = isValid;
+}
+
+
+void Waypoint::setFinish(bool finish) {
+	m_isFinish = finish;
 }

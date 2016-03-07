@@ -87,9 +87,18 @@ void Car::update(float dt) {
 	healthBar->setHealthPercentage(m_currentHealth / m_maxHealth);
 	gaugeBar->setGaugePercentage(getSuperGauge());
 
-	std::stringstream s;
-	s << "Score: " << getScore();
-	score->setString(s.str());
+	{
+		std::stringstream s;
+		s << "Score: " << getScore();
+		score->setString(s.str());
+	}
+
+	{
+		std::stringstream s;
+		s << "Lap: " << getLap();
+		lap->setString(s.str());
+	}
+
 	if (m_currentHealth < 0) {
 		hasToBeDeleted = true;
 	}
@@ -104,13 +113,29 @@ int Car::getScore() {
 	return m_damageDealt;
 }
 
-void Car::setCurrentWaypoint(Waypoint* waypoint)
+bool Car::setCurrentWaypoint(Waypoint* waypoint)
 {
 	//std::cout << "current waypoint is " << waypoint->getId() << "\n";
-	m_currentWaypoint = waypoint;
+	if (waypoint != m_currentWaypoint) {
+		m_lastWayPoint = m_currentWaypoint;
+		m_currentWaypoint = waypoint;
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 Waypoint* Car::getCurrentWaypoint()
 {
 	//if (m_currentWaypoint!=NULL)
 		return m_currentWaypoint;
+}
+
+
+void Car::incrementLap() {
+	m_currentLap++;
+}
+
+int Car::getLap() {
+	return m_currentLap;
 }
