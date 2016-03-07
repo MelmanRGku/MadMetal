@@ -81,8 +81,10 @@ void Car::updateSuper(float dt)
 
 void Car::update(float dt) {
 	m_reloadRemainingSeconds -= dt;
+	if (m_superDurationRemainingSeconds > 0) m_superDurationRemainingSeconds -= dt;
 	healthBar->setHealthPercentage(m_currentHealth / m_maxHealth);
 	gaugeBar->setGaugePercentage(getSuperGauge());
+
 	std::stringstream s;
 	s << "Score: " << getScore();
 	score->setString(s.str());

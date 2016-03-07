@@ -24,6 +24,7 @@ protected: //members
 	float m_currentHealth;
 	float m_maxHealth;
 	float m_reloadRateSeconds; //seconds
+	float m_superReloadRateSeconds;
 	float m_reloadRemainingSeconds;
 	float m_superGauge; // 0-1
 	float m_superMaxDurationSeconds; //seconds
@@ -56,6 +57,7 @@ public:
 	DrivingStyle& getDrivingStyle();
 	
 	//void usePowerUp();
+	bool isAlive() { return m_currentHealth > 0; }
 	virtual void useSuper() = 0;
 	virtual void fire() = 0;
 	void takeDamage(float damage);
