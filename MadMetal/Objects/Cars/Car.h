@@ -50,7 +50,8 @@ public:
 	//TODO: change to separate UI class
 	HealthBar2D *healthBar;
 	GaugeBar *gaugeBar;
-	Text2D *score;
+	Text2D *score,
+		*lap;
 
 
 	Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);

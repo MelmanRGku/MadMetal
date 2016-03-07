@@ -28,6 +28,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	audioHandle.loadMusic("mus_mettaton_neo.ogg");
 	
 	m_waypointSystem = NULL;
+	m_isPaused = true;
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 
 	//create characters for game from templates
