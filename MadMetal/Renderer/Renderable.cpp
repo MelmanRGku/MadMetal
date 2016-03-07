@@ -30,3 +30,8 @@ void Renderable::setModel(Model *model, bool resize, bool reposition)
 		initialModelMatrix = glm::mat4x4();
 	}
 }
+
+
+void Renderable::setAlpha(float alpha) {
+	m_model->setAlpha(alpha);
+}

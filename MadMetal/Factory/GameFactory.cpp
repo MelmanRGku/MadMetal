@@ -260,13 +260,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 	case OBJECT_WAYPOINT:
 	{
-		Renderable *renderable = new Renderable(NULL);
+		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GGO), true, true);
+		renderable->setAlpha(0.4);
 
 		Animatable *animatable = new Animatable();
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
 		PxRigidDynamic *waypointTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::WAYPOINT_COLLISION_VOLUME, objectId, pos, geom, 1, NULL, NULL, NULL));
 		Physicable *physicable = new Physicable(waypointTriggerVolume);
+		animatable->setScale(glm::vec3(waypointTriggerVolume->getWorldBounds().getDimensions().x, waypointTriggerVolume->getWorldBounds().getDimensions().y, waypointTriggerVolume->getWorldBounds().getDimensions().z));
 
 		Waypoint *waypoint = new Waypoint(objectId, *audioable, *physicable, *animatable, *renderable);
 

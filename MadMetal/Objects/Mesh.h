@@ -26,5 +26,6 @@ public:
 	std::vector<glm::vec3> *getVertices() { return &vertices; }
 	void setupVAO();
 	GLuint getVAO() { return vao; }
+	void setAlpha(float alpha);
 };
 

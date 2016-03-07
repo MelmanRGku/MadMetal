@@ -69,3 +69,9 @@ PxTriangleMesh **Model::getPhysicsTriangleMesh() {
 	}
 	return physicalMeshes;
 }
+
+void Model::setAlpha(float alpha) {
+	for (unsigned int i = 0; i < meshes.size(); i++) {
+		meshes.at(i)->setAlpha(alpha);
+	}
+}
