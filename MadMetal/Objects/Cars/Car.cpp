@@ -21,19 +21,25 @@ DrivingStyle& Car::getDrivingStyle()
 
 void Car::respawn()
 {
+	std::cout << "Respawned? \n";
 	m_currentHealth = m_maxHealth;
 	
 	if (m_currentWaypoint != NULL)
 	{
-		std::cout << "here" << std::endl;
-		glm::vec3 currentPos = m_currentWaypoint->getGlobalPose();
-		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPos.x, currentPos.y + 50, currentPos.z)));
+		std::cout << "Valid Waypoint Respawn" << std::endl;
+		glm::vec3 waypointPos = m_currentWaypoint->getGlobalPose();
+		
+		
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(waypointPos.x, waypointPos.y, waypointPos.z)));
+		
 	}
 	else {
+		std::cout << "Invalid Waypoint Respawn" << std::endl;
 		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
-		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, currentPosition.p.y + 50, currentPosition.p.z)));
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, currentPosition.p.y+10, currentPosition.p.z)));
 	}
-
+	m_car.getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 0, 0));
+	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0));
 	
 	
 }

@@ -70,7 +70,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		BulletCarCollision * col = dynamic_cast<BulletCarCollision *> (factory->makeObject(GameFactory::OBJECT_BULLET_CAR_COLLISION, new PxTransform(bullet->getPosition().x, bullet->getPosition().y, bullet->getPosition().z), NULL, NULL));
 		col->setHasToBeDeleted(true);
 	}
-	else if (car == NULL) {
+	else if (car == NULL) {//if dynamic cast to car returns NULL its probably a wall so get rid of it
 		bullet->setHasToBeDeleted(true);
 	}
 	
@@ -89,6 +89,7 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 	if (car != NULL) 
 	{
 		car->setCurrentWaypoint(waypoint);
+		std::cout << car->getGlobalPose().x << "," << car->getGlobalPose().y << "," << car->getGlobalPose().z << std::endl;
 		
 		std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getId() << "\n";
 	}
