@@ -40,7 +40,7 @@ void renderScene(void)
 	lastDrawCallTime = currentDrawCallTime;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.3, 0.3, 0.3, 1.0);
+	glClearColor(0.3, 0.3, 0.3, 0.0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	m_stackManager->progressScene(dt);

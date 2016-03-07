@@ -17,6 +17,7 @@
 #include "Objects\VolcanoGuySuperBullet.h"
 #include "Objects\Track.h"
 #include "Objects\BulletCarCollision.h"
+#include "Objects\UI.h"
 
 class GameFactory
 {
@@ -35,7 +36,8 @@ public:
 		OBJECT_TRACK_NON_DRIVABLE,
 		OBJECT_BUILDING,
 		OBJECT_WAYPOINT,
-		OBJECT_BULLET_CAR_COLLISION
+		OBJECT_BULLET_CAR_COLLISION,
+		OBJECT_UI,
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);

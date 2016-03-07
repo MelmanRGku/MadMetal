@@ -296,7 +296,9 @@ void GameSimulation::setupBasicGameWorldObjects() {
 
 	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 0), NULL, NULL));
 	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 10), NULL, NULL));
-
+	UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
+	meowMix->ui = ui;
+	m_world->addGameObject(ui);
 
 	m_players[1]->setCar(meowMixAi);
 

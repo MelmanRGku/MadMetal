@@ -103,19 +103,21 @@ void Car::updateSuper(float dt)
 void Car::update(float dt) {
 	m_reloadRemainingSeconds -= dt;
 	if (m_superDurationRemainingSeconds > 0) m_superDurationRemainingSeconds -= dt;
-	healthBar->setHealthPercentage(m_currentHealth / m_maxHealth);
-	gaugeBar->setGaugePercentage(getSuperGauge());
+	if (ui != NULL) {
+		ui->healthBar->setHealthPercentage(m_currentHealth / m_maxHealth);
+		ui->gaugeBar->setGaugePercentage(getSuperGauge());
 
-	{
-		std::stringstream s;
-		s << "Score: " << getScore();
-		score->setString(s.str());
-	}
+		{
+			std::stringstream s;
+			s << "Score: " << getScore();
+			ui->score->setString(s.str());
+		}
 
-	{
-		std::stringstream s;
-		s << "Lap: " << getLap();
-		lap->setString(s.str());
+		{
+			std::stringstream s;
+			s << "Lap: " << getLap();
+			ui->lap->setString(s.str());
+		}
 	}
 
 	if (m_currentHealth < 0) {

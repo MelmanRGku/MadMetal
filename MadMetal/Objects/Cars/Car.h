@@ -4,9 +4,7 @@
 #include "../TestObject.h"
 #include "Objects\DrivingStyle.h"
 #include "Game Logic\PowerUp.h"
-#include "Objects\HealthBar2D.h"
-#include "Objects\GaugeBar.h"
-#include "Objects\Text2D.h"
+#include "Objects/UI.h"
 
 class Waypoint;
 
@@ -47,12 +45,7 @@ private:
 
 public:
 
-	//TODO: change to separate UI class
-	HealthBar2D *healthBar;
-	GaugeBar *gaugeBar;
-	Text2D *score,
-		*lap;
-
+	UI *ui;
 
 	Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
 	~Car();

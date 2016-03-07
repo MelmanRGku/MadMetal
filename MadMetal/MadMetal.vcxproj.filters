@@ -210,6 +210,9 @@
     <ClCompile Include="Objects\BulletCarCollision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global\Settings.h">
@@ -438,6 +441,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\BulletCarCollision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

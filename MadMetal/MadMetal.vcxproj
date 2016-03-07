@@ -137,6 +137,7 @@
     <ClCompile Include="Objects\ObjectCreators\VehicleCreator.cpp" />
     <ClCompile Include="Objects\Text2D.cpp" />
     <ClCompile Include="Objects\VolcanoGuySuperBullet.cpp" />
+    <ClCompile Include="Objects\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Objects\ObjectCreators\VehicleCreator.h" />
     <ClInclude Include="Objects\Text2D.h" />
     <ClInclude Include="Objects\VolcanoGuySuperBullet.h" />
+    <ClInclude Include="Objects\UI.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />
