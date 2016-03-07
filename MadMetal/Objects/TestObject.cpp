@@ -5,12 +5,11 @@
 #include "Cars/Car.h"
 #include "Factory\GameFactory.h"
 
-TestObject::TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio* audio)
+TestObject::TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable)
 : m_renderable(rable)
 , m_physicable(pable)
 , m_animatable(anable)
 , m_audioable(aable)
-, m_audio(audio)
 , id(id)
 {
 }
@@ -18,6 +17,9 @@ TestObject::TestObject(long id, Audioable &aable, Physicable &pable, Animatable 
 
 TestObject::~TestObject()
 {
+	m_sound = NULL;
+	delete m_sound;
+
 }
 
 glm::mat4x4 TestObject::getModelMatrix() {
@@ -73,12 +75,13 @@ glm::vec3 TestObject::getPosition() {
 	return glm::vec3(pos.x, pos.y, pos.z);
 }
 
-void TestObject::setSound(Sound theSound)
+void TestObject::setSound(Sound *theSound)
 {
-	sound = theSound;
+	m_sound = theSound;
 }
 
 void TestObject::playSound()
 {
-	m_audio->queAudioSource(&this->getActor(), sound);
+	
+	m_audioable.getAudioHandle().queAudioSource(&this->getActor(), m_sound);
 }

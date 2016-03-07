@@ -21,12 +21,13 @@ using namespace std;
 bool gIsVehicleInAir = true;
 static const float TRACK_DIMENSIONS = 200;
 
-GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio* audioHandle)
+GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle)
 {
 	std::cout << "GameSimulation pushed onto the stack \n";
 	createPhysicsScene();
+
 	m_waypointSystem = NULL;
-	m_gameFactory = GameFactory::instance(*m_world, *m_scene, *audioHandle);
+	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 
 	//create characters for game from templates
 	for (int i = 0; i < playerTemplates.size(); i++)
@@ -277,6 +278,7 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
+	
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 

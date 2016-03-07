@@ -70,7 +70,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	else if (car == NULL) {
 		bullet->setHasToBeDeleted(true);
 	}
-	bullet->playSound();
+	
 }
 
 void CollisionManager::processWaypointHit(long waypointId, long otherId)

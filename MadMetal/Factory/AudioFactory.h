@@ -1,4 +1,5 @@
 #pragma once
+#include "Audio\Audio.h"
 #include "Audio\Sound.h"
 
 class AudioFactory
@@ -21,7 +22,7 @@ public:
 		}
 		
 	}
-	
+	Audio& getAudioHandle() { return m_audioHandle; }
 private: //members
 	Audio& m_audioHandle;
 	//todo:: make these!!!

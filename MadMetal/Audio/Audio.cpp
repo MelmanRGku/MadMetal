@@ -1,5 +1,12 @@
 #include "Audio.h"
+#include "Sound.h"
 #include <iostream>
+AudioChannel::~AudioChannel()
+{
+	m_sound->setChannel(-1);
+	m_audioPosition = NULL;
+}
+
 
 //set up audio library
 void Audio::initializeLibrary(char * fileToLoad)
@@ -13,14 +20,21 @@ void Audio::initializeLibrary(char * fileToLoad)
 	}
 	m_library.push_back(chunk);
 
-	Mix_Chunk * chunk2 = Mix_LoadWAV("Assets/Audio/menu_sound_1.wav");
+	Mix_Chunk * chunk1 = Mix_LoadWAV("Assets/Audio/gun_shot_1.wav");
+	if (chunk == NULL)
+	{
+		std::cout << "ABORT \n";
+	}
+	m_library.push_back(chunk1);
+
+	Mix_Chunk * chunk2 = Mix_LoadWAV("Assets/Audio/mario.wav");
 	if (chunk == NULL)
 	{
 		std::cout << "ABORT \n";
 	}
 	m_library.push_back(chunk2);
 
-	Mix_Chunk * chunk3 = Mix_LoadWAV("Assets/Audio/mario.wav");
+	Mix_Chunk * chunk3 = Mix_LoadWAV("Assets/Audio/explosion_1.wav");
 	if (chunk == NULL)
 	{
 		std::cout << "ABORT \n";
@@ -31,38 +45,43 @@ void Audio::initializeLibrary(char * fileToLoad)
 
 void Audio::update()
 {
-
+	//std::cout << m_audioChannels.size()<< std::endl;
 	for (unsigned int i = 0; i < m_audioChannels.size(); i++)
 	{
-		if (!Mix_Playing(m_audioChannels[i]->getChannelNum()))
+		if (m_audioChannels[i]->getSound() == NULL ||!Mix_Playing(m_audioChannels[i]->getSound()->getChannel()))
 		{
 			delete m_audioChannels[i];
 			m_audioChannels.erase(m_audioChannels.begin() + i);
 		}
-		else if (Mix_Paused(m_audioChannels[i]->getChannelNum()))
+		else if (m_audioChannels[i]->getSound()->getChannel())
 		{
 			//do nothing for now
 		}
-		else 
+		else
 		{
 			m_audioChannels[i]->updateAudio(m_listener);
 		}
+		
+		
+		
 	}
 	
 }
 		
-void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound& toPlay, int loopCount)
+void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound* toPlay, int loopCount)
 {
+	
 	//pass a refrence of the channel number in 'toPlay' to the audio channel 
 	//will allow channel changes to be mirrored in the toPlay bookmark
-	AudioChannel * toAdd = new AudioChannel(sourcePosition, toPlay.getChannel());
+	AudioChannel * toAdd = new AudioChannel(sourcePosition, toPlay);
 			
 	//set the audio channel to the next available channel, and play the specified sound
-	toAdd->setChannelNum(Mix_PlayChannel(-1, m_library[toPlay.getLibraryIndex()], loopCount));
+	
+	toAdd->getSound()->setChannel(Mix_PlayChannel(-1, m_library[toPlay->getLibraryIndex()], loopCount));
 	
 	//add new channel to the list of currently playing sounds
 	m_audioChannels.push_back(toAdd);
-	std::cout << "Qued Sound \n";
+	
 }
 
 
@@ -106,7 +125,7 @@ bool AudioChannel::updateAudio(PxRigidActor * listener)
 			sourceX = sourceX - listenerX;
 			sourceY = sourceY - listenerY;
 			float distance = sqrt((powf(sourceX, 2) + powf(sourceY, 2)));
-	distance = distance == 0 ? 0.1 : distance;
+			distance = distance == 0 ? 0.1 : distance;
 	
 			double angle;
 
@@ -142,7 +161,7 @@ bool AudioChannel::updateAudio(PxRigidActor * listener)
 	
 			distance = distance > 255 ? 255 : distance;
 			//-------------------------------
-	std::cout << distance << std::endl;
-	Mix_SetPosition(m_channelNum, Sint16(angle), Uint8(distance));
+	//std::cout << distance << std::endl;
+	Mix_SetPosition(m_sound->getChannel(), Sint16(angle), Uint8(distance));
 	return true;
 }
