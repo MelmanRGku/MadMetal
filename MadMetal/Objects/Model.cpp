@@ -62,6 +62,9 @@ PxTriangleMesh **Model::getPhysicsTriangleMesh() {
 			physicalMeshes[meshIndex] = triangleMesh;
 			meshIndex++;
 		}
+		else {
+			exit(7);
+		}
 
 	}
 	return physicalMeshes;

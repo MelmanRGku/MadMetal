@@ -190,10 +190,7 @@ public:
 			}
 			setFilterDataId(objectId, plane);
 			makeGround(plane, true);
-			PxVec3 p = plane->getGlobalPose().p;
-			PxBounds3 s = plane->getWorldBounds();
-			PxVec3 z = s.getCenter();
-			PxVec3 l = s.getDimensions();
+
 			toReturn = plane;
 			break;
 		}
