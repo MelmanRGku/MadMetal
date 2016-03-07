@@ -8,7 +8,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, WaypointSystem*
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
 	m_waypointSystem = waypointSystem;
-	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
+	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(14);
 	m_currentPath.clear();
 }
 AIControllable::~AIControllable()
@@ -27,21 +27,21 @@ void AIControllable::playFrame(double dt)
 
 		if (m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId())
 		{
-			if (m_goalWaypoint->getId() == 26)
+			if (m_goalWaypoint->getId() == 7)
 			{
-				m_goalWaypoint = m_waypointSystem->getWaypointAt(27);
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(14);
 			}
-			else if (m_goalWaypoint->getId() == 27)
+			else if (m_goalWaypoint->getId() == 14)
 			{
-				m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(22);
 			}
-			else if (m_goalWaypoint->getId() == 12)
+			else if (m_goalWaypoint->getId() == 22)
 			{
-				m_goalWaypoint = m_waypointSystem->getWaypointAt(23);
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(10);
 			}
-			else if (m_goalWaypoint->getId() == 23)
+			else if (m_goalWaypoint->getId() == 10)
 			{
-				m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
 			}
 			//m_goalWaypoint->getId() == 38 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(42) : m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
 			//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
@@ -59,14 +59,14 @@ void AIControllable::playFrame(double dt)
 		//std::cout << "\n";
 		updateNextWaypoint();
 
-		//std::cout << "Current path is: ";
+		std::cout << "Current path is: ";
 
-		//for (int i = 0; i < m_currentPath.size(); i++)
-		//{
-		//	std::cout << m_currentPath[i]->getId() << ", ";
-		//}
+		for (int i = 0; i < m_currentPath.size(); i++)
+		{
+			std::cout << m_currentPath[i]->getId() << ", ";
+		}
 
-		//std::cout << "\n";
+		std::cout << "\n";
 		//std::cout << "next : " << m_nextWaypoint->getId() << "\n";
 
 		//	std::cout << "updating path\n";
@@ -196,5 +196,5 @@ void AIControllable::setCar(Car * toAdd)
 void AIControllable::setWaypointSystem(WaypointSystem* waypointSystem)
 {
 	m_waypointSystem = waypointSystem;
-	m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
+	m_goalWaypoint = m_waypointSystem->getWaypointAt(14);
 }

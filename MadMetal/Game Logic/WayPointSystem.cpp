@@ -3,17 +3,14 @@
 
 static const float WAYPOINT_RADIUS = 35;
 
-WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int trackLength, int yposition) : m_gameFactory(gameFactory)
+WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition) : m_gameFactory(gameFactory)
 {
-	float minLength = -trackLength;
-	float minWidth = -trackWidth;
-
 	int index = 0;
-	for (int i = minWidth + WAYPOINT_RADIUS + 5; i < trackWidth; i += ((WAYPOINT_RADIUS+ 5)  * 2))
+	for (int i = trackWidthMin + WAYPOINT_RADIUS + 5; i < trackWidthMax; i += ((WAYPOINT_RADIUS + 5) * 2))
 	{
 		std::vector<Waypoint*> newVectorWaypoint;
 		m_waypointMap.push_back(newVectorWaypoint);
-		for (int j = minLength + WAYPOINT_RADIUS + 5; j < trackLength; j += ((WAYPOINT_RADIUS + 5) * 2))
+		for (int j = trackLengthMin + WAYPOINT_RADIUS + 5; j < trackLengthMax; j += ((WAYPOINT_RADIUS + 5) * 2))
 		{
 			PxGeometry **geom = new PxGeometry * [1];
 			geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_RADIUS, yposition, WAYPOINT_RADIUS));
@@ -23,12 +20,11 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 		}
 		index++;
 	}
-
-
+	
 	std::cout << "number of waypoints" << m_waypoints.size() << "\n";
 	std::cout << "Rows" << m_waypointMap.size() << "\n";
 	std::cout << "Columns: " << m_waypointMap[0].size() << "\n";
-	std::cout << "width: " << trackWidth << " | " << "tack length: " << trackLength << "\n";
+	std::cout << "width: " << trackWidthMax << " | " << "tack length: " << trackLengthMax << "\n";
 	// Populate Waypoints
 	for (int i = 0; i < m_waypointMap.size(); i++)
 	{
@@ -79,10 +75,14 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 		}
 	}
 
-	//for (int i = 33; i < 37; i++)
-	//{
-	//	m_waypoints[i]->setValid(false);
-	//}
+	for (int i = 0; i < m_waypoints.size(); i++)
+	{
+		
+		if (12 == i || 17 == i || i == 13 || i == 11)
+		{
+			m_waypoints[i]->setValid(false);
+		}
+	}
 
 	//for (int i = 0; i < m_waypoints.size(); i++)
 	//{
