@@ -32,6 +32,7 @@ protected: //members
 	float m_superMaxDurationSeconds; //seconds
 	float m_superDurationRemainingSeconds; //seconds
 	Waypoint* m_currentWaypoint, *m_lastWayPoint;
+	Waypoint *m_nextWaypoint;
 
 	/*
 		Need to be implemented
@@ -71,7 +72,6 @@ public:
 	bool superReady() { return m_superGauge >= 1.f; }
 	float getSuperGauge() { return m_superGauge > 1.f ? 1.f : m_superGauge; }
 	int getScore();
-	void setCurrentWaypoint(Waypoint* waypoint);
 	void respawn();
 	bool setCurrentWaypoint(Waypoint* waypoint);							//true if the waypoint is new, false otherwise
 	Waypoint* getCurrentWaypoint();

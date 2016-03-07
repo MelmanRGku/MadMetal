@@ -28,5 +28,7 @@ private: //members
 	Waypoint* m_goalWaypoint;
 	WaypointSystem* m_waypointSystem;
 	Waypoint* m_nextWaypoint;
+	Waypoint* m_potentialWaypoint;
+	Waypoint* m_currentKnownWaypoint;
 	std::vector<Waypoint*> m_currentPath;
 };

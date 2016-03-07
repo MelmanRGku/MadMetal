@@ -7,6 +7,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, WaypointSystem*
 {
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
+	m_currentKnownWaypoint = NULL;
 	m_waypointSystem = waypointSystem;
 	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(14);
 	m_currentPath.clear();
@@ -24,6 +25,24 @@ void AIControllable::playFrame(double dt)
 	{
 		return;
 	}
+
+	if (m_currentKnownWaypoint == NULL)
+	{
+		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+	}
+	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_car->getCurrentWaypoint()->getId() != m_nextWaypoint->getId())
+	{
+		m_currentPath.clear();
+		m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
+		m_nextWaypoint = m_currentPath[m_currentPath.size() - 1];
+		m_currentPath.pop_back();
+		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+	}
+	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId())
+	{
+		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+	}
+
 	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId()))
 	{
 
@@ -53,22 +72,18 @@ void AIControllable::playFrame(double dt)
 
 		//std::cout << "The optimal path is: ";
 
-		for (int i = 0; i < m_currentPath.size(); i++)
-		{
-			//std::cout << m_currentPath[i]->getId() << ", ";
-		}
+		//std::cout << "Current path is: ";
+
+		//for (int i = 0; i < m_currentPath.size(); i++)
+		//{
+		//	std::cout << m_currentPath[i]->getId() << ", ";
+		//}
+
+		//std::cout << "\n";
 
 		//std::cout << "\n";
 		updateNextWaypoint();
 
-		std::cout << "Current path is: ";
-
-		for (int i = 0; i < m_currentPath.size(); i++)
-		{
-			std::cout << m_currentPath[i]->getId() << ", ";
-		}
-
-		std::cout << "\n";
 		//std::cout << "next : " << m_nextWaypoint->getId() << "\n";
 
 		//	std::cout << "updating path\n";
@@ -148,6 +163,7 @@ void AIControllable::playFrame(double dt)
 	} else {
 		m_car->respawn();
 	}
+
 	//if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
 		//std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";
 }
