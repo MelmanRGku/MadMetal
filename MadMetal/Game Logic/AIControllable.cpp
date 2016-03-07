@@ -27,33 +27,33 @@ void AIControllable::playFrame(double dt)
 		return;
 	}
 
-	//if (m_currentKnownWaypoint == NULL)
-	//{
-	//	m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-	//}
-	//else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_car->getCurrentWaypoint()->getId() != m_nextWaypoint->getId())
-	//{
-	//	m_currentPath.clear();
-	//	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
+	if (m_currentKnownWaypoint == NULL)
+	{
+		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+	}
+	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_car->getCurrentWaypoint()->getId() != m_nextWaypoint->getId())
+	{
+		m_currentPath.clear();
+		m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-	//	std::cout << "THe new path is: ";
+		std::cout << "THe new path is: ";
 
-	//	for (int i = 0; i < m_currentPath.size(); i++)
-	//	{
-	//		std::cout << m_currentPath[i]->getId() << ", ";
-	//	}
+		for (int i = 0; i < m_currentPath.size(); i++)
+		{
+			std::cout << m_currentPath[i]->getId() << ", ";
+		}
 
-	//	std::cout << "\n";
+		std::cout << "\n";
 
-	//	m_nextWaypoint = m_currentPath[m_currentPath.size() - 1];
-	//	m_currentPath.pop_back();
-	//	m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+		m_nextWaypoint = m_currentPath[m_currentPath.size() - 1];
+		m_currentPath.pop_back();
+		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 
-	//}
-	//else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId())
-	//{
-	//	m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-	//}
+	}
+	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId())
+	{
+		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+	}
 
 	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId()))
 	{
@@ -124,7 +124,12 @@ void AIControllable::playFrame(double dt)
 
 			glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
 			//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
+			vectorToNextWaypoint3.y = 0;
+			forwardVector.y = 0;
+			vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
+			forwardVector = glm::normalize(forwardVector);
 			float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
+
 
 			//std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
 			//std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
@@ -135,7 +140,7 @@ void AIControllable::playFrame(double dt)
 
 			accelerate(amountToAccelerate);
 
-			//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
+			std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
 			//std::cout << "z value: " << crossProductResult.z << "\n";
 
 			if (crossProductResult.y < 0)
@@ -208,14 +213,14 @@ void AIControllable::accelerate(float amount)
 	else if (amount < 0 && m_car->getCar().computeForwardSpeed() > 10.0)
 	{
 		//std::cout << "Applying break with : " << -amount << "\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, -amount * 0.5);
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
 	}
-	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 10.0)
+	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 50.0)
 	{
 		//std::cout << "Applying acceleration : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount * 0.5));
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount ));
 	}
 	else
 	{
