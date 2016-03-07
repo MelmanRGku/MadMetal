@@ -21,13 +21,14 @@ using namespace std;
 bool gIsVehicleInAir = true;
 static const float TRACK_DIMENSIONS = 200;
 
-GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle)
+GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audioHandle(audioHandle)
 {
 	std::cout << "GameSimulation pushed onto the stack \n";
 	createPhysicsScene();
-	audioHandle.loadMusic("mus_mettaton_neo.ogg");
 	
 	m_waypointSystem = NULL;
+	m_isPaused = false;
+
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 
 	//create characters for game from templates
@@ -45,24 +46,33 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
-			cout << "ai player added\n";
+			
 			m_players.push_back(new AIControllable(*playerTemplates[i]));
 			//make a car for ai based off template
 		}
 	}
 
-
+	
 	//add when car is created by this point. 
 	//m_mainCamera = m_humanPlayers[0]->getCamera();
 	
 	initialize();
 
 	audioHandle.assignListener(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor());
+	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), new StartBeepSound());
+	pauseControls(true);
 }
 
 GameSimulation::~GameSimulation()
 {
+	for (int i = 0; i < m_players.size(); i++)
+	{
+		delete m_players[i];
+	}
+	m_scene->release();
+	
 	delete m_waypointSystem;
+	
 }
 
 PxFixedSizeLookupTable<8> gSteerVsForwardSpeedTable(gSteerVsForwardSpeedData, 4);
@@ -192,7 +202,7 @@ void GameSimulation::initialize() {
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(PhysicsManager::getScale());
-	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -18.0f, 0.0f);
 
 	CollisionManager *manager = new CollisionManager(*m_world);
 	sceneDesc.simulationEventCallback = manager;
@@ -231,6 +241,12 @@ void GameSimulation::createPhysicsScene()
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
+	m_sceneGameTimeSeconds += dt;
+	if (m_sceneGameTimeSeconds > 3 && m_controlsPaused) {
+		pauseControls(false);
+		m_audioHandle.loadMusic("mus_mettaton_neo.ogg");
+	}
+
 	for (int i = 0; i < m_humanPlayers.size(); i++)
 	{
 		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
@@ -245,6 +261,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 			//put a dummy controllable at the front of the vector so the pause screen knows who paused
 			playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
 			newMessage.setPlayerTemplates(playerTemplates);
+			
 			return true;
 		}
 	}
@@ -254,6 +271,13 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	simulateAnimation();
 	updateObjects(dt);
 	return false;
+}
+
+void GameSimulation::pauseControls(bool pause) {
+	for (unsigned int i = 0; i < m_players.size(); i++) {
+		m_players[i]->pauseControls(pause);
+	}
+	m_controlsPaused = pause;
 }
 
 
@@ -285,18 +309,24 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
-	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 0), NULL, NULL));
-	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 10), NULL, NULL));
-
+	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 40, 0), NULL, NULL));
+	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-105, 40, 15), NULL, NULL));
+	UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
+	meowMix->ui = ui;
+	m_world->addGameObject(ui);
 
 	m_players[1]->setCar(meowMixAi);
 
 	m_players[0]->setCar(meowMix);
 
 	Track* testObject = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL));
-	//GameFactory& gameFactory, int trackWidth, int trackLength
 
-	m_waypointSystem = new WaypointSystem(*m_gameFactory, testObject->getDrivablePart()->getWorldBounds().getDimensions().x, testObject->getDrivablePart()->getWorldBounds().getDimensions().z);
+	m_waypointSystem = new WaypointSystem(*m_gameFactory, 
+										  testObject->getDrivablePart()->getWorldBounds().minimum.x, 
+										  testObject->getDrivablePart()->getWorldBounds().maximum.x,
+										  testObject->getDrivablePart()->getWorldBounds().minimum.z,
+										  testObject->getDrivablePart()->getWorldBounds().maximum.z,
+										  testObject->getDrivablePart()->getWorldBounds().maximum.y);
 
 	for (int i = 0; i < m_players.size(); i++)
 	{
@@ -306,70 +336,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 			aiPlayer->setWaypointSystem(m_waypointSystem);
 		}
 	}
-
-	//Create the drivable geometry
-	//m_gameFactory->makeObject(GameFactory::OBJECT_PLANE, new PxTransform(PxVec3(0, 0, 0)), new PxBoxGeometry(width, 0.5, length), NULL);
-	//m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, NULL, NULL, NULL);
-	//m_gameFactory->makeObject(GameFactory::OBJECT_BUILDING, &PxTransform(PxVec3(0,0,0)), NULL, NULL);
-	// Create the collidable walls
-	/*PxRigidStatic * leftWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(width, width, 0));
-	leftWall->createShape(PxBoxGeometry(0.5, width, length), *mMaterial);
-	m_scene->addActor(*leftWall);
-	PxRigidStatic * rightWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(-width, width, 0));
-	rightWall->createShape(PxBoxGeometry(.5, width, length), *mMaterial);
-	m_scene->addActor(*rightWall);
-	PxRigidStatic * frontWall = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(0, width, length));
-	frontWall->createShape(PxBoxGeometry(width, width, 0.5), *mMaterial);
-	m_scene->addActor(*frontWall);
-
-	
-	RenderableObject * FrontPlane = new RenderableObject();
-	FrontPlane->setModel(Assets::getModel("plane"), true, true);
-	FrontPlane->updateScale(glm::vec3(glm::vec3(frontWall->getWorldBounds().getDimensions().x, 1, frontWall->getWorldBounds().getDimensions().y)));
-	FrontPlane->setActor(frontWall);
-	FrontPlane->updateRotation(glm::vec3(3.14 / 2, 0, 0));
-	m_world->addGameObject(FrontPlane);
-
-	RenderableObject * leftPlane = new RenderableObject();
-	leftPlane->setModel(Assets::getModel("plane"));
-	leftPlane->setActor(leftWall);
-	leftPlane->updatePosition(glm::vec3(leftPlane->getPosition().x, leftPlane->getPosition().y, leftPlane->getPosition().z));
-	leftPlane->updateRotation(glm::vec3(0, 0, 3.14 / 2));
-	m_world->addGameObject(leftPlane);
-
-	RenderableObject * RightPlane = new RenderableObject();
-	RightPlane->setModel(Assets::getModel("plane"));
-	RightPlane->setActor(rightWall);
-	RightPlane->updateRotation(glm::vec3(0, 0, 3.14 / 2));
-	m_world->addGameObject(RightPlane);
-	*/
-
-
-	//drawthe finish line
-	/*RenderableObject * finishLine = new RenderableObject();
-	finishLine->setModel(Assets::getModel("finishLine"));
-	m_world->addGameObject(finishLine);*/
-
-	//create a bounding box for storm tropper to run into
-	/*PxRigidStatic *boundVolume = PhysicsManager::getPhysicsInstance().createRigidStatic(PxTransform(0, 0, length - 5));
-	PxShape* aSphereShape = boundVolume->createShape(PxBoxGeometry(PxVec3(2, 5, 3)), *mMaterial);
-	aSphereShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
-	aSphereShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
-	//m_scene->addActor(*boundVolume);
-	finishLine->setActor(boundVolume);
-	PhysicsManager::setupFiltering(boundVolume,
-		PhysicsManager::WAYPOINT,
-		PhysicsManager::PLAYER,
-		0,
-		0);
-
-	//create waypoints
-	vector<glm::vec3> positions;
-	positions.push_back(glm::vec3(0, 0, 40));
-	positions.push_back(glm::vec3(0, 0, -40));
-	positions.push_back(glm::vec3(0, 0, -20));
-	positions.push_back(glm::vec3(0, 0, 0));
-	positions.push_back(glm::vec3(0, 0, 20));*/
 	
 }
 

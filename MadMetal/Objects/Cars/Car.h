@@ -4,9 +4,7 @@
 #include "../TestObject.h"
 #include "Objects\DrivingStyle.h"
 #include "Game Logic\PowerUp.h"
-#include "Objects\HealthBar2D.h"
-#include "Objects\GaugeBar.h"
-#include "Objects\Text2D.h"
+#include "Objects/UI.h"
 
 class Waypoint;
 
@@ -31,7 +29,8 @@ protected: //members
 	float m_superGauge; // 0-1
 	float m_superMaxDurationSeconds; //seconds
 	float m_superDurationRemainingSeconds; //seconds
-	Waypoint* m_currentWaypoint;
+	Waypoint* m_currentWaypoint, *m_lastWayPoint;
+	Waypoint *m_nextWaypoint;
 
 	Sound * soundChassis;
 
@@ -49,11 +48,7 @@ private:
 
 public:
 
-	//TODO: change to separate UI class
-	HealthBar2D *healthBar;
-	GaugeBar *gaugeBar;
-	Text2D *score;
-
+	UI *ui;
 
 	Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
 	~Car();
@@ -72,8 +67,11 @@ public:
 	bool superReady() { return m_superGauge >= 1.f; }
 	float getSuperGauge() { return m_superGauge > 1.f ? 1.f : m_superGauge; }
 	int getScore();
-	void setCurrentWaypoint(Waypoint* waypoint);
+	void respawn();
+	bool setCurrentWaypoint(Waypoint* waypoint);							//true if the waypoint is new, false otherwise
 	Waypoint* getCurrentWaypoint();
+	void incrementLap();
+	int getLap();
 	void setSoundChassis(Sound * sound);
 	void playSoundChassis();
 	

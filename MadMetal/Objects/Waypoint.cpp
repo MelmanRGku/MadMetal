@@ -29,7 +29,23 @@ bool Waypoint::isValid()
 	return m_isValid;
 }
 
+bool Waypoint::isFinish() {
+	return m_isFinish;
+}
+
 void Waypoint::setValid(bool isValid)
 {
 	m_isValid = isValid;
 }
+
+
+void Waypoint::setFinish(bool finish) {
+	m_isFinish = finish;
+}
+
+//bool Waypoint::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
+//	if (Renderer::ShaderType::SHADER_TYPE_CELL != type || passNumber > 1)
+//		return false;
+//
+//	return false;
+//}

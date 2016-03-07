@@ -59,7 +59,7 @@ public:
 			shapes[i]->setSimulationFilterData(filterData);
 		}
 	}
-
+		 
 	void makeGround(PxRigidActor *actor, bool drivable) {
 		const PxU32 numShapes = actor->getNbShapes();
 		PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
@@ -125,8 +125,8 @@ public:
 			PxFilterData simFilterData;
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
-
-			bullet->createShape(PxBoxGeometry(1, 1, 2), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			
+			bullet->createShape(PxBoxGeometry(.3, .3, 1), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			bullet->getShapes(shapes, 1);
@@ -147,7 +147,7 @@ public:
 			PxFilterData simFilterData;
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
-
+			
 			bullet->createShape(PxSphereGeometry(3.f), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
@@ -190,10 +190,7 @@ public:
 			}
 			setFilterDataId(objectId, plane);
 			makeGround(plane, true);
-			PxVec3 p = plane->getGlobalPose().p;
-			PxBounds3 s = plane->getWorldBounds();
-			PxVec3 z = s.getCenter();
-			PxVec3 l = s.getDimensions();
+
 			toReturn = plane;
 			break;
 		}
@@ -212,8 +209,8 @@ public:
 		}
 		}
 
-			return toReturn;
-		}
+		return toReturn;
+	}
 
 	
 private: //members

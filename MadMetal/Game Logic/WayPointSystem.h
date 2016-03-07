@@ -11,7 +11,7 @@
 class WaypointSystem
 {
 public:
-	WaypointSystem(GameFactory& gameFactory, int trackWidth, int trackLength);
+	WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition);
 	~WaypointSystem();
 
 public: // member functions

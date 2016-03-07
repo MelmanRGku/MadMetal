@@ -41,7 +41,8 @@ Model *ObjModelLoader::processScene(const aiScene *scene) {
 	{
 		aiMesh* mesh = scene->mMeshes[i];
 		// Data to fill
-		std::vector<glm::vec3> vertices, colours, normals; 
+		std::vector<glm::vec3> vertices, normals; 
+		std::vector<glm::vec4> colours;
 		std::vector<glm::vec2> uvs;
 		std::vector<GLuint> indices;
 		Texture *texture = NULL;
@@ -101,15 +102,15 @@ Model *ObjModelLoader::processScene(const aiScene *scene) {
 				texture = new Texture(GL_TEXTURE_2D, (directory + '/' + std::string(str.C_Str())).c_str());
 			}
 
-			aiColor3D colour;
+			aiColor4D colour;
 			if (AI_SUCCESS == material->Get(AI_MATKEY_COLOR_DIFFUSE, colour)) {
 				for (unsigned int j = 0; j < vertices.size(); j++) {
-					colours.push_back(glm::vec3(colour.r, colour.g, colour.b));
+					colours.push_back(glm::vec4(colour.r, colour.g, colour.b, colour.a));
 				}
 			}
 			else {
 				for (unsigned int j = 0; j < vertices.size(); j++) {
-					colours.push_back(glm::vec3(0, 0, 0));
+					colours.push_back(glm::vec4(0, 0, 0, 0));
 				}
 			}
 		}

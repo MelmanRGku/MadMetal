@@ -10,6 +10,7 @@ class Controllable
 protected:
 	
 	ControllableTemplate& m_controllableTemplate;
+	bool m_controlsPaused;
 
 public:
 	Controllable(ControllableTemplate& controllableTemplate) : m_controllableTemplate(controllableTemplate){};
@@ -23,7 +24,10 @@ public:
 	
 	ControllableTemplate& getControllableTemplate();
 	virtual void setCar(Car * toAdd) = 0;
+	
 	Car *getCar() { return m_car; }
+
+	void pauseControls(bool pause);
 protected:
 	Car* m_car;
 };

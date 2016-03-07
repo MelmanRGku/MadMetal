@@ -11,14 +11,14 @@ class Mesh
 {
 private:
 	std::vector<glm::vec2> uvs;
-	std::vector<glm::vec3> colours;
+	std::vector<glm::vec4> colours;
 	std::vector<glm::vec3> normals;
 	std::vector<GLuint> indices;
 	std::vector<glm::vec3> vertices;
 	GLuint vao, vbo[ShaderProgram::TOTAL_NUMBER_OF_ATTRIBUTES], ebo;
 	Texture *texture;
 public:
-	Mesh(std::vector<glm::vec3> vertices, std::vector<glm::vec2> uvs, std::vector<glm::vec3> colours, std::vector<glm::vec3> normals, std::vector<GLuint> indices, Texture *texture) : vertices(vertices), uvs(uvs), colours(colours), normals(normals), texture(texture), indices(indices) {}
+	Mesh(std::vector<glm::vec3> vertices, std::vector<glm::vec2> uvs, std::vector<glm::vec4> colours, std::vector<glm::vec3> normals, std::vector<GLuint> indices, Texture *texture) : vertices(vertices), uvs(uvs), colours(colours), normals(normals), texture(texture), indices(indices) {}
 	~Mesh();
 	bool hasTexture() { return texture != NULL; }
 	Texture *getTexture() { return texture; }
@@ -26,5 +26,6 @@ public:
 	std::vector<glm::vec3> *getVertices() { return &vertices; }
 	void setupVAO();
 	GLuint getVAO() { return vao; }
+	void setAlpha(float alpha);
 };
 

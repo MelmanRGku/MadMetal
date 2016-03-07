@@ -13,10 +13,11 @@ private:
 	LoadingStatus *status;
 	LoadingBar *bar;
 	SceneMessage m_toDeliver;
+	Audio &m_audio;
 
 	void createProgressBar();
 public:
-	LoadingScreen(SceneMessage &toDeliver);
+	LoadingScreen(SceneMessage &toDeliver, Audio &audio);
 	~LoadingScreen();
 	bool simulateScene(double dt, SceneMessage &newMessage);
 };

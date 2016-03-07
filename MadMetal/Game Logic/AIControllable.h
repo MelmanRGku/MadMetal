@@ -12,7 +12,7 @@ public:
 	AIControllable(ControllableTemplate& aiTemplate, WaypointSystem* waypointSystem = NULL);
 	~AIControllable();
 
-	void playFrame(double dt);//todo: fearless leader <3
+	void playFrame(double dt);//todo: fearless leader <
 	void setCar(Car * toAdd);
 	//Car *getCar() { return m_car; }
 	Waypoint* getGoalWaypoint(Waypoint* waypoint);
@@ -28,5 +28,7 @@ private: //members
 	Waypoint* m_goalWaypoint;
 	WaypointSystem* m_waypointSystem;
 	Waypoint* m_nextWaypoint;
+	Waypoint* m_potentialWaypoint;
+	Waypoint* m_currentKnownWaypoint;
 	std::vector<Waypoint*> m_currentPath;
 };

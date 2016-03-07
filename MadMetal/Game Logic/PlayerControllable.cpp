@@ -15,6 +15,7 @@ GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
 void PlayerControllable::playFrame(double dt)
 {
 	m_camera->update(dt);
+	if (!m_controlsPaused) {
 	if (m_car->isAlive())
 	{
 		if (m_gamePad != NULL && m_gamePad->checkConnection())
@@ -99,6 +100,7 @@ void PlayerControllable::playFrame(double dt)
 
 				if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
 				{
+					
 					m_car->getCar().mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 				}
 				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL,
@@ -108,8 +110,19 @@ void PlayerControllable::playFrame(double dt)
 			}
 			else if (m_gamePad->getLeftTrigger())
 			{
+				if (m_car->getCar().computeForwardSpeed() > 0)
+				{
+					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 1);
+				}
+				else {
+					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+					if (m_car->getCar().mDriveDynData.getCurrentGear() != PxVehicleGearsData::eREVERSE)
 				m_car->getCar().mDriveDynData.forceGearChange(PxVehicleGearsData::eREVERSE);
+					if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eNEUTRAL)
+						std::cout << "in neutral still \n";
 				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getLeftTrigger());
+			}
+				
 			}
 			else
 			{
@@ -147,6 +160,9 @@ void PlayerControllable::playFrame(double dt)
 			//do nothing cause you dead bro
 		}
 	}
-	
+ else {
+	 m_car->respawn();
+ }
+	}
 }
 

@@ -105,7 +105,7 @@ void StackManager::readMailBox()
 		break;
 
 	case (SceneMessage::eLoadScreen) :
-		m_stack->pushScene(new LoadingScreen(*m_mailBox));
+		m_stack->pushScene(new LoadingScreen(*m_mailBox, *m_audio));
 		break;
 	case (SceneMessage::eGameSimulation) :
 		m_stack->clearStack();
@@ -118,7 +118,7 @@ void StackManager::readMailBox()
 
 	case (SceneMessage::eRestart):
 		m_stack->clearStack();
-		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), *m_audio));
+		m_stack->pushScene(new MainMenuScene(m_input));
 		break;
 
 	case (SceneMessage::ePop) :

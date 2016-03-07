@@ -7,7 +7,7 @@ Mesh::~Mesh()
 
 
 void Mesh::setupVAO() {
-	long cBufferSize = colours.size() * sizeof(glm::vec3),
+	long cBufferSize = colours.size() * sizeof(glm::vec4),
 		vBufferSize = vertices.size() * sizeof(glm::vec3),
 		nBufferSize = normals.size() * sizeof(glm::vec3),
 		uvBufferSize = uvs.size() * sizeof(glm::vec2);
@@ -31,7 +31,7 @@ void Mesh::setupVAO() {
 	glBufferData(GL_ARRAY_BUFFER, cBufferSize, &colours[0],
 		GL_STATIC_DRAW);
 	glEnableVertexAttribArray(ShaderProgram::COLOUR_ATTRIBUTE_LOCATION);
-	glVertexAttribPointer(ShaderProgram::COLOUR_ATTRIBUTE_LOCATION, 3, GL_FLOAT, 0, GL_FALSE,
+	glVertexAttribPointer(ShaderProgram::COLOUR_ATTRIBUTE_LOCATION, 4, GL_FLOAT, 0, GL_FALSE,
 		(const GLvoid*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[ShaderProgram::NORMAL_ATTRIBUTE_LOCATION]);
@@ -55,4 +55,20 @@ void Mesh::setupVAO() {
 
 	if (texture != NULL)
 		texture->Load();
+}
+
+void Mesh::setAlpha(float alpha) {
+	for (unsigned int i = 0; i < colours.size(); i++) {
+		colours.at(i).w = alpha;
+	}
+
+	long cBufferSize = colours.size() * sizeof(glm::vec4);
+
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[ShaderProgram::COLOUR_ATTRIBUTE_LOCATION]);
+	glBufferData(GL_ARRAY_BUFFER, cBufferSize, &colours[0],
+		GL_STATIC_DRAW);
+	glEnableVertexAttribArray(ShaderProgram::COLOUR_ATTRIBUTE_LOCATION);
+	glVertexAttribPointer(ShaderProgram::COLOUR_ATTRIBUTE_LOCATION, 4, GL_FLOAT, 0, GL_FALSE,
+		(const GLvoid*)0);
 }

@@ -7,8 +7,9 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, WaypointSystem*
 {
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
+	m_currentKnownWaypoint = NULL;
 	m_waypointSystem = waypointSystem;
-	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
+	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(48);
 	m_currentPath.clear();
 }
 AIControllable::~AIControllable()
@@ -18,39 +19,83 @@ AIControllable::~AIControllable()
 
 void AIControllable::playFrame(double dt)
 {
+	if (!m_controlsPaused) {
+	if (m_car->isAlive())
+	{
 	if (m_car->getCurrentWaypoint() == NULL || m_goalWaypoint == NULL)
 	{
 		return;
 	}
+
+	//if (m_currentKnownWaypoint == NULL)
+	//{
+	//	m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+	//}
+	//else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_car->getCurrentWaypoint()->getId() != m_nextWaypoint->getId())
+	//{
+	//	m_currentPath.clear();
+	//	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
+
+	//	std::cout << "THe new path is: ";
+
+	//	for (int i = 0; i < m_currentPath.size(); i++)
+	//	{
+	//		std::cout << m_currentPath[i]->getId() << ", ";
+	//	}
+
+	//	std::cout << "\n";
+
+	//	m_nextWaypoint = m_currentPath[m_currentPath.size() - 1];
+	//	m_currentPath.pop_back();
+	//	m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+
+	//}
+	//else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId())
+	//{
+	//	m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+	//}
+
 	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId()))
 	{
 
 		if (m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId())
 		{
-			m_goalWaypoint->getId() == 7 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(23) : m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
+			if (m_goalWaypoint->getId() == 15)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(48);
+			}
+			else if (m_goalWaypoint->getId() == 48)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(96);
+			}
+			else if (m_goalWaypoint->getId() == 96)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(41);
+			}
+			else if (m_goalWaypoint->getId() == 41)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(15);
+			}
+			//m_goalWaypoint->getId() == 38 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(42) : m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
 			//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
 		}
-		std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
+		//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
 		m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-		std::cout << "The optimal path is: ";
+		//std::cout << "The optimal path is: ";
+
+		std::cout << "Current path is: ";
 
 		for (int i = 0; i < m_currentPath.size(); i++)
 		{
 			std::cout << m_currentPath[i]->getId() << ", ";
 		}
 
+		std::cout << "\n";
+
 		//std::cout << "\n";
 		updateNextWaypoint();
 
-		//std::cout << "Current path is: ";
-
-		//for (int i = 0; i < m_currentPath.size(); i++)
-		//{
-		//	std::cout << m_currentPath[i]->getId() << ", ";
-		//}
-
-		//std::cout << "\n";
 		//std::cout << "next : " << m_nextWaypoint->getId() << "\n";
 
 		//	std::cout << "updating path\n";
@@ -81,8 +126,8 @@ void AIControllable::playFrame(double dt)
 			//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
 			float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
 
-			std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
-			std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
+			//std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
+			//std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
 			float amountToSteerBy = fabs(amountOfDotProduct - 1);
 			amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
 			float amountToAccelerate;
@@ -90,8 +135,8 @@ void AIControllable::playFrame(double dt)
 
 			accelerate(amountToAccelerate);
 
-			std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
-			std::cout << "z value: " << crossProductResult.z << "\n";
+			//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
+			//std::cout << "z value: " << crossProductResult.z << "\n";
 
 			if (crossProductResult.y < 0)
 			{
@@ -124,9 +169,19 @@ void AIControllable::playFrame(double dt)
 
 
 		}
+		}
+		
+
+		}
+		else {
+		m_car->respawn();
+		m_currentPath.clear();
+		m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(),m_goalWaypoint);
+		updateNextWaypoint();
 	}
-	if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
-		std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";
+	}
+	//if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
+		//std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";
 }
 
 void AIControllable::updateNextWaypoint()
@@ -180,5 +235,5 @@ void AIControllable::setCar(Car * toAdd)
 void AIControllable::setWaypointSystem(WaypointSystem* waypointSystem)
 {
 	m_waypointSystem = waypointSystem;
-	m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
+	m_goalWaypoint = m_waypointSystem->getWaypointAt(48);
 }

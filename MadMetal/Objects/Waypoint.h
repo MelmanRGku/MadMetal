@@ -12,6 +12,7 @@ class Waypoint : public TestObject
 	static int globalID;
 	int m_id;
 	bool m_isValid;
+	bool m_isFinish;
 	std::vector<Waypoint*> m_adjecentWaypoints;
 
 public:
@@ -21,6 +22,8 @@ public:
 	const int& getId();
 	bool isValid();
 	void setValid(bool isValid);
-
+	bool isFinish();
+	void setFinish(bool finish);
+	//bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	void addAdjecentWaypoint(Waypoint* waypoint);
 };
