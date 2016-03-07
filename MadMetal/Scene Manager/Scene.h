@@ -66,6 +66,7 @@ protected:
 	World *m_world;
 	Camera * m_defaultSceneCamera;
 	std::vector<Camera *> m_sceneCameras;
+	double m_sceneGameTimeSeconds = 0;
 
 public:
 	Scene() {

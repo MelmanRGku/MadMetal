@@ -83,3 +83,13 @@ public:
 	};
 	virtual ~BulletCarCollisionSound(){};
 };
+
+class StartBeepSound : public Sound
+{
+public:
+	StartBeepSound() : Sound()
+	{
+		m_libraryIndex = 8;
+	}
+	virtual ~StartBeepSound() {}
+};

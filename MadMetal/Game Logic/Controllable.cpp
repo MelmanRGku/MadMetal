@@ -33,3 +33,6 @@ ControllableTemplate& Controllable::getControllableTemplate()
 	return m_controllableTemplate;
 }
 
+void Controllable::pauseControls(bool pause) {
+	m_controlsPaused = pause;
+}
