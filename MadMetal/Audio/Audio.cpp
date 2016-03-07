@@ -1,6 +1,10 @@
 #include "Audio.h"
 #include "Sound.h"
 #include <iostream>
+#include <fstream>
+#include <string>
+
+
 AudioChannel::~AudioChannel()
 {
 	m_sound->setChannel(-1);
@@ -8,38 +12,57 @@ AudioChannel::~AudioChannel()
 }
 
 
+
 //set up audio library
 void Audio::initializeLibrary(char * fileToLoad)
 {
-	//to do: make into a file parsing method? 
-	//to do: fill with sounds
-	Mix_Chunk * chunk = Mix_LoadWAV("Assets/Audio/car_idle.wav");
-	if (chunk == NULL)
-	{
-		std::cout << "ABORT \n";
-	}
-	m_library.push_back(chunk);
 
-	Mix_Chunk * chunk1 = Mix_LoadWAV("Assets/Audio/gun_shot_1.wav");
-	if (chunk == NULL)
+	std::ifstream stream;
+	stream.open("Audio/Library.txt");
+	std::string line;
+	if (stream.is_open())
 	{
-		std::cout << "ABORT \n";
-	}
-	m_library.push_back(chunk1);
+		std::string filename;
+		bool reached= false;;
+		int pos = 0;
+		Mix_Chunk * chunk;
+		while (getline(stream, line))
+		{
+			while (pos < line.length())
+			{
+				if (reached)
+				{
+					filename = filename + line[pos];
+				}
+				if (line[pos] == ' ')
+				{
+					reached = true;
+				}
 
-	Mix_Chunk * chunk2 = Mix_LoadWAV("Assets/Audio/mario.wav");
-	if (chunk == NULL)
-	{
-		std::cout << "ABORT \n";
-	}
-	m_library.push_back(chunk2);
+				pos++;
+			}
+			std::cout << filename << std::endl;
+			char * test = "Assets/Audio/";
+			std::string thefile = test + filename;
+			chunk = Mix_LoadWAV(thefile.c_str());
+			if (chunk == NULL)
+			{
+				std::cout << "File Failed to Load \n";
+			}
+			m_library.push_back(chunk);
 
-	Mix_Chunk * chunk3 = Mix_LoadWAV("Assets/Audio/explosion_1.wav");
-	if (chunk == NULL)
-	{
-		std::cout << "ABORT \n";
+			pos = 0;
+			reached = false;
+			filename.clear();
+		}
+
+
 	}
-	m_library.push_back(chunk3);
+	else
+	{
+		std::cout << "File reading error" << std::endl;
+	}
+
 }
 
 
@@ -57,7 +80,7 @@ void Audio::update()
 		{
 			//do nothing for now
 		}
-		else
+		else 
 		{
 			m_audioChannels[i]->updateAudio(m_listener);
 		}
@@ -125,7 +148,7 @@ bool AudioChannel::updateAudio(PxRigidActor * listener)
 			sourceX = sourceX - listenerX;
 			sourceY = sourceY - listenerY;
 			float distance = sqrt((powf(sourceX, 2) + powf(sourceY, 2)));
-			distance = distance == 0 ? 0.1 : distance;
+	distance = distance == 0 ? 0.1 : distance;
 	
 			double angle;
 
@@ -164,4 +187,10 @@ bool AudioChannel::updateAudio(PxRigidActor * listener)
 	//std::cout << distance << std::endl;
 	Mix_SetPosition(m_sound->getChannel(), Sint16(angle), Uint8(distance));
 	return true;
+}
+
+void Audio::loadMusic(char * file)
+{
+	music = Mix_LoadMUS("Assets/Audio/musmettatonneo.wav");
+	Mix_PlayMusic(music, -1);
 }

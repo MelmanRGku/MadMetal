@@ -59,7 +59,7 @@ class GunShotSound : public Sound
 public:
 	GunShotSound() : Sound()
 	{
-		m_libraryIndex = 1;
+		m_libraryIndex = 7;
 	};
 	virtual ~GunShotSound(){};
 };
@@ -72,4 +72,14 @@ public:
 		m_libraryIndex = 3;
 	};
 	virtual ~ExplosionSound(){};
+};
+
+class BulletCarCollisionSound : public Sound
+{
+public:
+	BulletCarCollisionSound() : Sound()
+	{
+		m_libraryIndex = 5;
+	};
+	virtual ~BulletCarCollisionSound(){};
 };

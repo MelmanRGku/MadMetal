@@ -12,7 +12,7 @@ public:
 	AIControllable(ControllableTemplate& aiTemplate, WaypointSystem* waypointSystem = NULL);
 	~AIControllable();
 
-	void playFrame(double dt);//todo: fearless leader <3
+	void playFrame(double dt);//todo: fearless leader <
 	void setCar(Car * toAdd);
 	//Car *getCar() { return m_car; }
 	Waypoint* getGoalWaypoint(Waypoint* waypoint);

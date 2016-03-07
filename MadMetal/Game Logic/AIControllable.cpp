@@ -8,7 +8,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, WaypointSystem*
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
 	m_waypointSystem = waypointSystem;
-	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
+	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
 	m_currentPath.clear();
 }
 AIControllable::~AIControllable()
@@ -20,112 +20,128 @@ void AIControllable::playFrame(double dt)
 {
 	if (m_car->isAlive())
 	{
-		if (m_car->getCurrentWaypoint() == NULL || m_goalWaypoint == NULL)
+	if (m_car->getCurrentWaypoint() == NULL || m_goalWaypoint == NULL)
+	{
+		return;
+	}
+	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId()))
+	{
+
+		if (m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId())
 		{
-			return;
+			if (m_goalWaypoint->getId() == 26)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(27);
+			}
+			else if (m_goalWaypoint->getId() == 27)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
+			}
+			else if (m_goalWaypoint->getId() == 12)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(23);
+			}
+			else if (m_goalWaypoint->getId() == 23)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
+			}
+			//m_goalWaypoint->getId() == 38 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(42) : m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
+			//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
 		}
-		if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId()))
+		std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
+		m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
+
+		std::cout << "The optimal path is: ";
+
+		for (int i = 0; i < m_currentPath.size(); i++)
 		{
+			std::cout << m_currentPath[i]->getId() << ", ";
+		}
 
-			if (m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId())
-			{
-				m_goalWaypoint->getId() == 7 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(23) : m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
-				//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
-			}
-			std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
-			m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
+		//std::cout << "\n";
+		updateNextWaypoint();
 
-			std::cout << "The optimal path is: ";
+		//std::cout << "Current path is: ";
 
-			for (int i = 0; i < m_currentPath.size(); i++)
-			{
-				std::cout << m_currentPath[i]->getId() << ", ";
-			}
+		//for (int i = 0; i < m_currentPath.size(); i++)
+		//{
+		//	std::cout << m_currentPath[i]->getId() << ", ";
+		//}
 
-			//std::cout << "\n";
+		//std::cout << "\n";
+		//std::cout << "next : " << m_nextWaypoint->getId() << "\n";
+
+		//	std::cout << "updating path\n";
+
+		//	std::cout << "Stupid Melvin\n";
+	}
+	else
+	{
+		//std::cout << "path exists\n";
+		if (m_car->getCurrentWaypoint()->getId() == m_nextWaypoint->getId())
+		{
+			//std::cout << "Reached Next Waypoint\n";
 			updateNextWaypoint();
-
-			//std::cout << "Current path is: ";
-
-			//for (int i = 0; i < m_currentPath.size(); i++)
-			//{
-			//	std::cout << m_currentPath[i]->getId() << ", ";
-			//}
-
-			//std::cout << "\n";
-			//std::cout << "next : " << m_nextWaypoint->getId() << "\n";
-
-			//	std::cout << "updating path\n";
-
-			//	std::cout << "Stupid Melvin\n";
 		}
-		else
+
+		if (m_car->getCurrentWaypoint()->getId() != m_goalWaypoint->getId())
 		{
-			//std::cout << "path exists\n";
-			if (m_car->getCurrentWaypoint()->getId() == m_nextWaypoint->getId())
-			{
-				//std::cout << "Reached Next Waypoint\n";
-				updateNextWaypoint();
-			}
+			//glm::vec4 vectorToNextWaypoint4 = glm::vec4(m_nextWaypoint->getPosition() - m_car->getPosition(), 1.0);
+			glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
+			//glm::normalize(vectorToNextWaypoint4);
+			vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
+			//glm::vec4 vectorOfSideOfCar = m_car->getModelMatrix() * glm::vec4(1.0, 0.0, 0.0, 1.0);
+			//glm::normalize(vectorOfSideOfCar);
+			glm::vec3 forwardVector = m_car->getForwardVector();
+			forwardVector = glm::normalize(forwardVector);
 
-			if (m_car->getCurrentWaypoint()->getId() != m_goalWaypoint->getId())
-			{
-				//glm::vec4 vectorToNextWaypoint4 = glm::vec4(m_nextWaypoint->getPosition() - m_car->getPosition(), 1.0);
-				glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
-				//glm::normalize(vectorToNextWaypoint4);
-				vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
-				//glm::vec4 vectorOfSideOfCar = m_car->getModelMatrix() * glm::vec4(1.0, 0.0, 0.0, 1.0);
-				//glm::normalize(vectorOfSideOfCar);
-				glm::vec3 forwardVector = m_car->getForwardVector();
-				forwardVector = glm::normalize(forwardVector);
+			glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
+			//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
+			float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
 
-				glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
-				//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
-				float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
+			std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
+			std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
+			float amountToSteerBy = fabs(amountOfDotProduct - 1);
+			amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
+			float amountToAccelerate;
+			amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
-				std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
-				std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
-				float amountToSteerBy = fabs(amountOfDotProduct - 1);
-				amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
-				float amountToAccelerate;
-				amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
-
-				accelerate(amountToAccelerate);
+			accelerate(amountToAccelerate);
 
 				std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy << "\n";
-				std::cout << "z value: " << crossProductResult.z << "\n";
+			std::cout << "z value: " << crossProductResult.z << "\n";
 
-				if (crossProductResult.y < 0)
-				{
-					//std::cout << "turning Left\n";
-					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
-					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, amountToSteerBy);
-				}
-				else if (crossProductResult.y > 0)
-				{
-					//std::cout << "turning right\n";
-					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
-					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, amountToSteerBy);
-				}
-				else
-				{
-					//std::cout << "Do not turn\n";
-					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
-					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
-				}
-
-				//glm::normalize(vectorToNextWaypoint);
-				//float dotVectorResult = glm::dot(vectorToNextWaypoint, m_car->getForwardVector());
-
-				//m_car->getActor().getGlobalPose().
-				//float cosineOfAngle = dotVectorResult / (vectorToNextWaypoint.length() *  m_car->getForwardVector().length());
-				//float angleBetweenForwardAndNextWaypoint = glm::acos(cosineOfAngle);
-
-
-				/*if (cosineOfAngle > 0)*/
-
-
+			if (crossProductResult.y < 0)
+			{
+				//std::cout << "turning Left\n";
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, amountToSteerBy);
 			}
+			else if (crossProductResult.y > 0)
+			{
+				//std::cout << "turning right\n";
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, amountToSteerBy);
+			}
+			else
+			{
+				//std::cout << "Do not turn\n";
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
+				m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
+			}
+
+			//glm::normalize(vectorToNextWaypoint);
+			//float dotVectorResult = glm::dot(vectorToNextWaypoint, m_car->getForwardVector());
+
+			//m_car->getActor().getGlobalPose().
+			//float cosineOfAngle = dotVectorResult / (vectorToNextWaypoint.length() *  m_car->getForwardVector().length());
+			//float angleBetweenForwardAndNextWaypoint = glm::acos(cosineOfAngle);
+
+
+			/*if (cosineOfAngle > 0)*/
+
+
+		}
 		}
 		
 
@@ -187,5 +203,5 @@ void AIControllable::setCar(Car * toAdd)
 void AIControllable::setWaypointSystem(WaypointSystem* waypointSystem)
 {
 	m_waypointSystem = waypointSystem;
-	m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
+	m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
 }

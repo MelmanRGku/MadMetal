@@ -23,7 +23,7 @@ void setupDrivableSurface(PxFilterData& filterData)
 
 void setupNonDrivableSurface(PxFilterData& filterData)
 {
-	filterData.word3 = UNDRIVABLE_SURFACE;
+	filterData.word3 = (PxU32)UNDRIVABLE_SURFACE;
 }
 
 PxQueryHitType::Enum WheelRaycastPreFilter

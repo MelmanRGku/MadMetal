@@ -204,6 +204,12 @@
     <ClCompile Include="Game Logic\AIControllable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\Track.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\BulletCarCollision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global\Settings.h">
@@ -429,6 +435,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Logic\PathFinding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\BulletCarCollision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
