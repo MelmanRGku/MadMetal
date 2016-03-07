@@ -46,13 +46,13 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
-			cout << "ai player added\n";
-			m_players.push_back(new AIControllable(*playerTemplates[i]));
+			//cout << "ai player added\n";
+			//m_players.push_back(new AIControllable(*playerTemplates[i]));
 			//make a car for ai based off template
 		}
 	}
 
-
+	
 	//add when car is created by this point. 
 	//m_mainCamera = m_humanPlayers[0]->getCamera();
 	
@@ -287,17 +287,17 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
 	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 0), NULL, NULL));
-	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 10), NULL, NULL));
+	//MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 10), NULL, NULL));
 
 
-	m_players[1]->setCar(meowMixAi);
+	//m_players[1]->setCar(meowMixAi);
 
 	m_players[0]->setCar(meowMix);
 
 	Track* testObject = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL));
 	//GameFactory& gameFactory, int trackWidth, int trackLength
 
-	m_waypointSystem = new WaypointSystem(*m_gameFactory, testObject->getDrivablePart()->getWorldBounds().getDimensions().x, testObject->getDrivablePart()->getWorldBounds().getDimensions().z);
+	m_waypointSystem = new WaypointSystem(*m_gameFactory, testObject->getDrivablePart()->getWorldBounds().getDimensions().x, testObject->getDrivablePart()->getWorldBounds().getDimensions().z, testObject->getDrivablePart()->getWorldBounds().maximum.y);
 
 	for (int i = 0; i < m_players.size(); i++)
 	{

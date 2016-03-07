@@ -8,7 +8,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, WaypointSystem*
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
 	m_waypointSystem = waypointSystem;
-	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
+	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
 	m_currentPath.clear();
 }
 AIControllable::~AIControllable()
@@ -27,17 +27,33 @@ void AIControllable::playFrame(double dt)
 
 		if (m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId())
 		{
-			m_goalWaypoint->getId() == 7 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(23) : m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
+			if (m_goalWaypoint->getId() == 26)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(27);
+			}
+			else if (m_goalWaypoint->getId() == 27)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
+			}
+			else if (m_goalWaypoint->getId() == 12)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(23);
+			}
+			else if (m_goalWaypoint->getId() == 23)
+			{
+				m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
+			}
+			//m_goalWaypoint->getId() == 38 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(42) : m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
 			//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
 		}
-		std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
+		//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
 		m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-		std::cout << "The optimal path is: ";
+		//std::cout << "The optimal path is: ";
 
 		for (int i = 0; i < m_currentPath.size(); i++)
 		{
-			std::cout << m_currentPath[i]->getId() << ", ";
+			//std::cout << m_currentPath[i]->getId() << ", ";
 		}
 
 		//std::cout << "\n";
@@ -81,8 +97,8 @@ void AIControllable::playFrame(double dt)
 			//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
 			float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
 
-			std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
-			std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
+			//std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
+			//std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
 			float amountToSteerBy = fabs(amountOfDotProduct - 1);
 			amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
 			float amountToAccelerate;
@@ -90,8 +106,8 @@ void AIControllable::playFrame(double dt)
 
 			accelerate(amountToAccelerate);
 
-			std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
-			std::cout << "z value: " << crossProductResult.z << "\n";
+			//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
+			//std::cout << "z value: " << crossProductResult.z << "\n";
 
 			if (crossProductResult.y < 0)
 			{
@@ -125,8 +141,8 @@ void AIControllable::playFrame(double dt)
 
 		}
 	}
-	if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
-		std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";
+	//if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
+		//std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";
 }
 
 void AIControllable::updateNextWaypoint()
@@ -180,5 +196,5 @@ void AIControllable::setCar(Car * toAdd)
 void AIControllable::setWaypointSystem(WaypointSystem* waypointSystem)
 {
 	m_waypointSystem = waypointSystem;
-	m_goalWaypoint = m_waypointSystem->getWaypointAt(7);
+	m_goalWaypoint = m_waypointSystem->getWaypointAt(26);
 }

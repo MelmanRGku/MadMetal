@@ -106,7 +106,7 @@ int Car::getScore() {
 
 void Car::setCurrentWaypoint(Waypoint* waypoint)
 {
-	std::cout << "current waypoint is " << waypoint->getId() << "\n";
+	//std::cout << "current waypoint is " << waypoint->getId() << "\n";
 	m_currentWaypoint = waypoint;
 }
 Waypoint* Car::getCurrentWaypoint()

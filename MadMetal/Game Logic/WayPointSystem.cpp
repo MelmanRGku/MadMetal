@@ -1,12 +1,12 @@
 #include "WaypointSystem.h"
 #include "Game Logic\PathFinding.h"
 
-static const int WAYPOINT_RADIUS = 35;
+static const float WAYPOINT_RADIUS = 35;
 
-WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int trackLength) : m_gameFactory(gameFactory)
+WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int trackLength, int yposition) : m_gameFactory(gameFactory)
 {
-	float minLength = -trackWidth;
-	float minWidth = -trackLength;
+	float minLength = -trackLength;
+	float minWidth = -trackWidth;
 
 	int index = 0;
 	for (int i = minWidth + WAYPOINT_RADIUS + 5; i < trackWidth; i += ((WAYPOINT_RADIUS+ 5)  * 2))
@@ -16,8 +16,8 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 		for (int j = minLength + WAYPOINT_RADIUS + 5; j < trackLength; j += ((WAYPOINT_RADIUS + 5) * 2))
 		{
 			PxGeometry **geom = new PxGeometry * [1];
-			geom[0] = new PxSphereGeometry(static_cast<float>(WAYPOINT_RADIUS));
-			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, new PxTransform(i, -100, j), geom, NULL));
+			geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_RADIUS, yposition, WAYPOINT_RADIUS));
+			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, new PxTransform(i, yposition, j), geom, NULL));
 			m_waypointMap[index].push_back(tempWaypoint);
 			m_waypoints.push_back(tempWaypoint);
 		}
@@ -26,6 +26,8 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidth, int tra
 
 
 	std::cout << "number of waypoints" << m_waypoints.size() << "\n";
+	std::cout << "Rows" << m_waypointMap.size() << "\n";
+	std::cout << "Columns: " << m_waypointMap[0].size() << "\n";
 	std::cout << "width: " << trackWidth << " | " << "tack length: " << trackLength << "\n";
 	// Populate Waypoints
 	for (int i = 0; i < m_waypointMap.size(); i++)
@@ -111,14 +113,14 @@ void WaypointSystem::test()
 
 	std::vector<Waypoint*> result = pathFinding->findPath(m_waypoints[0], m_waypoints[46]);
 
-	std::cout << "The optimal path is: ";
+	//std::cout << "The optimal path is: ";
 
 	for (int i = 0; i < result.size(); i++)
 	{
-		std::cout << result[i]->getId() << ", ";
+		//std::cout << result[i]->getId() << ", ";
 	}
 
-	std::cout << "\n";
+	//std::cout << "\n";
 
 	delete pathFinding;
 }
