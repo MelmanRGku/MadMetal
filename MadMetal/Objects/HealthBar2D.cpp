@@ -1,7 +1,7 @@
 #include "HealthBar2D.h"
 
 
-HealthBar2D::HealthBar2D(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio* audio) : TestObject(id, aable, pable, anable, rable, audio)
+HealthBar2D::HealthBar2D(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable)
 {
 	healthPercentage = 0.f;
 }

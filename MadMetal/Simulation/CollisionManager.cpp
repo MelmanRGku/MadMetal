@@ -2,6 +2,7 @@
 #include "Objects\Cars\Car.h"
 #include "Objects\Bullet.h"
 #include "Objects\Waypoint.h"
+#include "Factory/GameFactory.h"
 
 CollisionManager::CollisionManager(World &world) : m_world(world)
 {
@@ -65,12 +66,14 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		car->takeDamage(bullet->getDamage());
 		bullet->getOwner()->addDamageDealt(bullet->getDamage());
 		bullet->setHasToBeDeleted(true);
-		
+		GameFactory * factory = GameFactory::instance();
+		BulletCarCollision * col = dynamic_cast<BulletCarCollision *> (factory->makeObject(GameFactory::OBJECT_BULLET_CAR_COLLISION, new PxTransform(bullet->getPosition().x, bullet->getPosition().y, bullet->getPosition().z), NULL, NULL));
+		col->setHasToBeDeleted(true);
 	}
 	else if (car == NULL) {
 		bullet->setHasToBeDeleted(true);
 	}
-	bullet->playSound();
+	
 }
 
 void CollisionManager::processWaypointHit(long waypointId, long otherId)

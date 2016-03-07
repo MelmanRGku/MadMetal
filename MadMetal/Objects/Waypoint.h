@@ -15,7 +15,7 @@ class Waypoint : public TestObject
 	std::vector<Waypoint*> m_adjecentWaypoints;
 
 public:
-	Waypoint(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio* audio);
+	Waypoint(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
 	~Waypoint();
 	std::vector<Waypoint*>& getListOfAdjacentWaypoints(){ return m_adjecentWaypoints; }
 	const int& getId();

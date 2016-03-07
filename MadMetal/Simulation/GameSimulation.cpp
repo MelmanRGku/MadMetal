@@ -21,12 +21,14 @@ using namespace std;
 bool gIsVehicleInAir = true;
 static const float TRACK_DIMENSIONS = 200;
 
-GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio* audioHandle)
+GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle)
 {
 	std::cout << "GameSimulation pushed onto the stack \n";
 	createPhysicsScene();
+	audioHandle.loadMusic("mus_mettaton_neo.ogg");
+	
 	m_waypointSystem = NULL;
-	m_gameFactory = GameFactory::instance(*m_world, *m_scene, *audioHandle);
+	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 
 	//create characters for game from templates
 	for (int i = 0; i < playerTemplates.size(); i++)
@@ -54,6 +56,8 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	//m_mainCamera = m_humanPlayers[0]->getCamera();
 	
 	initialize();
+
+	audioHandle.assignListener(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor());
 }
 
 GameSimulation::~GameSimulation()
@@ -277,19 +281,22 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
+	
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
-	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-70, -900, -70), NULL, NULL));
-	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-80, -900, -80), NULL, NULL));
+	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 0), NULL, NULL));
+	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 100, 10), NULL, NULL));
+
 
 	m_players[1]->setCar(meowMixAi);
+
 	m_players[0]->setCar(meowMix);
 
-	TestObject* testObject = m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL);
+	Track* testObject = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL));
 	//GameFactory& gameFactory, int trackWidth, int trackLength
 
-	m_waypointSystem = new WaypointSystem(*m_gameFactory, testObject->getWorldBounds().getDimensions().x, testObject->getWorldBounds().getDimensions().z, testObject->getGlobalPose().y);
+	m_waypointSystem = new WaypointSystem(*m_gameFactory, testObject->getDrivablePart()->getWorldBounds().getDimensions().x, testObject->getDrivablePart()->getWorldBounds().getDimensions().z, testObject->getDrivablePart()->getWorldBounds().maximum.y);
 
 	for (int i = 0; i < m_players.size(); i++)
 	{

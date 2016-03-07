@@ -44,7 +44,7 @@ private: //members
 	WaypointSystem* m_waypointSystem;
 
 public:
-	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio* audioHandle);
+	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle);
 	~GameSimulation();
 
 	bool simulateScene(double dt, SceneMessage &newMessage);
