@@ -8,7 +8,7 @@ in VS_OUT
     vec3 N;
     vec3 L;
     vec3 V;
-    vec3 C;
+    vec4 C;
     vec2 uv;
 } fs_in;
 
@@ -42,7 +42,7 @@ void main(void)
 
     // Compute the diffuse and specular components for each fragment
     // May replace the colour value with diffuse albedo
-    vec3 diffuse = max(dot(N, L), 0.7) * fs_in.C; // diffuse_albedo;
+    vec3 diffuse = max(dot(N, L), 0.7) * fs_in.C.xyz; // diffuse_albedo;
 	if (texValid)
 	{
 		diffuse *= vec3(texture(texObject, fs_in.uv));
@@ -64,5 +64,5 @@ void main(void)
     float shadeIntensity = ceil(intensity * 5)/ 5;
 
     // Write final colour to the framebuffer
-    gl_FragColor = vec4(ambient + diffuse * shadeIntensity + specular * shadeIntensity, 1.0);
+    gl_FragColor = vec4(ambient + diffuse * shadeIntensity + specular * shadeIntensity, fs_in.C.w);
 }
