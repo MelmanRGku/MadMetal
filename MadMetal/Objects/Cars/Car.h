@@ -8,6 +8,8 @@
 #include "Objects\GaugeBar.h"
 #include "Objects\Text2D.h"
 
+class Waypoint;
+
 class Car : public TestObject
 {
 protected: //members
@@ -24,10 +26,12 @@ protected: //members
 	float m_currentHealth;
 	float m_maxHealth;
 	float m_reloadRateSeconds; //seconds
+	float m_superReloadRateSeconds;
 	float m_reloadRemainingSeconds;
 	float m_superGauge; // 0-1
 	float m_superMaxDurationSeconds; //seconds
 	float m_superDurationRemainingSeconds; //seconds
+	Waypoint* m_currentWaypoint;
 
 	/*
 		Need to be implemented
@@ -49,13 +53,14 @@ public:
 	Text2D *score;
 
 
-	Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio* audio);
+	Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
 	~Car();
 
 	PxVehicleDrive4W &getCar() { return m_car; }
 	DrivingStyle& getDrivingStyle();
 	
 	//void usePowerUp();
+	bool isAlive() { return m_currentHealth > 0; }
 	virtual void useSuper() = 0;
 	virtual void fire() = 0;
 	void takeDamage(float damage);
@@ -65,6 +70,8 @@ public:
 	bool superReady() { return m_superGauge >= 1.f; }
 	float getSuperGauge() { return m_superGauge > 1.f ? 1.f : m_superGauge; }
 	int getScore();
+	void setCurrentWaypoint(Waypoint* waypoint);
+	Waypoint* getCurrentWaypoint();
 	
 	
 };

@@ -13,6 +13,8 @@ public:
 		PHYSICAL_TRIANGLE_MESH,
 		PHYSICAL_OBJECT_BULLET_MEOW_MIX,
 		PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO,
+		PHYSICAL_OBJECT_TRACK,
+		WAYPOINT_COLLISION_VOLUME,
 	};
 
 public:
@@ -56,6 +58,24 @@ public:
 		}
 	}
 		 
+	void makeDrivable(PxRigidActor *actor) {
+		const PxU32 numShapes = actor->getNbShapes();
+		PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
+		actor->getShapes(shapes, numShapes);
+
+
+		for (PxU32 i = 0; i < numShapes; i++) {
+			physx::PxFilterData qryFilterData = shapes[i]->getQueryFilterData();
+			setupDrivableSurface(qryFilterData);
+			shapes[i]->setQueryFilterData(qryFilterData);
+
+			PxFilterData simFilterData = shapes[i]->getSimulationFilterData();
+			simFilterData.word0 = COLLISION_FLAG_GROUND;
+			simFilterData.word1 = COLLISION_FLAG_GROUND_AGAINST;
+			shapes[i]->setSimulationFilterData(simFilterData);
+		}
+	}
+		 
 	PxBase *makePhysicsObject(PhysicalObjects actorToMake, long objectId, PxTransform *pos, PxGeometry *geom, PxMaterial *material, DrivingStyle *style, PxVec3 *velocity)
 	{
 		PxBase *toReturn = NULL;
@@ -88,7 +108,7 @@ public:
 		{
 			VehicleCreator *vc = new VehicleCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 			PxVehicleDrive4W *car = vc->create(style);
-			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
+			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1000.0f), 0), PxQuat(PxIdentity));
 			PxTransform anotherTransform = pos == NULL ? PxTransform(PxVec3(0), PxQuat(PxIdentity)) : *pos;
 			car->getRigidDynamicActor()->setGlobalPose(PxTransform(startTransform.p.x + anotherTransform.p.x, startTransform.p.y + anotherTransform.p.y, startTransform.p.z + anotherTransform.p.z));
 			setFilterDataId(objectId, car->getRigidDynamicActor());
@@ -101,7 +121,7 @@ public:
 			PxFilterData simFilterData;
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
-
+			
 			bullet->createShape(PxBoxGeometry(1, 1, 2), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
@@ -189,7 +209,7 @@ public:
 			PxFilterData simFilterData;
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
-
+			
 			bullet->createShape(PxSphereGeometry(3.f), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
@@ -204,9 +224,38 @@ public:
 			toReturn = bullet;
 			break;
 		}
+		case WAYPOINT_COLLISION_VOLUME:
+		{
+			PxRigidStatic * wapoint = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+			PxFilterData simFilterData;
+			simFilterData.word0 = COLLISION_FLAG_WAYPOINT;
+			simFilterData.word1 = COLLISION_FLAG_WAYPOINT_AGAINST;
 
-			return toReturn;
+			wapoint->createShape(*geom, *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			wapoint->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+			setFilterDataId(objectId, wapoint);
+
+			toReturn = wapoint;
+			break;
 		}
+		case PHYSICAL_OBJECT_TRACK:
+		{
+			PxRigidStatic* plane = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+			plane->createShape(*geom, *material);
+			setFilterDataId(objectId, plane);
+			makeDrivable(plane);
+
+			toReturn = plane;
+		}
+		}
+
+		return toReturn;
 	}
 
 	

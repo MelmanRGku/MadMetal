@@ -27,7 +27,7 @@ public:
 		case RENDERABLE_OBJECT_BULLET_MEOW_MIX:
 			return Assets::getModel("bullet");
 		case RENDERABLE_OBJECT_TRACK:
-			return Assets::getModel("plane");
+			return Assets::getModel("flatTrack");
 		case RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO:
 			return Assets::getModel("scareMoon");
 		}

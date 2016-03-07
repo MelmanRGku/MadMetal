@@ -9,6 +9,7 @@ private:
 
 private:
 	void processBulletHit(long bulletId, long otherId);
+	void processWaypointHit(long waypointId, long otherId);
 
 public:
 	CollisionManager(World &world);

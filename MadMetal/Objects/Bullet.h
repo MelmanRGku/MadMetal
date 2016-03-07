@@ -9,7 +9,7 @@ protected:
 	int m_damage;
 
 public:
-	Bullet(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Audio* audio, Car *owner);
+	Bullet(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, Car *owner);
 	~Bullet();
 	void setOwner(Car *car) { m_owner = car; }
 	Car *getOwner() { return m_owner; }

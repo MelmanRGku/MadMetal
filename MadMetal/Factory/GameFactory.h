@@ -29,7 +29,8 @@ public:
 		OBJECT_GAUGE_BAR,
 		OBJECT_TEXT_2D,
 		OBJECT_TRACK,
-		OBJECT_BUILDING
+		OBJECT_BUILDING,
+		OBJECT_WAYPOINT,
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry *geom, TestObject *parent);
