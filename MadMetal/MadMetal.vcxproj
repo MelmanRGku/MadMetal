@@ -219,6 +219,11 @@
   <ItemGroup>
     <Text Include="Files\test.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Models\asphalt_texture409.jpg" />
+    <Image Include="Assets\Models\Building_texture4.jpg" />
+    <Image Include="Assets\Models\Terrain-Road.jpg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

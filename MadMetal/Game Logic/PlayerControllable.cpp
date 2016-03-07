@@ -147,6 +147,9 @@ void PlayerControllable::playFrame(double dt)
 			//do nothing cause you dead bro
 		}
 	}
+ else {
+	 m_car->respawn();
+ }
 	
 }
 

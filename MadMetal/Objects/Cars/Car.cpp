@@ -19,6 +19,25 @@ DrivingStyle& Car::getDrivingStyle()
 	return m_drivingStyle;
 }
 
+void Car::respawn()
+{
+	m_currentHealth = m_maxHealth;
+	
+	if (m_currentWaypoint != NULL)
+	{
+		std::cout << "here" << std::endl;
+		glm::vec3 currentPos = m_currentWaypoint->getGlobalPose();
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPos.x, currentPos.y + 50, currentPos.z)));
+	}
+	else {
+		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, currentPosition.p.y + 50, currentPosition.p.z)));
+	}
+
+	
+	
+}
+
 /*
 void Car::usePowerUp()
 {
@@ -87,9 +106,18 @@ void Car::update(float dt) {
 	healthBar->setHealthPercentage(m_currentHealth / m_maxHealth);
 	gaugeBar->setGaugePercentage(getSuperGauge());
 
-	std::stringstream s;
-	s << "Score: " << getScore();
-	score->setString(s.str());
+	{
+		std::stringstream s;
+		s << "Score: " << getScore();
+		score->setString(s.str());
+	}
+
+	{
+		std::stringstream s;
+		s << "Lap: " << getLap();
+		lap->setString(s.str());
+	}
+
 	if (m_currentHealth < 0) {
 		hasToBeDeleted = true;
 	}
@@ -97,20 +125,37 @@ void Car::update(float dt) {
 
 void Car::addDamageDealt(float damage) {
 	m_damageDealt += damage;
-	m_superGauge += damage / 100;
+	if (m_superDurationRemainingSeconds == 0)
+		m_superGauge += damage / 100;
 }
 
 int Car::getScore() {
 	return m_damageDealt;
 }
 
-void Car::setCurrentWaypoint(Waypoint* waypoint)
+bool Car::setCurrentWaypoint(Waypoint* waypoint)
 {
 	//std::cout << "current waypoint is " << waypoint->getId() << "\n";
-	m_currentWaypoint = waypoint;
+	if (waypoint != m_currentWaypoint) {
+		m_lastWayPoint = m_currentWaypoint;
+		m_currentWaypoint = waypoint;
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 Waypoint* Car::getCurrentWaypoint()
 {
 	//if (m_currentWaypoint!=NULL)
 		return m_currentWaypoint;
+}
+
+
+void Car::incrementLap() {
+	m_currentLap++;
+}
+
+int Car::getLap() {
+	return m_currentLap;
 }

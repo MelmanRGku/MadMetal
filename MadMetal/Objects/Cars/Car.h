@@ -31,7 +31,7 @@ protected: //members
 	float m_superGauge; // 0-1
 	float m_superMaxDurationSeconds; //seconds
 	float m_superDurationRemainingSeconds; //seconds
-	Waypoint* m_currentWaypoint;
+	Waypoint* m_currentWaypoint, *m_lastWayPoint;
 
 	/*
 		Need to be implemented
@@ -50,7 +50,8 @@ public:
 	//TODO: change to separate UI class
 	HealthBar2D *healthBar;
 	GaugeBar *gaugeBar;
-	Text2D *score;
+	Text2D *score,
+		*lap;
 
 
 	Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
@@ -71,8 +72,11 @@ public:
 	float getSuperGauge() { return m_superGauge > 1.f ? 1.f : m_superGauge; }
 	int getScore();
 	void setCurrentWaypoint(Waypoint* waypoint);
+	void respawn();
+	bool setCurrentWaypoint(Waypoint* waypoint);							//true if the waypoint is new, false otherwise
 	Waypoint* getCurrentWaypoint();
-	
+	void incrementLap();
+	int getLap();
 	
 };
 

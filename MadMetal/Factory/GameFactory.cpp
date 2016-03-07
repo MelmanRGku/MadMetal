@@ -56,6 +56,9 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							car->gaugeBar = static_cast<GaugeBar *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_GAUGE_BAR, NULL, NULL, NULL));
 							car->score = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
 							car->score->setString("Score: 0");
+							car->lap = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
+							car->lap->setString("Lap: 0");
+							car->lap->setPos(glm::vec3(10, 70, 0));
 
 		return car;
 	}
@@ -92,7 +95,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
 		track = new Track(objectId, *audioable, *physicable, *animatable, *renderable, drivableTrack, nonDrivableTrack);
-
+		
 		return track;
 	}
 	case OBJECT_TRACK_DRIVABLE:
@@ -123,14 +126,14 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRACK_NON_DRIVABLE));
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
-		
+
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 		PxTriangleMesh ** mesh = renderable->getModel()->getPhysicsTriangleMesh();
 		PxGeometry ** geom = new PxGeometry *[renderable->getModel()->getMeshes()->size()];
 		for (unsigned int i = 0; i < renderable->getModel()->getMeshes()->size(); i++) {
 			geom[i] = new PxTriangleMeshGeometry(mesh[i]);
 		}
-		PxRigidStatic *physicalNonDrivableTrack = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_TRACK_NON_DRIVABLE, objectId, pos, geom, (PxU32)renderable->getModel()->getMeshes()->size(), material, NULL, NULL));
+		PxRigidStatic *physicalNonDrivableTrack = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_TRACK_NON_DRIVABLE, objectId, pos, geom, renderable->getModel()->getMeshes()->size(), material, NULL, NULL));
 		Physicable *physicable = new Physicable(physicalNonDrivableTrack);
 		nonDrivableTrack = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable);
 

@@ -61,7 +61,7 @@ class Scene
 {
 
 protected:
-	bool m_isPaused;
+	bool m_isPaused = false;
 	SceneMessage * m_message;
 	World *m_world;
 	Camera * m_defaultSceneCamera;
@@ -84,6 +84,7 @@ public:
 		}
 		m_sceneCameras.clear();
 	}
+
 	virtual bool simulateScene(double dt, SceneMessage &newMessage) = 0;
 
 	World* getWorld() { return m_world; }
@@ -97,6 +98,7 @@ public:
 		return m_sceneCameras; 
 	}
 	//virtual void loadFromFile();
+
 };
 
 class MainMenuScene : public Scene
