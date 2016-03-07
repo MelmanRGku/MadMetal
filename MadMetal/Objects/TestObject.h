@@ -38,6 +38,9 @@ public:
 	glm::vec3 getForwardVector() { return m_physicable.getForwardVector(); }
 	glm::vec3 getPosition();
 	glm::vec3 getFullRotation();
+	glm::vec3 getScale() { return m_animatable.getScale(); }
+	glm::vec3 getAnimatablePos() { return m_animatable.getPosition(); }
+	void setPosition(glm::vec3 pos) { m_animatable.setPosition(pos); }
 	void setScale(glm::vec3 scale) { m_animatable.setScale(scale); }
 	void updateScale(glm::vec3 ds) { m_animatable.updateScale(ds); }
 	PxBounds3 getWorldBounds() { return m_physicable.getActor().getWorldBounds(); }

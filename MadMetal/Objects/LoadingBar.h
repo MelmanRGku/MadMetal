@@ -1,16 +1,19 @@
 #pragma once
 
+#include "TestObject.h"
+
 #define LOADING_BAR_BORDER_SIZE  0.2f
 
-class LoadingBar
+class LoadingBar : public TestObject
 {
 private:
 	float percentageDone;
+	TestObject *completeBar;
 public:
-	LoadingBar(glm::vec3 size, glm::vec3 position, Model *completeBarModel);
+	LoadingBar(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
 	~LoadingBar();
 	void setPercentage(float percentage);
-	void draw(Renderer *renderer);
+	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	void setProgress(float percentage);
 };
 

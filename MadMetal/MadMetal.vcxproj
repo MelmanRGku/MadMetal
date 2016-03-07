@@ -79,6 +79,7 @@
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
     <ClCompile Include="Objects\BulletCarCollision.cpp" />
+    <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Objects\MeowMixBullet.cpp" />
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
     <ClInclude Include="Objects\Audioable.h" />
     <ClInclude Include="Objects\BulletCarCollision.h" />
+    <ClInclude Include="Objects\LoadingBar.h" />
     <ClInclude Include="Objects\MeowMixBullet.h" />
     <ClInclude Include="Objects\GaugeBar.h" />
     <ClInclude Include="Objects\HealthBar2D.h" />
