@@ -89,9 +89,6 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int 
 	m_waypoints[83]->setValid(false);
 	m_waypoints[26]->setValid(false);
 
-	m_waypoints[5]->setFinish(true);
-	m_waypoints[25]->setFinish(true);
-	m_waypoints[15]->setFinish(true);
 
 	//for (int i = 0; i < m_waypoints.size(); i++)
 	//{

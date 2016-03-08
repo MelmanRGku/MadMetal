@@ -192,14 +192,14 @@ void AIControllable::recalculatePath()
 	m_currentPath.clear();
 	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-	std::cout << "THe new path is: ";
+	//std::cout << "THe new path is: ";
 
 	for (int i = 0; i < m_currentPath.size(); i++)
 	{
-		std::cout << m_currentPath[i]->getId() << ", ";
+		//std::cout << m_currentPath[i]->getId() << ", ";
 	}
 
-	std::cout << "\n";
+	//std::cout << "\n";
 
 	updateNextWaypoint();
 }
@@ -251,11 +251,14 @@ void AIControllable::setWaypointSystem(WaypointSystem* waypointSystem)
 
 void AIControllable::checkCollisionVolumes()
 {
+
+	
 	if (m_car->isAtStartingCollisionVolume())
 	{
 		setHighCostWaypointsToHigh();
 		m_goalWaypoint = m_waypointSystem->getWaypointAt(13);
 		recalculatePath();
+		
 		m_car->setStartingCollisionVolumeFlag(false);
 	}
 	else if (m_car->isAtMidCollisionVolume())
@@ -263,6 +266,7 @@ void AIControllable::checkCollisionVolumes()
 		setHighCostWaypointsToLow();
 		m_goalWaypoint = m_waypointSystem->getWaypointAt(16);
 		recalculatePath();
+		
 		m_car->setMidCollisionVolumeFlag(false);
 	}
 }

@@ -34,6 +34,7 @@ protected: //members
 	Waypoint *m_nextWaypoint;
 	bool m_isAtStartingCollisionVolume;
 	bool m_isAtMidCollisionVolume;
+	bool m_newLap;
 
 	Sound * soundChassis;
 

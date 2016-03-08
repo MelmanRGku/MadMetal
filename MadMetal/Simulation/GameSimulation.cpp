@@ -18,7 +18,7 @@
 
 
 #define NUM_OF_PLAYERS 8
-#define NUM_LAPS_FOR_VICTORY 2
+#define NUM_LAPS_FOR_VICTORY 10
 #define RACE_FINISH_DELAY 5
 
 using namespace std;
@@ -416,10 +416,12 @@ void GameSimulation::setupBasicGameWorldObjects() {
 			aiPlayer->setWaypointSystem(m_waypointSystem);
 		}
 	}
-	PxGeometry **geom = new PxGeometry *[1];
-	geom[0] = new PxBoxGeometry(PxVec3(50, testObject->getDrivablePart()->getWorldBounds().maximum.y, 50));
-	m_startingCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(16)->getGlobalPose().x, m_waypointSystem->getWaypointAt(16)->getGlobalPose().y, m_waypointSystem->getWaypointAt(16)->getGlobalPose().z), geom, NULL));
-	m_midCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(41)->getGlobalPose().x, m_waypointSystem->getWaypointAt(41)->getGlobalPose().y, m_waypointSystem->getWaypointAt(41)->getGlobalPose().z), geom, NULL));
+	PxGeometry **geom1 = new PxGeometry *[1];
+	PxGeometry **geom2 = new PxGeometry *[1];
+	geom1[0] = new PxBoxGeometry(PxVec3(40, testObject->getDrivablePart()->getWorldBounds().maximum.y, 120));
+	geom2[0] = new PxBoxGeometry(PxVec3(120, testObject->getDrivablePart()->getWorldBounds().maximum.y, 40));
+	m_startingCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(16)->getGlobalPose().x, m_waypointSystem->getWaypointAt(16)->getGlobalPose().y, m_waypointSystem->getWaypointAt(16)->getGlobalPose().z), geom1, NULL));
+	m_midCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(41)->getGlobalPose().x, m_waypointSystem->getWaypointAt(41)->getGlobalPose().y, m_waypointSystem->getWaypointAt(41)->getGlobalPose().z),geom2 , NULL));
 }
 
 float GameSimulation::getFinishLineBonus(int position)

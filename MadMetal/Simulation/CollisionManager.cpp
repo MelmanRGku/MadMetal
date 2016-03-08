@@ -97,7 +97,7 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 	{
 		if (car->setCurrentWaypoint(waypoint)) {
 			if (car->getCurrentWaypoint()->isFinish()) {
-				car->incrementLap();
+			//	car->incrementLap();
 			}
 		}
 		
