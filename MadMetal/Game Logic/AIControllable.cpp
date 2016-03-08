@@ -91,8 +91,8 @@ void AIControllable::playFrame(double dt)
 		}
 		float engineRotationSpeed = static_cast<float>(m_car->getCar().mDriveDynData.getEngineRotationSpeed());
 		float forwardSpeed = static_cast<float>(m_car->getCar().computeForwardSpeed());
-		std::cout << "rotation speed:" << engineRotationSpeed << "\n";
-		std::cout << "linear speed:" << forwardSpeed << "\n";
+		//std::cout << "rotation speed:" << engineRotationSpeed << "\n";
+		//std::cout << "linear speed:" << forwardSpeed << "\n";
 
 		// Car is stuck in a wall
 		if (engineRotationSpeed > 50.0 &&
@@ -235,10 +235,10 @@ void AIControllable::recalculatePath()
 
 	for (int i = 0; i < m_currentPath.size(); i++)
 	{
-		//std::cout << m_currentPath[i]->getId() << ", ";
+		std::cout << m_currentPath[i]->getId() << ", ";
 	}
 
-	//std::cout << "\n";
+	std::cout << "\n";
 
 	updateNextWaypoint();
 }
@@ -292,8 +292,6 @@ void AIControllable::setWaypointSystem(WaypointSystem* waypointSystem)
 
 void AIControllable::checkCollisionVolumes()
 {
-
-	
 	if (m_car->isAtStartingCollisionVolume())
 	{
 		setHighCostWaypointsToHigh();
