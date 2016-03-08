@@ -51,5 +51,6 @@ public:
 	bool getHasToBeDeleted() { return hasToBeDeleted; }
 	void playSound();
 	void setSound(Sound* theSound);
+	void setMaxLifeTime(float maxTime){ maxLifeTime - maxTime; }
 };
 

@@ -4,6 +4,7 @@
 
 Text2D::Text2D(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable)
 {
+	m_centerize = false;
 }
 
 
@@ -24,9 +25,15 @@ bool Text2D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
 
 	glColor4f(1.0, 0.0, 0.0, 1.0);
 	// Set the font size and render a small text.
-	font.FaceSize(72);
-	font.Render(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z));
-
+	font.FaceSize(m_fontSize);
+	
+	float xOffset = 0;
+	float yOffset = 0;
+	if (m_centerize) {
+		xOffset = font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Upper().X() - font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Lower().X();
+		yOffset = font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Upper().Y() - font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Lower().Y();
+	}
+	font.Render(stringToRender.c_str(), -1, FTPoint(pos.x - xOffset/2, pos.y - yOffset / 2, pos.z));
 	glPopAttrib();
 	return false;
 }

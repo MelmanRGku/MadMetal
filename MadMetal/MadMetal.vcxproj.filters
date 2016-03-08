@@ -458,6 +458,9 @@
     <ClInclude Include="Objects\LoadingBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\DisplayMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Objects\Text3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>

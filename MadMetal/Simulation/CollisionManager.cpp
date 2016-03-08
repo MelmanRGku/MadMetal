@@ -128,7 +128,7 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 			car->setMidCollisionVolumeFlag(true);
 		}
 	}
-}
+	}
 
 void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
 	Car *car1 = dynamic_cast<Car *>(m_world.findObject(car1Id));

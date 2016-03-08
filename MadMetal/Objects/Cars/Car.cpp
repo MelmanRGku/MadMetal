@@ -127,10 +127,6 @@ void Car::update(float dt) {
 			ui->lap->setString(s.str());
 		}
 	}
-
-	if (m_currentHealth < 0) {
-		hasToBeDeleted = true;
-	}
 }
 
 void Car::addDamageDealt(float damage) {
@@ -140,9 +136,6 @@ void Car::addDamageDealt(float damage) {
 	}
 }
 
-int Car::getScore() {
-	return m_damageDealt;
-}
 
 bool Car::setCurrentWaypoint(Waypoint* waypoint)
 {

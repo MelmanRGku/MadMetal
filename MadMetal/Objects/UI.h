@@ -15,5 +15,6 @@ public:
 	GaugeBar *gaugeBar;
 	Text2D *score,
 		*lap;
+		
 };
 
