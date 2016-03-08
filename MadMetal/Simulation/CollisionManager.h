@@ -2,7 +2,7 @@
 #include "PhysicsManager.h"
 #include "World.h"
 
-class CollisionManager : public PxSimulationEventCallback
+class CollisionManager : public PxSimulationEventCallback, public PxSimulationFilterCallback
 {
 private:
 	World &m_world;
@@ -30,5 +30,11 @@ public:
 	void	onWake(PxActor**, PxU32) {}
 	void	onSleep(PxActor**, PxU32){}
 	//end PxSumlationEventCallback
+
+	//PxSimulationFilterCallback
+	PxFilterFlags pairFound(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, const PxActor *a0, const PxShape *s0, PxFilterObjectAttributes attributes1, PxFilterData filterData1, const PxActor *a1, const PxShape *s1, PxPairFlags &pairFlags);
+	void pairLost(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, PxFilterObjectAttributes attributes1, PxFilterData filterData1, bool objectDeleted);
+	bool statusChange(PxU32 &pairID, PxPairFlags &pairFlags, PxFilterFlags &filterFlags);
+	//end PxSimulationFilterCallback
 };
 

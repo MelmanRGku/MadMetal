@@ -221,6 +221,7 @@ void GameSimulation::createPhysicsScene()
 
 	CollisionManager *manager = new CollisionManager(*m_world);
 	sceneDesc.simulationEventCallback = manager;
+	sceneDesc.filterCallback = manager;
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 
 	if (!sceneDesc.filterShader)

@@ -32,6 +32,9 @@ void AIControllable::processFire(std::vector<Controllable *> *players) {
 			vecToPlayer.y = 0;
 			vecToPlayer = glm::normalize(vecToPlayer);
 			if (glm::dot(vecToPlayer, forwardVector) > .9) {
+				if (m_car->superReady()) {
+					m_car->useSuper();
+				}
 				m_car->fire();
 			}
 		}
