@@ -31,6 +31,12 @@ PxFilterFlags CollisionManager::TestFilterShader(
 		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1))
 		return PxFilterFlag::eSUPPRESS;
 
+	////just notify about car-car collision
+	//if ((filterData0.word0 == COLLISION_FLAG_CHASSIS || filterData0.word0 == COLLISION_FLAG_WHEEL) && (filterData1.word0 == COLLISION_FLAG_CHASSIS || filterData1.word0 == COLLISION_FLAG_WHEEL)) {
+	//	pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+	//	return PxFilterFlag::eSUPPRESS;
+	//}
+
 	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
 	{
 
@@ -98,16 +104,23 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 	}
 }
 
+void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
+	Car *car1 = dynamic_cast<Car *>(m_world.findObject(car1Id));
+	Car *car2 = dynamic_cast<Car *>(m_world.findObject(car2Id));
+	car1->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -500, 0));
+	car2->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -500, 0));
+}
+
 void CollisionManager::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
 {
-	/*int i = 0;
-	PxShape *shapes[1];
-	pairHeader.actors[0]->getShapes(shapes, 1);
-	i = shapes[0]->getSimulationFilterData().word2;
-	std::cout << i << std::endl;
-	pairHeader.actors[1]->getShapes(shapes, 1);
-	i = shapes[0]->getSimulationFilterData().word2;
-	std::cout << i << std::endl;*/
+	for (PxU32 i = 0; i < nbPairs; i++) {
+		PxU32 firstObj = pairs[i].shapes[0]->getSimulationFilterData().word0,
+			secondObj = pairs[i].shapes[1]->getSimulationFilterData().word0;
+
+		if ((firstObj == COLLISION_FLAG_CHASSIS || firstObj == COLLISION_FLAG_WHEEL) && (secondObj == COLLISION_FLAG_CHASSIS || secondObj == COLLISION_FLAG_WHEEL)) {
+			processCarCarHit(pairs[i].shapes[0]->getSimulationFilterData().word2, pairs[i].shapes[1]->getSimulationFilterData().word2);
+		}
+	}
 }
 
 

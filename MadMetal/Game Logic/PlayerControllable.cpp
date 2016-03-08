@@ -102,7 +102,6 @@ void PlayerControllable::playFrame(double dt)
 					if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
 					{
 						m_car->getCar().mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
-						std::cout << "HI" << std::endl;
 					}
 					if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eNEUTRAL){
 						m_car->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -1, 0));
