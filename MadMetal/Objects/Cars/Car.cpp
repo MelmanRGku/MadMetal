@@ -9,6 +9,7 @@ Car::Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, 
 	m_currentWaypoint = NULL;
 	m_isAtMidCollisionVolume = false;
 	m_isAtStartingCollisionVolume = false;
+	m_newLap = true;
 }
 
 
@@ -109,6 +110,7 @@ void Car::updateSuper(float dt)
 }
 
 void Car::update(float dt) {
+	//std::cout << m_currentLap << std::endl;
 	m_reloadRemainingSeconds -= dt;
 	updateSuper(dt);
 	if (ui != NULL) {
@@ -178,10 +180,24 @@ void Car::playSoundChassis()
 void Car::setStartingCollisionVolumeFlag(bool isHit)
 {
 	m_isAtStartingCollisionVolume = isHit;
+	if (m_isAtStartingCollisionVolume && !m_newLap)
+	{
+		incrementLap();
+		m_newLap = true;
+	}
+		
+	
+		
 }
 void Car::setMidCollisionVolumeFlag(bool isHit)
 {
 	m_isAtMidCollisionVolume = isHit;
+	if (m_isAtMidCollisionVolume)
+	{
+		m_newLap = false;
+	}
+	
+	
 }
 
 bool Car::isAtStartingCollisionVolume()
