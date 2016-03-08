@@ -32,11 +32,11 @@ PxFilterFlags CollisionManager::TestFilterShader(
 		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1))
 		return PxFilterFlag::eSUPPRESS;
 
-	////just notify about car-car collision
-	//if ((filterData0.word0 == COLLISION_FLAG_CHASSIS || filterData0.word0 == COLLISION_FLAG_WHEEL) && (filterData1.word0 == COLLISION_FLAG_CHASSIS || filterData1.word0 == COLLISION_FLAG_WHEEL)) {
-	//	pairFlags = PxPairFlag::eCONTACT_DEFAULT;
-	//	return PxFilterFlag::eSUPPRESS;
-	//}
+	//just notify about car-car collision
+	if ((filterData0.word0 == COLLISION_FLAG_CHASSIS || filterData0.word0 == COLLISION_FLAG_WHEEL) && (filterData1.word0 == COLLISION_FLAG_CHASSIS || filterData1.word0 == COLLISION_FLAG_WHEEL)) {
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
 
 	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
 	{
@@ -97,7 +97,7 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 	{
 		if (car->setCurrentWaypoint(waypoint)) {
 			if (car->getCurrentWaypoint()->isFinish()) {
-				car->incrementLap();
+			//	car->incrementLap();
 			}
 		}
 		
@@ -128,13 +128,31 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 			car->setMidCollisionVolumeFlag(true);
 		}
 	}
-}
+	}
 
 void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
 	Car *car1 = dynamic_cast<Car *>(m_world.findObject(car1Id));
 	Car *car2 = dynamic_cast<Car *>(m_world.findObject(car2Id));
-	car1->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -500, 0));
-	car2->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -500, 0));
+	glm::vec3 car1Pos = car1->getFullPosition(),
+		car2Pos = car2->getFullPosition();
+	glm::vec3 vectorBetweenCars = glm::normalize(car2Pos - car1Pos);
+	glm::vec3 car1ForwardVector = car1->getForwardVector();
+	glm::vec3 car2ForwardVector = car2->getForwardVector();
+
+	float car1Mass = car1->getDrivingStyle().getChassisMass();
+	float car2Mass = car2->getDrivingStyle().getChassisMass();
+	//if car1 hit car2
+	if (glm::dot(car1ForwardVector, vectorBetweenCars) > 0) {
+		glm::vec3 forceToApply = car1->getCar().computeForwardSpeed() * car1Mass * car1ForwardVector / 7.f;
+		car2->getCar().getRigidDynamicActor()->addForce(PxVec3(forceToApply.x, forceToApply.y, forceToApply.z), PxForceMode::eIMPULSE);
+		car1->getCar().getRigidDynamicActor()->addForce(-PxVec3(forceToApply.x, forceToApply.y, forceToApply.z), PxForceMode::eIMPULSE);
+	}
+	//car2 hit car1
+	if (glm::dot(car2ForwardVector, -vectorBetweenCars) > 0) {
+		glm::vec3 forceToApply = car2->getCar().computeForwardSpeed() * car2Mass * car2ForwardVector / 7.f;
+		car1->getCar().getRigidDynamicActor()->addForce(PxVec3(forceToApply.x, forceToApply.y, forceToApply.z), PxForceMode::eIMPULSE);
+		car2->getCar().getRigidDynamicActor()->addForce(-PxVec3(forceToApply.x, forceToApply.y, forceToApply.z), PxForceMode::eIMPULSE);
+	}
 }
 
 void CollisionManager::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
@@ -170,4 +188,20 @@ void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 		}
 	}
 
+}
+
+PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, const PxActor *a0, const PxShape *s0,
+	PxFilterObjectAttributes attributes1, PxFilterData filterData1, const PxActor *a1, const PxShape *s1, PxPairFlags &pairFlags) {
+	processCarCarHit(filterData0.word2, filterData1.word2);
+	return PxFilterFlags(PxFilterFlag::eDEFAULT);
+}
+
+
+void CollisionManager::pairLost(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, PxFilterObjectAttributes attributes1, PxFilterData filterData1, bool objectDeleted){
+
+}
+
+
+bool CollisionManager::statusChange(PxU32 &pairID, PxPairFlags &pairFlags, PxFilterFlags &filterFlags) {
+	return false;
 }

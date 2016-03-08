@@ -76,6 +76,19 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return ui;
 	}
+	case OBJECT_DISPLAY_MESSAGE:
+	{
+		Renderable *renderable = new Renderable(NULL);
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		Physicable *physicable = new Physicable(NULL);
+		DisplayMessage * display = new DisplayMessage(objectId, *audioable, *physicable, *animatable, *renderable);
+		Text2D *text = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
+		text->centerize(true);
+		display->setText2D(text);
+		
+		return display;
+	}
 	case OBJECT_BUILDING:
 	{
 		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PLANE), true, true);

@@ -21,10 +21,10 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int 
 		index++;
 	}
 	
-	std::cout << "number of waypoints" << m_waypoints.size() << "\n";
-	std::cout << "Rows" << m_waypointMap.size() << "\n";
-	std::cout << "Columns: " << m_waypointMap[0].size() << "\n";
-	std::cout << "width: " << trackWidthMax << " | " << "tack length: " << trackLengthMax << "\n";
+	//std::cout << "number of waypoints" << m_waypoints.size() << "\n";
+	//std::cout << "Rows" << m_waypointMap.size() << "\n";
+	//std::cout << "Columns: " << m_waypointMap[0].size() << "\n";
+	//std::cout << "width: " << trackWidthMax << " | " << "tack length: " << trackLengthMax << "\n";
 	// Populate Waypoints
 	for (int i = 0; i < m_waypointMap.size(); i++)
 	{
@@ -75,17 +75,20 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int 
 		}
 	}
 
+
+	
 	for (int i = 30; i < 80; i++)
 	{
 		if (i % 10 > 2 && i % 10 < 8)
 		{
-			std::cout << "Setting invalid index: " << i << "\n";
+			//std::cout << "Setting invalid index: " << i << "\n";
 			m_waypoints[i]->setValid(false);
 		}
 	}
 	m_waypoints[77]->setValid(false);
 	m_waypoints[83]->setValid(false);
 	m_waypoints[26]->setValid(false);
+
 
 	//for (int i = 0; i < m_waypoints.size(); i++)
 	//{

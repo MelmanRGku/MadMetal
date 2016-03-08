@@ -14,9 +14,12 @@
 #include "Game Logic\WayPointSystem.h"
 #include "Objects\TestObject.h"
 #include "Objects\CollisionVolume.h"
+#include <sstream>
 
 
 #define NUM_OF_PLAYERS 8
+#define NUM_LAPS_FOR_VICTORY 10
+#define RACE_FINISH_DELAY 5
 
 using namespace std;
 bool gIsVehicleInAir = true;
@@ -25,12 +28,16 @@ static const float TRACK_DIMENSIONS = 200;
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audioHandle(audioHandle)
 {
 	std::cout << "GameSimulation pushed onto the stack \n";
-	createPhysicsScene();
 	
-	m_waypointSystem = NULL;
-	m_isPaused = false;
-
+	createPhysicsScene();
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
+	m_displayMessage = static_cast<DisplayMessage *>(m_gameFactory->makeObject(GameFactory::OBJECT_DISPLAY_MESSAGE, NULL, NULL, NULL));
+	m_waypointSystem = NULL;
+
+	m_isPaused = false;
+	m_numLapsVictory = NUM_LAPS_FOR_VICTORY;
+
+
 
 	//create characters for game from templates
 	for (int i = 0; i < playerTemplates.size(); i++)
@@ -74,6 +81,7 @@ GameSimulation::~GameSimulation()
 	m_scene->release();
 	
 	delete m_waypointSystem;
+	delete m_displayMessage;
 	
 }
 
@@ -198,6 +206,7 @@ void GameSimulation::simulatePlayers(double dt)
 void GameSimulation::updateObjects(double dt) {
 
 	m_world->update(dt);
+	m_displayMessage->update(dt);
 
 	}
 
@@ -212,6 +221,7 @@ void GameSimulation::createPhysicsScene()
 
 	CollisionManager *manager = new CollisionManager(*m_world);
 	sceneDesc.simulationEventCallback = manager;
+	sceneDesc.filterCallback = manager;
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 
 	if (!sceneDesc.filterShader)
@@ -247,12 +257,65 @@ void GameSimulation::createPhysicsScene()
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
-	m_sceneGameTimeSeconds += dt;
+
+	m_sceneGameTimeSeconds += dt;\
 	if (m_sceneGameTimeSeconds > 3 && m_controlsPaused) {
 		pauseControls(false);
 		m_audioHandle.loadMusic("mus_mettaton_neo.ogg");
 	}
+	if (m_sceneGameTimeSeconds < 4 )
+	{
+		switch ((int)m_sceneGameTimeSeconds){
+		case(0) :
+			m_displayMessage->initializeMessage("3", 0.5);
+			break;
+		case(1) :
+			m_displayMessage->initializeMessage("2", 0.5);
+			break;
+		case(2) :
+			m_displayMessage->initializeMessage("1", 0.5);
+			break;
+		case(3) :
+			m_displayMessage->initializeMessage("GO!!", 0.5);
+			break;
+		default:
+			break;
+		}
+	}
 
+
+	if (!m_raceFinished)
+	{
+		//check for lap status
+		for (int i = 0; i < m_players.size(); i++)
+		{
+			if (m_players[i]->getCar()->getLap() == m_numLapsVictory)
+			{
+				if (!m_raceFinishedCountdownSeconds)
+				{
+					m_raceFinishedCountdownSeconds = RACE_FINISH_DELAY; //start count down
+				}
+				m_players[i]->getCar()->addToScore(getFinishLineBonus(m_numPlayersFinishedRace++));
+				std::stringstream s;
+				s << "Player " << i + 1 << " Has Finished!";
+				m_displayMessage->initializeMessage( s.str() , 2);;
+			}
+		}
+
+		if (m_raceFinishedCountdownSeconds) {
+			//have all players crossed the finish line or count down done?
+			if (m_numPlayersFinishedRace == m_players.size() || (m_raceFinishedCountdownSeconds -= dt) <= 0)
+			{
+				m_raceFinished = true;
+				m_displayMessage->initializeMessage("FINISHED", 3);
+			}
+		}
+	}
+	
+	//if the race is still going, do player simulations
+	if (!m_raceFinished)
+	{
+		//check for pause button
 	for (int i = 0; i < m_humanPlayers.size(); i++)
 	{
 		//if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
@@ -271,12 +334,24 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 		//	return true;
 		//}
 	}
+		//simulate players
 	simulateAI();
 	simulatePlayers(dt);
+	}
+	else {
+		int player = getFirstPlace();
+		int score = m_players[player]->getCar()->tallyScore();
+		std::stringstream s;
+		s << "Player " << player + 1 << " Wins with " << score << "Points!!!";
+		m_displayMessage->setFontSize(45);
+		m_displayMessage->initializeMessage(s.str(), 10);
+		
+	}
 	simulatePhysics(dt);
 	simulateAnimation();
 	updateObjects(dt);
 	return false;
+	
 }
 
 void GameSimulation::pauseControls(bool pause) {
@@ -342,11 +417,45 @@ void GameSimulation::setupBasicGameWorldObjects() {
 			aiPlayer->setWaypointSystem(m_waypointSystem);
 		}
 	}
+	PxGeometry **geom1 = new PxGeometry *[1];
+	PxGeometry **geom2 = new PxGeometry *[1];
+	geom1[0] = new PxBoxGeometry(PxVec3(40, testObject->getDrivablePart()->getWorldBounds().maximum.y, 120));
+	geom2[0] = new PxBoxGeometry(PxVec3(120, testObject->getDrivablePart()->getWorldBounds().maximum.y, 40));
+	m_startingCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(16)->getGlobalPose().x, m_waypointSystem->getWaypointAt(16)->getGlobalPose().y, m_waypointSystem->getWaypointAt(16)->getGlobalPose().z), geom1, NULL));
+	m_midCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(41)->getGlobalPose().x, m_waypointSystem->getWaypointAt(41)->getGlobalPose().y, m_waypointSystem->getWaypointAt(41)->getGlobalPose().z),geom2 , NULL));
+}
 
-	PxGeometry **geom = new PxGeometry *[1];
-	geom[0] = new PxBoxGeometry(PxVec3(50, testObject->getDrivablePart()->getWorldBounds().maximum.y, 50));
-	m_startingCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(16)->getGlobalPose().x, m_waypointSystem->getWaypointAt(16)->getGlobalPose().y, m_waypointSystem->getWaypointAt(16)->getGlobalPose().z), geom, NULL));
-	m_midCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(41)->getGlobalPose().x, m_waypointSystem->getWaypointAt(41)->getGlobalPose().y, m_waypointSystem->getWaypointAt(41)->getGlobalPose().z), geom, NULL));
+float GameSimulation::getFinishLineBonus(int position)
+{
+	switch (position)
+	{
+	case (0) :
+		return 500;
+	case (1) :
+		return 250;
+	case(2) :
+		return 100;
+	default:
+		return 0;
+	}
+
+	}
+	
+int GameSimulation::getFirstPlace()
+{
+	int tempPlayer = -1;
+	int tempScore = 0;
+	for (int i = 0; i < m_players.size(); i++)
+	{
+		
+		if (m_players[i]->getCar()->tallyScore() > tempScore)
+		{
+			tempPlayer = i;
+			tempScore = m_players[i]->getCar()->tallyScore();
+		}
+	}
+	return tempPlayer;
+	
 
 }
 

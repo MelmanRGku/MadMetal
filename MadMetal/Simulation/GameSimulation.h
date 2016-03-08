@@ -7,6 +7,7 @@
 #include "Game Logic\Controllable.h"
 #include "Game Logic\PlayerControllable.h"
 #include "Game Logic\AIControllable.h"
+#include "Objects\DisplayMessage.h"
 
 class Scene;
 class Car;
@@ -34,6 +35,10 @@ private:
 
 	void pauseControls(bool pause);
 
+	float getFinishLineBonus(int position);
+
+	int getFirstPlace();
+
 private: //members
 	std::vector<Controllable *> m_players;
 	std::vector<PlayerControllable*> m_humanPlayers;
@@ -46,8 +51,15 @@ private: //members
 	PxBatchQuery* gBatchQuery = NULL;
 	GameFactory* m_gameFactory;
 	WaypointSystem* m_waypointSystem;
-	bool m_controlsPaused;
 	Audio &m_audioHandle;
+	DisplayMessage * m_displayMessage;
+
+	int m_numLapsVictory;
+	int m_numPlayersFinishedRace;
+	bool m_raceFinished;
+	float m_raceFinishedCountdownSeconds;
+	bool m_controlsPaused;
+
 	CollisionVolume * m_startingCollisionVolume;
 	CollisionVolume * m_midCollisionVolume;
 	
