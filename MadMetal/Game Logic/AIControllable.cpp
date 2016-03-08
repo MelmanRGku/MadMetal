@@ -247,6 +247,10 @@ void AIControllable::accelerate(float amount)
 		//std::cout << "changing gear\n";
 		m_car->getCar().mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 	}
+	if (m_car->getCar().computeForwardSpeed() > 0)
+	{
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 1);
+	}
 	
 	processInputAcceleration(amount);
 }
