@@ -17,6 +17,24 @@ AIControllable::~AIControllable()
 	delete m_pathFinder;
 }
 
+void AIControllable::processFire(std::vector<Controllable *> *players) {
+
+	glm::vec3 forwardVector = m_car->getForwardVector();
+	forwardVector.y = 0;
+	forwardVector = glm::normalize(forwardVector);
+	for (unsigned int i = 0; i < players->size(); i++) {
+		if (players->at(i) != this) {
+			glm::vec3 vecToPlayer = players->at(i)->getCar()->getFullPosition() - m_car->getFullPosition();
+			vecToPlayer.y = 0;
+			vecToPlayer = glm::normalize(vecToPlayer);
+			if (glm::dot(vecToPlayer, forwardVector) > .9) {
+				m_car->fire();
+			}
+		}
+	}
+
+}
+
 void AIControllable::playFrame(double dt)
 {
 	if (!m_controlsPaused) {

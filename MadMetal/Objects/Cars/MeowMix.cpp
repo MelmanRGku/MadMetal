@@ -28,8 +28,8 @@ void MeowMix::fire()
 
 	if (m_superDurationRemainingSeconds > 0)
 	{
-		glm::vec4 up = glm::normalize(m_animatable.getModelMatrix() * glm::vec4(0, 1, 0, 0));
-		glm::vec4 forward = glm::normalize(m_animatable.getModelMatrix() * glm::vec4(0, 0, 1, 0));
+		glm::vec4 up = glm::normalize(getModelMatrix() * glm::vec4(0, 1, 0, 0));
+		glm::vec4 forward = glm::normalize(getModelMatrix() * glm::vec4(0, 0, 1, 0));
 		glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 2) + forward * (getScale().z / 2);
 		GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_SUPER_VOLCANO, new PxTransform(weaponPos.x, weaponPos.y, weaponPos.z), NULL, this);
 		m_reloadRemainingSeconds = m_superReloadRateSeconds;
@@ -37,8 +37,8 @@ void MeowMix::fire()
 	}
 	else {
 		m_reloadRemainingSeconds = m_reloadRateSeconds;
-		glm::vec4 up = glm::normalize(m_animatable.getModelMatrix() * glm::vec4(0, 1, 0, 0));
-		glm::vec4 left = glm::normalize(m_animatable.getModelMatrix() * glm::vec4(-1, 0, 0, 0));
+		glm::vec4 up = glm::normalize(getModelMatrix() * glm::vec4(0, 1, 0, 0));
+		glm::vec4 left = glm::normalize(getModelMatrix() * glm::vec4(-1, 0, 0, 0));
 		if (m_lastWeaponShot == LAST_WEAPON_SHOT_LEFT)
 		{
 			m_lastWeaponShot = LAST_WEAPON_SHOT_RIGHT;

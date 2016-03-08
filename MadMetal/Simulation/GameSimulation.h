@@ -36,6 +36,7 @@ private:
 private: //members
 	std::vector<Controllable *> m_players;
 	std::vector<PlayerControllable*> m_humanPlayers;
+	std::vector<AIControllable*> m_aiPlayers;
 	PxScene* m_scene;
 
 	PxVehicleDrivableSurfaceToTireFrictionPairs* gFrictionPairs = NULL; 
