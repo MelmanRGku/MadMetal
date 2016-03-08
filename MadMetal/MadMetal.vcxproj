@@ -146,6 +146,7 @@
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
     <ClInclude Include="Objects\Audioable.h" />
     <ClInclude Include="Objects\BulletCarCollision.h" />
+    <ClInclude Include="Objects\DisplayMessage.h" />
     <ClInclude Include="Objects\LoadingBar.h" />
     <ClInclude Include="Objects\MeowMixBullet.h" />
     <ClInclude Include="Objects\GaugeBar.h" />

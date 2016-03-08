@@ -18,6 +18,7 @@
 #include "Objects\Track.h"
 #include "Objects\BulletCarCollision.h"
 #include "Objects\UI.h"
+#include "Objects\DisplayMessage.h"
 
 class GameFactory
 {
@@ -38,6 +39,7 @@ public:
 		OBJECT_WAYPOINT,
 		OBJECT_BULLET_CAR_COLLISION,
 		OBJECT_UI,
+		OBJECT_DISPLAY_MESSAGE
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);

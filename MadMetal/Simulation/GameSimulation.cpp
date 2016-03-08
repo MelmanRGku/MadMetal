@@ -13,9 +13,12 @@
 #include "Objects\Waypoint.h"
 #include "Game Logic\WayPointSystem.h"
 #include "Objects\TestObject.h"
+#include <sstream>
 
 
 #define NUM_OF_PLAYERS 8
+#define NUM_LAPS_FOR_VICTORY 1
+#define RACE_FINISH_DELAY 2
 
 using namespace std;
 bool gIsVehicleInAir = true;
@@ -24,12 +27,16 @@ static const float TRACK_DIMENSIONS = 200;
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audioHandle(audioHandle)
 {
 	std::cout << "GameSimulation pushed onto the stack \n";
-	createPhysicsScene();
-	
-	m_waypointSystem = NULL;
-	m_isPaused = false;
 
+	createPhysicsScene();
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
+	m_displayMessage = static_cast<DisplayMessage *>(m_gameFactory->makeObject(GameFactory::OBJECT_DISPLAY_MESSAGE, NULL, NULL, NULL));
+	m_waypointSystem = NULL;
+
+	m_isPaused = false;
+	m_numLapsVictory = NUM_LAPS_FOR_VICTORY;
+
+	
 
 	//create characters for game from templates
 	for (int i = 0; i < playerTemplates.size(); i++)
@@ -72,6 +79,7 @@ GameSimulation::~GameSimulation()
 	m_scene->release();
 	
 	delete m_waypointSystem;
+	delete m_displayMessage;
 	
 }
 
@@ -192,6 +200,7 @@ void GameSimulation::simulatePlayers(double dt)
 void GameSimulation::updateObjects(double dt) {
 
 	m_world->update(dt);
+	m_displayMessage->update(dt);
 
 	}
 
@@ -241,36 +250,100 @@ void GameSimulation::createPhysicsScene()
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
-	m_sceneGameTimeSeconds += dt;
+
+	m_sceneGameTimeSeconds += dt;\
 	if (m_sceneGameTimeSeconds > 3 && m_controlsPaused) {
 		pauseControls(false);
 		m_audioHandle.loadMusic("mus_mettaton_neo.ogg");
 	}
-
-	for (int i = 0; i < m_humanPlayers.size(); i++)
+	if (m_sceneGameTimeSeconds < 4 )
 	{
-		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
-		{
-			newMessage.setTag(SceneMessage::ePause);
-			std::vector<ControllableTemplate *> playerTemplates;
-			//put the controllables into the vector incase the player trys to restart
-			for (int i = 0; i < m_players.size(); i++)
-			{
-				playerTemplates.push_back(&m_players[i]->getControllableTemplate());
-			}
-			//put a dummy controllable at the front of the vector so the pause screen knows who paused
-			playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
-			newMessage.setPlayerTemplates(playerTemplates);
-			
-			return true;
+		switch ((int)m_sceneGameTimeSeconds){
+		case(0) :
+			m_displayMessage->initializeMessage("3", 0.5);
+			break;
+		case(1) :
+			m_displayMessage->initializeMessage("2", 0.5);
+			break;
+		case(2) :
+			m_displayMessage->initializeMessage("1", 0.5);
+			break;
+		case(3) :
+			m_displayMessage->initializeMessage("GO!!", 0.5);
+			break;
+		default:
+			break;
 		}
 	}
-	simulateAI();
-	simulatePlayers(dt);
+
+
+	if (!m_raceFinished)
+	{
+		//check for lap status
+		for (int i = 0; i < m_players.size(); i++)
+		{
+			if (m_players[i]->getCar()->getLap() == m_numLapsVictory)
+			{
+				if (!m_raceFinishedCountdownSeconds)
+				{
+					m_raceFinishedCountdownSeconds = RACE_FINISH_DELAY; //start count down
+				}
+				m_players[i]->getCar()->addToScore(getFinishLineBonus(m_numPlayersFinishedRace++));
+				std::stringstream s;
+				s << "Player " << i + 1 << " Has Finished!";
+				m_displayMessage->initializeMessage( s.str() , 2);;
+			}
+		}
+
+		if (m_raceFinishedCountdownSeconds) {
+			//have all players crossed the finish line or count down done?
+			if (m_numPlayersFinishedRace == m_players.size() || (m_raceFinishedCountdownSeconds -= dt) <= 0)
+			{
+				m_raceFinished = true;
+				m_displayMessage->initializeMessage("FINISHED", 3);
+			}
+		}
+	}
+	
+	//if the race is still going, do player simulations
+	if (!m_raceFinished)
+	{
+		//check for pause button
+		for (int i = 0; i < m_humanPlayers.size(); i++)
+		{
+			if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
+			{
+				newMessage.setTag(SceneMessage::ePause);
+				std::vector<ControllableTemplate *> playerTemplates;
+				//put the controllables into the vector incase the player trys to restart
+				for (int i = 0; i < m_players.size(); i++)
+				{
+					playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+				}
+				//put a dummy controllable at the front of the vector so the pause screen knows who paused
+				playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
+				newMessage.setPlayerTemplates(playerTemplates);
+				return true;
+			}
+		}
+		//simulate players
+		simulateAI();
+		simulatePlayers(dt);
+	}
+	else {
+		int player = getFirstPlace();
+		int score = m_players[player]->getCar()->tallyScore();
+		std::stringstream s;
+		s << "Player " << player + 1 << " Wins with " << score << "Points!!!";
+		m_displayMessage->setFontSize(45);
+		m_displayMessage->initializeMessage(s.str(), 10);
+		
+	}
 	simulatePhysics(dt);
 	simulateAnimation();
 	updateObjects(dt);
 	return false;
+	
 }
 
 void GameSimulation::pauseControls(bool pause) {
@@ -337,5 +410,37 @@ void GameSimulation::setupBasicGameWorldObjects() {
 		}
 	}
 	
+}
+
+float GameSimulation::getFinishLineBonus(int position)
+{
+	switch (position)
+	{
+	case (0) :
+		return 500;
+	case (1) :
+		return 250;
+	case(2) :
+		return 100;
+	default:
+		return 0;
+	}
+
+}
+
+int GameSimulation::getFirstPlace()
+{
+	int tempPlayer = -1;
+	int tempScore = 0;
+	for (int i = 0; i < m_players.size(); i++)
+	{
+		
+		if (m_players[i]->getCar()->tallyScore() > tempScore)
+		{
+			tempPlayer = i;
+			tempScore = m_players[i]->getCar()->tallyScore();
+		}
+	}
+	return tempPlayer;
 }
 
