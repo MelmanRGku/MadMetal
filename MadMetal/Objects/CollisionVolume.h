@@ -15,4 +15,5 @@ public:
 	CollisionVolume(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
 	~CollisionVolume();
 	const int& getId();
+	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 };

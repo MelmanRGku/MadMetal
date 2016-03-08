@@ -83,7 +83,8 @@ public:
 	bool isAtStartingCollisionVolume();
 	bool isAtMidCollisionVolume();
 	int tallyScore() { return m_score + m_damageDealt; }
-	
+	Waypoint* Car::getLastWaypoint();
+
 	void setStartingCollisionVolumeFlag(bool isHit);
 	void setMidCollisionVolumeFlag(bool isHit);
 };

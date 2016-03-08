@@ -1,16 +1,16 @@
 #include "WaypointSystem.h"
 #include "Game Logic\PathFinding.h"
 
-static const float WAYPOINT_RADIUS = 12;
+static const float WAYPOINT_RADIUS = 17;
 
 WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition) : m_gameFactory(gameFactory)
 {
 	int index = 0;
-	for (int i = trackWidthMin + WAYPOINT_RADIUS + 8; i < trackWidthMax; i += ((WAYPOINT_RADIUS + 8) * 2))
+	for (int i = trackWidthMin + WAYPOINT_RADIUS + 3; i < trackWidthMax; i += ((WAYPOINT_RADIUS + 3) * 2))
 	{
 		std::vector<Waypoint*> newVectorWaypoint;
 		m_waypointMap.push_back(newVectorWaypoint);
-		for (int j = trackLengthMin + WAYPOINT_RADIUS + 8; j < trackLengthMax; j += ((WAYPOINT_RADIUS + 8) * 2))
+		for (int j = trackLengthMin + WAYPOINT_RADIUS + 3; j < trackLengthMax; j += ((WAYPOINT_RADIUS + 3) * 2))
 		{
 			PxGeometry **geom = new PxGeometry * [1];
 			geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_RADIUS, yposition, WAYPOINT_RADIUS));

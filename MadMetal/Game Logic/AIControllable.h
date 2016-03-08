@@ -26,6 +26,11 @@ private: //helper functions
 	void checkCollisionVolumes();
 	void setHighCostWaypointsToHigh();
 	void setHighCostWaypointsToLow();
+	void backUp(float amount);
+	void processInputAcceleration(float amount);
+	void accelerateToNextWaypoint();
+	void reverseToPreviousWaypoint();
+	void changeTurning(float turningDirectionValue, float turningAmountValue);
 
 private: //members
 	//Car* m_car;
@@ -37,4 +42,6 @@ private: //members
 	Waypoint* m_currentKnownWaypoint;
 	std::vector<Waypoint*> m_currentPath;
 	std::vector<int> m_listOfWaypointsHighCost;
+	bool m_needsToBackup;
+	int m_counter;
 };

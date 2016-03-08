@@ -1,5 +1,7 @@
 #include "CollisionVolume.h"
 
+#define _RENDER_COLLISION_VOLUME
+
 int CollisionVolume::globalID = 0;
 
 CollisionVolume::CollisionVolume(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable)
@@ -16,4 +18,12 @@ CollisionVolume::~CollisionVolume()
 const int& CollisionVolume::getId()
 {
 	return CollisionVolume::m_id;
+}
+
+bool CollisionVolume::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
+#ifdef _RENDER_COLLISION_VOLUME
+	return TestObject::draw(renderer, type, passNumber);
+#else
+	return false;
+#endif
 }
