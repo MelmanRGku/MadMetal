@@ -12,7 +12,7 @@ Renderable::Renderable(Model* Model, bool resize, bool reposition)
 void Renderable::setModel(Model *model, bool resize, bool reposition)
 {
 	m_model = model;
-
+	initialModelMatrix = glm::mat4x4();
 	if (model != NULL) {
 		if (resize) {
 			double scaleX = 1 / ZERO_TO_ONE(model->boundingBox->getSizeX());
