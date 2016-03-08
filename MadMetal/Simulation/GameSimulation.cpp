@@ -18,7 +18,7 @@
 
 
 #define NUM_OF_PLAYERS 8
-#define NUM_LAPS_FOR_VICTORY 10
+#define NUM_LAPS_FOR_VICTORY 3
 #define RACE_FINISH_DELAY 5
 
 using namespace std;
@@ -38,23 +38,31 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	m_numLapsVictory = NUM_LAPS_FOR_VICTORY;
 
 
-
+	PxMaterial* mMaterial;
+	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 	//create characters for game from templates
 	for (int i = 0; i < playerTemplates.size(); i++)
 	{
 		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
+			humanPlayer->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-130 + i*10, 40, 0), NULL, NULL)));
+			UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
+			humanPlayer->getCar()->ui = ui;
+			m_world->addGameObject(ui);
 			//todo: make a car for player based off template
 			m_humanPlayers.push_back(humanPlayer);
+			
 			m_players.push_back(humanPlayer);
 
 			//pass players camera to scene cameras
 			m_sceneCameras.push_back(humanPlayer->getCamera());
 
+
 		}
 		else {
 			AIControllable *ai = new AIControllable(*playerTemplates[i]);
+			ai->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-130 + i * 10, 40, 0), NULL, NULL)));
 			m_aiPlayers.push_back(ai);
 			m_players.push_back(ai);
 			//make a car for ai based off template
@@ -386,19 +394,6 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-	
-	PxMaterial* mMaterial;
-	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
-
-	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 40, 0), NULL, NULL));
-	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-105, 40, 15), NULL, NULL));
-	UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
-	meowMix->ui = ui;
-	m_world->addGameObject(ui);
-
-	m_players[1]->setCar(meowMixAi);
-
-	m_players[0]->setCar(meowMix);
 
 	Track* testObject = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL));
 

@@ -24,12 +24,12 @@ DrivingStyle& Car::getDrivingStyle()
 
 void Car::respawn()
 {
-	std::cout << "Respawned? \n";
+	//std::cout << "Respawned? \n";
 	m_currentHealth = m_maxHealth;
 	
 	if (m_currentWaypoint != NULL)
 	{
-		std::cout << "Valid Waypoint Respawn" << std::endl;
+		//std::cout << "Valid Waypoint Respawn" << std::endl;
 		glm::vec3 waypointPos = m_currentWaypoint->getGlobalPose();
 		
 		
@@ -37,7 +37,7 @@ void Car::respawn()
 		
 	}
 	else {
-		std::cout << "Invalid Waypoint Respawn" << std::endl;
+		//std::cout << "Invalid Waypoint Respawn" << std::endl;
 		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
 		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, currentPosition.p.y+10, currentPosition.p.z)));
 	}

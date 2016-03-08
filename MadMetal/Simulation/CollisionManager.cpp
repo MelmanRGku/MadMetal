@@ -119,12 +119,12 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 	{
 		if (collisionVolume->getId() == 0)
 		{
-			std::cout << "car: " << car->getId() << " collided with starting CollisionVolume \n";
+			//std::cout << "car: " << car->getId() << " collided with starting CollisionVolume \n";
 			car->setStartingCollisionVolumeFlag(true);
 		}
 		else if (collisionVolume->getId() == 1)
 		{
-			std::cout << "car: " << car->getId() << " collided with mid CollisionVolume \n";
+			//std::cout << "car: " << car->getId() << " collided with mid CollisionVolume \n";
 			car->setMidCollisionVolumeFlag(true);
 		}
 	}

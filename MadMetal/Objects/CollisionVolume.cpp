@@ -1,6 +1,6 @@
 #include "CollisionVolume.h"
 
-#define _RENDER_COLLISION_VOLUME
+//#define _RENDER_COLLISION_VOLUME
 
 int CollisionVolume::globalID = 0;
 
