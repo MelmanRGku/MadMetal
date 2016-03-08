@@ -133,8 +133,8 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
 	Car *car1 = dynamic_cast<Car *>(m_world.findObject(car1Id));
 	Car *car2 = dynamic_cast<Car *>(m_world.findObject(car2Id));
-	car1->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -500, 0));
-	car2->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -500, 0));
+	//car1->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -500, 0));
+	//car2->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -500, 0));
 }
 
 void CollisionManager::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)

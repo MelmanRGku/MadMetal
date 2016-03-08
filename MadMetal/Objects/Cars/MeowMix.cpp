@@ -42,13 +42,13 @@ void MeowMix::fire()
 		if (m_lastWeaponShot == LAST_WEAPON_SHOT_LEFT)
 		{
 			m_lastWeaponShot = LAST_WEAPON_SHOT_RIGHT;
-			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 2) + left * (getScale().x / 2);
+			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 3) + left * (getScale().x / 2);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_MEOW_MIX, new PxTransform(weaponPos.x, weaponPos.y, weaponPos.z), NULL, this);
 		}
 		else
 		{
 			m_lastWeaponShot = LAST_WEAPON_SHOT_LEFT;
-			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 2) - left * (getScale().x / 2);
+			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 3) - left * (getScale().x / 2);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_MEOW_MIX, new PxTransform(weaponPos.x, weaponPos.y, weaponPos.z), NULL, this);
 		}
 	}

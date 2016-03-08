@@ -119,7 +119,7 @@ void Car::update(float dt) {
 
 		{
 	std::stringstream s;
-	s << "Score: " << getScore();
+	s << "Score: " << tallyScore();
 			ui->score->setString(s.str());
 		}
 
