@@ -30,6 +30,9 @@ void PlayerControllable::playFrame(double dt)
 		{
 			if (m_gamePad != NULL && m_gamePad->checkConnection())
 			{
+				if (m_car->getCar().getRigidDynamicActor()->isSleeping()) {
+					m_car->getCar().getRigidDynamicActor()->wakeUp();
+				}
 				//std::cout << m_car->getCar().computeForwardSpeed() << std::endl;
 				/*
 				if (m_gamePad->isPressed(GamePad::LJoyRight))
