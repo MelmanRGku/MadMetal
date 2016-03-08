@@ -36,6 +36,7 @@ protected: //members
 
 	Sound * soundChassis;
 
+	virtual void unuseSuper() = 0;
 	/*
 		Need to be implemented
 		Projectile * m_ammuntion;

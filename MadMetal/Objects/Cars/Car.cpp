@@ -102,7 +102,7 @@ void Car::updateSuper(float dt)
 	{
 		if ((m_superDurationRemainingSeconds -= dt) <= 0)
 		{
-			//m_currentModel = &m_normalModel;
+			unuseSuper();
 		}
 
 	}
@@ -110,7 +110,7 @@ void Car::updateSuper(float dt)
 
 void Car::update(float dt) {
 	m_reloadRemainingSeconds -= dt;
-	if (m_superDurationRemainingSeconds > 0) m_superDurationRemainingSeconds -= dt;
+	updateSuper(dt);
 	if (ui != NULL) {
 		ui->healthBar->setHealthPercentage(m_currentHealth / m_maxHealth);
 		ui->gaugeBar->setGaugePercentage(getSuperGauge());
@@ -135,8 +135,9 @@ void Car::update(float dt) {
 
 void Car::addDamageDealt(float damage) {
 	m_damageDealt += damage;
-	if (m_superDurationRemainingSeconds == 0)
-	m_superGauge += damage / 100;
+	if (m_superDurationRemainingSeconds <= 0) {
+		m_superGauge += damage / 100;
+	}
 }
 
 int Car::getScore() {

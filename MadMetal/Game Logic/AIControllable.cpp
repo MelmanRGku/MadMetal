@@ -21,6 +21,24 @@ AIControllable::~AIControllable()
 	delete m_pathFinder;
 }
 
+void AIControllable::processFire(std::vector<Controllable *> *players) {
+
+	glm::vec3 forwardVector = m_car->getForwardVector();
+	forwardVector.y = 0;
+	forwardVector = glm::normalize(forwardVector);
+	for (unsigned int i = 0; i < players->size(); i++) {
+		if (players->at(i) != this) {
+			glm::vec3 vecToPlayer = players->at(i)->getCar()->getFullPosition() - m_car->getFullPosition();
+			vecToPlayer.y = 0;
+			vecToPlayer = glm::normalize(vecToPlayer);
+			if (glm::dot(vecToPlayer, forwardVector) > .9) {
+				m_car->fire();
+			}
+		}
+	}
+
+}
+
 void AIControllable::playFrame(double dt)
 {
 	if (!m_controlsPaused) {
@@ -36,20 +54,20 @@ void AIControllable::playFrame(double dt)
 	if (m_currentKnownWaypoint == NULL)
 	{
 		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-	}
+			}
 	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_car->getCurrentWaypoint()->getId() != m_nextWaypoint->getId())
-	{
+			{
 		recalculatePath();
 		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 
-	}
+			}
 	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId())
-	{
+			{
 		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-	}
+			}
 
 	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId()))
-	{
+		{
 
 		//if (m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId())
 		//{
@@ -96,7 +114,12 @@ void AIControllable::playFrame(double dt)
 
 			glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
 			//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
+			vectorToNextWaypoint3.y = 0;
+			forwardVector.y = 0;
+			vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
+			forwardVector = glm::normalize(forwardVector);
 			float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
+
 
 			//std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
 			//std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
@@ -107,7 +130,7 @@ void AIControllable::playFrame(double dt)
 
 			accelerate(amountToAccelerate);
 
-			//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
+			std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
 			//std::cout << "z value: " << crossProductResult.z << "\n";
 
 			if (crossProductResult.y < 0)
@@ -142,7 +165,7 @@ void AIControllable::playFrame(double dt)
 
 		}
 		}
-	
+		
 		}
 		else {
 		m_car->respawn();
@@ -199,14 +222,14 @@ void AIControllable::accelerate(float amount)
 	else if (amount < 0 && m_car->getCar().computeForwardSpeed() > 10.0)
 	{
 		//std::cout << "Applying break with : " << -amount << "\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
 	}
-	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 10.0)
+	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
 	{
 		//std::cout << "Applying acceleration : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount * 0.5));
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount ));
 	}
 	else
 	{

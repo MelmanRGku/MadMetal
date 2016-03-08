@@ -24,6 +24,6 @@ public:
 	void setValid(bool isValid);
 	bool isFinish();
 	void setFinish(bool finish);
-	//bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
+	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	void addAdjecentWaypoint(Waypoint* waypoint);
 };

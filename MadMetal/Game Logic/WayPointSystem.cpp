@@ -1,16 +1,16 @@
 #include "WaypointSystem.h"
 #include "Game Logic\PathFinding.h"
 
-static const float WAYPOINT_RADIUS = 10;
+static const float WAYPOINT_RADIUS = 12;
 
 WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition) : m_gameFactory(gameFactory)
 {
 	int index = 0;
-	for (int i = trackWidthMin + WAYPOINT_RADIUS + 10; i < trackWidthMax; i += ((WAYPOINT_RADIUS + 10) * 2))
+	for (int i = trackWidthMin + WAYPOINT_RADIUS + 8; i < trackWidthMax; i += ((WAYPOINT_RADIUS + 8) * 2))
 	{
 		std::vector<Waypoint*> newVectorWaypoint;
 		m_waypointMap.push_back(newVectorWaypoint);
-		for (int j = trackLengthMin + WAYPOINT_RADIUS + 10; j < trackLengthMax; j += ((WAYPOINT_RADIUS + 10) * 2))
+		for (int j = trackLengthMin + WAYPOINT_RADIUS + 8; j < trackLengthMax; j += ((WAYPOINT_RADIUS + 8) * 2))
 		{
 			PxGeometry **geom = new PxGeometry * [1];
 			geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_RADIUS, yposition, WAYPOINT_RADIUS));
@@ -77,7 +77,7 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int 
 
 	for (int i = 30; i < 80; i++)
 	{
-		if (i % 10 > 2 && i % 10 < 7)
+		if (i % 10 > 2 && i % 10 < 8)
 		{
 			std::cout << "Setting invalid index: " << i << "\n";
 			m_waypoints[i]->setValid(false);

@@ -47,8 +47,9 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
-			
-			m_players.push_back(new AIControllable(*playerTemplates[i]));
+			AIControllable *ai = new AIControllable(*playerTemplates[i]);
+			m_aiPlayers.push_back(ai);
+			m_players.push_back(ai);
 			//make a car for ai based off template
 		}
 	}
@@ -185,6 +186,10 @@ void GameSimulation::simulatePlayers(double dt)
 		m_players[i]->playFrame(dt);
 		
 	}
+
+	for (unsigned int i = 0; i < m_aiPlayers.size(); i++) {
+		m_aiPlayers[i]->processFire(&m_players);
+	}
 	//m_humanPlayers[0]->playFrame(dt);
 	//m_players[1]->playFrame(dt);
 	
@@ -250,21 +255,21 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 
 	for (int i = 0; i < m_humanPlayers.size(); i++)
 	{
-		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
-		{
-			newMessage.setTag(SceneMessage::ePause);
-			std::vector<ControllableTemplate *> playerTemplates;
-			//put the controllables into the vector incase the player trys to restart
-			for (int i = 0; i < m_players.size(); i++)
-			{
-				playerTemplates.push_back(&m_players[i]->getControllableTemplate());
-			}
-			//put a dummy controllable at the front of the vector so the pause screen knows who paused
-			playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
-			newMessage.setPlayerTemplates(playerTemplates);
-			
-			return true;
-		}
+		//if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
+		//{
+		//	newMessage.setTag(SceneMessage::ePause);
+		//	std::vector<ControllableTemplate *> playerTemplates;
+		//	//put the controllables into the vector incase the player trys to restart
+		//	for (int i = 0; i < m_players.size(); i++)
+		//	{
+		//		playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+		//	}
+		//	//put a dummy controllable at the front of the vector so the pause screen knows who paused
+		//	playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
+		//	newMessage.setPlayerTemplates(playerTemplates);
+		//	
+		//	return true;
+		//}
 	}
 	simulateAI();
 	simulatePlayers(dt);
