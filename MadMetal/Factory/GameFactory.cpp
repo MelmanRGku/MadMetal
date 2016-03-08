@@ -216,7 +216,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-		glm::vec3 speed = 100.f * parent->getForwardVector(); speed += glm::vec3(0, 5.f, 0);
+		glm::vec3 speed = 150.f * parent->getForwardVector(); speed += glm::vec3(0, 5.f, 0);
 		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
 		animatable->setRotation(parent->getFullRotation());
 		animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
