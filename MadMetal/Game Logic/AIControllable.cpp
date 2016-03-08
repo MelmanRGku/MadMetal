@@ -54,17 +54,17 @@ void AIControllable::playFrame(double dt)
 	if (m_currentKnownWaypoint == NULL)
 	{
 		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-			}
+	}
 	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_car->getCurrentWaypoint()->getId() != m_nextWaypoint->getId())
-			{
+	{
 		recalculatePath();
 		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 
-			}
+	}
 	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId())
-			{
+	{
 		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-			}
+	}
 
 	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId()))
 		{
@@ -130,7 +130,7 @@ void AIControllable::playFrame(double dt)
 
 			accelerate(amountToAccelerate);
 
-			std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
+			//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
 			//std::cout << "z value: " << crossProductResult.z << "\n";
 
 			if (crossProductResult.y < 0)

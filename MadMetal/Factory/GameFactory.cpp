@@ -315,7 +315,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
-		PxRigidDynamic *physicalCollisionVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::WAYPOINT_COLLISION_VOLUME, objectId, pos, geom, 1, NULL, NULL, NULL));
+		PxRigidDynamic *physicalCollisionVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::COLLISION_VOLUME, objectId, pos, geom, 1, NULL, NULL, NULL));
 		Physicable *physicable = new Physicable(physicalCollisionVolume);
 
 		CollisionVolume *collisionVolume = new CollisionVolume(objectId, *audioable, *physicable, *animatable, *renderable);
