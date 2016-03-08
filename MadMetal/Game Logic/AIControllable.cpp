@@ -233,12 +233,12 @@ void AIControllable::recalculatePath()
 
 	//std::cout << "THe new path is: ";
 
-	for (int i = 0; i < m_currentPath.size(); i++)
-	{
-		std::cout << m_currentPath[i]->getId() << ", ";
-	}
+	//for (int i = 0; i < m_currentPath.size(); i++)
+	//{
+	//	std::cout << m_currentPath[i]->getId() << ", ";
+	//}
 
-	std::cout << "\n";
+	//std::cout << "\n";
 
 	updateNextWaypoint();
 }
