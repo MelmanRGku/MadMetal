@@ -127,7 +127,6 @@ void PlayerControllable::playFrame(double dt)
 						}
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getLeftTrigger());
 					}
-
 				}
 				else
 				{

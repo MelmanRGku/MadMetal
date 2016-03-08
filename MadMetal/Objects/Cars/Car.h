@@ -79,6 +79,7 @@ public:
 	void playSoundChassis();
 	bool isAtStartingCollisionVolume();
 	bool isAtMidCollisionVolume();
+	Waypoint* Car::getLastWaypoint();
 
 	void setStartingCollisionVolumeFlag(bool isHit);
 	void setMidCollisionVolumeFlag(bool isHit);

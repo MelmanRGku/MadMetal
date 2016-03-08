@@ -156,10 +156,15 @@ bool Car::setCurrentWaypoint(Waypoint* waypoint)
 		return false;
 	}
 }
+Waypoint* Car::getLastWaypoint()
+{
+	return m_lastWayPoint;
+}
+
 Waypoint* Car::getCurrentWaypoint()
 {
 	//if (m_currentWaypoint!=NULL)
-		return m_currentWaypoint;
+	return m_currentWaypoint;
 }
 
 
