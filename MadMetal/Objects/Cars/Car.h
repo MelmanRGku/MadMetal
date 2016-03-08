@@ -32,6 +32,9 @@ protected: //members
 	Waypoint* m_currentWaypoint, *m_lastWayPoint;
 	Waypoint *m_nextWaypoint;
 
+	Sound * soundChassis;
+
+	virtual void unuseSuper() = 0;
 	/*
 		Need to be implemented
 		Projectile * m_ammuntion;
@@ -70,6 +73,8 @@ public:
 	Waypoint* getCurrentWaypoint();
 	void incrementLap();
 	int getLap();
+	void setSoundChassis(Sound * sound);
+	void playSoundChassis();
 	
 };
 

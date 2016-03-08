@@ -139,6 +139,7 @@
     <ClCompile Include="Objects\Text2D.cpp" />
     <ClCompile Include="Objects\VolcanoGuySuperBullet.cpp" />
     <ClCompile Include="Objects\UI.cpp" />
+    <ClCompile Include="Objects\Text3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
@@ -219,6 +220,7 @@
     <ClInclude Include="Objects\Text2D.h" />
     <ClInclude Include="Objects\VolcanoGuySuperBullet.h" />
     <ClInclude Include="Objects\UI.h" />
+    <ClInclude Include="Objects\Text3D.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />

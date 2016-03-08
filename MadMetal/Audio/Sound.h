@@ -93,3 +93,13 @@ public:
 	}
 	virtual ~StartBeepSound() {}
 };
+
+class ChassisCrashSound : public Sound
+{
+public:
+	ChassisCrashSound() : Sound()
+	{
+		m_libraryIndex = 5;
+	};
+	virtual ~ChassisCrashSound(){};
+};

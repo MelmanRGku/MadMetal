@@ -3,7 +3,7 @@
 
 LoadingBar::LoadingBar(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable)
 {
-	m_animatable.updatePosition(glm::vec3(0, -2, -10));
+	m_animatable.updatePosition(glm::vec3(0, -1, -10));
 	m_animatable.setScale(glm::vec3(5, 1, 1));
 
 	ObjModelLoader *loader = new ObjModelLoader();

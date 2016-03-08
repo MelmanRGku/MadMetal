@@ -100,7 +100,7 @@ void Car::updateSuper(float dt)
 	{
 		if ((m_superDurationRemainingSeconds -= dt) <= 0)
 		{
-			//m_currentModel = &m_normalModel;
+			unuseSuper();
 		}
 
 	}
@@ -108,14 +108,14 @@ void Car::updateSuper(float dt)
 
 void Car::update(float dt) {
 	m_reloadRemainingSeconds -= dt;
-	if (m_superDurationRemainingSeconds > 0) m_superDurationRemainingSeconds -= dt;
+	updateSuper(dt);
 	if (ui != NULL) {
 		ui->healthBar->setHealthPercentage(m_currentHealth / m_maxHealth);
 		ui->gaugeBar->setGaugePercentage(getSuperGauge());
 
 		{
-			std::stringstream s;
-			s << "Score: " << getScore();
+	std::stringstream s;
+	s << "Score: " << getScore();
 			ui->score->setString(s.str());
 		}
 
@@ -133,8 +133,9 @@ void Car::update(float dt) {
 
 void Car::addDamageDealt(float damage) {
 	m_damageDealt += damage;
-	if (m_superDurationRemainingSeconds == 0)
+	if (m_superDurationRemainingSeconds <= 0) {
 		m_superGauge += damage / 100;
+	}
 }
 
 int Car::getScore() {
@@ -146,7 +147,7 @@ bool Car::setCurrentWaypoint(Waypoint* waypoint)
 	//std::cout << "current waypoint is " << waypoint->getId() << "\n";
 	if (waypoint != m_currentWaypoint) {
 		m_lastWayPoint = m_currentWaypoint;
-		m_currentWaypoint = waypoint;
+	m_currentWaypoint = waypoint;
 		return true;
 	}
 	else {
@@ -166,4 +167,15 @@ void Car::incrementLap() {
 
 int Car::getLap() {
 	return m_currentLap;
+}
+
+void Car::setSoundChassis(Sound *theSound)
+{
+	soundChassis = theSound;
+}
+
+void Car::playSoundChassis()
+{
+
+	m_audioable.getAudioHandle().queAudioSource(&this->getActor(), soundChassis);
 }

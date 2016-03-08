@@ -54,6 +54,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 							
 
+
+							car->setSoundChassis(new ChassisCrashSound());
 		return car;
 	}
 	case OBJECT_UI:
@@ -178,9 +180,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-						  glm::vec3 speed = 300.f * parent->getForwardVector(); speed += glm::vec3(0, 1.f, 0);
-		glm::vec3 pos = parent->getFullPosition();
-						  PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_MEOW_MIX, objectId, new PxTransform(pos.x, pos.y, pos.z), NULL, 0, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
+						  glm::vec3 speed = 300.f * parent->getForwardVector(); speed += glm::vec3(0, -.4f, 0);
+		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_MEOW_MIX, objectId, pos, NULL, 0, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
 		animatable->setRotation(parent->getFullRotation());
 		animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
 		Physicable *physicable = new Physicable(physicalBullet);
@@ -197,16 +198,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	{
 		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO), true, true);
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
-									 Animatable *animatable = new Animatable();
+		Animatable *animatable = new Animatable();
 
 
-									 PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-									 glm::vec3 speed = 100.f * parent->getForwardVector(); speed += glm::vec3(0, 5.f, 0);
-									 glm::vec3 pos = parent->getFullPosition();
-									 PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, new PxTransform(pos.x, pos.y + 2.f, pos.z), NULL, 0, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
-									 animatable->setRotation(parent->getFullRotation());
-									 animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
-									 Physicable *physicable = new Physicable(physicalBullet);
+		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+		glm::vec3 speed = 100.f * parent->getForwardVector(); speed += glm::vec3(0, 5.f, 0);
+		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
+		animatable->setRotation(parent->getFullRotation());
+		animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
+		Physicable *physicable = new Physicable(physicalBullet);
 
 		Bullet *bullet = new VolcanoGuySuperBullet(objectId, *audioable, *physicable, *animatable, *renderable, static_cast<Car *>(parent));
 		bullet->setSound(new ExplosionSound());
@@ -257,7 +257,19 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return bar;
 	}
+	case OBJECT_TEXT_3D:
+	{
+		Renderable *renderable = new Renderable(NULL);
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		Physicable *physicable = new Physicable(NULL);
 
+		Text3D *text = new Text3D(objectId, *audioable, *physicable, *animatable, *renderable, 1);
+
+		m_world.addGameObject(text);
+
+		return text;
+	}
 	case OBJECT_WAYPOINT:
 	{
 		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GGO), true, true);

@@ -2,7 +2,7 @@
 
 #include "TestObject.h"
 
-#define LOADING_BAR_BORDER_SIZE  0.2f
+#define LOADING_BAR_BORDER_SIZE  0.1f
 
 class LoadingBar : public TestObject
 {
