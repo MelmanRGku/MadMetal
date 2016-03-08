@@ -17,6 +17,11 @@ PathFinding::~PathFinding()
 
 }
 
+void PathFinding::setWaypointCostOf(std::vector<int> listOfHighWaypoints)
+{
+	m_indexWithHighCost = listOfHighWaypoints;
+}
+
 std::vector<Waypoint*> PathFinding::findPath(Waypoint * currentPosition, Waypoint * targetPosition)
 {
 	if (!m_initializedStartGOal)
@@ -106,6 +111,13 @@ void PathFinding::pathOpened(Waypoint& waypoint, float newCost, SearchWaypoint *
 	}
 
 	SearchWaypoint* newChild = new SearchWaypoint(waypoint, parent);
+	for (int i = 0; i < m_indexWithHighCost.size(); i++)
+	{
+		if (newChild->getWaypoint().getId() == m_indexWithHighCost[i])
+		{
+			newChild->setHighCost(9999.9);
+		}
+	}
 	newChild->setG(newCost);
 	newChild->setH(newChild->ManHattanDistance(m_goalWaypoint));
 
@@ -113,12 +125,13 @@ void PathFinding::pathOpened(Waypoint& waypoint, float newCost, SearchWaypoint *
 	{
 		if (waypoint.getId() == m_openList[i]->getWaypoint().getId())
 		{
-			float newF = newChild->getG() + m_openList[i]->getH();
+			float newG = newChild->getG();
 
-			if (m_openList[i]->GetF() > newF)
+			if (m_openList[i]->getG() > newG)
 			{
 				m_openList[i]->setG(newChild->getG());
 				m_openList[i]->setParent(parent);
+				delete newChild;
 				return;
 			}
 			else

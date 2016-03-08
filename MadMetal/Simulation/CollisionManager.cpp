@@ -3,6 +3,7 @@
 #include "Objects\Bullet.h"
 #include "Objects\Waypoint.h"
 #include "Factory/GameFactory.h"
+#include "Objects\CollisionVolume.h"
 
 CollisionManager::CollisionManager(World &world) : m_world(world)
 {
@@ -98,6 +99,31 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 	}
 }
 
+void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
+{
+	CollisionVolume *collisionVolume = dynamic_cast<CollisionVolume *>(m_world.findObject(volumeId));
+
+	if (collisionVolume == NULL)
+		return;
+
+	TestObject *otherObj = m_world.findObject(otherId);
+	Car *car = dynamic_cast<Car *>(otherObj);
+
+	if (car != NULL)
+	{
+		if (collisionVolume->getId() == 0)
+		{
+			std::cout << "car: " << car->getId() << " collided with starting CollisionVolume \n";
+			car->setStartingCollisionVolumeFlag(true);
+		}
+		else if (collisionVolume->getId() == 1)
+		{
+			std::cout << "car: " << car->getId() << " collided with mid CollisionVolume \n";
+			car->setMidCollisionVolumeFlag(true);
+		}
+	}
+}
+
 void CollisionManager::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
 {
 	/*int i = 0;
@@ -124,6 +150,10 @@ void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_CHASSIS)
 		{
 
+		}
+		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_COLLISION_VOLUME)
+		{
+			processCollisionVolumeHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
 		}
 	}
 

@@ -7,6 +7,8 @@
 Car::Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable), m_car(car), m_drivingStyle(style)
 {
 	m_currentWaypoint = NULL;
+	m_isAtMidCollisionVolume = false;
+	m_isAtStartingCollisionVolume = false;
 }
 
 
@@ -177,4 +179,22 @@ void Car::playSoundChassis()
 {
 
 	m_audioable.getAudioHandle().queAudioSource(&this->getActor(), soundChassis);
+}
+
+void Car::setStartingCollisionVolumeFlag(bool isHit)
+{
+	m_isAtStartingCollisionVolume = isHit;
+}
+void Car::setMidCollisionVolumeFlag(bool isHit)
+{
+	m_isAtMidCollisionVolume = isHit;
+}
+
+bool Car::isAtStartingCollisionVolume()
+{
+	return m_isAtStartingCollisionVolume;
+}
+bool Car::isAtMidCollisionVolume()
+{
+	return m_isAtMidCollisionVolume;
 }
