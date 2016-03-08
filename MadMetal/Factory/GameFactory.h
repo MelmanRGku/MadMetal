@@ -40,6 +40,7 @@ public:
 		OBJECT_BULLET_CAR_COLLISION,
 		OBJECT_UI,
 		OBJECT_TEXT_3D,
+		OBJECT_COLLISION_VOLUME,
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);

@@ -13,6 +13,7 @@
 #include "Objects\Waypoint.h"
 #include "Game Logic\WayPointSystem.h"
 #include "Objects\TestObject.h"
+#include "Objects\CollisionVolume.h"
 
 
 #define NUM_OF_PLAYERS 8
@@ -341,6 +342,11 @@ void GameSimulation::setupBasicGameWorldObjects() {
 			aiPlayer->setWaypointSystem(m_waypointSystem);
 		}
 	}
-	
+
+	PxGeometry **geom = new PxGeometry *[1];
+	geom[0] = new PxBoxGeometry(PxVec3(50, testObject->getDrivablePart()->getWorldBounds().maximum.y, 50));
+	m_startingCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(16)->getGlobalPose().x, m_waypointSystem->getWaypointAt(16)->getGlobalPose().y, m_waypointSystem->getWaypointAt(16)->getGlobalPose().z), geom, NULL));
+	m_midCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(41)->getGlobalPose().x, m_waypointSystem->getWaypointAt(41)->getGlobalPose().y, m_waypointSystem->getWaypointAt(41)->getGlobalPose().z), geom, NULL));
+
 }
 

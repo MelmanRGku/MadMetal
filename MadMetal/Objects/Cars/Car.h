@@ -31,6 +31,8 @@ protected: //members
 	float m_superDurationRemainingSeconds; //seconds
 	Waypoint* m_currentWaypoint, *m_lastWayPoint;
 	Waypoint *m_nextWaypoint;
+	bool m_isAtStartingCollisionVolume;
+	bool m_isAtMidCollisionVolume;
 
 	Sound * soundChassis;
 
@@ -75,6 +77,10 @@ public:
 	int getLap();
 	void setSoundChassis(Sound * sound);
 	void playSoundChassis();
-	
+	bool isAtStartingCollisionVolume();
+	bool isAtMidCollisionVolume();
+
+	void setStartingCollisionVolumeFlag(bool isHit);
+	void setMidCollisionVolumeFlag(bool isHit);
 };
 

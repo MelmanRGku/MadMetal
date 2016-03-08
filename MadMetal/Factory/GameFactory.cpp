@@ -1,5 +1,6 @@
 #include "GameFactory.h"
 #include "Objects\Waypoint.h"
+#include "Objects\CollisionVolume.h"
 
 long GameFactory::lastId = 0;
 
@@ -306,6 +307,23 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 //		m_world.addGameObject(col);
 
 		return col;
+	}
+	case OBJECT_COLLISION_VOLUME:
+	{
+		Renderable *renderable = new Renderable(NULL);
+
+		Animatable *animatable = new Animatable();
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+		PxRigidDynamic *physicalCollisionVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::COLLISION_VOLUME, objectId, pos, geom, 1, NULL, NULL, NULL));
+		Physicable *physicable = new Physicable(physicalCollisionVolume);
+
+		CollisionVolume *collisionVolume = new CollisionVolume(objectId, *audioable, *physicable, *animatable, *renderable);
+
+		m_world.addGameObject(collisionVolume);
+		m_scene.addActor(*physicalCollisionVolume);
+
+		return collisionVolume;
 	}
 	}
 }

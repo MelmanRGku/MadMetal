@@ -18,6 +18,9 @@ public: //Constuctors
 	void setG(float G);
 	float getG();
 	float getH();
+
+	void setHighCost(float highCost);
+	float getHighCost();
 	SearchWaypoint* getParent();
 
 private: //members
@@ -26,4 +29,5 @@ private: //members
 	
 	float m_G;
 	float m_H;
+	float m_highCost;
 };

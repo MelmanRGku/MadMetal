@@ -11,6 +11,10 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, WaypointSystem*
 	m_waypointSystem = waypointSystem;
 	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(48);
 	m_currentPath.clear();
+	m_listOfWaypointsHighCost.push_back(4);
+	m_listOfWaypointsHighCost.push_back(14);
+	m_listOfWaypointsHighCost.push_back(24);
+	setHighCostWaypointsToHigh();
 }
 AIControllable::~AIControllable()
 {
@@ -45,80 +49,48 @@ void AIControllable::playFrame(double dt)
 		return;
 	}
 
-	//if (m_currentKnownWaypoint == NULL)
-	//{
-	//	m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-	//}
-	//else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_car->getCurrentWaypoint()->getId() != m_nextWaypoint->getId())
-	//{
-	//	m_currentPath.clear();
-	//	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
+	checkCollisionVolumes();
 
-	//	std::cout << "THe new path is: ";
+	if (m_currentKnownWaypoint == NULL)
+	{
+		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+	}
+	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_car->getCurrentWaypoint()->getId() != m_nextWaypoint->getId())
+	{
+		recalculatePath();
+		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 
-	//	for (int i = 0; i < m_currentPath.size(); i++)
-	//	{
-	//		std::cout << m_currentPath[i]->getId() << ", ";
-	//	}
-
-	//	std::cout << "\n";
-
-	//	m_nextWaypoint = m_currentPath[m_currentPath.size() - 1];
-	//	m_currentPath.pop_back();
-	//	m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-
-	//}
-	//else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId())
-	//{
-	//	m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-	//}
+	}
+	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId())
+	{
+		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+	}
 
 	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId()))
-	{
-
-		if (m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId())
 		{
-			if (m_goalWaypoint->getId() == 15)
-			{
-				m_goalWaypoint = m_waypointSystem->getWaypointAt(48);
-			}
-			else if (m_goalWaypoint->getId() == 48)
-			{
-				m_goalWaypoint = m_waypointSystem->getWaypointAt(96);
-			}
-			else if (m_goalWaypoint->getId() == 96)
-			{
-				m_goalWaypoint = m_waypointSystem->getWaypointAt(41);
-			}
-			else if (m_goalWaypoint->getId() == 41)
-			{
-				m_goalWaypoint = m_waypointSystem->getWaypointAt(15);
-			}
-			//m_goalWaypoint->getId() == 38 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(42) : m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
-			//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
-		}
-		//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
-		m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-		//std::cout << "The optimal path is: ";
-
-		std::cout << "Current path is: ";
-
-		for (int i = 0; i < m_currentPath.size(); i++)
-		{
-			std::cout << m_currentPath[i]->getId() << ", ";
-		}
-
-		std::cout << "\n";
-
-		//std::cout << "\n";
-		updateNextWaypoint();
-
-		//std::cout << "next : " << m_nextWaypoint->getId() << "\n";
-
-		//	std::cout << "updating path\n";
-
-		//	std::cout << "Stupid Melvin\n";
+		//if (m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId())
+		//{
+		//	if (m_goalWaypoint->getId() == 15)
+		//	{
+		//		m_goalWaypoint = m_waypointSystem->getWaypointAt(48);
+		//	}
+		//	else if (m_goalWaypoint->getId() == 48)
+		//	{
+		//		m_goalWaypoint = m_waypointSystem->getWaypointAt(96);
+		//	}
+		//	else if (m_goalWaypoint->getId() == 96)
+		//	{
+		//		m_goalWaypoint = m_waypointSystem->getWaypointAt(41);
+		//	}
+		//	else if (m_goalWaypoint->getId() == 41)
+		//	{
+		//		m_goalWaypoint = m_waypointSystem->getWaypointAt(15);
+		//	}
+		//	//m_goalWaypoint->getId() == 38 ? m_goalWaypoint = m_waypointSystem->getWaypointAt(42) : m_goalWaypoint = m_waypointSystem->getWaypointAt(12);
+		//	//std::cout << "The current goal is: " << m_goalWaypoint->getId() << "\n";
+		//}
+		recalculatePath();
 	}
 	else
 	{
@@ -142,7 +114,12 @@ void AIControllable::playFrame(double dt)
 
 			glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
 			//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
+			vectorToNextWaypoint3.y = 0;
+			forwardVector.y = 0;
+			vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
+			forwardVector = glm::normalize(forwardVector);
 			float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
+
 
 			//std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
 			//std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
@@ -189,7 +166,6 @@ void AIControllable::playFrame(double dt)
 		}
 		}
 		
-
 		}
 		else {
 		m_car->respawn();
@@ -211,6 +187,23 @@ void AIControllable::updateNextWaypoint()
 	}
 }
 
+void AIControllable::recalculatePath()
+{
+	m_currentPath.clear();
+	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
+
+	std::cout << "THe new path is: ";
+
+	for (int i = 0; i < m_currentPath.size(); i++)
+	{
+		std::cout << m_currentPath[i]->getId() << ", ";
+	}
+
+	std::cout << "\n";
+
+	updateNextWaypoint();
+}
+
 void AIControllable::accelerate(float amount)
 {
 	if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
@@ -229,14 +222,14 @@ void AIControllable::accelerate(float amount)
 	else if (amount < 0 && m_car->getCar().computeForwardSpeed() > 10.0)
 	{
 		//std::cout << "Applying break with : " << -amount << "\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
 	}
-	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 10.0)
+	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
 	{
 		//std::cout << "Applying acceleration : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount * 0.5));
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount ));
 	}
 	else
 	{
@@ -253,5 +246,40 @@ void AIControllable::setCar(Car * toAdd)
 void AIControllable::setWaypointSystem(WaypointSystem* waypointSystem)
 {
 	m_waypointSystem = waypointSystem;
-	m_goalWaypoint = m_waypointSystem->getWaypointAt(48);
+	m_goalWaypoint = m_waypointSystem->getWaypointAt(13);
+}
+
+void AIControllable::checkCollisionVolumes()
+{
+	if (m_car->isAtStartingCollisionVolume())
+	{
+		setHighCostWaypointsToHigh();
+		m_goalWaypoint = m_waypointSystem->getWaypointAt(13);
+		recalculatePath();
+		m_car->setStartingCollisionVolumeFlag(false);
+	}
+	else if (m_car->isAtMidCollisionVolume())
+	{
+		setHighCostWaypointsToLow();
+		m_goalWaypoint = m_waypointSystem->getWaypointAt(16);
+		recalculatePath();
+		m_car->setMidCollisionVolumeFlag(false);
+	}
+}
+
+void AIControllable::setHighCostWaypointsToHigh()
+{
+	for (int i = 0; i < m_listOfWaypointsHighCost.size(); i++)
+	{
+		m_pathFinder->setWaypointCostOf(m_listOfWaypointsHighCost);
+	}
+}
+
+void AIControllable::setHighCostWaypointsToLow()
+{
+	for (int i = 0; i < m_listOfWaypointsHighCost.size(); i++)
+	{
+		std::vector<int> temp;
+		m_pathFinder->setWaypointCostOf(temp);
+	}
 }

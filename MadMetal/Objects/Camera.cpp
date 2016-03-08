@@ -104,8 +104,9 @@ void Camera::update(double dtMilli)
 {
 	
 	m_lookAt = glm::vec3(m_toFollow->getGlobalPose().x, m_toFollow->getGlobalPose().y, m_toFollow->getGlobalPose().z);
-	m_currentPos = m_desiredPos = (m_toFollow->getFullPosition() - m_toFollow->getForwardVector() * m_distance);
-	m_currentPos += glm::vec3(0, 7.f, 0);
+	m_desiredPos = (m_toFollow->getFullPosition() - m_toFollow->getForwardVector() * m_distance);
+	m_currentPos = glm::vec3(m_desiredPos.x, m_toFollow->getFullPosition().y + 7.0f, m_desiredPos.z);
+	//m_currentPos += glm::vec3(0, 7.f, 0);
 }
 
 void Camera::setLookAt(glm::vec3 eye, glm::vec3 at, glm::vec3 up) {

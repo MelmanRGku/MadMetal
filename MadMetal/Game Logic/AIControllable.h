@@ -22,6 +22,10 @@ public:
 	void processFire(std::vector<Controllable *> *players);
 private: //helper functions
 	void accelerate(float amount);
+	void recalculatePath();
+	void checkCollisionVolumes();
+	void setHighCostWaypointsToHigh();
+	void setHighCostWaypointsToLow();
 
 private: //members
 	//Car* m_car;
@@ -32,4 +36,5 @@ private: //members
 	Waypoint* m_potentialWaypoint;
 	Waypoint* m_currentKnownWaypoint;
 	std::vector<Waypoint*> m_currentPath;
+	std::vector<int> m_listOfWaypointsHighCost;
 };
