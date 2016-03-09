@@ -7,6 +7,9 @@
 Car::Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable), m_car(car), m_drivingStyle(style)
 {
 	m_currentWaypoint = NULL;
+	m_isAtMidCollisionVolume = false;
+	m_isAtStartingCollisionVolume = false;
+	m_newLap = true;
 }
 
 
@@ -21,12 +24,12 @@ DrivingStyle& Car::getDrivingStyle()
 
 void Car::respawn()
 {
-	std::cout << "Respawned? \n";
+	//std::cout << "Respawned? \n";
 	m_currentHealth = m_maxHealth;
 	
 	if (m_currentWaypoint != NULL)
 	{
-		std::cout << "Valid Waypoint Respawn" << std::endl;
+		//std::cout << "Valid Waypoint Respawn" << std::endl;
 		glm::vec3 waypointPos = m_currentWaypoint->getGlobalPose();
 		
 		
@@ -34,7 +37,7 @@ void Car::respawn()
 		
 	}
 	else {
-		std::cout << "Invalid Waypoint Respawn" << std::endl;
+		//std::cout << "Invalid Waypoint Respawn" << std::endl;
 		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
 		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, currentPosition.p.y+10, currentPosition.p.z)));
 	}
@@ -100,22 +103,23 @@ void Car::updateSuper(float dt)
 	{
 		if ((m_superDurationRemainingSeconds -= dt) <= 0)
 		{
-			//m_currentModel = &m_normalModel;
+			unuseSuper();
 		}
 
 	}
 }
 
 void Car::update(float dt) {
+	//std::cout << m_currentLap << std::endl;
 	m_reloadRemainingSeconds -= dt;
-	if (m_superDurationRemainingSeconds > 0) m_superDurationRemainingSeconds -= dt;
+	updateSuper(dt);
 	if (ui != NULL) {
 		ui->healthBar->setHealthPercentage(m_currentHealth / m_maxHealth);
 		ui->gaugeBar->setGaugePercentage(getSuperGauge());
 
 		{
 	std::stringstream s;
-	s << "Score: " << getScore();
+	s << "Score: " << tallyScore();
 			ui->score->setString(s.str());
 		}
 
@@ -125,21 +129,15 @@ void Car::update(float dt) {
 			ui->lap->setString(s.str());
 		}
 	}
-
-	if (m_currentHealth < 0) {
-		hasToBeDeleted = true;
-	}
 }
 
 void Car::addDamageDealt(float damage) {
 	m_damageDealt += damage;
-	if (m_superDurationRemainingSeconds == 0)
-	m_superGauge += damage / 100;
+	if (m_superDurationRemainingSeconds <= 0) {
+		m_superGauge += damage / 100;
+	}
 }
 
-int Car::getScore() {
-	return m_damageDealt;
-}
 
 bool Car::setCurrentWaypoint(Waypoint* waypoint)
 {
@@ -153,10 +151,15 @@ bool Car::setCurrentWaypoint(Waypoint* waypoint)
 		return false;
 	}
 }
+Waypoint* Car::getLastWaypoint()
+{
+	return m_lastWayPoint;
+}
+
 Waypoint* Car::getCurrentWaypoint()
 {
 	//if (m_currentWaypoint!=NULL)
-		return m_currentWaypoint;
+	return m_currentWaypoint;
 }
 
 
@@ -177,4 +180,36 @@ void Car::playSoundChassis()
 {
 
 	m_audioable.getAudioHandle().queAudioSource(&this->getActor(), soundChassis);
+}
+
+void Car::setStartingCollisionVolumeFlag(bool isHit)
+{
+	m_isAtStartingCollisionVolume = isHit;
+	if (m_isAtStartingCollisionVolume && !m_newLap)
+	{
+		incrementLap();
+		m_newLap = true;
+	}
+		
+	
+		
+}
+void Car::setMidCollisionVolumeFlag(bool isHit)
+{
+	m_isAtMidCollisionVolume = isHit;
+	if (m_isAtMidCollisionVolume)
+	{
+		m_newLap = false;
+	}
+	
+	
+}
+
+bool Car::isAtStartingCollisionVolume()
+{
+	return m_isAtStartingCollisionVolume;
+}
+bool Car::isAtMidCollisionVolume()
+{
+	return m_isAtMidCollisionVolume;
 }

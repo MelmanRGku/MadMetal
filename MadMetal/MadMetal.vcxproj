@@ -79,6 +79,7 @@
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
     <ClCompile Include="Objects\BulletCarCollision.cpp" />
+    <ClCompile Include="Objects\CollisionVolume.cpp" />
     <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Objects\MeowMixBullet.cpp" />
     <ClCompile Include="Objects\GaugeBar.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="Objects\Text2D.cpp" />
     <ClCompile Include="Objects\VolcanoGuySuperBullet.cpp" />
     <ClCompile Include="Objects\UI.cpp" />
+    <ClCompile Include="Objects\Text3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
@@ -146,6 +148,8 @@
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
     <ClInclude Include="Objects\Audioable.h" />
     <ClInclude Include="Objects\BulletCarCollision.h" />
+    <ClInclude Include="Objects\DisplayMessage.h" />
+    <ClInclude Include="Objects\CollisionVolume.h" />
     <ClInclude Include="Objects\LoadingBar.h" />
     <ClInclude Include="Objects\MeowMixBullet.h" />
     <ClInclude Include="Objects\GaugeBar.h" />
@@ -219,6 +223,7 @@
     <ClInclude Include="Objects\Text2D.h" />
     <ClInclude Include="Objects\VolcanoGuySuperBullet.h" />
     <ClInclude Include="Objects\UI.h" />
+    <ClInclude Include="Objects\Text3D.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />

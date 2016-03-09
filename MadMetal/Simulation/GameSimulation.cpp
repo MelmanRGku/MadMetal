@@ -13,9 +13,13 @@
 #include "Objects\Waypoint.h"
 #include "Game Logic\WayPointSystem.h"
 #include "Objects\TestObject.h"
+#include "Objects\CollisionVolume.h"
+#include <sstream>
 
 
 #define NUM_OF_PLAYERS 8
+#define NUM_LAPS_FOR_VICTORY 3
+#define RACE_FINISH_DELAY 5
 
 using namespace std;
 bool gIsVehicleInAir = true;
@@ -24,30 +28,43 @@ static const float TRACK_DIMENSIONS = 200;
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audioHandle(audioHandle)
 {
 	std::cout << "GameSimulation pushed onto the stack \n";
-	createPhysicsScene();
 	
-	m_waypointSystem = NULL;
-	m_isPaused = false;
-
+	createPhysicsScene();
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
+	m_displayMessage = static_cast<DisplayMessage *>(m_gameFactory->makeObject(GameFactory::OBJECT_DISPLAY_MESSAGE, NULL, NULL, NULL));
+	m_waypointSystem = NULL;
 
+	m_isPaused = false;
+	m_numLapsVictory = NUM_LAPS_FOR_VICTORY;
+
+
+	PxMaterial* mMaterial;
+	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 	//create characters for game from templates
 	for (int i = 0; i < playerTemplates.size(); i++)
 	{
 		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
+			humanPlayer->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-130 + i*10, 40, 0), NULL, NULL)));
+			UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
+			humanPlayer->getCar()->ui = ui;
+			m_world->addGameObject(ui);
 			//todo: make a car for player based off template
 			m_humanPlayers.push_back(humanPlayer);
+			
 			m_players.push_back(humanPlayer);
 
 			//pass players camera to scene cameras
 			m_sceneCameras.push_back(humanPlayer->getCamera());
 
+
 		}
 		else {
-			
-			m_players.push_back(new AIControllable(*playerTemplates[i]));
+			AIControllable *ai = new AIControllable(*playerTemplates[i]);
+			ai->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-130 + i * 10, 40, 0), NULL, NULL)));
+			m_aiPlayers.push_back(ai);
+			m_players.push_back(ai);
 			//make a car for ai based off template
 		}
 	}
@@ -72,6 +89,7 @@ GameSimulation::~GameSimulation()
 	m_scene->release();
 	
 	delete m_waypointSystem;
+	delete m_displayMessage;
 	
 }
 
@@ -184,6 +202,10 @@ void GameSimulation::simulatePlayers(double dt)
 		m_players[i]->playFrame(dt);
 		
 	}
+
+	for (unsigned int i = 0; i < m_aiPlayers.size(); i++) {
+		m_aiPlayers[i]->processFire(&m_players);
+	}
 	//m_humanPlayers[0]->playFrame(dt);
 	//m_players[1]->playFrame(dt);
 	
@@ -192,6 +214,7 @@ void GameSimulation::simulatePlayers(double dt)
 void GameSimulation::updateObjects(double dt) {
 
 	m_world->update(dt);
+	m_displayMessage->update(dt);
 
 	}
 
@@ -206,6 +229,7 @@ void GameSimulation::createPhysicsScene()
 
 	CollisionManager *manager = new CollisionManager(*m_world);
 	sceneDesc.simulationEventCallback = manager;
+	sceneDesc.filterCallback = manager;
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 
 	if (!sceneDesc.filterShader)
@@ -241,36 +265,101 @@ void GameSimulation::createPhysicsScene()
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
-	m_sceneGameTimeSeconds += dt;
+
+	m_sceneGameTimeSeconds += dt;\
 	if (m_sceneGameTimeSeconds > 3 && m_controlsPaused) {
 		pauseControls(false);
 		m_audioHandle.loadMusic("mus_mettaton_neo.ogg");
 	}
-
-	for (int i = 0; i < m_humanPlayers.size(); i++)
+	if (m_sceneGameTimeSeconds < 4 )
 	{
-		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
-		{
-			newMessage.setTag(SceneMessage::ePause);
-			std::vector<ControllableTemplate *> playerTemplates;
-			//put the controllables into the vector incase the player trys to restart
-			for (int i = 0; i < m_players.size(); i++)
-			{
-				playerTemplates.push_back(&m_players[i]->getControllableTemplate());
-			}
-			//put a dummy controllable at the front of the vector so the pause screen knows who paused
-			playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
-			newMessage.setPlayerTemplates(playerTemplates);
-			
-			return true;
+		switch ((int)m_sceneGameTimeSeconds){
+		case(0) :
+			m_displayMessage->initializeMessage("3", 0.5);
+			break;
+		case(1) :
+			m_displayMessage->initializeMessage("2", 0.5);
+			break;
+		case(2) :
+			m_displayMessage->initializeMessage("1", 0.5);
+			break;
+		case(3) :
+			m_displayMessage->initializeMessage("GO!!", 0.5);
+			break;
+		default:
+			break;
 		}
 	}
+
+
+	if (!m_raceFinished)
+	{
+		//check for lap status
+		for (int i = 0; i < m_players.size(); i++)
+		{
+			if (m_players[i]->getCar()->getLap() == m_numLapsVictory)
+			{
+				if (!m_raceFinishedCountdownSeconds)
+				{
+					m_raceFinishedCountdownSeconds = RACE_FINISH_DELAY; //start count down
+				}
+				m_players[i]->getCar()->addToScore(getFinishLineBonus(m_numPlayersFinishedRace++));
+				std::stringstream s;
+				s << "Player " << i + 1 << " Has Finished!";
+				m_displayMessage->initializeMessage( s.str() , 2);;
+			}
+		}
+
+		if (m_raceFinishedCountdownSeconds) {
+			//have all players crossed the finish line or count down done?
+			if (m_numPlayersFinishedRace == m_players.size() || (m_raceFinishedCountdownSeconds -= dt) <= 0)
+			{
+				m_raceFinished = true;
+				m_displayMessage->initializeMessage("FINISHED", 3);
+			}
+		}
+	}
+	
+	//if the race is still going, do player simulations
+	if (!m_raceFinished)
+	{
+		//check for pause button
+	for (int i = 0; i < m_humanPlayers.size(); i++)
+	{
+		//if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
+		//{
+		//	newMessage.setTag(SceneMessage::ePause);
+		//	std::vector<ControllableTemplate *> playerTemplates;
+		//	//put the controllables into the vector incase the player trys to restart
+		//	for (int i = 0; i < m_players.size(); i++)
+		//	{
+		//		playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+		//	}
+		//	//put a dummy controllable at the front of the vector so the pause screen knows who paused
+		//	playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
+		//	newMessage.setPlayerTemplates(playerTemplates);
+		//	
+		//	return true;
+		//}
+	}
+		//simulate players
 	simulateAI();
 	simulatePlayers(dt);
+	}
+	else {
+		int player = getFirstPlace();
+		int score = m_players[player]->getCar()->tallyScore();
+		std::stringstream s;
+		s << "Player " << player + 1 << " Wins with " << score << "Points!!!";
+		m_displayMessage->setFontSize(45);
+		m_displayMessage->initializeMessage(s.str(), 10);
+		
+	}
 	simulatePhysics(dt);
 	simulateAnimation();
 	updateObjects(dt);
 	return false;
+	
 }
 
 void GameSimulation::pauseControls(bool pause) {
@@ -305,19 +394,6 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-	
-	PxMaterial* mMaterial;
-	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
-
-	MeowMix *meowMix = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-120, 40, 0), NULL, NULL));
-	MeowMix *meowMixAi = dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, new PxTransform(-105, 40, 15), NULL, NULL));
-	UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
-	meowMix->ui = ui;
-	m_world->addGameObject(ui);
-
-	m_players[1]->setCar(meowMixAi);
-
-	m_players[0]->setCar(meowMix);
 
 	Track* testObject = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL));
 
@@ -336,6 +412,45 @@ void GameSimulation::setupBasicGameWorldObjects() {
 			aiPlayer->setWaypointSystem(m_waypointSystem);
 		}
 	}
+	PxGeometry **geom1 = new PxGeometry *[1];
+	PxGeometry **geom2 = new PxGeometry *[1];
+	geom1[0] = new PxBoxGeometry(PxVec3(60, testObject->getDrivablePart()->getWorldBounds().maximum.y, 30));
+	geom2[0] = new PxBoxGeometry(PxVec3(40, testObject->getDrivablePart()->getWorldBounds().maximum.y, 60));
+	m_startingCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(16)->getGlobalPose().x, m_waypointSystem->getWaypointAt(16)->getGlobalPose().y, m_waypointSystem->getWaypointAt(16)->getGlobalPose().z), geom1, NULL));
+	m_midCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(41)->getGlobalPose().x, m_waypointSystem->getWaypointAt(41)->getGlobalPose().y, m_waypointSystem->getWaypointAt(41)->getGlobalPose().z),geom2 , NULL));
+}
+
+float GameSimulation::getFinishLineBonus(int position)
+{
+	switch (position)
+	{
+	case (0) :
+		return 500;
+	case (1) :
+		return 250;
+	case(2) :
+		return 100;
+	default:
+		return 0;
+	}
+
+	}
 	
+int GameSimulation::getFirstPlace()
+{
+	int tempPlayer = -1;
+	int tempScore = 0;
+	for (int i = 0; i < m_players.size(); i++)
+	{
+		
+		if (m_players[i]->getCar()->tallyScore() > tempScore)
+		{
+			tempPlayer = i;
+			tempScore = m_players[i]->getCar()->tallyScore();
+		}
+	}
+	return tempPlayer;
+	
+
 }
 

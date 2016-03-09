@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-#define NUM_PLAYERS 2
+#define NUM_PLAYERS 4
 
 MainMenuScene::MainMenuScene(Input * input)
 {
@@ -123,20 +123,20 @@ bool SinglePlayerCharSelectScene::simulateScene(double dt, SceneMessage &message
 			}
 		}
 
-		if (m_gamePad->isPressed(m_gamePad->StartButton))
-		{
-			if (m_charConfirmed)
-			{
-				message.setTag(SceneMessage::eLoadScreen);
-				for (int i = m_playerTemplates.size(); i < NUM_PLAYERS; i++)
-				{
-					//TODO:: Puts the same character in for every AI. Make random or something
-					m_playerTemplates.push_back(new ControllableTemplate(m_selections[0]));
-				}
-				message.setPlayerTemplates(m_playerTemplates);
-				return true;
-			}
-		}
+		//if (m_gamePad->isPressed(m_gamePad->StartButton))
+		//{
+		//	if (m_charConfirmed)
+		//	{
+		//		message.setTag(SceneMessage::eLoadScreen);
+		//		for (int i = m_playerTemplates.size(); i < NUM_PLAYERS; i++)
+		//		{
+		//			//TODO:: Puts the same character in for every AI. Make random or something
+		//			m_playerTemplates.push_back(new ControllableTemplate(m_selections[0]));
+		//		}
+		//		message.setPlayerTemplates(m_playerTemplates);
+		//		return true;
+		//	}
+		//}
 	}
 	else
 	{

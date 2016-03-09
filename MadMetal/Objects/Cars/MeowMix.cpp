@@ -28,13 +28,29 @@ void MeowMix::fire()
 
 	if (m_superDurationRemainingSeconds > 0)
 	{
+		glm::vec4 up = glm::normalize(getModelMatrix() * glm::vec4(0, 1, 0, 0));
+		glm::vec4 forward = glm::normalize(getModelMatrix() * glm::vec4(0, 0, 1, 0));
+		glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 2) + forward * (getScale().z / 2);
+		GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_SUPER_VOLCANO, new PxTransform(weaponPos.x, weaponPos.y, weaponPos.z), NULL, this);
 		m_reloadRemainingSeconds = m_superReloadRateSeconds;
-		GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_SUPER_VOLCANO, NULL, NULL, this);
 
 	}
 	else {
 		m_reloadRemainingSeconds = m_reloadRateSeconds;
-		GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_MEOW_MIX, new PxTransform(getFullPosition().x, getFullPosition().y, getFullPosition().z), NULL, this);
+		glm::vec4 up = glm::normalize(getModelMatrix() * glm::vec4(0, 1, 0, 0));
+		glm::vec4 left = glm::normalize(getModelMatrix() * glm::vec4(-1, 0, 0, 0));
+		if (m_lastWeaponShot == LAST_WEAPON_SHOT_LEFT)
+		{
+			m_lastWeaponShot = LAST_WEAPON_SHOT_RIGHT;
+			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 3) + left * (getScale().x / 2);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_MEOW_MIX, new PxTransform(weaponPos.x, weaponPos.y, weaponPos.z), NULL, this);
+		}
+		else
+		{
+			m_lastWeaponShot = LAST_WEAPON_SHOT_LEFT;
+			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 3) - left * (getScale().x / 2);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_MEOW_MIX, new PxTransform(weaponPos.x, weaponPos.y, weaponPos.z), NULL, this);
+		}
 	}
 	
 
@@ -49,5 +65,11 @@ void MeowMix::useSuper() {
 	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
 	m_reloadRemainingSeconds = 0;
 	m_superGauge = 0;
-	
+	m_renderable.setModel(Assets::getModel("UglyCarWithCannon"), true, true);
+	m_animatable.updateScale(glm::vec3(0, 2, 0));
+}
+
+void MeowMix::unuseSuper() {
+	m_renderable.setModel(Assets::getModel("UglyCarWithGuns"), true, true);
+	m_animatable.updateScale(glm::vec3(0, -2, 0));
 }

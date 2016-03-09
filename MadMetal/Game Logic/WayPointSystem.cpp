@@ -1,16 +1,16 @@
 #include "WaypointSystem.h"
 #include "Game Logic\PathFinding.h"
 
-static const float WAYPOINT_RADIUS = 10;
+static const float WAYPOINT_RADIUS = 17;
 
 WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition) : m_gameFactory(gameFactory)
 {
 	int index = 0;
-	for (int i = trackWidthMin + WAYPOINT_RADIUS + 10; i < trackWidthMax; i += ((WAYPOINT_RADIUS + 10) * 2))
+	for (int i = trackWidthMin + WAYPOINT_RADIUS + 3; i < trackWidthMax; i += ((WAYPOINT_RADIUS + 3) * 2))
 	{
 		std::vector<Waypoint*> newVectorWaypoint;
 		m_waypointMap.push_back(newVectorWaypoint);
-		for (int j = trackLengthMin + WAYPOINT_RADIUS + 10; j < trackLengthMax; j += ((WAYPOINT_RADIUS + 10) * 2))
+		for (int j = trackLengthMin + WAYPOINT_RADIUS + 3; j < trackLengthMax; j += ((WAYPOINT_RADIUS + 3) * 2))
 		{
 			PxGeometry **geom = new PxGeometry * [1];
 			geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_RADIUS, yposition, WAYPOINT_RADIUS));
@@ -21,10 +21,10 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int 
 		index++;
 	}
 	
-	std::cout << "number of waypoints" << m_waypoints.size() << "\n";
-	std::cout << "Rows" << m_waypointMap.size() << "\n";
-	std::cout << "Columns: " << m_waypointMap[0].size() << "\n";
-	std::cout << "width: " << trackWidthMax << " | " << "tack length: " << trackLengthMax << "\n";
+	//std::cout << "number of waypoints" << m_waypoints.size() << "\n";
+	//std::cout << "Rows" << m_waypointMap.size() << "\n";
+	//std::cout << "Columns: " << m_waypointMap[0].size() << "\n";
+	//std::cout << "width: " << trackWidthMax << " | " << "tack length: " << trackLengthMax << "\n";
 	// Populate Waypoints
 	for (int i = 0; i < m_waypointMap.size(); i++)
 	{
@@ -75,17 +75,20 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int 
 		}
 	}
 
+
+	
 	for (int i = 30; i < 80; i++)
 	{
-		if (i % 10 > 2 && i % 10 < 7)
+		if (i % 10 > 2 && i % 10 < 8)
 		{
-			std::cout << "Setting invalid index: " << i << "\n";
+			//std::cout << "Setting invalid index: " << i << "\n";
 			m_waypoints[i]->setValid(false);
 		}
 	}
 	m_waypoints[77]->setValid(false);
 	m_waypoints[83]->setValid(false);
 	m_waypoints[26]->setValid(false);
+
 
 	//for (int i = 0; i < m_waypoints.size(); i++)
 	//{

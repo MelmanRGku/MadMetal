@@ -19,6 +19,7 @@ protected: //members
 	//score based
 	float m_damageDealt;
 	int m_currentLap;
+	int m_score;
 
 	//current state 
 	float m_currentHealth;
@@ -31,9 +32,13 @@ protected: //members
 	float m_superDurationRemainingSeconds; //seconds
 	Waypoint* m_currentWaypoint, *m_lastWayPoint;
 	Waypoint *m_nextWaypoint;
+	bool m_isAtStartingCollisionVolume;
+	bool m_isAtMidCollisionVolume;
+	bool m_newLap;
 
 	Sound * soundChassis;
 
+	virtual void unuseSuper() = 0;
 	/*
 		Need to be implemented
 		Projectile * m_ammuntion;
@@ -66,7 +71,8 @@ public:
 	void addDamageDealt(float damage);
 	bool superReady() { return m_superGauge >= 1.f; }
 	float getSuperGauge() { return m_superGauge > 1.f ? 1.f : m_superGauge; }
-	int getScore();
+	int getScore() { return m_score; }
+	void addToScore(int points) { m_score += points; }
 	void respawn();
 	bool setCurrentWaypoint(Waypoint* waypoint);							//true if the waypoint is new, false otherwise
 	Waypoint* getCurrentWaypoint();
@@ -74,6 +80,12 @@ public:
 	int getLap();
 	void setSoundChassis(Sound * sound);
 	void playSoundChassis();
-	
+	bool isAtStartingCollisionVolume();
+	bool isAtMidCollisionVolume();
+	int tallyScore() { return m_score + m_damageDealt; }
+	Waypoint* Car::getLastWaypoint();
+
+	void setStartingCollisionVolumeFlag(bool isHit);
+	void setMidCollisionVolumeFlag(bool isHit);
 };
 

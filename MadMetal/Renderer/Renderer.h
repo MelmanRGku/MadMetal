@@ -30,5 +30,7 @@ public:
 	void setViewMatrixLookAt(std::vector<Camera *> cameras);
 	void setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt);
 	ShaderProgram *getShaderProgram(ShaderType type) { return shader[type]; }
+	glm::mat4x4 getProjectionMatrix() { return projectionMatrix; }
+	glm::mat4x4 getViewMatrix() { return viewMatrix; }
 };
 
