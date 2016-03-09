@@ -225,7 +225,7 @@ void GameSimulation::initialize() {
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(PhysicsManager::getScale());
-	sceneDesc.gravity = PxVec3(0.0f, -54.0f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -18.0f, 0.0f);
 
 	CollisionManager *manager = new CollisionManager(*m_world);
 	sceneDesc.simulationEventCallback = manager;
