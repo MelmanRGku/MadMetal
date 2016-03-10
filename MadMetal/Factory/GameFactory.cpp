@@ -1,6 +1,8 @@
 #include "GameFactory.h"
 #include "Objects\Waypoint.h"
 #include "Objects\CollisionVolume.h"
+#include "Objects\VehicleSpecificationsMeowMix.h"
+#include "Objects\VehicleSpecifications.h"
 
 long GameFactory::lastId = 0;
 
@@ -52,11 +54,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		physicalCar->setToRestState();
 		physicalCar->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 		physicalCar->mDriveDynData.setUseAutoGears(true);
-
-							
-
-
-							car->setSoundChassis(new ChassisCrashSound());
+		car->setSoundChassis(new ChassisCrashSound());
 		return car;
 	}
 	case OBJECT_UI:

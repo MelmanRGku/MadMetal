@@ -84,6 +84,8 @@
     <ClCompile Include="Objects\MeowMixBullet.cpp" />
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
+    <ClCompile Include="Objects\VehicleSpecifications.cpp" />
+    <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp" />
     <ClCompile Include="Objects\Waypoint.cpp" />
     <ClCompile Include="Objects\Track.cpp" />
     <ClCompile Include="Renderer\NoShaderProgram.cpp" />
@@ -154,6 +156,8 @@
     <ClInclude Include="Objects\MeowMixBullet.h" />
     <ClInclude Include="Objects\GaugeBar.h" />
     <ClInclude Include="Objects\HealthBar2D.h" />
+    <ClInclude Include="Objects\VehicleSpecifications.h" />
+    <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h" />
     <ClInclude Include="Objects\Waypoint.h" />
     <ClInclude Include="Renderer\NoShaderProgram.h" />
     <ClInclude Include="Objects\Bullet.h" />
