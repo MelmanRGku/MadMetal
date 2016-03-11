@@ -15,3 +15,8 @@ bool Track::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) 
 	return false;
 
 }
+
+void Track::playTrackMusic()
+{
+	m_audioable.getAudioHandle().playMusic(m_sound);
+}

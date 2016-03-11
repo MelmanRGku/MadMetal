@@ -58,7 +58,6 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			//pass players camera to scene cameras
 			m_sceneCameras.push_back(humanPlayer->getCamera());
 
-
 		}
 		else {
 			AIControllable *ai = new AIControllable(*playerTemplates[i]);
@@ -69,13 +68,17 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		}
 	}
 
+	//if there is only one player, set audio to do sound attenuation to that player
+	if (m_humanPlayers.size() == 1)
+	{
+		m_audioHandle.assignListener(m_humanPlayers[0]->getCar());
+	}
 	
-	//add when car is created by this point. 
 	//m_mainCamera = m_humanPlayers[0]->getCamera();
 	
 	initialize();
 
-	audioHandle.assignListener(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor());
+	
 	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), new StartBeepSound());
 	pauseControls(true);
 }
@@ -89,6 +92,7 @@ GameSimulation::~GameSimulation()
 	m_scene->release();
 	
 	delete m_waypointSystem;
+	delete m_track;
 	delete m_displayMessage;
 	
 }
@@ -266,10 +270,10 @@ void GameSimulation::createPhysicsScene()
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
 
-	m_sceneGameTimeSeconds += dt;\
+	m_sceneGameTimeSeconds += dt;
 	if (m_sceneGameTimeSeconds > 3 && m_controlsPaused) {
 		pauseControls(false);
-		m_audioHandle.loadMusic("mus_mettaton_neo.ogg");
+		m_track->playTrackMusic();
 	}
 	if (m_sceneGameTimeSeconds < 4 )
 	{
@@ -395,14 +399,14 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 
 void GameSimulation::setupBasicGameWorldObjects() {
 
-	Track* testObject = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL));
+	m_track = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL));
 
 	m_waypointSystem = new WaypointSystem(*m_gameFactory, 
-										  testObject->getDrivablePart()->getWorldBounds().minimum.x, 
-										  testObject->getDrivablePart()->getWorldBounds().maximum.x,
-										  testObject->getDrivablePart()->getWorldBounds().minimum.z,
-										  testObject->getDrivablePart()->getWorldBounds().maximum.z,
-										  testObject->getDrivablePart()->getWorldBounds().maximum.y);
+											m_track->getDrivablePart()->getWorldBounds().minimum.x,
+											m_track->getDrivablePart()->getWorldBounds().maximum.x,
+											m_track->getDrivablePart()->getWorldBounds().minimum.z,
+											m_track->getDrivablePart()->getWorldBounds().maximum.z,
+											m_track->getDrivablePart()->getWorldBounds().maximum.y);
 
 	for (int i = 0; i < m_players.size(); i++)
 	{
@@ -414,8 +418,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	}
 	PxGeometry **geom1 = new PxGeometry *[1];
 	PxGeometry **geom2 = new PxGeometry *[1];
-	geom1[0] = new PxBoxGeometry(PxVec3(60, testObject->getDrivablePart()->getWorldBounds().maximum.y, 30));
-	geom2[0] = new PxBoxGeometry(PxVec3(40, testObject->getDrivablePart()->getWorldBounds().maximum.y, 60));
+	geom1[0] = new PxBoxGeometry(PxVec3(60, m_track->getDrivablePart()->getWorldBounds().maximum.y, 30));
+	geom2[0] = new PxBoxGeometry(PxVec3(40, m_track->getDrivablePart()->getWorldBounds().maximum.y, 60));
 	m_startingCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(16)->getGlobalPose().x, m_waypointSystem->getWaypointAt(16)->getGlobalPose().y, m_waypointSystem->getWaypointAt(16)->getGlobalPose().z), geom1, NULL));
 	m_midCollisionVolume = dynamic_cast<CollisionVolume*>(m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, new PxTransform(m_waypointSystem->getWaypointAt(41)->getGlobalPose().x, m_waypointSystem->getWaypointAt(41)->getGlobalPose().y, m_waypointSystem->getWaypointAt(41)->getGlobalPose().z),geom2 , NULL));
 }

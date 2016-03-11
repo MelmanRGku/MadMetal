@@ -470,6 +470,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />
+    <Text Include="Audio\MusicLibrary.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Models\asphalt_texture409.jpg">

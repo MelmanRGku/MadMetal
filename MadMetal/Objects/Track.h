@@ -9,9 +9,12 @@ public:
 	~Track();
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	TestObject *getDrivablePart() { return drivablePart; }
+	
+	void playTrackMusic();
 
 private: //members
 	TestObject *drivablePart,
 		*nonDrivablePart;
+	
 	
 };

@@ -226,6 +226,7 @@
     <ClInclude Include="Objects\Text3D.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Audio\MusicLibrary.txt" />
     <Text Include="Files\test.txt" />
   </ItemGroup>
   <ItemGroup>
