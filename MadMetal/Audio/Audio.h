@@ -11,9 +11,6 @@
 class AudioChannel;
 class Car;
 
-
-
-
 class Audio
 {
 private:
@@ -46,6 +43,25 @@ public:
 
 	~Audio()
 	{
+		for (int i = 0; i < m_audioChannels.size(); i++)
+		{
+			delete m_audioChannels[i];
+		}
+		m_audioChannels.clear();
+
+		for (int i = 0; i < m_chunkLibrary.size(); i++)
+		{
+			Mix_FreeChunk(m_chunkLibrary[i]);
+		}
+		m_chunkLibrary.clear();
+
+		for (int i = 0; i < m_musicLibrary.size(); i++)
+		{
+			Mix_FreeMusic(m_musicLibrary[i]);
+		}
+		m_musicLibrary.clear();
+		
+		m_listener = NULL;
 		Mix_CloseAudio();
 		SDL_Quit();
 	}
@@ -82,10 +98,11 @@ public:
 	~AudioChannel()
 	{
 		m_sound->setChannel(-1);
+		m_sound = NULL;
 		m_audioPosition = NULL;
+		
 	}
 
-	
 	bool setAudioPosition(Car * listener);
 	bool needsUpdate(){ return m_updatePosition; }
 	void setChannel(int channel)
