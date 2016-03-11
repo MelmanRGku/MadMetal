@@ -9,6 +9,9 @@ Model::Model()
 Model::~Model()
 {
 	delete boundingBox;
+	for (unsigned int i = 0; i < meshes.size(); i++) {
+		delete meshes[i];
+	}
 }
 
 
@@ -66,7 +69,12 @@ PxTriangleMesh **Model::getPhysicsTriangleMesh() {
 			exit(7);
 		}
 
+		delete[] verts;
+		delete[] indices;
+
 	}
+
+
 	return physicalMeshes;
 }
 

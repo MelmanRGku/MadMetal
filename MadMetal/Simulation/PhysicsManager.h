@@ -31,9 +31,11 @@ public:
 	static PxDefaultAllocator *getAllocator() { return defaultAllocator_; }
 	static PxFoundation& getFoundation();
 	static PxCooking& getCookingInstance();
+	static PxDefaultCpuDispatcher &getCpuDispatcher();
 
 public:
 	static void init();
+	static void release();
 
 private:
 	static void initPhysicsSimulation();
@@ -54,4 +56,6 @@ private: // members
 	static PxTolerancesScale *m_scale;
 
 	static bool initialized;
+
+	static PxDefaultCpuDispatcher *cpuDispatcher;
 };

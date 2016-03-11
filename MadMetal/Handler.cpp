@@ -6,6 +6,7 @@
 #include "Scene Manager\StackManager.h"
 #include "Global\Assets.h"
 #include "Global\Fonts.h"
+#include <vld.h>
 
 #define MAX_FPS (60)
 #define MIN_DT (1000 / MAX_FPS)
@@ -49,6 +50,13 @@ void renderScene(void)
 	//glutPostRedisplay();
 }
 
+void close() {
+	delete m_stackManager;
+	//delete assets
+	Assets::release();
+	Fonts::release(); 
+}
+
 void initOpengl(int argc, char **argv) {
 	//initialize the window
 	glutInit(&argc, argv);
@@ -61,6 +69,7 @@ void initOpengl(int argc, char **argv) {
 	// register callbacks
 	glutDisplayFunc(renderScene);
 	glutIdleFunc(renderScene);
+	glutCloseFunc(close);
 	//initialize opengl functions
 	glewInit();
 	glEnable(GL_BLEND);

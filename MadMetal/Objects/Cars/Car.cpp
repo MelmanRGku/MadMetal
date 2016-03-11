@@ -4,7 +4,7 @@
 #include <sstream>
 #include "Objects\Waypoint.h"
 
-Car::Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable), m_car(car), m_drivingStyle(style)
+Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable), m_car(car), m_drivingStyle(style)
 {
 	m_currentWaypoint = NULL;
 	m_isAtMidCollisionVolume = false;
@@ -15,11 +15,15 @@ Car::Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, 
 
 Car::~Car()
 {
+	delete soundChassis;
+	//TODO: revive later ?
+	//delete ui;
+	delete m_drivingStyle;
 }
 
 DrivingStyle& Car::getDrivingStyle()
 {
-	return m_drivingStyle;
+	return *m_drivingStyle;
 }
 
 void Car::respawn()
@@ -179,7 +183,7 @@ void Car::setSoundChassis(Sound *theSound)
 void Car::playSoundChassis()
 {
 
-	m_audioable.getAudioHandle().queAudioSource(&this->getActor(), soundChassis);
+	m_audioable->getAudioHandle().queAudioSource(&this->getActor(), soundChassis);
 }
 
 void Car::setStartingCollisionVolumeFlag(bool isHit)

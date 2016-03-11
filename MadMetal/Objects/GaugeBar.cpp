@@ -1,7 +1,7 @@
 #include "GaugeBar.h"
 
 
-GaugeBar::GaugeBar(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable)
+GaugeBar::GaugeBar(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable)
 {
 	gaugePercentage = 0.f;
 }

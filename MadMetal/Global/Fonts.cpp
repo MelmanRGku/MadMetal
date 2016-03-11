@@ -10,6 +10,14 @@ void Fonts::init() {
 	fonts = new std::map<std::string, FTFont *>();
 }
 
+void Fonts::release() {
+	typedef std::map<std::string, FTFont*>::iterator it_type;
+	for (it_type iterator = fonts->begin(); iterator != fonts->end(); iterator++) {
+		delete iterator->second;
+	}
+	delete fonts;
+}
+
 void Fonts::loadTTFFontsFromDirectory(std::string path) {
 	std::vector<std::string> files;
 	FileHandlingHelpers::findFilesWithExtension(path, "ttf", files);

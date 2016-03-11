@@ -10,7 +10,7 @@ private:
 	float percentageDone;
 	TestObject *completeBar;
 public:
-	LoadingBar(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
+	LoadingBar(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
 	~LoadingBar();
 	void setPercentage(float percentage);
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);

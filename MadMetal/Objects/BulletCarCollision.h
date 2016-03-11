@@ -5,6 +5,6 @@
 class BulletCarCollision : public TestObject
 {
 public:
-	BulletCarCollision(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
+	BulletCarCollision(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
 	~BulletCarCollision();
 };

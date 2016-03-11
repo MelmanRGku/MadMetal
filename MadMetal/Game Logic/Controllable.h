@@ -14,9 +14,8 @@ protected:
 
 public:
 	Controllable(ControllableTemplate& controllableTemplate) : m_controllableTemplate(controllableTemplate){};
-	~Controllable()
+	virtual ~Controllable()
 	{
-		delete m_car;
 	};
 
 	virtual void playFrame(double dt) = 0;

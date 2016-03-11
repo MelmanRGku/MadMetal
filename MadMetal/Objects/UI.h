@@ -8,7 +8,7 @@
 class UI : public TestObject
 {
 public:
-	UI(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
+	UI(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
 	~UI();
 
 	HealthBar2D *healthBar;

@@ -14,7 +14,17 @@ PathFinding::PathFinding()
 
 PathFinding::~PathFinding()
 {
+	for (unsigned int i = 0; i < m_openList.size(); i++) {
+		delete m_openList[i];
+	}
+	std::vector<SearchWaypoint *>().swap(m_openList);
 
+	for (unsigned int i = 0; i < m_visitedList.size(); i++) {
+		delete m_visitedList[i];
+	}
+	std::vector<SearchWaypoint *>().swap(m_visitedList);
+
+	delete m_goalWaypoint;
 }
 
 void PathFinding::setWaypointCostOf(std::vector<int> listOfHighWaypoints)

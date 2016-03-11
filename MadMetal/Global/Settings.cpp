@@ -9,6 +9,7 @@ Settings::Settings()
 
 Settings::~Settings()
 {
+	//delete map;
 }
 
 /*

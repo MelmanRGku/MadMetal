@@ -53,6 +53,10 @@ public:
 
 	static GameFactory *instance(World& world, PxScene& scene, Audio& audioHandle);
 
+	static void release() {
+		delete m_factory;
+	}
+
 private:
 	GameFactory(World& world, PxScene& scene, Audio& audioHandle);
 	~GameFactory();

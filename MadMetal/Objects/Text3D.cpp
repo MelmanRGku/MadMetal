@@ -3,7 +3,7 @@
 #include "Libraries\glm\gtc\type_ptr.hpp"
 
 
-Text3D::Text3D(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, float fontSize) : TestObject(id, aable, pable, anable, rable), fontSize(fontSize)
+Text3D::Text3D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable, float fontSize) : TestObject(id, aable, pable, anable, rable), fontSize(fontSize)
 {
 }
 

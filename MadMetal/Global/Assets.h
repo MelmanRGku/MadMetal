@@ -53,7 +53,14 @@ public:
 	~Assets();
 	static void init();
 	static void loadObjsFromDirectory(std::string path, bool fromList = false);
+	static Model *loadObjFromDirectory(std::string path);
 	static void initializeVAOs();
-	static Model *getModel(std::string name) { return models->find(name)->second; }
+	static Model *getModel(std::string name) { 
+		if (models->find(name) == models->end())
+			return NULL; 
+		else
+			return models->find(name)->second;
+	}
+	static void release();
 };
 

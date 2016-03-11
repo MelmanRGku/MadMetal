@@ -16,6 +16,7 @@ PxPhysics* PhysicsManager::topLevelPhysics_ = NULL;
 PxCooking* PhysicsManager::m_cooking = NULL;
 PxDefaultCpuDispatcher* PhysicsManager::mCpuDispatcher = NULL;
 PxTolerancesScale *PhysicsManager::m_scale = NULL;
+PxDefaultCpuDispatcher *PhysicsManager::cpuDispatcher;
 
 PhysicsManager::PhysicsManager()
 {
@@ -24,6 +25,9 @@ PhysicsManager::PhysicsManager()
 
 PhysicsManager::~PhysicsManager()
 {
+}
+
+void PhysicsManager::release() {
 	shutdownPhysicsSimualtion();
 }
 
@@ -59,6 +63,8 @@ void PhysicsManager::initPhysicsSimulation()
 	{
 		std::cout << "A fatal error has occured. ERROR CODE PX0007" << std::endl;
 	}
+
+	cpuDispatcher = PxDefaultCpuDispatcherCreate(8);
 }
 
 /*word 0 = id of actor
@@ -83,7 +89,7 @@ void PhysicsManager::setupFiltering(PxRigidActor * actor, unsigned int actorId, 
 	data.word2 = extraActorInfo;
 	data.word3 = extraInteractionInfo;
 	shapes[0]->setSimulationFilterData(data);
-	
+	free(shapes);
 }
 
 void PhysicsManager::initCarPhysics() {
@@ -94,6 +100,7 @@ void PhysicsManager::initCarPhysics() {
 
 void PhysicsManager::shutdownPhysicsSimualtion()
 {
+	cpuDispatcher->release();
 	m_cooking->release();
 	topLevelPhysics_->release();
 	physicsFoundation_->release();
@@ -128,4 +135,8 @@ PxFoundation& PhysicsManager::getFoundation()
 PxCooking& PhysicsManager::getCookingInstance()
 {
 	return *m_cooking;
+}
+
+PxDefaultCpuDispatcher& PhysicsManager::getCpuDispatcher() {
+	return *cpuDispatcher;
 }

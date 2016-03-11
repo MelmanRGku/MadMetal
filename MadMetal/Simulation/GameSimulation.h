@@ -8,6 +8,7 @@
 #include "Game Logic\PlayerControllable.h"
 #include "Game Logic\AIControllable.h"
 #include "Objects\DisplayMessage.h"
+#include "CollisionManager.h"
 
 class Scene;
 class Car;
@@ -52,7 +53,8 @@ private: //members
 	GameFactory* m_gameFactory;
 	WaypointSystem* m_waypointSystem;
 	Audio &m_audioHandle;
-	DisplayMessage * m_displayMessage;
+	DisplayMessage * m_displayMessage; 
+	CollisionManager *manager;
 
 	int m_numLapsVictory;
 	int m_numPlayersFinishedRace;
@@ -60,8 +62,7 @@ private: //members
 	float m_raceFinishedCountdownSeconds;
 	bool m_controlsPaused;
 
-	CollisionVolume * m_startingCollisionVolume;
-	CollisionVolume * m_midCollisionVolume;
+	Track *track;
 	
 
 public:
