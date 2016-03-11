@@ -82,7 +82,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	initialize();
 
 	
-	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), new StartBeepSound());
+	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
 	pauseControls(true);
 }
 

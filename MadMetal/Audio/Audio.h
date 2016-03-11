@@ -74,10 +74,10 @@ public:
 	void resumeSources();
 	void initializeChunkLibrary(char * fileToLoad = "Audio/ChunkLibrary.txt");
 	void initializeMusicLibrary(char * fileToLoad = "Audio/MusicLibrary.txt");
-	void queAudioSource(PxRigidActor * sourcePosition, Sound* toPlay, float volumeScalar = 1, bool updatePosition = false, int loopCount = 0);
+	void queAudioSource(PxRigidActor * sourcePosition, Sound toPlay, float volumeScalar = 1, bool updatePosition = false, int loopCount = 0);
 //	bool queAudioSource(int sourceID);
 	void update();
-	void playMusic(Sound* toPlay, int loopCount = -1);
+	void playMusic(Sound toPlay, int loopCount = -1);
 
 };
 
@@ -88,17 +88,18 @@ public:
 class AudioChannel
 {
 private:
-	Sound* m_sound;
+	
 	PxRigidActor * m_audioPosition;
 	int m_playingChannel;
 	bool m_updatePosition;
 	float m_volumeScalar;
 public:
-	AudioChannel(PxRigidActor * position, Sound* sound, bool updatePosition, float volumeScalar) : m_audioPosition(position), m_sound(sound), m_updatePosition(updatePosition), m_volumeScalar(volumeScalar){}
+	AudioChannel(PxRigidActor * position, bool updatePosition, float volumeScalar) : m_audioPosition(position),  m_updatePosition(updatePosition), m_volumeScalar(volumeScalar){}
 	~AudioChannel()
 	{
-		m_sound->setChannel(-1);
-		delete m_sound;
+		
+			
+		
 		
 	}
 
@@ -107,7 +108,6 @@ public:
 	void setChannel(int channel)
 	{
 		m_playingChannel = channel;
-		m_sound->setChannel(channel);
 	}
 	int getChannel(){ return m_playingChannel; }
 };

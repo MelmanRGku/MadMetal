@@ -6,7 +6,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 Track::~Track()
 {
-	delete m_sound;
+	
 }
 
 bool Track::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {

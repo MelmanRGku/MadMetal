@@ -24,7 +24,7 @@ protected:
 	bool hasToBeDeleted = false;
 	float totalLifeTime = 0;
 	float maxLifeTime = -1;
-	Sound *m_sound;
+	Sound m_sound;
 
 public:
 	TestObject(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
@@ -50,7 +50,7 @@ public:
 	void setHasToBeDeleted(bool hasToBeDeleted) { this->hasToBeDeleted = hasToBeDeleted; }
 	bool getHasToBeDeleted() { return hasToBeDeleted; }
 	void playSound();
-	void setSound(Sound* theSound);
+	void setSound(Sound theSound);
 	void setMaxLifeTime(float maxTime){ maxLifeTime = maxTime; }
 };
 

@@ -56,7 +56,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							
 
 
-							car->setSoundChassis(new ChassisCrashSound());
+							car->setSoundChassis(ChassisCrashSound());
 		return car;
 	}
 	case OBJECT_UI:
@@ -122,7 +122,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
 		track = new Track(objectId, audioable, physicable, animatable, renderable, drivableTrack, nonDrivableTrack);
-		track->setSound(new TrackMusicSound());
+		track->setSound(TrackMusicSound());
 		return track;
 	}
 	case OBJECT_TRACK_DRIVABLE:
@@ -214,7 +214,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Physicable *physicable = new Physicable(physicalBullet);
 
 		Bullet *bullet = new MeowMixBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
-		bullet->setSound(new GunShotSound());
+		bullet->setSound(GunShotSound());
 		bullet->playSound();
 		m_world.addGameObject(bullet);
 		m_scene.addActor(*physicalBullet);
@@ -238,7 +238,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Physicable *physicable = new Physicable(physicalBullet);
 
 		Bullet *bullet = new VolcanoGuySuperBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
-		bullet->setSound(new ExplosionSound());
+		bullet->setSound(ExplosionSound());
 		bullet->playSound();
 
 		m_world.addGameObject(bullet);
@@ -327,7 +327,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 
 		BulletCarCollision * col = new BulletCarCollision(objectId, audioable, physicable, animatable, renderable);
-		col->setSound(new BulletCarCollisionSound());
+		col->setSound(BulletCarCollisionSound());
 		col->playSound();
 
 		return col;

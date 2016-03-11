@@ -37,7 +37,7 @@ protected: //members
 	bool m_isAtMidCollisionVolume;
 	bool m_newLap;
 
-	Sound * soundChassis;
+	Sound soundChassis;
 
 	virtual void unuseSuper() = 0;
 	/*
@@ -79,7 +79,7 @@ public:
 	Waypoint* getCurrentWaypoint();
 	void incrementLap();
 	int getLap();
-	void setSoundChassis(Sound * sound);
+	void setSoundChassis(Sound sound);
 	void playSoundChassis();
 	bool isAtStartingCollisionVolume();
 	bool isAtMidCollisionVolume();

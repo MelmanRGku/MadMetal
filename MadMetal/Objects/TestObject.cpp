@@ -77,7 +77,7 @@ glm::vec3 TestObject::getPosition() {
 	return glm::vec3(pos.x, pos.y, pos.z);
 }
 
-void TestObject::setSound(Sound *theSound)
+void TestObject::setSound(Sound theSound)
 {
 	m_sound = theSound;
 }

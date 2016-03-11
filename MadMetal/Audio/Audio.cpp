@@ -127,15 +127,16 @@ void Audio::update()
 	
 }
 		
-void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound* toPlay, float volumeScalar, bool updatePosition, int loopCount)
+void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound toPlay, float volumeScalar, bool updatePosition, int loopCount)
 {
 	
-	AudioChannel * toAdd = new AudioChannel(sourcePosition, toPlay, updatePosition, volumeScalar);
+	AudioChannel * toAdd = new AudioChannel(sourcePosition, updatePosition, volumeScalar);
 			
 	//set the audio channel to the next available channel, and play the specified sound
-	toAdd->setChannel(Mix_FadeInChannel(-1, m_chunkLibrary[toPlay->getLibraryIndex()], loopCount, 200));
-	toAdd->setAudioPosition(m_listener);
 	
+	toAdd->setChannel(Mix_FadeInChannel(-1, m_chunkLibrary[toPlay.getLibraryIndex()], loopCount, 200));
+	toAdd->setAudioPosition(m_listener);
+	toPlay.setChannel(toAdd->getChannel());
 	//add new channel to the list of currently playing sounds
 	m_audioChannels.push_back(toAdd);
 	
@@ -220,14 +221,14 @@ bool AudioChannel::setAudioPosition(Car * listener)
 		//std::cout << "Sound is to the Right\n";	
 			}
 
-	Mix_SetPosition(m_sound->getChannel(), Sint16(degree), Uint8(distance));
+	Mix_SetPosition(m_playingChannel, Sint16(degree), Uint8(distance));
 	return true;
 }
 
 
-void Audio::playMusic(Sound* sound, int playCount)
+void Audio::playMusic(Sound sound, int playCount)
 {
 	
-	Mix_PlayMusic(m_musicLibrary[sound->getLibraryIndex()], playCount);
+	Mix_PlayMusic(m_musicLibrary[sound.getLibraryIndex()], playCount);
 
 }

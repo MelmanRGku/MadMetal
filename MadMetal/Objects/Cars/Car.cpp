@@ -15,7 +15,6 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 
 Car::~Car()
 {
-	delete soundChassis;
 	//TODO: revive later ?
 	//delete ui;
 	delete m_drivingStyle;
@@ -175,7 +174,7 @@ int Car::getLap() {
 	return m_currentLap;
 }
 
-void Car::setSoundChassis(Sound *theSound)
+void Car::setSoundChassis(Sound theSound)
 {
 	soundChassis = theSound;
 }
