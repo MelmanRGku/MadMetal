@@ -89,6 +89,7 @@ GameSimulation::~GameSimulation()
 	{
 		delete m_players[i];
 	}
+	PhysicsManager::getCpuDispatcher().release();
 	m_scene->release();
 	delete m_waypointSystem;
 	delete track;

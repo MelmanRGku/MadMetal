@@ -12849,3 +12849,323 @@ New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 New Message (StackManager::readMailBox())
 Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 0 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())
+Initialized Input. 1 controllers connected
+Compiling vertex shader.
+
+Compiling fragment shader.
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+Linking program
+Fragment info
+-------------
+0(67) : warning C7533: global variable gl_FragColor is deprecated after version 120
+
+New shader loaded with program ID 3
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+New Message (StackManager::readMailBox())
+Cleared the Stack (SceneStack::clearStack())

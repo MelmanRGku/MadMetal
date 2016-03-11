@@ -72,7 +72,8 @@ void Audio::update()
 	//std::cout << m_audioChannels.size()<< std::endl;
 	for (unsigned int i = 0; i < m_audioChannels.size(); i++)
 	{
-		if (m_audioChannels[i]->getSound() == NULL ||!Mix_Playing(m_audioChannels[i]->getSound()->getChannel()))
+		if (m_audioChannels[i]->getSound() == NULL 
+			||!Mix_Playing(m_audioChannels[i]->getSound()->getChannel()))
 		{
 			delete m_audioChannels[i];
 			m_audioChannels.erase(m_audioChannels.begin() + i);

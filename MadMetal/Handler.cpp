@@ -17,6 +17,7 @@ float lastDrawCallTime = 0;
 
 void initStatics(){
 	//load settings from a file
+	Settings::init();
 	Settings::loadSettingsFromFile("settings.txt");
 	//enable\disable logging based on the setting
 	Log::enableLogging(std::stoi(Settings::getSetting("debugEnabled")) == 0 ? false : true);
@@ -55,6 +56,7 @@ void close() {
 	//delete assets
 	Assets::release();
 	Fonts::release(); 
+	Settings::release();
 }
 
 void initOpengl(int argc, char **argv) {

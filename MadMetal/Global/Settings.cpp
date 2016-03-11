@@ -1,6 +1,6 @@
-#include "Settings.h"
+#include "settings.h"
 #include "Files\FileHandlingHelpers.h"
-std::map<std::string, std::string> Settings::settings;		//map with all the settings
+std::map<std::string, std::string> *Settings::settings;		//map with all the settings
 
 Settings::Settings()
 {
@@ -10,6 +10,10 @@ Settings::Settings()
 Settings::~Settings()
 {
 	//delete map;
+}
+
+void Settings::init() {
+	settings = new std::map<std::string, std::string>();
 }
 
 /*
@@ -33,7 +37,7 @@ void Settings::loadSettingsFromFile(char *fileName) {
 		//store the setting in the map
 		std::string settingName = line.substr(0, line.find(delimiter));
 		std::string settingValue = line.substr(line.find(delimiter) + 1);
-		settings.insert(std::pair<std::string, std::string>(settingName, settingValue));
+		settings->insert(std::pair<std::string, std::string>(settingName, settingValue));
 	}
 }
 
@@ -42,9 +46,9 @@ void Settings::loadSettingsFromFile(char *fileName) {
 */
 std::string Settings::getSetting(char *name) {
 	//find the setting
-	std::map<std::string, std::string>::iterator iter = settings.find(std::string(name));
+	std::map<std::string, std::string>::iterator iter = settings->find(std::string(name));
 	//if element exists in the map - return the value
-	if (iter != settings.end())
+	if (iter != settings->end())
 		return iter->second;
 	//otherwise nothing
 	else {
@@ -57,14 +61,14 @@ std::string Settings::getSetting(char *name) {
 */
 void Settings::setSetting(char *name, char *value) {
 	//check if the setting is already in the map
-	std::map<std::string, std::string>::iterator iter = settings.find(std::string(name));
+	std::map<std::string, std::string>::iterator iter = settings->find(std::string(name));
 	//if not, just add a new one
-	if (iter == settings.end())
-		settings.insert(std::pair<std::string, std::string>(std::string(name), std::string(value)));
+	if (iter == settings->end())
+		settings->insert(std::pair<std::string, std::string>(std::string(name), std::string(value)));
 	//otherwise, remove it and then add a new one
 	else {
-		settings.erase(iter);
-		settings.insert(std::pair<std::string, std::string>(std::string(name), std::string(value)));
+		settings->erase(iter);
+		settings->insert(std::pair<std::string, std::string>(std::string(name), std::string(value)));
 	}
 }
 
@@ -77,7 +81,7 @@ void Settings::storeToFile(char *name) {
 
 	//compose each line for the file from 
 	//setting name, colon, setting value and a new line
-	for (std::map<std::string, std::string>::iterator iter = settings.begin(); iter != settings.end(); ++iter)
+	for (std::map<std::string, std::string>::iterator iter = settings->begin(); iter != settings->end(); ++iter)
 	{
 		std::string key = iter->first;
 		std::string value = iter->second;
@@ -89,4 +93,9 @@ void Settings::storeToFile(char *name) {
 
 	//write the whole string to the file
 	FileHandlingHelpers::writeToFile(name, fileContents);
+}
+
+
+void Settings::release() {
+	delete settings;
 }

@@ -49,7 +49,7 @@ void World::deleteObjectById(long id) {
 			TestObject *obj = gameObjects->at(mid);
 			gameObjects->erase(gameObjects->begin()+mid);
 			scene->removeActor(obj->getActor());
-			obj->getActor().release();
+			//obj->getActor().release();
 			delete obj;
 			break;
 		}
@@ -60,7 +60,7 @@ void World::deleteObjectByIndex(int index) {
 	TestObject *obj = gameObjects->at(index);
 	gameObjects->erase(gameObjects->begin() + index);
 	scene->removeActor(obj->getActor());
-	obj->getActor().release();
+	//obj->getActor().release();
 	delete obj;
 }
 

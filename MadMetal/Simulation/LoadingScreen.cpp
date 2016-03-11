@@ -13,7 +13,7 @@ LoadingScreen::LoadingScreen(SceneMessage& toDeliver, Audio &audio) : m_audio(au
 	createLoadingInfoString();
 	status = new LoadingStatus();
 	Assets::status = status;
-	t = std::thread(Assets::loadObjsFromDirectory, "Assets/Models", false );
+	t = std::thread(Assets::loadObjsFromDirectory, "Assets/Models");
 	
 }
 

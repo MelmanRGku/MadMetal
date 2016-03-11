@@ -3,7 +3,6 @@
 #include "Files\FileHandlingHelpers.h"
 
 std::map<std::string, Model*> *Assets::models;
-const std::vector<std::string> Assets::list = { "Ugly_Car", "bullet", "plane", "finishLine" };
 LoadingStatus *Assets::status;
 
 Assets::~Assets()
@@ -33,7 +32,7 @@ Model *Assets::loadObjFromDirectory(std::string path) {
 	return model;
 }
 
-void Assets::loadObjsFromDirectory(std::string path, bool fromList) {
+void Assets::loadObjsFromDirectory(std::string path) {
 	std::vector<std::string> files;
 	double totalFilesSize = FileHandlingHelpers::findFilesWithExtension(path, "obj", files);
 
@@ -44,15 +43,6 @@ void Assets::loadObjsFromDirectory(std::string path, bool fromList) {
 		std::string objectName = files.at(i).substr(lastSlashPos, files.at(i).rfind(".") - lastSlashPos);
 
 		status->setStatus(loadedFilesSize / totalFilesSize, "Loading file " + objectName);
-
-		if (fromList) {
-			bool isInList = false;
-			for (unsigned int j = 0; j < list.size(); j++) {
-				isInList = isInList || objectName.compare(list[j]) == 0;
-			}
-			if (!isInList)
-				continue;
-		}
 
 		if (getModel(objectName) == NULL)
 			loadObjFromDirectory(files.at(i));
