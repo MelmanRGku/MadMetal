@@ -18,8 +18,8 @@
 
 
 #define NUM_OF_PLAYERS 8
-#define NUM_LAPS_FOR_VICTORY 3
-#define RACE_FINISH_DELAY 5
+#define NUM_LAPS_FOR_VICTORY 1
+#define RACE_FINISH_DELAY 10
 
 using namespace std;
 bool gIsVehicleInAir = true;
@@ -301,12 +301,23 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 			{
 				if (!m_raceFinishedCountdownSeconds)
 				{
+					if (i != 0)
+						m_displayMessage->initializeMessage("You Better Hurry...", 2);
+					else 
+						m_displayMessage->initializeMessage("First Across... Like a Boss", 2);
 					m_raceFinishedCountdownSeconds = RACE_FINISH_DELAY; //start count down
 				}
-				m_players[i]->getCar()->addToScore(getFinishLineBonus(m_numPlayersFinishedRace++));
-				std::stringstream s;
-				s << "Player " << i + 1 << " Has Finished!";
-				m_displayMessage->initializeMessage( s.str() , 2);;
+				else if (RACE_FINISH_DELAY - m_raceFinishedCountdownSeconds >= 2)
+				{
+					m_displayMessage->initializeMessage(std::to_string((int)m_raceFinishedCountdownSeconds), 1);
+				}
+				if (!m_players[i]->getCar()->isFinishedRace())
+				{
+					m_players[i]->getCar()->setFinishedRace(true);
+					m_players[i]->getCar()->addToScore(getFinishLineBonus(m_numPlayersFinishedRace++));
+					
+				}
+				
 			}
 		}
 
@@ -315,7 +326,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 			if (m_numPlayersFinishedRace == m_players.size() || (m_raceFinishedCountdownSeconds -= dt) <= 0)
 			{
 				m_raceFinished = true;
-				m_displayMessage->initializeMessage("FINISHED", 3);
+				//m_displayMessage->initializeMessage("FINISHED", 3);
 			}
 		}
 	}
@@ -324,27 +335,27 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	if (!m_raceFinished)
 	{
 		//check for pause button
-	for (int i = 0; i < m_humanPlayers.size(); i++)
-	{
-		//if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
-		//{
-		//	newMessage.setTag(SceneMessage::ePause);
-		//	std::vector<ControllableTemplate *> playerTemplates;
-		//	//put the controllables into the vector incase the player trys to restart
-		//	for (int i = 0; i < m_players.size(); i++)
-		//	{
-		//		playerTemplates.push_back(&m_players[i]->getControllableTemplate());
-		//	}
-		//	//put a dummy controllable at the front of the vector so the pause screen knows who paused
-		//	playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
-		//	newMessage.setPlayerTemplates(playerTemplates);
-		//	
-		//	return true;
-		//}
-	}
+		for (int i = 0; i < m_humanPlayers.size(); i++)
+		{
+			//if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
+			//{
+			//	newMessage.setTag(SceneMessage::ePause);
+			//	std::vector<ControllableTemplate *> playerTemplates;
+			//	//put the controllables into the vector incase the player trys to restart
+			//	for (int i = 0; i < m_players.size(); i++)
+			//	{
+			//		playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+			//	}
+			//	//put a dummy controllable at the front of the vector so the pause screen knows who paused
+			//	playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
+			//	newMessage.setPlayerTemplates(playerTemplates);
+			//	
+			//	return true;
+			//}
+		}
 		//simulate players
-	simulateAI();
-	simulatePlayers(dt);
+		simulateAI();
+		simulatePlayers(dt);
 	}
 	else {
 		int player = getFirstPlace();

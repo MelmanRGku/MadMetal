@@ -19,6 +19,7 @@ protected: //members
 	//score based
 	float m_damageDealt;
 	int m_currentLap;
+	bool m_finishedRace;
 	int m_score;
 
 	//current state 
@@ -84,7 +85,8 @@ public:
 	bool isAtMidCollisionVolume();
 	int tallyScore() { return m_score + m_damageDealt; }
 	Waypoint* Car::getLastWaypoint();
-
+	bool isFinishedRace() { return m_finishedRace; }
+	void setFinishedRace(bool finished) { m_finishedRace = finished; }
 	void setStartingCollisionVolumeFlag(bool isHit);
 	void setMidCollisionVolumeFlag(bool isHit);
 };
