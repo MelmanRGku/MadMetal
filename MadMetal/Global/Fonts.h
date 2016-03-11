@@ -13,6 +13,7 @@ public:
 	Fonts() = delete;
 	~Fonts();
 	static void init();
+	static void release();
 	static void loadTTFFontsFromDirectory(std::string path);
 	static FTFont *getFont(std::string name) { return fonts->find(name)->second; }
 };

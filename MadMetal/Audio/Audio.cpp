@@ -28,7 +28,7 @@ void Audio::initializeMusicLibrary(char * fileToLoad)
 				if (reached)
 				{
 					filename = filename + line[pos];
-				}
+}
 				if (line[pos] == ' ')
 				{
 					reached = true;
@@ -135,7 +135,7 @@ void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound* toPlay, float v
 	//set the audio channel to the next available channel, and play the specified sound
 	toAdd->setChannel(Mix_FadeInChannel(-1, m_chunkLibrary[toPlay->getLibraryIndex()], loopCount, 200));
 	toAdd->setAudioPosition(m_listener);
-
+	
 	//add new channel to the list of currently playing sounds
 	m_audioChannels.push_back(toAdd);
 	
@@ -168,7 +168,7 @@ bool AudioChannel::setAudioPosition(Car * listener)
 {
 	//if sound has stopped playing, return 
 	if (!Mix_Playing(m_playingChannel))
-	{
+{
 		return false;
 	}
 
@@ -185,7 +185,7 @@ bool AudioChannel::setAudioPosition(Car * listener)
 		sourceZ = m_audioPosition->getGlobalPose().p.z;
 	}
 
-	sourceX = sourceX - listenerX;
+			sourceX = sourceX - listenerX;
 	sourceZ = sourceZ - listenerZ;
 	float distance = sqrt((powf(sourceX, 2) + powf(sourceZ, 2))) + (1 - m_volumeScalar) * 255;
 	if (distance < 0) distance = 0;
@@ -201,25 +201,25 @@ bool AudioChannel::setAudioPosition(Car * listener)
 	//calculate where the sound is in relation to the player
 	glm::vec3 forwardVector = glm::normalize(glm::vec3( listener->getForwardVector().x, 0, listener->getForwardVector().z));
 	glm::vec3 vectorToSound = glm::normalize(glm::vec3(sourceX, 0,sourceZ));
-
+	
 	float degree = 180.f / 3.14 * acos(glm::dot(forwardVector, vectorToSound));
 
-	//convert position of source relative to listener to SDL_Mixer orientation:
-	/*
-	0/360 - in front
+			//convert position of source relative to listener to SDL_Mixer orientation:
+			/*
+			0/360 - in front
 	90 - to the right
-	180 - behind
-	270 - to the left
-	*/
+			180 - behind
+			270 - to the left
+			*/
 	if (glm::cross(forwardVector, vectorToSound).y > 0)
-	{
+			{
 		//std::cout << "Sound is to the Left\n";
 		degree = 360 - degree;
-	}
+			}
 	else {
 		//std::cout << "Sound is to the Right\n";	
-	}
-	
+			}
+
 	Mix_SetPosition(m_sound->getChannel(), Sint16(degree), Uint8(distance));
 	return true;
 }

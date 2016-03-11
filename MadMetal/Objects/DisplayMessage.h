@@ -5,11 +5,13 @@
 class DisplayMessage : public TestObject
 {
 public:
-	DisplayMessage(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable)
+	DisplayMessage(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable)
 	{
 		m_centerOfScreen = glm::vec3(std::stof(Settings::getSetting("screenWidth")) / 2, std::stof(Settings::getSetting("screenHeight")) / 2, 0);
 	}
-	~DisplayMessage(){ m_message->setHasToBeDeleted(true); }
+	~DisplayMessage(){ 
+	
+	}
 
 	void setText2D(Text2D * text2d) { m_message = text2d; }
 	

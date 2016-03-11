@@ -21,6 +21,15 @@ Input::Input() {
 	Log::writeLine(ss.str());
 };
 
+Input::~Input() {
+	for (int i = 0; i< XUSER_MAX_COUNT; i++)
+	{
+
+		delete gamePads[i];
+
+	}
+}
+
 void Input::updateGamePads(double dt)
 {
 	for (int i = 0; i < XUSER_MAX_COUNT; i++)

@@ -2,6 +2,8 @@
 
 #define ZERO_TO_ONE(x) (x == 0 ? 1 : x)
 
+Renderable::~Renderable() {}
+
 Renderable::Renderable() {}
 
 Renderable::Renderable(Model* Model, bool resize, bool reposition)

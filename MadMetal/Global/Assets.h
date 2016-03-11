@@ -44,7 +44,6 @@ class Assets
 {
 private:
 	static std::map<std::string, Model *> *models;
-	static const std::vector<std::string> list;
 
 public:
 	static LoadingStatus *status;
@@ -52,8 +51,15 @@ public:
 	Assets() = delete;
 	~Assets();
 	static void init();
-	static void loadObjsFromDirectory(std::string path, bool fromList = false);
+	static void loadObjsFromDirectory(std::string path);
+	static Model *loadObjFromDirectory(std::string path);
 	static void initializeVAOs();
-	static Model *getModel(std::string name) { return models->find(name)->second; }
+	static Model *getModel(std::string name) { 
+		if (models->find(name) == models->end())
+			return NULL; 
+		else
+			return models->find(name)->second;
+	}
+	static void release();
 };
 

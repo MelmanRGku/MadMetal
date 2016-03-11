@@ -14,7 +14,11 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int 
 		{
 			PxGeometry **geom = new PxGeometry * [1];
 			geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_RADIUS, yposition, WAYPOINT_RADIUS));
-			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, new PxTransform(i, yposition, j), geom, NULL));
+			PxTransform *pos = new PxTransform(i, yposition, j);
+			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
+			delete pos;
+			delete geom[0];
+			delete[] geom;
 			m_waypointMap[index].push_back(tempWaypoint);
 			m_waypoints.push_back(tempWaypoint);
 		}
@@ -108,7 +112,7 @@ WaypointSystem::~WaypointSystem()
 {
 	for (unsigned int i = 0; i < m_waypoints.size(); i++)
 	{
-		delete m_waypoints[i];
+		//delete m_waypoints[i];
 	}
 	m_waypoints.clear();
 }

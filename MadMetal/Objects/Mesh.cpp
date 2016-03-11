@@ -3,6 +3,7 @@
 
 Mesh::~Mesh()
 {
+	delete texture;
 }
 
 

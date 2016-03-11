@@ -15,10 +15,9 @@ SceneStack::SceneStack()
 
 SceneStack::~SceneStack()
 {
-	delete m_top;
 	for (unsigned int i = 0; i < m_sceneStack.size(); i++)
 	{
-		//handle deleting scene
+		delete m_sceneStack[i];
 	}
 }
 
@@ -85,6 +84,7 @@ StackManager::~StackManager()
 	delete m_renderer;
 	delete m_mailBox;
 	delete m_input;
+	PhysicsManager::release();
 }
 
 void StackManager::readMailBox()

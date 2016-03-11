@@ -59,6 +59,8 @@ public:
 			filterData.word2 = id;
 			shapes[i]->setSimulationFilterData(filterData);
 		}
+
+		free(shapes);
 	}
 		 
 	void makeGround(PxRigidActor *actor, bool drivable) {
@@ -79,6 +81,8 @@ public:
 			simFilterData.word1 = COLLISION_FLAG_GROUND_AGAINST;
 			shapes[i]->setSimulationFilterData(simFilterData);
 		}
+
+		free(shapes);
 	}
 		 
 	PxBase *makePhysicsObject(PhysicalObjects actorToMake, long objectId, PxTransform *pos, PxGeometry **geom, PxU32 nbGeom, PxMaterial *material, DrivingStyle *style, PxVec3 *velocity)
@@ -113,6 +117,7 @@ public:
 		{
 			VehicleCreator *vc = new VehicleCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 			PxVehicleDrive4W *car = vc->create(style);
+			delete vc;
 			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
 			PxTransform anotherTransform = pos == NULL ? PxTransform(PxVec3(0), PxQuat(PxIdentity)) : *pos;
 			car->getRigidDynamicActor()->setGlobalPose(PxTransform(startTransform.p.x + anotherTransform.p.x, startTransform.p.y + anotherTransform.p.y, startTransform.p.z + anotherTransform.p.z));

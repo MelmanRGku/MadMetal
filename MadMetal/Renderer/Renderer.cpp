@@ -29,6 +29,9 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
+	for (int i = 0; i < NUMBER_OF_SHADER_TYPES; i++) {
+		delete shader[i];
+	}
 }
 
 void Renderer::setShader(ShaderType type, ShaderProgram *sp) {

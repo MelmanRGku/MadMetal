@@ -8,6 +8,7 @@
 #include "Game Logic\PlayerControllable.h"
 #include "Game Logic\AIControllable.h"
 #include "Objects\DisplayMessage.h"
+#include "CollisionManager.h"
 
 class Scene;
 class Car;
@@ -54,6 +55,7 @@ private: //members
 	Audio &m_audioHandle;
 	DisplayMessage * m_displayMessage;
 	Track* m_track;
+	CollisionManager *manager;
 
 	int m_numLapsVictory;
 	int m_numPlayersFinishedRace;

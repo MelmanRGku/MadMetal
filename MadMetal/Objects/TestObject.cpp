@@ -5,7 +5,7 @@
 #include "Cars/Car.h"
 #include "Factory\GameFactory.h"
 
-TestObject::TestObject(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable)
+TestObject::TestObject(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable)
 : m_renderable(rable)
 , m_physicable(pable)
 , m_animatable(anable)
@@ -17,19 +17,22 @@ TestObject::TestObject(long id, Audioable &aable, Physicable &pable, Animatable 
 
 TestObject::~TestObject()
 {
-	m_sound = NULL;
 	delete m_sound;
+	delete m_renderable;
+	delete m_animatable;
+	delete m_physicable;
+	delete m_audioable;
 
 }
 
 glm::mat4x4 TestObject::getModelMatrix() {
-	return m_physicable.getPhysicsModelMatrix() * m_animatable.getModelMatrix() * m_renderable.getInitialModelMatrix();
+	return m_physicable->getPhysicsModelMatrix() * m_animatable->getModelMatrix() * m_renderable->getInitialModelMatrix();
 }
 
 
 glm::vec3 TestObject::getFullRotation() { 
-	PxQuat rotation = m_physicable.getActor().getGlobalPose().q;
-	return glm::eulerAngles(glm::quat(rotation.w, rotation.x, rotation.y, rotation.z)) + m_animatable.getRotation(); 
+	PxQuat rotation = m_physicable->getActor().getGlobalPose().q;
+	return glm::eulerAngles(glm::quat(rotation.w, rotation.x, rotation.y, rotation.z)) + m_animatable->getRotation(); 
 }
 
 bool TestObject::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
@@ -37,10 +40,10 @@ bool TestObject::draw(Renderer *renderer, Renderer::ShaderType type, int passNum
 	if (type != Renderer::ShaderType::SHADER_TYPE_CELL || passNumber > 1)
 		return false;
 
-	if (m_renderable.getModel() == NULL)
+	if (m_renderable->getModel() == NULL)
 		return false;
 
-	std::vector<Mesh *> *meshes = m_renderable.getModel()->getMeshes();
+	std::vector<Mesh *> *meshes = m_renderable->getModel()->getMeshes();
 
 	glm::mat4x4 modelMatrix = getModelMatrix();
 
@@ -71,7 +74,7 @@ bool TestObject::draw(Renderer *renderer, Renderer::ShaderType type, int passNum
 }
 
 glm::vec3 TestObject::getPosition() {
-	PxVec3 pos = m_physicable.getActor().getGlobalPose().p;
+	PxVec3 pos = m_physicable->getActor().getGlobalPose().p;
 	return glm::vec3(pos.x, pos.y, pos.z);
 }
 
@@ -83,5 +86,5 @@ void TestObject::setSound(Sound *theSound)
 void TestObject::playSound()
 {
 	
-	m_audioable.getAudioHandle().queAudioSource(&this->getActor(), m_sound);
+	m_audioable->getAudioHandle().queAudioSource(&this->getActor(), m_sound);
 }
