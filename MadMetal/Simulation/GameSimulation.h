@@ -53,6 +53,7 @@ private: //members
 	WaypointSystem* m_waypointSystem;
 	Audio &m_audioHandle;
 	DisplayMessage * m_displayMessage;
+	Track* m_track;
 
 	int m_numLapsVictory;
 	int m_numPlayersFinishedRace;

@@ -122,7 +122,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
 		track = new Track(objectId, *audioable, *physicable, *animatable, *renderable, drivableTrack, nonDrivableTrack);
-		
+		track->setSound(new TrackMusicSound());
 		return track;
 	}
 	case OBJECT_TRACK_DRIVABLE:

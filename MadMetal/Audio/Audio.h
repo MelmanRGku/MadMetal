@@ -4,20 +4,22 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include "Sound.h"
 #include "Objects\Object.h"
-#define NUM_CHANNELS 50
+#define NUM_CHANNELS 100
 
 class AudioChannel;
-class Sound;
+class Car;
+
 
 
 
 class Audio
 {
 private:
-	Mix_Music * music;
-	std::vector<Mix_Chunk *> m_library;
-	PxRigidActor * m_listener;
+	std::vector<Mix_Chunk *> m_chunkLibrary;
+	std::vector<Mix_Music *> m_musicLibrary;
+	Car * m_listener;
 
 
 public:
@@ -38,7 +40,8 @@ public:
 		//set max amount of channels to mix
 		Mix_AllocateChannels(NUM_CHANNELS);
 		//todo:: load from file?
-		initializeLibrary("");
+		initializeMusicLibrary();
+		initializeChunkLibrary();
 	}
 
 	~Audio()
@@ -47,17 +50,18 @@ public:
 		SDL_Quit();
 	}
 
-	void assignListener(PxRigidActor* listener) { m_listener = listener; }
+	void assignListener(Car* listener) { m_listener = listener; }
 	void removeListener();
 	void stopSources();
 	void stopSource(int channel);
 	void pauseSources();
 	void resumeSources();
-	void initializeLibrary(char * fileToLoad);
-	void queAudioSource(PxRigidActor * sourcePosition, Sound* toPlay, int loopCount = 0);
+	void initializeChunkLibrary(char * fileToLoad = "Audio/ChunkLibrary.txt");
+	void initializeMusicLibrary(char * fileToLoad = "Audio/MusicLibrary.txt");
+	void queAudioSource(PxRigidActor * sourcePosition, Sound* toPlay, float volumeScalar = 1, bool updatePosition = false, int loopCount = 0);
 //	bool queAudioSource(int sourceID);
 	void update();
-	void loadMusic(char * file);
+	void playMusic(Sound* toPlay, int loopCount = -1);
 
 };
 
@@ -70,13 +74,26 @@ class AudioChannel
 private:
 	Sound* m_sound;
 	PxRigidActor * m_audioPosition;
+	int m_playingChannel;
+	bool m_updatePosition;
+	float m_volumeScalar;
 public:
-	AudioChannel(PxRigidActor * position, Sound* sound) : m_audioPosition(position), m_sound(sound){}
-	~AudioChannel();
+	AudioChannel(PxRigidActor * position, Sound* sound, bool updatePosition, float volumeScalar) : m_audioPosition(position), m_sound(sound), m_updatePosition(updatePosition), m_volumeScalar(volumeScalar){}
+	~AudioChannel()
+	{
+		m_sound->setChannel(-1);
+		m_audioPosition = NULL;
+	}
 
-	Sound* getSound() { return m_sound; }
-	bool updateAudio(PxRigidActor * listener);
-
+	
+	bool setAudioPosition(Car * listener);
+	bool needsUpdate(){ return m_updatePosition; }
+	void setChannel(int channel)
+	{
+		m_playingChannel = channel;
+		m_sound->setChannel(channel);
+	}
+	int getChannel(){ return m_playingChannel; }
 };
 
 
