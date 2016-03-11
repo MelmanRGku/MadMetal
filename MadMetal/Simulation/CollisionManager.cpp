@@ -77,7 +77,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		PxTransform *pos = new PxTransform(bullet->getPosition().x, bullet->getPosition().y, bullet->getPosition().z);
 		BulletCarCollision * col = dynamic_cast<BulletCarCollision *> (factory->makeObject(GameFactory::OBJECT_BULLET_CAR_COLLISION, pos, NULL, NULL));
 		delete pos;
-		col->setHasToBeDeleted(true);
+		delete col;
 	}
 	else if (car == NULL) {//if dynamic cast to car returns NULL its probably a wall so get rid of it
 		bullet->setHasToBeDeleted(true);

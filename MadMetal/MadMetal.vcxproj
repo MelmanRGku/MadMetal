@@ -158,6 +158,7 @@
     <ClInclude Include="Renderer\NoShaderProgram.h" />
     <ClInclude Include="Objects\Bullet.h" />
     <ClInclude Include="Renderer\ShaderProgram.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="Simulation\CollisionManager.h" />
     <ClInclude Include="Factory\AudioFactory.h" />
     <ClInclude Include="Factory\GameFactory.h" />

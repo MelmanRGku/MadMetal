@@ -54,7 +54,9 @@ void AIControllable::playFrame(double dt)
 		return;
 	}
 
+
 	checkCollisionVolumes();
+
 
 	if (m_currentKnownWaypoint == NULL)
 	{
@@ -239,7 +241,6 @@ void AIControllable::recalculatePath()
 	//}
 
 	//std::cout << "\n";
-
 	updateNextWaypoint();
 }
 
@@ -297,7 +298,7 @@ void AIControllable::checkCollisionVolumes()
 		setHighCostWaypointsToHigh();
 		m_goalWaypoint = m_waypointSystem->getWaypointAt(13);
 		recalculatePath();
-		
+
 		m_car->setStartingCollisionVolumeFlag(false);
 	}
 	else if (m_car->isAtMidCollisionVolume())

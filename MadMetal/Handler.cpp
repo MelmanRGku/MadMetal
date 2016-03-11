@@ -1,4 +1,5 @@
 #pragma once
+#include "Settings.h"
 #include "Libraries\glew\glew.h"
 #include "Libraries\freeglut\freeglut.h"
 #include "Global\Settings.h"
@@ -6,7 +7,10 @@
 #include "Scene Manager\StackManager.h"
 #include "Global\Assets.h"
 #include "Global\Fonts.h"
-#include <vld.h>
+
+#ifdef _USE_MEMORY_LEAK_DETECTOR
+	#include <vld.h>
+#endif
 
 #define MAX_FPS (60)
 #define MIN_DT (1000 / MAX_FPS)

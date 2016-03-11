@@ -6,7 +6,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 Track::~Track()
 {
-
+	delete m_sound;
 }
 
 bool Track::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
@@ -18,5 +18,5 @@ bool Track::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) 
 
 void Track::playTrackMusic()
 {
-	m_audioable.getAudioHandle().playMusic(m_sound);
+	m_audioable->getAudioHandle().playMusic(m_sound);
 }

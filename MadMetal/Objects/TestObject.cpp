@@ -17,7 +17,6 @@ TestObject::TestObject(long id, Audioable *aable, Physicable *pable, Animatable 
 
 TestObject::~TestObject()
 {
-	delete m_sound;
 	delete m_renderable;
 	delete m_animatable;
 	delete m_physicable;

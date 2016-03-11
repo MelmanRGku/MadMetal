@@ -98,8 +98,7 @@ public:
 	~AudioChannel()
 	{
 		m_sound->setChannel(-1);
-		m_sound = NULL;
-		m_audioPosition = NULL;
+		delete m_sound;
 		
 	}
 

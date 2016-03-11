@@ -47,7 +47,6 @@ bool Input::getGamePadHandle(int portNum, GamePad* handle)
 	if (gamePads[portNum]->checkConnection())
 	{	
 		handle = gamePads[portNum];
-		char *line = new char[50];
 		return true;
 	}
 	else 
@@ -55,6 +54,7 @@ bool Input::getGamePadHandle(int portNum, GamePad* handle)
 		char *line = new char[100];
 		sprintf_s(line, 100, "Request for controller at port %d. No controller connected", portNum);
 		Log::writeLine(line);
+		delete[] line;
 		return false;
 	}
 }

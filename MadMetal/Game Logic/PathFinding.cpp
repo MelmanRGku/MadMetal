@@ -166,6 +166,7 @@ void PathFinding::continuePath()
 
 	if (currentWaypoint->getWaypoint().getId() == m_goalWaypoint->getWaypoint().getId())
 	{
+		delete m_goalWaypoint->getParent();
 		m_goalWaypoint->setParent(currentWaypoint->getParent());
 
 		SearchWaypoint* getPath;
@@ -202,6 +203,7 @@ void PathFinding::continuePath()
 		{
 			if (currentWaypoint->getWaypoint().getId() == m_openList[i]->getWaypoint().getId())
 			{
+				delete m_openList[i];
 				m_openList.erase(m_openList.begin() + i);
 			}
 		}

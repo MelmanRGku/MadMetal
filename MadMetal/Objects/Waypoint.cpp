@@ -1,6 +1,5 @@
+#include "Settings.h"
 #include "Waypoint.h"
-
-//#define _RENDER_WAYPOINT
 
 int Waypoint::globalID = 0;
 

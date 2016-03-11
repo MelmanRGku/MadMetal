@@ -417,7 +417,9 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 
 void GameSimulation::setupBasicGameWorldObjects() {
 
-	m_track = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, new PxTransform(PxVec3(0, 0, 0)), NULL, NULL));
+	PxTransform *pos = new PxTransform(PxVec3(0, 0, 0));
+	m_track = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, pos, NULL, NULL));
+	delete pos;
 
 	m_waypointSystem = new WaypointSystem(*m_gameFactory, 
 											m_track->getDrivablePart()->getWorldBounds().minimum.x,
