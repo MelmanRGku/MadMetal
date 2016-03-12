@@ -336,6 +336,44 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 			return powerup;
 	}
+
+	case OBJECT_SHIELD_POWERUP:
+	{
+						   Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP), true, true);
+						   renderable->setModel(NULL); // remove when there is a model for the powerup
+						   Animatable *animatable = new Animatable();
+						   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+						   PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::SHIELD_POWERUP, objectId, pos, geom, 0, NULL, NULL, NULL));
+						   Physicable *physicable = new Physicable(powerupTriggerVolume);
+						   animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
+
+						   PowerUpShield *shield = new PowerUpShield(objectId, audioable, physicable, animatable, renderable, static_cast<Car*>(parent));
+
+						   m_world.addGameObject(shield);
+						   m_scene.addActor(*powerupTriggerVolume);
+
+						   return shield;
+	}
+
+	case OBJECT_SPEED_POWERUP:
+	{
+						   Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP), true, true);
+						   renderable->setModel(NULL);  // remove when there is a model for the powerup
+						   Animatable *animatable = new Animatable();
+						   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+						   PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::SPEED_POWERUP, objectId, pos, geom, 0, NULL, NULL, NULL));
+						   Physicable *physicable = new Physicable(powerupTriggerVolume);
+						   animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
+
+						   PowerUpSpeed *powerup = new PowerUpSpeed(objectId, audioable, physicable, animatable, renderable, static_cast<Car*>(parent));
+
+						   m_world.addGameObject(powerup);
+						   m_scene.addActor(*powerupTriggerVolume);
+
+						   return powerup;
+	}
 	case OBJECT_BULLET_CAR_COLLISION:
 	{
 		Renderable *renderable = new Renderable(NULL);

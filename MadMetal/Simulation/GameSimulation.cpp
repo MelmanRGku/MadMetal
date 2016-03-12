@@ -218,6 +218,7 @@ void GameSimulation::simulatePlayers(double dt)
 	for (unsigned int i = 0; i < m_aiPlayers.size(); i++) {
 		m_aiPlayers[i]->processFire(&m_players);
 	}
+
 	//m_humanPlayers[0]->playFrame(dt);
 	//m_players[1]->playFrame(dt);
 	
@@ -366,7 +367,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 		//}
 	}
 		//simulate players
-	simulateAI();
+	
 	simulatePlayers(dt);
 	}
 	else {
@@ -439,11 +440,13 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	}
 
 	//Power up test
-	/*PxGeometry **powerGeom = new PxGeometry*[1];
+	/*
+	PxGeometry **powerGeom = new PxGeometry*[1];
 	powerGeom[0] = new PxBoxGeometry(PxVec3(1, 5, 1));
 	pos = new PxTransform(-130, 25, 60);
 	m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL);
-	delete pos;*/
+	delete pos;
+	*/
 
 
 	PxGeometry **geom1 = new PxGeometry *[1];

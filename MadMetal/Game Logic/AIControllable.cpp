@@ -46,6 +46,7 @@ void AIControllable::processFire(std::vector<Controllable *> *players) {
 
 void AIControllable::playFrame(double dt)
 {
+	
 	if (!m_controlsPaused) {
 	if (m_car->isAlive())
 	{

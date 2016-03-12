@@ -20,6 +20,8 @@
 #include "Objects\UI.h"
 #include "Objects\DisplayMessage.h"
 #include "Objects\Text3D.h"
+#include "Objects\PowerUpShield.h"
+#include "Objects\PowerUpSpeed.h"
 
 class GameFactory
 {
@@ -44,6 +46,9 @@ public:
 		OBJECT_TEXT_3D,
 		OBJECT_COLLISION_VOLUME,
 		OBJECT_POWERUP,
+		OBJECT_SHIELD_POWERUP,
+		OBJECT_SPEED_POWERUP
+
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);

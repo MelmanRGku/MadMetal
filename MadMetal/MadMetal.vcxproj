@@ -85,6 +85,8 @@
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
     <ClCompile Include="Objects\PowerUp.cpp" />
+    <ClCompile Include="Objects\PowerUpShield.cpp" />
+    <ClCompile Include="Objects\PowerUpSpeed.cpp" />
     <ClCompile Include="Objects\Waypoint.cpp" />
     <ClCompile Include="Objects\Track.cpp" />
     <ClCompile Include="Renderer\NoShaderProgram.cpp" />
@@ -155,6 +157,9 @@
     <ClInclude Include="Objects\MeowMixBullet.h" />
     <ClInclude Include="Objects\GaugeBar.h" />
     <ClInclude Include="Objects\HealthBar2D.h" />
+    <ClInclude Include="Objects\PowerUpShield.h" />
+    <ClInclude Include="Objects\PowerUpSpeed.h" />
+    <ClInclude Include="Objects\PowerUpVolume.h" />
     <ClInclude Include="Objects\Waypoint.h" />
     <ClInclude Include="Renderer\NoShaderProgram.h" />
     <ClInclude Include="Objects\Bullet.h" />

@@ -98,9 +98,6 @@ public:
 	~AudioChannel()
 	{
 		
-			
-		
-		
 	}
 
 	bool setAudioPosition(Car * listener);
