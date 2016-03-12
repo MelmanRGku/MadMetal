@@ -422,8 +422,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_track = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, pos, NULL, NULL));
 	delete pos;
 
-	m_waypointSystem = new WaypointSystem(*m_gameFactory, 
-											m_track->getDrivablePart()->getWorldBounds().minimum.x,
+	m_waypointSystem = new WaypointSystem(	m_track->getDrivablePart()->getWorldBounds().minimum.x,
 											m_track->getDrivablePart()->getWorldBounds().maximum.x,
 											m_track->getDrivablePart()->getWorldBounds().minimum.z,
 											m_track->getDrivablePart()->getWorldBounds().maximum.z,

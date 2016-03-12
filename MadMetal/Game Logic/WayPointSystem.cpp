@@ -1,12 +1,13 @@
 #include "WaypointSystem.h"
 #include "Game Logic\PathFinding.h"
+#include "Factory\GameFactory.h"
 
 static const float WAYPOINT_WIDTH_COLLISION = 17;
 static const float WAYPOINT_LENGTH_COLLISION = 17;
 static const float WAYPOINT_TRUE_WIDTH = 20;
 static const float WAYPOINT_TRUE_LENGTH = 20;
 
-WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition) : m_gameFactory(gameFactory)
+WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition)
 {
 	int index = 0;
 	for (int i = trackWidthMin + WAYPOINT_TRUE_WIDTH; i < trackWidthMax; i += ((WAYPOINT_TRUE_WIDTH)* 2))
@@ -18,7 +19,7 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int 
 			PxGeometry **geom = new PxGeometry * [1];
 			geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_WIDTH_COLLISION, yposition, WAYPOINT_LENGTH_COLLISION));
 			PxTransform *pos = new PxTransform(i, yposition, j);
-			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
+			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
 			delete pos;
 			delete geom[0];
 			delete[] geom;
