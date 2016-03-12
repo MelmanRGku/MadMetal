@@ -67,7 +67,7 @@ public:
 	virtual void useSuper() = 0;
 	virtual void fire() = 0;
 	void takeDamage(float damage);
-	void increaseDamageDealt(float damage);
+	
 	virtual void update(float dt);
 	void addDamageDealt(float damage);
 	bool superReady() { return m_superGauge >= 1.f; }
@@ -91,6 +91,7 @@ public:
 	void setMidCollisionVolumeFlag(bool isHit);
 	void pickUpPowerUp(PowerUpType type);
 	void usePowerUp();
+	PowerUpType getActivePowerUpType();
 
 };
 

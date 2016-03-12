@@ -175,13 +175,14 @@ bool AudioChannel::setAudioPosition(Car * listener)
 
 	//calculate distance between the listener and source. 
 	float listenerX = 0 , listenerZ =0, sourceX =0, sourceZ =0;
-	if (listener != NULL)
-	{
-		listenerX = listener->getActor().getGlobalPose().p.x;
-		listenerZ = listener->getActor().getGlobalPose().p.z;
-	}
 	if (m_audioPosition != NULL)
 	{
+		if (listener != NULL)
+		{
+			listenerX = listener->getActor().getGlobalPose().p.x;
+			listenerZ = listener->getActor().getGlobalPose().p.z;
+		}
+	
 		sourceX = m_audioPosition->getGlobalPose().p.x;
 		sourceZ = m_audioPosition->getGlobalPose().p.z;
 	}
