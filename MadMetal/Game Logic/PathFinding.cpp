@@ -114,7 +114,7 @@ void PathFinding::pathOpened(Waypoint& waypoint, float newCost, SearchWaypoint *
 
 	for (int i = 0; i < m_visitedList.size(); i++)
 	{
-		if (waypoint.getId() == m_visitedList[i]->getWaypoint().getId())
+		if (waypoint.getIndex() == m_visitedList[i]->getWaypoint().getIndex())
 		{
 			return;
 		}
@@ -123,7 +123,7 @@ void PathFinding::pathOpened(Waypoint& waypoint, float newCost, SearchWaypoint *
 	SearchWaypoint* newChild = new SearchWaypoint(waypoint, parent);
 	for (int i = 0; i < m_indexWithHighCost.size(); i++)
 	{
-		if (newChild->getWaypoint().getId() == m_indexWithHighCost[i])
+		if (newChild->getWaypoint().getIndex() == m_indexWithHighCost[i])
 		{
 			newChild->setHighCost(9999.9);
 		}
@@ -133,7 +133,7 @@ void PathFinding::pathOpened(Waypoint& waypoint, float newCost, SearchWaypoint *
 
 	for (int i = 0; i < m_openList.size(); i++)
 	{
-		if (waypoint.getId() == m_openList[i]->getWaypoint().getId())
+		if (waypoint.getIndex() == m_openList[i]->getWaypoint().getIndex())
 		{
 			float newG = newChild->getG();
 
@@ -164,7 +164,7 @@ void PathFinding::continuePath()
 
 	SearchWaypoint* currentWaypoint = getNextCell();
 
-	if (currentWaypoint->getWaypoint().getId() == m_goalWaypoint->getWaypoint().getId())
+	if (currentWaypoint->getWaypoint().getIndex() == m_goalWaypoint->getWaypoint().getIndex())
 	{
 		delete m_goalWaypoint->getParent();
 		m_goalWaypoint->setParent(currentWaypoint->getParent());
@@ -201,7 +201,7 @@ void PathFinding::continuePath()
 
 		for (int i = 0; i < m_openList.size(); i++)
 		{
-			if (currentWaypoint->getWaypoint().getId() == m_openList[i]->getWaypoint().getId())
+			if (currentWaypoint->getWaypoint().getIndex() == m_openList[i]->getWaypoint().getIndex())
 			{
 				delete m_openList[i];
 				m_openList.erase(m_openList.begin() + i);
