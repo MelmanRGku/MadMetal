@@ -10,7 +10,7 @@
 class Waypoint : public TestObject
 {
 	static int globalID;
-	int m_id;
+	int m_index;
 	bool m_isValid;
 	bool m_isFinish;
 	std::vector<Waypoint*> m_adjecentWaypoints;
@@ -19,7 +19,7 @@ public:
 	Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
 	~Waypoint();
 	std::vector<Waypoint*>& getListOfAdjacentWaypoints(){ return m_adjecentWaypoints; }
-	const int& getId();
+	const int& getIndex();
 	bool isValid();
 	void setValid(bool isValid);
 	bool isFinish();

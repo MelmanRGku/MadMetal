@@ -14,6 +14,6 @@ class CollisionVolume : public TestObject
 public:
 	CollisionVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
 	~CollisionVolume();
-	const int& getId();
+	const int& getIndex();
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 };

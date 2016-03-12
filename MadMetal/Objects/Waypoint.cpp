@@ -5,7 +5,7 @@ int Waypoint::globalID = 0;
 
 Waypoint::Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable)
 {
-	m_id = Waypoint::globalID;
+	m_index = Waypoint::globalID;
 	Waypoint::globalID++;
 	m_isValid = true;
 }
@@ -15,9 +15,9 @@ Waypoint::~Waypoint()
 {
 }
 
-const int& Waypoint::getId()
+const int& Waypoint::getIndex()
 {
-	return Waypoint::m_id;
+	return Waypoint::m_index;
 }
 
 void Waypoint::addAdjecentWaypoint(Waypoint* waypoint)

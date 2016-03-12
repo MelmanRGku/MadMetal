@@ -99,10 +99,10 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int 
 
 	//for (int i = 0; i < m_waypoints.size(); i++)
 	//{
-	//	std::cout << "waypoint: " << m_waypoints[i]->getId() << " " << " and is connected to ";
+	//	std::cout << "waypoint: " << m_waypoints[i]->getIndex() << " " << " and is connected to ";
 	//	for (int k = 0; k < m_waypoints[i]->getListOfAdjacentWaypoints().size(); k++)
 	//	{
-	//		std::cout << m_waypoints[i]->getListOfAdjacentWaypoints().at(k)->getId() << ", ";
+	//		std::cout << m_waypoints[i]->getListOfAdjacentWaypoints().at(k)->getIndex() << ", ";
 	//	}
 	//	std::cout << "\n";
 	//}
@@ -130,7 +130,7 @@ void WaypointSystem::test()
 
 	for (int i = 0; i < result.size(); i++)
 	{
-		//std::cout << result[i]->getId() << ", ";
+		//std::cout << result[i]->getIndex() << ", ";
 	}
 
 	//std::cout << "\n";

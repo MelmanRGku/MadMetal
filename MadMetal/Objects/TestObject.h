@@ -44,7 +44,7 @@ public:
 	void setScale(glm::vec3 scale) { m_animatable->setScale(scale); }
 	void updateScale(glm::vec3 ds) { m_animatable->updateScale(ds); }
 	PxBounds3 getWorldBounds() { return m_physicable->getActor().getWorldBounds(); }
-	long getId() { return id; }
+	long getIndex() { return id; }
 	virtual void update(float dt) { totalLifeTime += dt; if (maxLifeTime != -1 && totalLifeTime > maxLifeTime) hasToBeDeleted = true; }
 	PxRigidActor &getActor() { return m_physicable->getActor(); }
 	void setHasToBeDeleted(bool hasToBeDeleted) { this->hasToBeDeleted = hasToBeDeleted; }

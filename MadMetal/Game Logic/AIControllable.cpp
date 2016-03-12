@@ -62,31 +62,31 @@ void AIControllable::playFrame(double dt)
 	{
 		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 	}
-	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_needsToBackup)
+	else if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() && m_needsToBackup)
 	{
 		m_needsToBackup = false;
 		recalculatePath();
 		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 		m_counter = 0;
 	}
-	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_car->getCurrentWaypoint()->getId() != m_nextWaypoint->getId())
+	else if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() && m_car->getCurrentWaypoint()->getIndex() != m_nextWaypoint->getIndex())
 	{
 		recalculatePath();
 		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 	}
-	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId())
+	else if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex())
 	{
 		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 	}
 
-	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId()))
+	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getIndex() == m_goalWaypoint->getIndex()))
 	{
 		recalculatePath();
 	}
 	else
 	{
 		//std::cout << "path exists\n";
-		if (m_car->getCurrentWaypoint()->getId() == m_nextWaypoint->getId())
+		if (m_car->getCurrentWaypoint()->getIndex() == m_nextWaypoint->getIndex())
 		{
 			//std::cout << "Reached Next Waypoint\n";
 			updateNextWaypoint();
@@ -125,7 +125,7 @@ void AIControllable::playFrame(double dt)
 			}
 		}
 
-		if (m_car->getCurrentWaypoint()->getId() != m_goalWaypoint->getId())
+		if (m_car->getCurrentWaypoint()->getIndex() != m_goalWaypoint->getIndex())
 		{
 			if (m_needsToBackup)
 			{
@@ -147,7 +147,7 @@ void AIControllable::playFrame(double dt)
 	}
 	}
 	//if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
-		//std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";
+		//std::cout << "current: " << m_car->getCurrentWaypoint()->getIndex() << " | next : " << m_nextWaypoint->getIndex() << " | " << "goal: " << m_goalWaypoint->getIndex() << "\n";
 }
 
 void AIControllable::accelerateToNextWaypoint()
@@ -237,7 +237,7 @@ void AIControllable::recalculatePath()
 
 	//for (int i = 0; i < m_currentPath.size(); i++)
 	//{
-	//	std::cout << m_currentPath[i]->getId() << ", ";
+	//	std::cout << m_currentPath[i]->getIndex() << ", ";
 	//}
 
 	//std::cout << "\n";

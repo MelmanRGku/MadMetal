@@ -69,7 +69,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	TestObject *otherObj = m_world.findObject(otherId);
 	Car *car = dynamic_cast<Car *>(otherObj);
 
-	if (car != NULL && car->getId() != bullet->getOwner()->getId()) {
+	if (car != NULL && car->getIndex() != bullet->getOwner()->getIndex()) {
 		car->takeDamage(bullet->getDamage());
 		bullet->getOwner()->addDamageDealt(bullet->getDamage());
 		bullet->setHasToBeDeleted(true);
@@ -103,7 +103,7 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 			}
 		}
 		
-		//std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getId() << "\n";
+		//std::cout << "car is: " << car->getIndex() << " waypoint is: " << waypoint->getIndex() << "\n";
 	}
 }
 
@@ -119,14 +119,14 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 
 	if (car != NULL)
 	{
-		if (collisionVolume->getId() == 0)
+		if (collisionVolume->getIndex() == 0)
 		{
-			//std::cout << "car: " << car->getId() << " collided with starting CollisionVolume \n";
+			//std::cout << "car: " << car->getIndex() << " collided with starting CollisionVolume \n";
 			car->setStartingCollisionVolumeFlag(true);
 		}
-		else if (collisionVolume->getId() == 1)
+		else if (collisionVolume->getIndex() == 1)
 		{
-			//std::cout << "car: " << car->getId() << " collided with mid CollisionVolume \n";
+			//std::cout << "car: " << car->getIndex() << " collided with mid CollisionVolume \n";
 			car->setMidCollisionVolumeFlag(true);
 		}
 	}
