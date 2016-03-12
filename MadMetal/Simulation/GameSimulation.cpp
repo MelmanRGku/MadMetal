@@ -32,7 +32,10 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	createPhysicsScene();
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 	m_displayMessage = static_cast<DisplayMessage *>(m_gameFactory->makeObject(GameFactory::OBJECT_DISPLAY_MESSAGE, NULL, NULL, NULL));
-	m_waypointSystem = NULL;
+
+	PxTransform *pos = new PxTransform(PxVec3(0, 0, 0));
+	m_track = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, pos, NULL, NULL));
+	delete pos;
 
 	m_isPaused = false;
 	m_numLapsVictory = NUM_LAPS_FOR_VICTORY;
@@ -62,7 +65,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
-			AIControllable *ai = new AIControllable(*playerTemplates[i]);
+			AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
 			PxTransform *pos = new PxTransform(-130 + i * 10, 40, 0);
 			ai->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL)));
 			delete pos;
@@ -89,14 +92,13 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 GameSimulation::~GameSimulation()
 {
+	PhysicsManager::getCpuDispatcher().release();
+	m_scene->release();
+	delete m_track;
 	for (int i = 0; i < m_players.size(); i++)
 	{
 		delete m_players[i];
 	}
-	PhysicsManager::getCpuDispatcher().release();
-	m_scene->release();
-	delete m_waypointSystem;
-	delete m_track;
 	delete m_displayMessage;
 	gVehicleSceneQueryData->free(*PhysicsManager::getAllocator());
 	gFrictionPairs->release();
@@ -417,26 +419,6 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-
-	PxTransform *pos = new PxTransform(PxVec3(0, 0, 0));
-	m_track = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, pos, NULL, NULL));
-	delete pos;
-
-	m_waypointSystem = new WaypointSystem(	m_track->getDrivablePart()->getWorldBounds().minimum.x,
-											m_track->getDrivablePart()->getWorldBounds().maximum.x,
-											m_track->getDrivablePart()->getWorldBounds().minimum.z,
-											m_track->getDrivablePart()->getWorldBounds().maximum.z,
-											m_track->getDrivablePart()->getWorldBounds().maximum.y);
-
-	for (int i = 0; i < m_players.size(); i++)
-	{
-		AIControllable *aiPlayer = dynamic_cast<AIControllable *>(m_players[i]);
-		if (aiPlayer != NULL)
-		{
-			aiPlayer->setWaypointSystem(m_waypointSystem);
-		}
-	}
-
 	//Power up test
 	/*PxGeometry **powerGeom = new PxGeometry*[1];
 	powerGeom[0] = new PxBoxGeometry(PxVec3(1, 5, 1));
@@ -449,10 +431,11 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxGeometry **geom2 = new PxGeometry *[1];
 	geom1[0] = new PxBoxGeometry(PxVec3(60, m_track->getDrivablePart()->getWorldBounds().maximum.y, 30));
 	geom2[0] = new PxBoxGeometry(PxVec3(40, m_track->getDrivablePart()->getWorldBounds().maximum.y, 60));
-	pos = new PxTransform(m_waypointSystem->getWaypointAt(16)->getGlobalPose().x, m_waypointSystem->getWaypointAt(16)->getGlobalPose().y, m_waypointSystem->getWaypointAt(16)->getGlobalPose().z);
+	PxTransform *pos;
+	pos = new PxTransform(m_track->getWaypointAt(16)->getGlobalPose().x, m_track->getWaypointAt(16)->getGlobalPose().y, m_track->getWaypointAt(16)->getGlobalPose().z);
 	m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL);
 	delete pos;
-	pos = new PxTransform(m_waypointSystem->getWaypointAt(41)->getGlobalPose().x, m_waypointSystem->getWaypointAt(41)->getGlobalPose().y, m_waypointSystem->getWaypointAt(41)->getGlobalPose().z);
+	pos = new PxTransform(m_track->getWaypointAt(41)->getGlobalPose().x, m_track->getWaypointAt(41)->getGlobalPose().y, m_track->getWaypointAt(41)->getGlobalPose().z);
 	m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2 , NULL);
 	delete pos;
 	delete geom1[0];

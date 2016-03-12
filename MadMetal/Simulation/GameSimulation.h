@@ -51,7 +51,6 @@ private: //members
 	VehicleSceneQueryData*	gVehicleSceneQueryData = NULL;
 	PxBatchQuery* gBatchQuery = NULL;
 	GameFactory* m_gameFactory;
-	WaypointSystem* m_waypointSystem;
 	Audio &m_audioHandle;
 	DisplayMessage * m_displayMessage;
 	Track* m_track;

@@ -1,15 +1,16 @@
 #include "AIControllable.h"
 #include "Game Logic\PathFinding.h"
 #include "Game Logic\WayPointSystem.h"
+#include "Objects\Track.h"
 
-AIControllable::AIControllable(ControllableTemplate& aiTemplate, WaypointSystem* waypointSystem) 
+AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	: Controllable(aiTemplate)
+	, m_track(track)
 {
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
-	m_waypointSystem = waypointSystem;
-	m_waypointSystem == NULL ? m_goalWaypoint = NULL : m_goalWaypoint = m_waypointSystem->getWaypointAt(48);
+	m_goalWaypoint = m_track.getWaypointAt(48);
 	m_currentPath.clear();
 	m_listOfWaypointsHighCost.push_back(4);
 	m_listOfWaypointsHighCost.push_back(14);
@@ -113,7 +114,7 @@ void AIControllable::playFrame(double dt)
 					}
 					else
 					{
-						m_nextWaypoint = m_waypointSystem->getWaypointAt(13);
+						m_nextWaypoint = m_track.getWaypointAt(13);
 					}
 				}
 				else
@@ -285,18 +286,13 @@ void AIControllable::setCar(Car * toAdd)
 	m_car = toAdd;
 }
 
-void AIControllable::setWaypointSystem(WaypointSystem* waypointSystem)
-{
-	m_waypointSystem = waypointSystem;
-	m_goalWaypoint = m_waypointSystem->getWaypointAt(13);
-}
 
 void AIControllable::checkCollisionVolumes()
 {
 	if (m_car->isAtStartingCollisionVolume())
 	{
 		setHighCostWaypointsToHigh();
-		m_goalWaypoint = m_waypointSystem->getWaypointAt(13);
+		m_goalWaypoint = m_track.getWaypointAt(13);
 		recalculatePath();
 
 		m_car->setStartingCollisionVolumeFlag(false);
@@ -304,7 +300,7 @@ void AIControllable::checkCollisionVolumes()
 	else if (m_car->isAtMidCollisionVolume())
 	{
 		setHighCostWaypointsToLow();
-		m_goalWaypoint = m_waypointSystem->getWaypointAt(16);
+		m_goalWaypoint = m_track.getWaypointAt(16);
 		recalculatePath();
 		
 		m_car->setMidCollisionVolumeFlag(false);
