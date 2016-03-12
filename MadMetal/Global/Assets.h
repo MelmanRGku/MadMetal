@@ -6,7 +6,7 @@
 #include <mutex>
 #include <vector>
 
-#include "Objects\Model.h"
+#include "Objects\Model3D.h"
 #include "Objects\ObjectLoaders\ObjModelLoader.h"
 
 class LoadingStatus {

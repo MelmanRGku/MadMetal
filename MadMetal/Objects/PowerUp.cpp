@@ -1,6 +1,6 @@
 #include "PowerUp.h"
 
-PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable)
+PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable)
 {
 	activate();
 }
@@ -44,7 +44,8 @@ void PowerUp::activate()
 		m_type = PowerUpType::NONE;
 		break;
 	}
-	m_renderable->setModel(Assets::getModel("sword"), true, true);
+	m_renderable->setModel(Assets::getModel("sword"));
+	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 }
 
 float PowerUp::getPowerUpDuration(PowerUpType toGet)

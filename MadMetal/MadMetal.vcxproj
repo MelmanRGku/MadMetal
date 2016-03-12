@@ -78,6 +78,10 @@
     <ClCompile Include="Game Logic\PathFinding.cpp" />
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
+    <ClCompile Include="Objects\Model2D.cpp" />
+    <ClCompile Include="Objects\Model3D.cpp" />
+    <ClCompile Include="Objects\Object2D.cpp" />
+    <ClCompile Include="Objects\Object3D.cpp" />
     <ClCompile Include="Objects\BulletCarCollision.cpp" />
     <ClCompile Include="Objects\CollisionVolume.cpp" />
     <ClCompile Include="Objects\LoadingBar.cpp" />
@@ -89,6 +93,8 @@
     <ClCompile Include="Objects\Track.cpp" />
     <ClCompile Include="Renderer\NoShaderProgram.cpp" />
     <ClCompile Include="Objects\Bullet.cpp" />
+    <ClCompile Include="Renderer\Renderable2D.cpp" />
+    <ClCompile Include="Renderer\Renderable3D.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
     <ClCompile Include="Simulation\CollisionManager.cpp" />
     <ClCompile Include="Factory\GameFactory.cpp" />
@@ -147,6 +153,10 @@
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
+    <ClInclude Include="Objects\Model2D.h" />
+    <ClInclude Include="Objects\Model3D.h" />
+    <ClInclude Include="Objects\Object2D.h" />
+    <ClInclude Include="Objects\Object3D.h" />
     <ClInclude Include="Objects\Audioable.h" />
     <ClInclude Include="Objects\BulletCarCollision.h" />
     <ClInclude Include="Objects\DisplayMessage.h" />
@@ -158,6 +168,8 @@
     <ClInclude Include="Objects\Waypoint.h" />
     <ClInclude Include="Renderer\NoShaderProgram.h" />
     <ClInclude Include="Objects\Bullet.h" />
+    <ClInclude Include="Renderer\Renderable2D.h" />
+    <ClInclude Include="Renderer\Renderable3D.h" />
     <ClInclude Include="Renderer\ShaderProgram.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Simulation\CollisionManager.h" />

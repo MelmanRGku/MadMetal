@@ -2,7 +2,8 @@
 
 #include <iostream>
 #include <vector>
-#include "../Objects/TestObject.h"
+#include "../Objects/Object3D.h"
+#include "../Objects/Object2D.h"
 
 
 

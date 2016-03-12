@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PxVehicleDrive4W.h"
-#include "../TestObject.h"
+#include "../Object3D.h"
 #include "Objects\DrivingStyle.h"
 #include "Objects\PowerUp.h"
 #include "Objects/UI.h"
@@ -9,7 +9,7 @@
 
 class Waypoint;
 
-class Car : public TestObject
+class Car : public Object3D
 {
 protected: //members
 
@@ -56,7 +56,7 @@ public:
 
 	UI *ui;
 
-	Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
+	Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	virtual ~Car();
 
 	PxVehicleDrive4W &getCar() { return m_car; }

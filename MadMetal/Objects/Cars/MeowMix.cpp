@@ -1,7 +1,7 @@
 #include "MeowMix.h"
 #include "Factory\GameFactory.h"
 
-MeowMix::MeowMix(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : Car(id, style, car, aable, pable, anable, rable)
+MeowMix::MeowMix(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Car(id, style, car, aable, pable, anable, rable)
 {
 	m_lastWeaponShot = LAST_WEAPON_SHOT_LEFT;
 	m_reloadRateSeconds = 0.15;						//in s
@@ -76,11 +76,13 @@ void MeowMix::useSuper() {
 	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
 	m_reloadRemainingSeconds = 0;
 	m_superGauge = 0;
-	m_renderable->setModel(Assets::getModel("UglyCarWithCannon"), true, true);
+	m_renderable->setModel(Assets::getModel("UglyCarWithCannon"));
+	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 	m_animatable->updateScale(glm::vec3(0, 2, 0));
 }
 
 void MeowMix::unuseSuper() {
-	m_renderable->setModel(Assets::getModel("UglyCarWithGuns"), true, true);
+	m_renderable->setModel(Assets::getModel("UglyCarWithGuns"));
+	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 	m_animatable->updateScale(glm::vec3(0, -2, 0));
 }

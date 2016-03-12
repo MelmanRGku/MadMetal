@@ -1,11 +1,11 @@
 #pragma once
 
-#include "TestObject.h"
+#include "Object3D.h"
 
 class Camera 
 {
 private:
-	TestObject * m_toFollow;
+	Object3D * m_toFollow;
 	glm::vec3 m_up, m_currentPos, m_desiredPos, m_rotation, m_lookAt; 
 	float m_rotateScalar, m_distance, m_gravityScalar;
 	float m_inclinationAngle;
@@ -13,8 +13,8 @@ private:
 	bool m_recentlyMoved;
 public:
 	Camera();
-	Camera(TestObject * object);
-	void setToFollow(TestObject * toFollow);
+	Camera(Object3D * object);
+	void setToFollow(Object3D * toFollow);
 	void setLookAt(glm::vec3 eye, glm::vec3 at, glm::vec3 up);
 	void rotateCamera(float xpos, float ypos);
 	void update(double dtMilli);

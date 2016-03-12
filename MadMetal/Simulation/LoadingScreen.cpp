@@ -40,12 +40,11 @@ bool LoadingScreen::simulateScene(double dt, SceneMessage &newMessage) {
 
 
 void LoadingScreen::createProgressBar() {
-	Model *barModel = Assets::loadObjFromDirectory("Assets/Models/loadingBox.obj");
+	Model3D *barModel = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/loadingBox.obj"));
 	barModel->setupVAOs();
 
 	Animatable *animatable = new Animatable();
-	Renderable *renderable = new Renderable(NULL);
-	renderable->setModel(barModel, true, true);
+	Renderable3D *renderable = new Renderable3D(barModel, true, true);
 	Audioable *audioable = new Audioable(m_audio);
 	Physicable *physicable = new Physicable(NULL);
 	bar = new LoadingBar(1, audioable, physicable, animatable, renderable);
@@ -54,24 +53,24 @@ void LoadingScreen::createProgressBar() {
 }
 
 void LoadingScreen::createLoadingString() {
-	Renderable *renderable = new Renderable(NULL);
+	Renderable3D *renderable = new Renderable3D(NULL);
 	Audioable *audioable = new Audioable(m_audio);
 	Animatable *animatable = new Animatable();
 	Physicable *physicable = new Physicable(NULL);
 
 	loadingString = new Text3D(3, audioable, physicable, animatable, renderable, 1);
 	loadingString->setString("Loading");
-	loadingString->setPos(glm::vec3(0, 0, -10));
+	loadingString->setPosition(glm::vec3(0, 0, -10));
 	m_world->addGameObject(loadingString);
 }
 
 void LoadingScreen::createLoadingInfoString() {
-	Renderable *renderable = new Renderable(NULL);
+	Renderable3D *renderable = new Renderable3D(NULL);
 	Audioable *audioable = new Audioable(m_audio);
 	Animatable *animatable = new Animatable();
 	Physicable *physicable = new Physicable(NULL);
 
 	loadingInfoString = new Text3D(4, audioable, physicable, animatable, renderable, 1);
-	loadingInfoString->setPos(glm::vec3(0, -4.5, -20));
+	loadingInfoString->setPosition(glm::vec3(0, -4.5, -20));
 	m_world->addGameObject(loadingInfoString);
 }

@@ -54,6 +54,7 @@ void Assets::loadObjsFromDirectory(std::string path) {
 
 void Assets::initializeVAOs() {
 	for (std::map<std::string, Model *>::iterator iterator = models->begin(); iterator != models->end(); iterator++) {
-		iterator->second->setupVAOs();
+		Model3D *model = static_cast<Model3D*> (iterator->second);
+		model->setupVAOs();
 	}
 }

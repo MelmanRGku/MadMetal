@@ -9,15 +9,11 @@ class Renderer;
 class Renderable {
 public:
 	Model *m_model;
-	glm::mat4x4 initialModelMatrix;
 public:
-	Renderable(Model *model, bool resize = false, bool reposition = false);
-	Renderable();
+	Renderable(Model *model);
 	virtual ~Renderable();
-	virtual glm::mat4x4 getInitialModelMatrix() { return initialModelMatrix; }
 	Model *getModel() { return m_model; }
-	void setModel(Model *model, bool resize = false, bool reposition = false);
-	void setAlpha(float alpha);
+	void setModel(Model *model);
 };
 
 

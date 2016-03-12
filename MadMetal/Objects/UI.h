@@ -1,14 +1,14 @@
 #pragma once
 
-#include "TestObject.h"
+#include "Object2D.h"
 #include "HealthBar2D.h"
 #include "GaugeBar.h"
 #include "Text2D.h"
 
-class UI : public TestObject
+class UI : public Object2D
 {
 public:
-	UI(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
+	UI(long id, Audioable *aable, Animatable *anable, Renderable2D *rable);
 	~UI();
 
 	HealthBar2D *healthBar;

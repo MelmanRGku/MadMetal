@@ -3,11 +3,11 @@
 #include "Simulation\PhysicsManager.h"
 #include <vector>
 #include <iostream>
-#include <Objects\TestObject.h>
+#include "Objects\Object3D.h"
 
 #define WAYPOINT_DIMENSION_X 4
 
-class Waypoint : public TestObject
+class Waypoint : public Object3D
 {
 	static int globalID;
 	int m_id;
@@ -16,7 +16,7 @@ class Waypoint : public TestObject
 	std::vector<Waypoint*> m_adjecentWaypoints;
 
 public:
-	Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
+	Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	~Waypoint();
 	std::vector<Waypoint*>& getListOfAdjacentWaypoints(){ return m_adjecentWaypoints; }
 	const int& getId();

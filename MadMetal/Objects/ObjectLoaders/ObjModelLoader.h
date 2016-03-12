@@ -11,7 +11,7 @@
 #include "Libraries\glm\vec2.hpp"
 #include "..\Object.h"
 #include "..\Texture.h"
-#include "..\Model.h"
+#include "..\Model3D.h"
 #include <iostream>
 #include <string>
 
@@ -20,12 +20,12 @@ class ObjModelLoader
 public:
 	ObjModelLoader();
 	~ObjModelLoader();
-	Model *loadFromFile(const char* fileName);
-	Model *loadFromFile(std::string fileName);
+	Model3D *loadFromFile(const char* fileName);
+	Model3D *loadFromFile(std::string fileName);
 
 private:
 	std::string directory;
 
-	Model *processScene(const aiScene *scene);
+	Model3D *processScene(const aiScene *scene);
 };
 

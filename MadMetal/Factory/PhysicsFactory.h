@@ -7,7 +7,6 @@ class PhysicsFactory
 public:
 	enum PhysicalObjects {
 		PHYSICAL_OBJECT_CAR,
-		PHYSICAL_OBJECT_WALL,
 		PHYSICAL_OBJECT_DRIVING_BOX,
 		PHYSICAL_OBJECT_BOX,
 		PHYSICAL_TRIANGLE_MESH,
@@ -91,14 +90,6 @@ public:
 		PxBase *toReturn = NULL;
 
 		switch (actorToMake) {
-		case PHYSICAL_OBJECT_WALL:
-		{
-			PxRigidStatic * wall = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
-			wall->createShape(*geom[0], *material);
-			setFilterDataId(objectId, wall);
-			toReturn = wall;
-			break;
-		}
 		case PHYSICAL_OBJECT_BOX:
 		{
 			PxRigidStatic * box = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);

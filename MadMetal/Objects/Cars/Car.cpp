@@ -4,7 +4,7 @@
 #include <sstream>
 #include "Objects\Waypoint.h"
 
-Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable), m_car(car), m_drivingStyle(style)
+Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable), m_car(car), m_drivingStyle(style)
 {
 	m_currentWaypoint = NULL;
 	m_isAtMidCollisionVolume = false;

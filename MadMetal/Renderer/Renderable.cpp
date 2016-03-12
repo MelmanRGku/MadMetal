@@ -1,39 +1,13 @@
 #include "Renderable.h"
 
-#define ZERO_TO_ONE(x) (x == 0 ? 1 : x)
-
 Renderable::~Renderable() {}
 
-Renderable::Renderable() {}
-
-Renderable::Renderable(Model* Model, bool resize, bool reposition)
+Renderable::Renderable(Model* Model)
 {
-	setModel(Model, resize, reposition);
+	setModel(Model);
 }
 
-void Renderable::setModel(Model *model, bool resize, bool reposition)
+void Renderable::setModel(Model *model)
 {
 	m_model = model;
-	initialModelMatrix = glm::mat4x4();
-	if (model != NULL) {
-		if (resize) {
-			double scaleX = 1 / ZERO_TO_ONE(model->boundingBox->getSizeX());
-			double scaleY = 1 / ZERO_TO_ONE(model->boundingBox->getSizeY());
-			double scaleZ = 1 / ZERO_TO_ONE(model->boundingBox->getSizeZ());
-			initialModelMatrix = initialModelMatrix * glm::scale(glm::mat4x4(), glm::vec3(scaleX, scaleY, scaleZ));
-		}
-
-		if (reposition) {
-			glm::mat4x4 translate = glm::translate(glm::mat4x4(), glm::vec3(-model->boundingBox->getCenterX(), -model->boundingBox->getCenterY(), -model->boundingBox->getCenterZ()));
-			initialModelMatrix = initialModelMatrix * translate;
-		}
-	}
-	else {
-		initialModelMatrix = glm::mat4x4();
-	}
-}
-
-
-void Renderable::setAlpha(float alpha) {
-	m_model->setAlpha(alpha);
 }

@@ -9,7 +9,8 @@
 #include "Objects\Audioable.h"
 #include "Objects\Animatable.h"
 #include "Objects\Physicable.h"
-#include "Renderer\Renderable.h"
+#include "Renderer\Renderable3D.h"
+#include "Renderer\Renderable2D.h"
 #include "Objects\DrivingStyleFast.h"
 #include "Objects\Cars\MeowMix.h"
 #include "Objects\Bullet.h"
@@ -27,7 +28,6 @@ public:
 	enum Objects {
 		OBJECT_MEOW_MIX,
 		OBJECT_PLANE,
-		OBJECT_WALL,
 		OBJECT_BULLET_MEOW_MIX,
 		OBJECT_BULLET_SUPER_VOLCANO,
 		OBJECT_HEALTH_BAR,
@@ -36,7 +36,6 @@ public:
 		OBJECT_TRACK,
 		OBJECT_TRACK_DRIVABLE,
 		OBJECT_TRACK_NON_DRIVABLE,
-		OBJECT_BUILDING,
 		OBJECT_WAYPOINT,
 		OBJECT_BULLET_CAR_COLLISION,
 		OBJECT_UI,

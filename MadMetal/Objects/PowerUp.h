@@ -1,5 +1,5 @@
 #pragma once
-#include "TestObject.h"
+#include "Object3D.h"
 #include "Global\Assets.h"
 
 
@@ -17,7 +17,7 @@ enum PowerUpType {
 	SPEED
 };
 
-class PowerUp : public TestObject
+class PowerUp : public Object3D
 {
 private:
 	PowerUpType m_type;
@@ -28,7 +28,7 @@ private:
 public:
 	
 
-	PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
+	PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	virtual ~PowerUp();
 	
 	virtual void update(float dtMillis);
