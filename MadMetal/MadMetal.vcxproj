@@ -78,6 +78,7 @@
     <ClCompile Include="Game Logic\PathFinding.cpp" />
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp" />
     <ClCompile Include="Objects\Model2D.cpp" />
     <ClCompile Include="Objects\Model3D.cpp" />
     <ClCompile Include="Objects\Object2D.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectScaleUpdater.h" />
     <ClInclude Include="Objects\Model2D.h" />
     <ClInclude Include="Objects\Model3D.h" />
     <ClInclude Include="Objects\Object2D.h" />

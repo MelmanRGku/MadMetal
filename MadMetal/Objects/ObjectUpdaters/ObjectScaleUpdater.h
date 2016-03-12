@@ -6,15 +6,15 @@
 #include "Libraries/glm/vec3.hpp"
 
 
-class ObjectPositionUpdater : public ObjectUpdater
+class ObjectScaleUpdater : public ObjectUpdater
 {
 private:
 	TestObject *object;
-	glm::vec3 offset;
+	glm::vec3 scale;
 
 public:
-	ObjectPositionUpdater(TestObject *obj, glm::vec3 offset, float duration);
-	~ObjectPositionUpdater();
+	ObjectScaleUpdater(TestObject *obj, glm::vec3 scale, float duration);
+	~ObjectScaleUpdater();
 	void update(float dt);
 };
 

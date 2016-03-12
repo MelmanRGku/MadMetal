@@ -37,6 +37,8 @@ public:
 	void setPosition(glm::vec3 pos) { m_animatable->setPosition(pos); }
 	void setScale(glm::vec3 scale) { m_animatable->setScale(scale); }
 	void updateScale(glm::vec3 ds) { m_animatable->updateScale(ds); }
+	void updatePosition(glm::vec3 dp) { m_animatable->updatePosition(dp); }
+	void updateRotation(glm::vec3 dr) { m_animatable->updateRotation(dr); }
 	long getId() { return id; }
 	virtual void update(float dt) { totalLifeTime += dt; if (maxLifeTime != -1 && totalLifeTime > maxLifeTime) hasToBeDeleted = true; }
 	void setHasToBeDeleted(bool hasToBeDeleted) { this->hasToBeDeleted = hasToBeDeleted; }

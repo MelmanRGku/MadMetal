@@ -9,6 +9,11 @@
 #include "Game Logic\AIControllable.h"
 #include "Objects\DisplayMessage.h"
 #include "CollisionManager.h"
+#include "Objects\ObjectUpdaters\ObjectPositionUpdater.h"
+#include "Objects\ObjectUpdaters\ObjectRotationUpdater.h"
+#include "Objects\ObjectUpdaters\ObjectScaleUpdater.h"
+#include "Objects\ObjectUpdaters\ObjectUpdaterSequence.h"
+#include "Objects\ObjectUpdaters\ObjectUpdaterParallel.h"
 
 class Scene;
 class Car;

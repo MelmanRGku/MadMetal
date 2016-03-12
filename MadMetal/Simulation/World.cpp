@@ -11,6 +11,10 @@ World::~World() {
 		delete gameObjects->at(i);
 	}
 	delete gameObjects;
+
+	for (unsigned int i = 0; i < updaters.size(); i++) {
+		delete updaters.at(i);
+	}
 }
 
 
@@ -76,5 +80,9 @@ void World::update(float dt) {
 		}
 
 		obj->update(dt);
+	}
+
+	for (unsigned int i = 0; i < updaters.size(); i++) {
+		updaters.at(i)->update(dt);
 	}
 }

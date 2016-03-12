@@ -243,6 +243,9 @@
     <ClCompile Include="Objects\Model3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global\Settings.h">
@@ -507,6 +510,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Model3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectScaleUpdater.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

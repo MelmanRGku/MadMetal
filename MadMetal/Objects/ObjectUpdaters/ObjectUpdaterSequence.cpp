@@ -25,6 +25,9 @@ ObjectUpdaterSequence::ObjectUpdaterSequence(int type, int numberOfTimes) {
 
 ObjectUpdaterSequence::~ObjectUpdaterSequence()
 {
+	for (unsigned int i = 0; i < updaters.size(); i++) {
+		delete updaters.at(i);
+	}
 }
 
 

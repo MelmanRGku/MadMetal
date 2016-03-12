@@ -1,7 +1,7 @@
 #include "ObjectPositionUpdater.h"
 
 
-ObjectPositionUpdater::ObjectPositionUpdater(Object *obj, glm::vec3 offset, float duration)
+ObjectPositionUpdater::ObjectPositionUpdater(TestObject *obj, glm::vec3 offset, float duration)
 {
 
 	object = obj;

@@ -47,8 +47,10 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
 			PxTransform *pos = new PxTransform(-130 + i * 10, 40, 0);
-			humanPlayer->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL)));
+			MeowMix *car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
+			humanPlayer->setCar(car);
 			delete pos;
+
 			UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
 			humanPlayer->getCar()->ui = ui;
 			m_world->addGameObject(ui);
