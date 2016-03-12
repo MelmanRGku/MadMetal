@@ -5,6 +5,14 @@
 class WaypointSystem;
 class Waypoint;
 
+enum Boundry
+{
+	TOP = 1,
+	BOTTOM = 2,
+	LEFT = 3,
+	RIGHT = 4,
+};
+
 class Track : public TestObject
 {
 public:
@@ -21,5 +29,8 @@ private: //members
 		*nonDrivablePart;
 	std::vector<WaypointSystem*> m_waypointSystems;
 	std::vector<Waypoint*> m_waypointList;
+private: //helper functions 
+	void stitchWaypointSystem(Boundry lastWaypointSystemLocation, Boundry newWaypointSystemPosition, WaypointSystem& newWaypointSystem,int lastWaypointSystemIntialPosition, int newWaypointSystemIntialPosition);
+	void determineStitchingBoundaries(Boundry locationOfStiching, int initialPosition, bool& isStichingRow, int& RowIndex, int& ColumnIndex, WaypointSystem& system);
 	
 };

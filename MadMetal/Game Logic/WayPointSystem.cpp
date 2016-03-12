@@ -86,17 +86,17 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 
 
 	
-	for (int i = 30; i < 80; i++)
-	{
-		if (i % 10 > 2 && i % 10 < 8)
-		{
-			//std::cout << "Setting invalid index: " << i << "\n";
-			m_waypoints[i]->setValid(false);
-		}
-	}
-	m_waypoints[77]->setValid(false);
-	m_waypoints[83]->setValid(false);
-	m_waypoints[26]->setValid(false);
+	//for (int i = 30; i < 80; i++)
+	//{
+	//	if (i % 10 > 2 && i % 10 < 8)
+	//	{
+	//		//std::cout << "Setting invalid index: " << i << "\n";
+	//		m_waypoints[i]->setValid(false);
+	//	}
+	//}
+	//m_waypoints[77]->setValid(false);
+	//m_waypoints[83]->setValid(false);
+	//m_waypoints[26]->setValid(false);
 
 
 	//for (int i = 0; i < m_waypoints.size(); i++)

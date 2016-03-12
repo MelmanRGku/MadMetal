@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-#define NUM_PLAYERS 4
+#define NUM_PLAYERS 1
 
 MainMenuScene::MainMenuScene(Input * input)
 {
