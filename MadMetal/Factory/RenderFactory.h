@@ -15,7 +15,8 @@ public:
 		RENDERABLE_OBJECT_TRACK_NON_DRIVABLE,
 		RENDERABLE_OBJECT_BULLET_MEOW_MIX,
 		RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO,
-		RENDERABLE_OBJECT_GGO
+		RENDERABLE_OBJECT_GGO,
+		RENDERABLE_OBJECT_ATTACK_POWERUP
 	};
 
 	
@@ -36,6 +37,8 @@ public:
 			return Assets::getModel("scareMoon");
 		case RENDERABLE_OBJECT_GGO:
 			return Assets::getModel("GGO");
+		case (RENDERABLE_OBJECT_ATTACK_POWERUP) :
+			return Assets::getModel("sword");
 		}
 	}
 	

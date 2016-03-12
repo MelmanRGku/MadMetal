@@ -13,6 +13,7 @@
 #include "Game Logic\WayPointSystem.h"
 #include "Objects\TestObject.h"
 #include "Objects\CollisionVolume.h"
+#include "Objects\PowerUp.h"
 #include <sstream>
 
 
@@ -436,6 +437,15 @@ void GameSimulation::setupBasicGameWorldObjects() {
 			aiPlayer->setWaypointSystem(m_waypointSystem);
 		}
 	}
+
+	//Power up test
+	/*PxGeometry **powerGeom = new PxGeometry*[1];
+	powerGeom[0] = new PxBoxGeometry(PxVec3(1, 5, 1));
+	pos = new PxTransform(-130, 25, 60);
+	m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL);
+	delete pos;*/
+
+
 	PxGeometry **geom1 = new PxGeometry *[1];
 	PxGeometry **geom2 = new PxGeometry *[1];
 	geom1[0] = new PxBoxGeometry(PxVec3(60, m_track->getDrivablePart()->getWorldBounds().maximum.y, 30));

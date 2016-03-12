@@ -84,6 +84,7 @@
     <ClCompile Include="Objects\MeowMixBullet.cpp" />
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
+    <ClCompile Include="Objects\PowerUp.cpp" />
     <ClCompile Include="Objects\Waypoint.cpp" />
     <ClCompile Include="Objects\Track.cpp" />
     <ClCompile Include="Renderer\NoShaderProgram.cpp" />
@@ -182,7 +183,7 @@
     <ClInclude Include="Objects\Cars\Car.h" />
     <ClInclude Include="Game Logic\Controllable.h" />
     <ClInclude Include="Game Logic\PlayerControllable.h" />
-    <ClInclude Include="Game Logic\PowerUp.h" />
+    <ClInclude Include="Objects\PowerUp.h" />
     <ClInclude Include="Game Logic\Projectile.h" />
     <ClInclude Include="Game Logic\WayPointSystem.h" />
     <ClInclude Include="Libraries\stb_image.h" />

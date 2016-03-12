@@ -59,7 +59,7 @@ PxTriangleMesh **Model::getPhysicsTriangleMesh() {
 		PxDefaultMemoryOutputStream buf;
 		if (PhysicsManager::getCookingInstance().cookTriangleMesh(description, buf))
 		{
-			std::cout << "created the triangle mesh \n";
+			//std::cout << "created the triangle mesh \n";
 			PxDefaultMemoryInputData id(buf.getData(), buf.getSize());
 			triangleMesh = PhysicsManager::getPhysicsInstance().createTriangleMesh(id);
 			physicalMeshes[meshIndex] = triangleMesh;

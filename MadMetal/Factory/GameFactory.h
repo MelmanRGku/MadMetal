@@ -43,6 +43,7 @@ public:
 		OBJECT_DISPLAY_MESSAGE,
 		OBJECT_TEXT_3D,
 		OBJECT_COLLISION_VOLUME,
+		OBJECT_POWERUP,
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);

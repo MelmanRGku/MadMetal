@@ -318,6 +318,24 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return waypoint;
 	}
+
+	case OBJECT_POWERUP:
+	{
+			Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP), true, true);
+			Animatable *animatable = new Animatable();
+			Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+			PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::POWER_UP, objectId, pos, geom, 0, NULL, NULL, NULL));
+			Physicable *physicable = new Physicable(powerupTriggerVolume);
+			animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
+
+			PowerUp *powerup = new PowerUp(objectId, audioable, physicable, animatable, renderable);
+
+			m_world.addGameObject(powerup);
+			m_scene.addActor(*powerupTriggerVolume);
+
+			return powerup;
+	}
 	case OBJECT_BULLET_CAR_COLLISION:
 	{
 		Renderable *renderable = new Renderable(NULL);
@@ -350,6 +368,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return collisionVolume;
 	}
+
+
 	}
 }
 

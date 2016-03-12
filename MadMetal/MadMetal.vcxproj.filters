@@ -222,6 +222,9 @@
     <ClCompile Include="Objects\CollisionVolume.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\PowerUp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global\Settings.h">
@@ -300,9 +303,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Logic\Controllable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Logic\PowerUp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Logic\Projectile.h">
@@ -468,6 +468,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\PowerUp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,8 +3,9 @@
 #include "PxVehicleDrive4W.h"
 #include "../TestObject.h"
 #include "Objects\DrivingStyle.h"
-#include "Game Logic\PowerUp.h"
+#include "Objects\PowerUp.h"
 #include "Objects/UI.h"
+
 
 class Waypoint;
 
@@ -40,12 +41,11 @@ protected: //members
 	Sound soundChassis;
 
 	virtual void unuseSuper() = 0;
-	/*
-		Need to be implemented
-		Projectile * m_ammuntion;
-		PowerUp m_heldPowerUp;
-		PowerUp m_activePowerUp;
-	*/
+	
+	PowerUpType m_heldPowerUp;
+	PowerUpType m_activePowerUp;
+	float m_powerUpRemaining;
+	
 private:
 	//update functions
 	void updatePowerUp(float dt);
@@ -89,5 +89,8 @@ public:
 	void setFinishedRace(bool finished) { m_finishedRace = finished; }
 	void setStartingCollisionVolumeFlag(bool isHit);
 	void setMidCollisionVolumeFlag(bool isHit);
+	void pickUpPowerUp(PowerUpType type);
+	void usePowerUp();
+
 };
 

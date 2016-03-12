@@ -82,13 +82,13 @@ void PlayerControllable::playFrame(double dt)
 					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 0);
 				}
 
-				/*
+				
 				if (m_gamePad->isPressed(GamePad::AButton))
 				{
-
+					m_car->usePowerUp();
 
 				}
-
+				/*
 				if (m_gamePad->isPressed(GamePad::BButton))
 				{
 				std::cout << "Bpressed \n";

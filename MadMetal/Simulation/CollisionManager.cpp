@@ -130,7 +130,35 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 			car->setMidCollisionVolumeFlag(true);
 		}
 	}
+}
+
+void CollisionManager::processPowerUpHit(long powerupId, long otherId)
+{
+	PowerUp* powerUp = dynamic_cast<PowerUp *>(m_world.findObject(powerupId));
+
+	if (powerUp == NULL){
+		return;
 	}
+
+	TestObject *otherObject = m_world.findObject(otherId);
+	Car* car = dynamic_cast<Car*>(otherObject);
+
+	if (car != NULL)
+	{
+		if (powerUp->isActive())
+		{
+			car->pickUpPowerUp(powerUp->pickup());
+		}
+		else{
+			//std::cout << "PowerUp wasn't active\n";
+		}
+
+	}
+	else {
+		std::cout << "Couldn't Cast to car \n";
+	}
+}
+
 
 void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
 	Car *car1 = dynamic_cast<Car *>(m_world.findObject(car1Id));
@@ -170,6 +198,7 @@ void CollisionManager::onContact(const PxContactPairHeader& pairHeader, const Px
 }
 
 
+
 void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 {
 	for (int i = 0; i < count; i++) {
@@ -187,6 +216,10 @@ void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_COLLISION_VOLUME)
 		{
 			processCollisionVolumeHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
+		}
+		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_POWERUP)
+		{
+			processPowerUpHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
 		}
 	}
 

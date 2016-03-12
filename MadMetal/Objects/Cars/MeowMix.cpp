@@ -39,6 +39,10 @@ void MeowMix::fire()
 
 	}
 	else {
+		//if (m_activePowerUp != PowerUpType::NONE)
+			//std::cout << "Shooting with powerup \n";
+		//else
+			//std::cout << "Shooting without Powerup \n";
 		m_reloadRemainingSeconds = m_reloadRateSeconds;
 		glm::vec4 up = glm::normalize(getModelMatrix() * glm::vec4(0, 1, 0, 0));
 		glm::vec4 left = glm::normalize(getModelMatrix() * glm::vec4(-1, 0, 0, 0));

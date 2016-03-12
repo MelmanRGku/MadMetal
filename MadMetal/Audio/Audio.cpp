@@ -36,7 +36,7 @@ void Audio::initializeMusicLibrary(char * fileToLoad)
 
 				pos++;
 			}
-			std::cout << filename << std::endl;
+			//std::cout << filename << std::endl;
 			char * test = "Assets/Audio/";
 			std::string thefile = test + filename;
 			music = Mix_LoadMUS(thefile.c_str());
@@ -85,7 +85,7 @@ void Audio::initializeChunkLibrary(char * fileToLoad)
 
 				pos++;
 			}
-			std::cout << filename << std::endl;
+			//std::cout << filename << std::endl;
 			char * test = "Assets/Audio/";
 			std::string thefile = test + filename;
 			chunk = Mix_LoadWAV(thefile.c_str());

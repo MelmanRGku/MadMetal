@@ -55,8 +55,11 @@ public:
 	static Model *loadObjFromDirectory(std::string path);
 	static void initializeVAOs();
 	static Model *getModel(std::string name) { 
-		if (models->find(name) == models->end())
-			return NULL; 
+		if (models->find(name) == models->end()){
+			//std::cout << "Couldn't find " << name << std::endl;
+			return NULL;
+		}
+			
 		else
 			return models->find(name)->second;
 	}

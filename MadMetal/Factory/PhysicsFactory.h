@@ -18,6 +18,7 @@ public:
 		PHYSICAL_OBJECT_TRACK_DRIVABLE,
 		PHYSICAL_OBJECT_TRACK_NON_DRIVABLE,
 		COLLISION_VOLUME,
+		POWER_UP
 	};
 
 public:
@@ -234,6 +235,24 @@ public:
 			toReturn = wapoint;
 			break;
 		}
+		case POWER_UP:
+			PxRigidStatic * powerup = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+			PxFilterData simFilterData;
+			simFilterData.word0 = COLLISION_FLAG_POWERUP;
+			simFilterData.word1 = COLLISION_FLAG_POWERUP_AGAINST;
+
+			powerup->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			powerup->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+			setFilterDataId(objectId, powerup);
+
+			toReturn = powerup;
+			break;
 		}
 
 		return toReturn;
