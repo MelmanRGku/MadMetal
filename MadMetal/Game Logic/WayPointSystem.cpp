@@ -22,6 +22,7 @@ WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int 
 			delete pos;
 			delete geom[0];
 			delete[] geom;
+			tempWaypoint->setId(index);
 			m_waypointMap[index].push_back(tempWaypoint);
 			m_waypoints.push_back(tempWaypoint);
 		}

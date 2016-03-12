@@ -2,9 +2,6 @@
 #include "TestObject.h"
 #include "Global\Assets.h"
 
-
-
-
 #define ATTACK_DURATION_SECONDS 5;
 #define DEFENSE_DURATION_SECONDS 5;
 #define SPEED_DURATION_SECONDS 5;

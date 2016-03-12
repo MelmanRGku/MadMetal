@@ -6,6 +6,7 @@ int Waypoint::globalID = 0;
 Waypoint::Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable)
 {
 	m_index = Waypoint::globalID;
+	m_id = m_index;
 	Waypoint::globalID++;
 	m_isValid = true;
 }
@@ -42,6 +43,16 @@ void Waypoint::setValid(bool isValid)
 
 void Waypoint::setFinish(bool finish) {
 	m_isFinish = finish;
+}
+
+int Waypoint::getId()
+{
+	return m_id;
+}
+
+void Waypoint::setId(int id)
+{
+	m_id = id;
 }
 
 bool Waypoint::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
