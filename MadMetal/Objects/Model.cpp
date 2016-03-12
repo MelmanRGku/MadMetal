@@ -9,6 +9,9 @@ Model::Model()
 Model::~Model()
 {
 	delete boundingBox;
+	for (unsigned int i = 0; i < meshes.size(); i++) {
+		delete meshes[i];
+	}
 }
 
 
@@ -56,7 +59,7 @@ PxTriangleMesh **Model::getPhysicsTriangleMesh() {
 		PxDefaultMemoryOutputStream buf;
 		if (PhysicsManager::getCookingInstance().cookTriangleMesh(description, buf))
 		{
-			std::cout << "created the triangle mesh \n";
+			//std::cout << "created the triangle mesh \n";
 			PxDefaultMemoryInputData id(buf.getData(), buf.getSize());
 			triangleMesh = PhysicsManager::getPhysicsInstance().createTriangleMesh(id);
 			physicalMeshes[meshIndex] = triangleMesh;
@@ -66,7 +69,12 @@ PxTriangleMesh **Model::getPhysicsTriangleMesh() {
 			exit(7);
 		}
 
+		delete[] verts;
+		delete[] indices;
+
 	}
+
+
 	return physicalMeshes;
 }
 

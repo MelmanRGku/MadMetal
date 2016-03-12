@@ -12,6 +12,7 @@ private:
 	void processWaypointHit(long waypointId, long otherId);
 	void processCollisionVolumeHit(long volumeId, long otherId);
 	void processCarCarHit(long car1Id, long car2Id);
+	void processPowerUpHit(long powerupId, long otherId);
 
 public:
 	CollisionManager(World &world);

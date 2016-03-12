@@ -75,7 +75,6 @@ public:
 	}
 
 	virtual ~Scene() {
-
 		delete m_defaultSceneCamera;
 		delete m_world;
 
@@ -127,7 +126,9 @@ private:
 
 public:
 	SinglePlayerCharSelectScene(Input * input);
-	~SinglePlayerCharSelectScene(){ m_gamePad = NULL; }
+	~SinglePlayerCharSelectScene(){ 
+		m_gamePad = NULL; 
+	}
 	bool simulateScene(double dt, SceneMessage &newMessage);
 };
 

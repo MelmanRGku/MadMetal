@@ -38,7 +38,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Physicable *physicable = new Physicable(physicalCar->getRigidDynamicActor());
 
 
-		MeowMix *car = new MeowMix(objectId, *drivingStyle, *physicalCar, *audioable, *physicable, *animatable, *renderable);
+		MeowMix *car = new MeowMix(objectId, drivingStyle, *physicalCar, audioable, physicable, animatable, renderable);
 
 		int k = (int)physicalCar->mWheelsSimData.getWheelData(0).mRadius * 2;
 		PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();
@@ -56,7 +56,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							
 
 
-							car->setSoundChassis(new ChassisCrashSound());
+							car->setSoundChassis(ChassisCrashSound());
 		return car;
 	}
 	case OBJECT_UI:
@@ -65,7 +65,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
-		UI *ui = new UI(objectId, *audioable, *physicable, *animatable, *renderable);
+		UI *ui = new UI(objectId, audioable, physicable, animatable, renderable);
 		ui->healthBar = static_cast<HealthBar2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_HEALTH_BAR, NULL, NULL, NULL));
 		ui->gaugeBar = static_cast<GaugeBar *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_GAUGE_BAR, NULL, NULL, NULL));
 		ui->score = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
@@ -82,7 +82,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
-		DisplayMessage * display = new DisplayMessage(objectId, *audioable, *physicable, *animatable, *renderable);
+		DisplayMessage * display = new DisplayMessage(objectId, audioable, physicable, animatable, renderable);
 		Text2D *text = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
 		text->centerize(true);
 		display->setText2D(text);
@@ -101,7 +101,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		PxRigidStatic *physicalBox = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BOX, objectId, pos, geo, 0, material, NULL, NULL));
 		Physicable *physicable = new Physicable(physicalBox);
 
-		TestObject *box = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable);
+		TestObject *box = new TestObject(objectId, audioable, physicable, animatable, renderable);
 
 		box->updateScale(glm::vec3(glm::vec3(box->getWorldBounds().getDimensions().x, 80, box->getWorldBounds().getDimensions().z)));
 
@@ -121,8 +121,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
-		track = new Track(objectId, *audioable, *physicable, *animatable, *renderable, drivableTrack, nonDrivableTrack);
-		
+		track = new Track(objectId, audioable, physicable, animatable, renderable, drivableTrack, nonDrivableTrack);
+		track->setSound(TrackMusicSound());
 		return track;
 	}
 	case OBJECT_TRACK_DRIVABLE:
@@ -138,9 +138,14 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		for (unsigned int i = 0; i < renderable->getModel()->getMeshes()->size(); i++) {
 			geom[i] = new PxTriangleMeshGeometry(mesh[i]);
 		}
+		delete[] mesh;
 		PxRigidStatic *physicalDrivableTrack = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_TRACK_DRIVABLE, objectId, pos, geom, renderable->getModel()->getMeshes()->size(), material, NULL, NULL));
+		for (unsigned int i = 0; i < renderable->getModel()->getMeshes()->size(); i++) {
+			delete geom[i];
+		}
+		delete geom;
 		Physicable *physicable = new Physicable(physicalDrivableTrack);
-		drivableTrack = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable);
+		drivableTrack = new TestObject(objectId, audioable, physicable, animatable, renderable);
 
 		m_scene.addActor(*physicalDrivableTrack);
 		m_world.addGameObject(drivableTrack);
@@ -160,9 +165,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		for (unsigned int i = 0; i < renderable->getModel()->getMeshes()->size(); i++) {
 			geom[i] = new PxTriangleMeshGeometry(mesh[i]);
 		}
+		delete[] mesh;
 		PxRigidStatic *physicalNonDrivableTrack = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_TRACK_NON_DRIVABLE, objectId, pos, geom, renderable->getModel()->getMeshes()->size(), material, NULL, NULL));
+		for (unsigned int i = 0; i < renderable->getModel()->getMeshes()->size(); i++) {
+			delete geom[i];
+		}
+		delete geom;
+
 		Physicable *physicable = new Physicable(physicalNonDrivableTrack);
-		nonDrivableTrack = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable);
+		nonDrivableTrack = new TestObject(objectId, audioable, physicable, animatable, renderable);
 
 		m_scene.addActor(*physicalNonDrivableTrack);
 		m_world.addGameObject(nonDrivableTrack);
@@ -179,7 +190,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		PxRigidStatic *physicalWall = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_WALL, objectId, pos, NULL, 0, NULL, NULL, NULL));
 		Physicable *physicable = new Physicable(physicalWall);
 
-		TestObject *wall = new TestObject(objectId, *audioable, *physicable, *animatable, *renderable);
+		TestObject *wall = new TestObject(objectId, audioable, physicable, animatable, renderable);
 
 		m_world.addGameObject(wall);
 		m_scene.addActor(*physicalWall);
@@ -195,13 +206,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 						  glm::vec3 speed = 300.f * parent->getForwardVector(); speed += glm::vec3(0, -.4f, 0);
-		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_MEOW_MIX, objectId, pos, NULL, 0, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
+						  PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
+						  PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_MEOW_MIX, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
+						  delete physicsSpeed;
 		animatable->setRotation(parent->getFullRotation());
 		animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
 		Physicable *physicable = new Physicable(physicalBullet);
 
-		Bullet *bullet = new MeowMixBullet(objectId, *audioable, *physicable, *animatable, *renderable, static_cast<Car *>(parent));
-		bullet->setSound(new GunShotSound());
+		Bullet *bullet = new MeowMixBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
+		bullet->setSound(GunShotSound());
 		bullet->playSound();
 		m_world.addGameObject(bullet);
 		m_scene.addActor(*physicalBullet);
@@ -217,13 +230,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 		glm::vec3 speed = 150.f * parent->getForwardVector(); speed += glm::vec3(0, 5.f, 0);
-		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, new PxVec3(speed.x, speed.y, speed.z)));
+		PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
+		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
+		delete physicsSpeed;
 		animatable->setRotation(parent->getFullRotation());
 		animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
 		Physicable *physicable = new Physicable(physicalBullet);
 
-		Bullet *bullet = new VolcanoGuySuperBullet(objectId, *audioable, *physicable, *animatable, *renderable, static_cast<Car *>(parent));
-		bullet->setSound(new ExplosionSound());
+		Bullet *bullet = new VolcanoGuySuperBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
+		bullet->setSound(ExplosionSound());
 		bullet->playSound();
 
 		m_world.addGameObject(bullet);
@@ -239,7 +254,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		Physicable *physicable = new Physicable(NULL);
 
-		HealthBar2D *bar = new HealthBar2D(objectId, *audioable, *physicable, *animatable, *renderable);
+		HealthBar2D *bar = new HealthBar2D(objectId, audioable, physicable, animatable, renderable);
 
 		m_world.addGameObject(bar);
 
@@ -252,7 +267,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
 
-		GaugeBar *bar = new GaugeBar(objectId, *audioable, *physicable, *animatable, *renderable);
+		GaugeBar *bar = new GaugeBar(objectId, audioable, physicable, animatable, renderable);
 
 		m_world.addGameObject(bar);
 
@@ -265,7 +280,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
 
-		Text2D *bar = new Text2D(objectId, *audioable, *physicable, *animatable, *renderable);
+		Text2D *bar = new Text2D(objectId, audioable, physicable, animatable, renderable);
 
 		m_world.addGameObject(bar);
 
@@ -278,7 +293,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
 
-		Text3D *text = new Text3D(objectId, *audioable, *physicable, *animatable, *renderable, 1);
+		Text3D *text = new Text3D(objectId, audioable, physicable, animatable, renderable, 1);
 
 		m_world.addGameObject(text);
 
@@ -296,28 +311,42 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Physicable *physicable = new Physicable(waypointTriggerVolume);
 		animatable->setScale(glm::vec3(waypointTriggerVolume->getWorldBounds().getDimensions().x, waypointTriggerVolume->getWorldBounds().getDimensions().y, waypointTriggerVolume->getWorldBounds().getDimensions().z));
 
-		Waypoint *waypoint = new Waypoint(objectId, *audioable, *physicable, *animatable, *renderable);
+		Waypoint *waypoint = new Waypoint(objectId, audioable, physicable, animatable, renderable);
 
 		m_world.addGameObject(waypoint);
 		m_scene.addActor(*waypointTriggerVolume);
 
 		return waypoint;
 	}
+
+	case OBJECT_POWERUP:
+	{
+			Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP), true, true);
+			Animatable *animatable = new Animatable();
+			Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+			PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::POWER_UP, objectId, pos, geom, 0, NULL, NULL, NULL));
+			Physicable *physicable = new Physicable(powerupTriggerVolume);
+			animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
+
+			PowerUp *powerup = new PowerUp(objectId, audioable, physicable, animatable, renderable);
+
+			m_world.addGameObject(powerup);
+			m_scene.addActor(*powerupTriggerVolume);
+
+			return powerup;
+	}
 	case OBJECT_BULLET_CAR_COLLISION:
 	{
 		Renderable *renderable = new Renderable(NULL);
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
-//		PxRigidDynamic * actor = ;
-
 		Physicable *physicable = new Physicable(NULL);
 
 
-		BulletCarCollision * col = new BulletCarCollision(objectId, *audioable, *physicable, *animatable, *renderable);
-		col->setSound(new BulletCarCollisionSound());
+		BulletCarCollision * col = new BulletCarCollision(objectId, audioable, physicable, animatable, renderable);
+		col->setSound(BulletCarCollisionSound());
 		col->playSound();
-
-//		m_world.addGameObject(col);
 
 		return col;
 	}
@@ -332,13 +361,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Physicable *physicable = new Physicable(physicalCollisionVolume);
 		animatable->setScale(glm::vec3(physicalCollisionVolume->getWorldBounds().getDimensions().x, physicalCollisionVolume->getWorldBounds().getDimensions().y, physicalCollisionVolume->getWorldBounds().getDimensions().z));
 
-		CollisionVolume *collisionVolume = new CollisionVolume(objectId, *audioable, *physicable, *animatable, *renderable);
+		CollisionVolume *collisionVolume = new CollisionVolume(objectId, audioable, physicable, animatable, renderable);
 
 		m_world.addGameObject(collisionVolume);
 		m_scene.addActor(*physicalCollisionVolume);
 
 		return collisionVolume;
 	}
+
+
 	}
 }
 

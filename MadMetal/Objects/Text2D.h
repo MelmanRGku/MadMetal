@@ -11,7 +11,7 @@ private:
 	float m_fontSize = DEFAULT_FONT_SIZE;
 	bool m_centerize;
 public:
-	Text2D(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
+	Text2D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
 	~Text2D();
 	void setString(std::string toRender) { stringToRender = toRender; }
 	void setString(const char *toRender) { stringToRender = std::string(toRender); }

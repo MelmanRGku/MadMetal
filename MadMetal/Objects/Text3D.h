@@ -10,7 +10,7 @@ private:
 	glm::vec3 pos;
 	float fontSize;
 public:
-	Text3D(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, float fontSize);
+	Text3D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable, float fontSize);
 	~Text3D(); 
 	void setString(std::string toRender) { stringToRender = toRender; }
 	void setString(const char *toRender) { stringToRender = std::string(toRender); }

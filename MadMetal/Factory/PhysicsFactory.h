@@ -18,6 +18,7 @@ public:
 		PHYSICAL_OBJECT_TRACK_DRIVABLE,
 		PHYSICAL_OBJECT_TRACK_NON_DRIVABLE,
 		COLLISION_VOLUME,
+		POWER_UP
 	};
 
 public:
@@ -59,6 +60,8 @@ public:
 			filterData.word2 = id;
 			shapes[i]->setSimulationFilterData(filterData);
 		}
+
+		free(shapes);
 	}
 		 
 	void makeGround(PxRigidActor *actor, bool drivable) {
@@ -79,6 +82,8 @@ public:
 			simFilterData.word1 = COLLISION_FLAG_GROUND_AGAINST;
 			shapes[i]->setSimulationFilterData(simFilterData);
 		}
+
+		free(shapes);
 	}
 		 
 	PxBase *makePhysicsObject(PhysicalObjects actorToMake, long objectId, PxTransform *pos, PxGeometry **geom, PxU32 nbGeom, PxMaterial *material, DrivingStyle *style, PxVec3 *velocity)
@@ -113,6 +118,7 @@ public:
 		{
 			VehicleCreator *vc = new VehicleCreator(&PhysicsManager::getPhysicsInstance(), &PhysicsManager::getCookingInstance());
 			PxVehicleDrive4W *car = vc->create(style);
+			delete vc;
 			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
 			PxTransform anotherTransform = pos == NULL ? PxTransform(PxVec3(0), PxQuat(PxIdentity)) : *pos;
 			car->getRigidDynamicActor()->setGlobalPose(PxTransform(startTransform.p.x + anotherTransform.p.x, startTransform.p.y + anotherTransform.p.y, startTransform.p.z + anotherTransform.p.z));
@@ -229,6 +235,24 @@ public:
 			toReturn = wapoint;
 			break;
 		}
+		case POWER_UP:
+			PxRigidStatic * powerup = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+			PxFilterData simFilterData;
+			simFilterData.word0 = COLLISION_FLAG_POWERUP;
+			simFilterData.word1 = COLLISION_FLAG_POWERUP_AGAINST;
+
+			powerup->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			powerup->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+			setFilterDataId(objectId, powerup);
+
+			toReturn = powerup;
+			break;
 		}
 
 		return toReturn;

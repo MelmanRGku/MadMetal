@@ -1,10 +1,9 @@
 #include "CollisionVolume.h"
-
-//#define _RENDER_COLLISION_VOLUME
+#include "Settings.h"
 
 int CollisionVolume::globalID = 0;
 
-CollisionVolume::CollisionVolume(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable)
+CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable)
 {
 	m_id = CollisionVolume::globalID;
 	CollisionVolume::globalID++;

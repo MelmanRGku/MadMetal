@@ -11,12 +11,12 @@ protected:
 	
 	ControllableTemplate& m_controllableTemplate;
 	bool m_controlsPaused;
+	bool m_finishedRace;
 
 public:
 	Controllable(ControllableTemplate& controllableTemplate) : m_controllableTemplate(controllableTemplate){};
-	~Controllable()
+	virtual ~Controllable()
 	{
-		delete m_car;
 	};
 
 	virtual void playFrame(double dt) = 0;
@@ -28,6 +28,7 @@ public:
 	Car *getCar() { return m_car; }
 
 	void pauseControls(bool pause);
+	
 protected:
 	Car* m_car;
 };

@@ -9,7 +9,7 @@ public:
 	}
 	virtual ~Sound(){}
 
-	virtual int& getChannel()
+	virtual int getChannel()
 	{
 		return m_currentChannel;
 	}
@@ -102,4 +102,14 @@ public:
 		m_libraryIndex = 5;
 	};
 	virtual ~ChassisCrashSound(){};
+};
+
+class TrackMusicSound : public Sound
+{
+public:
+	TrackMusicSound() : Sound()
+	{
+		m_libraryIndex = 0;
+	};
+	virtual ~TrackMusicSound(){};
 };

@@ -5,13 +5,16 @@
 class Track : public TestObject
 {
 public:
-	Track(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable, TestObject *drivablePart, TestObject *nonDrivablePart);
+	Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable, TestObject *drivablePart, TestObject *nonDrivablePart);
 	~Track();
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	TestObject *getDrivablePart() { return drivablePart; }
+	
+	void playTrackMusic();
 
 private: //members
 	TestObject *drivablePart,
 		*nonDrivablePart;
+	
 	
 };

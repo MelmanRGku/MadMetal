@@ -13,7 +13,7 @@ LoadingScreen::LoadingScreen(SceneMessage& toDeliver, Audio &audio) : m_audio(au
 	createLoadingInfoString();
 	status = new LoadingStatus();
 	Assets::status = status;
-	t = std::thread(Assets::loadObjsFromDirectory, "Assets/Models", false );
+	t = std::thread(Assets::loadObjsFromDirectory, "Assets/Models");
 	
 }
 
@@ -28,7 +28,7 @@ bool LoadingScreen::simulateScene(double dt, SceneMessage &newMessage) {
 	loadingInfoString->setString(status->getMessage());
 	if (status->getPercentage() >= 1){
 		t.join();
-
+		delete status;
 		Assets::initializeVAOs();
 
 		newMessage.setTag(SceneMessage::eGameSimulation);
@@ -40,8 +40,7 @@ bool LoadingScreen::simulateScene(double dt, SceneMessage &newMessage) {
 
 
 void LoadingScreen::createProgressBar() {
-	ObjModelLoader *loader = new ObjModelLoader();
-	Model *barModel = loader->loadFromFile("Assets/Models/loadingBox.obj");
+	Model *barModel = Assets::loadObjFromDirectory("Assets/Models/loadingBox.obj");
 	barModel->setupVAOs();
 
 	Animatable *animatable = new Animatable();
@@ -49,10 +48,9 @@ void LoadingScreen::createProgressBar() {
 	renderable->setModel(barModel, true, true);
 	Audioable *audioable = new Audioable(m_audio);
 	Physicable *physicable = new Physicable(NULL);
-	bar = new LoadingBar(1, *audioable, *physicable, *animatable, *renderable);
+	bar = new LoadingBar(1, audioable, physicable, animatable, renderable);
 
 	m_world->addGameObject(bar);
-	delete loader;
 }
 
 void LoadingScreen::createLoadingString() {
@@ -61,7 +59,7 @@ void LoadingScreen::createLoadingString() {
 	Animatable *animatable = new Animatable();
 	Physicable *physicable = new Physicable(NULL);
 
-	loadingString = new Text3D(3, *audioable, *physicable, *animatable, *renderable, 1);
+	loadingString = new Text3D(3, audioable, physicable, animatable, renderable, 1);
 	loadingString->setString("Loading");
 	loadingString->setPos(glm::vec3(0, 0, -10));
 	m_world->addGameObject(loadingString);
@@ -73,7 +71,7 @@ void LoadingScreen::createLoadingInfoString() {
 	Animatable *animatable = new Animatable();
 	Physicable *physicable = new Physicable(NULL);
 
-	loadingInfoString = new Text3D(4, *audioable, *physicable, *animatable, *renderable, 1);
+	loadingInfoString = new Text3D(4, audioable, physicable, animatable, renderable, 1);
 	loadingInfoString->setPos(glm::vec3(0, -4.5, -20));
 	m_world->addGameObject(loadingInfoString);
 }

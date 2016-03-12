@@ -5,6 +5,7 @@
 #include "Simulation\PhysicsManager.h"
 #include "Simulation\LoadingScreen.h"
 #include "Audio\Audio.h"
+#include "Input\Input.h"
 
 class SceneStack
 {

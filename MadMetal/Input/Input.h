@@ -11,6 +11,7 @@ private:
 
 public:
 	Input();
+	~Input();
 
 	void updateGamePads(double dt);
 	bool getGamePadHandle(int portNumber, GamePad* handle);
