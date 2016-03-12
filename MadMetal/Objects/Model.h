@@ -5,6 +5,6 @@ class Model
 private:
 public:
 	Model();
-	~Model();
+	virtual ~Model();
 };
 

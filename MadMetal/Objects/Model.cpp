@@ -6,5 +6,5 @@ Model::Model()
 }
 
 Model::~Model() {
-
+	int k = 1;
 }

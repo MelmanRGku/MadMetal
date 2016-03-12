@@ -51,6 +51,19 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			humanPlayer->setCar(car);
 			delete pos;
 
+			ObjectUpdaterSequence *seq = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
+			ObjectPositionUpdater *posUpd1 = new ObjectPositionUpdater(car, glm::vec3(0, 2, 0), 1);
+			ObjectPositionUpdater *posUpd2 = new ObjectPositionUpdater(car, glm::vec3(0, -4, 0), 2);
+			ObjectPositionUpdater *posUpd3 = new ObjectPositionUpdater(car, glm::vec3(0, 2, 0), 1);
+			ObjectUpdaterParallel *par = new ObjectUpdaterParallel(ObjectUpdaterSequence::TYPE_INFINITE);
+			ObjectRotationUpdater *rotUpd = new ObjectRotationUpdater(car, glm::vec3(0, 30, 0), 1, ObjectRotationUpdater::ANGLE_TYPE_DEGREES);
+			seq->addObjectUpdater(posUpd1);
+			seq->addObjectUpdater(posUpd2);
+			seq->addObjectUpdater(posUpd3);
+			par->addObjectUpdater(seq);
+			par->addObjectUpdater(rotUpd);
+			m_world->addObjectUpdater(par);
+
 			UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
 			humanPlayer->getCar()->ui = ui;
 			m_world->addGameObject(ui);

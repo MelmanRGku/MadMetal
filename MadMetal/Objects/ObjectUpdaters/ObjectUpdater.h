@@ -7,7 +7,7 @@ protected:
 
 public:
 	ObjectUpdater();
-	~ObjectUpdater();
+	virtual ~ObjectUpdater();
 	virtual void update(float dt) = 0;
 	virtual bool ended() { return currentDuration >= totalDuration; }
 	virtual void restart() { currentDuration = 0; }
