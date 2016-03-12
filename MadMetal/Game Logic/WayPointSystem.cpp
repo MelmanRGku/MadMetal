@@ -1,19 +1,22 @@
 #include "WaypointSystem.h"
 #include "Game Logic\PathFinding.h"
 
-static const float WAYPOINT_RADIUS = 17;
+static const float WAYPOINT_WIDTH_COLLISION = 17;
+static const float WAYPOINT_LENGTH_COLLISION = 17;
+static const float WAYPOINT_TRUE_WIDTH = 20;
+static const float WAYPOINT_TRUE_LENGTH = 20;
 
 WaypointSystem::WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition) : m_gameFactory(gameFactory)
 {
 	int index = 0;
-	for (int i = trackWidthMin + WAYPOINT_RADIUS + 3; i < trackWidthMax; i += ((WAYPOINT_RADIUS + 3) * 2))
+	for (int i = trackWidthMin + WAYPOINT_TRUE_WIDTH; i < trackWidthMax; i += ((WAYPOINT_TRUE_WIDTH)* 2))
 	{
 		std::vector<Waypoint*> newVectorWaypoint;
 		m_waypointMap.push_back(newVectorWaypoint);
-		for (int j = trackLengthMin + WAYPOINT_RADIUS + 3; j < trackLengthMax; j += ((WAYPOINT_RADIUS + 3) * 2))
+		for (int j = trackLengthMin + WAYPOINT_TRUE_LENGTH; j < trackLengthMax; j += ((WAYPOINT_TRUE_LENGTH)* 2))
 		{
 			PxGeometry **geom = new PxGeometry * [1];
-			geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_RADIUS, yposition, WAYPOINT_RADIUS));
+			geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_WIDTH_COLLISION, yposition, WAYPOINT_LENGTH_COLLISION));
 			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(m_gameFactory.makeObject(GameFactory::OBJECT_WAYPOINT, new PxTransform(i, yposition, j), geom, NULL));
 			m_waypointMap[index].push_back(tempWaypoint);
 			m_waypoints.push_back(tempWaypoint);
