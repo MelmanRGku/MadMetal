@@ -50,7 +50,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 	}
 
 	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
-	stitchWaypointSystem(TOP, BOTTOM, *lastWaypointSystem, *nextLocation2, lastWaypointSystem->getWaypointMap().at(0).size() - 3, 0);
+	stitchWaypointSystem(BOTTOM, TOP, *lastWaypointSystem, *nextLocation2, 0, nextLocation2->getWaypointMap().at(0).size() - 3);
 
 	m_waypointSystems.push_back(nextLocation2);
 
