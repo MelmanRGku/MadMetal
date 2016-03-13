@@ -371,6 +371,30 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return collisionVolume;
 	}
+	case OBJECT_UI_DISTURBED_SONG:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_DISTURBED_TEXTURE)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, .89f, 0));
+		animatable->setScale(glm::vec3(.05f, 0, 0));
+
+		TexturedObject2D *image = new TexturedObject2D(objectId, audioable, animatable, renderable);
+		image->setMaxLifeTime(2);
+
+		ObjectScaleUpdater *upd1 = new ObjectScaleUpdater(image, glm::vec3(.0f, .2f, .0f), .5);
+		ObjectScaleUpdater *upd2 = new ObjectScaleUpdater(image, glm::vec3(.0f, .0f, .0f), .2);
+		ObjectScaleUpdater *upd3 = new ObjectScaleUpdater(image, glm::vec3(.45f, .0f, .0f), .3);
+		ObjectUpdaterSequence *seq = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
+		seq->addObjectUpdater(upd1);
+		seq->addObjectUpdater(upd2);
+		seq->addObjectUpdater(upd3);
+		m_world.addObjectUpdater(seq);
+
+		m_world.addGameObject(image);
+
+		return image;
+	}
 
 
 	}

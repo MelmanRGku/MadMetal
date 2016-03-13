@@ -3,10 +3,6 @@
 #include "Objects/Cars/MeowMix.h"
 #include "Objects/Model.h"
 #include "Objects/ObjectLoaders/ObjModelLoader.h"
-#include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
-#include "Objects/ObjectUpdaters/ObjectRotationUpdater.h"
-#include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
-#include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 #include "PhysicsManager.h"
 #include "Objects\ObjectCreators\VehicleCreator.h"
 #include "Objects\Waypoint.h"
@@ -30,8 +26,11 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	std::cout << "GameSimulation pushed onto the stack \n";
 	
 	createPhysicsScene();
+	musicManager = new MusicManager(audioHandle);
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 	m_displayMessage = static_cast<DisplayMessage *>(m_gameFactory->makeObject(GameFactory::OBJECT_DISPLAY_MESSAGE, NULL, NULL, NULL));
+	static_cast<DisplayMessage *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI_DISTURBED_SONG, NULL, NULL, NULL));
+	
 	m_waypointSystem = NULL;
 
 	m_isPaused = false;
@@ -104,6 +103,7 @@ GameSimulation::~GameSimulation()
 	gFrictionPairs->release();
 	GameFactory::release();
 	delete manager;
+	delete musicManager;
 	
 }
 
@@ -276,15 +276,39 @@ void GameSimulation::createPhysicsScene()
 	gFrictionPairs = createFrictionPairs(mMaterial);
 }
 
+void GameSimulation::processInput() {
+	//check for pause button
+	for (int i = 0; i < m_humanPlayers.size(); i++)
+	{
+		//if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
+		//{
+		//	newMessage.setTag(SceneMessage::ePause);
+		//	std::vector<ControllableTemplate *> playerTemplates;
+		//	//put the controllables into the vector incase the player trys to restart
+		//	for (int i = 0; i < m_players.size(); i++)
+		//	{
+		//		playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+		//	}
+		//	//put a dummy controllable at the front of the vector so the pause screen knows who paused
+		//	playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
+		//	newMessage.setPlayerTemplates(playerTemplates);
+		//	
+		//	return true;
+		//}
+	}
 
+	if (m_humanPlayers[0]->getGamePad() != NULL && (m_humanPlayers[0]->getGamePad()->isPressed(GamePad::DPadLeft) || m_humanPlayers[0]->getGamePad()->isPressed(GamePad::DPadRight))) {
+		musicManager->changeSong();
+	}
+}
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
-
+	processInput();
+	musicManager->update();
 	m_sceneGameTimeSeconds += dt;
 	if (m_sceneGameTimeSeconds > 3 && m_controlsPaused) {
 		pauseControls(false);
-		m_track->playTrackMusic();
 	}
 	if (m_sceneGameTimeSeconds < 4 )
 	{
@@ -349,25 +373,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	//if the race is still going, do player simulations
 	if (!m_raceFinished)
 	{
-		//check for pause button
-	for (int i = 0; i < m_humanPlayers.size(); i++)
-	{
-		//if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
-		//{
-		//	newMessage.setTag(SceneMessage::ePause);
-		//	std::vector<ControllableTemplate *> playerTemplates;
-		//	//put the controllables into the vector incase the player trys to restart
-		//	for (int i = 0; i < m_players.size(); i++)
-		//	{
-		//		playerTemplates.push_back(&m_players[i]->getControllableTemplate());
-		//	}
-		//	//put a dummy controllable at the front of the vector so the pause screen knows who paused
-		//	playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
-		//	newMessage.setPlayerTemplates(playerTemplates);
-		//	
-		//	return true;
-		//}
-	}
+		
 		//simulate players
 	
 	simulatePlayers(dt);

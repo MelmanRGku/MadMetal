@@ -113,3 +113,23 @@ public:
 	};
 	virtual ~TrackMusicSound(){};
 };
+
+class VengefulOneSong : public Sound
+{
+public:
+	VengefulOneSong() : Sound()
+	{
+		m_libraryIndex = 1;
+	};
+	virtual ~VengefulOneSong(){};
+};
+
+class NumaNumaYeiSong : public Sound
+{
+public:
+	NumaNumaYeiSong() : Sound()
+	{
+		m_libraryIndex = 2;
+	};
+	virtual ~NumaNumaYeiSong(){};
+};

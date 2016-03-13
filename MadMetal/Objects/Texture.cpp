@@ -21,7 +21,6 @@ bool Texture::Load()
 		glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glBindTexture(textureTarget, 0);
 		stbi_image_free(data);
-
 		return true;
 	}
 	else {

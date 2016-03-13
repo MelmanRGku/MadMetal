@@ -23,6 +23,12 @@
 #include "Objects\Text3D.h"
 #include "Objects\PowerUpShield.h"
 #include "Objects\PowerUpSpeed.h"
+#include "Objects\TexturedObject2D.h"
+#include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
+#include "Objects/ObjectUpdaters/ObjectRotationUpdater.h"
+#include "Objects/ObjectUpdaters/ObjectScaleUpdater.h"
+#include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
+#include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 
 class GameFactory
 {
@@ -46,7 +52,8 @@ public:
 		OBJECT_COLLISION_VOLUME,
 		OBJECT_POWERUP,
 		OBJECT_SHIELD_POWERUP,
-		OBJECT_SPEED_POWERUP
+		OBJECT_SPEED_POWERUP,
+		OBJECT_UI_DISTURBED_SONG,
 
 	};
 

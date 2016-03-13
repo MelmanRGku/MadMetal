@@ -151,6 +151,8 @@
     <ClCompile Include="Objects\VolcanoGuySuperBullet.cpp" />
     <ClCompile Include="Objects\UI.cpp" />
     <ClCompile Include="Objects\Text3D.cpp" />
+    <ClCompile Include="Audio\MusicManager.cpp" />
+    <ClCompile Include="Objects\TexturedObject2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
@@ -245,6 +247,8 @@
     <ClInclude Include="Objects\VolcanoGuySuperBullet.h" />
     <ClInclude Include="Objects\UI.h" />
     <ClInclude Include="Objects\Text3D.h" />
+    <ClInclude Include="Audio\MusicManager.h" />
+    <ClInclude Include="Objects\TexturedObject2D.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Audio\MusicLibrary.txt" />

@@ -1,5 +1,6 @@
 #pragma once
 #include "Objects\Model.h"
+#include "Objects\Model2D.h"
 #include "Global\Assets.h"
 
 class RenderFactory
@@ -16,7 +17,8 @@ public:
 		RENDERABLE_OBJECT_BULLET_MEOW_MIX,
 		RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO,
 		RENDERABLE_OBJECT_GGO,
-		RENDERABLE_OBJECT_ATTACK_POWERUP
+		RENDERABLE_OBJECT_ATTACK_POWERUP,
+		RENDERABLE_OBJECT_DISTURBED_TEXTURE,
 	};
 
 	
@@ -39,6 +41,8 @@ public:
 			return Assets::getModel("GGO");
 		case (RENDERABLE_OBJECT_ATTACK_POWERUP) :
 			return Assets::getModel("sword");
+		case RENDERABLE_OBJECT_DISTURBED_TEXTURE:
+			return new Model2D(Assets::getTexture("tex1"));
 		}
 	}
 	

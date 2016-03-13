@@ -17,6 +17,7 @@ private:
 	std::vector<Mix_Chunk *> m_chunkLibrary;
 	std::vector<Mix_Music *> m_musicLibrary;
 	Car * m_listener;
+	static bool m_musicPlaying;
 
 
 public:
@@ -39,6 +40,7 @@ public:
 		//todo:: load from file?
 		initializeMusicLibrary();
 		initializeChunkLibrary();
+		Mix_HookMusicFinished(setMusicFinished);
 	}
 
 	~Audio()
@@ -78,6 +80,10 @@ public:
 //	bool queAudioSource(int sourceID);
 	void update();
 	void playMusic(Sound toPlay, int loopCount = -1);
+	void stopMusic();
+
+	static void setMusicFinished();
+	static bool getMusicFinished();
 
 };
 

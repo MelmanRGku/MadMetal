@@ -13,7 +13,7 @@ LoadingScreen::LoadingScreen(SceneMessage& toDeliver, Audio &audio) : m_audio(au
 	createLoadingInfoString();
 	status = new LoadingStatus();
 	Assets::status = status;
-	t = std::thread(Assets::loadObjsFromDirectory, "Assets/Models");
+	t = std::thread(Assets::load, "Assets/Models", "Assets/Textures");
 	
 }
 
@@ -26,7 +26,7 @@ LoadingScreen::~LoadingScreen()
 bool LoadingScreen::simulateScene(double dt, SceneMessage &newMessage) {
 	bar->setProgress(status->getPercentage());
 	loadingInfoString->setString(status->getMessage());
-	if (status->getPercentage() >= 1){
+	if (status->done){
 		t.join();
 		delete status;
 		Assets::initializeVAOs();

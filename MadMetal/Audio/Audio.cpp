@@ -6,8 +6,7 @@
 #include <fstream>
 #include <string>
 
-
-
+bool Audio::m_musicPlaying = false;
 
 //set up audio library
 void Audio::initializeMusicLibrary(char * fileToLoad)
@@ -226,10 +225,18 @@ bool AudioChannel::setAudioPosition(Car * listener)
 	return true;
 }
 
+void Audio::setMusicFinished() {
+	m_musicPlaying = false;
+}
+
+bool Audio::getMusicFinished() {
+	return !m_musicPlaying;
+}
 
 void Audio::playMusic(Sound sound, int playCount)
 {
 	
+	m_musicPlaying = true;
 	Mix_PlayMusic(m_musicLibrary[sound.getLibraryIndex()], playCount);
 
 }
