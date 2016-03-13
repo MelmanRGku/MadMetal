@@ -5,7 +5,7 @@
 class DisplayMessage : public TestObject
 {
 public:
-	DisplayMessage(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable)
+	DisplayMessage(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable, NULL)
 	{
 		m_centerOfScreen = glm::vec3(std::stof(Settings::getSetting("screenWidth")) / 2, std::stof(Settings::getSetting("screenHeight")) / 2, 0);
 	}

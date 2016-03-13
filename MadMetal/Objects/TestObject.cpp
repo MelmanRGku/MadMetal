@@ -5,12 +5,13 @@
 #include "Cars/Car.h"
 #include "Factory\GameFactory.h"
 
-TestObject::TestObject(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable)
+TestObject::TestObject(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable, Animation *aniable)
 : m_renderable(rable)
 , m_physicable(pable)
 , m_animatable(anable)
 , m_audioable(aable)
 , id(id)
+, m_animation(aniable)
 {
 }
 
@@ -86,4 +87,44 @@ void TestObject::playSound()
 {
 	
 	m_audioable->getAudioHandle().queAudioSource(&this->getActor(), m_sound);
+}
+
+void TestObject::startAnimation()
+{
+	if (!m_animation == NULL)
+	{
+		start = clock();
+		previousModel = m_renderable->getModel();
+		m_renderable->setModel(m_animation->theModels[0], true, true);
+		animating = true;
+		current = 0;
+	}
+}
+
+void TestObject::updateAnimation()
+{
+	if (!m_animation == NULL)
+	{
+
+		if (animating)
+		{
+			if (clock() < start + m_animation->ticksPerFrame[current])
+			{
+			}
+			else
+			{
+				start = clock();
+				current++;
+				if (current >= m_animation->theModels.size())
+				{
+					animating = false;
+					m_renderable->setModel(previousModel, true, true);
+				}
+				else
+				{
+					m_renderable->setModel(m_animation->theModels[current], true, true);
+				}
+			}
+		}
+	}
 }

@@ -11,6 +11,7 @@ GameFactory::GameFactory(World& world, PxScene& scene, Audio& audioHandle) :m_wo
 	m_physicsFactory = new PhysicsFactory();
 	m_renderFactory = new RenderFactory();
 	m_audioFactory = new AudioFactory(audioHandle);
+	m_animationFactory = new AnimationFactory();
 }
 
 GameFactory::~GameFactory()
@@ -53,10 +54,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		physicalCar->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 		physicalCar->mDriveDynData.setUseAutoGears(true);
 
-							
 
-
-							car->setSoundChassis(ChassisCrashSound());
+		car->setSoundChassis(ChassisCrashSound());
 		return car;
 	}
 	case OBJECT_UI:
@@ -101,7 +100,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		PxRigidStatic *physicalBox = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BOX, objectId, pos, geo, 0, material, NULL, NULL));
 		Physicable *physicable = new Physicable(physicalBox);
 
-		TestObject *box = new TestObject(objectId, audioable, physicable, animatable, renderable);
+		TestObject *box = new TestObject(objectId, audioable, physicable, animatable, renderable, NULL);
 
 		box->updateScale(glm::vec3(glm::vec3(box->getWorldBounds().getDimensions().x, 80, box->getWorldBounds().getDimensions().z)));
 
@@ -145,7 +144,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		}
 		delete geom;
 		Physicable *physicable = new Physicable(physicalDrivableTrack);
-		drivableTrack = new TestObject(objectId, audioable, physicable, animatable, renderable);
+		drivableTrack = new TestObject(objectId, audioable, physicable, animatable, renderable, NULL);
 
 		m_scene.addActor(*physicalDrivableTrack);
 		m_world.addGameObject(drivableTrack);
@@ -173,7 +172,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		delete geom;
 
 		Physicable *physicable = new Physicable(physicalNonDrivableTrack);
-		nonDrivableTrack = new TestObject(objectId, audioable, physicable, animatable, renderable);
+		nonDrivableTrack = new TestObject(objectId, audioable, physicable, animatable, renderable, NULL);
 
 		m_scene.addActor(*physicalNonDrivableTrack);
 		m_world.addGameObject(nonDrivableTrack);
@@ -190,7 +189,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		PxRigidStatic *physicalWall = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_WALL, objectId, pos, NULL, 0, NULL, NULL, NULL));
 		Physicable *physicable = new Physicable(physicalWall);
 
-		TestObject *wall = new TestObject(objectId, audioable, physicable, animatable, renderable);
+		TestObject *wall = new TestObject(objectId, audioable, physicable, animatable, renderable, NULL);
 
 		m_world.addGameObject(wall);
 		m_scene.addActor(*physicalWall);
@@ -368,8 +367,24 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return collisionVolume;
 	}
+	case OBJECT_ANIMATION_TEST:
+	{
+		Renderable *renderable = new Renderable(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ANIMATION_TEST), true, true);
+		Animatable *animatable = new Animatable();
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animation *aniable = new Animation(m_animationFactory->makeAnimation(AnimationFactory::ANIMATION_DEATHSTAR));
 
+		PxRigidDynamic *animationTestTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::ANIMATION_TEST, objectId, pos, geom, 0, NULL, NULL, NULL));
+		Physicable *physicable = new Physicable(animationTestTriggerVolume);
+		animatable->setScale(glm::vec3(animationTestTriggerVolume->getWorldBounds().getDimensions().x, animationTestTriggerVolume->getWorldBounds().getDimensions().y, animationTestTriggerVolume->getWorldBounds().getDimensions().z));
 
+		TestObject *animation = new TestObject(objectId, audioable, physicable, animatable, renderable, aniable);
+
+		m_world.addGameObject(animation);
+		m_scene.addActor(*animationTestTriggerVolume);
+
+		return animation;
+	}
 	}
 }
 

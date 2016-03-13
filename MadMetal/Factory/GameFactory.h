@@ -3,6 +3,7 @@
 #include "RenderFactory.h"
 #include "AudioFactory.h"
 #include "PxScene.h"
+#include "AnimationFactory.h"
 #include "Simulation/World.h"
 #include "Simulation\PhysicsManager.h"
 #include "Audio\Audio.h"
@@ -44,6 +45,7 @@ public:
 		OBJECT_TEXT_3D,
 		OBJECT_COLLISION_VOLUME,
 		OBJECT_POWERUP,
+		OBJECT_ANIMATION_TEST
 	};
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);
@@ -67,6 +69,7 @@ private: //members
 	PhysicsFactory * m_physicsFactory;
 	RenderFactory * m_renderFactory;
 	AudioFactory * m_audioFactory;
+	AnimationFactory * m_animationFactory;
 	World& m_world;
 	PxScene& m_scene;
 	static long lastId;

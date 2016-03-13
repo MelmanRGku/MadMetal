@@ -3,7 +3,7 @@
 
 int Waypoint::globalID = 0;
 
-Waypoint::Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable)
+Waypoint::Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable, NULL)
 {
 	m_id = Waypoint::globalID;
 	Waypoint::globalID++;

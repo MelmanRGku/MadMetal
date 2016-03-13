@@ -12,6 +12,8 @@
 #include "Audioable.h"
 #include "Audio\Audio.h"
 #include "Audio\Sound.h"
+#include "Renderer\Animation.h"
+#include <time.h>
 
 class TestObject
 {
@@ -21,13 +23,19 @@ protected:
 	Physicable *m_physicable;
 	Animatable *m_animatable;
 	Audioable *m_audioable;
+	Animation *m_animation;
 	bool hasToBeDeleted = false;
 	float totalLifeTime = 0;
 	float maxLifeTime = -1;
 	Sound m_sound;
+	clock_t start;
+	int current;
+	int frame;
+	bool animating = false;
+	Model * previousModel;
 
 public:
-	TestObject(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable);
+	TestObject(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable, Animation *aniable);
 	virtual ~TestObject();
 
 	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
@@ -52,5 +60,8 @@ public:
 	void playSound();
 	void setSound(Sound theSound);
 	void setMaxLifeTime(float maxTime){ maxLifeTime = maxTime; }
+	Renderable * getRenderable(){ return m_renderable; }
+	void startAnimation();
+	void updateAnimation();
 };
 

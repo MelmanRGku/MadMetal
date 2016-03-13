@@ -2,7 +2,7 @@
 #include "FTGL\ftgl.h"
 #include "Libraries\glm\gtc\type_ptr.hpp"
 
-Text2D::Text2D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable)
+Text2D::Text2D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable, NULL)
 {
 	m_centerize = false;
 }

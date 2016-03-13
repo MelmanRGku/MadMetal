@@ -9,6 +9,7 @@
 #include "Game Logic\AIControllable.h"
 #include "Objects\DisplayMessage.h"
 #include "CollisionManager.h"
+#include <time.h>
 
 class Scene;
 class Car;
@@ -68,6 +69,8 @@ private: //members
 	
 
 public:
+	TestObject * myObject;
+	clock_t t;
 	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle);
 	~GameSimulation();
 

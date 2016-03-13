@@ -1,6 +1,6 @@
 #include "PowerUp.h"
 
-PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable)
+PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable, NULL)
 {
 	activate();
 }
