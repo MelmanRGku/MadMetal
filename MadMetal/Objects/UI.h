@@ -4,6 +4,7 @@
 #include "HealthBar2D.h"
 #include "GaugeBar.h"
 #include "Text2D.h"
+#include "MapUI.h"
 
 class UI : public Object2D
 {
@@ -15,6 +16,7 @@ public:
 	GaugeBar *gaugeBar;
 	Text2D *score,
 		*lap;
+	MapUI *map;
 		
 };
 

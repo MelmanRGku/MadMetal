@@ -52,6 +52,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 			UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
 			humanPlayer->getCar()->ui = ui;
+			ui->map->setMainPlayer(humanPlayer);
 			m_world->addGameObject(ui);
 			//todo: make a car for player based off template
 			m_humanPlayers.push_back(humanPlayer);
@@ -72,7 +73,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			//make a car for ai based off template
 		}
 	}
-
+	
 	//if there is only one player, set audio to do sound attenuation to that player
 	if (m_humanPlayers.size() == 1)
 	{
@@ -81,7 +82,17 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	
 	//m_mainCamera = m_humanPlayers[0]->getCamera();
 	
-	initialize();
+	initialize(); 
+	
+	PxVec3 minTrackBounds = m_track->getDrivablePart()->getActor().getWorldBounds().minimum;
+	PxVec3 maxTrackBounds = m_track->getDrivablePart()->getActor().getWorldBounds().maximum;
+	glm::vec3 minBounds = glm::vec3(minTrackBounds.x, minTrackBounds.y, minTrackBounds.z);
+	glm::vec3 maxBounds = glm::vec3(maxTrackBounds.x, maxTrackBounds.y, maxTrackBounds.z);
+	for (unsigned int i = 0; i < m_humanPlayers.size(); i++) {
+		m_humanPlayers.at(i)->getCar()->getUI()->map->setTrackBounds(minBounds, maxBounds);
+		m_humanPlayers.at(i)->getCar()->getUI()->map->setPlayers(&m_players);
+	}
+
 
 	
 	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());

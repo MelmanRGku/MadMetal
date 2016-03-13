@@ -92,6 +92,7 @@ public:
 	void pickUpPowerUp(PowerUpType type);
 	void usePowerUp();
 	PowerUpType getActivePowerUpType();
+	UI *getUI() { return ui; }
 
 };
 

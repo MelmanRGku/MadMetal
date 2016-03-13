@@ -73,6 +73,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		ui->lap = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
 		ui->lap->setString("Lap: 0");
 		ui->lap->setPosition(glm::vec3(10, 70, 0));
+		ui->map = static_cast<MapUI *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_MAP, NULL, NULL, NULL));
 
 		return ui;
 	}
@@ -395,7 +396,20 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return image;
 	}
+	case OBJECT_UI_MAP:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MAP_TEXTURE)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(.8f, .8f, 0));
+		animatable->setScale(glm::vec3(.38f, .38f, 0));
 
+		MapUI *map = new MapUI(objectId, audioable, animatable, renderable);
+
+		m_world.addGameObject(map);
+
+		return map;
+	}
 
 	}
 }

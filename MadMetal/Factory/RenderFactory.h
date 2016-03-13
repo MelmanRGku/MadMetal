@@ -19,6 +19,7 @@ public:
 		RENDERABLE_OBJECT_GGO,
 		RENDERABLE_OBJECT_ATTACK_POWERUP,
 		RENDERABLE_OBJECT_DISTURBED_TEXTURE,
+		RENDERABLE_OBJECT_MAP_TEXTURE,
 	};
 
 	
@@ -43,6 +44,8 @@ public:
 			return Assets::getModel("sword");
 		case RENDERABLE_OBJECT_DISTURBED_TEXTURE:
 			return new Model2D(Assets::getTexture("tex1"));
+		case RENDERABLE_OBJECT_MAP_TEXTURE:
+			return new Model2D(Assets::getTexture("topViewMap"));
 		}
 	}
 	
