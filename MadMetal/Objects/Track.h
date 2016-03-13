@@ -30,7 +30,7 @@ private: //members
 	std::vector<WaypointSystem*> m_waypointSystems;
 	std::vector<Waypoint*> m_waypointList;
 private: //helper functions 
-	void stitchWaypointSystem(Boundry lastWaypointSystemLocation, Boundry newWaypointSystemPosition, WaypointSystem& newWaypointSystem,int lastWaypointSystemIntialPosition, int newWaypointSystemIntialPosition);
+	void stitchWaypointSystem(Boundry lastWaypointSystemLocation, Boundry newWaypointSystemPosition, WaypointSystem& lastWaypointSystem, WaypointSystem& newWaypointSystem, int lastWaypointSystemIntialPosition, int newWaypointSystemIntialPosition);
 	void determineStitchingBoundaries(Boundry locationOfStiching, int initialPosition, bool& isStichingRow, int& RowIndex, int& ColumnIndex, WaypointSystem& system);
 	
 };

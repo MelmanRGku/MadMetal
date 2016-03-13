@@ -31,34 +31,48 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 	{
 		m_waypointList.insert(m_waypointList.end(), nextLocation1->getWaypointMap().at(i).begin(), nextLocation1->getWaypointMap().at(i).end());
 	}
-
-	stitchWaypointSystem(RIGHT, LEFT, *nextLocation1, 0,0);
+	WaypointSystem* lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystem(RIGHT, LEFT, *lastWaypointSystem, *nextLocation1, 0, 0);
 
 	m_waypointSystems.push_back(nextLocation1);
 
+	WaypointSystem * nextLocation2 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().maximum.x - 80,
+		getDrivablePart()->getWorldBounds().maximum.x,
+		getDrivablePart()->getWorldBounds().minimum.z + 120,
+		getDrivablePart()->getWorldBounds().maximum.z,
+		getDrivablePart()->getWorldBounds().maximum.y);
+
+	//m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
+	for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation2->getWaypointMap().at(i).begin(), nextLocation2->getWaypointMap().at(i).end());
+	}
+
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystem(TOP, BOTTOM, *lastWaypointSystem, *nextLocation2, lastWaypointSystem->getWaypointMap().at(0).size() - 3, 0);
+
+	m_waypointSystems.push_back(nextLocation2);
 
 
+	WaypointSystem * nextLocation3 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().minimum.x + 120,
+		getDrivablePart()->getWorldBounds().maximum.x,
+		getDrivablePart()->getWorldBounds().minimum.z,
+		getDrivablePart()->getWorldBounds().minimum.z + 120,
+		getDrivablePart()->getWorldBounds().maximum.y);
 
+	//m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
+	for (int i = 0; i < nextLocation3->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation3->getWaypointMap().at(i).begin(), nextLocation3->getWaypointMap().at(i).end());
+	}
 
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystem(LEFT, RIGHT, *lastWaypointSystem, *nextLocation3, 0, nextLocation3->getWaypointMap().size() - 2);
+	stitchWaypointSystem(BOTTOM, TOP, *m_waypointSystems.at(0), *nextLocation3, 0, 0);
 
-
-	//WaypointSystem * nextLocation2 = new WaypointSystem(
-	//	getDrivablePart()->getWorldBounds().maximum.x - 80,
-	//	getDrivablePart()->getWorldBounds().maximum.x,
-	//	getDrivablePart()->getWorldBounds().minimum.z + 120,
-	//	getDrivablePart()->getWorldBounds().maximum.z,
-	//	getDrivablePart()->getWorldBounds().maximum.y);
-
-	////m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
-	//for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
-	//{
-	//	m_waypointList.insert(m_waypointList.end(), nextLocation2->getWaypointMap().at(i).begin(), nextLocation2->getWaypointMap().at(i).end());
-	//}
-
-	//stitchWaypointSystem(TOP, BOTTOM, *nextLocation2, m_waypointSystems.at(m_waypointSystems.size()-1)->getWaypointMap().at(0).size() - 120, 0);
-
-	//m_waypointSystems.push_back(nextLocation2);
-
+	m_waypointSystems.push_back(nextLocation3);
 
 }
 
@@ -100,14 +114,13 @@ Waypoint * Track::getWaypointAt(int index)
 	}
 }
 
-void Track::stitchWaypointSystem(Boundry lastWaypointSystemLocation, Boundry newWaypointSystemPosition, WaypointSystem& newWaypointSystem, int lastWaypointSystemIntialPosition, int newWaypointSystemIntialPosition)
+void Track::stitchWaypointSystem(Boundry lastWaypointSystemLocation, Boundry newWaypointSystemPosition, WaypointSystem& lastWaypointSystem, WaypointSystem& newWaypointSystem, int lastWaypointSystemIntialPosition, int newWaypointSystemIntialPosition)
 {
-	WaypointSystem* lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
 	bool isStichingRowForLastWaypoint;
 	int lastWaypointRowIndex;
 	int lastWaypointColumnIndex;
 
-	determineStitchingBoundaries(lastWaypointSystemLocation, lastWaypointSystemIntialPosition, isStichingRowForLastWaypoint, lastWaypointRowIndex, lastWaypointColumnIndex, *lastWaypointSystem);
+	determineStitchingBoundaries(lastWaypointSystemLocation, lastWaypointSystemIntialPosition, isStichingRowForLastWaypoint, lastWaypointRowIndex, lastWaypointColumnIndex, lastWaypointSystem);
 
 	bool isStichingRowForNewWaypoint;
 	int newWaypointRowIndex;
@@ -120,76 +133,76 @@ void Track::stitchWaypointSystem(Boundry lastWaypointSystemLocation, Boundry new
 		if (isStichingRowForNewWaypoint)
 		{
 			for (int i = lastWaypointColumnIndex, j = newWaypointColumnIndex;
-				i < lastWaypointSystem->getWaypointMap().at(0).size() &&
+				i < lastWaypointSystem.getWaypointMap().at(0).size() &&
 				j < newWaypointSystem.getWaypointMap().at(0).size();
 				i++, j++)
 			{
 				if ((j - 1) >= 0)
 				{
-					lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
+					lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
 						newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j - 1));
 				}
 
-				lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
+				lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
 					newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j));
 
 				if ((j + 1) < newWaypointSystem.getWaypointMap().at(0).size())
 				{
-					lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
+					lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
 						newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j + 1));
 				}
 
 				if ((i - 1) >= 0)
 				{
 					newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j)->getListOfAdjacentWaypoints().push_back(
-						lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i - 1));
+						lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i - 1));
 				}
 
 				newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j)->getListOfAdjacentWaypoints().push_back(
-					lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i));
+					lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i));
 
-				if ((i + 1) < lastWaypointSystem->getWaypointMap().at(0).size())
+				if ((i + 1) < lastWaypointSystem.getWaypointMap().at(0).size())
 				{
 					newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j)->getListOfAdjacentWaypoints().push_back(
-						lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i + 1));
+						lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i + 1));
 				}
 			}
 		}
 		else
 		{
 			for (int i = lastWaypointColumnIndex, j = newWaypointRowIndex;
-				i < lastWaypointSystem->getWaypointMap().at(0).size() &&
+				i < lastWaypointSystem.getWaypointMap().at(0).size() &&
 				j < newWaypointSystem.getWaypointMap().size();
 				i++, j++)
 			{
 				if ((j - 1) >= 0)
 				{
-					lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
+					lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
 						newWaypointSystem.getWaypointMap().at(j - 1).at(newWaypointColumnIndex));
 				}
 
-				lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
+				lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
 					newWaypointSystem.getWaypointMap().at(j).at(newWaypointColumnIndex));
 
 				if ((j + 1) < newWaypointSystem.getWaypointMap().size())
 				{
-					lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
+					lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i)->getListOfAdjacentWaypoints().push_back(
 						newWaypointSystem.getWaypointMap().at(j+1).at(newWaypointColumnIndex));
 				}
 
 				if ((i - 1) >= 0)
 				{
 					newWaypointSystem.getWaypointMap().at(j).at(newWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
-						lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i - 1));
+						lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i - 1));
 				}
 
 				newWaypointSystem.getWaypointMap().at(j).at(newWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
-					lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i));
+					lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i));
 
-				if ((i + 1) < lastWaypointSystem->getWaypointMap().at(0).size())
+				if ((i + 1) < lastWaypointSystem.getWaypointMap().at(0).size())
 				{
 					newWaypointSystem.getWaypointMap().at(j).at(newWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
-						lastWaypointSystem->getWaypointMap().at(lastWaypointRowIndex).at(i + 1));
+						lastWaypointSystem.getWaypointMap().at(lastWaypointRowIndex).at(i + 1));
 				}
 			}
 		}
@@ -199,76 +212,76 @@ void Track::stitchWaypointSystem(Boundry lastWaypointSystemLocation, Boundry new
 		if (isStichingRowForNewWaypoint)
 		{
 			for (int i = lastWaypointRowIndex, j = newWaypointColumnIndex;
-				i < lastWaypointSystem->getWaypointMap().size() &&
+				i < lastWaypointSystem.getWaypointMap().size() &&
 				j < newWaypointSystem.getWaypointMap().at(0).size();
 			i++, j++)
 			{
 				if ((j - 1) >= 0)
 				{
-					lastWaypointSystem->getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
+					lastWaypointSystem.getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
 						newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j - 1));
 				}
 
-				lastWaypointSystem->getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
+				lastWaypointSystem.getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
 					newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j));
 
 				if ((j + 1) < newWaypointSystem.getWaypointMap().at(0).size())
 				{
-					lastWaypointSystem->getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
+					lastWaypointSystem.getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
 						newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j + 1));
 				}
 
 				if ((i - 1) >= 0)
 				{
 					newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j)->getListOfAdjacentWaypoints().push_back(
-						lastWaypointSystem->getWaypointMap().at(i-1).at(lastWaypointColumnIndex));
+						lastWaypointSystem.getWaypointMap().at(i-1).at(lastWaypointColumnIndex));
 				}
 
 				newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j)->getListOfAdjacentWaypoints().push_back(
-					lastWaypointSystem->getWaypointMap().at(i).at(lastWaypointColumnIndex));
+					lastWaypointSystem.getWaypointMap().at(i).at(lastWaypointColumnIndex));
 
-				if ((i + 1) < lastWaypointSystem->getWaypointMap().size())
+				if ((i + 1) < lastWaypointSystem.getWaypointMap().size())
 				{
 					newWaypointSystem.getWaypointMap().at(newWaypointRowIndex).at(j)->getListOfAdjacentWaypoints().push_back(
-						lastWaypointSystem->getWaypointMap().at(i + 1).at(lastWaypointColumnIndex));
+						lastWaypointSystem.getWaypointMap().at(i + 1).at(lastWaypointColumnIndex));
 				}
 			}
 		}
 		else
 		{
 			for (int i = lastWaypointRowIndex, j = newWaypointRowIndex;
-				i < lastWaypointSystem->getWaypointMap().size() &&
+				i < lastWaypointSystem.getWaypointMap().size() &&
 				j < newWaypointSystem.getWaypointMap().size();
 				i++, j++)
 			{
 				if ((j - 1) >= 0)
 				{
-					lastWaypointSystem->getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
+					lastWaypointSystem.getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
 						newWaypointSystem.getWaypointMap().at(j-1).at(newWaypointColumnIndex));
 				}
 
-				lastWaypointSystem->getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
+				lastWaypointSystem.getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
 					newWaypointSystem.getWaypointMap().at(j).at(newWaypointColumnIndex));
 
 				if ((j + 1) < newWaypointSystem.getWaypointMap().size())
 				{
-					lastWaypointSystem->getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
+					lastWaypointSystem.getWaypointMap().at(i).at(lastWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
 						newWaypointSystem.getWaypointMap().at(j+1).at(newWaypointColumnIndex));
 				}
 
 				if ((i - 1) >= 0)
 				{
 					newWaypointSystem.getWaypointMap().at(j).at(newWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
-						lastWaypointSystem->getWaypointMap().at(i-1).at(lastWaypointColumnIndex));
+						lastWaypointSystem.getWaypointMap().at(i-1).at(lastWaypointColumnIndex));
 				}
 
 				newWaypointSystem.getWaypointMap().at(j).at(newWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
-					lastWaypointSystem->getWaypointMap().at(i).at(lastWaypointColumnIndex));
+					lastWaypointSystem.getWaypointMap().at(i).at(lastWaypointColumnIndex));
 
-				if ((i + 1) < lastWaypointSystem->getWaypointMap().size())
+				if ((i + 1) < lastWaypointSystem.getWaypointMap().size())
 				{
 					newWaypointSystem.getWaypointMap().at(j).at(newWaypointColumnIndex)->getListOfAdjacentWaypoints().push_back(
-						lastWaypointSystem->getWaypointMap().at(i+1).at(lastWaypointColumnIndex));
+						lastWaypointSystem.getWaypointMap().at(i+1).at(lastWaypointColumnIndex));
 				}
 			}
 		}
