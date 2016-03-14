@@ -7,6 +7,8 @@
 #include <string>
 
 bool Audio::m_musicPlaying = false;
+#define SFX_VOLUME 10
+#define MUSIC_VOLUME 100
 
 //set up audio library
 void Audio::initializeMusicLibrary(char * fileToLoad)
@@ -42,6 +44,9 @@ void Audio::initializeMusicLibrary(char * fileToLoad)
 			if (music == NULL)
 			{
 				std::cout << "File Failed to Load \n";
+			}
+			else {
+				Mix_VolumeMusic(MUSIC_VOLUME);
 			}
 			m_musicLibrary.push_back(music);
 
@@ -91,6 +96,9 @@ void Audio::initializeChunkLibrary(char * fileToLoad)
 			if (chunk == NULL)
 			{
 				std::cout << "File Failed to Load \n";
+			}
+			else {
+				Mix_VolumeChunk(chunk, SFX_VOLUME);
 			}
 			m_chunkLibrary.push_back(chunk);
 			

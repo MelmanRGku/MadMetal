@@ -104,32 +104,42 @@ public:
 	virtual ~ChassisCrashSound(){};
 };
 
-class TrackMusicSound : public Sound
+class AllGoodThingsIAmTheEnemySong : public Sound
 {
 public:
-	TrackMusicSound() : Sound()
+	AllGoodThingsIAmTheEnemySong() : Sound()
 	{
 		m_libraryIndex = 0;
 	};
-	virtual ~TrackMusicSound(){};
+	virtual ~AllGoodThingsIAmTheEnemySong(){};
 };
 
-class VengefulOneSong : public Sound
+class DisturbedVengefulOneSong : public Sound
 {
 public:
-	VengefulOneSong() : Sound()
+	DisturbedVengefulOneSong() : Sound()
 	{
 		m_libraryIndex = 1;
 	};
-	virtual ~VengefulOneSong(){};
+	virtual ~DisturbedVengefulOneSong(){};
 };
 
-class NumaNumaYeiSong : public Sound
+class SickPuppiedYoureGoingDownSong : public Sound
 {
 public:
-	NumaNumaYeiSong() : Sound()
+	SickPuppiedYoureGoingDownSong() : Sound()
 	{
 		m_libraryIndex = 2;
 	};
-	virtual ~NumaNumaYeiSong(){};
+	virtual ~SickPuppiedYoureGoingDownSong(){};
+};
+
+class MetalMusicDarknessFallsSong : public Sound
+{
+public:
+	MetalMusicDarknessFallsSong() : Sound()
+	{
+		m_libraryIndex = 3;
+	};
+	virtual ~MetalMusicDarknessFallsSong(){};
 };

@@ -4,15 +4,10 @@
 
 MusicManager::MusicManager(Audio &audio) : m_audio(audio)
 {
-	addSong(TrackMusicSound(), GameFactory::Objects::OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE);
-
-
-	addSong(VengefulOneSong(), GameFactory::Objects::OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE);
-
-
-	addSong(NumaNumaYeiSong(), GameFactory::Objects::OBJECT_UI_SICK_PUPPIES_SONG_TEXTURE_YOURE_GOING_DOWN);
-
-
+	addSong(AllGoodThingsIAmTheEnemySong(), GameFactory::Objects::OBJECT_UI_ALL_GOOD_THINGS_SONG_I_AM_THE_ENEMY);
+	addSong(DisturbedVengefulOneSong(), GameFactory::Objects::OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE);
+	addSong(SickPuppiedYoureGoingDownSong(), GameFactory::Objects::OBJECT_UI_SICK_PUPPIES_SONG_TEXTURE_YOURE_GOING_DOWN);
+	addSong(MetalMusicDarknessFallsSong(), GameFactory::Objects::OBJECT_UI_METAL_MUSIC_SONG_DARKNESS_FALLS);
 }
 
 
