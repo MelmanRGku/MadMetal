@@ -29,7 +29,6 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	musicManager = new MusicManager(audioHandle);
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 	m_displayMessage = static_cast<DisplayMessage *>(m_gameFactory->makeObject(GameFactory::OBJECT_DISPLAY_MESSAGE, NULL, NULL, NULL));
-	static_cast<DisplayMessage *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI_DISTURBED_SONG, NULL, NULL, NULL));
 	
 	m_waypointSystem = NULL;
 

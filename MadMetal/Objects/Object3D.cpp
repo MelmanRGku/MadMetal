@@ -69,6 +69,5 @@ glm::vec3 Object3D::getPosition() {
 
 void Object3D::playSound()
 {
-
 	m_audioable->getAudioHandle().queAudioSource(&this->getActor(), m_sound);
 }

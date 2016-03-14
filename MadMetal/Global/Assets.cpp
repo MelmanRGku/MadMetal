@@ -68,9 +68,9 @@ void Assets::loadObjsFromDirectory(std::string path) {
 	}
 }
 
-void Assets::loadJPGsFromDirectory(std::string path) {
+void Assets::loadPNGsFromDirectory(std::string path) {
 	std::vector<std::string> files;
-	double totalFilesSize = FileHandlingHelpers::findFilesWithExtension(path, "jpg", files);
+	double totalFilesSize = FileHandlingHelpers::findFilesWithExtension(path, "png", files);
 
 	double loadedFilesSize = 0;
 
@@ -88,9 +88,9 @@ void Assets::loadJPGsFromDirectory(std::string path) {
 	}
 }
 
-void Assets::load(std::string objPath, std::string jpgPath) {
+void Assets::load(std::string objPath, std::string pngPath) {
 	loadObjsFromDirectory(objPath);
-	loadJPGsFromDirectory(jpgPath);
+	loadPNGsFromDirectory(pngPath);
 	status->done = true;
 }
 

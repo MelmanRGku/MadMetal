@@ -56,7 +56,7 @@ public:
 	static void init();
 	static void loadObjsFromDirectory(std::string path);
 	static Model *loadObjFromDirectory(std::string path);
-	static void loadJPGsFromDirectory(std::string path);
+	static void loadPNGsFromDirectory(std::string path);
 	static Texture *loadTextureFromDirectory(std::string path);
 	static void initializeVAOs();
 	static Model *getModel(std::string name) { 
@@ -78,6 +78,6 @@ public:
 		}
 	}
 	static void release();
-	static void load(std::string objPath, std::string jpgPath);
+	static void load(std::string objPath, std::string pngPath);
 };
 

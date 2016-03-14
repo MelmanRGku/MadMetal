@@ -339,20 +339,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 						   return powerup;
 	}
-	case OBJECT_BULLET_CAR_COLLISION:
-	{
-		Renderable3D *renderable = new Renderable3D(NULL);
-		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
-		Animatable *animatable = new Animatable();
-		Physicable *physicable = new Physicable(NULL);
-
-
-		BulletCarCollision * col = new BulletCarCollision(objectId, audioable, physicable, animatable, renderable);
-		col->setSound(BulletCarCollisionSound());
-		col->playSound();
-
-		return col;
-	}
 	case OBJECT_COLLISION_VOLUME:
 	{
 		Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GGO));
@@ -372,9 +358,33 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return collisionVolume;
 	}
-	case OBJECT_UI_DISTURBED_SONG:
+	case OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE:
 	{
-		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_DISTURBED_TEXTURE)));
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, .89f, 0));
+		animatable->setScale(glm::vec3(.05f, 0, 0));
+
+		TexturedObject2D *image = new TexturedObject2D(objectId, audioable, animatable, renderable);
+		image->setMaxLifeTime(2);
+
+		ObjectScaleUpdater *upd1 = new ObjectScaleUpdater(image, glm::vec3(.0f, .2f, .0f), .5);
+		ObjectScaleUpdater *upd2 = new ObjectScaleUpdater(image, glm::vec3(.0f, .0f, .0f), .2);
+		ObjectScaleUpdater *upd3 = new ObjectScaleUpdater(image, glm::vec3(.45f, .0f, .0f), .3);
+		ObjectUpdaterSequence *seq = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
+		seq->addObjectUpdater(upd1);
+		seq->addObjectUpdater(upd2);
+		seq->addObjectUpdater(upd3);
+		m_world.addObjectUpdater(seq);
+
+		m_world.addGameObject(image);
+
+		return image;
+	}
+	case OBJECT_UI_SICK_PUPPIES_SONG_TEXTURE_YOURE_GOING_DOWN:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_SICK_PUPPIES_SONG_TEXTURE_YOURE_GOING_DOWN)));
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 		animatable->setPosition(glm::vec3(0, .89f, 0));
@@ -405,6 +415,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		animatable->setScale(glm::vec3(.38f, .38f, 0));
 
 		MapUI *map = new MapUI(objectId, audioable, animatable, renderable);
+		map->setPlayerModel(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PLAYER_ON_UI_MAP_TEXTURE)));
 
 		m_world.addGameObject(map);
 
