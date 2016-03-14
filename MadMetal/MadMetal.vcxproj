@@ -156,6 +156,7 @@
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
+    <ClInclude Include="Objects\Particle.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectScaleUpdater.h" />
     <ClInclude Include="Objects\Model2D.h" />
     <ClInclude Include="Objects\Model3D.h" />

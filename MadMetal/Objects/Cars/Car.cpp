@@ -75,24 +75,27 @@ void Car::usePowerUp()
 		m_heldPowerUp = PowerUpType::NONE;
 		m_powerUpRemaining = PowerUp::getPowerUpDuration(m_activePowerUp);
 
+		PxGeometry* geom[1];
 		switch (m_activePowerUp)
 		{
 		case (PowerUpType::ATTACK) :
 			//add particle system
 			break;
 		case (PowerUpType::DEFENSE) :
-			PxGeometry* dgeom[1];
-			dgeom[0] = new PxSphereGeometry(10);
-			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), dgeom, this);
+			
+			geom[0] = new PxSphereGeometry(10);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), geom, this);
+			
 			break;
 		case (PowerUpType::SPEED) :
 			//add particle system
-			PxGeometry* sgeom[1];
-			sgeom[0] = new PxSphereGeometry(10);
-			GameFactory::instance()->makeObject(GameFactory::OBJECT_SPEED_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), sgeom, this);
+			geom[0] = new PxSphereGeometry(10);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_SPEED_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), geom, this);
 			break;
 
 		}
+		delete geom[0];
+
 	}
 	
 

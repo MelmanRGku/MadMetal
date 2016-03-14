@@ -1,6 +1,7 @@
 #include "GameFactory.h"
 #include "Objects\Waypoint.h"
 #include "Objects\CollisionVolume.h"
+#include "Objects\Particle.h"
 
 long GameFactory::lastId = 0;
 
@@ -337,6 +338,24 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 						   m_scene.addActor(*powerupTriggerVolume);
 
 						   return powerup;
+	}
+	case OBJECT_PARTICLE:
+	{
+							Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
+							Renderable3D *renderable = new Renderable3D(model, true, true);
+							Animatable *animatable = new Animatable();
+							Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+							PxRigidDynamic *particleVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_PARTICLE, objectId, pos, geom, 0, NULL, NULL, NULL));
+							Physicable *physicable = new Physicable(particleVolume);
+							animatable->setScale(glm::vec3(particleVolume->getWorldBounds().getDimensions().x, particleVolume->getWorldBounds().getDimensions().y, particleVolume->getWorldBounds().getDimensions().z));
+
+							Particle *particle = new Particle(objectId, audioable, physicable, animatable, renderable);
+
+							m_world.addGameObject(particle);
+							//m_scene.addActor(*powerupTriggerVolume);
+
+							return particle;
 	}
 	case OBJECT_BULLET_CAR_COLLISION:
 	{
