@@ -1,35 +1,39 @@
 #include "ParticleUpdater.h"
 #include <iostream>
 
-void PositionUpdater::update(float dt, ParticleData * p)
+void PositionUpdater::update(float dt, ParticleData& particles)
 {
-	PxVec3 accel(dt * m_globalAcc.x, dt * m_globalAcc.y, dt * m_globalAcc.z);
+	//PxVec3 accel(dt * m_globalAcc.x, dt * m_globalAcc.y, dt * m_globalAcc.z);
+	
 
+	const unsigned int endId = particles.m_countAlive;
 
-	const unsigned int endId = p->m_countAlive;
-
-	for (size_t i = 0; i < p->m_countAlive; i++)
+	for (size_t i = 0; i < particles.m_countAlive; i++)
 	{
-		Particle * particle = p->m_particles[i];
-		PxVec3 speed = particle->getRigidActor()->getLinearVelocity();
-		speed += accel;
-		particle->getRigidActor()->setLinearVelocity(speed);
 		
-		PxVec3 position = particle->getRigidActor()->getGlobalPose().p * dt;
-		particle->getRigidActor()->setGlobalPose(PxTransform(position));
+		//particles.m_vel[i] += accel;
+		PxVec3 deltaV = PxVec3(particles.m_vel[i].x * dt, particles.m_vel[i].y * dt, particles.m_vel[i].z * dt);
+		particles.m_pos[i] += deltaV;
+		particles.m_particles[i]->getRigidActor()->setGlobalPose(PxTransform(particles.m_pos[i]));
 	}
+
+	
+	
+	
+	
+	
 
 
 }
 
-void TimeUpdater::update(float dt, ParticleData * p)
+void TimeUpdater::update(float dt, ParticleData& particles)
 {
 	
-	for (size_t i = 0; i < p->m_countAlive; i++)
+	for (size_t i = 0; i < particles.m_countAlive; i++)
 	{
-		if ((p->m_time[i] -= dt) <= 0)
+		if ((particles.m_time[i] -= dt) <= 0)
 		{
-			p->kill(i);
+			particles.kill(i);
 		}
 	}
 }

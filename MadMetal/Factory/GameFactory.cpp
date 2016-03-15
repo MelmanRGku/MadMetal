@@ -281,24 +281,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		return waypoint;
 	}
 
-	case OBJECT_POWERUP:
-	{
-			Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
-			Renderable3D *renderable = new Renderable3D(model, true, true);
-			Animatable *animatable = new Animatable();
-			Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
-
-			PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::POWER_UP, objectId, pos, geom, 0, NULL, NULL, NULL));
-			Physicable *physicable = new Physicable(powerupTriggerVolume);
-			animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
-
-			PowerUp *powerup = new PowerUp(objectId, audioable, physicable, animatable, renderable);
-
-			m_world.addGameObject(powerup);
-			m_scene.addActor(*powerupTriggerVolume);
-
-			return powerup;
-	}
+	
 
 	case OBJECT_SHIELD_POWERUP:
 	{
@@ -339,6 +322,25 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 						   return powerup;
 	}
+
+	case OBJECT_POWERUP:
+	{
+						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
+						   Renderable3D *renderable = new Renderable3D(model, true, true);
+						   Animatable *animatable = new Animatable();
+						   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+						   PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::POWER_UP, objectId, pos, geom, 0, NULL, NULL, NULL));
+						   Physicable *physicable = new Physicable(powerupTriggerVolume);
+						   animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
+
+						   PowerUp *powerup = new PowerUp(objectId, audioable, physicable, animatable, renderable);
+
+						   m_world.addGameObject(powerup);
+						   m_scene.addActor(*powerupTriggerVolume);
+
+						   return powerup;
+	}
 	case OBJECT_PARTICLE:
 	{
 							Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
@@ -353,7 +355,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							Particle *particle = new Particle(objectId, audioable, physicable, animatable, renderable);
 
 							m_world.addGameObject(particle);
-							//m_scene.addActor(*powerupTriggerVolume);
+							m_scene.addActor(*particleVolume);
 
 							return particle;
 	}

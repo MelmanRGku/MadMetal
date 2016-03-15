@@ -1,27 +1,47 @@
 #include "ParticleEmitter.h"
 #include <iostream>
 
-void ParticleEmitter::emit(double dt, ParticleData *p)
+void ParticleEmitter::emit(double dt, ParticleData& particles)
 {
-	const size_t maxNewParticles = static_cast<size_t> (dt*m_emitRate);
-	const size_t startId = p->m_countAlive;
-	
-	const size_t endId = std::min(startId + maxNewParticles, p->m_count - 1);
+	m_timer += dt;
+	if (m_timer < m_emmitIntervalSeconds)
+		return;
+	m_timer = 0;
 
-	for (auto &gen : generators)
-	{
-		gen->generate(dt, p, startId, endId);
-	}
+	
+	size_t startId = particles.m_countAlive;
+	
+	const size_t endId = std::min(startId + m_emmitAmount, particles.m_maxParticleCount - 1);
+
+	
+	m_posGenerator->generate(particles, startId, endId);
+	m_velGenerator->generate(particles, startId, endId);
+	m_timeGenerator->generate(particles, startId, endId);
 
 	for (size_t i = startId; i < endId; i++)
 	{
-		p->wake(i);
-		//std::cout << p->m_col[i].x << "," << p->m_col[i].y << "," << p->m_col[i].z << "\n";
+		particles.wake(i);
+		
 	}
 }
 
-void ParticleEmitter::addGenerator(ParticleGenerator * generator)
+void ParticleEmitter::setPosGenerator(PositionGenerator * generator)
 {
-	generators.push_back(generator);
+	m_posGenerator = generator;
+}
+
+void ParticleEmitter::setVelGenerator(VelocityGenerator * generator)
+{
+	m_velGenerator = generator;
+}
+
+void ParticleEmitter::setTimeGenerator(TimeGenerator * generator)
+{
+	m_timeGenerator = generator;
+}
+
+PositionGenerator* ParticleEmitter::getPosGenerator()
+{
+	return m_posGenerator;
 }
 

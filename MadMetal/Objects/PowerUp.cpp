@@ -1,8 +1,19 @@
 #include "PowerUp.h"
+#include "ParticleSystem\ParticleSystem.h"
+
+#define STRESS_TEST 1
 
 PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable)
 {
 	activate();
+	PxVec3 dimensions = pable->getActor().getWorldBounds().getDimensions(); 
+	PxVec3 position = pable->getActor().getGlobalPose().p;
+	
+	for (int i = 0; i < STRESS_TEST; i++)
+	{
+		m_pSystem.push_back( new ParticleSystem(10, PxVec3(position.x, position.y - dimensions.y / 2, position.z + i * 5), -1));
+	}
+
 }
 
 PowerUp::~PowerUp()
@@ -36,6 +47,13 @@ void PowerUp::update(float dtMillis)
 			activate();
 		}
 	}
+	else {
+		for (int i = 0; i < STRESS_TEST; i++)
+		{
+			m_pSystem[i]->update(dtMillis);
+		}
+		
+	}
 }
 
 void PowerUp::activate()
@@ -56,8 +74,8 @@ void PowerUp::activate()
 		m_type = PowerUpType::NONE;
 		break;
 	}
-	m_renderable->setModel(Assets::getModel("sword"));
-	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
+	m_renderable->setModel(Assets::getModel(""));
+	//static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 }
 
 float PowerUp::getPowerUpDuration(PowerUpType toGet)

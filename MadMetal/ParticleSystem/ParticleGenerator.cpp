@@ -1,37 +1,29 @@
 #include "ParticleGenerator.h"
 #include <iostream>
 
-void PositionGenerator::generate(double dt, ParticleData *p, size_t startId, size_t endId)
+void PositionGenerator::generate( ParticleData &particles, size_t startId, size_t endId)
 {
 
-	glm::vec4 posMin{ m_pos.x - m_maxStartPosOffset.x,
-		m_pos.y - m_maxStartPosOffset.y,
-		m_pos.z - m_maxStartPosOffset.z,
-		1.0 };
-	glm::vec4 posMax{ m_pos.x + m_maxStartPosOffset.x,
-		m_pos.y + m_maxStartPosOffset.y,
-		m_pos.z + m_maxStartPosOffset.z,
-		1.0 };
-
 	for (size_t i = startId; i < endId; i++)
 	{
-		p->m_pos[i] = glm::linearRand(posMin, posMax);
+		
+		particles.m_pos[i] = m_pos;
+		
+		particles.m_particles[i]->getRigidActor()->setGlobalPose(PxTransform(particles.m_pos[i]));
+		
+		
+		//std::cout << "particle generated at " << actor->getGlobalPose().p.x << "," << actor->getGlobalPose().p.y << "," << actor->getGlobalPose().p.z << std::endl;
+		
 	}
-
-	for (size_t i = startId; i < endId; i++)
-	{
-		p->m_vel[i] = glm::vec4(0);
-	}
-
-	for (size_t i = startId; i < endId; i++)
-	{
-		p->m_acc[i] = glm::vec4(0);
-	}
-
 
 }
 
-void CirclePositionGenerator::generate(double dt, ParticleData *p, size_t startId, size_t endId)
+void PositionGenerator::updatePosition(PxVec3 pos)
+{
+	m_pos = pos;
+}
+
+void CirclePositionGenerator::generate(ParticleData &particles, size_t startId, size_t endId)
 {
 
 	
@@ -39,33 +31,24 @@ void CirclePositionGenerator::generate(double dt, ParticleData *p, size_t startI
 		for (size_t i = startId; i < endId; i++)
 		{
 			glm::vec2 position = glm::circularRand(m_radius);
-			p->m_pos[i] = m_pos + glm::vec4(position.x, position.y, 0, 0);
+
+			particles.m_pos[i] = PxVec3(m_pos.x + position.x, m_pos.y, m_pos.z + position.y);
+			
+			
 		}
 	}
 	else {
-		m_circProg = (float)fmod((m_circProg + dt * 5) ,360);
-		glm::vec3 position = glm::rotateZ(glm::vec3(1, 0,0) * m_radius, m_circProg);
+		m_circProg = (float)fmod((m_circProg + m_rotateSpeed) ,360);
+		glm::vec3 position = glm::rotateY(glm::vec3(1, 0,0) * m_radius, m_circProg);
 		for (size_t i = startId; i < endId; i++)
 		{
-			
-			p->m_pos[i] = m_pos + glm::vec4(position.x, position.y, position.z, 0);
+			particles.m_pos[i] = PxVec3(m_pos.x + position.x, m_pos.y + position.y, m_pos.z + position.z);
+			particles.m_particles[i]->getRigidActor()->setGlobalPose(PxTransform(particles.m_pos[i]));
 		}
 	}
-	
-
-	for (size_t i = startId; i < endId; i++)
-	{
-		p->m_vel[i] = glm::vec4(0);
-	}
-
-	for (size_t i = startId; i < endId; i++)
-	{
-		p->m_acc[i] = glm::vec4(0);
-	}
-
 
 }
-
+/*
 void ColorGenerator::generate(double dt, ParticleData *p, size_t startId, size_t endId)
 {
 
@@ -76,25 +59,27 @@ void ColorGenerator::generate(double dt, ParticleData *p, size_t startId, size_t
 		std::cout << p->m_col[i].y << "\n";
 	}
 
-}
+}*/
 
-void TimeGenerator::generate(double dt, ParticleData * p, size_t startId, size_t endId)
+
+void TimeGenerator::generate( ParticleData& particles, size_t startId, size_t endId)
 {
 
 	for (size_t i = startId; i < endId; i++)
 	{
-		p->m_time[i] = glm::linearRand(m_minStartTime, m_maxStartTime);
+		particles.m_time[i] = glm::linearRand(m_minStartTime, m_maxStartTime);
 	}
 }
 
-void VelocityGenerator::generate(double dt, ParticleData * p, size_t startId, size_t endId)
+void VelocityGenerator::generate(ParticleData& particles, size_t startId, size_t endId)
 {
 	for (size_t i = startId; i < endId; i++)
 	{
-		p->m_vel[i] = glm::linearRand(m_minStartVel, m_maxStartVel);
+		glm::vec3 startVelocity = glm::linearRand(glm::vec3(m_minStartVel.x, m_minStartVel.y, m_minStartVel.z), glm::vec3(m_maxStartVel.x, m_maxStartVel.y, m_maxStartVel.z));
+		particles.m_vel[i] = PxVec3(startVelocity.x, startVelocity.y, startVelocity.z);
 	}
 }
-
+/*
 void NormalGenerator::generate(double dt, ParticleData * p, size_t startId, size_t endId)
 {
 	for (size_t i = startId; i < endId; i++)
@@ -102,3 +87,4 @@ void NormalGenerator::generate(double dt, ParticleData * p, size_t startId, size
 		p->m_norm[i] = m_startNorm;
 	}
 }
+*/

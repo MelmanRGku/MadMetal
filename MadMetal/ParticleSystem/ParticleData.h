@@ -19,17 +19,19 @@ public:
 	float* m_time;
 	bool* m_alive;
 	
-	Particle ** m_particles;
-	size_t m_count{ 0 };
+	PxVec3* m_pos;
+	PxVec3* m_vel;
+	PxVec3* m_acc;
+	Particle** m_particles;
+	size_t m_maxParticleCount{ 0 };
 	size_t m_countAlive{ 0 };
 	
 
 public:
-	explicit ParticleData(size_t maxCount) { generate(maxCount); }
+	ParticleData(size_t maxCount) { generate(maxCount); }
 	~ParticleData() {}
 
-	ParticleData(const ParticleData &) = delete;
-	ParticleData &operator = (const ParticleData &) = delete;
+	
 
 	void generate(size_t maxSize);
 	void kill(size_t id);

@@ -293,10 +293,10 @@ public:
 		{
 										 PxRigidStatic * particle = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
 										 
-										 /*
+										 
 										 PxFilterData simFilterData;
-										 simFilterData.word0 = COLLISION_FLAG_SPEED_POWERUP;
-										 simFilterData.word1 = COLLISION_FLAG_POWERUP_AGAINST;
+										 simFilterData.word0 = 0;
+										 simFilterData.word1 = 0;
 
 										 particle->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
@@ -307,7 +307,7 @@ public:
 										 shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
 
 										 setFilterDataId(objectId, particle);
-										 */
+										 
 										 toReturn = particle;
 										 break;
 		}

@@ -3,22 +3,23 @@
 class ParticleUpdater
 {
 public:
-
-	virtual void update(float dt, ParticleData *p) = 0;
+	ParticleUpdater(){}
+	virtual void update(float dt, ParticleData &p) = 0;
 };
 
 class PositionUpdater : public ParticleUpdater
 {
 public:
+	PositionUpdater(PxVec3 globalAcc) : m_globalAcc(globalAcc){}
 	~PositionUpdater(){}
 
-	glm::vec4 m_globalAcc{ 0.0 };
-	void update(float dt, ParticleData *p);
+	PxVec3 m_globalAcc;
+	void update(float dt, ParticleData &p);
 };
 
 class TimeUpdater : public ParticleUpdater
 {
 public:
-	void update(float dt, ParticleData * p);
+	void update(float dt, ParticleData & p);
 
 };
