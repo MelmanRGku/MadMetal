@@ -3,7 +3,7 @@
 
 int CollisionVolume::globalID = 0;
 
-CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable, NULL)
+CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
 	m_id = CollisionVolume::globalID;
 	CollisionVolume::globalID++;

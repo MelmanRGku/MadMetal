@@ -9,6 +9,12 @@
 #include "Game Logic\AIControllable.h"
 #include "Objects\DisplayMessage.h"
 #include "CollisionManager.h"
+#include "Objects\ObjectUpdaters\ObjectPositionUpdater.h"
+#include "Objects\ObjectUpdaters\ObjectRotationUpdater.h"
+#include "Objects\ObjectUpdaters\ObjectScaleUpdater.h"
+#include "Objects\ObjectUpdaters\ObjectUpdaterSequence.h"
+#include "Objects\ObjectUpdaters\ObjectUpdaterParallel.h"
+#include "Audio\MusicManager.h"
 #include <time.h>
 
 class Scene;
@@ -41,6 +47,8 @@ private:
 
 	int getFirstPlace();
 
+	void processInput();
+
 private: //members
 	std::vector<Controllable *> m_players;
 	std::vector<PlayerControllable*> m_humanPlayers;
@@ -67,9 +75,10 @@ private: //members
 	CollisionVolume * m_startingCollisionVolume;
 	CollisionVolume * m_midCollisionVolume;
 	
+	MusicManager *musicManager;
 
 public:
-	TestObject * myObject;
+	Object3D * myObject;
 	clock_t t;
 	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle);
 	~GameSimulation();

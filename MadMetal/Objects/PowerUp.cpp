@@ -1,6 +1,6 @@
 #include "PowerUp.h"
 
-PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable, NULL)
+PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
 	activate();
 }
@@ -15,6 +15,18 @@ bool PowerUp::isActive()
 	return m_respawnDelay <= 0;
 }
 
+
+float PowerUp::getLifeStealPercentage()
+{
+	return LIFESTEAL_PERCENTAGE;
+}
+
+float PowerUp::getSpeedImpactDamage()
+{
+	return SPEED_IMPACT_DAMAGE;
+}
+
+
 void PowerUp::update(float dtMillis)
 {
 	if (m_respawnDelay > 0)
@@ -28,7 +40,7 @@ void PowerUp::update(float dtMillis)
 
 void PowerUp::activate()
 {
-	int choice = 1 + rand() % 2;
+	int choice = 1 + rand() % 3;
 	switch (choice)
 	{
 	case(1) :
@@ -44,7 +56,8 @@ void PowerUp::activate()
 		m_type = PowerUpType::NONE;
 		break;
 	}
-	m_renderable->setModel(Assets::getModel("sword"), true, true);
+	m_renderable->setModel(Assets::getModel("sword"));
+	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 }
 
 float PowerUp::getPowerUpDuration(PowerUpType toGet)

@@ -11,6 +11,10 @@ World::~World() {
 		delete gameObjects->at(i);
 	}
 	delete gameObjects;
+
+	for (unsigned int i = 0; i < updaters.size(); i++) {
+		delete updaters.at(i);
+	}
 }
 
 
@@ -48,8 +52,9 @@ void World::deleteObjectById(long id) {
 		else {
 			TestObject *obj = gameObjects->at(mid);
 			gameObjects->erase(gameObjects->begin()+mid);
-			scene->removeActor(obj->getActor());
-			//obj->getActor().release();
+			Object3D *object3D = dynamic_cast<Object3D *>(obj);
+			if (object3D != NULL)
+				scene->removeActor(object3D->getActor());
 			delete obj;
 			break;
 		}
@@ -59,8 +64,9 @@ void World::deleteObjectById(long id) {
 void World::deleteObjectByIndex(int index) {
 	TestObject *obj = gameObjects->at(index);
 	gameObjects->erase(gameObjects->begin() + index);
-	scene->removeActor(obj->getActor());
-	//obj->getActor().release();
+	Object3D *object3D = dynamic_cast<Object3D *>(obj);
+	if (object3D != NULL)
+		scene->removeActor(object3D->getActor());
 	delete obj;
 }
 
@@ -74,5 +80,9 @@ void World::update(float dt) {
 		}
 
 		obj->update(dt);
+	}
+
+	for (unsigned int i = 0; i < updaters.size(); i++) {
+		updaters.at(i)->update(dt);
 	}
 }

@@ -10,11 +10,11 @@ ObjModelLoader::~ObjModelLoader()
 {
 }
 
-Model *ObjModelLoader::loadFromFile(const char *fileName) {
+Model3D *ObjModelLoader::loadFromFile(const char *fileName) {
 	return loadFromFile(std::string(fileName));
 }
 
-Model *ObjModelLoader::loadFromFile(std::string fileName) {
+Model3D *ObjModelLoader::loadFromFile(std::string fileName) {
 	// Read file via ASSIMP
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
@@ -31,8 +31,8 @@ Model *ObjModelLoader::loadFromFile(std::string fileName) {
 }
 
 
-Model *ObjModelLoader::processScene(const aiScene *scene) {
-	Model *model = new Model();
+Model3D *ObjModelLoader::processScene(const aiScene *scene) {
+	Model3D *model = new Model3D();
 	BoundingBox *boundingBox = new BoundingBox();
 	model->boundingBox = boundingBox;
 

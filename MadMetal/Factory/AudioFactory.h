@@ -22,6 +22,7 @@ public:
 		}
 		
 	}
+
 	Audio& getAudioHandle() { return m_audioHandle; }
 private: //members
 	Audio& m_audioHandle;

@@ -78,6 +78,15 @@
     <ClCompile Include="Game Logic\PathFinding.cpp" />
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
+    <ClCompile Include="Objects\MainMenuSystem.cpp" />
+    <ClCompile Include="Objects\MenuSystem.cpp" />
+    <ClCompile Include="Simulation\MainMenu.cpp" />
+    <ClCompile Include="Objects\MapUI.cpp" />
+    <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp" />
+    <ClCompile Include="Objects\Model2D.cpp" />
+    <ClCompile Include="Objects\Model3D.cpp" />
+    <ClCompile Include="Objects\Object2D.cpp" />
+    <ClCompile Include="Objects\Object3D.cpp" />
     <ClCompile Include="Objects\BulletCarCollision.cpp" />
     <ClCompile Include="Objects\CollisionVolume.cpp" />
     <ClCompile Include="Objects\LoadingBar.cpp" />
@@ -85,10 +94,14 @@
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
     <ClCompile Include="Objects\PowerUp.cpp" />
+    <ClCompile Include="Objects\PowerUpShield.cpp" />
+    <ClCompile Include="Objects\PowerUpSpeed.cpp" />
     <ClCompile Include="Objects\Waypoint.cpp" />
     <ClCompile Include="Objects\Track.cpp" />
     <ClCompile Include="Renderer\NoShaderProgram.cpp" />
     <ClCompile Include="Objects\Bullet.cpp" />
+    <ClCompile Include="Renderer\Renderable2D.cpp" />
+    <ClCompile Include="Renderer\Renderable3D.cpp" />
     <ClCompile Include="Renderer\ShaderProgram.cpp" />
     <ClCompile Include="Simulation\CollisionManager.cpp" />
     <ClCompile Include="Factory\GameFactory.cpp" />
@@ -142,11 +155,24 @@
     <ClCompile Include="Objects\VolcanoGuySuperBullet.cpp" />
     <ClCompile Include="Objects\UI.cpp" />
     <ClCompile Include="Objects\Text3D.cpp" />
+    <ClCompile Include="Audio\MusicManager.cpp" />
+    <ClCompile Include="Objects\TexturedObject2D.cpp" />
+    <ClCompile Include="Objects\SinglePlayerButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Factory\AnimationFactory.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
+    <ClInclude Include="Objects\MainMenuSystem.h" />
+    <ClInclude Include="Objects\MenuSystem.h" />
+    <ClInclude Include="Simulation\MainMenu.h" />
+    <ClInclude Include="Objects\MapUI.h" />
+    <ClInclude Include="Objects\ObjectUpdaters\ObjectScaleUpdater.h" />
+    <ClInclude Include="Objects\Model2D.h" />
+    <ClInclude Include="Objects\Model3D.h" />
+    <ClInclude Include="Objects\Object2D.h" />
+    <ClInclude Include="Objects\Object3D.h" />
     <ClInclude Include="Objects\Audioable.h" />
     <ClInclude Include="Objects\BulletCarCollision.h" />
     <ClInclude Include="Objects\DisplayMessage.h" />
@@ -155,9 +181,14 @@
     <ClInclude Include="Objects\MeowMixBullet.h" />
     <ClInclude Include="Objects\GaugeBar.h" />
     <ClInclude Include="Objects\HealthBar2D.h" />
+    <ClInclude Include="Objects\PowerUpShield.h" />
+    <ClInclude Include="Objects\PowerUpSpeed.h" />
+    <ClInclude Include="Objects\PowerUpVolume.h" />
     <ClInclude Include="Objects\Waypoint.h" />
     <ClInclude Include="Renderer\NoShaderProgram.h" />
     <ClInclude Include="Objects\Bullet.h" />
+    <ClInclude Include="Renderer\Renderable2D.h" />
+    <ClInclude Include="Renderer\Renderable3D.h" />
     <ClInclude Include="Renderer\ShaderProgram.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Simulation\CollisionManager.h" />
@@ -226,6 +257,9 @@
     <ClInclude Include="Objects\VolcanoGuySuperBullet.h" />
     <ClInclude Include="Objects\UI.h" />
     <ClInclude Include="Objects\Text3D.h" />
+    <ClInclude Include="Audio\MusicManager.h" />
+    <ClInclude Include="Objects\TexturedObject2D.h" />
+    <ClInclude Include="Objects\SinglePlayerButton.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Audio\MusicLibrary.txt" />

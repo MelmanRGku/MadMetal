@@ -26,6 +26,9 @@ ObjectUpdaterParallel::ObjectUpdaterParallel(int type, int numberOfTimes) {
 
 ObjectUpdaterParallel::~ObjectUpdaterParallel()
 {
+	for (unsigned int i = 0; i < updaters.size(); i++) {
+		delete updaters.at(i).first;
+	}
 }
 
 

@@ -3,10 +3,6 @@
 #include "Objects/Cars/MeowMix.h"
 #include "Objects/Model.h"
 #include "Objects/ObjectLoaders/ObjModelLoader.h"
-#include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
-#include "Objects/ObjectUpdaters/ObjectRotationUpdater.h"
-#include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
-#include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 #include "PhysicsManager.h"
 #include "Objects\ObjectCreators\VehicleCreator.h"
 #include "Objects\Waypoint.h"
@@ -32,8 +28,10 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	std::cout << "GameSimulation pushed onto the stack \n";
 	
 	createPhysicsScene();
+	musicManager = new MusicManager(audioHandle);
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 	m_displayMessage = static_cast<DisplayMessage *>(m_gameFactory->makeObject(GameFactory::OBJECT_DISPLAY_MESSAGE, NULL, NULL, NULL));
+	
 	m_waypointSystem = NULL;
 
 	m_isPaused = false;
@@ -49,10 +47,13 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
 			PxTransform *pos = new PxTransform(-130 + i * 10, 40, 0);
-			humanPlayer->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL)));
+			MeowMix *car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
+			humanPlayer->setCar(car);
 			delete pos;
+
 			UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
 			humanPlayer->getCar()->ui = ui;
+			ui->map->setMainPlayer(humanPlayer);
 			m_world->addGameObject(ui);
 			//todo: make a car for player based off template
 			m_humanPlayers.push_back(humanPlayer);
@@ -73,7 +74,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			//make a car for ai based off template
 		}
 	}
-
+	
 	//if there is only one player, set audio to do sound attenuation to that player
 	if (m_humanPlayers.size() == 1)
 	{
@@ -82,7 +83,17 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	
 	//m_mainCamera = m_humanPlayers[0]->getCamera();
 	
-	initialize();
+	initialize(); 
+	
+	PxVec3 minTrackBounds = m_track->getDrivablePart()->getActor().getWorldBounds().minimum;
+	PxVec3 maxTrackBounds = m_track->getDrivablePart()->getActor().getWorldBounds().maximum;
+	glm::vec3 minBounds = glm::vec3(minTrackBounds.x, minTrackBounds.y, minTrackBounds.z);
+	glm::vec3 maxBounds = glm::vec3(maxTrackBounds.x, maxTrackBounds.y, maxTrackBounds.z);
+	for (unsigned int i = 0; i < m_humanPlayers.size(); i++) {
+		m_humanPlayers.at(i)->getCar()->getUI()->map->setTrackBounds(minBounds, maxBounds);
+		m_humanPlayers.at(i)->getCar()->getUI()->map->setPlayers(&m_players);
+	}
+
 
 	
 	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
@@ -105,6 +116,7 @@ GameSimulation::~GameSimulation()
 	gFrictionPairs->release();
 	GameFactory::release();
 	delete manager;
+	delete musicManager;
 	
 }
 
@@ -234,6 +246,7 @@ void GameSimulation::simulatePlayers(double dt)
 	for (unsigned int i = 0; i < m_aiPlayers.size(); i++) {
 		m_aiPlayers[i]->processFire(&m_players);
 	}
+
 	//m_humanPlayers[0]->playFrame(dt);
 	//m_players[1]->playFrame(dt);
 	
@@ -289,15 +302,39 @@ void GameSimulation::createPhysicsScene()
 	gFrictionPairs = createFrictionPairs(mMaterial);
 }
 
+void GameSimulation::processInput() {
+	//check for pause button
+	for (int i = 0; i < m_humanPlayers.size(); i++)
+	{
+		//if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
+		//{
+		//	newMessage.setTag(SceneMessage::ePause);
+		//	std::vector<ControllableTemplate *> playerTemplates;
+		//	//put the controllables into the vector incase the player trys to restart
+		//	for (int i = 0; i < m_players.size(); i++)
+		//	{
+		//		playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+		//	}
+		//	//put a dummy controllable at the front of the vector so the pause screen knows who paused
+		//	playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
+		//	newMessage.setPlayerTemplates(playerTemplates);
+		//	
+		//	return true;
+		//}
+	}
 
+	if (m_humanPlayers[0]->getGamePad() != NULL && (m_humanPlayers[0]->getGamePad()->isPressed(GamePad::DPadLeft) || m_humanPlayers[0]->getGamePad()->isPressed(GamePad::DPadRight))) {
+		musicManager->changeSong();
+	}
+}
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 {
-
+	processInput();
+	musicManager->update();
 	m_sceneGameTimeSeconds += dt;
 	if (m_sceneGameTimeSeconds > 3 && m_controlsPaused) {
 		pauseControls(false);
-		m_track->playTrackMusic();
 	}
 	if (m_sceneGameTimeSeconds < 4 )
 	{
@@ -362,27 +399,9 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	//if the race is still going, do player simulations
 	if (!m_raceFinished)
 	{
-		//check for pause button
-	for (int i = 0; i < m_humanPlayers.size(); i++)
-	{
-		//if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
-		//{
-		//	newMessage.setTag(SceneMessage::ePause);
-		//	std::vector<ControllableTemplate *> playerTemplates;
-		//	//put the controllables into the vector incase the player trys to restart
-		//	for (int i = 0; i < m_players.size(); i++)
-		//	{
-		//		playerTemplates.push_back(&m_players[i]->getControllableTemplate());
-		//	}
-		//	//put a dummy controllable at the front of the vector so the pause screen knows who paused
-		//	playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
-		//	newMessage.setPlayerTemplates(playerTemplates);
-		//	
-		//	return true;
-		//}
-	}
+		
 		//simulate players
-	simulateAI();
+	
 	simulatePlayers(dt);
 	}
 	else {
@@ -455,11 +474,13 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	}
 
 	//Power up test
-	/*PxGeometry **powerGeom = new PxGeometry*[1];
+	/*
+	PxGeometry **powerGeom = new PxGeometry*[1];
 	powerGeom[0] = new PxBoxGeometry(PxVec3(1, 5, 1));
 	pos = new PxTransform(-130, 25, 60);
 	m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL);
-	delete pos;*/
+	delete pos;
+	*/
 
 
 	PxGeometry **geom1 = new PxGeometry *[1];
@@ -475,7 +496,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	// THIS IS TEST CODE FOR ANIMATIONS
 	geom1[0] = new PxBoxGeometry(PxVec3(2, 2, 2));
 
-	myObject = m_gameFactory->makeObject(GameFactory::OBJECT_ANIMATION_TEST, &PxTransform(-130, 25, 20), geom1, NULL);
+	myObject = static_cast<Object3D *>(m_gameFactory->makeObject(GameFactory::OBJECT_ANIMATION_TEST, &PxTransform(-130, 25, 20), geom1, NULL));
 
 	t = clock();
 	// THE TEST CODE ENDS HERE

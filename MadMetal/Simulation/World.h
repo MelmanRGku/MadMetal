@@ -2,7 +2,9 @@
 
 #include <iostream>
 #include <vector>
-#include "../Objects/TestObject.h"
+#include "../Objects/Object3D.h"
+#include "../Objects/Object2D.h"
+#include "Objects\ObjectUpdaters\ObjectUpdater.h"
 
 
 
@@ -12,6 +14,7 @@ class World
 private:
 	std::vector<TestObject*> *gameObjects;
 	PxScene *scene;
+	std::vector<ObjectUpdater *> updaters;
 public:
 	
 	World();
@@ -25,5 +28,6 @@ public:
 	void deleteObjectByIndex(int index);
 	void update(float dt);
 	void setScene(PxScene *scene) { this->scene = scene; }
+	void addObjectUpdater(ObjectUpdater *updater) { updaters.push_back(updater); }
 };
 

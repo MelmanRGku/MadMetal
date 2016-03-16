@@ -2,56 +2,6 @@
 
 #define NUM_PLAYERS 4
 
-MainMenuScene::MainMenuScene(Input * input)
-{
-	std::cout << "Main menu Pushed on Stack \n";
-	m_gamePad = input->getGamePadHandle();
-	m_currentSelection = 0;
-	m_selections[0] = SceneMessage::eSingleCharSelect;
-	m_selections[1] = SceneMessage::eMultiCharSelect;
-
-}
-
-bool MainMenuScene::simulateScene(double dt, SceneMessage &message)
-{
-	//go straight to char select screen
-	message.setTag(SceneMessage::eSingleCharSelect);
-	return true;
-
-	//check gamepad stuff
-	if (m_gamePad->checkConnection())
-	{
-		if (m_gamePad->isPressed(m_gamePad->DPadLeft))
-		{
-			m_currentSelection = ++m_currentSelection % 2;
-			std::cout << m_currentSelection << " \n";
-		}
-		
-		if (m_gamePad->isPressed(m_gamePad->DPadRight))
-		{
-			if (--m_currentSelection < 0)
-			{
-				m_currentSelection = 1;
-			}
-			std::cout << m_currentSelection << " \n";
-		}
-
-		if (m_gamePad->isPressed(m_gamePad->AButton))
-		{	
-			
-				std::cout << "X Button Pressed \n";
-				message.setTag(m_selections[m_currentSelection]);
-				return true;
-		}
-		
-	}
-	else
-	{
-		std::cout << "Controller is Disconnected \n";
-	}
-	return false;
-}
-
 SinglePlayerCharSelectScene::SinglePlayerCharSelectScene(Input * input)
 {
 	

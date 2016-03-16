@@ -31,6 +31,7 @@ private:
 	SceneStack * m_stack;
 	bool m_newMessage;
 	SceneMessage * m_mailBox;
+	std::thread *loadingThread;
 
 	Renderer* m_renderer;
 	Audio *m_audio;
@@ -41,7 +42,8 @@ public:
 	//StackManager(Scene * startScene);
 	~StackManager();
 	
-	void progressScene(int newTime);
+	//true if game has ended, false otherwise
+	bool progressScene(int newTime);
 	void readMailBox();
 
 

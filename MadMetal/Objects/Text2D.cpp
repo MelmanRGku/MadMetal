@@ -2,7 +2,7 @@
 #include "FTGL\ftgl.h"
 #include "Libraries\glm\gtc\type_ptr.hpp"
 
-Text2D::Text2D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable, NULL)
+Text2D::Text2D(long id, Audioable *aable, Animatable *anable, Renderable2D *rable) : Object2D(id, aable, anable, rable)
 {
 	m_centerize = false;
 }
@@ -29,6 +29,7 @@ bool Text2D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
 	
 	float xOffset = 0;
 	float yOffset = 0;
+	glm::vec3 pos = m_animatable->getPosition();
 	if (m_centerize) {
 		xOffset = font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Upper().X() - font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Lower().X();
 		yOffset = font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Upper().Y() - font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Lower().Y();

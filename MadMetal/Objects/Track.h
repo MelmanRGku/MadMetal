@@ -1,19 +1,19 @@
 #pragma once
 
-#include "TestObject.h"
+#include "Object3D.h"
 
-class Track : public TestObject
+class Track : public Object3D
 {
 public:
-	Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable, TestObject *drivablePart, TestObject *nonDrivablePart);
+	Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Object3D *drivablePart, Object3D *nonDrivablePart);
 	~Track();
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
-	TestObject *getDrivablePart() { return drivablePart; }
+	Object3D *getDrivablePart() { return drivablePart; }
 	
 	void playTrackMusic();
 
 private: //members
-	TestObject *drivablePart,
+	Object3D *drivablePart,
 		*nonDrivablePart;
 	
 	

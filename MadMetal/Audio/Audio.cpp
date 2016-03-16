@@ -6,8 +6,9 @@
 #include <fstream>
 #include <string>
 
-
-
+bool Audio::m_musicPlaying = false;
+#define SFX_VOLUME 10
+#define MUSIC_VOLUME 100
 
 //set up audio library
 void Audio::initializeMusicLibrary(char * fileToLoad)
@@ -43,6 +44,9 @@ void Audio::initializeMusicLibrary(char * fileToLoad)
 			if (music == NULL)
 			{
 				std::cout << "File Failed to Load \n";
+			}
+			else {
+				Mix_VolumeMusic(MUSIC_VOLUME);
 			}
 			m_musicLibrary.push_back(music);
 
@@ -92,6 +96,9 @@ void Audio::initializeChunkLibrary(char * fileToLoad)
 			if (chunk == NULL)
 			{
 				std::cout << "File Failed to Load \n";
+			}
+			else {
+				Mix_VolumeChunk(chunk, SFX_VOLUME);
 			}
 			m_chunkLibrary.push_back(chunk);
 			
@@ -175,13 +182,14 @@ bool AudioChannel::setAudioPosition(Car * listener)
 
 	//calculate distance between the listener and source. 
 	float listenerX = 0 , listenerZ =0, sourceX =0, sourceZ =0;
-	if (listener != NULL)
-	{
-		listenerX = listener->getActor().getGlobalPose().p.x;
-		listenerZ = listener->getActor().getGlobalPose().p.z;
-	}
 	if (m_audioPosition != NULL)
 	{
+		if (listener != NULL)
+		{
+			listenerX = listener->getActor().getGlobalPose().p.x;
+			listenerZ = listener->getActor().getGlobalPose().p.z;
+		}
+	
 		sourceX = m_audioPosition->getGlobalPose().p.x;
 		sourceZ = m_audioPosition->getGlobalPose().p.z;
 	}
@@ -225,10 +233,18 @@ bool AudioChannel::setAudioPosition(Car * listener)
 	return true;
 }
 
+void Audio::setMusicFinished() {
+	m_musicPlaying = false;
+}
+
+bool Audio::getMusicFinished() {
+	return !m_musicPlaying;
+}
 
 void Audio::playMusic(Sound sound, int playCount)
 {
 	
+	m_musicPlaying = true;
 	Mix_PlayMusic(m_musicLibrary[sound.getLibraryIndex()], playCount);
 
 }

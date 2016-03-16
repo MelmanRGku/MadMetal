@@ -3,7 +3,7 @@
 #include "Libraries\glm\gtc\type_ptr.hpp"
 
 
-Text3D::Text3D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable, float fontSize) : TestObject(id, aable, pable, anable, rable, NULL), fontSize(fontSize)
+Text3D::Text3D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, float fontSize) : Object3D(id, aable, pable, anable, rable, NULL), fontSize(fontSize)
 {
 }
 
@@ -32,6 +32,7 @@ bool Text3D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
 	// Set the font size and render a small text.
 	font.FaceSize(fontSize);
 	font.Depth(3);
+	glm::vec3 pos = m_animatable->getPosition();
 	float xOffset = font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Upper().X() - font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Lower().X();
 	font.Render(stringToRender.c_str(), -1, FTPoint(pos.x - xOffset / 2, pos.y, pos.z));
 

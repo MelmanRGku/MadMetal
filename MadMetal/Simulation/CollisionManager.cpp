@@ -4,6 +4,8 @@
 #include "Objects\Waypoint.h"
 #include "Factory/GameFactory.h"
 #include "Objects\CollisionVolume.h"
+#include "Objects\PowerUpShield.h"
+#include "Objects\PowerUpSpeed.h"
 
 CollisionManager::CollisionManager(World &world) : m_world(world)
 {
@@ -37,6 +39,20 @@ PxFilterFlags CollisionManager::TestFilterShader(
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
+	else if ((filterData0.word0 == COLLISION_FLAG_SPEED_POWERUP) && (filterData1.word0 & filterData0.word1))
+	{
+		
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
+	else if ((filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP) && (filterData1.word0 & filterData0.word1))
+	{
+		
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
+
+
 
 	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
 	{
@@ -73,11 +89,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		car->takeDamage(bullet->getDamage());
 		bullet->getOwner()->addDamageDealt(bullet->getDamage());
 		bullet->setHasToBeDeleted(true);
-		GameFactory * factory = GameFactory::instance();
-		PxTransform *pos = new PxTransform(bullet->getPosition().x, bullet->getPosition().y, bullet->getPosition().z);
-		BulletCarCollision * col = dynamic_cast<BulletCarCollision *> (factory->makeObject(GameFactory::OBJECT_BULLET_CAR_COLLISION, pos, NULL, NULL));
-		delete pos;
-		delete col;
+		bullet->playCollisionSound();
 	}
 	else if (car == NULL) {//if dynamic cast to car returns NULL its probably a wall so get rid of it
 		bullet->setHasToBeDeleted(true);
@@ -159,6 +171,52 @@ void CollisionManager::processPowerUpHit(long powerupId, long otherId)
 	}
 }
 
+void CollisionManager::processShieldPowerUpHit(long shieldPowerUpId, long bulletId)
+{
+	PowerUpShield * shield = dynamic_cast<PowerUpShield *>(m_world.findObject(shieldPowerUpId));
+	
+	if (shield == NULL)
+	{
+		return;
+	}
+
+	TestObject * otherObject = m_world.findObject(bulletId);
+	Bullet* bullet = dynamic_cast<Bullet *>(otherObject);
+
+	if (bullet != NULL && !shield->isOwner(bullet->getOwner()))
+	{
+		std::cout << "Bullet hit while Shield Power Up was active!! \n";
+	}
+	else{
+		std::cout << "Failed to cast to Bullet \n";
+	}
+}
+
+void CollisionManager::processSpeedPowerUpHit(long speedPowerUpId, long carId)
+{
+	PowerUpSpeed * shield = dynamic_cast<PowerUpSpeed *>(m_world.findObject(speedPowerUpId));
+
+	if (shield == NULL)
+	{
+		return;
+	}
+
+	TestObject * otherObject = m_world.findObject(carId);
+	Car* car = dynamic_cast<Car *>(otherObject);
+	
+	if (car != NULL && !shield->isOwner(car))
+	{
+		
+		
+		car->getCar().getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 50, 0));
+		car->takeDamage(PowerUp::getSpeedImpactDamage());
+		shield->getOwner()->addDamageDealt(PowerUp::getSpeedImpactDamage());
+	}
+	else{
+		std::cout << "Failed to cast to Car \n";
+	}
+}
+
 
 void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
 	Car *car1 = dynamic_cast<Car *>(m_world.findObject(car1Id));
@@ -202,10 +260,11 @@ void CollisionManager::onContact(const PxContactPairHeader& pairHeader, const Px
 void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 {
 	for (int i = 0; i < count; i++) {
-		if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_BULLET) {
+		
+		if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_BULLET && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_BULLET_AGAINST)) {
 			processBulletHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
 		}
-		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_WAYPOINT)
+		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_WAYPOINT && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_WAYPOINT_AGAINST))
 		{
 			processWaypointHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
 		}
@@ -213,13 +272,21 @@ void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 		{
 
 		}
-		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_COLLISION_VOLUME)
+		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_COLLISION_VOLUME && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_COLLISION_VOLUME_AGAINST))
 		{
 			processCollisionVolumeHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
 		}
-		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_POWERUP)
+		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_POWERUP && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_POWERUP_AGAINST))
 		{
 			processPowerUpHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
+		}
+		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_SHIELD_POWERUP && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_SHIELD_POWERUP_AGAINST))
+		{
+			//processShieldPowerUpHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
+		}
+		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_SPEED_POWERUP && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_SPEED_POWERUP_AGAINST))
+		{
+			//processSpeedPowerUpHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
 		}
 	}
 
@@ -227,7 +294,13 @@ void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 
 PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, const PxActor *a0, const PxShape *s0,
 	PxFilterObjectAttributes attributes1, PxFilterData filterData1, const PxActor *a1, const PxShape *s1, PxPairFlags &pairFlags) {
-	processCarCarHit(filterData0.word2, filterData1.word2);
+	
+	if ((filterData0.word0 == COLLISION_FLAG_CHASSIS || filterData0.word0 == COLLISION_FLAG_WHEEL) && (filterData1.word0 == COLLISION_FLAG_CHASSIS || filterData1.word0 == COLLISION_FLAG_WHEEL))
+		processCarCarHit(filterData0.word2, filterData1.word2);
+	if ((filterData0.word0 == COLLISION_FLAG_SPEED_POWERUP) && (filterData1.word0 & filterData0.word1))
+		processSpeedPowerUpHit(filterData0.word2, filterData1.word2);
+	if ((filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP) && (filterData1.word0 & filterData0.word1))
+		processShieldPowerUpHit(filterData0.word2, filterData1.word2);
 	return PxFilterFlags(PxFilterFlag::eDEFAULT);
 }
 

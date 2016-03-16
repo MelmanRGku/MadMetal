@@ -4,7 +4,7 @@
 #include <sstream>
 #include "Objects\Waypoint.h"
 
-Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable *rable) : TestObject(id, aable, pable, anable, rable, NULL), m_car(car), m_drivingStyle(style)
+Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL), m_car(car), m_drivingStyle(style)
 {
 	m_currentWaypoint = NULL;
 	m_isAtMidCollisionVolume = false;
@@ -51,6 +51,10 @@ void Car::respawn()
 	
 }
 
+PowerUpType Car::getActivePowerUpType()
+{
+	return m_activePowerUp;
+}
 
 void Car::pickUpPowerUp(PowerUpType type)
 {
@@ -70,7 +74,28 @@ void Car::usePowerUp()
 		m_activePowerUp = m_heldPowerUp;
 		m_heldPowerUp = PowerUpType::NONE;
 		m_powerUpRemaining = PowerUp::getPowerUpDuration(m_activePowerUp);
+
+		switch (m_activePowerUp)
+		{
+		case (PowerUpType::ATTACK) :
+			//add particle system
+			break;
+		case (PowerUpType::DEFENSE) :
+			PxGeometry* dgeom[1];
+			dgeom[0] = new PxSphereGeometry(10);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), dgeom, this);
+			break;
+		case (PowerUpType::SPEED) :
+			//add particle system
+			PxGeometry* sgeom[1];
+			sgeom[0] = new PxSphereGeometry(10);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_SPEED_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), sgeom, this);
+			break;
+
+		}
 	}
+	
+
 }
 
 
@@ -80,10 +105,6 @@ void Car::takeDamage(float damage)
 	m_currentHealth -= damage;
 }
 
-void Car::increaseDamageDealt(float damage)
-{
-	m_damageDealt += damage;
-}
 
 void Car::updateReload(float dt)
 {
@@ -98,6 +119,7 @@ void Car::updatePowerUp(float dt)
 		if ((m_powerUpRemaining -= dt) <= 0)
 		{
 			m_activePowerUp = PowerUpType::NONE;
+			
 		}
 	}
 }
@@ -139,6 +161,13 @@ void Car::update(float dt) {
 
 void Car::addDamageDealt(float damage) {
 	m_damageDealt += damage;
+	
+	if (m_activePowerUp == PowerUpType::ATTACK)
+	{
+
+		m_currentHealth += PowerUp::getLifeStealPercentage() * damage;
+	}
+	
 	if (m_superDurationRemainingSeconds <= 0) {
 		m_superGauge += damage / 100;
 	}
