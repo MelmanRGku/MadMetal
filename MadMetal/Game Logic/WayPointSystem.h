@@ -11,7 +11,7 @@
 class WaypointSystem
 {
 public:
-	WaypointSystem(GameFactory& gameFactory, int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition);
+	WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition);
 	~WaypointSystem();
 
 public: // member functions
@@ -21,8 +21,6 @@ public: // member functions
 private: // members
 	std::vector<std::vector<Waypoint*>> m_waypointMap;
 	std::vector<Waypoint *> m_waypoints;
-	GameFactory& m_gameFactory;
-
 
 	void test();
 };

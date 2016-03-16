@@ -14,6 +14,6 @@ class CollisionVolume : public Object3D
 public:
 	CollisionVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	~CollisionVolume();
-	const int& getId();
+	const int& getIndex();
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 };

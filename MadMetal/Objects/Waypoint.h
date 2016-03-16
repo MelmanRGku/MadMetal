@@ -10,6 +10,7 @@
 class Waypoint : public Object3D
 {
 	static int globalID;
+	int m_index;
 	int m_id;
 	bool m_isValid;
 	bool m_isFinish;
@@ -19,11 +20,13 @@ public:
 	Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	~Waypoint();
 	std::vector<Waypoint*>& getListOfAdjacentWaypoints(){ return m_adjecentWaypoints; }
-	const int& getId();
+	const int& getIndex();
 	bool isValid();
 	void setValid(bool isValid);
 	bool isFinish();
 	void setFinish(bool finish);
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	void addAdjecentWaypoint(Waypoint* waypoint);
+	int getId();
+	void setId(int id);
 };

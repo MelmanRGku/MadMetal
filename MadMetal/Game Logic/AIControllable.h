@@ -4,12 +4,12 @@
 #include "Objects\Cars\Car.h"
 
 class PathFinding;
-class m_waypointSystem;
+class Track;
 
 class AIControllable : public Controllable
 {
 public:
-	AIControllable(ControllableTemplate& aiTemplate, WaypointSystem* waypointSystem = NULL);
+	AIControllable(ControllableTemplate& aiTemplate, Track& track);
 	~AIControllable();
 
 	void playFrame(double dt);//todo: fearless leader <
@@ -18,7 +18,6 @@ public:
 	Waypoint* getGoalWaypoint(Waypoint* waypoint);
 	void setGoalWaypoint();
 	void updateNextWaypoint();
-	void setWaypointSystem(WaypointSystem* waypointSystem);
 	void processFire(std::vector<Controllable *> *players);
 private: //helper functions
 	void accelerate(float amount);
@@ -36,7 +35,7 @@ private: //members
 	//Car* m_car;
 	PathFinding* m_pathFinder;
 	Waypoint* m_goalWaypoint;
-	WaypointSystem* m_waypointSystem;
+	Track& m_track;
 	Waypoint* m_nextWaypoint;
 	Waypoint* m_potentialWaypoint;
 	Waypoint* m_currentKnownWaypoint;
