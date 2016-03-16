@@ -4,6 +4,7 @@
 
 std::map<std::string, Model*> *Assets::models;
 std::map<std::string, Texture *> *Assets::textures;
+std::mutex Assets::m;
 LoadingStatus *Assets::status;
 
 Assets::~Assets()
@@ -17,6 +18,8 @@ void Assets::init() {
 }
 
 void Assets::release() {
+	delete status;
+
 	typedef std::map<std::string, Model*>::iterator it_type;
 	for (it_type iterator = models->begin(); iterator != models->end(); iterator++) {
 		delete iterator->second;
@@ -33,18 +36,26 @@ void Assets::release() {
 Model *Assets::loadObjFromDirectory(std::string path) {
 	int lastSlashPos = path.rfind("/") + 1;
 	std::string objectName = path.substr(lastSlashPos, path.rfind(".") - lastSlashPos);
+	m.lock();
+	if (getModel(objectName) != NULL) {
+		m.unlock();
+		return getModel(objectName);
+	}
 	ObjModelLoader *loader = new ObjModelLoader();
 	Model *model = loader->loadFromFile(path);
 	models->insert(std::pair<std::string, Model *>(objectName, model));
 	delete loader;
+	m.unlock();
 	return model;
 }
 
 Texture *Assets::loadTextureFromDirectory(std::string path) {
 	int lastSlashPos = path.rfind("/") + 1;
 	std::string objectName = path.substr(lastSlashPos, path.rfind(".") - lastSlashPos);
+	m.lock();
 	Texture *tex = new Texture(GL_TEXTURE_2D, path);
 	textures->insert(std::pair<std::string, Texture *>(objectName, tex));
+	m.unlock();
 	return tex;
 }
 

@@ -1,6 +1,7 @@
 #include "StackManager.h"
 #include "Simulation\GameSimulation.h"
 #include "Global\Log.h"
+#include "Simulation\MainMenu.h"
 
 SceneStack::SceneStack(Scene * scene)
 {
@@ -57,6 +58,8 @@ Scene * SceneStack::getTopScene()
 
 StackManager::StackManager()
 {
+	Assets::status = new LoadingStatus();
+	loadingThread = new std::thread(Assets::load, "Assets/Models", "Assets/Textures");
 	//initaliaze input
 	m_input = new Input();
 	//set starting scene to Main Menu and pass a controller handle
@@ -74,7 +77,7 @@ StackManager::StackManager()
 	m_audio = new Audio();
 
 	//create stack with main menu on top
-	m_stack = new SceneStack(new MainMenuScene(m_input));
+	m_stack = new SceneStack(new MainMenu(m_input, m_audio));
 }
 
 StackManager::~StackManager()
@@ -94,7 +97,7 @@ void StackManager::readMailBox()
 	{
 	case(SceneMessage::eMainMenu) :
 		m_stack->clearStack();
-		m_stack->pushScene(new MainMenuScene(m_input));
+		m_stack->pushScene(new MainMenu(m_input, m_audio));
 		break;
 	case(SceneMessage::eSingleCharSelect) :
 		m_stack->pushScene(new SinglePlayerCharSelectScene(m_input));
@@ -105,7 +108,7 @@ void StackManager::readMailBox()
 		break;
 
 	case (SceneMessage::eLoadScreen) :
-		m_stack->pushScene(new LoadingScreen(*m_mailBox, *m_audio));
+		m_stack->pushScene(new LoadingScreen(*m_mailBox, *m_audio, Assets::status, loadingThread));
 		break;
 	case (SceneMessage::eGameSimulation) :
 		m_stack->clearStack();
@@ -118,7 +121,7 @@ void StackManager::readMailBox()
 
 	case (SceneMessage::eRestart):
 		m_stack->clearStack();
-		m_stack->pushScene(new MainMenuScene(m_input));
+		m_stack->pushScene(new MainMenu(m_input, m_audio));
 		break;
 
 	case (SceneMessage::ePop) :
@@ -132,7 +135,7 @@ void StackManager::readMailBox()
 	m_mailBox->resetMessage();
 }
 
-void StackManager::progressScene(int newTime)
+bool StackManager::progressScene(int newTime)
 {
 	
 	//calculate delta time
@@ -154,11 +157,21 @@ void StackManager::progressScene(int newTime)
 	//get objects from the scene and draw
 	m_renderer->draw(m_stack->getTopScene()->getWorld()->getGameObjects());
 		
+	if (m_mailBox->getTag() == SceneMessage::eExit)
+		return true;
+
 	//check if the scene return a message for manager
 	if (m_newMessage)
 	{
+		//delete the thread if it is loading screen (when it is done)
+		if (dynamic_cast<LoadingScreen *>(m_stack->getTopScene()) != NULL) {
+			delete loadingThread;
+			loadingThread = NULL;
+		}
 		m_newMessage = false;
 		readMailBox();
 	}
+
+	return false;
 }
 

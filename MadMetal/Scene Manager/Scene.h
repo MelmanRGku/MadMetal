@@ -21,7 +21,9 @@ public:
 		ePause,
 		eRestart,
 		ePop,
-		eDefault
+		eDefault,
+		eNone,
+		eExit,
 	};
 
 	SceneMessage()
@@ -99,18 +101,6 @@ public:
 	}
 	//virtual void loadFromFile();
 
-};
-
-class MainMenuScene : public Scene
-{
-private:
-	GamePad * m_gamePad;
-	int m_currentSelection;
-	SceneMessage::SceneEnum m_selections[2];
-	
-public:
-	MainMenuScene(Input * input);
-	bool simulateScene(double dt, SceneMessage &newMessage);
 };
 
 class SinglePlayerCharSelectScene : public Scene

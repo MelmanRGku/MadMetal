@@ -45,6 +45,7 @@ public:
 class Assets
 {
 private:
+	static std::mutex m;
 	static std::map<std::string, Model *> *models;
 	static std::map<std::string, Texture *> *textures;
 

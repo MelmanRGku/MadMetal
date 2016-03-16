@@ -49,7 +49,8 @@ void renderScene(void)
 	glClearColor(0.3, 0.3, 0.3, 0.0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	m_stackManager->progressScene(dt);
+	if (m_stackManager->progressScene(dt))
+		glutLeaveMainLoop();
 	glutSwapBuffers();
 
 	//glutPostRedisplay();
