@@ -86,7 +86,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	initialize();
 
 	
-	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
+	//audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
 	pauseControls(true);
 }
 
@@ -214,7 +214,7 @@ void GameSimulation::simulatePlayers(double dt)
 	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
 		//cout << "size of players: " << m_players.size() << "\n";
-		m_players[i]->playFrame(dt);
+		//m_players[i]->playFrame(dt);
 		
 	}
 
@@ -222,7 +222,7 @@ void GameSimulation::simulatePlayers(double dt)
 		m_aiPlayers[i]->processFire(&m_players);
 	}
 
-	//m_humanPlayers[0]->playFrame(dt);
+	m_humanPlayers[0]->playFrame(dt);
 	//m_players[1]->playFrame(dt);
 	
 }

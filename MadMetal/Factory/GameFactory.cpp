@@ -285,15 +285,16 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 	case OBJECT_SHIELD_POWERUP:
 	{
-						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
+						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_SHIELD_POWERUP));
 						   Renderable3D *renderable = new Renderable3D(model, true, true);
-						   renderable->setModel(NULL); // remove when there is a model for the powerup
+						 
 						   Animatable *animatable = new Animatable();
 						   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
 						   PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::SHIELD_POWERUP, objectId, pos, geom, 0, NULL, NULL, NULL));
 						   Physicable *physicable = new Physicable(powerupTriggerVolume);
-						   animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
+						   PxVec3 dim = powerupTriggerVolume->getWorldBounds().getDimensions();
+						   animatable->setScale(glm::vec3(dim.x > dim.z ? dim.z : dim.x, 3, dim.x > dim.z ? dim.z : dim.x));
 
 						   PowerUpShield *shield = new PowerUpShield(objectId, audioable, physicable, animatable, renderable, static_cast<Car*>(parent));
 
@@ -350,6 +351,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 							PxRigidDynamic *particleVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_PARTICLE, objectId, pos, geom, 0, NULL, NULL, NULL));
 							Physicable *physicable = new Physicable(particleVolume);
+							
 							animatable->setScale(glm::vec3(particleVolume->getWorldBounds().getDimensions().x, particleVolume->getWorldBounds().getDimensions().y, particleVolume->getWorldBounds().getDimensions().z));
 
 							Particle *particle = new Particle(objectId, audioable, physicable, animatable, renderable);

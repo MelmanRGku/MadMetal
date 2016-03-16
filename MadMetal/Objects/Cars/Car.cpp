@@ -68,13 +68,16 @@ void Car::pickUpPowerUp(PowerUpType type)
 
 void Car::usePowerUp()
 {
-	if (m_heldPowerUp != PowerUpType::NONE)
-	{
-		std::cout << "Used PowerUp \n";
-		m_activePowerUp = m_heldPowerUp;
+	//if (m_heldPowerUp != PowerUpType::NONE)
+	//{
+		
+		//m_activePowerUp = m_heldPowerUp;
+		m_activePowerUp = PowerUpType::SPEED; //remove
 		m_heldPowerUp = PowerUpType::NONE;
 		m_powerUpRemaining = PowerUp::getPowerUpDuration(m_activePowerUp);
-
+		PxVec3 dim = m_car.getRigidDynamicActor()->getWorldBounds().getDimensions();
+		glm::vec3 pos = getGlobalPose();
+		pos.y += dim.y/2;
 		PxGeometry* geom[1];
 		switch (m_activePowerUp)
 		{
@@ -83,8 +86,8 @@ void Car::usePowerUp()
 			break;
 		case (PowerUpType::DEFENSE) :
 			
-			geom[0] = new PxSphereGeometry(10);
-			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), geom, this);
+			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(pos.x,pos.y,pos.x)), geom, this);
 			
 			break;
 		case (PowerUpType::SPEED) :
@@ -96,7 +99,7 @@ void Car::usePowerUp()
 		}
 		delete geom[0];
 
-	}
+	//}
 	
 
 }

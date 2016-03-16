@@ -11,7 +11,7 @@ PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anabl
 	
 	for (int i = 0; i < STRESS_TEST; i++)
 	{
-		m_pSystem.push_back( new ParticleSystem(10, PxVec3(position.x, position.y - dimensions.y / 2, position.z + i * 5), -1));
+		//m_pSystem.push_back( new ParticleSystem(10, PxVec3(position.x, position.y - dimensions.y / 2, position.z + i * 5), -1));
 	}
 
 }
@@ -50,7 +50,7 @@ void PowerUp::update(float dtMillis)
 	else {
 		for (int i = 0; i < STRESS_TEST; i++)
 		{
-			m_pSystem[i]->update(dtMillis);
+			//m_pSystem[i]->update(dtMillis);
 		}
 		
 	}

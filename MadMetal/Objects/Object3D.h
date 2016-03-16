@@ -26,5 +26,6 @@ public:
 	PxBounds3 getWorldBounds() { return m_physicable->getActor().getWorldBounds(); }
 	PxRigidActor &getActor() { return m_physicable->getActor(); }
 	void playSound();
+	
 };
 

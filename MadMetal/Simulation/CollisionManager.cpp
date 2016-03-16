@@ -41,11 +41,11 @@ PxFilterFlags CollisionManager::TestFilterShader(
 	}
 	else if ((filterData0.word0 == COLLISION_FLAG_SPEED_POWERUP) && (filterData1.word0 & filterData0.word1))
 	{
-		
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
-	else if ((filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP) && (filterData1.word0 & filterData0.word1))
+	else if ((filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP ) && (filterData1.word0 & filterData0.word1)
+		|| (filterData0.word0 == COLLISION_FLAG_BULLET) && (filterData1.word0 == COLLISION_FLAG_SHIELD_POWERUP))
 	{
 		
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
@@ -85,7 +85,8 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	TestObject *otherObj = m_world.findObject(otherId);
 	Car *car = dynamic_cast<Car *>(otherObj);
 
-	if (car != NULL && car->getId() != bullet->getOwner()->getId()) {
+	if (car != NULL && (car->getId() != bullet->getOwner()->getId()) && car->getActivePowerUpType() != PowerUpType::DEFENSE) {
+		std::cout << "Bullet " << bulletId << " hit car\n";
 		car->takeDamage(bullet->getDamage());
 		bullet->getOwner()->addDamageDealt(bullet->getDamage());
 		bullet->setHasToBeDeleted(true);
@@ -96,6 +97,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		delete col;
 	}
 	else if (car == NULL) {//if dynamic cast to car returns NULL its probably a wall so get rid of it
+	
 		bullet->setHasToBeDeleted(true);
 	}
 	
@@ -189,7 +191,18 @@ void CollisionManager::processShieldPowerUpHit(long shieldPowerUpId, long bullet
 
 	if (bullet != NULL && !shield->isOwner(bullet->getOwner()))
 	{
-		std::cout << "Bullet hit while Shield Power Up was active!! \n";
+		
+		PxRigidDynamic * bulletActor = static_cast<PxRigidDynamic*>(&bullet->getActor());
+		bullet->setOwner(shield->getOwner());
+		PxVec3 bulletVelocity = bulletActor->getLinearVelocity();
+		float bulletSpeed = bulletVelocity.magnitude();
+		glm::vec3 directionVec = glm::normalize(bullet->getGlobalPose() - shield->getGlobalPose());
+		directionVec.y = -bulletVelocity.getNormalized().y;
+		directionVec *= bulletSpeed;
+		bulletActor->setLinearVelocity(PxVec3(directionVec.x, directionVec.y, directionVec.z));
+		bullet->resetLifeTime();
+		//bullets need to be rotated
+		
 	}
 	else{
 		std::cout << "Failed to cast to Bullet \n";
@@ -284,14 +297,7 @@ void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 		{
 			processPowerUpHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
 		}
-		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_SHIELD_POWERUP && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_SHIELD_POWERUP_AGAINST))
-		{
-			//processShieldPowerUpHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
-		}
-		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_SPEED_POWERUP && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_SPEED_POWERUP_AGAINST))
-		{
-			//processSpeedPowerUpHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
-		}
+		
 	}
 
 }
@@ -301,10 +307,13 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 	
 	if ((filterData0.word0 == COLLISION_FLAG_CHASSIS || filterData0.word0 == COLLISION_FLAG_WHEEL) && (filterData1.word0 == COLLISION_FLAG_CHASSIS || filterData1.word0 == COLLISION_FLAG_WHEEL))
 		processCarCarHit(filterData0.word2, filterData1.word2);
-	if ((filterData0.word0 == COLLISION_FLAG_SPEED_POWERUP) && (filterData1.word0 & filterData0.word1))
+	else if ((filterData0.word0 == COLLISION_FLAG_SPEED_POWERUP) && (filterData1.word0 & filterData0.word1))
 		processSpeedPowerUpHit(filterData0.word2, filterData1.word2);
-	if ((filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP) && (filterData1.word0 & filterData0.word1))
+	//shield power up is done in two steps because since both bullet and shield are trigger objects then the shield could be object 0 or 1
+	else if (filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP && filterData1.word0 == COLLISION_FLAG_BULLET)
 		processShieldPowerUpHit(filterData0.word2, filterData1.word2);
+	else if (filterData0.word0 == COLLISION_FLAG_BULLET && filterData1.word0 == COLLISION_FLAG_SHIELD_POWERUP)
+		processShieldPowerUpHit(filterData1.word2, filterData0.word2);
 	return PxFilterFlags(PxFilterFlag::eDEFAULT);
 }
 

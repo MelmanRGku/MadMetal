@@ -7,6 +7,7 @@ class Bullet : public Object3D
 protected:
 	Car *m_owner;
 	int m_damage;
+	float m_lifeTime;
 
 public:
 	Bullet(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Car *owner);
