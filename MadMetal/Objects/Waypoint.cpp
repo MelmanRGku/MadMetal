@@ -5,7 +5,8 @@ int Waypoint::globalID = 0;
 
 Waypoint::Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
-	m_id = Waypoint::globalID;
+	m_index = Waypoint::globalID;
+	m_id = m_index;
 	Waypoint::globalID++;
 	m_isValid = true;
 }
@@ -15,9 +16,9 @@ Waypoint::~Waypoint()
 {
 }
 
-const int& Waypoint::getId()
+const int& Waypoint::getIndex()
 {
-	return Waypoint::m_id;
+	return Waypoint::m_index;
 }
 
 void Waypoint::addAdjecentWaypoint(Waypoint* waypoint)
@@ -42,6 +43,16 @@ void Waypoint::setValid(bool isValid)
 
 void Waypoint::setFinish(bool finish) {
 	m_isFinish = finish;
+}
+
+int Waypoint::getId()
+{
+	return m_id;
+}
+
+void Waypoint::setId(int id)
+{
+	m_id = id;
 }
 
 bool Waypoint::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {

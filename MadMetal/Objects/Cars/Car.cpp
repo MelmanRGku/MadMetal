@@ -176,7 +176,7 @@ void Car::addDamageDealt(float damage) {
 
 bool Car::setCurrentWaypoint(Waypoint* waypoint)
 {
-	//std::cout << "current waypoint is " << waypoint->getId() << "\n";
+	//std::cout << "current waypoint is " << waypoint->getIndex() << "\n";
 	if (waypoint != m_currentWaypoint) {
 		m_lastWayPoint = m_currentWaypoint;
 	m_currentWaypoint = waypoint;

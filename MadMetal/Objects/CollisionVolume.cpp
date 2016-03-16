@@ -14,7 +14,7 @@ CollisionVolume::~CollisionVolume()
 {
 }
 
-const int& CollisionVolume::getId()
+const int& CollisionVolume::getIndex()
 {
 	return CollisionVolume::m_id;
 }
