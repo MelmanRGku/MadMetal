@@ -1,21 +1,22 @@
-#include "MainMenuSystem.h"
-#include "Button.h"
+#include "SinglePlayerMenuSystem.h"
 #include "Global\Assets.h"
+#include "Button.h"
 #include "Objects\ObjectUpdaters\ObjectPositionUpdater.h"
 #include "Objects\ObjectUpdaters\ObjectRotationUpdater.h"
 #include "Objects\ObjectUpdaters\ObjectScaleUpdater.h"
 #include "Objects\ObjectUpdaters\ObjectUpdaterSequence.h"
 #include "Objects\ObjectUpdaters\ObjectUpdaterParallel.h"
 
-MainMenuSystem::MainMenuSystem(Audio *audio, World *world) : MenuSystem(audio, world)
+
+SinglePlayerMenuSystem::SinglePlayerMenuSystem(Audio *audio, World *world) : MenuSystem(audio, world)
 {
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, 2, -15));
-		a->setScale(glm::vec3(5, 1, 1));
+		a->updatePosition(glm::vec3(-2.2, 1.55, -5));
+		a->setScale(glm::vec3(1, 1, 0.00001));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/loadingBox.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/s-play.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		Button *spButton = new Button(1, au, p, a, r);
@@ -55,12 +56,11 @@ MainMenuSystem::MainMenuSystem(Audio *audio, World *world) : MenuSystem(audio, w
 }
 
 
-MainMenuSystem::~MainMenuSystem()
+SinglePlayerMenuSystem::~SinglePlayerMenuSystem()
 {
 }
 
-void MainMenuSystem::upPressed()
-{
+void SinglePlayerMenuSystem::upPressed() {
 	m_selectedObjectIndex--;
 	if (m_selectedObjectIndex < 0)
 		m_selectedObjectIndex = m_objects.size() - 1;
@@ -77,8 +77,7 @@ void MainMenuSystem::upPressed()
 	}
 }
 
-void MainMenuSystem::downPressed()
-{
+void SinglePlayerMenuSystem::downPressed() {
 	m_selectedObjectIndex++;
 	if (m_selectedObjectIndex >= m_objects.size())
 		m_selectedObjectIndex = 0;
@@ -95,20 +94,15 @@ void MainMenuSystem::downPressed()
 	}
 }
 
-void MainMenuSystem::leftPressed()
-{
-	//do nothing here
+void SinglePlayerMenuSystem::leftPressed() {
+
 }
 
-void MainMenuSystem::rightPressed()
-{
-	//do nothing here
+void SinglePlayerMenuSystem::rightPressed() {
+
 }
 
-void MainMenuSystem::aPressed()
-{
+void SinglePlayerMenuSystem::aPressed() {
 	if (m_selectedObject->getId() == 1)
-		messageToReturn = SceneMessage::eSingleCharSelect;
-	else if (m_selectedObject->getId() == 3)
-		messageToReturn = SceneMessage::eExit;
+		messageToReturn = SceneMessage::ePop;
 }

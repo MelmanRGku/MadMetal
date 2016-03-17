@@ -25,13 +25,15 @@ MainMenu::~MainMenu() {
 
 bool MainMenu::simulateScene(double dt, SceneMessage &message)
 {
+	m_sceneGameTimeSeconds += dt;
 	m_world->update(dt);
 	if (menuSystem->getMessage() != SceneMessage::eNone) {
 		message.setTag(menuSystem->getMessage());
+		menuSystem->resetMessage();
 		return true;
 	}
 	//check gamepad stuff
-	if (m_gamePad->checkConnection())
+	if (m_gamePad->checkConnection() && m_sceneGameTimeSeconds > 1)
 	{
 		
 		if (m_gamePad->isPressed(GamePad::DPadUp)) {

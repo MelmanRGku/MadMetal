@@ -1,5 +1,5 @@
 debugEnabled:1
-fovy:90
+fovy:45
 screenWidth:800
 screenHeight:600
 loadingScreenFont:leadcoat

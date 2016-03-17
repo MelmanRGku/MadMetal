@@ -103,26 +103,6 @@ public:
 
 };
 
-class SinglePlayerCharSelectScene : public Scene
-{
-private:
-	GamePad * m_gamePad; //handle for menu interaction
-	std::vector<ControllableTemplate * > m_playerTemplates; //templates to pass to game simulation
-	
-	bool m_charConfirmed; //has a character been selected?
-	int m_currentSelection; //the current character selected
-	int m_selections[NUM_CHARACTERS_AVAILABLE]; //fill with car enums later
-	
-
-public:
-	SinglePlayerCharSelectScene(Input * input);
-	~SinglePlayerCharSelectScene(){ 
-		m_gamePad = NULL; 
-	}
-	bool simulateScene(double dt, SceneMessage &newMessage);
-};
-
-
 
 class MultiPlayerCharSelectScene : public Scene
 {

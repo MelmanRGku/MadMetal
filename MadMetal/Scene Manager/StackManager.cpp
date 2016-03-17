@@ -2,6 +2,7 @@
 #include "Simulation\GameSimulation.h"
 #include "Global\Log.h"
 #include "Simulation\MainMenu.h"
+#include "Simulation\SinglePlayerMenu.h"
 
 SceneStack::SceneStack(Scene * scene)
 {
@@ -100,7 +101,7 @@ void StackManager::readMailBox()
 		m_stack->pushScene(new MainMenu(m_input, m_audio));
 		break;
 	case(SceneMessage::eSingleCharSelect) :
-		m_stack->pushScene(new SinglePlayerCharSelectScene(m_input));
+		m_stack->pushScene(new SinglePlayerMenu(m_input, m_audio));
 		break;
 			
 	case (SceneMessage::eMultiCharSelect):

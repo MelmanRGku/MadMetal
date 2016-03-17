@@ -24,5 +24,6 @@ public:
 	virtual void rightPressed() = 0;
 	virtual void aPressed() = 0;
 	SceneMessage::SceneEnum getMessage() { return messageToReturn; }
+	void resetMessage() { messageToReturn = SceneMessage::eNone; }
 };
 

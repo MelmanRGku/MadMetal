@@ -16,9 +16,14 @@ Model3D::~Model3D()
 
 void Model3D::setupVAOs() {
 
+	if (vaoSetup)
+		return;
+
 	for (unsigned int i = 0; i < meshes.size(); i++) {
 		meshes.at(i)->setupVAO();
 	}
+
+	vaoSetup = true;
 
 }
 

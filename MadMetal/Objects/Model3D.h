@@ -10,6 +10,7 @@ class Model3D : public Model
 {
 private:
 	std::vector<Mesh *> meshes;
+	bool vaoSetup = false;
 public:
 	BoundingBox *boundingBox;
 

@@ -157,7 +157,9 @@
     <ClCompile Include="Objects\Text3D.cpp" />
     <ClCompile Include="Audio\MusicManager.cpp" />
     <ClCompile Include="Objects\TexturedObject2D.cpp" />
-    <ClCompile Include="Objects\SinglePlayerButton.cpp" />
+    <ClCompile Include="Objects\Button.cpp" />
+    <ClCompile Include="Simulation\SinglePlayerMenu.cpp" />
+    <ClCompile Include="Objects\SinglePlayerMenuSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
@@ -259,7 +261,9 @@
     <ClInclude Include="Objects\Text3D.h" />
     <ClInclude Include="Audio\MusicManager.h" />
     <ClInclude Include="Objects\TexturedObject2D.h" />
-    <ClInclude Include="Objects\SinglePlayerButton.h" />
+    <ClInclude Include="Objects\Button.h" />
+    <ClInclude Include="Simulation\SinglePlayerMenu.h" />
+    <ClInclude Include="Objects\SinglePlayerMenuSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Audio\MusicLibrary.txt" />

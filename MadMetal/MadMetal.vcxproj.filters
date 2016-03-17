@@ -270,7 +270,13 @@
     <ClCompile Include="Objects\MainMenuSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\SinglePlayerButton.cpp">
+    <ClCompile Include="Simulation\SinglePlayerMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\SinglePlayerMenuSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -569,10 +575,16 @@
     <ClInclude Include="Objects\MainMenuSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\SinglePlayerButton.h">
+    <ClInclude Include="Factory\AnimationFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Factory\AnimationFactory.h">
+    <ClInclude Include="Simulation\SinglePlayerMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\SinglePlayerMenuSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
