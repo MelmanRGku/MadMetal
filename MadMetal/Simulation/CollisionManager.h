@@ -15,6 +15,7 @@ private:
 	void processPowerUpHit(long powerupId, long otherId);
 	void processShieldPowerUpHit(long shieldPowerUpId, long otherId);
 	void processSpeedPowerUpHit(long speedPowerUpId, long otherId);
+	void processCarWallHit(long carId, long wallId);
 
 public:
 	CollisionManager(World &world);

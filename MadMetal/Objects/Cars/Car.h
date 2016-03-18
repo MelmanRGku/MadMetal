@@ -92,6 +92,7 @@ public:
 	void pickUpPowerUp(PowerUpType type);
 	void usePowerUp();
 	PowerUpType getActivePowerUpType();
+	void deactivatePowerUp(){ m_activePowerUp = PowerUpType::NONE; }
 
 };
 

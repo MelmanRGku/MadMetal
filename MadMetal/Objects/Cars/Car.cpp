@@ -92,8 +92,16 @@ void Car::usePowerUp()
 			break;
 		case (PowerUpType::SPEED) :
 			//add particle system
-			geom[0] = new PxSphereGeometry(10);
+			geom[0] = new PxSphereGeometry(dim.x > dim.z ? dim.z : dim.x);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SPEED_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), geom, this);
+			PxRigidDynamic* actor = static_cast<PxRigidDynamic*>(&getActor());
+			glm::vec3 direction = glm::normalize(getForwardVector());
+			direction.y = 0;
+			float currentSpeed = getCar().computeForwardSpeed();
+
+			direction *= (getDrivingStyle().getMaxSpeed() - currentSpeed) / getDrivingStyle().getMaxSpeed() * PowerUp::getSpeedImpulse() * 20;
+			actor->setAngularVelocity(PxVec3(0, 0, 0));
+			actor->addForce(PxVec3(direction.x, direction.y, direction.z), PxForceMode::eIMPULSE);
 			break;
 
 		}
@@ -126,6 +134,12 @@ void Car::updatePowerUp(float dt)
 		{
 			m_activePowerUp = PowerUpType::NONE;
 			
+		}
+		else {
+			if (m_activePowerUp == PowerUpType::SPEED)
+			{
+				std::cout << "Speed: " << getCar().computeForwardSpeed() << std::endl;
+			}
 		}
 	}
 }

@@ -8,11 +8,12 @@
 
 #define ATTACK_DURATION_SECONDS 5
 #define DEFENSE_DURATION_SECONDS 5
-#define SPEED_DURATION_SECONDS 5
+#define SPEED_DURATION_SECONDS 1
 #define RESPAWN_DELAY_SECONDS 5
 
 #define LIFESTEAL_PERCENTAGE 0.5
 #define SPEED_IMPACT_DAMAGE 50
+#define SPEED_IMPULSE_AMOUNT 10000
 
 class ParticleSystem;
 
@@ -48,6 +49,7 @@ public:
 	static float getPowerUpDuration(PowerUpType toGet);
 	static float getLifeStealPercentage();
 	static float getSpeedImpactDamage();
+	static float getSpeedImpulse();
 
 	
 

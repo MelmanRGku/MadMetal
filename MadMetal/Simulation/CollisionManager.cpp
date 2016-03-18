@@ -6,6 +6,7 @@
 #include "Objects\CollisionVolume.h"
 #include "Objects\PowerUpShield.h"
 #include "Objects\PowerUpSpeed.h"
+#include "PxQueryReport.h"
 
 CollisionManager::CollisionManager(World &world) : m_world(world)
 {
@@ -30,12 +31,19 @@ PxFilterFlags CollisionManager::TestFilterShader(
 	//   group can not choose to do so)
 	// - For objects that are not in the default group, a bitmask
 	//   is used to define the groups they should collide with
+	
 	if ((filterData0.word0 != 0 || filterData1.word0 != 0) &&
 		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1))
 		return PxFilterFlag::eSUPPRESS;
 
 	//just notify about car-car collision
 	if ((filterData0.word0 == COLLISION_FLAG_CHASSIS || filterData0.word0 == COLLISION_FLAG_WHEEL) && (filterData1.word0 == COLLISION_FLAG_CHASSIS || filterData1.word0 == COLLISION_FLAG_WHEEL)) {
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
+	if ((filterData0.word0 == COLLISION_FLAG_CHASSIS && filterData1.word0 == COLLISION_FLAG_OBSTACLE) || (filterData0.word0 == COLLISION_FLAG_OBSTACLE && filterData1.word0 == COLLISION_FLAG_CHASSIS))
+	{
+		std::cout << "got here\n";
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
@@ -47,7 +55,6 @@ PxFilterFlags CollisionManager::TestFilterShader(
 	else if ((filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP ) && (filterData1.word0 & filterData0.word1)
 		|| (filterData0.word0 == COLLISION_FLAG_BULLET) && (filterData1.word0 == COLLISION_FLAG_SHIELD_POWERUP))
 	{
-		
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
@@ -260,6 +267,26 @@ void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
 	}
 }
 
+void CollisionManager::processCarWallHit(long carId, long wallId)
+{
+	Car* car = dynamic_cast<Car*>(m_world.findObject(carId));
+	if (car != NULL)
+	{
+		std::cout << "Car hit a wall \n";
+		PxRaycastBuffer hit;
+		bool status = car->getActor().getScene()->raycast(PxVec3(car->getGlobalPose().x, car->getGlobalPose().y, car->getGlobalPose().z), 
+			PxVec3(car->getForwardVector().x, car->getForwardVector().y, car->getForwardVector().z), 5, hit);
+		if (status)
+		{
+			std::cout << "Ray cast hit a wall?\n";
+		}
+	}
+	else {
+		std::cout << "Failed to cast to car\n";
+	}
+	
+}
+
 void CollisionManager::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
 {
 	for (PxU32 i = 0; i < nbPairs; i++) {
@@ -314,6 +341,8 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 		processShieldPowerUpHit(filterData0.word2, filterData1.word2);
 	else if (filterData0.word0 == COLLISION_FLAG_BULLET && filterData1.word0 == COLLISION_FLAG_SHIELD_POWERUP)
 		processShieldPowerUpHit(filterData1.word2, filterData0.word2);
+	else if (filterData0.word0 == COLLISION_FLAG_CHASSIS && filterData1.word0 == COLLISION_FLAG_OBSTACLE)
+		processCarWallHit(filterData0.word2, filterData1.word2);
 	return PxFilterFlags(PxFilterFlag::eDEFAULT);
 }
 

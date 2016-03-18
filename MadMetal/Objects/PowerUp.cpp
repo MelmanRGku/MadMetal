@@ -37,6 +37,10 @@ float PowerUp::getSpeedImpactDamage()
 	return SPEED_IMPACT_DAMAGE;
 }
 
+float PowerUp::getSpeedImpulse()
+{
+	return SPEED_IMPULSE_AMOUNT;
+}
 
 void PowerUp::update(float dtMillis)
 {

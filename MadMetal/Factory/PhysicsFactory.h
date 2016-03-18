@@ -1,6 +1,7 @@
 #pragma once 
 #include "Simulation\PhysicsManager.h"
 #include "Objects\ObjectCreators\VehicleCreator.h"
+#include <iostream>
 
 class PhysicsFactory
 {
@@ -200,11 +201,22 @@ public:
 		{
 			PxRigidStatic* plane = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
 			for (PxU32 i = 0; i < nbGeom; i++) {
+				
 				plane->createShape(*geom[i], *material);
 			}
-			setFilterDataId(objectId, plane);
-			makeGround(plane, false);
+			
 
+			const PxU32 numShapes = plane->getNbShapes();
+			PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
+			plane->getShapes(shapes, numShapes);
+			PxFilterData simFilterData;
+			simFilterData.word0 = COLLISION_FLAG_OBSTACLE;
+			simFilterData.word1 = COLLISION_FLAG_OBSTACLE_AGAINST;
+			for (int i = 0; i < numShapes; i++)
+			{
+				shapes[i]->setSimulationFilterData(simFilterData);
+			}
+			setFilterDataId(objectId, plane);
 			toReturn = plane;
 			break;
 		}
