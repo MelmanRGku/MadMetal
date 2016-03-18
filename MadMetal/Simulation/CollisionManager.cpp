@@ -33,20 +33,18 @@ PxFilterFlags CollisionManager::TestFilterShader(
 	//   is used to define the groups they should collide with
 	
 	if ((filterData0.word0 != 0 || filterData1.word0 != 0) &&
-		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1))
-		return PxFilterFlag::eSUPPRESS;
+		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1)){
 
+	
+		return PxFilterFlag::eSUPPRESS;
+	}
 	//just notify about car-car collision
 	if ((filterData0.word0 == COLLISION_FLAG_CHASSIS || filterData0.word0 == COLLISION_FLAG_WHEEL) && (filterData1.word0 == COLLISION_FLAG_CHASSIS || filterData1.word0 == COLLISION_FLAG_WHEEL)) {
+		
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
-	if ((filterData0.word0 == COLLISION_FLAG_CHASSIS && filterData1.word0 == COLLISION_FLAG_OBSTACLE) || (filterData0.word0 == COLLISION_FLAG_OBSTACLE && filterData1.word0 == COLLISION_FLAG_CHASSIS))
-	{
-		std::cout << "got here\n";
-		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
-		return PxFilterFlag::eCALLBACK;
-	}
+
 	else if ((filterData0.word0 == COLLISION_FLAG_SPEED_POWERUP) && (filterData1.word0 & filterData0.word1))
 	{
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
