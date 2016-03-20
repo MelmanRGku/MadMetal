@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-#define NUM_PLAYERS 2
+#define NUM_PLAYERS 1
 
 SinglePlayerCharSelectScene::SinglePlayerCharSelectScene(Input * input)
 {

@@ -1,17 +1,12 @@
 #pragma once
 
 #include "Object3D.h"
+#include "Game Logic\WaypointDefinitions.h"
 
 class WaypointSystem;
 class Waypoint;
 
-enum Boundry
-{
-	TOP = 1,
-	BOTTOM = 2,
-	LEFT = 3,
-	RIGHT = 4,
-};
+
 class Track : public Object3D
 {
 public:

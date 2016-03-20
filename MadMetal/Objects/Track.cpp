@@ -1,6 +1,7 @@
 #include "Track.h"
 #include "Waypoint.h"
 #include "Game Logic\WayPointSystem.h"
+#include "Game Logic\WaypointDefinitions.h"
 
 Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Object3D *drivablePart, Object3D *nonDrivablePart) : Object3D(id, aable, pable, anable, rable), drivablePart(drivablePart), nonDrivablePart(nonDrivablePart)
 {
@@ -9,7 +10,8 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 		getDrivablePart()->getWorldBounds().minimum.x + 120,
 		getDrivablePart()->getWorldBounds().minimum.z,
 		getDrivablePart()->getWorldBounds().maximum.z - 120,
-		getDrivablePart()->getWorldBounds().maximum.y);
+		getDrivablePart()->getWorldBounds().maximum.y,
+		LEFT);
 
 	//m_waypointList.resize(m_waypointList.size() + (startLocation->getWaypointMap().at(0).size() * startLocation->getWaypointMap().size()));
 	for (int i = 0; i < startLocation->getWaypointMap().size(); i++)
@@ -24,7 +26,8 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 		getDrivablePart()->getWorldBounds().maximum.x - 80,
 		getDrivablePart()->getWorldBounds().maximum.z - 120,
 		getDrivablePart()->getWorldBounds().maximum.z,
-		getDrivablePart()->getWorldBounds().maximum.y);
+		getDrivablePart()->getWorldBounds().maximum.y,
+		TOP);
 
 	//m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
 	for (int i = 0; i < nextLocation1->getWaypointMap().size(); i++)
@@ -41,7 +44,8 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 		getDrivablePart()->getWorldBounds().maximum.x,
 		getDrivablePart()->getWorldBounds().minimum.z + 120,
 		getDrivablePart()->getWorldBounds().maximum.z,
-		getDrivablePart()->getWorldBounds().maximum.y);
+		getDrivablePart()->getWorldBounds().maximum.y,
+		RIGHT);
 
 	//m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
 	for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
@@ -60,7 +64,8 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 		getDrivablePart()->getWorldBounds().maximum.x,
 		getDrivablePart()->getWorldBounds().minimum.z,
 		getDrivablePart()->getWorldBounds().minimum.z + 120,
-		getDrivablePart()->getWorldBounds().maximum.y);
+		getDrivablePart()->getWorldBounds().maximum.y,
+		BOTTOM);
 
 	//m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
 	for (int i = 0; i < nextLocation3->getWaypointMap().size(); i++)
