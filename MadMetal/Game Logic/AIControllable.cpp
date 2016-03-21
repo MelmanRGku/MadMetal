@@ -48,104 +48,103 @@ void AIControllable::playFrame(double dt)
 {
 	
 	if (!m_controlsPaused) {
-	if (m_car->isAlive())
-	{
-	if (m_car->getCurrentWaypoint() == NULL || m_goalWaypoint == NULL)
-	{
-		return;
-	}
-
-
-	checkCollisionVolumes();
-
-
-	if (m_currentKnownWaypoint == NULL)
-	{
-		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-	}
-	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_needsToBackup)
-	{
-		m_needsToBackup = false;
-		recalculatePath();
-		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-		m_counter = 0;
-	}
-	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_car->getCurrentWaypoint()->getId() != m_nextWaypoint->getId())
-	{
-		recalculatePath();
-		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-	}
-	else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId())
-	{
-		m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-	}
-
-	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId()))
-	{
-		recalculatePath();
-	}
-	else
-	{
-		//std::cout << "path exists\n";
-		if (m_car->getCurrentWaypoint()->getId() == m_nextWaypoint->getId())
+		if (m_car->isAlive())
 		{
-			//std::cout << "Reached Next Waypoint\n";
-			updateNextWaypoint();
-		}
-		float engineRotationSpeed = static_cast<float>(m_car->getCar().mDriveDynData.getEngineRotationSpeed());
-		float forwardSpeed = static_cast<float>(m_car->getCar().computeForwardSpeed());
-		//std::cout << "rotation speed:" << engineRotationSpeed << "\n";
-		//std::cout << "linear speed:" << forwardSpeed << "\n";
-
-		// Car is stuck in a wall
-		if (engineRotationSpeed > 50.0 &&
-			m_car->getCar().computeForwardSpeed() < 0.5)
-		{
-			m_counter++;
-			if (m_counter > 120)
+			if (m_car->getCurrentWaypoint() == NULL || m_goalWaypoint == NULL)
 			{
-				m_needsToBackup = !m_needsToBackup;
-				if (m_needsToBackup)
-				{
-					m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-					if (m_car->getLastWaypoint() != NULL)
-					{
-						m_nextWaypoint = m_car->getLastWaypoint();
-					}
-					else
-					{
-						m_nextWaypoint = m_waypointSystem->getWaypointAt(13);
-					}
-				}
-				else
-				{
-					recalculatePath();
-					m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-				}
+				return;
+			}
+
+
+			checkCollisionVolumes();
+
+
+			if (m_currentKnownWaypoint == NULL)
+			{
+				m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+			}
+			else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_needsToBackup)
+			{
+				m_needsToBackup = false;
+				recalculatePath();
+				m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 				m_counter = 0;
 			}
-		}
-
-		if (m_car->getCurrentWaypoint()->getId() != m_goalWaypoint->getId())
-		{
-			if (m_needsToBackup)
+			else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId() && m_car->getCurrentWaypoint()->getId() != m_nextWaypoint->getId())
 			{
-				reverseToPreviousWaypoint();
+				recalculatePath();
+				m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+			}
+			else if (m_currentKnownWaypoint->getId() != m_car->getCurrentWaypoint()->getId())
+			{
+				m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+			}
+
+			if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getId() == m_goalWaypoint->getId()))
+			{
+				recalculatePath();
 			}
 			else
 			{
-				accelerateToNextWaypoint();
+				//std::cout << "path exists\n";
+				if (m_car->getCurrentWaypoint()->getId() == m_nextWaypoint->getId())
+				{
+					//std::cout << "Reached Next Waypoint\n";
+					updateNextWaypoint();
+				}
+				float engineRotationSpeed = static_cast<float>(m_car->getCar().mDriveDynData.getEngineRotationSpeed());
+				float forwardSpeed = static_cast<float>(m_car->getCar().computeForwardSpeed());
+				//std::cout << "rotation speed:" << engineRotationSpeed << "\n";
+				//std::cout << "linear speed:" << forwardSpeed << "\n";
+
+				// Car is stuck in a wall
+				if (engineRotationSpeed > 50.0 &&
+					m_car->getCar().computeForwardSpeed() < 0.5)
+				{
+					m_counter++;
+					if (m_counter > 120)
+					{
+						m_needsToBackup = !m_needsToBackup;
+						if (m_needsToBackup)
+						{
+							m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+							if (m_car->getLastWaypoint() != NULL)
+							{
+								m_nextWaypoint = m_car->getLastWaypoint();
+							}
+							else
+							{
+								m_nextWaypoint = m_waypointSystem->getWaypointAt(13);
+							}
+						}
+						else
+						{
+							recalculatePath();
+							m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+						}
+						m_counter = 0;
+					}
+				}
+
+				if (m_car->getCurrentWaypoint()->getId() != m_goalWaypoint->getId())
+				{
+					if (m_needsToBackup)
+					{
+						reverseToPreviousWaypoint();
+					}
+					else
+					{
+						accelerateToNextWaypoint();
+					}
+				}
 			}
-		}
-	}
 		
+		} else {
+		
+			m_currentPath.clear();
+			m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(),m_goalWaypoint);
+			updateNextWaypoint();
 		}
-		else {
-		m_car->respawn();
-		m_currentPath.clear();
-		m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(),m_goalWaypoint);
-		updateNextWaypoint();
-	}
 	}
 	//if (m_car->getCurrentWaypoint() != NULL && m_nextWaypoint != NULL && m_goalWaypoint != NULL)
 		//std::cout << "current: " << m_car->getCurrentWaypoint()->getId() << " | next : " << m_nextWaypoint->getId() << " | " << "goal: " << m_goalWaypoint->getId() << "\n";

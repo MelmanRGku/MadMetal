@@ -35,12 +35,18 @@ PxFilterFlags CollisionManager::TestFilterShader(
 	if ((filterData0.word0 != 0 || filterData1.word0 != 0) &&
 		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1)){
 
-	
 		return PxFilterFlag::eSUPPRESS;
 	}
 	//just notify about car-car collision
 	if ((filterData0.word0 == COLLISION_FLAG_CHASSIS || filterData0.word0 == COLLISION_FLAG_WHEEL) && (filterData1.word0 == COLLISION_FLAG_CHASSIS || filterData1.word0 == COLLISION_FLAG_WHEEL)) {
 		
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
+
+	//notify if a bullet has hit something
+	if (filterData0.word0 == COLLISION_FLAG_BULLET || filterData1.word0 == COLLISION_FLAG_BULLET){
+
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
@@ -95,11 +101,11 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		car->takeDamage(bullet->getDamage());
 		bullet->getOwner()->addDamageDealt(bullet->getDamage());
 		bullet->setHasToBeDeleted(true);
-		GameFactory * factory = GameFactory::instance();
-		PxTransform *pos = new PxTransform(bullet->getPosition().x, bullet->getPosition().y, bullet->getPosition().z);
-		BulletCarCollision * col = dynamic_cast<BulletCarCollision *> (factory->makeObject(GameFactory::OBJECT_BULLET_CAR_COLLISION, pos, NULL, NULL));
-		delete pos;
-		delete col;
+
+		PxGeometry **explosionGeom = new PxGeometry*[1];
+		explosionGeom[0] = new PxSphereGeometry(1);
+		GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &bullet->getActor().getGlobalPose(), explosionGeom, NULL);
+		delete explosionGeom[0];
 	}
 	else if (car == NULL) {//if dynamic cast to car returns NULL its probably a wall so get rid of it
 	
@@ -243,8 +249,14 @@ void CollisionManager::processSpeedPowerUpHit(long speedPowerUpId, long carId)
 void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
 	Car *car1 = dynamic_cast<Car *>(m_world.findObject(car1Id));
 	Car *car2 = dynamic_cast<Car *>(m_world.findObject(car2Id));
+
+	//if one of the cars has speed powerup on or is in the death animation cycle, dont record chassis collisions
+	if (car1->getActivePowerUpType() == PowerUpType::SPEED || car2->getActivePowerUpType() == PowerUpType::SPEED
+		|| !car1->isAlive() || !car2->isAlive())
+		return;
+
 	glm::vec3 car1Pos = car1->getFullPosition(),
-		car2Pos = car2->getFullPosition();
+	car2Pos = car2->getFullPosition();
 	glm::vec3 vectorBetweenCars = glm::normalize(car2Pos - car1Pos);
 	glm::vec3 car1ForwardVector = car1->getForwardVector();
 	glm::vec3 car2ForwardVector = car2->getForwardVector();
@@ -265,25 +277,6 @@ void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
 	}
 }
 
-void CollisionManager::processCarWallHit(long carId, long wallId)
-{
-	Car* car = dynamic_cast<Car*>(m_world.findObject(carId));
-	if (car != NULL)
-	{
-		std::cout << "Car hit a wall \n";
-		PxRaycastBuffer hit;
-		bool status = car->getActor().getScene()->raycast(PxVec3(car->getGlobalPose().x, car->getGlobalPose().y, car->getGlobalPose().z), 
-			PxVec3(car->getForwardVector().x, car->getForwardVector().y, car->getForwardVector().z), 5, hit);
-		if (status)
-		{
-			std::cout << "Ray cast hit a wall?\n";
-		}
-	}
-	else {
-		std::cout << "Failed to cast to car\n";
-	}
-	
-}
 
 void CollisionManager::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
 {
@@ -304,7 +297,7 @@ void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 	for (int i = 0; i < count; i++) {
 		
 		if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_BULLET && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_BULLET_AGAINST)) {
-			processBulletHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
+			
 		}
 		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_WAYPOINT && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_WAYPOINT_AGAINST))
 		{
@@ -334,13 +327,22 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 		processCarCarHit(filterData0.word2, filterData1.word2);
 	else if ((filterData0.word0 == COLLISION_FLAG_SPEED_POWERUP) && (filterData1.word0 & filterData0.word1))
 		processSpeedPowerUpHit(filterData0.word2, filterData1.word2);
+	
+	else if (filterData0.word0 == COLLISION_FLAG_BULLET && filterData1.word0 == COLLISION_FLAG_CHASSIS )
+	{
+		processBulletHit(filterData0.word2, filterData1.word2);
+	}
+	else if (filterData1.word0 == COLLISION_FLAG_BULLET && filterData0.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processBulletHit(filterData1.word2, filterData0.word2);
+	}
+
 	//shield power up is done in two steps because since both bullet and shield are trigger objects then the shield could be object 0 or 1
 	else if (filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP && filterData1.word0 == COLLISION_FLAG_BULLET)
 		processShieldPowerUpHit(filterData0.word2, filterData1.word2);
 	else if (filterData0.word0 == COLLISION_FLAG_BULLET && filterData1.word0 == COLLISION_FLAG_SHIELD_POWERUP)
 		processShieldPowerUpHit(filterData1.word2, filterData0.word2);
-	else if (filterData0.word0 == COLLISION_FLAG_CHASSIS && filterData1.word0 == COLLISION_FLAG_OBSTACLE)
-		processCarWallHit(filterData0.word2, filterData1.word2);
+	
 	return PxFilterFlags(PxFilterFlag::eDEFAULT);
 }
 

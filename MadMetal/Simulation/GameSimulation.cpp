@@ -85,8 +85,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	
 	initialize();
 
-	
-	//audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
+	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
 	pauseControls(true);
 }
 
@@ -213,8 +212,8 @@ void GameSimulation::simulatePlayers(double dt)
 	
 	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
-		//cout << "size of players: " << m_players.size() << "\n";
-		//m_players[i]->playFrame(dt);
+		
+		m_players[i]->playFrame(dt);
 		
 	}
 
@@ -222,7 +221,7 @@ void GameSimulation::simulatePlayers(double dt)
 		m_aiPlayers[i]->processFire(&m_players);
 	}
 
-	m_humanPlayers[0]->playFrame(dt);
+	//m_humanPlayers[0]->playFrame(dt);
 	//m_players[1]->playFrame(dt);
 	
 }
@@ -447,9 +446,15 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxGeometry **powerGeom = new PxGeometry*[1];
 	powerGeom[0] = new PxBoxGeometry(PxVec3(1, 5, 1));
 	pos = new PxTransform(-130, 25, 20);
-	m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL);
+	//m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL);
 	delete pos;
-	
+
+	//explosion test
+	PxGeometry **explosionGeom = new PxGeometry*[1];
+	explosionGeom[0] = new PxSphereGeometry(1);
+	pos = new PxTransform(-130, 25, 20);
+	//m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSION_1, pos, explosionGeom, NULL);
+	delete pos;
 	
 	PxGeometry **geom1 = new PxGeometry *[1];
 	PxGeometry **geom2 = new PxGeometry *[1];

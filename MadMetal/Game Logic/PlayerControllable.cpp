@@ -14,7 +14,7 @@ GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
 
 void PlayerControllable::playFrame(double dt)
 {
-	m_camera->update(dt);
+	if (m_car->isAlive()) m_camera->update(dt);
 	if (!m_controlsPaused) {
 		
 		/*if (m_car->isAtStartingCollisionVolume() && m_car->isAtMidCollisionVolume())
@@ -28,6 +28,7 @@ void PlayerControllable::playFrame(double dt)
 			
 		if (m_car->isAlive())
 		{
+			
 			if (m_gamePad != NULL && m_gamePad->checkConnection())
 			{
 				if (m_car->getCar().getRigidDynamicActor()->isSleeping()) {
@@ -190,7 +191,7 @@ void PlayerControllable::playFrame(double dt)
 			}
 		}
 		else {
-			m_car->respawn();
+			
 		}
 	}
 }

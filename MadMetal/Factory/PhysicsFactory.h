@@ -21,7 +21,8 @@ public:
 		POWER_UP,
 		SHIELD_POWERUP,
 		SPEED_POWERUP,
-		PHYSICAL_OBJECT_PARTICLE
+		PHYSICAL_OBJECT_PARTICLE,
+		PHYSICAL_OBJECT_EXPLOSION
 	};
 
 public:
@@ -321,6 +322,29 @@ public:
 										 setFilterDataId(objectId, particle);
 										 
 										 toReturn = particle;
+										 break;
+		}
+
+		case PHYSICAL_OBJECT_EXPLOSION:
+		{
+										 PxRigidStatic * explosion = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+
+
+										 PxFilterData simFilterData;
+										 simFilterData.word0 = 0;
+										 simFilterData.word1 = 0;
+
+										 explosion->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+
+										 PxShape* shapes[1];
+										 explosion->getShapes(shapes, 1);
+										 shapes[0]->setSimulationFilterData(simFilterData);
+										 shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+										 shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+										 setFilterDataId(objectId, explosion);
+
+										 toReturn = explosion;
 										 break;
 		}
 		}

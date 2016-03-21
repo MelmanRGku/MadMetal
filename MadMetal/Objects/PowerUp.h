@@ -34,7 +34,7 @@ private:
 	const float m_speedDuration = SPEED_DURATION_SECONDS;
 	const float m_attackLifeSteal = LIFESTEAL_PERCENTAGE;
 	const float m_speedImpactDamage = SPEED_IMPACT_DAMAGE;
-	//std::vector< ParticleSystem *> m_pSystem;
+	
 
 public:
 	

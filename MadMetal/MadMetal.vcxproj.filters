@@ -533,6 +533,12 @@
     <ClInclude Include="Objects\Particle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\AnimatedModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\AnimatedExplosion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />

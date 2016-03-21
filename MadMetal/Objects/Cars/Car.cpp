@@ -68,16 +68,16 @@ void Car::pickUpPowerUp(PowerUpType type)
 
 void Car::usePowerUp()
 {
-	//if (m_heldPowerUp != PowerUpType::NONE)
-	//{
+	if (m_heldPowerUp != PowerUpType::NONE)
+	{
 		
-		//m_activePowerUp = m_heldPowerUp;
-		m_activePowerUp = PowerUpType::SPEED; //remove
+		m_activePowerUp = m_heldPowerUp;
 		m_heldPowerUp = PowerUpType::NONE;
 		m_powerUpRemaining = PowerUp::getPowerUpDuration(m_activePowerUp);
 		PxVec3 dim = m_car.getRigidDynamicActor()->getWorldBounds().getDimensions();
 		glm::vec3 pos = getGlobalPose();
 		pos.y += dim.y/2;
+		
 		PxGeometry* geom[1];
 		switch (m_activePowerUp)
 		{
@@ -98,7 +98,6 @@ void Car::usePowerUp()
 			glm::vec3 direction = glm::normalize(getForwardVector());
 			direction.y = 0;
 			float currentSpeed = getCar().computeForwardSpeed();
-
 			direction *= (getDrivingStyle().getMaxSpeed() - currentSpeed) / getDrivingStyle().getMaxSpeed() * PowerUp::getSpeedImpulse() * 20;
 			actor->setAngularVelocity(PxVec3(0, 0, 0));
 			actor->addForce(PxVec3(direction.x, direction.y, direction.z), PxForceMode::eIMPULSE);
@@ -107,7 +106,7 @@ void Car::usePowerUp()
 		}
 		delete geom[0];
 
-	//}
+	}
 	
 
 }
@@ -115,7 +114,6 @@ void Car::usePowerUp()
 
 void Car::takeDamage(float damage)
 {
-	//car set to dead will be dealt with in the update function
 	m_currentHealth -= damage;
 }
 
@@ -156,8 +154,35 @@ void Car::updateSuper(float dt)
 	}
 }
 
+#define CAR_DEATH_DELAY .75
+#define CAR_LAUNCH_SPEED 100000
+#define CAR_SPIN 45, 0, 45
+void Car::updateHealth(float dtMillis)
+{
+	if (m_currentHealth < 0)	
+	{
+		if (m_deathTimerMillis > 0)
+		{
+			m_deathTimerMillis -= dtMillis;
+			if (m_deathTimerMillis < 0)
+				respawn();
+		}
+		else {
+			m_deathTimerMillis = CAR_DEATH_DELAY;
+			getCar().getRigidDynamicActor()->setAngularVelocity(PxVec3(CAR_SPIN));
+			getCar().getRigidDynamicActor()->addForce(PxVec3(0, CAR_LAUNCH_SPEED, 0), PxForceMode::eIMPULSE);
+			PxGeometry **explosionGeom = new PxGeometry*[1];
+			explosionGeom[0] = new PxSphereGeometry(7);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &getCar().getRigidDynamicActor()->getGlobalPose(), explosionGeom, NULL);
+			delete explosionGeom[0];
+		}
+	}
+	
+}
+
 void Car::update(float dt) {
 	//std::cout << m_currentLap << std::endl;
+	updateHealth(dt);
 	m_reloadRemainingSeconds -= dt;
 	updateSuper(dt);
 	updatePowerUp(dt);

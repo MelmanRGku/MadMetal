@@ -23,6 +23,7 @@
 #include "Objects\Text3D.h"
 #include "Objects\PowerUpShield.h"
 #include "Objects\PowerUpSpeed.h"
+#include "Objects\AnimatedExplosion.h"
 
 class GameFactory
 {
@@ -47,7 +48,8 @@ public:
 		OBJECT_POWERUP,
 		OBJECT_SHIELD_POWERUP,
 		OBJECT_SPEED_POWERUP,
-		OBJECT_PARTICLE
+		OBJECT_PARTICLE,
+		OBJECT_EXPLOSION_1
 
 	};
 
