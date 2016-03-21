@@ -14,6 +14,7 @@ class WaypointSystem
 public:
 	WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition, Boundry startingPosition);
 	~WaypointSystem();
+	void addIdToAllWaypointsInTheSystem(int id);
 
 public: // member functions
 	Waypoint * getWaypointAt(int index) { return m_waypoints[index]; }
