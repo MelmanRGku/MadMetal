@@ -10,7 +10,7 @@ class LoadingScreen :
 	public Scene
 {
 private:
-	std::thread t;
+	std::thread *t;
 	LoadingStatus *status;
 	LoadingBar *bar;
 	Text3D *loadingString, *loadingInfoString;
@@ -21,7 +21,7 @@ private:
 	void createLoadingString();
 	void createLoadingInfoString();
 public:
-	LoadingScreen(SceneMessage &toDeliver, Audio &audio);
+	LoadingScreen(SceneMessage &toDeliver, Audio &audio, LoadingStatus *status, std::thread *t);
 	~LoadingScreen();
 	bool simulateScene(double dt, SceneMessage &newMessage);
 };

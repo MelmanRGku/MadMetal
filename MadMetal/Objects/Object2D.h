@@ -6,7 +6,6 @@
 class Object2D : public TestObject
 {
 protected:
-	Physicable *m_physicable;
 	bool hasToBeDeleted = false;
 	float totalLifeTime = 0;
 	float maxLifeTime = -1;

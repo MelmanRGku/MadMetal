@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Objects\Model3D.h"
+#include "Objects\Model2D.h"
 #include "Objects\ObjectLoaders\ObjModelLoader.h"
 
 class LoadingStatus {
@@ -16,6 +17,7 @@ private:
 public:
 	float percentageDone;
 	std::string message;
+	bool done = false;
 
 	LoadingStatus() : percentageDone(0), message("Initiating Load"){}
 	void setStatus(float percentageDone, std::string message) {
@@ -43,7 +45,9 @@ public:
 class Assets
 {
 private:
+	static std::mutex m;
 	static std::map<std::string, Model *> *models;
+	static std::map<std::string, Texture *> *textures;
 
 public:
 	static LoadingStatus *status;
@@ -53,16 +57,28 @@ public:
 	static void init();
 	static void loadObjsFromDirectory(std::string path);
 	static Model *loadObjFromDirectory(std::string path);
+	static void loadPNGsFromDirectory(std::string path);
+	static Texture *loadTextureFromDirectory(std::string path);
 	static void initializeVAOs();
 	static Model *getModel(std::string name) { 
 		if (models->find(name) == models->end()){
-			//std::cout << "Couldn't find " << name << std::endl;
 			return NULL;
 		}
-			
 		else
+		{
 			return models->find(name)->second;
+		}
+	}
+	static Texture *getTexture(std::string name) {
+		if (textures->find(name) == textures->end()){
+			return NULL;
+		}
+		else 
+		{
+			return textures->find(name)->second;
+		}
 	}
 	static void release();
+	static void load(std::string objPath, std::string pngPath);
 };
 

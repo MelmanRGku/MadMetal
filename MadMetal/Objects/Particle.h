@@ -5,7 +5,7 @@
 class Particle : public Object3D
 {
 public:
-	Particle(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable)
+	Particle(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 	{
 		//do stuff
 	}

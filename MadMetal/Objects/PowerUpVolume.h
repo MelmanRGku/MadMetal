@@ -6,7 +6,7 @@
 class PowerUpVolume : public Object3D
 {
 public:
-	PowerUpVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Car * owner) : Object3D(id, aable, pable, anable, rable)
+	PowerUpVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Car * owner) : Object3D(id, aable, pable, anable, rable, NULL)
 	{
 		m_car = owner;
 		m_type = owner->getActivePowerUpType();

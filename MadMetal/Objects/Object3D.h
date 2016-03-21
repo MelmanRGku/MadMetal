@@ -7,12 +7,13 @@ class Object3D : public TestObject
 {
 protected:
 	Physicable *m_physicable;
+	Animation *m_animation;
 	bool hasToBeDeleted = false;
 	float totalLifeTime = 0;
 	float maxLifeTime = -1;
 
 public:
-	Object3D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
+	Object3D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Animation *aniable);
 	virtual ~Object3D();
 
 	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
@@ -26,6 +27,7 @@ public:
 	PxBounds3 getWorldBounds() { return m_physicable->getActor().getWorldBounds(); }
 	PxRigidActor &getActor() { return m_physicable->getActor(); }
 	void playSound();
-	
+	void startAnimation();
+	void updateAnimation();
 };
 

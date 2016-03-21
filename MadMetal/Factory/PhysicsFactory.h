@@ -20,9 +20,10 @@ public:
 		COLLISION_VOLUME,
 		POWER_UP,
 		SHIELD_POWERUP,
-		SPEED_POWERUP,
 		PHYSICAL_OBJECT_PARTICLE,
-		PHYSICAL_OBJECT_EXPLOSION
+		PHYSICAL_OBJECT_EXPLOSION,
+		SPEED_POWERUP,
+		ANIMATION_TEST
 	};
 
 public:
@@ -205,7 +206,7 @@ public:
 				
 				plane->createShape(*geom[i], *material);
 			}
-			
+
 
 			const PxU32 numShapes = plane->getNbShapes();
 			PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
@@ -302,6 +303,15 @@ public:
 							  toReturn = powerup;
 							  break;
 		}
+		case ANIMATION_TEST:
+		{
+			PxRigidStatic * powerup = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+
+			powerup->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+
+			toReturn = powerup;
+			break;
+		}
 		case PHYSICAL_OBJECT_PARTICLE:
 		{
 										 PxRigidStatic * particle = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
@@ -348,6 +358,7 @@ public:
 										 break;
 		}
 		}
+
 
 		return toReturn;
 	}

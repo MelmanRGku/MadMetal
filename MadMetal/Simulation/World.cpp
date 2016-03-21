@@ -23,10 +23,10 @@ TestObject *World::findObject(long id) {
 	long right = gameObjects->size();
 	while (left < right) {
 		mid = left + (right - left) / 2;
-		if (id > gameObjects->at(mid)->getId()){
+		if (id > gameObjects->at(mid)->getIndex()){
 			left = mid + 1;
 		}
-		else if (id < gameObjects->at(mid)->getId()){
+		else if (id < gameObjects->at(mid)->getIndex()){
 			right = mid;
 		}
 		else {
@@ -43,10 +43,10 @@ void World::deleteObjectById(long id) {
 	long right = gameObjects->size();
 	while (left < right) {
 		mid = left + (right - left) / 2;
-		if (id > gameObjects->at(mid)->getId()){
+		if (id > gameObjects->at(mid)->getIndex()){
 			left = mid + 1;
 		}
-		else if (id < gameObjects->at(mid)->getId()){
+		else if (id < gameObjects->at(mid)->getIndex()){
 			right = mid;
 		}
 		else {

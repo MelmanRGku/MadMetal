@@ -97,7 +97,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	Car *car = dynamic_cast<Car *>(otherObj);
 
 	if (car != NULL && (car->getId() != bullet->getOwner()->getId()) && car->getActivePowerUpType() != PowerUpType::DEFENSE) {
-		std::cout << "Bullet " << bulletId << " hit car\n";
+		//std::cout << "Bullet " << bulletId << " hit car\n";
 		car->takeDamage(bullet->getDamage());
 		bullet->getOwner()->addDamageDealt(bullet->getDamage());
 		bullet->setHasToBeDeleted(true);
@@ -106,6 +106,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		explosionGeom[0] = new PxSphereGeometry(1);
 		GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &bullet->getActor().getGlobalPose(), explosionGeom, NULL);
 		delete explosionGeom[0];
+		bullet->playCollisionSound();
 	}
 	else if (car == NULL) {//if dynamic cast to car returns NULL its probably a wall so get rid of it
 	
@@ -132,7 +133,7 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 			}
 		}
 		
-		//std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getId() << "\n";
+		//std::cout << "car is: " << car->getIndex() << " waypoint is: " << waypoint->getIndex() << "\n";
 	}
 }
 
@@ -148,14 +149,14 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 
 	if (car != NULL)
 	{
-		if (collisionVolume->getId() == 0)
+		if (collisionVolume->getIndex() == 0)
 		{
-			//std::cout << "car: " << car->getId() << " collided with starting CollisionVolume \n";
+			//std::cout << "car: " << car->getIndex() << " collided with starting CollisionVolume \n";
 			car->setStartingCollisionVolumeFlag(true);
 		}
-		else if (collisionVolume->getId() == 1)
+		else if (collisionVolume->getIndex() == 1)
 		{
-			//std::cout << "car: " << car->getId() << " collided with mid CollisionVolume \n";
+			//std::cout << "car: " << car->getIndex() << " collided with mid CollisionVolume \n";
 			car->setMidCollisionVolumeFlag(true);
 		}
 	}
@@ -256,7 +257,7 @@ void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
 		return;
 
 	glm::vec3 car1Pos = car1->getFullPosition(),
-	car2Pos = car2->getFullPosition();
+		car2Pos = car2->getFullPosition();
 	glm::vec3 vectorBetweenCars = glm::normalize(car2Pos - car1Pos);
 	glm::vec3 car1ForwardVector = car1->getForwardVector();
 	glm::vec3 car2ForwardVector = car2->getForwardVector();

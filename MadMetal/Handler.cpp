@@ -49,7 +49,8 @@ void renderScene(void)
 	glClearColor(0.3, 0.3, 0.3, 0.0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	m_stackManager->progressScene(dt);
+	if (m_stackManager->progressScene(dt))
+		glutLeaveMainLoop();
 	glutSwapBuffers();
 
 	//glutPostRedisplay();
@@ -79,6 +80,7 @@ void initOpengl(int argc, char **argv) {
 	//initialize opengl functions
 	glewInit();
 	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 

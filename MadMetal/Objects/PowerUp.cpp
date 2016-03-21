@@ -1,7 +1,7 @@
 #include "PowerUp.h"
 #include "ParticleSystem\ParticleSystem.h"
 
-PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable)
+PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
 	activate();
 	PxVec3 dimensions = pable->getActor().getWorldBounds().getDimensions(); 

@@ -14,6 +14,8 @@
 #include "Objects\ObjectUpdaters\ObjectScaleUpdater.h"
 #include "Objects\ObjectUpdaters\ObjectUpdaterSequence.h"
 #include "Objects\ObjectUpdaters\ObjectUpdaterParallel.h"
+#include "Audio\MusicManager.h"
+#include <time.h>
 
 class Scene;
 class Car;
@@ -45,6 +47,8 @@ private:
 
 	int getFirstPlace();
 
+	void processInput();
+
 private: //members
 	std::vector<Controllable *> m_players;
 	std::vector<PlayerControllable*> m_humanPlayers;
@@ -56,7 +60,6 @@ private: //members
 	VehicleSceneQueryData*	gVehicleSceneQueryData = NULL;
 	PxBatchQuery* gBatchQuery = NULL;
 	GameFactory* m_gameFactory;
-	WaypointSystem* m_waypointSystem;
 	Audio &m_audioHandle;
 	DisplayMessage * m_displayMessage;
 	Track* m_track;
@@ -71,6 +74,7 @@ private: //members
 	CollisionVolume * m_startingCollisionVolume;
 	CollisionVolume * m_midCollisionVolume;
 	
+	MusicManager *musicManager;
 
 public:
 	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle);

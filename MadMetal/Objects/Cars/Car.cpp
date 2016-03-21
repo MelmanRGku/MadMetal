@@ -4,7 +4,7 @@
 #include <sstream>
 #include "Objects\Waypoint.h"
 
-Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable), m_car(car), m_drivingStyle(style)
+Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL), m_car(car), m_drivingStyle(style)
 {
 	m_currentWaypoint = NULL;
 	m_isAtMidCollisionVolume = false;
@@ -221,7 +221,7 @@ void Car::addDamageDealt(float damage) {
 
 bool Car::setCurrentWaypoint(Waypoint* waypoint)
 {
-	//std::cout << "current waypoint is " << waypoint->getId() << "\n";
+	//std::cout << "current waypoint is " << waypoint->getIndex() << "\n";
 	if (waypoint != m_currentWaypoint) {
 		m_lastWayPoint = m_currentWaypoint;
 	m_currentWaypoint = waypoint;

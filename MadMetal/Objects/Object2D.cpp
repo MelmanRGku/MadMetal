@@ -9,7 +9,6 @@ Object2D::Object2D(long id, Audioable *aable, Animatable *anable, Renderable2D *
 
 Object2D::~Object2D()
 {
-	delete m_physicable;
 
 }
 

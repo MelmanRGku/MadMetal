@@ -12,6 +12,7 @@ GameFactory::GameFactory(World& world, PxScene& scene, Audio& audioHandle) :m_wo
 	m_physicsFactory = new PhysicsFactory();
 	m_renderFactory = new RenderFactory();
 	m_audioFactory = new AudioFactory(audioHandle);
+	m_animationFactory = new AnimationFactory();
 }
 
 GameFactory::~GameFactory()
@@ -56,8 +57,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		physicalCar->mDriveDynData.setUseAutoGears(true);
 
 							
-
-
 							car->setSoundChassis(ChassisCrashSound());
 		return car;
 	}
@@ -74,6 +73,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		ui->lap = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
 		ui->lap->setString("Lap: 0");
 		ui->lap->setPosition(glm::vec3(10, 70, 0));
+		ui->map = static_cast<MapUI *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_MAP, NULL, NULL, NULL));
 
 		return ui;
 	}
@@ -101,7 +101,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
 		track = new Track(objectId, audioable, physicable, animatable, renderable, drivableTrack, nonDrivableTrack);
-		track->setSound(TrackMusicSound());
 		return track;
 	}
 	case OBJECT_TRACK_DRIVABLE:
@@ -125,7 +124,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		}
 		delete geom;
 		Physicable *physicable = new Physicable(physicalDrivableTrack);
-		drivableTrack = new Object3D(objectId, audioable, physicable, animatable, renderable);
+		drivableTrack = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
 
 		m_scene.addActor(*physicalDrivableTrack);
 		m_world.addGameObject(drivableTrack);
@@ -154,7 +153,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		delete geom;
 
 		Physicable *physicable = new Physicable(physicalNonDrivableTrack);
-		nonDrivableTrack = new Object3D(objectId, audioable, physicable, animatable, renderable);
+		nonDrivableTrack = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
 
 		m_scene.addActor(*physicalNonDrivableTrack);
 		m_world.addGameObject(nonDrivableTrack);
@@ -286,20 +285,20 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	case OBJECT_SHIELD_POWERUP:
 	{
 						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_SHIELD_POWERUP));
-						   Renderable3D *renderable = new Renderable3D(model, true, true);
+			Renderable3D *renderable = new Renderable3D(model, true, true);
 						 
-						   Animatable *animatable = new Animatable();
-						   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+			Animatable *animatable = new Animatable();
+			Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
 						   PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::SHIELD_POWERUP, objectId, pos, geom, 0, NULL, NULL, NULL));
-						   Physicable *physicable = new Physicable(powerupTriggerVolume);
+			Physicable *physicable = new Physicable(powerupTriggerVolume);
 						   PxVec3 dim = powerupTriggerVolume->getWorldBounds().getDimensions();
 						   animatable->setScale(glm::vec3(dim.x > dim.z ? dim.z : dim.x, 3, dim.x > dim.z ? dim.z : dim.x));
 
 						   PowerUpShield *shield = new PowerUpShield(objectId, audioable, physicable, animatable, renderable, static_cast<Car*>(parent));
 
 						   m_world.addGameObject(shield);
-						   m_scene.addActor(*powerupTriggerVolume);
+			m_scene.addActor(*powerupTriggerVolume);
 
 						   return shield;
 	}
@@ -380,20 +379,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 							   return explosion;
 	}
-	case OBJECT_BULLET_CAR_COLLISION:
-	{
-		Renderable3D *renderable = new Renderable3D(NULL);
-		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
-		Animatable *animatable = new Animatable();
-		Physicable *physicable = new Physicable(NULL);
-
-
-		BulletCarCollision * col = new BulletCarCollision(objectId, audioable, physicable, animatable, renderable);
-		col->setSound(BulletCarCollisionSound());
-		col->playSound();
-
-		return col;
-	}
 	case OBJECT_COLLISION_VOLUME:
 	{
 		Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GGO));
@@ -413,8 +398,135 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return collisionVolume;
 	}
+	case OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, .89f, 0));
+		animatable->setScale(glm::vec3(.05f, 0, 0));
 
+		TexturedObject2D *image = new TexturedObject2D(objectId, audioable, animatable, renderable);
+		image->setMaxLifeTime(2);
 
+		ObjectScaleUpdater *upd1 = new ObjectScaleUpdater(image, glm::vec3(.0f, .2f, .0f), .5);
+		ObjectScaleUpdater *upd2 = new ObjectScaleUpdater(image, glm::vec3(.0f, .0f, .0f), .2);
+		ObjectScaleUpdater *upd3 = new ObjectScaleUpdater(image, glm::vec3(.45f, .0f, .0f), .3);
+		ObjectUpdaterSequence *seq = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
+		seq->addObjectUpdater(upd1);
+		seq->addObjectUpdater(upd2);
+		seq->addObjectUpdater(upd3);
+		m_world.addObjectUpdater(seq);
+
+		m_world.addGameObject(image);
+
+		return image;
+	}
+	case OBJECT_UI_SICK_PUPPIES_SONG_TEXTURE_YOURE_GOING_DOWN:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_SICK_PUPPIES_SONG_TEXTURE_YOURE_GOING_DOWN)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, .89f, 0));
+		animatable->setScale(glm::vec3(.05f, 0, 0));
+
+		TexturedObject2D *image = new TexturedObject2D(objectId, audioable, animatable, renderable);
+		image->setMaxLifeTime(2);
+
+		ObjectScaleUpdater *upd1 = new ObjectScaleUpdater(image, glm::vec3(.0f, .2f, .0f), .5);
+		ObjectScaleUpdater *upd2 = new ObjectScaleUpdater(image, glm::vec3(.0f, .0f, .0f), .2);
+		ObjectScaleUpdater *upd3 = new ObjectScaleUpdater(image, glm::vec3(.45f, .0f, .0f), .3);
+		ObjectUpdaterSequence *seq = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
+		seq->addObjectUpdater(upd1);
+		seq->addObjectUpdater(upd2);
+		seq->addObjectUpdater(upd3);
+		m_world.addObjectUpdater(seq);
+
+		m_world.addGameObject(image);
+
+		return image;
+	}
+	case OBJECT_UI_ALL_GOOD_THINGS_SONG_I_AM_THE_ENEMY:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_ALL_GOOD_THINGS_SONG_I_AM_THE_ENEMY)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, .89f, 0));
+		animatable->setScale(glm::vec3(.05f, 0, 0));
+
+		TexturedObject2D *image = new TexturedObject2D(objectId, audioable, animatable, renderable);
+		image->setMaxLifeTime(2);
+
+		ObjectScaleUpdater *upd1 = new ObjectScaleUpdater(image, glm::vec3(.0f, .2f, .0f), .5);
+		ObjectScaleUpdater *upd2 = new ObjectScaleUpdater(image, glm::vec3(.0f, .0f, .0f), .2);
+		ObjectScaleUpdater *upd3 = new ObjectScaleUpdater(image, glm::vec3(.45f, .0f, .0f), .3);
+		ObjectUpdaterSequence *seq = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
+		seq->addObjectUpdater(upd1);
+		seq->addObjectUpdater(upd2);
+		seq->addObjectUpdater(upd3);
+		m_world.addObjectUpdater(seq);
+
+		m_world.addGameObject(image);
+
+		return image;
+	}
+	case OBJECT_UI_METAL_MUSIC_SONG_DARKNESS_FALLS:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_METAL_MUSIC_SONG_DARKNESS_FALLS)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, .89f, 0));
+		animatable->setScale(glm::vec3(.05f, 0, 0));
+
+		TexturedObject2D *image = new TexturedObject2D(objectId, audioable, animatable, renderable);
+		image->setMaxLifeTime(2);
+
+		ObjectScaleUpdater *upd1 = new ObjectScaleUpdater(image, glm::vec3(.0f, .2f, .0f), .5);
+		ObjectScaleUpdater *upd2 = new ObjectScaleUpdater(image, glm::vec3(.0f, .0f, .0f), .2);
+		ObjectScaleUpdater *upd3 = new ObjectScaleUpdater(image, glm::vec3(.45f, .0f, .0f), .3);
+		ObjectUpdaterSequence *seq = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
+		seq->addObjectUpdater(upd1);
+		seq->addObjectUpdater(upd2);
+		seq->addObjectUpdater(upd3);
+		m_world.addObjectUpdater(seq);
+
+		m_world.addGameObject(image);
+
+		return image;
+	}
+	case OBJECT_UI_MAP:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MAP_TEXTURE)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(.8f, .8f, 0));
+		animatable->setScale(glm::vec3(.38f, .38f, 0));
+
+		MapUI *map = new MapUI(objectId, audioable, animatable, renderable);
+		map->setPlayerModel(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PLAYER_ON_UI_MAP_TEXTURE)));
+
+		m_world.addGameObject(map);
+
+		return map;
+	}
+	case OBJECT_ANIMATION_TEST:
+	{
+								  Renderable3D *renderable = new Renderable3D(static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ANIMATION_TEST)), true, true);
+								  Animatable *animatable = new Animatable();
+								  Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+								  Animation *aniable = new Animation(m_animationFactory->makeAnimation(AnimationFactory::ANIMATION_DEATHSTAR));
+
+								  PxRigidDynamic *animationTestTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::ANIMATION_TEST, objectId, pos, geom, 0, NULL, NULL, NULL));
+								  Physicable *physicable = new Physicable(animationTestTriggerVolume);
+								  animatable->setScale(glm::vec3(animationTestTriggerVolume->getWorldBounds().getDimensions().x, animationTestTriggerVolume->getWorldBounds().getDimensions().y, animationTestTriggerVolume->getWorldBounds().getDimensions().z));
+
+								  Object3D *animation = new Object3D(objectId, audioable, physicable, animatable, renderable, aniable);
+
+								  m_world.addGameObject(animation);
+								  m_scene.addActor(*animationTestTriggerVolume);
+
+								  return animation;
+	}
 	}
 }
 

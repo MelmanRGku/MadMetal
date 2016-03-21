@@ -12,6 +12,8 @@
 #include "Audioable.h"
 #include "Audio\Audio.h"
 #include "Audio\Sound.h"
+#include "Renderer\Animation.h"
+#include <time.h>
 
 class TestObject
 {
@@ -20,10 +22,16 @@ protected:
 	Renderable *m_renderable;
 	Animatable *m_animatable;
 	Audioable *m_audioable;
+	Animation *m_animation;
 	bool hasToBeDeleted = false;
 	float totalLifeTime = 0;
 	float maxLifeTime = -1;
 	Sound m_sound;
+	clock_t start;
+	int current;
+	int frame;
+	bool animating = false;
+	Model * previousModel;
 
 public:
 	TestObject(long id, Audioable *aable, Animatable *anable, Renderable *rable);
@@ -37,6 +45,7 @@ public:
 	void setPosition(glm::vec3 pos) { m_animatable->setPosition(pos); }
 	void setScale(glm::vec3 scale) { m_animatable->setScale(scale); }
 	void updateScale(glm::vec3 ds) { m_animatable->updateScale(ds); }
+	long getIndex() { return id; }
 	void updatePosition(glm::vec3 dp) { m_animatable->updatePosition(dp); }
 	void updateRotation(glm::vec3 dr) { m_animatable->updateRotation(dr); }
 	long getId() { return id; }
@@ -47,5 +56,6 @@ public:
 	void setSound(Sound theSound);
 	void setMaxLifeTime(float maxTime){ maxLifeTime = maxTime; }
 	void resetLifeTime() { totalLifeTime = 0; }
+	Renderable * getRenderable(){ return m_renderable; }
 };
 

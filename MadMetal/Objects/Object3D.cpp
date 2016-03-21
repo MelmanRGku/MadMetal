@@ -2,8 +2,8 @@
 
 #include "Object3D.h"
 
-Object3D::Object3D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : TestObject(id, aable, anable, rable)
-, m_physicable(pable)
+Object3D::Object3D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Animation *aniable) : TestObject(id, aable, anable, rable)
+, m_physicable(pable), m_animation(aniable)
 {
 }
 
@@ -69,6 +69,46 @@ glm::vec3 Object3D::getPosition() {
 
 void Object3D::playSound()
 {
-
 	m_audioable->getAudioHandle().queAudioSource(&this->getActor(), m_sound);
+}
+
+void Object3D::startAnimation()
+{
+	if (!m_animation == NULL)
+	{
+		start = clock();
+		previousModel = m_renderable->getModel();
+		m_renderable->setModel(m_animation->theModels[0]);
+		static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
+		animating = true;
+		current = 0;
+	}
+}
+
+void Object3D::updateAnimation()
+{
+	if (!m_animation == NULL)
+	{
+
+		if (animating)
+		{
+			//if enough time has passed
+			if (clock() >= start + m_animation->ticksPerFrame[current])
+			{
+				start = clock();
+				current++;
+				if (current >= m_animation->theModels.size())
+				{
+					animating = false;
+					m_renderable->setModel(previousModel);
+					static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
+				}
+				else
+				{
+					m_renderable->setModel(m_animation->theModels[current]);
+					static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
+				}
+			}
+		}
+	}
 }

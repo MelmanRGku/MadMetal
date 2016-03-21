@@ -1,7 +1,7 @@
 #include "LoadingScreen.h"
 #include "Factory\GameFactory.h"
 
-LoadingScreen::LoadingScreen(SceneMessage& toDeliver, Audio &audio) : m_audio(audio)
+LoadingScreen::LoadingScreen(SceneMessage& toDeliver, Audio &audio, LoadingStatus *status, std::thread *t) : m_audio(audio)
 {
 
 	
@@ -11,10 +11,8 @@ LoadingScreen::LoadingScreen(SceneMessage& toDeliver, Audio &audio) : m_audio(au
 	createProgressBar();
 	createLoadingString();
 	createLoadingInfoString();
-	status = new LoadingStatus();
-	Assets::status = status;
-	t = std::thread(Assets::loadObjsFromDirectory, "Assets/Models");
-	
+	this->status = status;
+	this->t = t;	
 }
 
 
@@ -26,10 +24,11 @@ LoadingScreen::~LoadingScreen()
 bool LoadingScreen::simulateScene(double dt, SceneMessage &newMessage) {
 	bar->setProgress(status->getPercentage());
 	loadingInfoString->setString(status->getMessage());
-	if (status->getPercentage() >= 1){
-		t.join();
-		delete status;
-		Assets::initializeVAOs();
+	if (status->done){
+		if (t != NULL) {
+			t->join();
+			Assets::initializeVAOs();
+		}
 
 		newMessage.setTag(SceneMessage::eGameSimulation);
 		newMessage.setPlayerTemplates(m_toDeliver.getPlayerTemplates());

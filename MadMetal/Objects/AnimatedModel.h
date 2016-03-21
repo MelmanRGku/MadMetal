@@ -5,7 +5,7 @@
 class AnimatedModel : public Object3D
 {
 public:
-	AnimatedModel(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, float duration, bool loop = false) : Object3D(id, aable, pable, anable, rable)
+	AnimatedModel(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, float duration, bool loop = false) : Object3D(id, aable, pable, anable, rable, NULL)
 	{
 		
 		m_counter = 0;
