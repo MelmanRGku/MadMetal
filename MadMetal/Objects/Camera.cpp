@@ -114,3 +114,12 @@ void Camera::setLookAt(glm::vec3 eye, glm::vec3 at, glm::vec3 up) {
 	m_lookAt = at;
 	m_up = up;
 }
+
+
+glm::mat4x4 Camera::getMatrix() {
+	return glm::lookAt(
+		m_currentPos,
+		m_lookAt,
+		m_up
+		);
+}

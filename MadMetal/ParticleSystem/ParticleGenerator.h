@@ -1,6 +1,6 @@
 #include "ParticleData.h"
-#include "..\Libraries\glm\gtc\random.hpp"
-#include "..\Libraries\glm/gtx/rotate_vector.hpp"
+//#include "..\Libraries\glm\gtc\random.hpp"
+//#include "..\Libraries\glm/gtx/rotate_vector.hpp"
 #include <math.h>
 
 class ParticleGenerator

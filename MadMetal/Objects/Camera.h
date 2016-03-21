@@ -22,6 +22,7 @@ public:
 	glm::vec3 getPosition();
 	glm::vec3 getUpVector();
 	glm::vec3 getLookAt();
+	glm::mat4x4 getMatrix();
 
 
 	~Camera();

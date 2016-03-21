@@ -30,7 +30,7 @@ void CirclePositionGenerator::generate(ParticleData &particles, size_t startId, 
 	if (m_randomStart){
 		for (size_t i = startId; i < endId; i++)
 		{
-			glm::vec2 position = glm::circularRand(m_radius);
+			glm::vec2 position;// = glm::circularRand(m_radius);
 
 			particles.m_pos[i] = PxVec3(m_pos.x + position.x, m_pos.y, m_pos.z + position.y);
 			
@@ -39,7 +39,7 @@ void CirclePositionGenerator::generate(ParticleData &particles, size_t startId, 
 	}
 	else {
 		m_circProg = (float)fmod((m_circProg + m_rotateSpeed) ,360);
-		glm::vec3 position = glm::rotateY(glm::vec3(1, 0,0) * m_radius, m_circProg);
+		glm::vec3 position;// = glm::rotateY(glm::vec3(1, 0, 0) * m_radius, m_circProg);
 		for (size_t i = startId; i < endId; i++)
 		{
 			particles.m_pos[i] = PxVec3(m_pos.x + position.x, m_pos.y + position.y, m_pos.z + position.z);
@@ -67,7 +67,7 @@ void TimeGenerator::generate( ParticleData& particles, size_t startId, size_t en
 
 	for (size_t i = startId; i < endId; i++)
 	{
-		particles.m_time[i] = glm::linearRand(m_minStartTime, m_maxStartTime);
+		particles.m_time[i];// = glm::linearRand(m_minStartTime, m_maxStartTime);
 	}
 }
 
@@ -75,7 +75,7 @@ void VelocityGenerator::generate(ParticleData& particles, size_t startId, size_t
 {
 	for (size_t i = startId; i < endId; i++)
 	{
-		glm::vec3 startVelocity = glm::linearRand(glm::vec3(m_minStartVel.x, m_minStartVel.y, m_minStartVel.z), glm::vec3(m_maxStartVel.x, m_maxStartVel.y, m_maxStartVel.z));
+		glm::vec3 startVelocity;// = glm::linearRand(glm::vec3(m_minStartVel.x, m_minStartVel.y, m_minStartVel.z), glm::vec3(m_maxStartVel.x, m_maxStartVel.y, m_maxStartVel.z));
 		particles.m_vel[i] = PxVec3(startVelocity.x, startVelocity.y, startVelocity.z);
 	}
 }

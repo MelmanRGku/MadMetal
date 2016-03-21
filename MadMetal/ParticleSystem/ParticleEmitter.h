@@ -1,6 +1,6 @@
 #pragma once
 #include "ParticleGenerator.h"
-#include <algorithm>
+
 #include <vector>
 
 class ParticleEmitter

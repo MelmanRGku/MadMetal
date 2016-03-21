@@ -10,6 +10,8 @@ class Model3D : public Model
 {
 private:
 	std::vector<Mesh *> meshes;
+	bool vaoSetup = false;
+	bool vboSetup = false;
 public:
 	BoundingBox *boundingBox;
 
@@ -18,6 +20,7 @@ public:
 	void addMesh(Mesh *mesh) { meshes.push_back(mesh); }
 	std::vector<Mesh *> *getMeshes() { return &meshes; }
 	void setupVAOs();
+	void setupVBOs();
 	PxTriangleMesh **getPhysicsTriangleMesh();
 	void setAlpha(float alpha);
 };

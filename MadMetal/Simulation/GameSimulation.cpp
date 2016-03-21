@@ -14,7 +14,7 @@
 #include <sstream>
 
 
-#define NUM_OF_PLAYERS 8
+#define NUM_OF_PLAYERS 12
 #define NUM_LAPS_FOR_VICTORY 1
 #define RACE_FINISH_DELAY 10
 
@@ -57,7 +57,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
 			humanPlayer->getCar()->ui = ui;
 			ui->map->setMainPlayer(humanPlayer);
-			m_world->addGameObject(ui);
+			//m_world->addGameObject(ui);
 			//todo: make a car for player based off template
 			m_humanPlayers.push_back(humanPlayer);
 			
@@ -79,10 +79,10 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	}
 
 	//if there is only one player, set audio to do sound attenuation to that player
-	if (m_humanPlayers.size() == 1)
-	{
+	//if (m_humanPlayers.size() == 1)
+	//{
 		m_audioHandle.assignListener(m_humanPlayers[0]->getCar());
-	}
+	//}
 	
 	//m_mainCamera = m_humanPlayers[0]->getCamera();
 	
@@ -145,74 +145,51 @@ bool PxVehicleIsInAir(const PxVehicleWheelQueryResult& vehWheelQueryResults)
 
 void GameSimulation::simulatePhysics(double dt)
 {
-	const PxF32 timestep = 1.0f / 60.0f;
+	int numSteps = 1;
+	while (dt > 1.f / 50.f) {
+		dt /= 2.f;
+		numSteps *= 2;
+	}
+	for (int i = 0; i < numSteps; i++) {
 
 	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
 
-	//Raycasts.
-	
+		//Raycasts.
+
 		PxVehicleWheels* vehicles[1] = { &m_players[i]->getCar()->getCar() };
-	PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
-	const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
-	PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
+		PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
+		const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
+		PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
 
-	//Vehicle update.
-	const PxVec3 grav = m_scene->getGravity();
-	PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
+		//Vehicle update.
+		const PxVec3 grav = m_scene->getGravity();
+		PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
 		PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, m_players[i]->getCar()->getCar().mWheelsSimData.getNbWheels() } };
-	PxVehicleUpdates(timestep, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
+			PxVehicleUpdates(dt, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
-	//Work out if the vehicle is in the air.
+		//Work out if the vehicle is in the air.
 		gIsVehicleInAir = m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
 
-	// PLUG IN PITCH CORRECTION CODE HERE
 
-	/*
-	PxVec3 angularVelocity = m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity();
-
-
-	PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
-	m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
-
-	bool carTilt = false;
-	float lowest = 100000;
-	float highest = -100000;
-	for (int i = 0; i < 4; i++)
-	{
-		if (tempBuffer[i]->getLocalPose().p.y > highest) highest = tempBuffer[i]->getLocalPose().p.y;
-		if (tempBuffer[i]->getLocalPose().p.y < highest) lowest = tempBuffer[i]->getLocalPose().p.y;
-		cout << tempBuffer[i]->getLocalPose().p.y << endl;;
-	}
-	cout << endl << endl;
-	//cout << lowest << " " << highest << endl;
-
-	float pitchDist = abs(highest - lowest);
-
-	if (gIsVehicleInAir && pitchDist > 1 )
-	{
-		//m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.0000001 * pitchDist, 0, 0));
-	}
-	*/
-	PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
+		PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
 		m_players[i]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_players[i]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
 
 		PxVec3 test = m_players[i]->getCar()->getCar().getRigidDynamicActor()->getGlobalPose().q.getBasisVector1();
 
-	if (test.y < 0.9 && gIsVehicleInAir)
-	{
+		if (test.y < 0.9 && gIsVehicleInAir)
+		{
 			//cout << "PITCH ME" << endl;
 			m_players[i]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_players[i]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.01, 0, 0));
 
-	}
-
-//	cout << test.x << " " << test.y << " " << test.z << endl;
+		}
 	}
 
 	
 
-	m_scene->simulate(timestep);
+	m_scene->simulate(dt);
 	m_scene->fetchResults(true);
+}
 }
 
 void GameSimulation::simulateAnimation()
@@ -237,9 +214,6 @@ void GameSimulation::simulatePlayers(double dt)
 		m_aiPlayers[i]->processFire(&m_players);
 	}
 
-	//m_humanPlayers[0]->playFrame(dt);
-	//m_players[1]->playFrame(dt);
-	
 }
 
 void GameSimulation::updateObjects(double dt) {

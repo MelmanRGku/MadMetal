@@ -2,6 +2,13 @@
 #include "Simulation\GameSimulation.h"
 #include "Global\Log.h"
 #include "Simulation\MainMenu.h"
+#include "Simulation\SinglePlayerMenu.h"
+#include <windows.h>
+#include "winbase.h"
+#include "wingdi.h"
+#include "winerror.h"
+#include "winternl.h"
+#include "winnt.h"
 
 SceneStack::SceneStack(Scene * scene)
 {
@@ -59,7 +66,18 @@ Scene * SceneStack::getTopScene()
 StackManager::StackManager()
 {
 	Assets::status = new LoadingStatus();
-	loadingThread = new std::thread(Assets::load, "Assets/Models", "Assets/Textures");
+
+	//get the current opengl context and create a new one for the current device
+	HGLRC ctx = wglGetCurrentContext();
+	HGLRC shared = wglCreateContext(wglGetCurrentDC());
+
+	//share lists between the two (this does not share vao and vfo)
+	wglShareLists(ctx, shared);
+
+	//start loading assets in the second thread and give it access to the current DC and GLRC
+	loadingThread = new std::thread(Assets::load, "Assets/Models", "Assets/Textures", wglGetCurrentDC(), shared);
+
+
 	//initaliaze input
 	m_input = new Input();
 	//set starting scene to Main Menu and pass a controller handle
@@ -100,7 +118,7 @@ void StackManager::readMailBox()
 		m_stack->pushScene(new MainMenu(m_input, m_audio));
 		break;
 	case(SceneMessage::eSingleCharSelect) :
-		m_stack->pushScene(new SinglePlayerCharSelectScene(m_input));
+		m_stack->pushScene(new SinglePlayerMenu(m_input, m_audio));
 		break;
 			
 	case (SceneMessage::eMultiCharSelect):
@@ -112,7 +130,9 @@ void StackManager::readMailBox()
 		break;
 	case (SceneMessage::eGameSimulation) :
 		m_stack->clearStack();
+		m_renderer->initializeScreens(2);
 		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), *m_audio));
+		m_renderer->setPlayers(static_cast<GameSimulation *>(m_stack->getTopScene())->getHumanPlayers());
 		break;
 
 	case (SceneMessage::ePause) :

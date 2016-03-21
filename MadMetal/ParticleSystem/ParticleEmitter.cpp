@@ -1,9 +1,11 @@
 #include "ParticleEmitter.h"
+#include <algorithm>
 #include <iostream>
 
+#undef min
 void ParticleEmitter::emit(double dt, ParticleData& particles)
 {
-	m_timer += dt;
+	/*m_timer += dt;
 	if (m_timer < m_emmitIntervalSeconds)
 		return;
 	m_timer = 0;
@@ -11,18 +13,18 @@ void ParticleEmitter::emit(double dt, ParticleData& particles)
 	
 	size_t startId = particles.m_countAlive;
 	
-	const size_t endId = std::min(startId + m_emmitAmount, particles.m_maxParticleCount - 1);
+	//size_t endId = std::min(startId + m_emmitAmount, particles.m_maxParticleCount - 1);
 
 	
-	m_posGenerator->generate(particles, startId, endId);
-	m_velGenerator->generate(particles, startId, endId);
-	m_timeGenerator->generate(particles, startId, endId);
+	//m_posGenerator->generate(particles, startId, endId);
+	//m_velGenerator->generate(particles, startId, endId);
+	//m_timeGenerator->generate(particles, startId, endId);
 
 	for (size_t i = startId; i < endId; i++)
 	{
 		particles.wake(i);
 		
-	}
+	}*/
 }
 
 void ParticleEmitter::setPosGenerator(PositionGenerator * generator)
