@@ -15,9 +15,8 @@ Renderer::Renderer()
 		glm::radians(std::stof(Settings::getSetting("fovy"))),
 		std::stof(Settings::getSetting("screenWidth")) / std::stof(Settings::getSetting("screenHeight")),
 		0.5f,
-		10000.f
+		1000.f
 		);
-	projectionMatrices.push_back(projectionMatrix);
 	viewPorts.push_back(glm::vec4(0, 0, std::stoi(Settings::getSetting("screenWidth")), std::stoi(Settings::getSetting("screenHeight"))));
 
 	viewMatrix = glm::lookAt(
@@ -92,17 +91,31 @@ void Renderer::initializeScreens(int numOfPlayers) {
 		viewPorts.push_back(glm::vec4(0, 0, screenWidth, screenHeight));
 	}
 	else if (numOfPlayers == 2) {
-		viewPorts.push_back(glm::vec4(0, 0, screenWidth/2 , screenHeight));
-		viewPorts.push_back(glm::vec4(screenWidth / 2, 0, screenWidth / 2, screenHeight));
+		viewPorts.push_back(glm::vec4(0, 0, screenWidth , screenHeight/2));
+		viewPorts.push_back(glm::vec4(0, screenHeight/2, screenWidth, screenHeight/2));
+	}
+	else if (numOfPlayers == 4) {
+		viewPorts.push_back(glm::vec4(0, 0, screenWidth/2, screenHeight / 2));
+		viewPorts.push_back(glm::vec4(0, screenHeight / 2, screenWidth /2 , screenHeight / 2)); 
+		viewPorts.push_back(glm::vec4(screenWidth / 2, 0, screenWidth / 2, screenHeight / 2));
+		viewPorts.push_back(glm::vec4(screenWidth / 2, screenHeight / 2, screenWidth / 2, screenHeight / 2));
 	}
 }
 
 
 void Renderer::draw(std::vector<TestObject *> *objects) {
-	//for (int i = 0; i < viewPorts.size(); i++) {
-		//projectionMatrix = projectionMatrices.at(i);
-		//glm::vec4 viewport = viewPorts.at(i);
-		//glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
+	for (int j = 0; j < viewPorts.size(); j++) {
+		if (players != NULL) {
+			projectionMatrix = glm::perspective(
+				glm::radians(std::stof(Settings::getSetting("fovy")) + (-0.3f) * max(players->at(j)->getCar()->getCar().computeForwardSpeed(), 1) + 30),
+				std::stof(Settings::getSetting("screenWidth")) / std::stof(Settings::getSetting("screenHeight")),
+				0.5f,
+				1000.f
+				);
+			glm::vec4 viewport = viewPorts.at(j);
+			viewMatrix = players->at(j)->getCamera()->getMatrix();
+			glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
+		}
 		for (int i = 0; i < NUMBER_OF_SHADER_TYPES; i++) {
 			if (shader[i] != NULL) {
 				shader[i]->start(&viewMatrix, &projectionMatrix);
@@ -113,10 +126,13 @@ void Renderer::draw(std::vector<TestObject *> *objects) {
 						TestObject *obj = objects->at(j);
 						keepGoing = keepGoing || obj->draw(this, (ShaderType)i, passNumber);
 					}
+					if (players != NULL) {
+						keepGoing = keepGoing || players->at(j)->getCar()->getUI()->draw(this, (ShaderType)i, passNumber);
+					}
 					passNumber++;
 				} while (keepGoing);
 				shader[i]->end();
 			}
-	//	}
+		}
 	}
 }

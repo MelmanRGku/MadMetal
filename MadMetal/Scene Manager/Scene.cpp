@@ -10,7 +10,7 @@ MultiPlayerCharSelectScene::MultiPlayerCharSelectScene(Input * input)
 	{
 		if (inputNum < 4) //still gamepads to give out
 		{
-			if (input->getGamePadHandle(inputNum, m_gamePads[gpNum]))
+			if (input->getGamePadHandle(inputNum, &m_gamePads[gpNum]))
 			{
 				std::cout << "Assigned controller " << inputNum << " to player " << gpNum << std::endl;
 				gpNum++;//successfully assigned gp, go to next
@@ -19,7 +19,7 @@ MultiPlayerCharSelectScene::MultiPlayerCharSelectScene(Input * input)
 		else 
 		{
 			//no more gp's to distribute
-			m_gamePads[gpNum] = NULL;
+			m_gamePads[gpNum++] = NULL;
 		}
 	}
 	
@@ -29,7 +29,6 @@ MultiPlayerCharSelectScene::MultiPlayerCharSelectScene(Input * input)
 		if (m_gamePads[i] != NULL)
 		{
 			m_playerTemplates.push_back(new ControllableTemplate(m_gamePads[i]));
-			break;
 		}
 	}
 	
@@ -40,7 +39,7 @@ bool MultiPlayerCharSelectScene::simulateScene(double dt, SceneMessage &message)
 {
 
 
-	/*/check gamepad stuff
+	/*//check gamepad stuff
 	if (m_gamePad->checkConnection())
 	{
 
@@ -102,9 +101,10 @@ bool MultiPlayerCharSelectScene::simulateScene(double dt, SceneMessage &message)
 	else
 	{
 		std::cout << "Controller is Disconnected \n";
-	}
-	*/
-	return false;
+	}*/
+	message.setTag(SceneMessage::eLoadScreen);
+	message.setPlayerTemplates(m_playerTemplates);
+	return true;
 }
 
 PauseScene::PauseScene(std::vector<ControllableTemplate *> playerTemplates)

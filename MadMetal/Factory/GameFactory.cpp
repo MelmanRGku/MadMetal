@@ -84,6 +84,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		DisplayMessage * display = new DisplayMessage(objectId, audioable, animatable, renderable);
 		Text2D *text = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
 		text->centerize(true);
+		m_world.addGameObject(text);
 		display->setText2D(text);
 		
 		return display;
@@ -217,8 +218,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		HealthBar2D *bar = new HealthBar2D(objectId, audioable, animatable, renderable);
 
-		m_world.addGameObject(bar);
-
 		return bar;
 	}
 	case OBJECT_GAUGE_BAR:
@@ -229,8 +228,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		GaugeBar *bar = new GaugeBar(objectId, audioable, animatable, renderable);
 
-		m_world.addGameObject(bar);
-
 		return bar;
 	}
 	case OBJECT_TEXT_2D:
@@ -240,8 +237,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 
 		Text2D *bar = new Text2D(objectId, audioable, animatable, renderable);
-
-		m_world.addGameObject(bar);
 
 		return bar;
 	}
@@ -462,8 +457,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		MapUI *map = new MapUI(objectId, audioable, animatable, renderable);
 		map->setPlayerModel(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PLAYER_ON_UI_MAP_TEXTURE)));
-
-		m_world.addGameObject(map);
 
 		return map;
 	}

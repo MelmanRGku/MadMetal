@@ -23,7 +23,7 @@ private:
 	glm::mat4x4 projectionMatrix, viewMatrix, modelMatrix;
 	ShaderProgram *shader[NUMBER_OF_SHADER_TYPES];
 	std::vector<glm::vec4> viewPorts;
-	std::vector<glm::mat4x4> projectionMatrices;
+	std::vector<PlayerControllable *> *players;
 
 public:
 	Renderer();
@@ -33,6 +33,7 @@ public:
 	void setViewMatrixLookAt(std::vector<Camera *> cameras);
 	void setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt);
 	void initializeScreens(int numOfPlayers);
+	void setPlayers(std::vector<PlayerControllable *> *players) { this->players = players; };
 	ShaderProgram *getShaderProgram(ShaderType type) { return shader[type]; }
 	glm::mat4x4 getProjectionMatrix() { return projectionMatrix; }
 	glm::mat4x4 getViewMatrix() { return viewMatrix; }

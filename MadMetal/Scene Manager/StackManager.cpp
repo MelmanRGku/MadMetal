@@ -132,6 +132,7 @@ void StackManager::readMailBox()
 		m_stack->clearStack();
 		m_renderer->initializeScreens(2);
 		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), *m_audio));
+		m_renderer->setPlayers(static_cast<GameSimulation *>(m_stack->getTopScene())->getHumanPlayers());
 		break;
 
 	case (SceneMessage::ePause) :
