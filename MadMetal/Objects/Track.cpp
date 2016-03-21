@@ -138,25 +138,7 @@ void Track::stitchWaypointSystems(Boundry lastWaypointSystemLocation, Boundry ne
 		if (isStichingRowForNewWaypoint)
 		{
 			stitch(lastWaypointSystem, isStichingRowForLastWaypoint, lastWaypointColumnIndex, lastWaypointRowIndex, newWaypointSystem, isStichingRowForNewWaypoint, newWaypointColumnIndex, newWaypointRowIndex);
-			if (recalculateIds)
-			{
-				int difference1 = abs(lastWaypointSystem.getWaypointMap().at(lastWaypointSystem.getWaypointMap().size() - 1).at(lastWaypointSystem.getWaypointMap().at(0).size() - 1)->getId() -
-					newWaypointSystem.getWaypointMap().at(0).at(newWaypointSystem.getWaypointMap().at(0).size() - 1)->getId());
-				int secondValue = lastWaypointSystem.getWaypointMap().at(lastWaypointSystem.getWaypointMap().size() - 1).at(lastWaypointSystem.getWaypointMap().at(0).size() - 1)->getId() == lastWaypointSystem.getWaypointMap().at(0).at(lastWaypointSystem.getWaypointMap().at(0).size() - 1)->getId() ?
-					lastWaypointSystem.getWaypointMap().at(0).at(0)->getId() :
-					lastWaypointSystem.getWaypointMap().at(0).at(lastWaypointSystem.getWaypointMap().at(0).size() - 1)->getId();
-				int difference2 = abs(secondValue -
-					newWaypointSystem.getWaypointMap().at(0).at(newWaypointSystem.getWaypointMap().at(0).size() - 1)->getId());
-
-				if (difference1 > difference2)
-				{
-					newWaypointSystem.addIdToAllWaypointsInTheSystem(lastWaypointSystem.getWaypointMap().at(lastWaypointSystem.getWaypointMap().size() - 1).at(lastWaypointSystem.getWaypointMap().at(0).size() - 1)->getId());
-				}
-				else
-				{
-					newWaypointSystem.addIdToAllWaypointsInTheSystem(secondValue);
-				}
-			}
+			recalculateWaypointSystemIds(lastWaypointSystem, newWaypointSystem, recalculateIds);
 		}
 		else
 		{
@@ -173,25 +155,7 @@ void Track::stitchWaypointSystems(Boundry lastWaypointSystemLocation, Boundry ne
 		{
 			stitch(lastWaypointSystem, isStichingRowForLastWaypoint, lastWaypointRowIndex, lastWaypointColumnIndex, newWaypointSystem, isStichingRowForNewWaypoint, newWaypointRowIndex, newWaypointColumnIndex);
 
-			if (recalculateIds)
-			{
-				int difference1 = abs(lastWaypointSystem.getWaypointMap().at(lastWaypointSystem.getWaypointMap().size() - 1).at(lastWaypointSystem.getWaypointMap().at(0).size() - 1)->getId() -
-					newWaypointSystem.getWaypointMap().at(0).at(newWaypointSystem.getWaypointMap().at(0).size()  - 1)->getId());
-				int secondValue = lastWaypointSystem.getWaypointMap().at(lastWaypointSystem.getWaypointMap().size() - 1).at(lastWaypointSystem.getWaypointMap().at(0).size() - 1)->getId() == lastWaypointSystem.getWaypointMap().at(0).at(lastWaypointSystem.getWaypointMap().at(0).size() - 1)->getId() ?
-					lastWaypointSystem.getWaypointMap().at(0).at(0)->getId() :
-					lastWaypointSystem.getWaypointMap().at(0).at(lastWaypointSystem.getWaypointMap().at(0).size() - 1)->getId();
-				int difference2 = abs(secondValue -
-					newWaypointSystem.getWaypointMap().at(0).at(newWaypointSystem.getWaypointMap().at(0).size() - 1)->getId());
-
-				if (difference1 > difference2)
-				{
-					newWaypointSystem.addIdToAllWaypointsInTheSystem(lastWaypointSystem.getWaypointMap().at(lastWaypointSystem.getWaypointMap().size() - 1).at(lastWaypointSystem.getWaypointMap().at(0).size() - 1)->getId());
-				}
-				else
-				{
-					newWaypointSystem.addIdToAllWaypointsInTheSystem(secondValue);
-				}
-			}
+			recalculateWaypointSystemIds(lastWaypointSystem, newWaypointSystem, recalculateIds);
 		}
 	}
 
@@ -295,5 +259,28 @@ void Track::determinePlaceInAdjecencyListAndPush(WaypointSystem& waypointSystem1
 	{
 		waypointSystem1.getWaypointMap().at(indexOfIncrement1).at(indexOfEdge1)->getListOfAdjacentWaypoints().push_back(
 			waypointSystem2.getWaypointMap().at(indexOfIncrement2).at(indexOfEdge2));
+	}
+}
+
+void Track::recalculateWaypointSystemIds(WaypointSystem& waypointSystem1, WaypointSystem& waypointSystem2, bool& recalculateIds)
+{
+	if (recalculateIds)
+	{
+		int difference1 = abs(waypointSystem1.getWaypointMap().at(waypointSystem1.getWaypointMap().size() - 1).at(waypointSystem1.getWaypointMap().at(0).size() - 1)->getId() -
+			waypointSystem2.getWaypointMap().at(0).at(waypointSystem2.getWaypointMap().at(0).size() - 1)->getId());
+		int secondValue = waypointSystem1.getWaypointMap().at(waypointSystem1.getWaypointMap().size() - 1).at(waypointSystem1.getWaypointMap().at(0).size() - 1)->getId() == waypointSystem1.getWaypointMap().at(0).at(waypointSystem1.getWaypointMap().at(0).size() - 1)->getId() ?
+			waypointSystem1.getWaypointMap().at(0).at(0)->getId() :
+			waypointSystem1.getWaypointMap().at(0).at(waypointSystem1.getWaypointMap().at(0).size() - 1)->getId();
+		int difference2 = abs(secondValue -
+			waypointSystem2.getWaypointMap().at(0).at(waypointSystem2.getWaypointMap().at(0).size() - 1)->getId());
+
+		if (difference1 > difference2)
+		{
+			waypointSystem2.addIdToAllWaypointsInTheSystem(waypointSystem1.getWaypointMap().at(waypointSystem1.getWaypointMap().size() - 1).at(waypointSystem1.getWaypointMap().at(0).size() - 1)->getId());
+		}
+		else
+		{
+			waypointSystem2.addIdToAllWaypointsInTheSystem(secondValue);
+		}
 	}
 }
