@@ -19,7 +19,7 @@ bool Text2D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
 
-	FTGLBitmapFont font("Assets/Fonts/OpenSans-Bold.ttf");
+	FTGLPixmapFont font("Assets/Fonts/OpenSans-Bold.ttf");
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glDisable(GL_LIGHTING);
 

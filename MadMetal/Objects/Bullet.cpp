@@ -3,7 +3,7 @@
 
 Bullet::Bullet(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Car *owner) : Object3D(id, aable, pable, anable, rable, NULL), m_owner(owner)
 {
-	maxLifeTime = -1;
+	maxLifeTime = 4;
 	m_collisionSound = BulletCarCollisionSound();
 }
 

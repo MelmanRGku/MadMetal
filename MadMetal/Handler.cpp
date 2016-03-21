@@ -34,6 +34,7 @@ void initObjects()
 {
 	//	psystem->initSystem(glutGet(GLUT_ELAPSED_TIME));
 	Fonts::loadTTFFontsFromDirectory("Assets/Fonts");
+	Assets::loadBeforeGameStarts();
 	m_stackManager = new StackManager();
 }
 

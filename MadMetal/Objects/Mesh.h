@@ -24,6 +24,7 @@ public:
 	Texture *getTexture() { return texture; }
 	std::vector<GLuint> *getIndices() { return &indices; }
 	std::vector<glm::vec3> *getVertices() { return &vertices; }
+	void setupVBO();
 	void setupVAO();
 	GLuint getVAO() { return vao; }
 	void setAlpha(float alpha);

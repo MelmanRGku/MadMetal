@@ -6,6 +6,7 @@
 #include "CellShaderProgram.h"
 #include "NoShaderProgram.h"
 
+class PlayerControllable;
 class TestObject;
 class Camera;
 
@@ -21,6 +22,8 @@ public:
 private:
 	glm::mat4x4 projectionMatrix, viewMatrix, modelMatrix;
 	ShaderProgram *shader[NUMBER_OF_SHADER_TYPES];
+	std::vector<glm::vec4> viewPorts;
+	std::vector<glm::mat4x4> projectionMatrices;
 
 public:
 	Renderer();
@@ -29,6 +32,7 @@ public:
 	void draw(std::vector<TestObject *> *objects);
 	void setViewMatrixLookAt(std::vector<Camera *> cameras);
 	void setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt);
+	void initializeScreens(int numOfPlayers);
 	ShaderProgram *getShaderProgram(ShaderType type) { return shader[type]; }
 	glm::mat4x4 getProjectionMatrix() { return projectionMatrix; }
 	glm::mat4x4 getViewMatrix() { return viewMatrix; }

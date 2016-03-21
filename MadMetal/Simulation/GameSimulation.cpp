@@ -13,7 +13,7 @@
 #include <sstream>
 
 
-#define NUM_OF_PLAYERS 8
+#define NUM_OF_PLAYERS 12
 #define NUM_LAPS_FOR_VICTORY 1
 #define RACE_FINISH_DELAY 10
 
