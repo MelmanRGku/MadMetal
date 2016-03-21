@@ -129,12 +129,18 @@ void StackManager::readMailBox()
 		m_stack->pushScene(new LoadingScreen(*m_mailBox, *m_audio, Assets::status, loadingThread));
 		break;
 	case (SceneMessage::eGameSimulation) :
+	{
 		m_stack->clearStack();
-		m_renderer->initializeScreens(2);
+		int numPlayers = 0;
+		for (ControllableTemplate *temp : m_mailBox->getPlayerTemplates()) {
+			if (temp->getGamePad() != NULL)
+				numPlayers++;
+		}
+		m_renderer->initializeScreens(numPlayers);
 		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), *m_audio));
 		m_renderer->setPlayers(static_cast<GameSimulation *>(m_stack->getTopScene())->getHumanPlayers());
 		break;
-
+	}
 	case (SceneMessage::ePause) :
 		m_stack->pushScene(new PauseScene(m_mailBox->getPlayerTemplates()));
 		break;
