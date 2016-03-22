@@ -251,6 +251,16 @@ int Car::getLap() {
 	return m_currentLap;
 }
 
+int Car::getPositionInRace()
+{
+	return m_position;
+}
+
+void Car::setPositionInRace(int position)
+{
+	m_position = position;
+}
+
 void Car::setSoundChassis(Sound theSound)
 {
 	soundChassis = theSound;

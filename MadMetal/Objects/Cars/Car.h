@@ -20,6 +20,7 @@ protected: //members
 	//score based
 	float m_damageDealt;
 	int m_currentLap;
+	int m_position;
 	bool m_finishedRace;
 	int m_score;
 
@@ -80,6 +81,8 @@ public:
 	Waypoint* getCurrentWaypoint();
 	void incrementLap();
 	int getLap();
+	int getPositionInRace();
+	void setPositionInRace(int position);
 	void setSoundChassis(Sound sound);
 	void playSoundChassis();
 	bool isAtStartingCollisionVolume();
