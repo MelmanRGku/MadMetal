@@ -24,7 +24,16 @@ void PositionManager::updatePlayerPositions()
 			{
 				if (m_players.at(i)->getCar()->getPositionInRace() > m_players.at(j)->getCar()->getPositionInRace())
 				{
-					int temp = m_players.at(j)->getCar()->getPositionInRace();
+					int temp = m_players.at(i)->getCar()->getPositionInRace();
+					m_players.at(i)->getCar()->setPositionInRace(m_players.at(j)->getCar()->getPositionInRace());
+					m_players.at(j)->getCar()->setPositionInRace(temp);
+				}
+			}
+			else if (m_players.at(i)->getCar()->getLap() > m_players.at(j)->getCar()->getLap())
+			{
+				if (m_players.at(i)->getCar()->getPositionInRace() < m_players.at(j)->getCar()->getPositionInRace())
+				{
+					int temp = m_players.at(i)->getCar()->getPositionInRace();
 					m_players.at(i)->getCar()->setPositionInRace(m_players.at(j)->getCar()->getPositionInRace());
 					m_players.at(j)->getCar()->setPositionInRace(temp);
 				}
@@ -35,14 +44,26 @@ void PositionManager::updatePlayerPositions()
 				{
 					if (m_players.at(i)->getCar()->getPositionInRace() > m_players.at(j)->getCar()->getPositionInRace())
 					{
-						int temp = m_players.at(j)->getCar()->getPositionInRace();
+						int temp = m_players.at(i)->getCar()->getPositionInRace();
+						m_players.at(i)->getCar()->setPositionInRace(m_players.at(j)->getCar()->getPositionInRace());
+						m_players.at(j)->getCar()->setPositionInRace(temp);
+					}
+				}
+				else if (m_players.at(i)->getCar()->getCurrentWaypoint()->getId() < m_players.at(j)->getCar()->getCurrentWaypoint()->getId())
+				{
+					if (m_players.at(i)->getCar()->getPositionInRace() < m_players.at(j)->getCar()->getPositionInRace())
+					{
+						int temp = m_players.at(i)->getCar()->getPositionInRace();
 						m_players.at(i)->getCar()->setPositionInRace(m_players.at(j)->getCar()->getPositionInRace());
 						m_players.at(j)->getCar()->setPositionInRace(temp);
 					}
 				}
 				else if (m_players.at(i)->getCar()->getCurrentWaypoint()->getId() == m_players.at(j)->getCar()->getCurrentWaypoint()->getId())
 				{
-					std::cout << "in same waypoint\n";
+					if (i == 0)
+					{
+						std::cout << "in same waypoint\n";
+					}
 				}
 			}
 		}

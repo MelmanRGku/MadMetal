@@ -6,7 +6,6 @@
 #include "Objects\PowerUp.h"
 #include "Objects/UI.h"
 
-
 class Waypoint;
 
 class Car : public Object3D
@@ -20,7 +19,7 @@ protected: //members
 	//score based
 	float m_damageDealt;
 	int m_currentLap;
-	int m_position;
+	int m_positionInRace;
 	bool m_finishedRace;
 	int m_score;
 
@@ -47,6 +46,7 @@ protected: //members
 	PowerUpType m_heldPowerUp;
 	PowerUpType m_activePowerUp;
 	float m_powerUpRemaining;
+	static int positionGlobalID;
 	
 private:
 	//update functions

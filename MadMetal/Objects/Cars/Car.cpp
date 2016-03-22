@@ -4,6 +4,8 @@
 #include <sstream>
 #include "Objects\Waypoint.h"
 
+int Car::positionGlobalID = 0;
+
 Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL), m_car(car), m_drivingStyle(style)
 {
 	m_currentWaypoint = NULL;
@@ -11,6 +13,8 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 	m_isAtStartingCollisionVolume = false;
 	m_newLap = true;
 	m_powerUpRemaining = 0;
+	Car::positionGlobalID++;
+	m_positionInRace = positionGlobalID;
 }
 
 
@@ -253,12 +257,12 @@ int Car::getLap() {
 
 int Car::getPositionInRace()
 {
-	return m_position;
+	return m_positionInRace;
 }
 
 void Car::setPositionInRace(int position)
 {
-	m_position = position;
+	m_positionInRace = position;
 }
 
 void Car::setSoundChassis(Sound theSound)
