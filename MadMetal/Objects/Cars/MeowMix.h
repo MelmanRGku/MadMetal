@@ -7,7 +7,7 @@ class MeowMix : public Car
 protected:
 	void unuseSuper();
 public:
-	MeowMix(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
+	MeowMix(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	
 	~MeowMix();
 

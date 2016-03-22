@@ -21,7 +21,9 @@ public:
 		ePause,
 		eRestart,
 		ePop,
-		eDefault
+		eDefault,
+		eNone,
+		eExit,
 	};
 
 	SceneMessage()
@@ -75,7 +77,6 @@ public:
 	}
 
 	virtual ~Scene() {
-
 		delete m_defaultSceneCamera;
 		delete m_world;
 
@@ -102,18 +103,6 @@ public:
 
 };
 
-class MainMenuScene : public Scene
-{
-private:
-	GamePad * m_gamePad;
-	int m_currentSelection;
-	SceneMessage::SceneEnum m_selections[2];
-	
-public:
-	MainMenuScene(Input * input);
-	bool simulateScene(double dt, SceneMessage &newMessage);
-};
-
 class SinglePlayerCharSelectScene : public Scene
 {
 private:
@@ -127,7 +116,9 @@ private:
 
 public:
 	SinglePlayerCharSelectScene(Input * input);
-	~SinglePlayerCharSelectScene(){ m_gamePad = NULL; }
+	~SinglePlayerCharSelectScene(){ 
+		m_gamePad = NULL; 
+	}
 	bool simulateScene(double dt, SceneMessage &newMessage);
 };
 

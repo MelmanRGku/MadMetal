@@ -1,13 +1,13 @@
 #pragma once
 
-#include "TestObject.h"
+#include "Object2D.h"
 
-class GaugeBar : public TestObject
+class GaugeBar : public Object2D
 {
 private:
 	float gaugePercentage;
 public:
-	GaugeBar(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
+	GaugeBar(long id, Audioable *aable, Animatable *anable, Renderable2D *rable);
 	~GaugeBar();
 
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);

@@ -60,6 +60,8 @@ PxVehicleDrive4W* VehicleCreator::create(DrivingStyle* style)
 			(rigidBodyData,
 			wheelMaterials, wheelConvexMeshes, numWheels,
 			chassisMaterials, chassisConvexMeshes, 1);
+
+		delete physicsObjectCreator;
 	}
 
 	//Set up the sim data for the wheels.

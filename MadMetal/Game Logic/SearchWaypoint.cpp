@@ -13,7 +13,7 @@ SearchWaypoint::SearchWaypoint(Waypoint& waypoint, SearchWaypoint* parent, float
 
 SearchWaypoint::~SearchWaypoint()
 {
-
+	
 }
 
 float SearchWaypoint::GetF()

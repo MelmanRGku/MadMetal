@@ -9,7 +9,7 @@ public:
 	}
 	virtual ~Sound(){}
 
-	virtual int& getChannel()
+	virtual int getChannel()
 	{
 		return m_currentChannel;
 	}
@@ -102,4 +102,44 @@ public:
 		m_libraryIndex = 5;
 	};
 	virtual ~ChassisCrashSound(){};
+};
+
+class AllGoodThingsIAmTheEnemySong : public Sound
+{
+public:
+	AllGoodThingsIAmTheEnemySong() : Sound()
+	{
+		m_libraryIndex = 0;
+	};
+	virtual ~AllGoodThingsIAmTheEnemySong(){};
+};
+
+class DisturbedVengefulOneSong : public Sound
+{
+public:
+	DisturbedVengefulOneSong() : Sound()
+	{
+		m_libraryIndex = 1;
+	};
+	virtual ~DisturbedVengefulOneSong(){};
+};
+
+class SickPuppiedYoureGoingDownSong : public Sound
+{
+public:
+	SickPuppiedYoureGoingDownSong() : Sound()
+	{
+		m_libraryIndex = 2;
+	};
+	virtual ~SickPuppiedYoureGoingDownSong(){};
+};
+
+class MetalMusicDarknessFallsSong : public Sound
+{
+public:
+	MetalMusicDarknessFallsSong() : Sound()
+	{
+		m_libraryIndex = 3;
+	};
+	virtual ~MetalMusicDarknessFallsSong(){};
 };

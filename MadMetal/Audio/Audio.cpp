@@ -1,24 +1,72 @@
 #include "Audio.h"
 #include "Sound.h"
+#include "Objects\Cars\Car.h"
+
 #include <iostream>
 #include <fstream>
 #include <string>
 
-
-AudioChannel::~AudioChannel()
-{
-	m_sound->setChannel(-1);
-	m_audioPosition = NULL;
-}
-
-
+bool Audio::m_musicPlaying = false;
+#define SFX_VOLUME 10
+#define MUSIC_VOLUME 100
 
 //set up audio library
-void Audio::initializeLibrary(char * fileToLoad)
+void Audio::initializeMusicLibrary(char * fileToLoad)
 {
-
 	std::ifstream stream;
-	stream.open("Audio/Library.txt");
+	stream.open(fileToLoad);
+	std::string line;
+	if (stream.is_open())
+	{
+		std::string filename;
+		bool reached = false;;
+		int pos = 0;
+		Mix_Music * music;
+		while (getline(stream, line))
+		{
+			while (pos < line.length())
+			{
+				if (reached)
+				{
+					filename = filename + line[pos];
+}
+				if (line[pos] == ' ')
+				{
+					reached = true;
+				}
+
+				pos++;
+			}
+			//std::cout << filename << std::endl;
+			char * test = "Assets/Audio/";
+			std::string thefile = test + filename;
+			music = Mix_LoadMUS(thefile.c_str());
+			if (music == NULL)
+			{
+				std::cout << "File Failed to Load \n";
+			}
+			else {
+				Mix_VolumeMusic(MUSIC_VOLUME);
+			}
+			m_musicLibrary.push_back(music);
+
+			pos = 0;
+			reached = false;
+			filename.clear();
+		}
+	}
+	else
+	{
+		std::cout << "File reading error" << std::endl;
+	}
+
+}
+
+//set up audio library
+void Audio::initializeChunkLibrary(char * fileToLoad)
+{
+	std::ifstream stream;
+	stream.open(fileToLoad);
 	std::string line;
 	if (stream.is_open())
 	{
@@ -41,7 +89,7 @@ void Audio::initializeLibrary(char * fileToLoad)
 
 				pos++;
 			}
-			std::cout << filename << std::endl;
+			//std::cout << filename << std::endl;
 			char * test = "Assets/Audio/";
 			std::string thefile = test + filename;
 			chunk = Mix_LoadWAV(thefile.c_str());
@@ -49,15 +97,15 @@ void Audio::initializeLibrary(char * fileToLoad)
 			{
 				std::cout << "File Failed to Load \n";
 			}
-			m_library.push_back(chunk);
+			else {
+				Mix_VolumeChunk(chunk, SFX_VOLUME);
+			}
+			m_chunkLibrary.push_back(chunk);
 			
-
 			pos = 0;
 			reached = false;
 			filename.clear();
 		}
-
-
 	}
 	else
 	{
@@ -69,40 +117,33 @@ void Audio::initializeLibrary(char * fileToLoad)
 
 void Audio::update()
 {
-	//std::cout << m_audioChannels.size()<< std::endl;
 	for (unsigned int i = 0; i < m_audioChannels.size(); i++)
 	{
-		if (m_audioChannels[i]->getSound() == NULL ||!Mix_Playing(m_audioChannels[i]->getSound()->getChannel()))
+		if (!Mix_Playing(m_audioChannels[i]->getChannel()))
 		{
 			delete m_audioChannels[i];
 			m_audioChannels.erase(m_audioChannels.begin() + i);
 		}
-		else if (m_audioChannels[i]->getSound()->getChannel())
+		else if (m_audioChannels[i]->needsUpdate())
 		{
-			//do nothing for now
+			m_audioChannels[i]->setAudioPosition(m_listener);
 		}
-		else 
-		{
-			m_audioChannels[i]->updateAudio(m_listener);
-		}
-		
 		
 		
 	}
 	
 }
 		
-void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound* toPlay, int loopCount)
+void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound toPlay, float volumeScalar, bool updatePosition, int loopCount)
 {
 	
-	//pass a refrence of the channel number in 'toPlay' to the audio channel 
-	//will allow channel changes to be mirrored in the toPlay bookmark
-	AudioChannel * toAdd = new AudioChannel(sourcePosition, toPlay);
+	AudioChannel * toAdd = new AudioChannel(sourcePosition, updatePosition, volumeScalar);
 			
 	//set the audio channel to the next available channel, and play the specified sound
 	
-	toAdd->getSound()->setChannel(Mix_PlayChannel(-1, m_library[toPlay->getLibraryIndex()], loopCount));
-	
+	toAdd->setChannel(Mix_FadeInChannel(-1, m_chunkLibrary[toPlay.getLibraryIndex()], loopCount, 200));
+	toAdd->setAudioPosition(m_listener);
+	toPlay.setChannel(toAdd->getChannel());
 	//add new channel to the list of currently playing sounds
 	m_audioChannels.push_back(toAdd);
 	
@@ -131,67 +172,79 @@ void Audio::stopSource(int channel)
 
 //todo:: need to incorporate forward vector into calculations!!
 
-bool AudioChannel::updateAudio(PxRigidActor * listener)
+bool AudioChannel::setAudioPosition(Car * listener)
 {
-	float listenerX = 0 , listenerY =0, sourceX =0, sourceY =0;
-	if (listener != NULL)
-	{
-		listenerX = listener->getGlobalPose().p.x;
-		listenerY = listener->getGlobalPose().p.y;
-	}
-	if (m_audioPosition != NULL)
-	{
-		sourceX = m_audioPosition->getGlobalPose().p.x;
-		sourceY = m_audioPosition->getGlobalPose().p.y;
+	//if sound has stopped playing, return 
+	if (!Mix_Playing(m_playingChannel))
+{
+		return false;
 	}
 
-			//get distance in relation to listener
-			sourceX = sourceX - listenerX;
-			sourceY = sourceY - listenerY;
-			float distance = sqrt((powf(sourceX, 2) + powf(sourceY, 2)));
-	distance = distance == 0 ? 0.1 : distance;
+	//calculate distance between the listener and source. 
+	float listenerX = 0 , listenerZ =0, sourceX =0, sourceZ =0;
+	if (m_audioPosition != NULL)
+	{
+		if (listener != NULL)
+		{
+			listenerX = listener->getActor().getGlobalPose().p.x;
+			listenerZ = listener->getActor().getGlobalPose().p.z;
+		}
 	
-			double angle;
+		sourceX = m_audioPosition->getGlobalPose().p.x;
+		sourceZ = m_audioPosition->getGlobalPose().p.z;
+	}
+
+			sourceX = sourceX - listenerX;
+	sourceZ = sourceZ - listenerZ;
+	float distance = sqrt((powf(sourceX, 2) + powf(sourceZ, 2))) + (1 - m_volumeScalar) * 255;
+	if (distance < 0) distance = 0;
+	
+	// if sound is too far away to hear, halt playing and return
+	if (distance > 255) 
+	{
+		Mix_HaltChannel(m_playingChannel);
+		return false;
+	}
+
+
+	//calculate where the sound is in relation to the player
+	glm::vec3 forwardVector = glm::normalize(glm::vec3( listener->getForwardVector().x, 0, listener->getForwardVector().z));
+	glm::vec3 vectorToSound = glm::normalize(glm::vec3(sourceX, 0,sourceZ));
+	
+	float degree = 180.f / 3.14 * acos(glm::dot(forwardVector, vectorToSound));
 
 			//convert position of source relative to listener to SDL_Mixer orientation:
 			/*
 			0/360 - in front
-			90 - to the left
+	90 - to the right
 			180 - behind
 			270 - to the left
 			*/
-
-			if (sourceX == 0)
+	if (glm::cross(forwardVector, vectorToSound).y > 0)
 			{
-				if (sourceY < 0)
-					angle = 180;
-				else
-					angle = 0;
+		//std::cout << "Sound is to the Left\n";
+		degree = 360 - degree;
 			}
-			else
-			{
-				
-				angle = atan((sourceY / sourceX));
-				angle *= 180 / 3.14;
-
-				//convert to Mixer orientation
-				if (sourceX < 0)
-			angle = 270 - angle;
-				else
-					angle = 90 - angle;
+	else {
+		//std::cout << "Sound is to the Right\n";	
 			}
 
-			//------ remove later-----------
-	
-			distance = distance > 255 ? 255 : distance;
-			//-------------------------------
-	//std::cout << distance << std::endl;
-	Mix_SetPosition(m_sound->getChannel(), Sint16(angle), Uint8(distance));
+	Mix_SetPosition(m_playingChannel, Sint16(degree), Uint8(distance));
 	return true;
 }
 
-void Audio::loadMusic(char * file)
+void Audio::setMusicFinished() {
+	m_musicPlaying = false;
+}
+
+bool Audio::getMusicFinished() {
+	return !m_musicPlaying;
+}
+
+void Audio::playMusic(Sound sound, int playCount)
 {
-	music = Mix_LoadMUS("Assets/Audio/musmettatonneo.wav");
-	Mix_PlayMusic(music, -1);
+	
+	m_musicPlaying = true;
+	Mix_PlayMusic(m_musicLibrary[sound.getLibraryIndex()], playCount);
+
 }

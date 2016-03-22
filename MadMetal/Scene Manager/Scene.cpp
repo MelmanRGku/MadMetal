@@ -1,56 +1,6 @@
 #include "Scene.h"
 
-#define NUM_PLAYERS 4
-
-MainMenuScene::MainMenuScene(Input * input)
-{
-	std::cout << "Main menu Pushed on Stack \n";
-	m_gamePad = input->getGamePadHandle();
-	m_currentSelection = 0;
-	m_selections[0] = SceneMessage::eSingleCharSelect;
-	m_selections[1] = SceneMessage::eMultiCharSelect;
-
-}
-
-bool MainMenuScene::simulateScene(double dt, SceneMessage &message)
-{
-	//go straight to char select screen
-	message.setTag(SceneMessage::eSingleCharSelect);
-	return true;
-
-	//check gamepad stuff
-	if (m_gamePad->checkConnection())
-	{
-		if (m_gamePad->isPressed(m_gamePad->DPadLeft))
-		{
-			m_currentSelection = ++m_currentSelection % 2;
-			std::cout << m_currentSelection << " \n";
-		}
-		
-		if (m_gamePad->isPressed(m_gamePad->DPadRight))
-		{
-			if (--m_currentSelection < 0)
-			{
-				m_currentSelection = 1;
-			}
-			std::cout << m_currentSelection << " \n";
-		}
-
-		if (m_gamePad->isPressed(m_gamePad->AButton))
-		{	
-			
-				std::cout << "X Button Pressed \n";
-				message.setTag(m_selections[m_currentSelection]);
-				return true;
-		}
-		
-	}
-	else
-	{
-		std::cout << "Controller is Disconnected \n";
-	}
-	return false;
-}
+#define NUM_PLAYERS 2
 
 SinglePlayerCharSelectScene::SinglePlayerCharSelectScene(Input * input)
 {
@@ -122,21 +72,6 @@ bool SinglePlayerCharSelectScene::simulateScene(double dt, SceneMessage &message
 				return true;
 			}
 		}
-
-		//if (m_gamePad->isPressed(m_gamePad->StartButton))
-		//{
-		//	if (m_charConfirmed)
-		//	{
-		//		message.setTag(SceneMessage::eLoadScreen);
-		//		for (int i = m_playerTemplates.size(); i < NUM_PLAYERS; i++)
-		//		{
-		//			//TODO:: Puts the same character in for every AI. Make random or something
-		//			m_playerTemplates.push_back(new ControllableTemplate(m_selections[0]));
-		//		}
-		//		message.setPlayerTemplates(m_playerTemplates);
-		//		return true;
-		//	}
-		//}
 	}
 	else
 	{

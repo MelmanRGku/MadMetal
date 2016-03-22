@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "../Object.h"
+#include "../TestObject.h"
 #include "ObjectUpdater.h"
 #include "Libraries/glm/vec3.hpp"
 
@@ -9,11 +9,11 @@
 class ObjectPositionUpdater : public ObjectUpdater
 {
 private:
-	Object *object;
+	TestObject *object;
 	glm::vec3 offset;
 
 public:
-	ObjectPositionUpdater(Object *obj, glm::vec3 offset, float duration);
+	ObjectPositionUpdater(TestObject *obj, glm::vec3 offset, float duration);
 	~ObjectPositionUpdater();
 	void update(float dt);
 };

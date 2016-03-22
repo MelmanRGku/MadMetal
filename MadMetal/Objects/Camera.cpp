@@ -23,7 +23,7 @@ Camera::Camera()
 
 }
 
-Camera::Camera(TestObject * object)
+Camera::Camera(Object3D * object)
 {
 	m_rotateScalar = CAMERA_ROTATION_SPEED;
 	m_gravityScalar = CAMERA_GRAVITY_SPEED;
@@ -54,7 +54,7 @@ glm::vec3 Camera::getPosition(){ return m_currentPos; }
 glm::vec3 Camera::getUpVector() { return m_up; }
 
 
-void Camera::setToFollow(TestObject * object)
+void Camera::setToFollow(Object3D * object)
 {
 	m_toFollow = object;
 	m_up = glm::vec3(0, 1, 0);

@@ -2,14 +2,16 @@
 #include "Text2D.h"
 #include <string>
 
-class DisplayMessage : public TestObject
+class DisplayMessage : public Object2D
 {
 public:
-	DisplayMessage(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable) : TestObject(id, aable, pable, anable, rable)
+	DisplayMessage(long id, Audioable *aable, Animatable *anable, Renderable2D *rable) : Object2D(id, aable, anable, rable)
 	{
 		m_centerOfScreen = glm::vec3(std::stof(Settings::getSetting("screenWidth")) / 2, std::stof(Settings::getSetting("screenHeight")) / 2, 0);
 	}
-	~DisplayMessage(){ m_message->setHasToBeDeleted(true); }
+	~DisplayMessage(){ 
+	
+	}
 
 	void setText2D(Text2D * text2d) { m_message = text2d; }
 	
@@ -17,7 +19,7 @@ public:
 	{
 		m_messageLife = -durationSeconds;
 		m_message->setString(text);
-		m_message->setPos(m_centerOfScreen);
+		m_message->setPosition(m_centerOfScreen);
 	}
 	virtual void update(float dtMillis)
 	{

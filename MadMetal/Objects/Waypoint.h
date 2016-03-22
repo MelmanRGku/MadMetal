@@ -3,27 +3,30 @@
 #include "Simulation\PhysicsManager.h"
 #include <vector>
 #include <iostream>
-#include <Objects\TestObject.h>
+#include "Objects\Object3D.h"
 
 #define WAYPOINT_DIMENSION_X 4
 
-class Waypoint : public TestObject
+class Waypoint : public Object3D
 {
 	static int globalID;
+	int m_index;
 	int m_id;
 	bool m_isValid;
 	bool m_isFinish;
 	std::vector<Waypoint*> m_adjecentWaypoints;
 
 public:
-	Waypoint(long id, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
+	Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	~Waypoint();
 	std::vector<Waypoint*>& getListOfAdjacentWaypoints(){ return m_adjecentWaypoints; }
-	const int& getId();
+	const int& getIndex();
 	bool isValid();
 	void setValid(bool isValid);
 	bool isFinish();
 	void setFinish(bool finish);
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	void addAdjecentWaypoint(Waypoint* waypoint);
+	int getId();
+	void setId(int id);
 };

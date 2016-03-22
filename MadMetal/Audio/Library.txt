@@ -1,9 +1,0 @@
-0 car_idle.wav
-1 laugh.wav
-2 musmettatonneo.wav
-3 explosion_1.wav
-4 smb_mariodie.wav
-5 carcollision.wav
-6 countdown.wav
-7 shot.wav
-8 start-beep.wav

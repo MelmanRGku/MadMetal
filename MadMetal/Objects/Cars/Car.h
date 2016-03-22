@@ -1,24 +1,26 @@
 #pragma once
 
 #include "PxVehicleDrive4W.h"
-#include "../TestObject.h"
+#include "../Object3D.h"
 #include "Objects\DrivingStyle.h"
-#include "Game Logic\PowerUp.h"
+#include "Objects\PowerUp.h"
 #include "Objects/UI.h"
+
 
 class Waypoint;
 
-class Car : public TestObject
+class Car : public Object3D
 {
 protected: //members
 
 	//physics object
-	DrivingStyle& m_drivingStyle;
+	DrivingStyle* m_drivingStyle;
 	PxVehicleDrive4W &m_car;
 
 	//score based
 	float m_damageDealt;
 	int m_currentLap;
+	bool m_finishedRace;
 	int m_score;
 
 	//current state 
@@ -36,15 +38,14 @@ protected: //members
 	bool m_isAtMidCollisionVolume;
 	bool m_newLap;
 
-	Sound * soundChassis;
+	Sound soundChassis;
 
 	virtual void unuseSuper() = 0;
-	/*
-		Need to be implemented
-		Projectile * m_ammuntion;
-		PowerUp m_heldPowerUp;
-		PowerUp m_activePowerUp;
-	*/
+	
+	PowerUpType m_heldPowerUp;
+	PowerUpType m_activePowerUp;
+	float m_powerUpRemaining;
+	
 private:
 	//update functions
 	void updatePowerUp(float dt);
@@ -55,8 +56,8 @@ public:
 
 	UI *ui;
 
-	Car(long id, DrivingStyle& style, PxVehicleDrive4W &car, Audioable &aable, Physicable &pable, Animatable &anable, Renderable &rable);
-	~Car();
+	Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
+	virtual ~Car();
 
 	PxVehicleDrive4W &getCar() { return m_car; }
 	DrivingStyle& getDrivingStyle();
@@ -66,7 +67,7 @@ public:
 	virtual void useSuper() = 0;
 	virtual void fire() = 0;
 	void takeDamage(float damage);
-	void increaseDamageDealt(float damage);
+	
 	virtual void update(float dt);
 	void addDamageDealt(float damage);
 	bool superReady() { return m_superGauge >= 1.f; }
@@ -78,14 +79,20 @@ public:
 	Waypoint* getCurrentWaypoint();
 	void incrementLap();
 	int getLap();
-	void setSoundChassis(Sound * sound);
+	void setSoundChassis(Sound sound);
 	void playSoundChassis();
 	bool isAtStartingCollisionVolume();
 	bool isAtMidCollisionVolume();
 	int tallyScore() { return m_score + m_damageDealt; }
 	Waypoint* Car::getLastWaypoint();
-
+	bool isFinishedRace() { return m_finishedRace; }
+	void setFinishedRace(bool finished) { m_finishedRace = finished; }
 	void setStartingCollisionVolumeFlag(bool isHit);
 	void setMidCollisionVolumeFlag(bool isHit);
+	void pickUpPowerUp(PowerUpType type);
+	void usePowerUp();
+	PowerUpType getActivePowerUpType();
+	UI *getUI() { return ui; }
+
 };
 

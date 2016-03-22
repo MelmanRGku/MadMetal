@@ -1,4 +1,5 @@
 #pragma once
+#include "Settings.h"
 #include "Libraries\glew\glew.h"
 #include "Libraries\freeglut\freeglut.h"
 #include "Global\Settings.h"
@@ -6,6 +7,10 @@
 #include "Scene Manager\StackManager.h"
 #include "Global\Assets.h"
 #include "Global\Fonts.h"
+
+#ifdef _USE_MEMORY_LEAK_DETECTOR
+	#include <vld.h>
+#endif
 
 #define MAX_FPS (60)
 #define MIN_DT (1000 / MAX_FPS)
@@ -16,6 +21,7 @@ float lastDrawCallTime = 0;
 
 void initStatics(){
 	//load settings from a file
+	Settings::init();
 	Settings::loadSettingsFromFile("settings.txt");
 	//enable\disable logging based on the setting
 	Log::enableLogging(std::stoi(Settings::getSetting("debugEnabled")) == 0 ? false : true);
@@ -43,10 +49,19 @@ void renderScene(void)
 	glClearColor(0.3, 0.3, 0.3, 0.0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	m_stackManager->progressScene(dt);
+	if (m_stackManager->progressScene(dt))
+		glutLeaveMainLoop();
 	glutSwapBuffers();
 
 	//glutPostRedisplay();
+}
+
+void close() {
+	delete m_stackManager;
+	//delete assets
+	Assets::release();
+	Fonts::release(); 
+	Settings::release();
 }
 
 void initOpengl(int argc, char **argv) {
@@ -61,9 +76,11 @@ void initOpengl(int argc, char **argv) {
 	// register callbacks
 	glutDisplayFunc(renderScene);
 	glutIdleFunc(renderScene);
+	glutCloseFunc(close);
 	//initialize opengl functions
 	glewInit();
 	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
