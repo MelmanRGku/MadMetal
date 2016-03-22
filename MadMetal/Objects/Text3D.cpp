@@ -34,7 +34,8 @@ bool Text3D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
 	font.Depth(3);
 	glm::vec3 pos = m_animatable->getPosition();
 	float xOffset = font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Upper().X() - font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Lower().X();
-	font.Render(stringToRender.c_str(), -1, FTPoint(pos.x - xOffset / 2, pos.y, pos.z));
+	float yOffset = font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Upper().Y() - font.BBox(stringToRender.c_str(), -1, FTPoint(pos.x, pos.y, pos.z)).Lower().Y();
+	font.Render(stringToRender.c_str(), -1, FTPoint(pos.x - xOffset / 2, pos.y - yOffset / 2, pos.z));
 
 	glPopAttrib();
 	return false;

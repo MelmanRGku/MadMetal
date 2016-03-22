@@ -16,12 +16,29 @@ Model3D::~Model3D()
 
 void Model3D::setupVAOs() {
 
+	if (vaoSetup)
+		return;
+
 	for (unsigned int i = 0; i < meshes.size(); i++) {
 		meshes.at(i)->setupVAO();
 	}
 
+	vaoSetup = true;
+
 }
 
+void Model3D::setupVBOs() {
+
+	if (vboSetup)
+		return;
+
+	for (unsigned int i = 0; i < meshes.size(); i++) {
+		meshes.at(i)->setupVBO();
+	}
+
+	vboSetup = true;
+
+}
 
 PxTriangleMesh **Model3D::getPhysicsTriangleMesh() {
 	if (meshes.size() == 0)

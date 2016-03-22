@@ -10,6 +10,7 @@ public:
 	{
 		m_car = owner;
 		m_type = owner->getActivePowerUpType();
+		counter = 0;
 	}
 	virtual ~PowerUpVolume() { m_car = NULL; }
 	void update(float dt)
@@ -23,7 +24,11 @@ public:
 			}
 			else {
 				//std::cout << "Updating sheild position \n";
-				m_physicable->getActor().setGlobalPose(m_car->getActor().getGlobalPose());
+				updateRotation(glm::vec3(0, 360, 0) * dt / (50 * PowerUp::getPowerUpDuration(PowerUpType::DEFENSE)));
+				PxVec3 dim = m_car->getCar().getRigidDynamicActor()->getWorldBounds().getDimensions();
+				PxVec3 pos = m_car->getCar().getRigidDynamicActor()->getGlobalPose().p;
+				//pos.y += dim.y / 2;
+				m_physicable->getActor().setGlobalPose(PxTransform(pos));
 			}
 		}
 	}
@@ -32,6 +37,7 @@ public:
 protected://members
 	Car* m_car;
 	PowerUpType m_type;
+	float counter;
 private:
 
 };

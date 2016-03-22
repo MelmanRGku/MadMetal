@@ -12,6 +12,7 @@ protected:
 public:
 	Physicable(PxRigidActor *actor) {
 		physicsActor = actor;
+		
 	};
 	virtual ~Physicable() {}
 

@@ -32,6 +32,7 @@ protected: //members
 	float m_superGauge; // 0-1
 	float m_superMaxDurationSeconds; //seconds
 	float m_superDurationRemainingSeconds; //seconds
+	float m_deathTimerMillis;
 	Waypoint* m_currentWaypoint, *m_lastWayPoint;
 	Waypoint *m_nextWaypoint;
 	bool m_isAtStartingCollisionVolume;
@@ -93,6 +94,8 @@ public:
 	void usePowerUp();
 	PowerUpType getActivePowerUpType();
 	UI *getUI() { return ui; }
+	void deactivatePowerUp(){ m_activePowerUp = PowerUpType::NONE; }
+	void updateHealth(float dtMillis);
 
 };
 

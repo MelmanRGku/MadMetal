@@ -9,6 +9,7 @@
 #include "Objects\Model3D.h"
 #include "Objects\Model2D.h"
 #include "Objects\ObjectLoaders\ObjModelLoader.h"
+#include <Windows.h>
 
 class LoadingStatus {
 
@@ -17,6 +18,7 @@ private:
 public:
 	float percentageDone;
 	std::string message;
+	std::string fileName;
 	bool done = false;
 
 	LoadingStatus() : percentageDone(0), message("Initiating Load"){}
@@ -40,6 +42,18 @@ public:
 		m.unlock();
 		return message;
 	}
+	void setCurrentLoadingFile(std::string name) {
+		m.lock();
+		fileName = name;
+		m.unlock();
+	}
+	std::string getCurrentLoadingFile() {
+		std::string name;
+		m.lock();
+		name = fileName;
+		m.unlock();
+		return name;
+	}
 };
 
 class Assets
@@ -48,6 +62,7 @@ private:
 	static std::mutex m;
 	static std::map<std::string, Model *> *models;
 	static std::map<std::string, Texture *> *textures;
+	static std::vector<std::string> *modelsToBeLoadedBeforeTheGameStarts;
 
 public:
 	static LoadingStatus *status;
@@ -79,6 +94,7 @@ public:
 		}
 	}
 	static void release();
-	static void load(std::string objPath, std::string pngPath);
+	static void load(std::string objPath, std::string pngPath, HDC dc, HGLRC sharedOpenglContext);
+	static void loadBeforeGameStarts();
 };
 

@@ -1,11 +1,56 @@
 #include "MainMenu.h"
 #include "Objects\Text3D.h"
+#include "Global\Assets.h"
+#include "Objects\ObjectUpdaters\ObjectPositionUpdater.h"
+#include "Objects\ObjectUpdaters\ObjectRotationUpdater.h"
+#include "Objects\ObjectUpdaters\ObjectScaleUpdater.h"
+#include "Objects\ObjectUpdaters\ObjectUpdaterSequence.h"
+#include "Objects\ObjectUpdaters\ObjectUpdaterParallel.h"
 
 MainMenu::MainMenu(Input * input, Audio *audio)
 {
 	m_gamePad = input->getGamePadHandle();
-	menuSystem = new MainMenuSystem(audio, m_world);
 	m_defaultSceneCamera->setLookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -3), glm::vec3(0, 1, 0));
+	{
+		Physicable *p = new Physicable(NULL);
+		Animatable *a = new Animatable();
+		a->updatePosition(glm::vec3(0, 2, -15));
+		a->setScale(glm::vec3(5, 1, 1));
+		Audioable *au = new Audioable(*audio);
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Singleplayer.obj"));
+		model->setupVAOs();
+		Renderable3D *r = new Renderable3D(model, true, true);
+		singlePlayerButton = new Object3D(1, au, p, a, r, NULL);
+		m_world->addGameObject(singlePlayerButton);
+		selectedButton = singlePlayerButton;
+	}
+
+	{
+		Physicable *p = new Physicable(NULL);
+		Animatable *a = new Animatable();
+		a->updatePosition(glm::vec3(0, 0, -25));
+		a->setScale(glm::vec3(5, 1, 1));
+		Audioable *au = new Audioable(*audio);
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Multiplayer.obj"));
+		model->setupVAOs();
+		Renderable3D *r = new Renderable3D(model, true, true);
+		multiPlayerButton = new Object3D(2, au, p, a, r, NULL);
+		m_world->addGameObject(multiPlayerButton);
+	}
+
+	{
+		Physicable *p = new Physicable(NULL);
+		Animatable *a = new Animatable();
+		a->updatePosition(glm::vec3(0, -2, -25));
+		a->setScale(glm::vec3(5, 1, 1));
+		Audioable *au = new Audioable(*audio);
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Quit.obj"));
+		model->setupVAOs();
+		Renderable3D *r = new Renderable3D(model, true, true);
+		exitButton = new Object3D(3, au, p, a, r, NULL);
+		m_world->addGameObject(exitButton);
+	}
+
 
 	{
 		Renderable3D *renderable = new Renderable3D(NULL);
@@ -23,27 +68,85 @@ MainMenu::MainMenu(Input * input, Audio *audio)
 MainMenu::~MainMenu() {
 }
 
+
+void MainMenu::upPressed() {
+	unselectMenuItem(selectedButton);
+	if (selectedButton == singlePlayerButton) {
+		selectedButton = exitButton;
+	}
+	else if (selectedButton == multiPlayerButton) {
+		selectedButton = singlePlayerButton;
+	}
+	else if (selectedButton == exitButton) {
+		selectedButton = multiPlayerButton;
+	}
+	selectMenuItem(selectedButton);
+}
+
+void MainMenu::downPressed() {
+	unselectMenuItem(selectedButton);
+	if (selectedButton == singlePlayerButton) {
+		selectedButton = multiPlayerButton;
+	}
+	else if (selectedButton == multiPlayerButton) {
+		selectedButton = exitButton;
+	}
+	else if (selectedButton == exitButton) {
+		selectedButton = singlePlayerButton;
+	}
+	selectMenuItem(selectedButton);
+}
+
+void MainMenu::aPressed() {
+	if (selectedButton == singlePlayerButton) {
+		messageToReturn = SceneMessage::eSingleCharSelect;
+	}
+	else if (selectedButton == multiPlayerButton) {
+		messageToReturn = SceneMessage::eMultiCharSelect;
+	}
+	else if (selectedButton == exitButton) {
+		messageToReturn = SceneMessage::eExit;
+	}
+}
+
+
+void MainMenu::selectMenuItem(Object3D *menuItem) {
+	{
+		ObjectPositionUpdater *upd = new ObjectPositionUpdater(menuItem, glm::vec3(0, 0, 10), .5);
+		m_world->addObjectUpdater(upd);
+	}
+}
+
+void MainMenu::unselectMenuItem(Object3D *menuItem) {
+	{
+		ObjectPositionUpdater *upd = new ObjectPositionUpdater(menuItem, glm::vec3(0, 0, -10), .5);
+		m_world->addObjectUpdater(upd);
+	}
+}
+
 bool MainMenu::simulateScene(double dt, SceneMessage &message)
 {
+	m_sceneGameTimeSeconds += dt;
 	m_world->update(dt);
-	if (menuSystem->getMessage() != SceneMessage::eNone) {
-		message.setTag(menuSystem->getMessage());
+	if (messageToReturn != SceneMessage::eNone) {
+		message.setTag(messageToReturn);
+		messageToReturn = SceneMessage::eNone;
 		return true;
 	}
 	//check gamepad stuff
-	if (m_gamePad->checkConnection())
+	if (m_gamePad->checkConnection() && m_sceneGameTimeSeconds > 1)
 	{
 		
 		if (m_gamePad->isPressed(GamePad::DPadUp)) {
-			menuSystem->upPressed();
+			upPressed();
 		}
 
 		if (m_gamePad->isPressed(GamePad::DPadDown)) {
-			menuSystem->downPressed();
+			downPressed();
 		}
 
 		if (m_gamePad->isPressed(GamePad::AButton)) {
-			menuSystem->aPressed();
+			aPressed();
 		}
 
 	}

@@ -77,8 +77,6 @@ private: //members
 	MusicManager *musicManager;
 
 public:
-	Object3D * myObject;
-	clock_t t;
 	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle);
 	~GameSimulation();
 
@@ -87,5 +85,7 @@ public:
 	void initialize();
 
 	void setupBasicGameWorldObjects();
+
+	std::vector<PlayerControllable*> *getHumanPlayers() { return &m_humanPlayers; }
 
 };

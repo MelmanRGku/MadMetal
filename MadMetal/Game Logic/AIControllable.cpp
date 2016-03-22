@@ -140,9 +140,8 @@ void AIControllable::playFrame(double dt)
 		}
 	}
 		
-		}
-		else {
-		m_car->respawn();
+		} else {
+		
 		m_currentPath.clear();
 		m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(),m_goalWaypoint);
 		updateNextWaypoint();
@@ -235,14 +234,14 @@ void AIControllable::recalculatePath()
 	m_currentPath.clear();
 	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-	std::cout << "THe new path is: ";
+//	std::cout << "THe new path is: ";
 
-	for (int i = 0; i < m_currentPath.size(); i++)
-	{
-		std::cout << m_currentPath[i]->getIndex() << ", ";
-	}
+	//for (int i = 0; i < m_currentPath.size(); i++)
+	//{
+	//	std::cout << m_currentPath[i]->getIndex() << ", ";
+	//}
 
-	std::cout << "\n";
+	//std::cout << "\n";
 	updateNextWaypoint();
 }
 

@@ -17,7 +17,29 @@
 
 StackManager * m_stackManager;
 float lastDrawCallTime = 0;
-//ParticleSystem * psystem = new ParticleSystem(10000);
+
+void setVSync(bool sync)
+{
+	// Function pointer for the wgl extention function we need to enable/disable
+	// vsync
+	typedef BOOL(APIENTRY *PFNWGLSWAPINTERVALPROC)(int);
+	PFNWGLSWAPINTERVALPROC wglSwapIntervalEXT = 0;
+
+	const char *extensions = (char*)glGetString(GL_EXTENSIONS);
+
+	if (strstr(extensions, "WGL_EXT_swap_control") == 0)
+	{
+		std::cout << "No" << std::endl;
+		return;
+	}
+	else
+	{
+		wglSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC)wglGetProcAddress("wglSwapIntervalEXT");
+
+		if (wglSwapIntervalEXT)
+			wglSwapIntervalEXT(sync);
+	}
+}
 
 void initStatics(){
 	//load settings from a file
@@ -34,6 +56,7 @@ void initObjects()
 {
 	//	psystem->initSystem(glutGet(GLUT_ELAPSED_TIME));
 	Fonts::loadTTFFontsFromDirectory("Assets/Fonts");
+	Assets::loadBeforeGameStarts();
 	m_stackManager = new StackManager();
 }
 
@@ -43,6 +66,7 @@ void renderScene(void)
 	int dt = currentDrawCallTime - lastDrawCallTime;
 	if (dt < MIN_DT)
 		return;
+	std::cout << "FPS: " << (1000.f / dt) << std::endl;
 	lastDrawCallTime = currentDrawCallTime;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -82,6 +106,7 @@ void initOpengl(int argc, char **argv) {
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	setVSync(false);
 }
 
 int main(int argc, char **argv)

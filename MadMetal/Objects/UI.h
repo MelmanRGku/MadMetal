@@ -11,6 +11,7 @@ class UI : public Object2D
 public:
 	UI(long id, Audioable *aable, Animatable *anable, Renderable2D *rable);
 	~UI();
+	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 
 	HealthBar2D *healthBar;
 	GaugeBar *gaugeBar;

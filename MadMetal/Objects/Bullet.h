@@ -16,5 +16,6 @@ public:
 	Car *getOwner() { return m_owner; }
 	int getDamage() { return m_damage; }
 	void playCollisionSound();
+	virtual void update(float dt) { Object3D::update(dt); }
 };
 

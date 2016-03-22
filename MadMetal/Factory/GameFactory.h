@@ -30,6 +30,7 @@
 #include "Objects/ObjectUpdaters/ObjectScaleUpdater.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
+#include "Objects\AnimatedExplosion.h"
 
 class GameFactory
 {
@@ -58,6 +59,8 @@ public:
 		OBJECT_UI_ALL_GOOD_THINGS_SONG_I_AM_THE_ENEMY,
 		OBJECT_UI_METAL_MUSIC_SONG_DARKNESS_FALLS,
 		OBJECT_UI_MAP,
+		OBJECT_PARTICLE,
+		OBJECT_EXPLOSION_1,
 
 		OBJECT_ANIMATION_TEST
 	};

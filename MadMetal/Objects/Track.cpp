@@ -98,7 +98,7 @@ bool Track::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) 
 
 void Track::playTrackMusic()
 {
-	//m_audioable->getAudioHandle().playMusic(m_sound);
+	m_audioable->getAudioHandle().playMusic(m_sound);
 }
 
 Waypoint * Track::getWaypointAt(int index)

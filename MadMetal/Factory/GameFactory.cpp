@@ -1,6 +1,7 @@
 #include "GameFactory.h"
 #include "Objects\Waypoint.h"
 #include "Objects\CollisionVolume.h"
+#include "Objects\Particle.h"
 
 long GameFactory::lastId = 0;
 
@@ -84,6 +85,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		DisplayMessage * display = new DisplayMessage(objectId, audioable, animatable, renderable);
 		Text2D *text = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
 		text->centerize(true);
+		m_world.addGameObject(text);
 		display->setText2D(text);
 		
 		return display;
@@ -168,9 +170,9 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 		glm::vec3 speed = 300.f * static_cast<Object3D *>(parent)->getForwardVector(); speed += glm::vec3(0, -.4f, 0);
-						  PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
-						  PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_MEOW_MIX, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
-						  delete physicsSpeed;
+		PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
+		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_MEOW_MIX, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
+		delete physicsSpeed;
 		animatable->setRotation(static_cast<Object3D *>(parent)->getFullRotation());
 		animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
 		Physicable *physicable = new Physicable(physicalBullet);
@@ -217,8 +219,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		HealthBar2D *bar = new HealthBar2D(objectId, audioable, animatable, renderable);
 
-		m_world.addGameObject(bar);
-
 		return bar;
 	}
 	case OBJECT_GAUGE_BAR:
@@ -229,8 +229,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		GaugeBar *bar = new GaugeBar(objectId, audioable, animatable, renderable);
 
-		m_world.addGameObject(bar);
-
 		return bar;
 	}
 	case OBJECT_TEXT_2D:
@@ -240,8 +238,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Animatable *animatable = new Animatable();
 
 		Text2D *bar = new Text2D(objectId, audioable, animatable, renderable);
-
-		m_world.addGameObject(bar);
 
 		return bar;
 	}
@@ -279,41 +275,25 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		return waypoint;
 	}
 
-	case OBJECT_POWERUP:
-	{
-			Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
-			Renderable3D *renderable = new Renderable3D(model, true, true);
-			Animatable *animatable = new Animatable();
-			Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
-
-			PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::POWER_UP, objectId, pos, geom, 0, NULL, NULL, NULL));
-			Physicable *physicable = new Physicable(powerupTriggerVolume);
-			animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
-
-			PowerUp *powerup = new PowerUp(objectId, audioable, physicable, animatable, renderable);
-
-			m_world.addGameObject(powerup);
-			m_scene.addActor(*powerupTriggerVolume);
-
-			return powerup;
-	}
+	
 
 	case OBJECT_SHIELD_POWERUP:
 	{
-						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
-						   Renderable3D *renderable = new Renderable3D(model, true, true);
-						   renderable->setModel(NULL); // remove when there is a model for the powerup
-						   Animatable *animatable = new Animatable();
-		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_SHIELD_POWERUP));
+			Renderable3D *renderable = new Renderable3D(model, true, true);
+						 
+			Animatable *animatable = new Animatable();
+			Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
 						   PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::SHIELD_POWERUP, objectId, pos, geom, 0, NULL, NULL, NULL));
-						   Physicable *physicable = new Physicable(powerupTriggerVolume);
-						   animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
+			Physicable *physicable = new Physicable(powerupTriggerVolume);
+						   PxVec3 dim = powerupTriggerVolume->getWorldBounds().getDimensions();
+						   animatable->setScale(glm::vec3(dim.x > dim.z ? dim.z : dim.x, 3, dim.x > dim.z ? dim.z : dim.x));
 
 						   PowerUpShield *shield = new PowerUpShield(objectId, audioable, physicable, animatable, renderable, static_cast<Car*>(parent));
 
 						   m_world.addGameObject(shield);
-						   m_scene.addActor(*powerupTriggerVolume);
+			m_scene.addActor(*powerupTriggerVolume);
 
 						   return shield;
 	}
@@ -323,7 +303,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
 						   Renderable3D *renderable = new Renderable3D(model, true, true);
 						   renderable->setModel(NULL);  // remove when there is a model for the powerup
-		Animatable *animatable = new Animatable();
+						   Animatable *animatable = new Animatable();
 						   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
 						   PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::SPEED_POWERUP, objectId, pos, geom, 0, NULL, NULL, NULL));
@@ -336,6 +316,63 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 						   m_scene.addActor(*powerupTriggerVolume);
 
 						   return powerup;
+	}
+
+	case OBJECT_POWERUP:
+	{
+						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
+						   Renderable3D *renderable = new Renderable3D(model, true, true);
+						   Animatable *animatable = new Animatable();
+						   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+						   PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::POWER_UP, objectId, pos, geom, 0, NULL, NULL, NULL));
+						   Physicable *physicable = new Physicable(powerupTriggerVolume);
+						   animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
+
+						   PowerUp *powerup = new PowerUp(objectId, audioable, physicable, animatable, renderable);
+
+						   m_world.addGameObject(powerup);
+						   m_scene.addActor(*powerupTriggerVolume);
+
+						   return powerup;
+	}
+	case OBJECT_PARTICLE:
+	{
+							Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
+							Renderable3D *renderable = new Renderable3D(model, true, true);
+							Animatable *animatable = new Animatable();
+							Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+							PxRigidDynamic *particleVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_PARTICLE, objectId, pos, geom, 0, NULL, NULL, NULL));
+							Physicable *physicable = new Physicable(particleVolume);
+							
+							animatable->setScale(glm::vec3(particleVolume->getWorldBounds().getDimensions().x, particleVolume->getWorldBounds().getDimensions().y, particleVolume->getWorldBounds().getDimensions().z));
+
+							Particle *particle = new Particle(objectId, audioable, physicable, animatable, renderable);
+
+							m_world.addGameObject(particle);
+							m_scene.addActor(*particleVolume);
+
+							return particle;
+	}
+	case OBJECT_EXPLOSION_1:
+	{
+							   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_EXPLOSION1_1));
+							   Renderable3D *renderable = new Renderable3D(model, true, true);
+							   Animatable *animatable = new Animatable();
+							   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+							   PxRigidDynamic *explosionVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_EXPLOSION, objectId, pos, geom, 0, NULL, NULL, NULL));
+							   Physicable *physicable = new Physicable(explosionVolume);
+
+							   animatable->setScale(glm::vec3(explosionVolume->getWorldBounds().getDimensions().x, explosionVolume->getWorldBounds().getDimensions().y, explosionVolume->getWorldBounds().getDimensions().z));
+
+							   AnimatedExplosion *explosion = new AnimatedExplosion(objectId, audioable, physicable, animatable, renderable, .5);
+
+							   m_world.addGameObject(explosion);
+							   m_scene.addActor(*explosionVolume);
+
+							   return explosion;
 	}
 	case OBJECT_COLLISION_VOLUME:
 	{
@@ -462,8 +499,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		MapUI *map = new MapUI(objectId, audioable, animatable, renderable);
 		map->setPlayerModel(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PLAYER_ON_UI_MAP_TEXTURE)));
-
-		m_world.addGameObject(map);
 
 		return map;
 	}
