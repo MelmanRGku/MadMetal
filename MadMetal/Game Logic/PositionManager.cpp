@@ -22,20 +22,16 @@ void PositionManager::updatePlayerPositions()
 		{
 			if (m_players.at(i)->getCar()->getLap() < m_players.at(j)->getCar()->getLap())
 			{
-				if (m_players.at(i)->getCar()->getPositionInRace() > m_players.at(j)->getCar()->getPositionInRace())
+				if (m_players.at(i)->getCar()->getPositionInRace() < m_players.at(j)->getCar()->getPositionInRace())
 				{
-					int temp = m_players.at(i)->getCar()->getPositionInRace();
-					m_players.at(i)->getCar()->setPositionInRace(m_players.at(j)->getCar()->getPositionInRace());
-					m_players.at(j)->getCar()->setPositionInRace(temp);
+					swap(*m_players.at(i), *m_players.at(j));
 				}
 			}
 			else if (m_players.at(i)->getCar()->getLap() > m_players.at(j)->getCar()->getLap())
 			{
-				if (m_players.at(i)->getCar()->getPositionInRace() < m_players.at(j)->getCar()->getPositionInRace())
+				if (m_players.at(i)->getCar()->getPositionInRace() > m_players.at(j)->getCar()->getPositionInRace())
 				{
-					int temp = m_players.at(i)->getCar()->getPositionInRace();
-					m_players.at(i)->getCar()->setPositionInRace(m_players.at(j)->getCar()->getPositionInRace());
-					m_players.at(j)->getCar()->setPositionInRace(temp);
+					swap(*m_players.at(i), *m_players.at(j));
 				}
 			}
 			else
@@ -44,25 +40,21 @@ void PositionManager::updatePlayerPositions()
 				{
 					if (m_players.at(i)->getCar()->getPositionInRace() > m_players.at(j)->getCar()->getPositionInRace())
 					{
-						int temp = m_players.at(i)->getCar()->getPositionInRace();
-						m_players.at(i)->getCar()->setPositionInRace(m_players.at(j)->getCar()->getPositionInRace());
-						m_players.at(j)->getCar()->setPositionInRace(temp);
+						swap(*m_players.at(i), *m_players.at(j));
 					}
 				}
 				else if (m_players.at(i)->getCar()->getCurrentWaypoint()->getId() < m_players.at(j)->getCar()->getCurrentWaypoint()->getId())
 				{
 					if (m_players.at(i)->getCar()->getPositionInRace() < m_players.at(j)->getCar()->getPositionInRace())
 					{
-						int temp = m_players.at(i)->getCar()->getPositionInRace();
-						m_players.at(i)->getCar()->setPositionInRace(m_players.at(j)->getCar()->getPositionInRace());
-						m_players.at(j)->getCar()->setPositionInRace(temp);
+						swap(*m_players.at(i), *m_players.at(j));
 					}
 				}
 				else if (m_players.at(i)->getCar()->getCurrentWaypoint()->getId() == m_players.at(j)->getCar()->getCurrentWaypoint()->getId())
 				{
 					if (i == 0)
 					{
-						std::cout << "in same waypoint\n";
+						//std::cout << "in same waypoint\n";
 					}
 				}
 			}
@@ -70,4 +62,10 @@ void PositionManager::updatePlayerPositions()
 	}
 }
 
+void PositionManager::swap(Controllable& player1, Controllable& player2)
+{
+	int temp = player1.getCar()->getPositionInRace();
+	player1.getCar()->setPositionInRace(player2.getCar()->getPositionInRace());
+	player2.getCar()->setPositionInRace(temp);
+}
 

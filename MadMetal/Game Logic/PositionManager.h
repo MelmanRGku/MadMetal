@@ -14,4 +14,7 @@ public:
 private: // members
 	std::vector<Controllable*>& m_players;
 
+private: // helper functions 
+	void swap(Controllable& player1, Controllable& player2);
+
 };
