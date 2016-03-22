@@ -165,6 +165,7 @@
     <ClInclude Include="Objects\AnimatedExplosion.h" />
     <ClInclude Include="Objects\AnimatedModel.h" />
     <ClInclude Include="Objects\Particle.h" />
+    <ClInclude Include="Game Logic\WaypointDefinitions.h" />
     <ClInclude Include="Objects\MainMenuSystem.h" />
     <ClInclude Include="Objects\MenuSystem.h" />
     <ClInclude Include="Simulation\MainMenu.h" />

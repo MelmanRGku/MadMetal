@@ -572,6 +572,9 @@
     <ClInclude Include="Objects\AnimatedExplosion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game Logic\WaypointDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />
