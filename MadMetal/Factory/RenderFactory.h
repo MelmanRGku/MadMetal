@@ -53,9 +53,9 @@ public:
 		case RENDERABLE_OBJECT_BULLET_MEOW_MIX:
 			return Assets::getModel("bullet");
 		case RENDERABLE_OBJECT_TRACK_DRIVABLE:
-			return Assets::getModel("texturedTrack");
+			return Assets::getModel("trackv2ground");
 		case RENDERABLE_OBJECT_TRACK_NON_DRIVABLE:
-			return Assets::getModel("texturedBorder");
+			return Assets::getModel("trackv2enviro");
 		case RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO:
 			return Assets::getModel("scareMoon");
 		case RENDERABLE_OBJECT_GGO:
