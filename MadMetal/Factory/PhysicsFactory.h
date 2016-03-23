@@ -91,7 +91,7 @@ public:
 		free(shapes);
 	}
 		 
-	PxBase *makePhysicsObject(PhysicalObjects actorToMake, long objectId, PxTransform *pos, PxGeometry **geom, PxU32 nbGeom, PxMaterial *material, DrivingStyle *style, PxVec3 *velocity)
+	PxBase *makePhysicsObject(PhysicalObjects actorToMake, long objectId, PxTransform *pos = NULL, PxGeometry **geom = NULL, PxU32 nbGeom = 0, PxMaterial *material = NULL, DrivingStyle *style = NULL, PxVec3 *velocity = NULL)
 	{
 		PxBase *toReturn = NULL;
 

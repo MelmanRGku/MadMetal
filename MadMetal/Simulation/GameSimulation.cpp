@@ -11,11 +11,12 @@
 #include "Objects\CollisionVolume.h"
 #include "Objects\PowerUp.h"
 #include "ParticleSystem\ParticleSystem.h"
+#include "Game Logic\PositionManager.h"
 #include <sstream>
 
 
 #define NUM_OF_PLAYERS 12
-#define NUM_LAPS_FOR_VICTORY 1
+#define NUM_LAPS_FOR_VICTORY 10
 #define RACE_FINISH_DELAY 10
 
 using namespace std;
@@ -98,7 +99,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	}
 	
 
-	
+	m_positionManager = new PositionManager(m_players);
 	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
 	pauseControls(true);
 
@@ -107,6 +108,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 GameSimulation::~GameSimulation()
 {
 	PhysicsManager::getCpuDispatcher().release();
+	delete m_positionManager;
 	m_scene->release();
 	delete m_track;
 	for (int i = 0; i < m_players.size(); i++)
@@ -119,7 +121,6 @@ GameSimulation::~GameSimulation()
 	GameFactory::release();
 	delete manager;
 	delete musicManager;
-	
 }
 
 PxFixedSizeLookupTable<8> gSteerVsForwardSpeedTable(gSteerVsForwardSpeedData, 4);
@@ -380,6 +381,9 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	simulatePhysics(dt);
 	simulateAnimation();
 	updateObjects(dt);
+	m_positionManager->updatePlayerPositions();
+
+	std::cout << "player position in race: " << m_players[0]->getCar()->getPositionInRace() << "\n";
 	return false;
 	
 }

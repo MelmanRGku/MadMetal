@@ -578,9 +578,23 @@
     <ClInclude Include="Objects\MenuSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+ <ClInclude Include="Game Logic\WaypointDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />
     <Text Include="Audio\MusicLibrary.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Models\asphalt_texture409.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\Building_texture4.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\Terrain-Road.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
