@@ -32,7 +32,7 @@ public:
 	{
 		switch (objectToMake) {
 		case RENDERABLE_OBJECT_CAR:
-			return Assets::getModel("UglyCarWithGuns");
+			return Assets::getModel("Meowmix");
 		case RENDERABLE_OBJECT_PLANE:
 			return Assets::getModel("plane");
 		case RENDERABLE_OBJECT_BULLET_MEOW_MIX:
