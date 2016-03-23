@@ -6,12 +6,12 @@
 Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Object3D *drivablePart, Object3D *nonDrivablePart) : Object3D(id, aable, pable, anable, rable, NULL), drivablePart(drivablePart), nonDrivablePart(nonDrivablePart)
 {
 	WaypointSystem * startLocation = new WaypointSystem(
-		getDrivablePart()->getWorldBounds().minimum.x,
-		getDrivablePart()->getWorldBounds().minimum.x + 120,
-		getDrivablePart()->getWorldBounds().minimum.z,
-		getDrivablePart()->getWorldBounds().maximum.z - 120,
+		getDrivablePart()->getWorldBounds().maximum.x - 200,
+		getDrivablePart()->getWorldBounds().maximum.x - 120,
+		getDrivablePart()->getWorldBounds().minimum.z + 200,
+		getDrivablePart()->getWorldBounds().minimum.z + 360,
 		getDrivablePart()->getWorldBounds().maximum.y,
-		LEFT);
+		TOP);
 
 	//m_waypointList.resize(m_waypointList.size() + (startLocation->getWaypointMap().at(0).size() * startLocation->getWaypointMap().size()));
 	for (int i = 0; i < startLocation->getWaypointMap().size(); i++)
@@ -22,10 +22,10 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 	m_waypointSystems.push_back(startLocation);
 
 	WaypointSystem * nextLocation1 = new WaypointSystem(
-		getDrivablePart()->getWorldBounds().minimum.x,
-		getDrivablePart()->getWorldBounds().maximum.x - 80,
-		getDrivablePart()->getWorldBounds().maximum.z - 120,
-		getDrivablePart()->getWorldBounds().maximum.z,
+		getDrivablePart()->getWorldBounds().maximum.x - 280,
+		getDrivablePart()->getWorldBounds().maximum.x - 40,
+		getDrivablePart()->getWorldBounds().minimum.z + 360,
+		getDrivablePart()->getWorldBounds().maximum.z - 520,
 		getDrivablePart()->getWorldBounds().maximum.y,
 		TOP);
 
@@ -35,49 +35,49 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 		m_waypointList.insert(m_waypointList.end(), nextLocation1->getWaypointMap().at(i).begin(), nextLocation1->getWaypointMap().at(i).end());
 	}
 	WaypointSystem* lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
-	stitchWaypointSystems(RIGHT, LEFT, *lastWaypointSystem, *nextLocation1, 0, 0, true);
+	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation1, 0, 2, true);
 
 	m_waypointSystems.push_back(nextLocation1);
 
-	WaypointSystem * nextLocation2 = new WaypointSystem(
-		getDrivablePart()->getWorldBounds().maximum.x - 80,
-		getDrivablePart()->getWorldBounds().maximum.x,
-		getDrivablePart()->getWorldBounds().minimum.z + 120,
-		getDrivablePart()->getWorldBounds().maximum.z,
-		getDrivablePart()->getWorldBounds().maximum.y,
-		RIGHT);
+	//WaypointSystem * nextLocation2 = new WaypointSystem(
+	//	getDrivablePart()->getWorldBounds().maximum.x - 80,
+	//	getDrivablePart()->getWorldBounds().maximum.x,
+	//	getDrivablePart()->getWorldBounds().minimum.z + 120,
+	//	getDrivablePart()->getWorldBounds().maximum.z,
+	//	getDrivablePart()->getWorldBounds().maximum.y,
+	//	RIGHT);
 
-	//m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
-	for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
-	{
-		m_waypointList.insert(m_waypointList.end(), nextLocation2->getWaypointMap().at(i).begin(), nextLocation2->getWaypointMap().at(i).end());
-	}
+	////m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
+	//for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
+	//{
+	//	m_waypointList.insert(m_waypointList.end(), nextLocation2->getWaypointMap().at(i).begin(), nextLocation2->getWaypointMap().at(i).end());
+	//}
 
-	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
-	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation2, 0, nextLocation2->getWaypointMap().at(0).size() - 3, true);
+	//lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	//stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation2, 0, nextLocation2->getWaypointMap().at(0).size() - 3, true);
 
-	m_waypointSystems.push_back(nextLocation2);
+	//m_waypointSystems.push_back(nextLocation2);
 
 
-	WaypointSystem * nextLocation3 = new WaypointSystem(
-		getDrivablePart()->getWorldBounds().minimum.x + 120,
-		getDrivablePart()->getWorldBounds().maximum.x,
-		getDrivablePart()->getWorldBounds().minimum.z,
-		getDrivablePart()->getWorldBounds().minimum.z + 120,
-		getDrivablePart()->getWorldBounds().maximum.y,
-		BOTTOM);
+	//WaypointSystem * nextLocation3 = new WaypointSystem(
+	//	getDrivablePart()->getWorldBounds().minimum.x + 120,
+	//	getDrivablePart()->getWorldBounds().maximum.x,
+	//	getDrivablePart()->getWorldBounds().minimum.z,
+	//	getDrivablePart()->getWorldBounds().minimum.z + 120,
+	//	getDrivablePart()->getWorldBounds().maximum.y,
+	//	BOTTOM);
 
-	//m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
-	for (int i = 0; i < nextLocation3->getWaypointMap().size(); i++)
-	{
-		m_waypointList.insert(m_waypointList.end(), nextLocation3->getWaypointMap().at(i).begin(), nextLocation3->getWaypointMap().at(i).end());
-	}
+	////m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
+	//for (int i = 0; i < nextLocation3->getWaypointMap().size(); i++)
+	//{
+	//	m_waypointList.insert(m_waypointList.end(), nextLocation3->getWaypointMap().at(i).begin(), nextLocation3->getWaypointMap().at(i).end());
+	//}
 
-	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
-	stitchWaypointSystems(LEFT, RIGHT, *lastWaypointSystem, *nextLocation3, 0, nextLocation3->getWaypointMap().size() - 2, true);
-	stitchWaypointSystems(BOTTOM, TOP, *m_waypointSystems.at(0), *nextLocation3, 0, 0, false);
+	//lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	//stitchWaypointSystems(LEFT, RIGHT, *lastWaypointSystem, *nextLocation3, 0, nextLocation3->getWaypointMap().size() - 2, true);
+	//stitchWaypointSystems(BOTTOM, TOP, *m_waypointSystems.at(0), *nextLocation3, 0, 0, false);
 
-	m_waypointSystems.push_back(nextLocation3);
+	//m_waypointSystems.push_back(nextLocation3);
 
 }
 

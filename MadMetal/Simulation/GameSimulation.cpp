@@ -69,13 +69,13 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
-			AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
-			PxTransform *pos = new PxTransform(-130 + i * 10, 40, 0);
-			ai->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL)));
-			delete pos;
-			m_aiPlayers.push_back(ai);
-			m_players.push_back(ai);
-			//make a car for ai based off template
+			//AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
+			//PxTransform *pos = new PxTransform(-10 + i * 10, i + 10, 0);
+			//ai->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL)));
+			//delete pos;
+			//m_aiPlayers.push_back(ai);
+			//m_players.push_back(ai);
+			////make a car for ai based off template
 		}
 	}
 
@@ -383,7 +383,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	updateObjects(dt);
 	m_positionManager->updatePlayerPositions();
 
-	std::cout << "player position in race: " << m_players[0]->getCar()->getPositionInRace() << "\n";
+	//std::cout << "player position in race: " << m_players[0]->getCar()->getPositionInRace() << "\n";
 	return false;
 	
 }
