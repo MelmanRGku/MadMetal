@@ -42,11 +42,11 @@ void Input::updateGamePads(double dt)
 
 }
 
-bool Input::getGamePadHandle(int portNum, GamePad* handle)
+bool Input::getGamePadHandle(int portNum, GamePad** handle)
 {
 	if (gamePads[portNum]->checkConnection())
 	{	
-		handle = gamePads[portNum];
+		*handle = gamePads[portNum];
 		return true;
 	}
 	else 

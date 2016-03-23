@@ -1,8 +1,12 @@
 #include "PowerUp.h"
+#include "ParticleSystem\ParticleSystem.h"
 
 PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
 	activate();
+	PxVec3 dimensions = pable->getActor().getWorldBounds().getDimensions(); 
+	PxVec3 position = pable->getActor().getGlobalPose().p;
+	
 }
 
 PowerUp::~PowerUp()
@@ -26,6 +30,10 @@ float PowerUp::getSpeedImpactDamage()
 	return SPEED_IMPACT_DAMAGE;
 }
 
+float PowerUp::getSpeedImpulse()
+{
+	return SPEED_IMPULSE_AMOUNT;
+}
 
 void PowerUp::update(float dtMillis)
 {

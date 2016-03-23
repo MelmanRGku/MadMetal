@@ -64,5 +64,12 @@ void main(void)
     float shadeIntensity = ceil(intensity * 5)/ 5;
 
     // Write final colour to the framebuffer
-    gl_FragColor = vec4(ambient + diffuse * shadeIntensity + specular * shadeIntensity, fs_in.C.w);
+	if (texValid)
+	{
+		float alpha = texture(texObject, fs_in.uv).w;
+		gl_FragColor = texture(texObject, fs_in.uv);// + diffuse * shadeIntensity + specular * shadeIntensity, alpha);
+	} else {
+		gl_FragColor = vec4(ambient + diffuse * shadeIntensity + specular * shadeIntensity, fs_in.C.w);
+	}
+	
 }

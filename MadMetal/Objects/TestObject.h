@@ -49,12 +49,17 @@ public:
 	void updatePosition(glm::vec3 dp) { m_animatable->updatePosition(dp); }
 	void updateRotation(glm::vec3 dr) { m_animatable->updateRotation(dr); }
 	long getId() { return id; }
-	virtual void update(float dt) { totalLifeTime += dt; if (maxLifeTime != -1 && totalLifeTime > maxLifeTime) hasToBeDeleted = true; }
+	virtual void update(float dt) { 
+		totalLifeTime += dt; 
+		if (maxLifeTime != -1 && totalLifeTime > maxLifeTime) 
+			hasToBeDeleted = true; 
+	}
 	void setHasToBeDeleted(bool hasToBeDeleted) { this->hasToBeDeleted = hasToBeDeleted; }
 	bool getHasToBeDeleted() { return hasToBeDeleted; }
 	virtual void playSound() = 0;
 	void setSound(Sound theSound);
 	void setMaxLifeTime(float maxTime){ maxLifeTime = maxTime; }
+	void resetLifeTime() { totalLifeTime = 0; }
 	Renderable * getRenderable(){ return m_renderable; }
 };
 

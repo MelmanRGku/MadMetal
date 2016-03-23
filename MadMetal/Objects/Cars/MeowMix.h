@@ -2,6 +2,8 @@
 
 #include "Car.h"
 
+
+
 class MeowMix : public Car
 {
 protected:
@@ -15,6 +17,7 @@ public:
 	void update(float dt);
 	void useSuper();
 private:
+	
 	enum LastWeaponShot {
 		LAST_WEAPON_SHOT_LEFT,
 		LAST_WEAPON_SHOT_RIGHT

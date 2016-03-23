@@ -1,9 +1,16 @@
 #include "Assets.h"
 #include <fstream>
 #include "Files\FileHandlingHelpers.h"
+#include <windows.h>
+#include "winbase.h"
+#include "wingdi.h"
+#include "winerror.h"
+#include "winternl.h"
+#include "winnt.h"
 
 std::map<std::string, Model*> *Assets::models;
 std::map<std::string, Texture *> *Assets::textures;
+std::vector<std::string> *Assets::modelsToBeLoadedBeforeTheGameStarts;
 std::mutex Assets::m;
 LoadingStatus *Assets::status;
 
@@ -15,6 +22,9 @@ Assets::~Assets()
 void Assets::init() {
 	models = new std::map<std::string, Model*>();
 	textures = new std::map<std::string, Texture*>();
+	modelsToBeLoadedBeforeTheGameStarts = new std::vector<std::string>();
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/UglyCarWithCannon.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/UglyCarWithGuns.obj");
 }
 
 void Assets::release() {
@@ -36,16 +46,24 @@ void Assets::release() {
 Model *Assets::loadObjFromDirectory(std::string path) {
 	int lastSlashPos = path.rfind("/") + 1;
 	std::string objectName = path.substr(lastSlashPos, path.rfind(".") - lastSlashPos);
+	if (status != NULL && objectName.compare(status->getCurrentLoadingFile()) == 0) {
+		m.lock();
+		m.unlock();
+		return getModel(objectName);
+	}
 	m.lock();
 	if (getModel(objectName) != NULL) {
 		m.unlock();
 		return getModel(objectName);
 	}
+	if (status != NULL)
+		status->setCurrentLoadingFile(objectName);
 	ObjModelLoader *loader = new ObjModelLoader();
-	Model *model = loader->loadFromFile(path);
+	Model *model = loader->loadFromFile(path); 
+	static_cast<Model3D *>(model)->setupVBOs();
 	models->insert(std::pair<std::string, Model *>(objectName, model));
-	delete loader;
 	m.unlock();
+	delete loader;
 	return model;
 }
 
@@ -99,10 +117,16 @@ void Assets::loadPNGsFromDirectory(std::string path) {
 	}
 }
 
-void Assets::load(std::string objPath, std::string pngPath) {
+void Assets::load(std::string objPath, std::string pngPath, HDC dc, HGLRC sharedOpenglContext) {
+	//share the device and opengl contexts with this new thread
+	wglMakeCurrent(dc, sharedOpenglContext);
 	loadObjsFromDirectory(objPath);
-	loadPNGsFromDirectory(pngPath);
+	loadPNGsFromDirectory(pngPath);	
 	status->done = true;
+
+	//remove the newly created opengl context and unbind everything from this thread (by everything I mean DC and opengl context)
+	wglMakeCurrent(NULL, NULL);
+	wglDeleteContext(sharedOpenglContext);
 }
 
 void Assets::initializeVAOs() {
@@ -113,5 +137,12 @@ void Assets::initializeVAOs() {
 
 	for (std::map<std::string, Texture *>::iterator iterator = textures->begin(); iterator != textures->end(); iterator++) {
 		iterator->second->Load();
+	}
+}
+
+void Assets::loadBeforeGameStarts() {
+	for (unsigned int i = 0; i < modelsToBeLoadedBeforeTheGameStarts->size(); i++) {
+		Model3D *model = static_cast<Model3D *>(loadObjFromDirectory(modelsToBeLoadedBeforeTheGameStarts->at(i)));
+		model->setupVAOs();
 	}
 }

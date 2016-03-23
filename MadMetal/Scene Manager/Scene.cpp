@@ -1,85 +1,7 @@
 #include "Scene.h"
 
-#define NUM_PLAYERS 2
-
-SinglePlayerCharSelectScene::SinglePlayerCharSelectScene(Input * input)
-{
-	
-	std::cout << "SinglePlayer Pushed on Stack \n";
-	m_gamePad = input->getGamePadHandle();
-	m_playerTemplates.push_back(new ControllableTemplate(m_gamePad));
-
-	m_currentSelection = 0;
-	m_charConfirmed = false;
-	
-}
-
-bool SinglePlayerCharSelectScene::simulateScene(double dt, SceneMessage &message)
-{
-	//go straight to load screen. remove when testing char select screen
-	message.setTag(SceneMessage::eLoadScreen);
-	for (int i = m_playerTemplates.size(); i < NUM_PLAYERS; i++)
-	{
-		//TODO:: Puts the same character in for every AI. Make random or something
-		m_playerTemplates.push_back(new ControllableTemplate(m_selections[0]));
-	}
-	message.setPlayerTemplates(m_playerTemplates);
-	
-	return true;
-
-
-
-	//check gamepad stuff
-	if (m_gamePad->checkConnection())
-	{
-
-		if (m_gamePad->isPressed(m_gamePad->DPadRight))
-		{
-			m_currentSelection = ++m_currentSelection % 3;
-			std::cout << "Left arrow Pressed \n";
-			std::cout << m_selections[m_currentSelection] << " \n";
-		}
+#define NUM_PLAYERS 1
 		
-		if (m_gamePad->isPressed(m_gamePad->DPadLeft))
-		{
-			if (--m_currentSelection < 0)
-			{
-				m_currentSelection = 2;
-			}
-			std::cout << "Right arrow Pressed \n";
-			std::cout << m_selections[m_currentSelection] << " \n";
-		}
-		
-		if (m_gamePad->isPressed(m_gamePad->AButton))
-		{
-			if (!m_charConfirmed)
-			{
-				m_charConfirmed = true;
-				m_playerTemplates[0]->setCarSelection(m_currentSelection);
-			}
-		}
-		
-
-		if (m_gamePad->isPressed(m_gamePad->BButton))
-		{
-			if (m_charConfirmed)
-			{
-				m_charConfirmed = false;
-			}
-			else 
-			{
-				message.setTag(SceneMessage::ePop);
-				return true;
-			}
-		}
-	}
-	else
-	{
-		std::cout << "Controller is Disconnected \n";
-	}
-	return false;
-}
-
 MultiPlayerCharSelectScene::MultiPlayerCharSelectScene(Input * input)
 {
 
@@ -88,7 +10,7 @@ MultiPlayerCharSelectScene::MultiPlayerCharSelectScene(Input * input)
 	{
 		if (inputNum < 4) //still gamepads to give out
 		{
-			if (input->getGamePadHandle(inputNum, m_gamePads[gpNum]))
+			if (input->getGamePadHandle(inputNum, &m_gamePads[gpNum]))
 			{
 				std::cout << "Assigned controller " << inputNum << " to player " << gpNum << std::endl;
 				gpNum++;//successfully assigned gp, go to next
@@ -97,7 +19,7 @@ MultiPlayerCharSelectScene::MultiPlayerCharSelectScene(Input * input)
 		else 
 		{
 			//no more gp's to distribute
-			m_gamePads[gpNum] = NULL;
+			m_gamePads[gpNum++] = NULL;
 		}
 	}
 	
@@ -107,7 +29,6 @@ MultiPlayerCharSelectScene::MultiPlayerCharSelectScene(Input * input)
 		if (m_gamePads[i] != NULL)
 		{
 			m_playerTemplates.push_back(new ControllableTemplate(m_gamePads[i]));
-			break;
 		}
 	}
 	
@@ -118,7 +39,7 @@ bool MultiPlayerCharSelectScene::simulateScene(double dt, SceneMessage &message)
 {
 
 
-	/*/check gamepad stuff
+	/*//check gamepad stuff
 	if (m_gamePad->checkConnection())
 	{
 
@@ -180,9 +101,10 @@ bool MultiPlayerCharSelectScene::simulateScene(double dt, SceneMessage &message)
 	else
 	{
 		std::cout << "Controller is Disconnected \n";
-	}
-	*/
-	return false;
+	}*/
+	message.setTag(SceneMessage::eLoadScreen);
+	message.setPlayerTemplates(m_playerTemplates);
+	return true;
 }
 
 PauseScene::PauseScene(std::vector<ControllableTemplate *> playerTemplates)

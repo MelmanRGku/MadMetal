@@ -76,10 +76,9 @@
   <ItemGroup>
     <ClCompile Include="Game Logic\AIControllable.cpp" />
     <ClCompile Include="Game Logic\PathFinding.cpp" />
+    <ClCompile Include="Game Logic\PositionManager.cpp" />
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
-    <ClCompile Include="Objects\MainMenuSystem.cpp" />
-    <ClCompile Include="Objects\MenuSystem.cpp" />
     <ClCompile Include="Simulation\MainMenu.cpp" />
     <ClCompile Include="Objects\MapUI.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp" />
@@ -157,13 +156,18 @@
     <ClCompile Include="Objects\Text3D.cpp" />
     <ClCompile Include="Audio\MusicManager.cpp" />
     <ClCompile Include="Objects\TexturedObject2D.cpp" />
-    <ClCompile Include="Objects\SinglePlayerButton.cpp" />
+    <ClCompile Include="Simulation\SinglePlayerMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="Factory\AnimationFactory.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />
+    <ClInclude Include="Game Logic\PositionManager.h" />
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
+    <ClInclude Include="Objects\AnimatedExplosion.h" />
+    <ClInclude Include="Objects\AnimatedModel.h" />
+    <ClInclude Include="Objects\Particle.h" />
+    <ClInclude Include="Game Logic\WaypointDefinitions.h" />
     <ClInclude Include="Objects\MainMenuSystem.h" />
     <ClInclude Include="Objects\MenuSystem.h" />
     <ClInclude Include="Simulation\MainMenu.h" />
@@ -259,7 +263,7 @@
     <ClInclude Include="Objects\Text3D.h" />
     <ClInclude Include="Audio\MusicManager.h" />
     <ClInclude Include="Objects\TexturedObject2D.h" />
-    <ClInclude Include="Objects\SinglePlayerButton.h" />
+    <ClInclude Include="Simulation\SinglePlayerMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Audio\MusicLibrary.txt" />
