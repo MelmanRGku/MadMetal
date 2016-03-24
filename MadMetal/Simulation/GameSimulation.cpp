@@ -49,7 +49,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
-			PxTransform *pos = new PxTransform(0, 0, 0);//-130 + i * 10, 40, 0);
+			PxTransform *pos = new PxTransform(-440, 1, 360);//-130 + i * 10, 40, 0);
 			MeowMix *car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
 			humanPlayer->setCar(car);
 			delete pos;
@@ -429,6 +429,19 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	explosionGeom[0] = new PxSphereGeometry(1);
 	pos = new PxTransform(-130, 25, 20);
 	//m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSION_1, pos, explosionGeom, NULL);
+	delete pos;
+
+	//trainCar test
+	PxGeometry **trainGeom = new PxGeometry*[1];
+	trainGeom[0] = new PxBoxGeometry(PxVec3(6,5,50));
+	pos = new PxTransform(-450, 0, 360);
+	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
+	delete pos;
+
+	trainGeom = new PxGeometry*[1];
+	trainGeom[0] = new PxBoxGeometry(PxVec3(6, 5, 50));
+	pos = new PxTransform(-579, 0, -183.85);
+	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
 	delete pos;
 
 	PxGeometry **geom1 = new PxGeometry *[1];

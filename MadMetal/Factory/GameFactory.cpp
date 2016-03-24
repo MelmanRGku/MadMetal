@@ -295,10 +295,31 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 						   m_world.addGameObject(shield);
 			m_scene.addActor(*powerupTriggerVolume);
-
+			
 						   return shield;
 	}
+	case OBJECT_TRAIN_CAR:
+	{
+		Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRAIN_CAR));
+		Renderable3D *renderable = new Renderable3D(model, true, true);
 
+		Animatable *animatable = new Animatable();
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+		
+		PxRigidDynamic *trainCarTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::DEATH_VOLUME, objectId, pos, geom, 0, NULL, NULL, NULL));
+	
+		Physicable *physicable = new Physicable(trainCarTriggerVolume);
+		PxVec3 dim = trainCarTriggerVolume->getWorldBounds().getDimensions();
+		
+		animatable->setScale(glm::vec3(dim.x, dim.y, dim.z));
+		pos->p.y += dim.y / 2;
+		TrainCar *trainCar = new TrainCar(objectId, audioable, physicable, animatable, renderable, pos->p);
+
+		m_world.addGameObject(trainCar);
+		m_scene.addActor(*trainCarTriggerVolume);
+		return trainCar;
+	}
 	case OBJECT_SPEED_POWERUP:
 	{
 						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));

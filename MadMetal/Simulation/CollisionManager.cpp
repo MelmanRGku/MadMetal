@@ -33,7 +33,7 @@ PxFilterFlags CollisionManager::TestFilterShader(
 	//   is used to define the groups they should collide with
 	
 	if ((filterData0.word0 != 0 || filterData1.word0 != 0) &&
-		!(filterData0.word0&filterData1.word1 || filterData1.word0&filterData0.word1)){
+		!(filterData0.word0 & filterData1.word1 || filterData1.word0&filterData0.word1)){
 
 		return PxFilterFlag::eSUPPRESS;
 	}
@@ -59,6 +59,12 @@ PxFilterFlags CollisionManager::TestFilterShader(
 	else if ((filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP ) && (filterData1.word0 & filterData0.word1)
 		|| (filterData0.word0 == COLLISION_FLAG_BULLET) && (filterData1.word0 == COLLISION_FLAG_SHIELD_POWERUP))
 	{
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
+
+	if (filterData0.word0 == COLLISION_FLAG_DEATH_VOLUME || filterData1.word0 == COLLISION_FLAG_DEATH_VOLUME){
+		std::cout << "registered \n";
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
@@ -113,6 +119,30 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		bullet->setHasToBeDeleted(true);
 	}
 	
+}
+
+void CollisionManager::processDeathVolumeHit(long deathVolumeId, long otherId)
+{
+	std::cout << "got here \n";
+	TrainCar * traincar = static_cast<TrainCar*>(m_world.findObject(deathVolumeId));
+
+	if (traincar == NULL)
+	{
+		std::cout << "failed to cast to train car" << std::endl;
+		return;
+	}
+
+	TestObject *otherObj = m_world.findObject(otherId);
+	Car *car = dynamic_cast<Car *>(otherObj);
+
+	if (car != NULL) {
+		//std::cout << "Bullet " << bulletId << " hit car\n";
+		car->takeDamage(10000);
+	}
+	else if (car == NULL) {//if dynamic cast to car returns NULL its probably a wall so get rid of it
+
+		std::cout << "failed to cast to car " << std::endl;
+	}
 }
 
 void CollisionManager::processWaypointHit(long waypointId, long otherId)
@@ -334,6 +364,14 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 		processBulletHit(filterData0.word2, filterData1.word2);
 	}
 	else if (filterData1.word0 == COLLISION_FLAG_BULLET && filterData0.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processBulletHit(filterData1.word2, filterData0.word2);
+	}
+	else if (filterData0.word0 == COLLISION_FLAG_DEATH_VOLUME && filterData1.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processDeathVolumeHit(filterData0.word2, filterData1.word2);
+	}
+	else if (filterData1.word0 == COLLISION_FLAG_DEATH_VOLUME && filterData0.word0 == COLLISION_FLAG_CHASSIS)
 	{
 		processBulletHit(filterData1.word2, filterData0.word2);
 	}

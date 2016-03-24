@@ -578,6 +578,9 @@
     <ClInclude Include="Objects\MenuSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\TrainCar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />

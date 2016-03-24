@@ -167,6 +167,7 @@
     <ClInclude Include="Objects\Particle.h" />
     <ClInclude Include="Objects\MainMenuSystem.h" />
     <ClInclude Include="Objects\MenuSystem.h" />
+    <ClInclude Include="Objects\TrainCar.h" />
     <ClInclude Include="Simulation\MainMenu.h" />
     <ClInclude Include="Objects\MapUI.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectScaleUpdater.h" />

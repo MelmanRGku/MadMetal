@@ -37,13 +37,13 @@ void Car::respawn()
 		glm::vec3 waypointPos = m_currentWaypoint->getGlobalPose();
 		
 		
-		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(waypointPos.x, waypointPos.y, waypointPos.z)));
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(waypointPos.x, 5, waypointPos.z)));
 		
 	}
 	else {
 		//std::cout << "Invalid Waypoint Respawn" << std::endl;
 		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
-		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, currentPosition.p.y+10, currentPosition.p.z)));
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, 5, currentPosition.p.z)));
 	}
 	m_car.getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 0, 0));
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0));

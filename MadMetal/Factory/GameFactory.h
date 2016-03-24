@@ -31,6 +31,7 @@
 #include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 #include "Objects\AnimatedExplosion.h"
+#include "Objects\TrainCar.h"
 
 class GameFactory
 {
@@ -61,6 +62,7 @@ public:
 		OBJECT_UI_MAP,
 		OBJECT_PARTICLE,
 		OBJECT_EXPLOSION_1,
+		OBJECT_TRAIN_CAR,
 
 		OBJECT_ANIMATION_TEST
 	};
