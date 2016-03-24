@@ -383,7 +383,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	updateObjects(dt);
 	m_positionManager->updatePlayerPositions();
 
-	std::cout << "player position in race: " << m_players[0]->getCar()->getPositionInRace() << "\n";
+	//std::cout << "player position in race: " << m_players[0]->getCar()->getPositionInRace() << "\n";
 	return false;
 	
 }
