@@ -53,7 +53,7 @@ public:
 	{
 		switch (objectToMake) {
 		case RENDERABLE_OBJECT_CAR:
-			return Assets::getModel("UglyCarWithGuns");
+			return Assets::getModel("twisted1");
 		case RENDERABLE_OBJECT_TRAIN_CAR:
 			return Assets::getModel("train_car");
 		case RENDERABLE_OBJECT_PLANE:
