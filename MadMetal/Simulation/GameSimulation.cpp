@@ -49,7 +49,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
-			PxTransform *pos = new PxTransform(-440, 1, 360);//-130 + i * 10, 40, 0);
+			PxTransform *pos = new PxTransform(0, 1, 0);//-130 + i * 10, 40, 0);
 			MeowMix *car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
 			humanPlayer->setCar(car);
 			delete pos;
@@ -419,9 +419,20 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	//Power up test
 	PxTransform * pos;
 	PxGeometry **powerGeom = new PxGeometry*[1];
-	powerGeom[0] = new PxBoxGeometry(PxVec3(1, 5, 1));
-	pos = new PxTransform(-130, 25, 20);
-	//m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL);
+	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
+	pos = new PxTransform(0, 2.5, 20);
+	PowerUp * powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
+	powerup->setActiveType(1);
+
+	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
+	pos = new PxTransform(-5, 2.5, 20);
+	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
+	powerup->setActiveType(2);
+
+	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
+	pos = new PxTransform(5, 2.5, 20);
+	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
+	powerup->setActiveType(3);
 	delete pos;
 
 	//trainCar test

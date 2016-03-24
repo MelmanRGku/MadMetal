@@ -46,6 +46,7 @@ public:
 	bool isActive();
 	PowerUpType pickup();
 	void activate();
+	void setActiveType(int type); //remove later
 	static float getPowerUpDuration(PowerUpType toGet);
 	static float getLifeStealPercentage();
 	static float getSpeedImpactDamage();

@@ -45,26 +45,52 @@ void PowerUp::update(float dtMillis)
 		}
 	}
 }
-
-void PowerUp::activate()
+void PowerUp::setActiveType(int type)
 {
-	int choice = 1 + rand() % 3;
-	switch (choice)
+	
+	switch (type)
 	{
 	case(1) :
 		m_type = PowerUpType::ATTACK;
+		m_renderable->setModel(Assets::getModel("attackPowerUp_pickup"));
 		break;
 	case(2) :
 		m_type = PowerUpType::DEFENSE;
+		m_renderable->setModel(Assets::getModel("sheildPowerUp_pickup"));
 		break;
 	case(3) :
 		m_type = PowerUpType::SPEED;
+		m_renderable->setModel(Assets::getModel("speedPowerUp_pickup"));
 		break;
 	default:
 		m_type = PowerUpType::NONE;
 		break;
 	}
-	m_renderable->setModel(Assets::getModel("sword"));
+	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
+}
+
+void PowerUp::activate()
+{
+	int choice = 1 + rand() % 3;
+	
+	switch (choice)
+	{
+	case(1) :
+		m_type = PowerUpType::ATTACK;
+		m_renderable->setModel(Assets::getModel("attackPowerUp_pickup"));
+		break;
+	case(2) :
+		m_type = PowerUpType::DEFENSE;
+		m_renderable->setModel(Assets::getModel("sheildPowerUp_pickup"));
+		break;
+	case(3) :
+		m_type = PowerUpType::SPEED;
+		m_renderable->setModel(Assets::getModel("speedPowerUp_pickup"));
+		break;
+	default:
+		m_type = PowerUpType::NONE;
+		break;
+	}
 	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 }
 
@@ -74,10 +100,9 @@ float PowerUp::getPowerUpDuration(PowerUpType toGet)
 	{
 	case(ATTACK) :
 		return ATTACK_DURATION_SECONDS;
-		
 	case(DEFENSE) :
 		return DEFENSE_DURATION_SECONDS;
-	case(3) :
+	case(SPEED) :
 		return SPEED_DURATION_SECONDS;
 	default:
 		return 0;
