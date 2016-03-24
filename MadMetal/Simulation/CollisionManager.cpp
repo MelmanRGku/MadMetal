@@ -123,14 +123,14 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 
 void CollisionManager::processDeathVolumeHit(long deathVolumeId, long otherId)
 {
-	std::cout << "got here \n";
-	TrainCar * traincar = static_cast<TrainCar*>(m_world.findObject(deathVolumeId));
+	//std::cout << "got here \n";
+	//TrainCar * traincar = static_cast<TrainCar*>(m_world.findObject(deathVolumeId));
 
-	if (traincar == NULL)
-	{
-		std::cout << "failed to cast to train car" << std::endl;
-		return;
-	}
+	//if (traincar == NULL)
+	//{
+		//std::cout << "failed to cast to train car" << std::endl;
+		//return;
+	//}
 
 	TestObject *otherObj = m_world.findObject(otherId);
 	Car *car = dynamic_cast<Car *>(otherObj);
