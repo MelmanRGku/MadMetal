@@ -75,6 +75,8 @@ PxVehicleDrive4W* VehicleCreator::create(DrivingStyle* style)
 
 		//Set up the simulation data for all wheels.
 		setupWheelsSimulationData(style, wheelCenterActorOffsets, wheelsSimData);
+		wheelsSimData->setSubStepCount(50, 2, 1);
+		wheelsSimData->setMinLongSlipDenominator(8);
 	}
 
 	//Set up the sim data for the vehicle drive model.

@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClCompile Include="Game Logic\AIControllable.cpp" />
     <ClCompile Include="Game Logic\PathFinding.cpp" />
+    <ClCompile Include="Game Logic\PositionManager.cpp" />
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
     <ClCompile Include="Objects\Cars\ExplosivelyDelicious.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="Factory\AnimationFactory.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />
+    <ClInclude Include="Game Logic\PositionManager.h" />
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
     <ClInclude Include="Objects\AnimatedExplosion.h" />
     <ClInclude Include="Objects\AnimatedModel.h" />
@@ -168,6 +170,7 @@
     <ClInclude Include="Objects\PowerUpAttack.h" />
     <ClInclude Include="Objects\Header.h" />
     <ClInclude Include="Objects\Particle.h" />
+    <ClInclude Include="Game Logic\WaypointDefinitions.h" />
     <ClInclude Include="Objects\MainMenuSystem.h" />
     <ClInclude Include="Objects\MenuSystem.h" />
     <ClInclude Include="Objects\TrainCar.h" />

@@ -116,17 +116,22 @@ void PlayerControllable::playFrame(double dt)
 
 				if (m_gamePad->getRightTrigger())
 				{
+					std::cout << "Gear: " << m_car->getCar().mDriveDynData.getGearChange() << "\n";
 					if (m_car->getActivePowerUpType() != PowerUpType::SPEED)
 					{
-						if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
+						if (m_car->getCar().computeForwardSpeed() < -0.1)
 						{
-							m_car->getCar().mDriveDynData.setTargetGear(PxVehicleGearsData::eFIRST);
+							m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 1);
 						}
-						if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eNEUTRAL){
-							m_car->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -1, 0));
+						else {
+							m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 0);
+							if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
+							{
+								m_car->getCar().mDriveDynData.setCurrentGear(PxVehicleGearsData::eFIRST);
+							}
+							m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL,
+								m_car->getDrivingStyle().getMaxSpeed() > m_car->getCar().computeForwardSpeed() ? m_gamePad->getRightTrigger() : 0);
 						}
-						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL,
-							m_car->getDrivingStyle().getMaxSpeed() > m_car->getCar().computeForwardSpeed() ? m_gamePad->getRightTrigger() : 0);
 					}
 					
 
@@ -134,17 +139,15 @@ void PlayerControllable::playFrame(double dt)
 				}
 				else if (m_gamePad->getLeftTrigger())
 				{
-					if (m_car->getCar().computeForwardSpeed() > 0)
+					std::cout << "Gear: " << m_car->getCar().mDriveDynData.getGearChange() << "\n";
+					if (m_car->getCar().computeForwardSpeed() > 0.1)
 					{
-						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 1);
+						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 1);
 					} 
 					else {
-						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 0);
 						if (m_car->getCar().mDriveDynData.getCurrentGear() != PxVehicleGearsData::eREVERSE) {
-							m_car->getCar().mDriveDynData.setTargetGear(PxVehicleGearsData::eREVERSE);
-						}
-						if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eNEUTRAL){
-							m_car->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -1, 0));
+							m_car->getCar().mDriveDynData.setCurrentGear(PxVehicleGearsData::eREVERSE);
 						}
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, m_gamePad->getLeftTrigger());
 					}

@@ -10,12 +10,12 @@
 #include "Objects\TestObject.h"
 #include "Objects\CollisionVolume.h"
 #include "Objects\PowerUp.h"
-
+#include "Game Logic\PositionManager.h"
 #include <sstream>
 
 
 #define NUM_OF_PLAYERS 12
-#define NUM_LAPS_FOR_VICTORY 1
+#define NUM_LAPS_FOR_VICTORY 10
 #define RACE_FINISH_DELAY 10
 
 using namespace std;
@@ -69,13 +69,14 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
-			AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
+			/*AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
 			PxTransform *pos = new PxTransform(0 + i * 1000, 1, 20);
 			ai->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL)));
 			delete pos;
 			m_aiPlayers.push_back(ai);
 			m_players.push_back(ai);
 			//make a car for ai based off template
+			*/
 		}
 	}
 
@@ -99,7 +100,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	}
 	
 
-	
+	m_positionManager = new PositionManager(m_players);
 	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
 	pauseControls(true);
 
@@ -108,6 +109,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 GameSimulation::~GameSimulation()
 {
 	PhysicsManager::getCpuDispatcher().release();
+	delete m_positionManager;
 	m_scene->release();
 	delete m_track;
 	for (int i = 0; i < m_players.size(); i++)
@@ -120,7 +122,6 @@ GameSimulation::~GameSimulation()
 	GameFactory::release();
 	delete manager;
 	delete musicManager;
-	
 }
 
 PxFixedSizeLookupTable<8> gSteerVsForwardSpeedTable(gSteerVsForwardSpeedData, 4);
@@ -210,7 +211,7 @@ void GameSimulation::simulatePlayers(double dt)
 		m_players[i]->playFrame(dt);
 		
 	}
-	
+
 	for (unsigned int i = 0; i < m_aiPlayers.size(); i++) {
 		m_aiPlayers[i]->processFire(&m_players);
 	}
@@ -381,6 +382,9 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	simulatePhysics(dt);
 	simulateAnimation();
 	updateObjects(dt);
+	m_positionManager->updatePlayerPositions();
+
+	//std::cout << "player position in race: " << m_players[0]->getCar()->getPositionInRace() << "\n";
 	return false;
 	
 }

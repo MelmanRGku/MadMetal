@@ -1,5 +1,4 @@
 #version 410 core
-
 //TODO:Rewrite shader so that diffuse doesn't change as per the camera
 
 // Input from vertex shader
