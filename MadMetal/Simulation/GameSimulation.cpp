@@ -69,7 +69,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		}
 		else {
 			AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
-			PxTransform *pos = new PxTransform(-130 + i * 10, 40, 0);
+			PxTransform *pos = new PxTransform(1000 + i * 10, -1, 0);
 			ai->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL)));
 			delete pos;
 			m_aiPlayers.push_back(ai);
@@ -209,7 +209,7 @@ void GameSimulation::simulatePlayers(double dt)
 		m_players[i]->playFrame(dt);
 		
 	}
-
+	
 	for (unsigned int i = 0; i < m_aiPlayers.size(); i++) {
 		m_aiPlayers[i]->processFire(&m_players);
 	}

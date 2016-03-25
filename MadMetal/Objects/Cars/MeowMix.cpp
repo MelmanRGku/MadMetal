@@ -32,13 +32,20 @@ void MeowMix::fire()
 	PxTransform *pos;
 	if (m_superDurationRemainingSeconds > 0)
 	{
-		glm::vec4 up = glm::normalize(getModelMatrix() * glm::vec4(0, 1, 0, 0));
+		/*glm::vec4 up = glm::normalize(getModelMatrix() * glm::vec4(0, 1, 0, 0));
 		glm::vec4 forward = glm::normalize(getModelMatrix() * glm::vec4(0, 0, 1, 0));
 		glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 2) + forward * (getScale().z / 2);
 		pos = new PxTransform(weaponPos.x, weaponPos.y, weaponPos.z);
-		GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_SUPER_VOLCANO, pos, NULL, this);
+		GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_EXPLOSIVELY_DELICIOUS, pos, NULL, this);
 		delete pos;
-		m_reloadRemainingSeconds = m_superReloadRateSeconds;
+		m_reloadRemainingSeconds = m_superReloadRateSeconds;*/
+
+		PxSweepBuffer hit;              // [out] Sweep results
+		PxGeometry sweepShape = PxSphereGeometry(1);    // [in] swept shape
+		PxTransform initialPose = m_car.getRigidDynamicActor()->getGlobalPose();  // [in] initial shape pose (at distance=0)
+		glm::vec3 forward = getForwardVector();
+		PxVec3 sweepDirection = PxVec3(forward.x, forward.y, forward.z);    // [in] normalized sweep direction
+		bool status = m_scene->sweep(sweepShape, initialPose, sweepDirection, sweepDistance, hit);
 
 	}
 	else {

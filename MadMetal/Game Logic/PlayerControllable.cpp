@@ -68,10 +68,10 @@ void PlayerControllable::playFrame(double dt)
 				}
 
 				if (m_gamePad->isPressed(GamePad::YButton)) {
-					if (m_car->superReady()) {
+					//if (m_car->superReady()) {
 						m_car->useSuper();
-						std::cout << "I shot" << std::endl;
-					}
+						//std::cout << "I shot" << std::endl;
+					//}
 				}
 
 				if (m_gamePad->isHeld(GamePad::BButton))

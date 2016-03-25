@@ -96,6 +96,7 @@ public:
 	UI *getUI() { return ui; }
 	void deactivatePowerUp(){ m_activePowerUp = PowerUpType::NONE; }
 	void updateHealth(float dtMillis);
+	float getSuperDurationRemaining(){ return m_superDurationRemainingSeconds; }
 
 };
 

@@ -78,6 +78,7 @@
     <ClCompile Include="Game Logic\PathFinding.cpp" />
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
+    <ClCompile Include="Objects\Cars\ExplosivelyDelicious.cpp" />
     <ClCompile Include="Simulation\MainMenu.cpp" />
     <ClCompile Include="Objects\MapUI.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp" />
@@ -160,6 +161,9 @@
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
     <ClInclude Include="Objects\AnimatedExplosion.h" />
     <ClInclude Include="Objects\AnimatedModel.h" />
+    <ClInclude Include="Objects\Cars\ExplosivelyDelicious.h" />
+    <ClInclude Include="Objects\ExplosivelyDeliciousSuper.h" />
+    <ClInclude Include="Objects\ExplosivelyDeliciousBullet.h" />
     <ClInclude Include="Objects\PowerUpAttack.h" />
     <ClInclude Include="Objects\Header.h" />
     <ClInclude Include="Objects\Particle.h" />

@@ -61,6 +61,40 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							car->setSoundChassis(ChassisCrashSound());
 		return car;
 	}
+#define EXPLOSIVELY_DELICIOUS_HEIGHT_ADDITION 3
+	case OBJECT_EXPLOSIVELY_DELICIOUS:
+	{
+										 Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS));
+										 Renderable3D *renderable = new Renderable3D(model, true, true);
+										 Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+										 Animatable *animatable = new Animatable();
+										 PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5f, 0.3f, 0.1f);    //static friction, dynamic friction, restitution
+										 DrivingStyle * drivingStyle = new DrivingStyleFast(material, material);
+										 PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, 0, NULL, drivingStyle, NULL);
+
+										 PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
+										 Physicable *physicable = new Physicable(physicalCar->getRigidDynamicActor());
+
+
+										 ExplosivelyDelicious *car = new ExplosivelyDelicious(objectId, drivingStyle, *physicalCar, audioable, physicable, animatable, renderable);
+
+										 int k = (int)physicalCar->mWheelsSimData.getWheelData(0).mRadius * 2 + EXPLOSIVELY_DELICIOUS_HEIGHT_ADDITION;
+
+										 PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();
+										 car->setScale(glm::vec3(physicalCarDimensions.x, physicalCarDimensions.y + k, physicalCarDimensions.z));
+
+										 m_world.addGameObject(car);
+										 m_scene.addActor(*physicalCar->getRigidDynamicActor());
+
+										 //Set the vehicle to rest in first gear.
+										 //Set the vehicle to use auto-gears.
+										 physicalCar->setToRestState();
+										 physicalCar->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
+										 physicalCar->mDriveDynData.setUseAutoGears(true);
+
+										 car->setSoundChassis(ChassisCrashSound());
+										 return car;
+	}
 	case OBJECT_UI:
 	{
 		Renderable2D *renderable = new Renderable2D(NULL);
@@ -187,9 +221,9 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return bullet;
 	}
-	case OBJECT_BULLET_SUPER_VOLCANO:
+	case OBJECT_BULLET_EXPLOSIVELY_DELICIOUS:
 	{
-		Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO));
+		Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_BULLET_EXPLOSIVELY_DELICIOUS));
 		Renderable3D *renderable = new Renderable3D(model, true, true);
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
@@ -204,7 +238,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
 		Physicable *physicable = new Physicable(physicalBullet);
 
-		Bullet *bullet = new VolcanoGuySuperBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
+		Bullet *bullet = new ExplosivelyDeliciousBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
 		bullet->setSound(ExplosionSound());
 		bullet->playSound();
 
@@ -212,6 +246,29 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		m_scene.addActor(*physicalBullet);
 
 		return bullet;
+	}
+	case OBJECT_EXPLOSIVELY_DELICIOUS_SUPER:
+	{
+											   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER));
+											   Renderable3D *renderable = new Renderable3D(model, true, true);
+											   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+											   Animatable *animatable = new Animatable();
+
+
+											   PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+											   
+											   PxRigidDynamic *explosion = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER, objectId, pos, geom, 0, NULL, NULL, NULL));
+											   
+											   animatable->setRotation(static_cast<Object3D *>(parent)->getFullRotation());
+											   animatable->setScale(glm::vec3(explosion->getWorldBounds().getDimensions().x / 5, explosion->getWorldBounds().getDimensions().y / 5, explosion->getWorldBounds().getDimensions().z / 5));
+											   Physicable *physicable = new Physicable(explosion);
+
+											   ExplosivelyDeliciousSuper *superExplosion = new ExplosivelyDeliciousSuper(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
+											   superExplosion->setSound(ExplosionSound());
+											   superExplosion->playSound();
+
+											   m_world.addGameObject(superExplosion);
+											   m_scene.addActor(*explosion);
 	}
 	case OBJECT_HEALTH_BAR:
 	{

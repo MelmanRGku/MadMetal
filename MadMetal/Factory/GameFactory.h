@@ -14,9 +14,12 @@
 #include "Renderer\Renderable2D.h"
 #include "Objects\DrivingStyleFast.h"
 #include "Objects\Cars\MeowMix.h"
+#include "Objects\Cars\ExplosivelyDelicious.h"
+#include "Objects\ExplosivelyDeliciousSuper.h"
 #include "Objects\Bullet.h"
 #include "Objects\MeowMixBullet.h"
 #include "Objects\VolcanoGuySuperBullet.h"
+#include "Objects\ExplosivelyDeliciousBullet.h"
 #include "Objects\Track.h"
 #include "Objects\BulletCarCollision.h"
 #include "Objects\UI.h"
@@ -39,9 +42,11 @@ class GameFactory
 public:
 	enum Objects {
 		OBJECT_MEOW_MIX,
-		OBJECT_PLANE,
+		OBJECT_EXPLOSIVELY_DELICIOUS,
 		OBJECT_BULLET_MEOW_MIX,
-		OBJECT_BULLET_SUPER_VOLCANO,
+		OBJECT_BULLET_EXPLOSIVELY_DELICIOUS,
+		OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
+		OBJECT_PLANE,
 		OBJECT_HEALTH_BAR,
 		OBJECT_GAUGE_BAR,
 		OBJECT_TEXT_2D,

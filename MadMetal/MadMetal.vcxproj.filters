@@ -255,6 +255,9 @@
     <ClCompile Include="Simulation\SinglePlayerMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\Cars\ExplosivelyDelicious.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global\Settings.h">
@@ -564,6 +567,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\PowerUpAttack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Cars\ExplosivelyDelicious.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\ExplosivelyDeliciousBullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\ExplosivelyDeliciousSuper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
