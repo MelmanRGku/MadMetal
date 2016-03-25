@@ -163,7 +163,7 @@ void Car::updateSuper(float dt)
 #define CAR_SPIN 45, 0, 45
 void Car::updateHealth(float dtMillis)
 {
-	if (m_currentHealth < 0)	
+	if (m_currentHealth <= 0)	
 	{
 		if (m_deathTimerMillis > 0)
 		{
