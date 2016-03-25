@@ -24,7 +24,6 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 		getDrivablePart()->getWorldBounds().maximum.x - 280,
 		getDrivablePart()->getWorldBounds().maximum.x - 40,
 		getDrivablePart()->getWorldBounds().minimum.z + 360,
-		//getDrivablePart()->getWorldBounds().minimum.z + 400,
 		getDrivablePart()->getWorldBounds().maximum.z - 520,
 		getDrivablePart()->getWorldBounds().maximum.y,
 		TOP);
@@ -58,27 +57,23 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	m_waypointSystems.push_back(nextLocation2);
 
+	WaypointSystem * nextLocation3 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().minimum.x + 40,
+		getDrivablePart()->getWorldBounds().maximum.x - 180,
+		getDrivablePart()->getWorldBounds().maximum.z - 100,
+		getDrivablePart()->getWorldBounds().maximum.z - 20,
+		getDrivablePart()->getWorldBounds().maximum.y,
+		RIGHT);
 
-	//WaypointSystem * nextLocation3 = new WaypointSystem(
-	//	getDrivablePart()->getWorldBounds().minimum.x + 120,
-	//	getDrivablePart()->getWorldBounds().maximum.x,
-	//	getDrivablePart()->getWorldBounds().minimum.z,
-	//	getDrivablePart()->getWorldBounds().minimum.z + 120,
-	//	getDrivablePart()->getWorldBounds().maximum.y,
-	//	BOTTOM);
+	for (int i = 0; i < nextLocation3->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation3->getWaypointMap().at(i).begin(), nextLocation3->getWaypointMap().at(i).end());
+	}
 
-	////m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
-	//for (int i = 0; i < nextLocation3->getWaypointMap().size(); i++)
-	//{
-	//	m_waypointList.insert(m_waypointList.end(), nextLocation3->getWaypointMap().at(i).begin(), nextLocation3->getWaypointMap().at(i).end());
-	//}
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystems(LEFT, RIGHT, *lastWaypointSystem, *nextLocation3, lastWaypointSystem->getWaypointMap().size() - 2, 0, true);
 
-	//lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
-	//stitchWaypointSystems(LEFT, RIGHT, *lastWaypointSystem, *nextLocation3, 0, nextLocation3->getWaypointMap().size() - 2, true);
-	//stitchWaypointSystems(BOTTOM, TOP, *m_waypointSystems.at(0), *nextLocation3, 0, 0, false);
-
-	//m_waypointSystems.push_back(nextLocation3);
-
+	m_waypointSystems.push_back(nextLocation3);
 }
 
 Track::~Track()
@@ -160,15 +155,15 @@ void Track::stitchWaypointSystems(Boundry lastWaypointSystemLocation, Boundry ne
 	}
 
 
-	for (int i = 0; i < m_waypointList.size(); i++)
-	{
-		std::cout << "waypoint: " << m_waypointList[i]->getIndex() << " " << " and is connected to ";
-		for (int k = 0; k < m_waypointList[i]->getListOfAdjacentWaypoints().size(); k++)
-		{
-			std::cout << m_waypointList[i]->getListOfAdjacentWaypoints().at(k)->getIndex() << ", ";
-		}
-		std::cout << "\n";
-	}
+	//for (int i = 0; i < m_waypointList.size(); i++)
+	//{
+	//	std::cout << "waypoint: " << m_waypointList[i]->getIndex() << " " << " and is connected to ";
+	//	for (int k = 0; k < m_waypointList[i]->getListOfAdjacentWaypoints().size(); k++)
+	//	{
+	//		std::cout << m_waypointList[i]->getListOfAdjacentWaypoints().at(k)->getIndex() << ", ";
+	//	}
+	//	std::cout << "\n";
+	//}
 
 }
 
@@ -287,6 +282,9 @@ void Track::recalculateWaypointSystemIds(WaypointSystem& waypointSystem1, Waypoi
 
 void Track::setInvalid()
 {
+	m_waypointList[0]->setValid(false);
+	m_waypointList[1]->setValid(false);
+
 	for (int i = 16; i < 555; i++)
 	{
 		if ((i > 16 && i < 21) ||

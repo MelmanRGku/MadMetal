@@ -43,7 +43,7 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 			{
 				PxGeometry **geom = new PxGeometry *[1];
 				geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_LENGTH_COLLISION, yposition, WAYPOINT_WIDTH_COLLISION));
-				PxTransform *pos = new PxTransform(i, yposition, j);
+				PxTransform *pos = new PxTransform(j, yposition, i);
 				Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
 				tempWaypoint->setId(index);
 				delete pos;
@@ -66,7 +66,7 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 			{
 				PxGeometry **geom = new PxGeometry *[1];
 				geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_LENGTH_COLLISION, yposition, WAYPOINT_WIDTH_COLLISION));
-				PxTransform *pos = new PxTransform(i, yposition, j);
+				PxTransform *pos = new PxTransform(j, yposition, i);
 				Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
 				tempWaypoint->setId(index);
 				delete pos;
@@ -82,22 +82,22 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 		break;
 	case RIGHT:
 		int numberOfColumns = (abs(trackWidthMax - trackWidthMin) / (WAYPOINT_TRUE_WIDTH * 2));
-		for (int i = trackLengthMax - WAYPOINT_TRUE_LENGTH; i > trackLengthMin; i -= ((WAYPOINT_TRUE_LENGTH)* 2))
+		for (int i = trackLengthMin + WAYPOINT_TRUE_LENGTH; i < trackLengthMax; i += ((WAYPOINT_TRUE_LENGTH)* 2))
 		{
 			std::vector<Waypoint*> newVectorWaypoint;
 			m_waypointMap.push_back(newVectorWaypoint);
-			int columnIndex = numberOfColumns;
-			for (int j = trackWidthMax - WAYPOINT_TRUE_WIDTH; j > trackWidthMin; j -= ((WAYPOINT_TRUE_WIDTH)* 2))
+			int columnIndex = numberOfColumns - 1;
+			for (int j = trackWidthMin + WAYPOINT_TRUE_WIDTH; j < trackWidthMax; j += ((WAYPOINT_TRUE_WIDTH)* 2))
 			{
 				PxGeometry **geom = new PxGeometry *[1];
 				geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_LENGTH_COLLISION, yposition, WAYPOINT_WIDTH_COLLISION));
-				PxTransform *pos = new PxTransform(i, yposition, j);
+				PxTransform *pos = new PxTransform(j, yposition, i);
 				Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
 				tempWaypoint->setId(index);
 				delete pos;
 				delete geom[0];
 				delete[] geom;
-				tempWaypoint->setId((numberOfColumns - columnIndex));
+				tempWaypoint->setId(columnIndex);
 				m_waypointMap[index].push_back(tempWaypoint);
 				m_waypoints.push_back(tempWaypoint);
 				columnIndex--;
