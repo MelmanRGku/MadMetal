@@ -31,6 +31,7 @@
 #include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 #include "Objects\AnimatedExplosion.h"
+#include "Objects\VehicleSpecificationsMeowMix.h"
 
 class GameFactory
 {

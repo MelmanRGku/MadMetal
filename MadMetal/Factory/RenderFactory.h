@@ -11,6 +11,8 @@ public:
 
 	enum RenderableObjects {
 		RENDERABLE_OBJECT_CAR,
+		RENDERABLE_OBJECT_MEOWMIX,
+		RENDERABLE_OBJECT_GARGANTULOUS,
 		RENDERABLE_OBJECT_PLANE,
 		RENDERABLE_OBJECT_TRACK_DRIVABLE,
 		RENDERABLE_OBJECT_TRACK_NON_DRIVABLE,
@@ -47,7 +49,11 @@ public:
 	{
 		switch (objectToMake) {
 		case RENDERABLE_OBJECT_CAR:
+			return Assets::getModel("Gargantulous");
+		case RENDERABLE_OBJECT_MEOWMIX:
 			return Assets::getModel("Meowmix");
+		case RENDERABLE_OBJECT_GARGANTULOUS:
+			return Assets::getModel("Gargantulous");
 		case RENDERABLE_OBJECT_PLANE:
 			return Assets::getModel("plane");
 		case RENDERABLE_OBJECT_BULLET_MEOW_MIX:

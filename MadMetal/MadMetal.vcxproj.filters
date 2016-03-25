@@ -267,6 +267,21 @@
     <ClCompile Include="Simulation\SinglePlayerMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game Logic\PositionManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\VehicleSpecifications.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\DrivingStyleHealth.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Cars\Gargantulous.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global\Settings.h">
@@ -575,6 +590,27 @@
     <ClInclude Include="Game Logic\WaypointDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game Logic\PositionManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\MainMenuSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\MenuSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\VehicleSpecifications.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\DrivingStyleHealth.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Cars\Gargantulous.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />
@@ -588,6 +624,21 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Assets\Models\Terrain-Road.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\lava rock.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\lavaRocks.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\Skirt.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\Staff.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\TikiTest.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

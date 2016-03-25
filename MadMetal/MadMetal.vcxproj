@@ -79,6 +79,10 @@
     <ClCompile Include="Game Logic\PositionManager.cpp" />
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
+    <ClCompile Include="Objects\Cars\Gargantulous.cpp" />
+    <ClCompile Include="Objects\DrivingStyleHealth.cpp" />
+    <ClCompile Include="Objects\VehicleSpecifications.cpp" />
+    <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp" />
     <ClCompile Include="Simulation\MainMenu.cpp" />
     <ClCompile Include="Objects\MapUI.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp" />
@@ -166,10 +170,14 @@
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
     <ClInclude Include="Objects\AnimatedExplosion.h" />
     <ClInclude Include="Objects\AnimatedModel.h" />
+    <ClInclude Include="Objects\Cars\Gargantulous.h" />
+    <ClInclude Include="Objects\DrivingStyleHealth.h" />
     <ClInclude Include="Objects\Particle.h" />
     <ClInclude Include="Game Logic\WaypointDefinitions.h" />
     <ClInclude Include="Objects\MainMenuSystem.h" />
     <ClInclude Include="Objects\MenuSystem.h" />
+    <ClInclude Include="Objects\VehicleSpecifications.h" />
+    <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h" />
     <ClInclude Include="Simulation\MainMenu.h" />
     <ClInclude Include="Objects\MapUI.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectScaleUpdater.h" />
@@ -272,7 +280,12 @@
   <ItemGroup>
     <Image Include="Assets\Models\asphalt_texture409.jpg" />
     <Image Include="Assets\Models\Building_texture4.jpg" />
+    <Image Include="Assets\Models\lava rock.jpg" />
+    <Image Include="Assets\Models\lavaRocks.png" />
+    <Image Include="Assets\Models\Skirt.png" />
+    <Image Include="Assets\Models\Staff.png" />
     <Image Include="Assets\Models\Terrain-Road.jpg" />
+    <Image Include="Assets\Models\TikiTest.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -48,6 +48,7 @@ void main(void)
 
 
 
+
     vec3 specular = pow(max(dot(N, h), 0.0), specular_power) * specular_albedo;
 
 	if(specular.x + specular.y + specular.z > 2.0) specular = vec3(0.5, 0.5, 0.5);
