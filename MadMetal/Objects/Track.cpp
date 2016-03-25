@@ -35,19 +35,19 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 		m_waypointList.insert(m_waypointList.end(), nextLocation1->getWaypointMap().at(i).begin(), nextLocation1->getWaypointMap().at(i).end());
 	}
 	WaypointSystem* lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
-	stitchWaypointSystems(RIGHT, LEFT, *lastWaypointSystem, *nextLocation1, 0, 2, true);
+	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation1, 0, 2, true);
 
 	m_waypointSystems.push_back(nextLocation1);
 
 	setInvalid();
 
 	//WaypointSystem * nextLocation2 = new WaypointSystem(
-	//	getDrivablePart()->getWorldBounds().maximum.x - 80,
-	//	getDrivablePart()->getWorldBounds().maximum.x,
-	//	getDrivablePart()->getWorldBounds().minimum.z + 120,
+	//	getDrivablePart()->getWorldBounds().minimum.x - 200,
+	//	getDrivablePart()->getWorldBounds().maximum.x - 120,
+	//	getDrivablePart()->getWorldBounds().maximum.z - 480,
 	//	getDrivablePart()->getWorldBounds().maximum.z,
 	//	getDrivablePart()->getWorldBounds().maximum.y,
-	//	RIGHT);
+	//	TOP);
 
 	////m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
 	//for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
@@ -291,16 +291,29 @@ void Track::setInvalid()
 {
 	for (int i = 8; i < 140; i++)
 	{
-		if ((i > 7 && i < 22) ||
-			(i > 27 && i < 43) ||
-			(i > 49 && i < 52) ||
-			(i > 54 && i < 63) ||
+		if ((i > 7 && i < 10) ||
+			(i > 11 && i < 16) ||
+			(i > 17 && i < 22) ||
+			(i > 23 && i < 29) ||
+			(i > 30 && i < 34) ||
+			(i > 36 && i < 42) ||
+			(i > 43 && i < 48) ||
+			(i > 49 && i < 54) ||
+			(i > 55 && i < 60) ||
+			(i > 61 && i < 66) ||
 			(i > 66 && i < 71) ||
-			(i > 78 && i < 85) ||
-			(i > 86 && i < 94) ||
-			(i > 95 && i < 99) ||
-			(i > 107 && i < 124) ||
-			(i > 128 && i < 140))
+			(i > 72 && i < 76) ||
+			(i > 78 && i < 82) || 
+			(i > 84 && i < 87) || 
+			(i > 88 && i < 92) || 
+			(i > 93 && i < 98) ||
+			(i > 99 && i < 104) ||
+			(i > 105 && i < 110) || 
+			(i > 111 && i < 116) || 
+			(i > 117 && i < 122) || 
+			(i > 124 && i < 129) ||
+			(i > 131 && i < 136) ||
+			(i > 137 && i < 140))
 		{
 			m_waypointList[i]->setValid(false);
 
