@@ -40,12 +40,12 @@ void MeowMix::fire()
 		delete pos;
 		m_reloadRemainingSeconds = m_superReloadRateSeconds;*/
 
-		PxSweepBuffer hit;              // [out] Sweep results
-		PxGeometry sweepShape = PxSphereGeometry(1);    // [in] swept shape
-		PxTransform initialPose = m_car.getRigidDynamicActor()->getGlobalPose();  // [in] initial shape pose (at distance=0)
-		glm::vec3 forward = getForwardVector();
-		PxVec3 sweepDirection = PxVec3(forward.x, forward.y, forward.z);    // [in] normalized sweep direction
-		bool status = m_scene->sweep(sweepShape, initialPose, sweepDirection, sweepDistance, hit);
+		//PxSweepBuffer hit;              // [out] Sweep results
+		//PxGeometry sweepShape = PxSphereGeometry(1);    // [in] swept shape
+		//PxTransform initialPose = m_car.getRigidDynamicActor()->getGlobalPose();  // [in] initial shape pose (at distance=0)
+		//glm::vec3 forward = getForwardVector();
+		//PxVec3 sweepDirection = PxVec3(forward.x, forward.y, forward.z);    // [in] normalized sweep direction
+		//bool status = m_scene->sweep(sweepShape, initialPose, sweepDirection, sweepDistance, hit);
 
 	}
 	else {
