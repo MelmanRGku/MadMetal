@@ -23,6 +23,7 @@ public:
 		PHYSICAL_OBJECT_PARTICLE,
 		PHYSICAL_OBJECT_EXPLOSION,
 		PHYSICAL_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
+		PHYSICAL_OBJECT_MEOW_MIX_SUPER,
 		SPEED_POWERUP,
 		ANIMATION_TEST,
 		DEATH_VOLUME
@@ -146,7 +147,26 @@ public:
 			toReturn = bullet;
 			break;
 		}
+		case PHYSICAL_OBJECT_MEOW_MIX_SUPER:
+		{
+											   PxRigidDynamic * beam = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+											   PxFilterData simFilterData;
+											   simFilterData.word0 = COLLISION_FLAG_MEOW_MIX_SUPER;
+											   simFilterData.word1 = COLLISION_FLAG_MEOW_MIX_SUPER_AGAINST;
 
+											   beam->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+
+											   PxShape* shapes[1];
+											   beam->getShapes(shapes, 1);
+											   shapes[0]->setSimulationFilterData(simFilterData);
+											   shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+											   shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+											   setFilterDataId(objectId, beam);
+											   
+											   toReturn = beam;
+											   break;
+		}
 		case PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO:
 		{
 			PxRigidDynamic * bullet = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);

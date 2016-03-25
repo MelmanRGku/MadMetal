@@ -16,6 +16,7 @@ public:
 		RENDERABLE_OBJECT_TRACK_DRIVABLE,
 		RENDERABLE_OBJECT_TRACK_NON_DRIVABLE,
 		RENDERABLE_OBJECT_BULLET_MEOW_MIX,
+		RENDERABLE_OBJECT_MEOW_MIX_SUPER,
 		RENDERABLE_OBJECT_BULLET_EXPLOSIVELY_DELICIOUS,
 		RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
 		RENDERABLE_OBJECT_GGO,
@@ -59,7 +60,7 @@ public:
 	{
 		switch (objectToMake) {
 		case RENDERABLE_OBJECT_CAR:
-			return Assets::getModel("uglyCarWithGuns");
+			return Assets::getModel("UglyCarWithGuns");
 		case RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS:
 			return Assets::getModel("twisted1");
 		case RENDERABLE_OBJECT_TRAIN_CAR:
@@ -76,6 +77,8 @@ public:
 			return Assets::getModel("explosively_delicious_bullet");
 		case RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER:
 			return Assets::getModel("explosively_delicious_super");
+		case RENDERABLE_OBJECT_MEOW_MIX_SUPER:
+			return Assets::getModel("powerup_particle_attack"); //put in beam!
 		case RENDERABLE_OBJECT_GGO:
 			return Assets::getModel("GGO");
 		case (RENDERABLE_OBJECT_ATTACK_POWERUP_PICKUP) :

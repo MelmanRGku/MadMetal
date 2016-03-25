@@ -23,6 +23,17 @@ GameFactory::~GameFactory()
 	delete m_physicsFactory;
 }
 
+bool GameFactory::sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal maxDistance, PxRaycastBuffer &hit)
+{
+	return m_scene.raycast(origin, direction, maxDistance, hit);
+}
+
+bool GameFactory::sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit)
+{
+	return m_scene.sweep(sweepShape, origin, sweepDirection, maxDistance, hit);
+}
+
+
 TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent)
 {
 	long objectId = getNextId();
@@ -233,6 +244,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		glm::vec3 speed = 150.f * static_cast<Object3D *>(parent)->getForwardVector(); speed += glm::vec3(0, 5.f, 0);
 		PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
+		
 		delete physicsSpeed;
 		animatable->setRotation(static_cast<Object3D *>(parent)->getFullRotation());
 		animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
@@ -269,6 +281,31 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 											   m_world.addGameObject(superExplosion);
 											   m_scene.addActor(*explosion);
+	}
+	case OBJECT_MEOW_MIX_SUPER:
+	{
+											   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOW_MIX_SUPER));
+											   Renderable3D *renderable = new Renderable3D(model, true, true);
+											   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+											   Animatable *animatable = new Animatable();
+
+
+											   PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+
+											   PxRigidDynamic *beam = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER, objectId, pos, geom, 0, NULL, NULL, NULL));
+											   
+											   
+											   animatable->setScale(glm::vec3(beam->getWorldBounds().getDimensions().x, beam->getWorldBounds().getDimensions().y, beam->getWorldBounds().getDimensions().z));
+											   //animatable->setRotation(static_cast<Object3D *>(parent)->getFullRotation());
+											  
+											   Physicable *physicable = new Physicable(beam);
+
+											   MeowMixSuper * superBeam = new MeowMixSuper(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
+											   superBeam->setSound(ExplosionSound());
+											   superBeam->playSound();
+
+											   m_world.addGameObject(superBeam);
+											   m_scene.addActor(*beam);
 	}
 	case OBJECT_HEALTH_BAR:
 	{

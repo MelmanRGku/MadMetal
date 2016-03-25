@@ -51,6 +51,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
 			PxTransform *pos = new PxTransform(0, 1, 0);//-130 + i * 10, 40, 0);
 			MeowMix *car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
+			//ExplosivelyDelicious *car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS, pos, NULL, NULL));
 			humanPlayer->setCar(car);
 			delete pos;
 
@@ -69,7 +70,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		}
 		else {
 			AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
-			PxTransform *pos = new PxTransform(1000 + i * 10, -1, 0);
+			PxTransform *pos = new PxTransform(0 + i * 1000, 1, 20);
 			ai->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL)));
 			delete pos;
 			m_aiPlayers.push_back(ai);
@@ -418,7 +419,7 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 void GameSimulation::setupBasicGameWorldObjects() {
 	//Power up test
 	PxTransform * pos;
-	PxGeometry **powerGeom = new PxGeometry*[1];
+	/*PxGeometry **powerGeom = new PxGeometry*[1];
 	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
 	pos = new PxTransform(0, 5, 20);
 	PowerUp * powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
@@ -433,7 +434,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	pos = new PxTransform(10, 5, 20);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(3);
-	delete pos;
+	delete pos;*/
 	
 	//trainCar test
 	PxGeometry **trainGeom = new PxGeometry*[1];

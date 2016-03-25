@@ -14,6 +14,7 @@
 #include "Renderer\Renderable2D.h"
 #include "Objects\DrivingStyleFast.h"
 #include "Objects\Cars\MeowMix.h"
+#include "Objects\MeowMixSuper.h"
 #include "Objects\Cars\ExplosivelyDelicious.h"
 #include "Objects\ExplosivelyDeliciousSuper.h"
 #include "Objects\Bullet.h"
@@ -36,7 +37,7 @@
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 #include "Objects\AnimatedExplosion.h"
 #include "Objects\TrainCar.h"
-
+#include "PxQueryReport.h"
 class GameFactory
 {
 public:
@@ -44,6 +45,7 @@ public:
 		OBJECT_MEOW_MIX,
 		OBJECT_EXPLOSIVELY_DELICIOUS,
 		OBJECT_BULLET_MEOW_MIX,
+		OBJECT_MEOW_MIX_SUPER,
 		OBJECT_BULLET_EXPLOSIVELY_DELICIOUS,
 		OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
 		OBJECT_PLANE,
@@ -71,11 +73,15 @@ public:
 		OBJECT_EXPLOSION_1,
 		OBJECT_TRAIN_CAR,
 		OBJECT_DEATH_PIT,
-
 		OBJECT_ANIMATION_TEST
 	};
 
+	
+
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);
+
+	bool sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal MaxDistance, PxRaycastBuffer &hit);
+	bool sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit);
 
 	static long getNextId() { return ++lastId; }
 
