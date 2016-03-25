@@ -6,7 +6,7 @@
 		//The moment of inertia is just the moment of inertia of a cuboid but modified for easier steering.
 		//Center of mass offset is 0.65m above the base of the chassis and 0.25m towards the front.
 		m_chassisMass = 1500.0f;
-		m_chassisDims = PxVec3(5.f, 2.0f, 7.0f);
+		m_chassisDims = PxVec3(5.f, 5.0f, 7.0f);
 		m_chassisMOI = PxVec3((m_chassisDims.y*m_chassisDims.y + m_chassisDims.z*m_chassisDims.z)*m_chassisMass / 12.0f,
 			                  (m_chassisDims.x*m_chassisDims.x + m_chassisDims.z*m_chassisDims.z)*0.8f*m_chassisMass / 12.0f,
 			                  (m_chassisDims.x*m_chassisDims.x + m_chassisDims.y*m_chassisDims.y)*m_chassisMass / 12.0f);
