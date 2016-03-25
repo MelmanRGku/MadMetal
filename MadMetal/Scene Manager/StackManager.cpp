@@ -67,17 +67,6 @@ StackManager::StackManager()
 {
 	Assets::status = new LoadingStatus();
 
-	//get the current opengl context and create a new one for the current device
-	HGLRC ctx = wglGetCurrentContext();
-	HGLRC shared = wglCreateContext(wglGetCurrentDC());
-
-	//share lists between the two (this does not share vao and vfo)
-	wglShareLists(ctx, shared);
-
-	//start loading assets in the second thread and give it access to the current DC and GLRC
-	loadingThread = new std::thread(Assets::load, "Assets/Models", "Assets/Textures", wglGetCurrentDC(), shared);
-
-
 	//initaliaze input
 	m_input = new Input();
 	//set starting scene to Main Menu and pass a controller handle
@@ -94,8 +83,17 @@ StackManager::StackManager()
 
 	m_audio = new Audio();
 
-	//create stack with main menu on top
-	m_stack = new SceneStack(new MainMenu(m_input, m_audio));
+
+	//get the current opengl context and create a new one for the current device
+	HGLRC ctx = wglGetCurrentContext();
+	HGLRC shared = wglCreateContext(wglGetCurrentDC());
+
+	//share lists between the two (this does not share vao and vfo)
+	wglShareLists(ctx, shared);
+
+	//create stack with loadingScreen on top
+	m_mailBox->setTag(SceneMessage::eMainMenu);
+	m_stack = new SceneStack(new LoadingScreen(*m_mailBox, *m_audio, Assets::status, new std::thread(Assets::loadBeforeGameStarts, wglGetCurrentDC(), shared)));
 }
 
 StackManager::~StackManager()
@@ -115,6 +113,16 @@ void StackManager::readMailBox()
 	{
 	case(SceneMessage::eMainMenu) :
 		m_stack->clearStack();
+		if (loadingThread == NULL) {
+			//get the current opengl context and create a new one for the current device
+			HGLRC ctx = wglGetCurrentContext();
+			HGLRC shared = wglCreateContext(wglGetCurrentDC());
+
+			//share lists between the two (this does not share vao and vfo)
+			wglShareLists(ctx, shared);
+			//start loading assets in the second thread and give it access to the current DC and GLRC
+			loadingThread = new std::thread(Assets::load, "Assets/Models", "Assets/Textures", wglGetCurrentDC(), shared);
+		}
 		m_stack->pushScene(new MainMenu(m_input, m_audio));
 		break;
 	case(SceneMessage::eSingleCharSelect) :
@@ -126,15 +134,22 @@ void StackManager::readMailBox()
 		break;
 
 	case (SceneMessage::eLoadScreen) :
+		m_mailBox->setTag(SceneMessage::eGameSimulation);
 		m_stack->pushScene(new LoadingScreen(*m_mailBox, *m_audio, Assets::status, loadingThread));
 		break;
 	case (SceneMessage::eGameSimulation) :
+	{
 		m_stack->clearStack();
-		m_renderer->initializeScreens(2);
+		int numPlayers = 0;
+		for (ControllableTemplate *temp : m_mailBox->getPlayerTemplates()) {
+			if (temp->getGamePad() != NULL)
+				numPlayers++;
+		}
+		m_renderer->initializeScreens(numPlayers);
 		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), *m_audio));
 		m_renderer->setPlayers(static_cast<GameSimulation *>(m_stack->getTopScene())->getHumanPlayers());
 		break;
-
+	}
 	case (SceneMessage::ePause) :
 		m_stack->pushScene(new PauseScene(m_mailBox->getPlayerTemplates()));
 		break;

@@ -80,7 +80,7 @@ Track::~Track()
 {
 	for (std::vector<Waypoint*>::iterator it = m_waypointList.begin(); it != m_waypointList.end(); ++it)
 	{
-		delete *it;
+	//	delete *it;
 	}
 	
 	for (std::vector<WaypointSystem*>::iterator it = m_waypointSystems.begin(); it != m_waypointSystems.end(); ++it)
