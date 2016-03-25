@@ -1,17 +1,23 @@
 #include "PowerUp.h"
-#include "ParticleSystem\ParticleSystem.h"
+#include "ParticleSystem\ParticleEmitter.h"
+
 
 PowerUp::PowerUp(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
+	m_emitter = new ParticleEmitter(0.1, PxVec3(0, 10, 0), 1, "powerup_particle_attack", static_cast<Object3D * > (this));
 	activate();
-	PxVec3 dimensions = pable->getActor().getWorldBounds().getDimensions(); 
-	PxVec3 position = pable->getActor().getGlobalPose().p;
+
+	m_floatingYUpperLimit = m_floatingYLowerLimit = getAnimatablePos().y;
+	m_floatingYLowerLimit -= 1;
+	m_floatingYUpperLimit += 1;
+	m_floatingUp = true;
+	
 	
 }
 
 PowerUp::~PowerUp()
 {
-
+	delete m_emitter;
 }
 
 bool PowerUp::isActive()
@@ -43,7 +49,27 @@ void PowerUp::update(float dtMillis)
 		{
 			activate();
 		}
-	}
+	} else 
+	 {
+		if (m_floatingUp)
+		{
+			
+			if (getAnimatablePos().y > m_floatingYUpperLimit)
+			{
+				m_floatingUp = false;
+			}
+		}
+		else {
+			if (getAnimatablePos().y < m_floatingYLowerLimit)
+			{
+				m_floatingUp = true;
+			}
+		}
+		//std::cout << getPosition().y << ", " << m_floatLowerLimit.y << "," << m_floatUpperLimit.y << std::endl;
+		updatePosition(glm::vec3(0, m_floatingUp ? dtMillis * 2 : -dtMillis * 2, 0));
+		
+		 m_emitter->update(dtMillis);
+	 }
 }
 void PowerUp::setActiveType(int type)
 {
@@ -53,14 +79,17 @@ void PowerUp::setActiveType(int type)
 	case(1) :
 		m_type = PowerUpType::ATTACK;
 		m_renderable->setModel(Assets::getModel("attackPowerUp_pickup"));
+		m_emitter->setParticleModel("powerup_particle_attack");
 		break;
 	case(2) :
 		m_type = PowerUpType::DEFENSE;
 		m_renderable->setModel(Assets::getModel("sheildPowerUp_pickup"));
+		m_emitter->setParticleModel("powerup_particle_defense");
 		break;
 	case(3) :
 		m_type = PowerUpType::SPEED;
 		m_renderable->setModel(Assets::getModel("speedPowerUp_pickup"));
+		m_emitter->setParticleModel("powerup_particle_speed");
 		break;
 	default:
 		m_type = PowerUpType::NONE;
@@ -78,14 +107,17 @@ void PowerUp::activate()
 	case(1) :
 		m_type = PowerUpType::ATTACK;
 		m_renderable->setModel(Assets::getModel("attackPowerUp_pickup"));
+		m_emitter->setParticleModel("powerup_particle_attack");
 		break;
 	case(2) :
 		m_type = PowerUpType::DEFENSE;
 		m_renderable->setModel(Assets::getModel("sheildPowerUp_pickup"));
+		m_emitter->setParticleModel("powerup_particle_defense");
 		break;
 	case(3) :
 		m_type = PowerUpType::SPEED;
 		m_renderable->setModel(Assets::getModel("speedPowerUp_pickup"));
+		m_emitter->setParticleModel("powerup_particle_speed");
 		break;
 	default:
 		m_type = PowerUpType::NONE;

@@ -2,10 +2,6 @@
 #include "Object3D.h"
 #include "Global\Assets.h"
 
-
-
-
-
 #define ATTACK_DURATION_SECONDS 5
 #define DEFENSE_DURATION_SECONDS 5
 #define SPEED_DURATION_SECONDS 1
@@ -15,7 +11,7 @@
 #define SPEED_IMPACT_DAMAGE 50
 #define SPEED_IMPULSE_AMOUNT 10000
 
-class ParticleSystem;
+class ParticleEmitter;
 
 enum PowerUpType {
 	NONE,
@@ -28,7 +24,13 @@ class PowerUp : public Object3D
 {
 private:
 	PowerUpType m_type;
+	ParticleEmitter * m_emitter;
+
 	float m_respawnDelay;
+	float m_floatingYUpperLimit;
+	float m_floatingYLowerLimit;
+	bool m_floatingUp;
+	
 	const float m_attackDuration = ATTACK_DURATION_SECONDS;
 	const float m_defenseDuration = DEFENSE_DURATION_SECONDS;
 	const float m_speedDuration = SPEED_DURATION_SECONDS;

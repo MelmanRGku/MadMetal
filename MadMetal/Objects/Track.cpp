@@ -154,12 +154,12 @@ void Track::stitchWaypointSystems(Boundry lastWaypointSystemLocation, Boundry ne
 
 	for (int i = 0; i < m_waypointList.size(); i++)
 	{
-		std::cout << "waypoint: " << m_waypointList[i]->getIndex() << " " << " and is connected to ";
+		//std::cout << "waypoint: " << m_waypointList[i]->getIndex() << " " << " and is connected to ";
 		for (int k = 0; k < m_waypointList[i]->getListOfAdjacentWaypoints().size(); k++)
 		{
-			std::cout << m_waypointList[i]->getListOfAdjacentWaypoints().at(k)->getIndex() << ", ";
+			//std::cout << m_waypointList[i]->getListOfAdjacentWaypoints().at(k)->getIndex() << ", ";
 		}
-		std::cout << "\n";
+		//std::cout << "\n";
 	}
 
 }

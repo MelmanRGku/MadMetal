@@ -36,25 +36,25 @@ void ParticleData::generate(size_t maxSize)
 
 void ParticleData::kill(size_t id)
 {
-	if (m_countAlive > 0)
+	/*if (m_countAlive > 0)
 	{
 		m_alive[id] = false;
 		m_particles[id]->setAlive(false);
 		swapData(id, m_countAlive - 1);
 		m_countAlive--;
-	}
+	}*/
 }
 
 void ParticleData::wake(size_t id)
 {
-	if (m_countAlive < m_maxParticleCount)
+	/*if (m_countAlive < m_maxParticleCount)
 	{
 		m_alive[id] = true;
 		m_particles[id]->setAlive(true);
 		swapData(id, m_countAlive);
 		
 		m_countAlive++;
-	}
+	}*/
 
 }
 

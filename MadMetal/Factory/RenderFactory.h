@@ -46,6 +46,10 @@ public:
 		RENDERABLE_OBJECT_SPEED_POWERUP_PICKUP,
 
 		RENDERABLE_OBJECT_SHIELD_POWERUP_ACTIVE,
+
+		RENDERABLE_OBJECT_PARTICLE_POWERUP_ATTACK,
+		RENDERABLE_OBJECT_PARTICLE_POWERUP_DEFENSE,
+		RENDERABLE_OBJECT_PARTICLE_POWERUP_SPEED,
 	};
 
 	
@@ -76,6 +80,12 @@ public:
 			return Assets::getModel("speedPowerUp_pickup");
 		case RENDERABLE_OBJECT_SHIELD_POWERUP_ACTIVE:
 			return Assets::getModel("sheildPowerUp");
+		case RENDERABLE_OBJECT_PARTICLE_POWERUP_ATTACK:
+			return Assets::getModel("powerup_particle_attack");
+		case RENDERABLE_OBJECT_PARTICLE_POWERUP_DEFENSE:
+			return Assets::getModel("powerup_particle_defense");
+		case RENDERABLE_OBJECT_PARTICLE_POWERUP_SPEED:
+			return Assets::getModel("powerup_particle_speed");
 		case RENDERABLE_OBJECT_EXPLOSION1_1:
 			return Assets::getModel("explosion1_1");
 		case RENDERABLE_OBJECT_EXPLOSION1_2:

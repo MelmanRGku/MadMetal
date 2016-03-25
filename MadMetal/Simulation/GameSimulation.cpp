@@ -10,7 +10,7 @@
 #include "Objects\TestObject.h"
 #include "Objects\CollisionVolume.h"
 #include "Objects\PowerUp.h"
-#include "ParticleSystem\ParticleSystem.h"
+
 #include <sstream>
 
 
@@ -420,21 +420,21 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	PxTransform * pos;
 	PxGeometry **powerGeom = new PxGeometry*[1];
 	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
-	pos = new PxTransform(0, 2.5, 20);
+	pos = new PxTransform(0, 5, 20);
 	PowerUp * powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(1);
-
+	
 	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
-	pos = new PxTransform(-5, 2.5, 20);
+	pos = new PxTransform(-10, 5, 20);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
 
 	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
-	pos = new PxTransform(5, 2.5, 20);
+	pos = new PxTransform(10, 5, 20);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(3);
 	delete pos;
-
+	
 	//trainCar test
 	PxGeometry **trainGeom = new PxGeometry*[1];
 	trainGeom[0] = new PxBoxGeometry(PxVec3(6,5,50));

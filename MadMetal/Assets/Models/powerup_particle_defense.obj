@@ -1,6 +1,6 @@
-# Blender v2.76 (sub 0) OBJ File: 'powerup_particle.blend'
+# Blender v2.76 (sub 0) OBJ File: 'powerup_particle_attack.blend'
 # www.blender.org
-mtllib powerup_particle.mtl
+mtllib powerup_particle_defense.mtl
 o Cube
 v -0.000000 1.000000 0.000000
 v -0.000000 0.000000 0.546900

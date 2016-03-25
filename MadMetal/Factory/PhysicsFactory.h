@@ -338,11 +338,13 @@ public:
 		}
 		case PHYSICAL_OBJECT_PARTICLE:
 		{
-										 PxRigidStatic * particle = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+										 PxRigidDynamic * particle = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+										 particle->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 										 
+										 particle->setLinearDamping(0);
 										 
 										 PxFilterData simFilterData;
-										 simFilterData.word0 = 0;
+										 simFilterData.word0 = COLLISION_FLAG_PARTICLE;
 										 simFilterData.word1 = 0;
 
 										 particle->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));

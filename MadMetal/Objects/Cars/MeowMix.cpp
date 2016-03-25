@@ -1,6 +1,6 @@
 #include "MeowMix.h"
 #include "Factory\GameFactory.h"
-#include "ParticleSystem\ParticleSystem.h"
+
 
 MeowMix::MeowMix(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Car(id, style, car, aable, pable, anable, rable)
 {
