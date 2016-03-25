@@ -6,18 +6,17 @@
 Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Object3D *drivablePart, Object3D *nonDrivablePart) : Object3D(id, aable, pable, anable, rable, NULL), drivablePart(drivablePart), nonDrivablePart(nonDrivablePart)
 {
 	WaypointSystem * startLocation = new WaypointSystem(
-		getDrivablePart()->getWorldBounds().maximum.x - 200,
-		getDrivablePart()->getWorldBounds().maximum.x - 120,
+		getDrivablePart()->getWorldBounds().maximum.x - 180,
+		getDrivablePart()->getWorldBounds().maximum.x - 140,
 		getDrivablePart()->getWorldBounds().minimum.z + 200,
 		getDrivablePart()->getWorldBounds().minimum.z + 360,
 		getDrivablePart()->getWorldBounds().maximum.y,
 		TOP);
 
-	//m_waypointList.resize(m_waypointList.size() + (startLocation->getWaypointMap().at(0).size() * startLocation->getWaypointMap().size()));
 	for (int i = 0; i < startLocation->getWaypointMap().size(); i++)
 	{
 		m_waypointList.insert(m_waypointList.end(), startLocation->getWaypointMap().at(i).begin(), startLocation->getWaypointMap().at(i).end());
-}
+	}
 
 	m_waypointSystems.push_back(startLocation);
 
@@ -25,40 +24,40 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 		getDrivablePart()->getWorldBounds().maximum.x - 280,
 		getDrivablePart()->getWorldBounds().maximum.x - 40,
 		getDrivablePart()->getWorldBounds().minimum.z + 360,
+		//getDrivablePart()->getWorldBounds().minimum.z + 400,
 		getDrivablePart()->getWorldBounds().maximum.z - 520,
 		getDrivablePart()->getWorldBounds().maximum.y,
 		TOP);
 
-	//m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
 	for (int i = 0; i < nextLocation1->getWaypointMap().size(); i++)
 	{
 		m_waypointList.insert(m_waypointList.end(), nextLocation1->getWaypointMap().at(i).begin(), nextLocation1->getWaypointMap().at(i).end());
 	}
 	WaypointSystem* lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
-	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation1, 0, 2, true);
+	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation1, 0, 5, true);
 
 	m_waypointSystems.push_back(nextLocation1);
 
 	setInvalid();
 
-	WaypointSystem * nextLocation2 = new WaypointSystem(
-		getDrivablePart()->getWorldBounds().maximum.x - 200,
-		getDrivablePart()->getWorldBounds().maximum.x - 120,
-		getDrivablePart()->getWorldBounds().maximum.z - 520,
-		getDrivablePart()->getWorldBounds().maximum.z - 40,
-		getDrivablePart()->getWorldBounds().maximum.y,
-		TOP);
+	//WaypointSystem * nextLocation2 = new WaypointSystem(
+	//	getDrivablePart()->getWorldBounds().maximum.x - 200,
+	//	getDrivablePart()->getWorldBounds().maximum.x - 120,
+	//	getDrivablePart()->getWorldBounds().maximum.z - 520,
+	//	getDrivablePart()->getWorldBounds().maximum.z - 40,
+	//	getDrivablePart()->getWorldBounds().maximum.y,
+	//	TOP);
 
-	//m_waypointList.resize(m_waypointList.size() + (nextLocation2->getWaypointMap().at(0).size() * nextLocation2->getWaypointMap().size()));
-	for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
-	{
-		m_waypointList.insert(m_waypointList.end(), nextLocation2->getWaypointMap().at(i).begin(), nextLocation2->getWaypointMap().at(i).end());
-	}
+	////m_waypointList.resize(m_waypointList.size() + (nextLocation2->getWaypointMap().at(0).size() * nextLocation2->getWaypointMap().size()));
+	//for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
+	//{
+	//	m_waypointList.insert(m_waypointList.end(), nextLocation2->getWaypointMap().at(i).begin(), nextLocation2->getWaypointMap().at(i).end());
+	//}
 
-	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
-	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation2, 2, 0, true);
+	//lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	//stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation2, 2, 0, true);
 
-	m_waypointSystems.push_back(nextLocation2);
+	//m_waypointSystems.push_back(nextLocation2);
 
 
 	//WaypointSystem * nextLocation3 = new WaypointSystem(
@@ -289,35 +288,60 @@ void Track::recalculateWaypointSystemIds(WaypointSystem& waypointSystem1, Waypoi
 
 void Track::setInvalid()
 {
-	for (int i = 8; i < 140; i++)
+	for (int i = 16; i < 555; i++)
 	{
-		if ((i > 7 && i < 10) ||
-			(i > 11 && i < 16) ||
-			(i > 17 && i < 22) ||
-			(i > 23 && i < 29) ||
-			(i > 30 && i < 34) ||
-			(i > 36 && i < 42) ||
-			(i > 43 && i < 48) ||
-			(i > 49 && i < 54) ||
-			(i > 55 && i < 60) ||
-			(i > 61 && i < 66) ||
-			(i > 66 && i < 71) ||
-			(i > 72 && i < 76) ||
-			(i > 78 && i < 82) || 
-			(i > 84 && i < 87) || 
-			(i > 88 && i < 92) || 
-			(i > 93 && i < 98) ||
-			(i > 99 && i < 104) ||
-			(i > 105 && i < 110) || 
-			(i > 111 && i < 116) || 
-			(i > 117 && i < 122) || 
-			(i > 124 && i < 129) ||
-			(i > 131 && i < 136) ||
-			(i > 137 && i < 140))
+		if ((i > 16 && i < 21) ||
+			(i > 22 && i < 33) ||
+			(i > 34 && i < 45) ||
+			(i > 46 && i < 57) ||
+			(i > 59 && i < 69) ||
+			(i > 71 && i < 81) ||
+			(i > 82 && i < 93) ||
+			(i > 95 && i < 105) ||
+			(i > 107 && i < 118) ||
+			(i > 121 && i < 131) ||
+			(i > 132 && i < 143) ||
+			(i > 144 && i < 155) ||
+			(i > 157 && i < 168) || 
+			(i > 179 && i < 180) || 
+			(i > 182 && i < 193) || 
+			(i > 194 && i < 205) ||
+			(i > 207 && i < 217) ||
+			(i > 219 && i < 229) || 
+			(i > 231 && i < 241) || 
+			(i > 243 && i < 252) || 
+			(i > 255 && i < 264) ||
+			(i > 266 && i < 276) ||
+			(i > 277 && i < 287) ||
+			
+			
+			(i > 289 && i < 298) ||
+			(i > 300 && i < 310) ||
+			(i > 311 && i < 321) ||
+			(i > 323 && i < 333) ||
+			(i > 334 && i < 344) ||
+			(i > 345 && i < 355) ||
+			(i > 356 && i < 367) ||
+			(i > 368 && i < 378) ||
+			(i > 379 && i < 390) ||
+			(i > 391 && i < 401) ||
+			(i > 402 && i < 412) ||
+			(i > 414 && i < 424) ||
+			(i > 426 && i < 436) ||
+			(i > 438 && i < 448) ||
+			(i > 450 && i < 461) ||
+			(i > 463 && i < 473) ||
+			(i > 475 && i < 486) ||
+			(i > 488 && i < 498) ||
+			(i > 500 && i < 511) ||
+			(i > 512 && i < 524) ||
+			(i > 525 && i < 536) ||
+			(i > 538 && i < 548) ||
+			(i > 550 && i < 555))
 		{
 			m_waypointList[i]->setValid(false);
 
-			std::cout << "making invalid: " << m_waypointList[i]->getIndex() << "\n";
+			//std::cout << "making invalid: " << m_waypointList[i]->getIndex() << "\n";
 		}
 	}
 }

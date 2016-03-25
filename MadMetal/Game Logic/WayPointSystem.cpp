@@ -2,10 +2,10 @@
 #include "Game Logic\PathFinding.h"
 #include "Factory\GameFactory.h"
 
-static const float WAYPOINT_WIDTH_COLLISION = 17;
-static const float WAYPOINT_LENGTH_COLLISION = 17;
-static const float WAYPOINT_TRUE_WIDTH = 20;
-static const float WAYPOINT_TRUE_LENGTH = 20;
+static const float WAYPOINT_WIDTH_COLLISION = 8;
+static const float WAYPOINT_LENGTH_COLLISION = 8;
+static const float WAYPOINT_TRUE_WIDTH = 10;
+static const float WAYPOINT_TRUE_LENGTH = 10;
 
 WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition, Boundry startingPosition)
 {
