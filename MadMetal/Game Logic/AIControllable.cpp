@@ -10,7 +10,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(550);
+	m_goalWaypoint = m_track.getWaypointAt(597);
 	m_currentPath.clear();
 	//m_listOfWaypointsHighCost.push_back(4);
 	//m_listOfWaypointsHighCost.push_back(11);

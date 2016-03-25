@@ -40,24 +40,23 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	setInvalid();
 
-	//WaypointSystem * nextLocation2 = new WaypointSystem(
-	//	getDrivablePart()->getWorldBounds().maximum.x - 200,
-	//	getDrivablePart()->getWorldBounds().maximum.x - 120,
-	//	getDrivablePart()->getWorldBounds().maximum.z - 520,
-	//	getDrivablePart()->getWorldBounds().maximum.z - 40,
-	//	getDrivablePart()->getWorldBounds().maximum.y,
-	//	TOP);
+	WaypointSystem * nextLocation2 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().maximum.x - 180,
+		getDrivablePart()->getWorldBounds().maximum.x - 140,
+		getDrivablePart()->getWorldBounds().maximum.z - 520,
+		getDrivablePart()->getWorldBounds().maximum.z - 60,
+		getDrivablePart()->getWorldBounds().maximum.y,
+		TOP);
 
-	////m_waypointList.resize(m_waypointList.size() + (nextLocation2->getWaypointMap().at(0).size() * nextLocation2->getWaypointMap().size()));
-	//for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
-	//{
-	//	m_waypointList.insert(m_waypointList.end(), nextLocation2->getWaypointMap().at(i).begin(), nextLocation2->getWaypointMap().at(i).end());
-	//}
+	for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation2->getWaypointMap().at(i).begin(), nextLocation2->getWaypointMap().at(i).end());
+	}
 
-	//lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
-	//stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation2, 2, 0, true);
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation2, 5, 0, true);
 
-	//m_waypointSystems.push_back(nextLocation2);
+	m_waypointSystems.push_back(nextLocation2);
 
 
 	//WaypointSystem * nextLocation3 = new WaypointSystem(
@@ -296,16 +295,16 @@ void Track::setInvalid()
 			(i > 46 && i < 57) ||
 			(i > 59 && i < 69) ||
 			(i > 71 && i < 81) ||
-			(i > 82 && i < 93) ||
+			(i > 83 && i < 93) ||
 			(i > 95 && i < 105) ||
 			(i > 107 && i < 118) ||
-			(i > 121 && i < 131) ||
+			(i > 120 && i < 131) ||
 			(i > 132 && i < 143) ||
 			(i > 144 && i < 155) ||
 			(i > 157 && i < 168) || 
-			(i > 179 && i < 180) || 
+			(i > 170 && i < 180) || 
 			(i > 182 && i < 193) || 
-			(i > 194 && i < 205) ||
+			(i > 195 && i < 205) ||
 			(i > 207 && i < 217) ||
 			(i > 219 && i < 229) || 
 			(i > 231 && i < 241) || 
@@ -318,18 +317,18 @@ void Track::setInvalid()
 			(i > 289 && i < 298) ||
 			(i > 300 && i < 310) ||
 			(i > 311 && i < 321) ||
-			(i > 323 && i < 333) ||
+			(i > 322 && i < 333) ||
 			(i > 334 && i < 344) ||
 			(i > 345 && i < 355) ||
-			(i > 356 && i < 367) ||
-			(i > 368 && i < 378) ||
+			(i > 356 && i < 366) ||
+			(i > 367 && i < 377) ||
 			(i > 379 && i < 390) ||
-			(i > 391 && i < 401) ||
+			(i > 391 && i < 400) ||
 			(i > 402 && i < 412) ||
 			(i > 414 && i < 424) ||
 			(i > 426 && i < 436) ||
 			(i > 438 && i < 448) ||
-			(i > 450 && i < 461) ||
+			(i > 451 && i < 461) ||
 			(i > 463 && i < 473) ||
 			(i > 475 && i < 486) ||
 			(i > 488 && i < 498) ||
