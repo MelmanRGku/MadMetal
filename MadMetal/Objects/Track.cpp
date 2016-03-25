@@ -35,9 +35,11 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 		m_waypointList.insert(m_waypointList.end(), nextLocation1->getWaypointMap().at(i).begin(), nextLocation1->getWaypointMap().at(i).end());
 	}
 	WaypointSystem* lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
-	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation1, 0, 2, true);
+	stitchWaypointSystems(RIGHT, LEFT, *lastWaypointSystem, *nextLocation1, 0, 2, true);
 
 	m_waypointSystems.push_back(nextLocation1);
+
+	setInvalid();
 
 	//WaypointSystem * nextLocation2 = new WaypointSystem(
 	//	getDrivablePart()->getWorldBounds().maximum.x - 80,
@@ -160,15 +162,15 @@ void Track::stitchWaypointSystems(Boundry lastWaypointSystemLocation, Boundry ne
 	}
 
 
-	//for (int i = 0; i < m_waypointList.size(); i++)
-	//{
-	//	std::cout << "waypoint: " << m_waypointList[i]->getIndex() << " " << " and is connected to ";
-	//	for (int k = 0; k < m_waypointList[i]->getListOfAdjacentWaypoints().size(); k++)
-	//	{
-	//		std::cout << m_waypointList[i]->getListOfAdjacentWaypoints().at(k)->getIndex() << ", ";
-	//	}
-	//	std::cout << "\n";
-	//}
+	for (int i = 0; i < m_waypointList.size(); i++)
+	{
+		std::cout << "waypoint: " << m_waypointList[i]->getIndex() << " " << " and is connected to ";
+		for (int k = 0; k < m_waypointList[i]->getListOfAdjacentWaypoints().size(); k++)
+		{
+			std::cout << m_waypointList[i]->getListOfAdjacentWaypoints().at(k)->getIndex() << ", ";
+		}
+		std::cout << "\n";
+	}
 
 }
 
@@ -281,6 +283,28 @@ void Track::recalculateWaypointSystemIds(WaypointSystem& waypointSystem1, Waypoi
 		else
 		{
 			waypointSystem2.addIdToAllWaypointsInTheSystem(secondValue);
+		}
+	}
+}
+
+void Track::setInvalid()
+{
+	for (int i = 8; i < 140; i++)
+	{
+		if ((i > 7 && i < 22) ||
+			(i > 27 && i < 43) ||
+			(i > 49 && i < 52) ||
+			(i > 54 && i < 63) ||
+			(i > 66 && i < 71) ||
+			(i > 78 && i < 85) ||
+			(i > 86 && i < 94) ||
+			(i > 95 && i < 99) ||
+			(i > 107 && i < 124) ||
+			(i > 128 && i < 140))
+		{
+			m_waypointList[i]->setValid(false);
+
+			std::cout << "making invalid: " << m_waypointList[i]->getIndex() << "\n";
 		}
 	}
 }

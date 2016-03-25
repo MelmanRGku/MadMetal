@@ -10,11 +10,11 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(10);
+	m_goalWaypoint = m_track.getWaypointAt(95);
 	m_currentPath.clear();
-	m_listOfWaypointsHighCost.push_back(4);
-	m_listOfWaypointsHighCost.push_back(11);
-	m_listOfWaypointsHighCost.push_back(18);
+	//m_listOfWaypointsHighCost.push_back(4);
+	//m_listOfWaypointsHighCost.push_back(11);
+	//m_listOfWaypointsHighCost.push_back(18);
 	setHighCostWaypointsToHigh();
 	m_needsToBackup = false;
 	m_counter = 0;
@@ -234,14 +234,14 @@ void AIControllable::recalculatePath()
 	m_currentPath.clear();
 	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-//	std::cout << "THe new path is: ";
+	std::cout << "THe new path is: ";
 
-	//for (int i = 0; i < m_currentPath.size(); i++)
-	//{
-	//	std::cout << m_currentPath[i]->getIndex() << ", ";
-	//}
+	for (int i = 0; i < m_currentPath.size(); i++)
+	{
+		std::cout << m_currentPath[i]->getIndex() << ", ";
+	}
 
-	//std::cout << "\n";
+	std::cout << "\n";
 	updateNextWaypoint();
 }
 

@@ -34,6 +34,11 @@ void PathFinding::setWaypointCostOf(std::vector<int> listOfHighWaypoints)
 
 std::vector<Waypoint*> PathFinding::findPath(Waypoint * currentPosition, Waypoint * targetPosition)
 {
+	
+	if (currentPosition->getIndex() == 48)
+	{
+		std::cout << "loco" << "\n";
+	}
 	if (!m_initializedStartGOal)
 	{
 		for (int i = 0; i < m_openList.size(); i++)
