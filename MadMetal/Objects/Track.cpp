@@ -41,24 +41,24 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	setInvalid();
 
-	//WaypointSystem * nextLocation2 = new WaypointSystem(
-	//	getDrivablePart()->getWorldBounds().minimum.x - 200,
-	//	getDrivablePart()->getWorldBounds().maximum.x - 120,
-	//	getDrivablePart()->getWorldBounds().maximum.z - 480,
-	//	getDrivablePart()->getWorldBounds().maximum.z,
-	//	getDrivablePart()->getWorldBounds().maximum.y,
-	//	TOP);
+	WaypointSystem * nextLocation2 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().maximum.x - 200,
+		getDrivablePart()->getWorldBounds().maximum.x - 120,
+		getDrivablePart()->getWorldBounds().maximum.z - 520,
+		getDrivablePart()->getWorldBounds().maximum.z - 40,
+		getDrivablePart()->getWorldBounds().maximum.y,
+		TOP);
 
-	////m_waypointList.resize(m_waypointList.size() + (nextLocation1->getWaypointMap().at(0).size() * nextLocation1->getWaypointMap().size()));
-	//for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
-	//{
-	//	m_waypointList.insert(m_waypointList.end(), nextLocation2->getWaypointMap().at(i).begin(), nextLocation2->getWaypointMap().at(i).end());
-	//}
+	//m_waypointList.resize(m_waypointList.size() + (nextLocation2->getWaypointMap().at(0).size() * nextLocation2->getWaypointMap().size()));
+	for (int i = 0; i < nextLocation2->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation2->getWaypointMap().at(i).begin(), nextLocation2->getWaypointMap().at(i).end());
+	}
 
-	//lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
-	//stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation2, 0, nextLocation2->getWaypointMap().at(0).size() - 3, true);
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation2, 2, 0, true);
 
-	//m_waypointSystems.push_back(nextLocation2);
+	m_waypointSystems.push_back(nextLocation2);
 
 
 	//WaypointSystem * nextLocation3 = new WaypointSystem(
