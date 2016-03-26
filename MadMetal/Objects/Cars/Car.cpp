@@ -1,8 +1,10 @@
 #include "Car.h"
-#include "../DrivingStyleFast.h"
+#include "../Cars/DrivingStyleMeowMix.h"
 #include "Factory\GameFactory.h"
 #include <sstream>
 #include "Objects\Waypoint.h"
+
+int Car::positionGlobalID = 0;
 
 Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL), m_car(car), m_drivingStyle(style)
 {
@@ -11,6 +13,8 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 	m_isAtStartingCollisionVolume = false;
 	m_newLap = true;
 	m_powerUpRemaining = 0;
+	Car::positionGlobalID++;
+	m_positionInRace = positionGlobalID;
 }
 
 
@@ -31,20 +35,23 @@ void Car::respawn()
 	//std::cout << "Respawned? \n";
 	m_currentHealth = m_maxHealth;
 	
-	if (m_currentWaypoint != NULL)
+	/*if (m_currentWaypoint != NULL)
 	{
 		//std::cout << "Valid Waypoint Respawn" << std::endl;
 		glm::vec3 waypointPos = m_currentWaypoint->getGlobalPose();
 		
 		
-		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(waypointPos.x, waypointPos.y, waypointPos.z)));
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(waypointPos.x, 5, waypointPos.z)));
 		
 	}
 	else {
 		//std::cout << "Invalid Waypoint Respawn" << std::endl;
 		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
-		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, currentPosition.p.y+10, currentPosition.p.z)));
-	}
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, 5, currentPosition.p.z)));
+	}*/
+
+	m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(0, 5, 0)));
+
 	m_car.getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 0, 0));
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0));
 	
@@ -70,29 +77,46 @@ void Car::usePowerUp()
 {
 	if (m_heldPowerUp != PowerUpType::NONE)
 	{
-		std::cout << "Used PowerUp \n";
+		
 		m_activePowerUp = m_heldPowerUp;
 		m_heldPowerUp = PowerUpType::NONE;
 		m_powerUpRemaining = PowerUp::getPowerUpDuration(m_activePowerUp);
-
+		PxVec3 dim = m_car.getRigidDynamicActor()->getWorldBounds().getDimensions();
+		glm::vec3 pos = getGlobalPose();
+		pos.y += dim.y/2;
+		
+		PxGeometry* geom[1];
 		switch (m_activePowerUp)
 		{
 		case (PowerUpType::ATTACK) :
 			//add particle system
+			geom[0] = new PxSphereGeometry(.1);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_ATTACK_POWERUP, &PxTransform(PxVec3(pos.x, pos.y, pos.x)), geom, this);
+			delete geom[0];
 			break;
 		case (PowerUpType::DEFENSE) :
-			PxGeometry* dgeom[1];
-			dgeom[0] = new PxSphereGeometry(10);
-			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), dgeom, this);
+			
+			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(pos.x,pos.y,pos.x)), geom, this);
+			delete geom[0];
 			break;
 		case (PowerUpType::SPEED) :
 			//add particle system
-			PxGeometry* sgeom[1];
-			sgeom[0] = new PxSphereGeometry(10);
-			GameFactory::instance()->makeObject(GameFactory::OBJECT_SPEED_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), sgeom, this);
+			geom[0] = new PxSphereGeometry(dim.x > dim.z ? dim.z : dim.x);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_SPEED_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), geom, this);
+			PxRigidDynamic* actor = static_cast<PxRigidDynamic*>(&getActor());
+			glm::vec3 direction = glm::normalize(getForwardVector());
+			direction.y = 0;
+			float currentSpeed = getCar().computeForwardSpeed();
+			direction *= (getDrivingStyle().getMaxSpeed() - currentSpeed) / getDrivingStyle().getMaxSpeed() * PowerUp::getSpeedImpulse() * 20;
+			actor->setAngularVelocity(PxVec3(0, 0, 0));
+			actor->addForce(PxVec3(direction.x, direction.y, direction.z), PxForceMode::eIMPULSE);
+			delete geom[0];
 			break;
 
 		}
+		
+
 	}
 	
 
@@ -101,7 +125,6 @@ void Car::usePowerUp()
 
 void Car::takeDamage(float damage)
 {
-	//car set to dead will be dealt with in the update function
 	m_currentHealth -= damage;
 }
 
@@ -121,6 +144,12 @@ void Car::updatePowerUp(float dt)
 			m_activePowerUp = PowerUpType::NONE;
 			
 		}
+		else {
+			if (m_activePowerUp == PowerUpType::SPEED)
+			{
+				std::cout << "Speed: " << getCar().computeForwardSpeed() << std::endl;
+			}
+		}
 	}
 }
 
@@ -136,8 +165,35 @@ void Car::updateSuper(float dt)
 	}
 }
 
+#define CAR_DEATH_DELAY .75
+#define CAR_LAUNCH_SPEED 100000
+#define CAR_SPIN 45, 0, 45
+void Car::updateHealth(float dtMillis)
+{
+	if (m_currentHealth <= 0)	
+	{
+		if (m_deathTimerMillis > 0)
+		{
+			m_deathTimerMillis -= dtMillis;
+			if (m_deathTimerMillis < 0)
+				respawn();
+		}
+		else {
+			m_deathTimerMillis = CAR_DEATH_DELAY;
+			getCar().getRigidDynamicActor()->setAngularVelocity(PxVec3(CAR_SPIN));
+			getCar().getRigidDynamicActor()->addForce(PxVec3(0, CAR_LAUNCH_SPEED, 0), PxForceMode::eIMPULSE);
+			PxGeometry **explosionGeom = new PxGeometry*[1];
+			explosionGeom[0] = new PxSphereGeometry(7);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &getCar().getRigidDynamicActor()->getGlobalPose(), explosionGeom, NULL);
+			delete explosionGeom[0];
+		}
+	}
+	
+}
+
 void Car::update(float dt) {
 	//std::cout << m_currentLap << std::endl;
+	updateHealth(dt);
 	m_reloadRemainingSeconds -= dt;
 	updateSuper(dt);
 	updatePowerUp(dt);
@@ -204,6 +260,16 @@ void Car::incrementLap() {
 
 int Car::getLap() {
 	return m_currentLap;
+}
+
+int Car::getPositionInRace()
+{
+	return m_positionInRace;
+}
+
+void Car::setPositionInRace(int position)
+{
+	m_positionInRace = position;
 }
 
 void Car::setSoundChassis(Sound theSound)

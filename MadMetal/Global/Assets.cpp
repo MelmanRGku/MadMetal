@@ -23,8 +23,13 @@ void Assets::init() {
 	models = new std::map<std::string, Model*>();
 	textures = new std::map<std::string, Texture*>();
 	modelsToBeLoadedBeforeTheGameStarts = new std::vector<std::string>();
-	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/UglyCarWithCannon.obj");
-	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/UglyCarWithGuns.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Meowmix.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/twisted1.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Gargantulous.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/LoadingBox.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Arrows.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/P1.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/P2.obj");
 }
 
 void Assets::release() {

@@ -21,7 +21,7 @@ PlayerSelection::PlayerSelection(GamePad *gamePad, Audio *audio, World *world) {
 		Animatable *a = new Animatable();
 		a->setScale(glm::vec3(0, 0, 0));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/UglyCarWithGuns.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Meowmix.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		selectedCar = new Object3D(2, au, p, a, r, NULL);
@@ -81,6 +81,21 @@ void PlayerSelection::selectCar() {
 	playerTemplate->setCarSelection(tempSelection);
 	selectedCar->setPosition(selectedCarPosition);
 	selectedCar->setScale(glm::vec3(.8, .8, .2));
+
+	Model3D *model = NULL;
+
+	if (tempSelection == Characters::CHARACTER_MEOW_MIX)
+		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Meowmix.obj"));
+	else if (tempSelection == Characters::CHARACTER_EXPLOSIVELY_DELICIOUS)
+		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/twisted1.obj"));
+	else if (tempSelection == Characters::CHARACTER_GARGANTULOUS)
+		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Gargantulous.obj"));
+
+	model->setupVAOs();
+	Renderable3D *renderable = static_cast<Renderable3D*>(selectedCar->getRenderable());
+	renderable->setModel(model);
+	renderable->adjustModel(true, true);
+
 	selectionIndicator->setScale(glm::vec3(0, 0, 0));
 }
 
@@ -212,7 +227,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 		a->updatePosition(glm::vec3(-10, -1, -35));
 		a->setScale(glm::vec3(5, 4, 7));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/UglyCarWithCannon.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Meowmix.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		car1 = new Object3D(3, au, p, a, r, NULL);
@@ -227,7 +242,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 		a->updatePosition(glm::vec3(0, -1, -35));
 		a->setScale(glm::vec3(5, 4, 7));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/UglyCarWithCannon.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/twisted1.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		car2 = new Object3D(4, au, p, a, r, NULL);
@@ -242,7 +257,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 		a->updatePosition(glm::vec3(10, -1, -35));
 		a->setScale(glm::vec3(5, 4, 7));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/UglyCarWithGuns.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Gargantulous.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		car3 = new Object3D(5, au, p, a, r, NULL);

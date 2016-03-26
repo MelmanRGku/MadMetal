@@ -65,7 +65,7 @@ void renderScene(void)
 	int dt = currentDrawCallTime - lastDrawCallTime;
 	if (dt < MIN_DT)
 		return;
-	std::cout << "FPS: " << (1000.f / dt) << std::endl;
+	//std::cout << "FPS: " << (1000.f / dt) << std::endl;
 	lastDrawCallTime = currentDrawCallTime;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

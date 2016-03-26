@@ -10,11 +10,13 @@
 #include "Objects\TestObject.h"
 #include "Objects\CollisionVolume.h"
 #include "Objects\PowerUp.h"
+#include "Game Logic\PositionManager.h"
+#include "Global\Definitions.h"
 #include <sstream>
 
 
 #define NUM_OF_PLAYERS 12
-#define NUM_LAPS_FOR_VICTORY 1
+#define NUM_LAPS_FOR_VICTORY 10
 #define RACE_FINISH_DELAY 10
 
 using namespace std;
@@ -48,8 +50,17 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
-			PxTransform *pos = new PxTransform(-130 + i * 10, 40, 0);
-			MeowMix *car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
+			PxTransform *pos = new PxTransform(0, 1, 0);//-130 + i * 10, 40, 0);
+			Car *car = NULL;
+			if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {
+				car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
+			}
+			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_EXPLOSIVELY_DELICIOUS) {
+				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS, pos, NULL, NULL));
+			}
+			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_GARGANTULOUS) {
+				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_GARGANTULOUS, pos, NULL, NULL));
+			} 
 			humanPlayer->setCar(car);
 			delete pos;
 
@@ -67,13 +78,14 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
-			AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
-			PxTransform *pos = new PxTransform(-130 + i * 10, 40, 0);
+			/*AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
+			PxTransform *pos = new PxTransform(0 + i * 1000, 1, 20);
 			ai->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL)));
 			delete pos;
 			m_aiPlayers.push_back(ai);
 			m_players.push_back(ai);
 			//make a car for ai based off template
+			*/
 		}
 	}
 
@@ -97,7 +109,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	}
 	
 
-	
+	m_positionManager = new PositionManager(m_players);
 	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
 	pauseControls(true);
 
@@ -105,6 +117,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 GameSimulation::~GameSimulation()
 {
+	delete m_positionManager;
 	m_scene->release();
 	delete m_track;
 	for (int i = 0; i < m_players.size(); i++)
@@ -117,7 +130,6 @@ GameSimulation::~GameSimulation()
 	GameFactory::release();
 	delete manager;
 	delete musicManager;
-	
 }
 
 PxFixedSizeLookupTable<8> gSteerVsForwardSpeedTable(gSteerVsForwardSpeedData, 4);
@@ -183,19 +195,7 @@ void GameSimulation::simulatePhysics(double dt)
 			}
 		}
 
-		// THIS IS TEST CODE FOR ANIMATIONS
-		if (clock() >= 5000 + t && !temporary)
-		{
-			myObject->startAnimation();
-			temporary = true;
-		}
 
-		if (temporary)
-		{
-			myObject->updateAnimation();
-		}
-
-		// THE TEST CODE ENDS HERE
 
 		m_scene->simulate(dt);
 		m_scene->fetchResults(true);
@@ -215,6 +215,7 @@ void GameSimulation::simulatePlayers(double dt)
 	
 	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
+		
 		m_players[i]->playFrame(dt);
 		
 	}
@@ -395,6 +396,9 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 		return true;
 	}
 
+	//m_positionManager->updatePlayerPositions();
+
+	//std::cout << "player position in race: " << m_players[0]->getCar()->getPositionInRace() << "\n";
 	return false;
 	
 }
@@ -432,33 +436,57 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 
 void GameSimulation::setupBasicGameWorldObjects() {
 	//Power up test
-	/*
-	PxGeometry **powerGeom = new PxGeometry*[1];
-	powerGeom[0] = new PxBoxGeometry(PxVec3(1, 5, 1));
-	pos = new PxTransform(-130, 25, 60);
-	m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL);
-	delete pos;
-	*/
+	PxTransform * pos;
+	/*PxGeometry **powerGeom = new PxGeometry*[1];
+	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
+	pos = new PxTransform(0, 5, 20);
+	PowerUp * powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
+	powerup->setActiveType(1);
+	
+	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
+	pos = new PxTransform(-10, 5, 20);
+	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
+	powerup->setActiveType(2);
 
+	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
+	pos = new PxTransform(10, 5, 20);
+	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
+	powerup->setActiveType(3);
+	delete pos;*/
+	
+	//trainCar test
+	PxGeometry **trainGeom = new PxGeometry*[1];
+	trainGeom[0] = new PxBoxGeometry(PxVec3(6,5,50));
+	pos = new PxTransform(-450, 0, 360);
+	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
+	delete pos;
+
+	trainGeom = new PxGeometry*[1];
+	trainGeom[0] = new PxBoxGeometry(PxVec3(6, 5, 50));
+	pos = new PxTransform(-579, 0, -183.85);
+	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
+	delete pos;
+	delete trainGeom[0];
+
+	//death pit
+	PxGeometry **deathPitGeom = new PxGeometry*[1];
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(250, 5, 50));
+	pos = new PxTransform(-275, -40, 1500);
+	m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL);
+	delete pos;
+	delete deathPitGeom[0];
 
 	PxGeometry **geom1 = new PxGeometry *[1];
 	PxGeometry **geom2 = new PxGeometry *[1];
 	geom1[0] = new PxBoxGeometry(PxVec3(60, m_track->getDrivablePart()->getWorldBounds().maximum.y, 30));
 	geom2[0] = new PxBoxGeometry(PxVec3(40, m_track->getDrivablePart()->getWorldBounds().maximum.y, 60));
-	PxTransform *pos;
+	
 	pos = new PxTransform(m_track->getWaypointAt(13)->getGlobalPose().x, m_track->getWaypointAt(13)->getGlobalPose().y, m_track->getWaypointAt(13)->getGlobalPose().z);
 	m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL);
 	delete pos;
 	pos = new PxTransform(m_track->getWaypointAt(72)->getGlobalPose().x, m_track->getWaypointAt(72)->getGlobalPose().y, m_track->getWaypointAt(72)->getGlobalPose().z);
 	m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2 , NULL);
 
-	// THIS IS TEST CODE FOR ANIMATIONS
-	geom1[0] = new PxBoxGeometry(PxVec3(2, 2, 2));
-
-	myObject = static_cast<Object3D *>(m_gameFactory->makeObject(GameFactory::OBJECT_ANIMATION_TEST, &PxTransform(-130, 25, 20), geom1, NULL));
-
-	t = clock();
-	// THE TEST CODE ENDS HERE
 
 	delete pos;
 	delete geom1[0];

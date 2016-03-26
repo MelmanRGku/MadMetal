@@ -7,34 +7,143 @@ static const float WAYPOINT_LENGTH_COLLISION = 17;
 static const float WAYPOINT_TRUE_WIDTH = 20;
 static const float WAYPOINT_TRUE_LENGTH = 20;
 
-WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition)
+WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition, Boundry startingPosition)
 {
 	int index = 0;
-	for (int i = trackWidthMin + WAYPOINT_TRUE_WIDTH; i < trackWidthMax; i += ((WAYPOINT_TRUE_WIDTH)* 2))
+	switch (startingPosition)
 	{
-		std::vector<Waypoint*> newVectorWaypoint;
-		m_waypointMap.push_back(newVectorWaypoint);
-		for (int j = trackLengthMin + WAYPOINT_TRUE_LENGTH; j < trackLengthMax; j += ((WAYPOINT_TRUE_LENGTH)* 2))
+	case TOP:
+		for (int i = trackWidthMin + WAYPOINT_TRUE_WIDTH; i < trackWidthMax; i += ((WAYPOINT_TRUE_WIDTH)* 2))
 		{
-			PxGeometry **geom = new PxGeometry * [1];
-			geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_WIDTH_COLLISION, yposition, WAYPOINT_LENGTH_COLLISION));
-			PxTransform *pos = new PxTransform(i, yposition, j);
-			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
-			delete pos;
-			delete geom[0];
-			delete[] geom;
-			tempWaypoint->setId(index);
-			m_waypointMap[index].push_back(tempWaypoint);
-			m_waypoints.push_back(tempWaypoint);
+			std::vector<Waypoint*> newVectorWaypoint;
+			m_waypointMap.push_back(newVectorWaypoint);
+			for (int j = trackLengthMin + WAYPOINT_TRUE_LENGTH; j < trackLengthMax; j += ((WAYPOINT_TRUE_LENGTH)* 2))
+			{
+				PxGeometry **geom = new PxGeometry *[1];
+				geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_WIDTH_COLLISION, yposition, WAYPOINT_LENGTH_COLLISION));
+				PxTransform *pos = new PxTransform(i, yposition, j);
+				Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
+				tempWaypoint->setId(index);
+				delete pos;
+				delete geom[0];
+				delete[] geom;
+				tempWaypoint->setId(index);
+				m_waypointMap[index].push_back(tempWaypoint);
+				m_waypoints.push_back(tempWaypoint);
+			}
+			index++;
 		}
-		index++;
+		break;
+	case BOTTOM:
+		for (int i = trackWidthMax - WAYPOINT_TRUE_WIDTH; i > trackWidthMin; i -= ((WAYPOINT_TRUE_WIDTH)* 2))
+		{
+			std::vector<Waypoint*> newVectorWaypoint;
+			m_waypointMap.push_back(newVectorWaypoint);
+			for (int j = trackLengthMax - WAYPOINT_TRUE_LENGTH; j > trackLengthMin; j -= ((WAYPOINT_TRUE_LENGTH)* 2))
+			{
+				PxGeometry **geom = new PxGeometry *[1];
+				geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_WIDTH_COLLISION, yposition, WAYPOINT_LENGTH_COLLISION));
+				PxTransform *pos = new PxTransform(i, yposition, j);
+				Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
+				tempWaypoint->setId(index);
+				delete pos;
+				delete geom[0];
+				delete[] geom;
+				tempWaypoint->setId(index);
+				m_waypointMap[index].push_back(tempWaypoint);
+				m_waypoints.push_back(tempWaypoint);
+			}
+			index++;
+		}
+		break;
+	case LEFT:
+		for (int i = trackWidthMin + WAYPOINT_TRUE_WIDTH; i < trackWidthMax; i += ((WAYPOINT_TRUE_WIDTH)* 2))
+		{
+			std::vector<Waypoint*> newVectorWaypoint;
+			m_waypointMap.push_back(newVectorWaypoint);
+			int columnIndex = 0;
+			for (int j = trackLengthMin + WAYPOINT_TRUE_LENGTH; j < trackLengthMax; j += ((WAYPOINT_TRUE_LENGTH)* 2))
+			{
+				PxGeometry **geom = new PxGeometry *[1];
+				geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_WIDTH_COLLISION, yposition, WAYPOINT_LENGTH_COLLISION));
+				PxTransform *pos = new PxTransform(i, yposition, j);
+				Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
+				tempWaypoint->setId(index);
+				delete pos;
+				delete geom[0];
+				delete[] geom;
+				tempWaypoint->setId(columnIndex);
+				m_waypointMap[index].push_back(tempWaypoint);
+				m_waypoints.push_back(tempWaypoint);
+				columnIndex++;
+			}
+			index++;
+		}
+		break;
+	case RIGHT:
+		int numberOfColumns = (abs(trackLengthMax - trackLengthMin) / (WAYPOINT_TRUE_LENGTH * 2));
+		for (int i = trackWidthMax - WAYPOINT_TRUE_WIDTH; i > trackWidthMin; i -= ((WAYPOINT_TRUE_WIDTH)* 2))
+		{
+			std::vector<Waypoint*> newVectorWaypoint;
+			m_waypointMap.push_back(newVectorWaypoint);
+			int columnIndex = numberOfColumns;
+			for (int j = trackLengthMax - WAYPOINT_TRUE_LENGTH; j > trackLengthMin; j -= ((WAYPOINT_TRUE_LENGTH)* 2))
+			{
+				PxGeometry **geom = new PxGeometry *[1];
+				geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_WIDTH_COLLISION, yposition, WAYPOINT_LENGTH_COLLISION));
+				PxTransform *pos = new PxTransform(i, yposition, j);
+				Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
+				tempWaypoint->setId(index);
+				delete pos;
+				delete geom[0];
+				delete[] geom;
+				tempWaypoint->setId((numberOfColumns - columnIndex));
+				m_waypointMap[index].push_back(tempWaypoint);
+				m_waypoints.push_back(tempWaypoint);
+				columnIndex--;
+			}
+			index++;
+		}
+		break;
 	}
 	
+	createWaypointConnections();
 	//std::cout << "number of waypoints" << m_waypoints.size() << "\n";
 	//std::cout << "Rows" << m_waypointMap.size() << "\n";
 	//std::cout << "Columns: " << m_waypointMap[0].size() << "\n";
 	//std::cout << "width: " << trackWidthMax << " | " << "tack length: " << trackLengthMax << "\n";
 	// Populate Waypoints
+
+	
+	//for (int i = 30; i < 80; i++)
+	//{
+	//	if (i % 10 > 2 && i % 10 < 8)
+	//	{
+	//		//std::cout << "Setting invalid index: " << i << "\n";
+	//		m_waypoints[i]->setValid(false);
+	//	}
+	//}
+	//m_waypoints[77]->setValid(false);
+	//m_waypoints[83]->setValid(false);
+	//m_waypoints[26]->setValid(false);
+
+
+	//for (int i = 0; i < m_waypoints.size(); i++)
+	//{
+	//	std::cout << "waypoint: " << m_waypoints[i]->getIndex() << " " << " and is connected to ";
+	//	for (int k = 0; k < m_waypoints[i]->getListOfAdjacentWaypoints().size(); k++)
+	//	{
+	//		std::cout << m_waypoints[i]->getListOfAdjacentWaypoints().at(k)->getIndex() << ", ";
+	//	}
+	//	std::cout << "\n";
+	//}
+
+	//test();
+
+}
+
+void WaypointSystem::createWaypointConnections()
+{
 	for (int i = 0; i < m_waypointMap.size(); i++)
 	{
 		for (int j = 0; j < m_waypointMap[i].size(); j++)
@@ -83,34 +192,19 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 			}
 		}
 	}
-
-
 	
-	//for (int i = 30; i < 80; i++)
-	//{
-	//	if (i % 10 > 2 && i % 10 < 8)
-	//	{
-	//		//std::cout << "Setting invalid index: " << i << "\n";
-	//		m_waypoints[i]->setValid(false);
-	//	}
-	//}
-	//m_waypoints[77]->setValid(false);
-	//m_waypoints[83]->setValid(false);
-	//m_waypoints[26]->setValid(false);
+}
 
-
-	//for (int i = 0; i < m_waypoints.size(); i++)
-	//{
-	//	std::cout << "waypoint: " << m_waypoints[i]->getIndex() << " " << " and is connected to ";
-	//	for (int k = 0; k < m_waypoints[i]->getListOfAdjacentWaypoints().size(); k++)
-	//	{
-	//		std::cout << m_waypoints[i]->getListOfAdjacentWaypoints().at(k)->getIndex() << ", ";
-	//	}
-	//	std::cout << "\n";
-	//}
-
-	//test();
-
+void WaypointSystem::addIdToAllWaypointsInTheSystem(int id)
+{
+	std::cout << "applying a change of: " << id << " \n";
+	for (int i = 0; i < m_waypointMap.size(); i++)
+	{
+		for (int j = 0; j < m_waypointMap.at(i).size(); j++)
+		{
+			m_waypointMap[i][j]->setId(m_waypointMap[i][j]->getId() + id);
+		}
+	}
 }
 
 WaypointSystem::~WaypointSystem()

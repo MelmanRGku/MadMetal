@@ -10,20 +10,16 @@ public:
 	{
 		m_car = owner;
 		m_type = owner->getActivePowerUpType();
+		counter = 0;
 	}
 	virtual ~PowerUpVolume() { m_car = NULL; }
-	void update(float dt)
+	virtual void update(float dt)
 	{
 		if (m_car != NULL)
 		{
 			if (m_car->getActivePowerUpType() != m_type || m_car->getActivePowerUpType() == NULL)
 			{
 				setHasToBeDeleted(true);
-				
-			}
-			else {
-				//std::cout << "Updating sheild position \n";
-				m_physicable->getActor().setGlobalPose(m_car->getActor().getGlobalPose());
 			}
 		}
 	}
@@ -32,6 +28,7 @@ public:
 protected://members
 	Car* m_car;
 	PowerUpType m_type;
+	float counter;
 private:
 
 };

@@ -59,6 +59,7 @@ public:
 	virtual void playSound() = 0;
 	void setSound(Sound theSound);
 	void setMaxLifeTime(float maxTime){ maxLifeTime = maxTime; }
+	void resetLifeTime() { totalLifeTime = 0; }
 	Renderable * getRenderable(){ return m_renderable; }
 };
 

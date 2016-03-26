@@ -76,10 +76,17 @@
   <ItemGroup>
     <ClCompile Include="Game Logic\AIControllable.cpp" />
     <ClCompile Include="Game Logic\PathFinding.cpp" />
+    <ClCompile Include="Game Logic\PositionManager.cpp" />
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
     <ClCompile Include="Simulation\PauseMenu.cpp" />
     <ClCompile Include="Simulation\MultiPlayerMenu.cpp" />
+    <ClCompile Include="Objects\Cars\DrivingStyleExplosivelyDelicious.cpp" />
+    <ClCompile Include="Objects\Cars\ExplosivelyDelicious.cpp" />
+    <ClCompile Include="Objects\Cars\Gargantulous.cpp" />
+    <ClCompile Include="Objects\Cars\DrivingStyleGargantulous.cpp" />
+    <ClCompile Include="Objects\VehicleSpecifications.cpp" />
+    <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp" />
     <ClCompile Include="Simulation\MainMenu.cpp" />
     <ClCompile Include="Objects\MapUI.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp" />
@@ -94,7 +101,6 @@
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
     <ClCompile Include="Objects\PowerUp.cpp" />
-    <ClCompile Include="Objects\PowerUpShield.cpp" />
     <ClCompile Include="Objects\PowerUpSpeed.cpp" />
     <ClCompile Include="Objects\Waypoint.cpp" />
     <ClCompile Include="Objects\Track.cpp" />
@@ -110,7 +116,7 @@
     <ClCompile Include="Global\Assets.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="Objects\Cars\MeowMix.cpp" />
-    <ClCompile Include="Objects\DrivingStyle.cpp" />
+    <ClCompile Include="Objects\Cars\DrivingStyle.cpp" />
     <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp" />
     <ClCompile Include="Objects\TestObject.cpp" />
     <ClCompile Include="Renderer\Renderable.cpp" />
@@ -125,7 +131,7 @@
     <ClCompile Include="Global\Log.cpp" />
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="Global\Settings.cpp" />
-    <ClCompile Include="Objects\DrivingStyleFast.cpp" />
+    <ClCompile Include="Objects\Cars\DrivingStyleMeowmix.cpp" />
     <ClCompile Include="Objects\Mesh.cpp" />
     <ClCompile Include="Objects\Model.cpp" />
     <ClCompile Include="Objects\Object.cpp" />
@@ -138,9 +144,6 @@
     <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.cpp" />
     <ClCompile Include="Objects\Texture.cpp" />
     <ClCompile Include="ParticleSystem\ParticleData.cpp" />
-    <ClCompile Include="ParticleSystem\ParticleEmitter.cpp" />
-    <ClCompile Include="ParticleSystem\ParticleGenerator.cpp" />
-    <ClCompile Include="ParticleSystem\ParticleUpdater.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
     <ClCompile Include="Renderer\CellShaderProgram.cpp" />
@@ -163,10 +166,29 @@
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="Factory\AnimationFactory.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />
+    <ClInclude Include="Game Logic\PositionManager.h" />
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
     <ClInclude Include="Global\Definitions.h" />
     <ClInclude Include="Simulation\PauseMenu.h" />
     <ClInclude Include="Simulation\MultiPlayerMenu.h" />
+    <ClInclude Include="Objects\AnimatedExplosion.h" />
+    <ClInclude Include="Objects\AnimatedModel.h" />
+    <ClInclude Include="Objects\Cars\DrivingStyleExplosivelyDelicious.h" />
+    <ClInclude Include="Objects\Cars\Gargantulous.h" />
+    <ClInclude Include="Objects\Cars\DrivingStyleGargantulous.h" />
+    <ClInclude Include="Objects\Cars\ExplosivelyDelicious.h" />
+    <ClInclude Include="Objects\ExplosivelyDeliciousSuper.h" />
+    <ClInclude Include="Objects\ExplosivelyDeliciousBullet.h" />
+    <ClInclude Include="Objects\MeowMixSuper.h" />
+    <ClInclude Include="Objects\PowerUpAttack.h" />
+    <ClInclude Include="Objects\Header.h" />
+    <ClInclude Include="Objects\Particle.h" />
+    <ClInclude Include="Game Logic\WaypointDefinitions.h" />
+    <ClInclude Include="Objects\MainMenuSystem.h" />
+    <ClInclude Include="Objects\MenuSystem.h" />
+    <ClInclude Include="Objects\VehicleSpecifications.h" />
+    <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h" />
+    <ClInclude Include="Objects\TrainCar.h" />
     <ClInclude Include="Simulation\MainMenu.h" />
     <ClInclude Include="Objects\MapUI.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectScaleUpdater.h" />
@@ -221,8 +243,8 @@
     <ClInclude Include="Libraries\stb_image.h" />
     <ClInclude Include="Objects\Camera.h" />
     <ClInclude Include="Input\GamePad.h" />
-    <ClInclude Include="Objects\DrivingStyle.h" />
-    <ClInclude Include="Objects\DrivingStyleFast.h" />
+    <ClInclude Include="Objects\Cars\DrivingStyle.h" />
+    <ClInclude Include="Objects\Cars\DrivingStyleMeowMix.h" />
     <ClInclude Include="Objects\Mesh.h" />
     <ClInclude Include="Objects\Model.h" />
     <ClInclude Include="Objects\Object.h" />
@@ -236,9 +258,6 @@
     <ClInclude Include="Objects\Texture.h" />
     <ClInclude Include="ParticleSystem\ParticleData.h" />
     <ClInclude Include="ParticleSystem\ParticleEmitter.h" />
-    <ClInclude Include="ParticleSystem\ParticleGenerator.h" />
-    <ClInclude Include="ParticleSystem\ParticleSystem.h" />
-    <ClInclude Include="ParticleSystem\ParticleUpdater.h" />
     <ClInclude Include="Renderer\Renderable.h" />
     <ClInclude Include="Scene Manager\Scene.h" />
     <ClInclude Include="Scene Manager\StackManager.h" />
@@ -269,7 +288,12 @@
   <ItemGroup>
     <Image Include="Assets\Models\asphalt_texture409.jpg" />
     <Image Include="Assets\Models\Building_texture4.jpg" />
+    <Image Include="Assets\Models\lava rock.jpg" />
+    <Image Include="Assets\Models\lavaRocks.png" />
+    <Image Include="Assets\Models\Skirt.png" />
+    <Image Include="Assets\Models\Staff.png" />
     <Image Include="Assets\Models\Terrain-Road.jpg" />
+    <Image Include="Assets\Models\TikiTest.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

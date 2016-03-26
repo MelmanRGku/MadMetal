@@ -24,6 +24,7 @@ class VehicleSceneQueryData;
 class ObjModelLoader;
 class WaypointSystem;
 class CollisionVolume;
+class PositionManager;
 
 class GameSimulation : public Scene{
 private:
@@ -76,10 +77,9 @@ private: //members
 	CollisionVolume * m_midCollisionVolume;
 	
 	MusicManager *musicManager;
+	PositionManager* m_positionManager;
 
 public:
-	Object3D * myObject;
-	clock_t t;
 	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle);
 	~GameSimulation();
 

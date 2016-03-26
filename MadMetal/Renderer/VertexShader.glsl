@@ -27,10 +27,11 @@ out VS_OUT
     vec3 V;
     vec4 C;
     vec2 uv;
+	vec4 position_attr;
 } vs_out;
 
 // Position of light
-uniform vec3 light_pos = vec3(1000.0, 1000.0, 1000.0);
+uniform vec3 light_pos = vec3(0.0, 0.0, 0.0);
 
 void main(void)
 {
@@ -43,7 +44,10 @@ void main(void)
     // Calculate normal in view-space
     vs_out.N = mat3(mv_matrix) * normal_attr;
 
+//    vs_out.N = vec3(inverse(transpose(model_matrix)) * vec4(normal_attr, 0));
+
     // Calculate light vector
+//    vs_out.L = light_pos;
     vs_out.L = light_pos - P.xyz;
 
     // Calculate view vector
@@ -54,6 +58,8 @@ void main(void)
 
     // Pass along the texture coordinates
     vs_out.uv = texcoords_attr.st;
+
+	vs_out.position_attr = position_attr;
 
     // Calculate the clip-space position of each vertex
     gl_Position = proj_matrix * P;
