@@ -2,6 +2,7 @@
 #include "Objects\Waypoint.h"
 #include "Objects\CollisionVolume.h"
 #include "Objects\Particle.h"
+#include "Objects\PowerUpAttack.h"
 
 long GameFactory::lastId = 0;
 
@@ -280,7 +281,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 	case OBJECT_SHIELD_POWERUP:
 	{
-						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_SHIELD_POWERUP));
+						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_SHIELD_POWERUP_ACTIVE));
 			Renderable3D *renderable = new Renderable3D(model, true, true);
 						 
 			Animatable *animatable = new Animatable();
@@ -295,13 +296,57 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 						   m_world.addGameObject(shield);
 			m_scene.addActor(*powerupTriggerVolume);
-
+			
 						   return shield;
 	}
+	case OBJECT_TRAIN_CAR:
+	{
+		Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRAIN_CAR));
+		Renderable3D *renderable = new Renderable3D(model, true, true);
 
+		Animatable *animatable = new Animatable();
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+		
+		PxRigidDynamic *trainCarTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::DEATH_VOLUME, objectId, pos, geom, 0, NULL, NULL, NULL));
+	
+		Physicable *physicable = new Physicable(trainCarTriggerVolume);
+		PxVec3 dim = trainCarTriggerVolume->getWorldBounds().getDimensions();
+		
+		animatable->setScale(glm::vec3(dim.x, dim.y, dim.z));
+		pos->p.y += dim.y / 2;
+		TrainCar *trainCar = new TrainCar(objectId, audioable, physicable, animatable, renderable, pos->p);
+
+		m_world.addGameObject(trainCar);
+		m_scene.addActor(*trainCarTriggerVolume);
+		return trainCar;
+	}
+
+	case OBJECT_DEATH_PIT:
+	{
+							 //Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRAIN_CAR));
+							 //Renderable3D *renderable = new Renderable3D(model, true, true);
+							 //renderable->setModel(NULL);
+							 //Animatable *animatable = new Animatable();
+							 //Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+
+							 PxRigidDynamic *trainCarTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::DEATH_VOLUME, objectId, pos, geom, 0, NULL, NULL, NULL));
+
+							 //Physicable *physicable = new Physicable(trainCarTriggerVolume);
+							 PxVec3 dim = trainCarTriggerVolume->getWorldBounds().getDimensions();
+
+							 //animatable->setScale(glm::vec3(dim.x, dim.y, dim.z));
+							 //pos->p.y += dim.y / 2;
+							 //TrainCar *trainCar = new TrainCar(objectId, audioable, physicable, animatable, renderable, pos->p);
+
+							 //m_world.addGameObject(trainCar);
+							 m_scene.addActor(*trainCarTriggerVolume);
+							 return NULL;
+	}
 	case OBJECT_SPEED_POWERUP:
 	{
-						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
+						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP_PICKUP));
 						   Renderable3D *renderable = new Renderable3D(model, true, true);
 						   renderable->setModel(NULL);  // remove when there is a model for the powerup
 						   Animatable *animatable = new Animatable();
@@ -318,10 +363,29 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 						   return powerup;
 	}
+	case OBJECT_ATTACK_POWERUP:
+	{
+								 Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP_PICKUP));
+								 Renderable3D *renderable = new Renderable3D(model, true, true);
+								 renderable->setModel(NULL);  // remove when there is a model for the powerup
+								 Animatable *animatable = new Animatable();
+								 Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+								 PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::SPEED_POWERUP, objectId, pos, geom, 0, NULL, NULL, NULL));
+								 Physicable *physicable = new Physicable(powerupTriggerVolume);
+								 //animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
+
+								 PowerUpAttack *powerup = new PowerUpAttack(objectId, audioable, physicable, animatable, renderable, static_cast<Car*>(parent));
+
+								 m_world.addGameObject(powerup);
+								 m_scene.addActor(*powerupTriggerVolume);
+
+								 return powerup;
+	}
 
 	case OBJECT_POWERUP:
 	{
-						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
+						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP_PICKUP));
 						   Renderable3D *renderable = new Renderable3D(model, true, true);
 						   Animatable *animatable = new Animatable();
 						   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
@@ -339,17 +403,18 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	}
 	case OBJECT_PARTICLE:
 	{
-							Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP));
+							Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_PARTICLE_POWERUP_ATTACK));
 							Renderable3D *renderable = new Renderable3D(model, true, true);
 							Animatable *animatable = new Animatable();
+							
 							Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
 							PxRigidDynamic *particleVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_PARTICLE, objectId, pos, geom, 0, NULL, NULL, NULL));
 							Physicable *physicable = new Physicable(particleVolume);
 							
-							animatable->setScale(glm::vec3(particleVolume->getWorldBounds().getDimensions().x, particleVolume->getWorldBounds().getDimensions().y, particleVolume->getWorldBounds().getDimensions().z));
+							//animatable->setScale(glm::vec3(particleVolume->getWorldBounds().getDimensions().x, particleVolume->getWorldBounds().getDimensions().y, particleVolume->getWorldBounds().getDimensions().z));
 
-							Particle *particle = new Particle(objectId, audioable, physicable, animatable, renderable);
+							Particle *particle = new Particle(objectId, audioable, physicable, animatable, renderable, NULL);
 
 							m_world.addGameObject(particle);
 							m_scene.addActor(*particleVolume);

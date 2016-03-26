@@ -24,6 +24,7 @@
 #include "Objects\Text3D.h"
 #include "Objects\PowerUpShield.h"
 #include "Objects\PowerUpSpeed.h"
+
 #include "Objects\TexturedObject2D.h"
 #include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
 #include "Objects/ObjectUpdaters/ObjectRotationUpdater.h"
@@ -31,6 +32,7 @@
 #include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 #include "Objects\AnimatedExplosion.h"
+#include "Objects\TrainCar.h"
 
 class GameFactory
 {
@@ -54,6 +56,7 @@ public:
 		OBJECT_POWERUP,
 		OBJECT_SHIELD_POWERUP,
 		OBJECT_SPEED_POWERUP,
+		OBJECT_ATTACK_POWERUP,
 		OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE,
 		OBJECT_UI_SICK_PUPPIES_SONG_TEXTURE_YOURE_GOING_DOWN,
 		OBJECT_UI_ALL_GOOD_THINGS_SONG_I_AM_THE_ENEMY,
@@ -61,6 +64,8 @@ public:
 		OBJECT_UI_MAP,
 		OBJECT_PARTICLE,
 		OBJECT_EXPLOSION_1,
+		OBJECT_TRAIN_CAR,
+		OBJECT_DEATH_PIT,
 
 		OBJECT_ANIMATION_TEST
 	};

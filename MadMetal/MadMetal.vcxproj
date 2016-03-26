@@ -93,7 +93,6 @@
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
     <ClCompile Include="Objects\PowerUp.cpp" />
-    <ClCompile Include="Objects\PowerUpShield.cpp" />
     <ClCompile Include="Objects\PowerUpSpeed.cpp" />
     <ClCompile Include="Objects\Waypoint.cpp" />
     <ClCompile Include="Objects\Track.cpp" />
@@ -137,9 +136,6 @@
     <ClCompile Include="Objects\ObjectUpdaters\ObjectUpdaterSequence.cpp" />
     <ClCompile Include="Objects\Texture.cpp" />
     <ClCompile Include="ParticleSystem\ParticleData.cpp" />
-    <ClCompile Include="ParticleSystem\ParticleEmitter.cpp" />
-    <ClCompile Include="ParticleSystem\ParticleGenerator.cpp" />
-    <ClCompile Include="ParticleSystem\ParticleUpdater.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\ShaderLoader.cpp" />
     <ClCompile Include="Renderer\CellShaderProgram.cpp" />
@@ -166,10 +162,13 @@
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
     <ClInclude Include="Objects\AnimatedExplosion.h" />
     <ClInclude Include="Objects\AnimatedModel.h" />
+    <ClInclude Include="Objects\PowerUpAttack.h" />
+    <ClInclude Include="Objects\Header.h" />
     <ClInclude Include="Objects\Particle.h" />
     <ClInclude Include="Game Logic\WaypointDefinitions.h" />
     <ClInclude Include="Objects\MainMenuSystem.h" />
     <ClInclude Include="Objects\MenuSystem.h" />
+    <ClInclude Include="Objects\TrainCar.h" />
     <ClInclude Include="Simulation\MainMenu.h" />
     <ClInclude Include="Objects\MapUI.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectScaleUpdater.h" />
@@ -239,9 +238,6 @@
     <ClInclude Include="Objects\Texture.h" />
     <ClInclude Include="ParticleSystem\ParticleData.h" />
     <ClInclude Include="ParticleSystem\ParticleEmitter.h" />
-    <ClInclude Include="ParticleSystem\ParticleGenerator.h" />
-    <ClInclude Include="ParticleSystem\ParticleSystem.h" />
-    <ClInclude Include="ParticleSystem\ParticleUpdater.h" />
     <ClInclude Include="Renderer\Renderable.h" />
     <ClInclude Include="Scene Manager\Scene.h" />
     <ClInclude Include="Scene Manager\StackManager.h" />

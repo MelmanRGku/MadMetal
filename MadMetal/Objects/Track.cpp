@@ -16,7 +16,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 	for (int i = 0; i < startLocation->getWaypointMap().size(); i++)
 	{
 		m_waypointList.insert(m_waypointList.end(), startLocation->getWaypointMap().at(i).begin(), startLocation->getWaypointMap().at(i).end());
-	}
+}
 
 	m_waypointSystems.push_back(startLocation);
 

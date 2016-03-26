@@ -93,15 +93,6 @@
     <ClCompile Include="ParticleSystem\ParticleData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleSystem\ParticleEmitter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleSystem\ParticleGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleSystem\ParticleUpdater.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Scene Manager\StackManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -246,9 +237,6 @@
     <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\PowerUpShield.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\PowerUpSpeed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -350,19 +338,10 @@
     <ClInclude Include="Game Logic\Projectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleSystem\ParticleUpdater.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleSystem\ParticleData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParticleSystem\ParticleEmitter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleSystem\ParticleGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleSystem\ParticleSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene Manager\StackManager.h">
@@ -579,6 +558,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
  <ClInclude Include="Game Logic\WaypointDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\TrainCar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\PowerUpAttack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
