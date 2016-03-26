@@ -343,6 +343,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 											   m_world.addGameObject(superExplosion);
 											   m_scene.addActor(*explosion);
+											   return superExplosion;
 	}
 	case OBJECT_MEOW_MIX_SUPER:
 	{
@@ -368,6 +369,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 											   m_world.addGameObject(superBeam);
 											   m_scene.addActor(*beam);
+											   return superBeam;
 	}
 	case OBJECT_HEALTH_BAR:
 	{

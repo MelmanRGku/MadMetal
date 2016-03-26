@@ -183,6 +183,10 @@ bool PauseMenu::simulateScene(double dt, SceneMessage &message)
 			aPressed();
 		}
 
+		if (m_gamePad->isPressed(GamePad::BButton)) {
+			messageToReturn = SceneMessage::ePop;
+		}
+
 	}
 	return false;
 }
