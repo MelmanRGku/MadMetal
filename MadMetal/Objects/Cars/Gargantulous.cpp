@@ -1,6 +1,5 @@
 #include "Gargantulous.h"
 #include "Factory\GameFactory.h"
-#include "ParticleSystem\ParticleSystem.h"
 
 Gargantulous::Gargantulous(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Car(id, style, car, aable, pable, anable, rable)
 {

@@ -2,7 +2,7 @@
 
 #include "PxVehicleDrive4W.h"
 #include "../Object3D.h"
-#include "Objects\DrivingStyle.h"
+#include "Objects\Cars\DrivingStyle.h"
 #include "Objects\PowerUp.h"
 #include "Objects/UI.h"
 
@@ -99,6 +99,7 @@ public:
 	UI *getUI() { return ui; }
 	void deactivatePowerUp(){ m_activePowerUp = PowerUpType::NONE; }
 	void updateHealth(float dtMillis);
+	float getSuperDurationRemaining(){ return m_superDurationRemainingSeconds; }
 
 };
 

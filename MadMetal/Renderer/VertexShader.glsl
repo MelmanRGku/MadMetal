@@ -42,12 +42,13 @@ void main(void)
     vec4 P = mv_matrix * position_attr;
 
     // Calculate normal in view-space
-//    vs_out.N = mat3(mv_matrix) * normal_attr;
+    vs_out.N = mat3(mv_matrix) * normal_attr;
 
-    vs_out.N = vec3(inverse(transpose(model_matrix)) * vec4(normal_attr, 0));
+//    vs_out.N = vec3(inverse(transpose(model_matrix)) * vec4(normal_attr, 0));
 
     // Calculate light vector
-    vs_out.L = light_pos;
+//    vs_out.L = light_pos;
+    vs_out.L = light_pos - P.xyz;
 
     // Calculate view vector
     vs_out.V = -P.xyz;

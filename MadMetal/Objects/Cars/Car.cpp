@@ -1,5 +1,5 @@
 #include "Car.h"
-#include "../DrivingStyleFast.h"
+#include "../Cars/DrivingStyleMeowMix.h"
 #include "Factory\GameFactory.h"
 #include <sstream>
 #include "Objects\Waypoint.h"
@@ -35,20 +35,23 @@ void Car::respawn()
 	//std::cout << "Respawned? \n";
 	m_currentHealth = m_maxHealth;
 	
-	if (m_currentWaypoint != NULL)
+	/*if (m_currentWaypoint != NULL)
 	{
 		//std::cout << "Valid Waypoint Respawn" << std::endl;
 		glm::vec3 waypointPos = m_currentWaypoint->getGlobalPose();
 		
 		
-		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(waypointPos.x, waypointPos.y, waypointPos.z)));
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(waypointPos.x, 5, waypointPos.z)));
 		
 	}
 	else {
 		//std::cout << "Invalid Waypoint Respawn" << std::endl;
 		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
-		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, currentPosition.p.y+10, currentPosition.p.z)));
-	}
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, 5, currentPosition.p.z)));
+	}*/
+
+	m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(0, 5, 0)));
+
 	m_car.getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 0, 0));
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0));
 	
@@ -87,12 +90,15 @@ void Car::usePowerUp()
 		{
 		case (PowerUpType::ATTACK) :
 			//add particle system
+			geom[0] = new PxSphereGeometry(.1);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_ATTACK_POWERUP, &PxTransform(PxVec3(pos.x, pos.y, pos.x)), geom, this);
+			delete geom[0];
 			break;
 		case (PowerUpType::DEFENSE) :
 			
 			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(pos.x,pos.y,pos.x)), geom, this);
-			
+			delete geom[0];
 			break;
 		case (PowerUpType::SPEED) :
 			//add particle system
@@ -105,10 +111,11 @@ void Car::usePowerUp()
 			direction *= (getDrivingStyle().getMaxSpeed() - currentSpeed) / getDrivingStyle().getMaxSpeed() * PowerUp::getSpeedImpulse() * 20;
 			actor->setAngularVelocity(PxVec3(0, 0, 0));
 			actor->addForce(PxVec3(direction.x, direction.y, direction.z), PxForceMode::eIMPULSE);
+			delete geom[0];
 			break;
 
 		}
-		delete geom[0];
+		
 
 	}
 	

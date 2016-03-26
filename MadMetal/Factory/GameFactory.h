@@ -12,11 +12,22 @@
 #include "Objects\Physicable.h"
 #include "Renderer\Renderable3D.h"
 #include "Renderer\Renderable2D.h"
-#include "Objects\DrivingStyleFast.h"
+
+#include "Objects\Cars\DrivingStyleMeowMix.h"
+#include "Objects\Cars\DrivingStyleExplosivelyDelicious.h"
+#include "Objects\Cars\DrivingStyleGargantulous.h"
+
+
 #include "Objects\Cars\MeowMix.h"
+#include "Objects\Cars\ExplosivelyDelicious.h"
+#include "Objects\Cars\Gargantulous.h"
+
+#include "Objects\MeowMixSuper.h"
+#include "Objects\ExplosivelyDeliciousSuper.h"
 #include "Objects\Bullet.h"
 #include "Objects\MeowMixBullet.h"
 #include "Objects\VolcanoGuySuperBullet.h"
+#include "Objects\ExplosivelyDeliciousBullet.h"
 #include "Objects\Track.h"
 #include "Objects\BulletCarCollision.h"
 #include "Objects\UI.h"
@@ -24,6 +35,7 @@
 #include "Objects\Text3D.h"
 #include "Objects\PowerUpShield.h"
 #include "Objects\PowerUpSpeed.h"
+
 #include "Objects\TexturedObject2D.h"
 #include "Objects/ObjectUpdaters/ObjectPositionUpdater.h"
 #include "Objects/ObjectUpdaters/ObjectRotationUpdater.h"
@@ -31,6 +43,8 @@
 #include "Objects/ObjectUpdaters/ObjectUpdaterParallel.h"
 #include "Objects/ObjectUpdaters/ObjectUpdaterSequence.h"
 #include "Objects\AnimatedExplosion.h"
+#include "Objects\TrainCar.h"
+#include "PxQueryReport.h"
 #include "Objects\VehicleSpecificationsMeowMix.h"
 
 class GameFactory
@@ -38,9 +52,14 @@ class GameFactory
 public:
 	enum Objects {
 		OBJECT_MEOW_MIX,
-		OBJECT_PLANE,
+		OBJECT_EXPLOSIVELY_DELICIOUS,
+		OBJECT_GARGANTULOUS,
 		OBJECT_BULLET_MEOW_MIX,
+		OBJECT_MEOW_MIX_SUPER,
+		OBJECT_BULLET_EXPLOSIVELY_DELICIOUS,
+		OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
 		OBJECT_BULLET_SUPER_VOLCANO,
+		OBJECT_PLANE,
 		OBJECT_HEALTH_BAR,
 		OBJECT_GAUGE_BAR,
 		OBJECT_TEXT_2D,
@@ -55,6 +74,7 @@ public:
 		OBJECT_POWERUP,
 		OBJECT_SHIELD_POWERUP,
 		OBJECT_SPEED_POWERUP,
+		OBJECT_ATTACK_POWERUP,
 		OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE,
 		OBJECT_UI_SICK_PUPPIES_SONG_TEXTURE_YOURE_GOING_DOWN,
 		OBJECT_UI_ALL_GOOD_THINGS_SONG_I_AM_THE_ENEMY,
@@ -62,11 +82,17 @@ public:
 		OBJECT_UI_MAP,
 		OBJECT_PARTICLE,
 		OBJECT_EXPLOSION_1,
-
+		OBJECT_TRAIN_CAR,
+		OBJECT_DEATH_PIT,
 		OBJECT_ANIMATION_TEST
 	};
 
+	
+
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);
+
+	bool sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal MaxDistance, PxRaycastBuffer &hit);
+	bool sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit);
 
 	static long getNextId() { return ++lastId; }
 

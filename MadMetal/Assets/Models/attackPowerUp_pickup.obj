@@ -1,6 +1,6 @@
 # Blender v2.76 (sub 0) OBJ File: 'sword.blend'
 # www.blender.org
-mtllib sword.mtl
+mtllib attackPowerUp_pickup.mtl
 o Cube
 v -0.243292 10.921947 -0.117176
 v -0.350078 5.778395 -0.141787

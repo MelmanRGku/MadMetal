@@ -1,10 +1,12 @@
-#include "DrivingStyleHealth.h"	
+#include "DrivingStyleGargantulous.h"	
 
-DrivingStyleHealth::DrivingStyleHealth(PxMaterial *chassisMaterial, PxMaterial *wheelMaterial)
+DrivingStyleGargantulous::DrivingStyleGargantulous(PxMaterial *chassisMaterial, PxMaterial *wheelMaterial)
 {
 	//Set up the chassis mass, dimensions, moment of inertia, and center of mass offset.
 	//The moment of inertia is just the moment of inertia of a cuboid but modified for easier steering.
 	//Center of mass offset is 0.65m above the base of the chassis and 0.25m towards the front.
+
+	// For the record, Gargantulous has high health, standard speed, and low maneuvrebility
 	m_chassisMass = 2500.0f;
 	m_chassisDims = PxVec3(10.f, 5.0f, 10.0f);
 	m_chassisMOI = PxVec3((m_chassisDims.y*m_chassisDims.y + m_chassisDims.z*m_chassisDims.z)*m_chassisMass / 12.0f,
@@ -28,7 +30,7 @@ DrivingStyleHealth::DrivingStyleHealth(PxMaterial *chassisMaterial, PxMaterial *
 	m_maxSpeed = 100;
 }
 
-DrivingStyleHealth::~DrivingStyleHealth()
+DrivingStyleGargantulous::~DrivingStyleGargantulous()
 {
 
 }

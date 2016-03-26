@@ -2,7 +2,7 @@
 
 //#include "SnippetVehicleRaycast.h"
 #include "PhysicsObjectCreator.h"
-#include "../DrivingStyle.h"
+#include "../Cars/DrivingStyle.h"
 #include "Simulation\GameSimulationDefinitions.h"
 
 class VehicleCreator

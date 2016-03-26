@@ -93,15 +93,6 @@
     <ClCompile Include="ParticleSystem\ParticleData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleSystem\ParticleEmitter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleSystem\ParticleGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleSystem\ParticleUpdater.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Scene Manager\StackManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -117,9 +108,6 @@
     <ClCompile Include="Objects\BoundingBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\DrivingStyleFast.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Simulation\LoadingScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -130,9 +118,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\ObjectCreators\VehicleCreator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\DrivingStyle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp">
@@ -246,9 +231,6 @@
     <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\PowerUpShield.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\PowerUpSpeed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -276,10 +258,22 @@
     <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\DrivingStyleHealth.cpp">
+    <ClCompile Include="Objects\Cars\Gargantulous.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Cars\Gargantulous.cpp">
+    <ClCompile Include="Objects\Cars\ExplosivelyDelicious.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Cars\DrivingStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Cars\DrivingStyleMeowmix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Cars\DrivingStyleGargantulous.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Cars\DrivingStyleExplosivelyDelicious.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -365,19 +359,10 @@
     <ClInclude Include="Game Logic\Projectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleSystem\ParticleUpdater.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleSystem\ParticleData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParticleSystem\ParticleEmitter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleSystem\ParticleGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleSystem\ParticleSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene Manager\StackManager.h">
@@ -399,12 +384,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\BoundingBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\DrivingStyle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\DrivingStyleFast.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Simulation\GameSimulationDefinitions.h">
@@ -605,10 +584,40 @@
     <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\DrivingStyleHealth.h">
+    <ClInclude Include="Objects\Cars\Gargantulous.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Cars\Gargantulous.h">
+    <ClInclude Include="Objects\Cars\ExplosivelyDelicious.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\ExplosivelyDeliciousSuper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\ExplosivelyDeliciousBullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\MeowMixSuper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\PowerUpAttack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\TrainCar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Cars\DrivingStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Cars\DrivingStyleMeowMix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Cars\DrivingStyleGargantulous.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Cars\DrivingStyleExplosivelyDelicious.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
