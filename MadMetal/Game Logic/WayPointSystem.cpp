@@ -10,6 +10,7 @@ static const float WAYPOINT_TRUE_LENGTH = 10;
 WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition, Boundry startingPosition)
 {
 	int index = 0;
+	int numberOfRows = 0;
 	switch (startingPosition)
 	{
 	case TOP:
@@ -35,11 +36,13 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 		}
 		break;
 	case BOTTOM:
-		for (int i = trackLengthMax - WAYPOINT_TRUE_LENGTH; i > trackLengthMin; i -= ((WAYPOINT_TRUE_LENGTH) * 2))
+		numberOfRows = (abs(trackLengthMax - trackLengthMin) / (WAYPOINT_TRUE_LENGTH * 2));
+		numberOfRows--;
+		for (int i = trackLengthMin + WAYPOINT_TRUE_LENGTH; i < trackLengthMax; i += ((WAYPOINT_TRUE_LENGTH)* 2))
 		{
 			std::vector<Waypoint*> newVectorWaypoint;
 			m_waypointMap.push_back(newVectorWaypoint);
-			for (int j = trackWidthMax - WAYPOINT_TRUE_WIDTH; j > trackWidthMin; j -= ((WAYPOINT_TRUE_WIDTH)* 2))
+			for (int j = trackWidthMin + WAYPOINT_TRUE_WIDTH; j < trackWidthMax; j += ((WAYPOINT_TRUE_WIDTH)* 2))
 			{
 				PxGeometry **geom = new PxGeometry *[1];
 				geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_LENGTH_COLLISION, yposition, WAYPOINT_WIDTH_COLLISION));
@@ -49,9 +52,10 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 				delete pos;
 				delete geom[0];
 				delete[] geom;
-				tempWaypoint->setId(index);
+				tempWaypoint->setId(numberOfRows);
 				m_waypointMap[index].push_back(tempWaypoint);
 				m_waypoints.push_back(tempWaypoint);
+				numberOfRows--;
 			}
 			index++;
 		}

@@ -31,4 +31,5 @@ private: //helper functions
 	void recalculateWaypointSystemIds(WaypointSystem& waypointSystem1, WaypointSystem& waypointSystem2, bool& recalculateIds);
 	void setInvalid1();
 	void setInvalid2();
+	void setInvalid3();
 };
