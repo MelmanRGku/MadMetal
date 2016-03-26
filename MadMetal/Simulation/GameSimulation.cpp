@@ -26,7 +26,7 @@ bool temporary = false;
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audioHandle(audioHandle)
 {
 	std::cout << "GameSimulation pushed onto the stack \n";
-	
+	newMessage.setTag(SceneMessage::eNone);
 	createPhysicsScene();
 	musicManager = new MusicManager(audioHandle);
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
@@ -105,7 +105,6 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 GameSimulation::~GameSimulation()
 {
-	PhysicsManager::getCpuDispatcher().release();
 	m_scene->release();
 	delete m_track;
 	for (int i = 0; i < m_players.size(); i++)
@@ -280,21 +279,19 @@ void GameSimulation::processInput() {
 	//check for pause button
 	for (int i = 0; i < m_humanPlayers.size(); i++)
 	{
-		//if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
-		//{
-		//	newMessage.setTag(SceneMessage::ePause);
-		//	std::vector<ControllableTemplate *> playerTemplates;
-		//	//put the controllables into the vector incase the player trys to restart
-		//	for (int i = 0; i < m_players.size(); i++)
-		//	{
-		//		playerTemplates.push_back(&m_players[i]->getControllableTemplate());
-		//	}
-		//	//put a dummy controllable at the front of the vector so the pause screen knows who paused
-		//	playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
-		//	newMessage.setPlayerTemplates(playerTemplates);
-		//	
-		//	return true;
-		//}
+		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
+		{
+			newMessage.setTag(SceneMessage::ePause);
+			std::vector<ControllableTemplate *> playerTemplates;
+			//put the controllables into the vector incase the player trys to restart
+			for (int i = 0; i < m_players.size(); i++)
+			{
+				playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+			}
+			//put a dummy controllable at the front of the vector so the pause screen knows who paused
+			playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
+			newMessage.setPlayerTemplates(playerTemplates);
+		}
 	}
 
 	if (m_humanPlayers[0]->getGamePad() != NULL && (m_humanPlayers[0]->getGamePad()->isPressed(GamePad::DPadLeft) || m_humanPlayers[0]->getGamePad()->isPressed(GamePad::DPadRight))) {
@@ -302,7 +299,7 @@ void GameSimulation::processInput() {
 	}
 }
 
-bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
+bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 {
 	processInput();
 	musicManager->update();
@@ -390,6 +387,14 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	simulatePhysics(dt);
 	simulateAnimation();
 	updateObjects(dt);
+
+	if (newMessage.getTag() != SceneMessage::eNone) {
+		message.setTag(newMessage.getTag());
+		message.setPlayerTemplates(newMessage.getPlayerTemplates());
+		newMessage.setTag(SceneMessage::eNone);
+		return true;
+	}
+
 	return false;
 	
 }

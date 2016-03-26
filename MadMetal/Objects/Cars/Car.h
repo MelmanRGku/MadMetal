@@ -5,6 +5,7 @@
 #include "Objects\DrivingStyle.h"
 #include "Objects\PowerUp.h"
 #include "Objects/UI.h"
+#include "Global\Definitions.h"
 
 
 class Waypoint;

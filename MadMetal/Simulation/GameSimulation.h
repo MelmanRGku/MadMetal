@@ -54,6 +54,7 @@ private: //members
 	std::vector<PlayerControllable*> m_humanPlayers;
 	std::vector<AIControllable*> m_aiPlayers;
 	PxScene* m_scene;
+	SceneMessage newMessage;
 
 	PxVehicleDrivableSurfaceToTireFrictionPairs* gFrictionPairs = NULL; 
 	PxVehicleDrivableSurfaceToTireFrictionPairs* createFrictionPairs(const PxMaterial* defaultMaterial);

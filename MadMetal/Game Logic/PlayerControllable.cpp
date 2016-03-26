@@ -94,7 +94,7 @@ void PlayerControllable::playFrame(double dt)
 				std::cout << "Bpressed \n";
 				}*/
 
-				if (m_gamePad->isPressed(GamePad::StartButton))
+				if (m_gamePad->isPressed(GamePad::BackButton))
 				{
 					m_car->respawn();
 				}

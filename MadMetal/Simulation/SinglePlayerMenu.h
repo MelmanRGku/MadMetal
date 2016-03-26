@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Scene Manager\Scene.h"
 #include "Objects\Text3D.h"
 

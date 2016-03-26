@@ -19,6 +19,7 @@ GameFactory::~GameFactory()
 	delete m_audioFactory;
 	delete m_renderFactory;
 	delete m_physicsFactory;
+	m_factory = NULL;
 }
 
 TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent)

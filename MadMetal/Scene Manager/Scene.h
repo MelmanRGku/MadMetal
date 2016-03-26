@@ -57,6 +57,7 @@ public:
 private://members
 	SceneEnum m_sceneType;
 	std::vector<ControllableTemplate *> m_playerTemplates;
+	std::vector<GamePad *> m_gamePads;
 };
 
 class Scene 
@@ -102,41 +103,3 @@ public:
 	//virtual void loadFromFile();
 
 };
-
-
-class MultiPlayerCharSelectScene : public Scene
-{
-private:
-	GamePad * m_gamePads[MAX_NUM_HUMAN_PLAYERS];
-	bool m_charConfirmed[MAX_NUM_HUMAN_PLAYERS];
-	int m_currentSelection[MAX_NUM_HUMAN_PLAYERS];
-	int m_selections[NUM_CHARACTERS_AVAILABLE];
-
-	std::vector<ControllableTemplate *> m_playerTemplates;
-
-public:
-	MultiPlayerCharSelectScene(Input * input);
-	~MultiPlayerCharSelectScene()
-	{
-		for (int i = 0; i < MAX_NUM_HUMAN_PLAYERS; i++)
-		{
-			m_gamePads[i] = NULL;
-		}
-	}
-	bool simulateScene(double dt, SceneMessage &newMessage);
-	
-};
-
-class PauseScene : public Scene
-{
-private:
-	GamePad * m_gamePad;
-	SceneMessage toDeliver;
-
-public:
-	PauseScene(std::vector<ControllableTemplate *> playerTemplates);
-	~PauseScene() { m_gamePad = NULL; }
-	
-	bool simulateScene(double dt, SceneMessage &newMessage);
-};
-

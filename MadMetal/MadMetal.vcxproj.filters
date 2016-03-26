@@ -267,6 +267,12 @@
     <ClCompile Include="Simulation\SinglePlayerMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Simulation\MultiPlayerMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulation\PauseMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global\Settings.h">
@@ -561,6 +567,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Simulation\SinglePlayerMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation\MultiPlayerMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Global\Definitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation\PauseMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

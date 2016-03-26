@@ -100,7 +100,7 @@ void PhysicsManager::initCarPhysics() {
 
 void PhysicsManager::shutdownPhysicsSimualtion()
 {
-	//cpuDispatcher->release();
+	cpuDispatcher->release();
 	PxCloseVehicleSDK();
 	m_cooking->release();
 	topLevelPhysics_->release();

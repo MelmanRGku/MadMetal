@@ -4,6 +4,7 @@
 #include "Objects\Camera.h"
 #include "Objects\TestObject.h"
 #include "Game Logic\PlayerControllable.h"
+#include "Libraries\freeglut\freeglut.h"
 
 /*
 	Constructor. 
@@ -11,13 +12,15 @@
 */
 Renderer::Renderer()
 {
-	projectionMatrix = glm::perspective(
+	float windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+	float windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+
+	defaultProjectionMatrix = projectionMatrix = glm::perspective(
 		glm::radians(std::stof(Settings::getSetting("fovy"))),
-		std::stof(Settings::getSetting("screenWidth")) / std::stof(Settings::getSetting("screenHeight")),
+		windowWidth / windowHeight,
 		0.5f,
 		1000.f
 		);
-	viewPorts.push_back(glm::vec4(0, 0, std::stoi(Settings::getSetting("screenWidth")), std::stoi(Settings::getSetting("screenHeight"))));
 
 	viewMatrix = glm::lookAt(
 		glm::vec3(50, 3, 50),
@@ -25,7 +28,7 @@ Renderer::Renderer()
 		glm::vec3(0, 1, 0)
 		);
 
-	modelMatrix = glm::mat4x4();
+	recalculateViewPorts(windowWidth, windowHeight);
 }
 
 
@@ -34,10 +37,6 @@ Renderer::~Renderer()
 	for (int i = 0; i < NUMBER_OF_SHADER_TYPES; i++) {
 		delete shader[i];
 	}
-}
-
-void Renderer::setShader(ShaderType type, ShaderProgram *sp) {
-	shader[type] = sp;
 }
 
 void Renderer::setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt)
@@ -57,65 +56,70 @@ void Renderer::setViewMatrixLookAt(std::vector<Camera *> cameras)
 		cameras[0]->getPosition(),
 		cameras[0]->getLookAt(),
 		cameras[0]->getUpVector()
-	);
+		);
 }
 
-/*void Renderer::draw(ParticleSystem * sys)
-{
-	startDrawing();
-	//set model matrix uniform
-	glUniformMatrix4fv(shader->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
+void Renderer::recalculateViewPorts(float windowWidth, float windowHeight) {
+	this->windowWidth = windowWidth;
+	this->windowHeight = windowHeight;
 
-	glUniformMatrix4fv(shader->viewMatrixUniform, 1, false, &viewMatrix[0][0]);
-
-	//we want to use color for now. Textures not supported yet
-	glUniform1i(shader->textureValidUniform, false);
-
-	// Bind to the correct context
-	glBindVertexArray(sys->m_vao);
-
-	// Draw the triangles
-	glPointSize(2);
-	glDrawArrays(GL_POINTS, 0, sys->p->m_countAlive);
-
-	glBindVertexArray(0);
-	stopDrawing();
-}*/
-
-
-void Renderer::initializeScreens(int numOfPlayers) {
-	int screenWidth = std::stoi(Settings::getSetting("screenWidth"));
-	int screenHeight = std::stoi(Settings::getSetting("screenHeight"));
 	viewPorts.clear();
-	if (numOfPlayers == 1) {
-		viewPorts.push_back(glm::vec4(0, 0, screenWidth, screenHeight));
-	}
-	else if (numOfPlayers == 2) {
-		viewPorts.push_back(glm::vec4(0, 0, screenWidth , screenHeight/2));
-		viewPorts.push_back(glm::vec4(0, screenHeight/2, screenWidth, screenHeight/2));
-	}
-	else if (numOfPlayers == 4) {
-		viewPorts.push_back(glm::vec4(0, 0, screenWidth/2, screenHeight / 2));
-		viewPorts.push_back(glm::vec4(0, screenHeight / 2, screenWidth /2 , screenHeight / 2)); 
-		viewPorts.push_back(glm::vec4(screenWidth / 2, 0, screenWidth / 2, screenHeight / 2));
-		viewPorts.push_back(glm::vec4(screenWidth / 2, screenHeight / 2, screenWidth / 2, screenHeight / 2));
-	}
+	std::vector<glm::vec4> viewPortDesc;
+
+	//1 player
+	viewPortDesc.clear();
+	viewPortDesc.push_back(glm::vec4(0, 0, windowWidth, windowHeight));
+	viewPorts.push_back(viewPortDesc);
+
+	//2 players
+	viewPortDesc.clear();
+	viewPortDesc.push_back(glm::vec4(0, windowHeight / 2, windowWidth, windowHeight / 2));
+	viewPortDesc.push_back(glm::vec4(0, 0, windowWidth, windowHeight / 2));
+	viewPorts.push_back(viewPortDesc);
+
+	//3 players
+	viewPortDesc.clear();
+	viewPortDesc.push_back(glm::vec4(0, windowHeight / 2, windowWidth / 2, windowHeight / 2));
+	viewPortDesc.push_back(glm::vec4(windowWidth / 2, windowHeight / 2, windowWidth / 2, windowHeight / 2));
+	viewPortDesc.push_back(glm::vec4(0, 0, windowWidth, windowHeight / 2));
+	viewPorts.push_back(viewPortDesc);
+
+	//4 players
+	viewPortDesc.clear();
+	viewPortDesc.push_back(glm::vec4(0, windowHeight / 2, windowWidth / 2, windowHeight / 2));
+	viewPortDesc.push_back(glm::vec4(windowWidth / 2, windowHeight / 2, windowWidth / 2, windowHeight / 2));
+	viewPortDesc.push_back(glm::vec4(0, 0, windowWidth / 2, windowHeight / 2));
+	viewPortDesc.push_back(glm::vec4(windowWidth / 2, 0, windowWidth / 2, windowHeight / 2));
+	viewPorts.push_back(viewPortDesc);
 }
 
+void Renderer::setShader(ShaderType type, ShaderProgram *sp) {
+	shader[type] = sp;
+}
 
-void Renderer::draw(std::vector<TestObject *> *objects) {
-	for (int j = 0; j < viewPorts.size(); j++) {
+void Renderer::draw(std::vector<TestObject *> *objects, std::vector<PlayerControllable *> *players) {
+	std::vector<glm::vec4> viewPortDesc;
+
+	if (players == NULL) {
+		viewPortDesc = viewPorts.at(0);
+		projectionMatrix = defaultProjectionMatrix;
+	}
+	else {
+		viewPortDesc = viewPorts.at(players->size() - 1);
+	}
+
+	for (int j = 0; j < viewPortDesc.size(); j++) {
 		if (players != NULL) {
 			projectionMatrix = glm::perspective(
-				glm::radians(std::stof(Settings::getSetting("fovy")) + (-0.3f) * max(players->at(j)->getCar()->getCar().computeForwardSpeed(), 1) + 30),
-				std::stof(Settings::getSetting("screenWidth")) / std::stof(Settings::getSetting("screenHeight")),
+				glm::radians(std::stof(Settings::getSetting("fovy")) + 0.3f * max(players->at(j)->getCar()->getCar().computeForwardSpeed(), 1) + 30),
+				windowWidth / windowHeight,
 				0.5f,
 				1000.f
 				);
-			glm::vec4 viewport = viewPorts.at(j);
 			viewMatrix = players->at(j)->getCamera()->getMatrix();
-			glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
 		}
+		glm::vec4 viewport = viewPortDesc.at(j);
+		glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
 		for (int i = 0; i < NUMBER_OF_SHADER_TYPES; i++) {
 			if (shader[i] != NULL) {
 				shader[i]->start(&viewMatrix, &projectionMatrix);

@@ -78,6 +78,8 @@
     <ClCompile Include="Game Logic\PathFinding.cpp" />
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
+    <ClCompile Include="Simulation\PauseMenu.cpp" />
+    <ClCompile Include="Simulation\MultiPlayerMenu.cpp" />
     <ClCompile Include="Simulation\MainMenu.cpp" />
     <ClCompile Include="Objects\MapUI.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp" />
@@ -162,6 +164,9 @@
     <ClInclude Include="Factory\AnimationFactory.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
+    <ClInclude Include="Global\Definitions.h" />
+    <ClInclude Include="Simulation\PauseMenu.h" />
+    <ClInclude Include="Simulation\MultiPlayerMenu.h" />
     <ClInclude Include="Simulation\MainMenu.h" />
     <ClInclude Include="Objects\MapUI.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectScaleUpdater.h" />

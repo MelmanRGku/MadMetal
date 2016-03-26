@@ -3,6 +3,8 @@
 #include "Global\Log.h"
 #include "Simulation\MainMenu.h"
 #include "Simulation\SinglePlayerMenu.h"
+#include "Simulation\MultiPlayerMenu.h"
+#include "Simulation\PauseMenu.h"
 #include <windows.h>
 #include "winbase.h"
 #include "wingdi.h"
@@ -130,7 +132,7 @@ void StackManager::readMailBox()
 		break;
 			
 	case (SceneMessage::eMultiCharSelect):
-		m_stack->pushScene(new MultiPlayerCharSelectScene(m_input));
+		m_stack->pushScene(new MultiPlayerMenu(m_input, m_audio));
 		break;
 
 	case (SceneMessage::eLoadScreen) :
@@ -145,13 +147,11 @@ void StackManager::readMailBox()
 			if (temp->getGamePad() != NULL)
 				numPlayers++;
 		}
-		m_renderer->initializeScreens(numPlayers);
 		m_stack->pushScene(new GameSimulation(m_mailBox->getPlayerTemplates(), *m_audio));
-		m_renderer->setPlayers(static_cast<GameSimulation *>(m_stack->getTopScene())->getHumanPlayers());
 		break;
 	}
 	case (SceneMessage::ePause) :
-		m_stack->pushScene(new PauseScene(m_mailBox->getPlayerTemplates()));
+		m_stack->pushScene(new PauseMenu(m_mailBox->getPlayerTemplates(), m_audio));
 		break;
 
 	case (SceneMessage::eRestart):
@@ -190,7 +190,11 @@ bool StackManager::progressScene(int newTime)
 	//get cameras from the scene
 	m_renderer->setViewMatrixLookAt(m_stack->getTopScene()->getSceneCameras());
 	//get objects from the scene and draw
-	m_renderer->draw(m_stack->getTopScene()->getWorld()->getGameObjects());
+	GameSimulation *sim = dynamic_cast<GameSimulation *>(m_stack->getTopScene());
+	if (sim != NULL)
+		m_renderer->draw(sim->getWorld()->getGameObjects(), sim->getHumanPlayers());
+	else 
+		m_renderer->draw(m_stack->getTopScene()->getWorld()->getGameObjects());
 		
 	if (m_mailBox->getTag() == SceneMessage::eExit)
 		return true;
@@ -210,3 +214,7 @@ bool StackManager::progressScene(int newTime)
 	return false;
 }
 
+
+void StackManager::onWindowResize(float width, float height) {
+	m_renderer->recalculateViewPorts(width, height);
+}

@@ -248,3 +248,7 @@ void Audio::playMusic(Sound sound, int playCount)
 	Mix_PlayMusic(m_musicLibrary[sound.getLibraryIndex()], playCount);
 
 }
+
+void Audio::stopMusic() {
+	Mix_HaltMusic();
+}
