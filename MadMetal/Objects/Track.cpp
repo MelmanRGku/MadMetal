@@ -37,7 +37,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	m_waypointSystems.push_back(nextLocation1);
 
-	setInvalid();
+	setInvalid1();
 
 	WaypointSystem * nextLocation2 = new WaypointSystem(
 		getDrivablePart()->getWorldBounds().maximum.x - 180,
@@ -61,7 +61,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 		getDrivablePart()->getWorldBounds().minimum.x + 40,
 		getDrivablePart()->getWorldBounds().maximum.x - 200,
 		getDrivablePart()->getWorldBounds().maximum.z - 100,
-		getDrivablePart()->getWorldBounds().maximum.z - 40,
+		getDrivablePart()->getWorldBounds().maximum.z - 20,
 		getDrivablePart()->getWorldBounds().maximum.y,
 		RIGHT);
 
@@ -74,6 +74,8 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 	stitchWaypointSystems(LEFT, RIGHT, *lastWaypointSystem, *nextLocation3, lastWaypointSystem->getWaypointMap().size() - 2, 0, true);
 
 	m_waypointSystems.push_back(nextLocation3);
+
+	setInvalid2();
 }
 
 Track::~Track()
@@ -280,38 +282,71 @@ void Track::recalculateWaypointSystemIds(WaypointSystem& waypointSystem1, Waypoi
 	}
 }
 
-void Track::setInvalid()
+void Track::setInvalid2()
+{
+	for (int i = 556; i < 596; i += 2)
+	{
+		m_waypointList[i]->setValid(false);
+	}
+
+	for (int i = 602; i < 714; i++)
+	{
+		if ((i > 605 && i < 622) ||
+			(i > 624 && i < 629) ||
+			(i > 637 && i < 647) ||
+			(i > 649 && i < 664) ||
+			//(i > 668 && i < 673) ||
+			(i > 676 && i < 685) ||
+			(i > 689 && i < 714))
+		{
+			m_waypointList[i]->setValid(false);
+
+			//std::cout << "making invalid: " << m_waypointList[i]->getIndex() << "\n";
+		}
+	}
+}
+
+
+void Track::setInvalid1()
 {
 	m_waypointList[0]->setValid(false);
 	m_waypointList[1]->setValid(false);
+
+	m_waypointList[2]->setValid(false);
+	m_waypointList[4]->setValid(false);
+	m_waypointList[6]->setValid(false);
+	m_waypointList[8]->setValid(false);
+	m_waypointList[10]->setValid(false);
+	m_waypointList[12]->setValid(false);
+	m_waypointList[14]->setValid(false);
 
 	for (int i = 16; i < 555; i++)
 	{
 		if ((i > 16 && i < 21) ||
 			(i > 22 && i < 33) ||
 			(i > 34 && i < 45) ||
-			(i > 46 && i < 57) ||
-			(i > 59 && i < 69) ||
-			(i > 71 && i < 81) ||
-			(i > 83 && i < 93) ||
+			(i > 46 && i < 58) ||
+			(i > 59 && i < 70) ||
+			(i > 71 && i < 82) ||
+			(i > 83 && i < 94) ||
 			(i > 95 && i < 105) ||
 			(i > 107 && i < 118) ||
 			(i > 120 && i < 131) ||
 			(i > 132 && i < 143) ||
 			(i > 144 && i < 155) ||
-			(i > 157 && i < 168) || 
-			(i > 170 && i < 180) || 
-			(i > 182 && i < 193) || 
+			(i > 157 && i < 168) ||
+			(i > 170 && i < 180) ||
+			(i > 182 && i < 193) ||
 			(i > 195 && i < 205) ||
 			(i > 207 && i < 217) ||
-			(i > 219 && i < 229) || 
-			(i > 231 && i < 241) || 
-			(i > 243 && i < 252) || 
+			(i > 219 && i < 229) ||
+			(i > 231 && i < 241) ||
+			(i > 243 && i < 252) ||
 			(i > 255 && i < 264) ||
 			(i > 266 && i < 276) ||
 			(i > 277 && i < 287) ||
-			
-			
+
+
 			(i > 289 && i < 298) ||
 			(i > 300 && i < 310) ||
 			(i > 311 && i < 321) ||
@@ -321,19 +356,19 @@ void Track::setInvalid()
 			(i > 356 && i < 366) ||
 			(i > 367 && i < 377) ||
 			(i > 379 && i < 390) ||
-			(i > 391 && i < 400) ||
-			(i > 402 && i < 412) ||
-			(i > 414 && i < 424) ||
-			(i > 426 && i < 436) ||
-			(i > 438 && i < 448) ||
-			(i > 451 && i < 461) ||
-			(i > 463 && i < 473) ||
-			(i > 475 && i < 486) ||
-			(i > 488 && i < 498) ||
-			(i > 500 && i < 511) ||
-			(i > 512 && i < 524) ||
-			(i > 525 && i < 536) ||
-			(i > 538 && i < 548) ||
+			(i > 391 && i < 401) ||
+			(i > 402 && i < 413) ||
+			(i > 414 && i < 425) ||
+			(i > 426 && i < 438) ||
+			(i > 439 && i < 451) ||
+			(i > 451 && i < 462) ||
+			(i > 463 && i < 475) ||
+			(i > 476 && i < 488) ||
+			(i > 488 && i < 501) ||
+			(i > 502 && i < 512) ||
+			(i > 512 && i < 525) ||
+			(i > 526 && i < 537) ||
+			(i > 537 && i < 550) ||
 			(i > 550 && i < 555))
 		{
 			m_waypointList[i]->setValid(false);

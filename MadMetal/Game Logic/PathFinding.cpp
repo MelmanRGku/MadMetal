@@ -112,10 +112,10 @@ SearchWaypoint* PathFinding::getNextCell()
 
 void PathFinding::pathOpened(Waypoint& waypoint, float newCost, SearchWaypoint *parent)
 {
-	if (!waypoint.isValid())
-	{
-		return;
-	}
+	//if (!waypoint.isValid())
+	//{
+	//	waypoint;
+	//}
 
 	for (int i = 0; i < m_visitedList.size(); i++)
 	{
@@ -132,7 +132,14 @@ void PathFinding::pathOpened(Waypoint& waypoint, float newCost, SearchWaypoint *
 		{
 			newChild->setHighCost(9999.9);
 		}
+		
 	}
+
+	if (!newChild->getWaypoint().isValid())
+	{
+		newChild->setHighCost(9999.9);
+	}
+
 	newChild->setG(newCost);
 	newChild->setH(newChild->ManHattanDistance(m_goalWaypoint));
 

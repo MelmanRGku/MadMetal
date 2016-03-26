@@ -10,7 +10,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(597);
+	m_goalWaypoint = m_track.getWaypointAt(632);
 	m_currentPath.clear();
 	//m_listOfWaypointsHighCost.push_back(4);
 	//m_listOfWaypointsHighCost.push_back(11);
@@ -179,7 +179,7 @@ void AIControllable::accelerateToNextWaypoint()
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
 	changeTurning(crossProductResult.y, amountToSteerBy);
-	accelerate(amountToAccelerate);
+	accelerate(amountToAccelerate * 0.65);
 
 	//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
 	//std::cout << "z value: " << crossProductResult.z << "\n";
