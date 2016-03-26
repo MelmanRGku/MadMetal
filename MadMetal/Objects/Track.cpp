@@ -59,9 +59,9 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	WaypointSystem * nextLocation3 = new WaypointSystem(
 		getDrivablePart()->getWorldBounds().minimum.x + 40,
-		getDrivablePart()->getWorldBounds().maximum.x - 180,
+		getDrivablePart()->getWorldBounds().maximum.x - 200,
 		getDrivablePart()->getWorldBounds().maximum.z - 100,
-		getDrivablePart()->getWorldBounds().maximum.z - 20,
+		getDrivablePart()->getWorldBounds().maximum.z - 40,
 		getDrivablePart()->getWorldBounds().maximum.y,
 		RIGHT);
 
