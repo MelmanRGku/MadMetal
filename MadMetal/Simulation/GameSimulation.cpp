@@ -89,6 +89,11 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		}
 	}
 
+	//adjust strings
+	for (int i = 0; i < m_humanPlayers.size(); i++) {
+		m_humanPlayers.at(i)->getCar()->getUI()->adjustStringsForViewport(i + 1, m_humanPlayers.size());
+	}
+
 	//if there is only one player, set audio to do sound attenuation to that player
 	//if (m_humanPlayers.size() == 1)
 	//{

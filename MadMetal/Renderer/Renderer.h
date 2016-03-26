@@ -24,6 +24,8 @@ private:
 	ShaderProgram *shader[NUMBER_OF_SHADER_TYPES];
 	std::vector<std::vector<glm::vec4>> viewPorts;
 	float windowWidth, windowHeight;
+	glm::vec4 currentViewPort;
+	int totalNumberOfViewPorts;
 
 public:
 	Renderer();
@@ -36,5 +38,7 @@ public:
 	glm::mat4x4 getProjectionMatrix() { return projectionMatrix; }
 	glm::mat4x4 getViewMatrix() { return viewMatrix; }
 	void recalculateViewPorts(float windowWidth, float windowHeight);
+	glm::vec4 getCurrentViewPort() { return currentViewPort; }
+	int getTotalNumberOfViewPorts() { return totalNumberOfViewPorts; }
 };
 

@@ -12,7 +12,7 @@ public:
 	UI(long id, Audioable *aable, Animatable *anable, Renderable2D *rable);
 	~UI();
 	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
-
+	void adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewports);
 	HealthBar2D *healthBar;
 	GaugeBar *gaugeBar;
 	Text2D *score,
