@@ -146,7 +146,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
 		a->updatePosition(glm::vec3(-2.2, 1.5, -5.));
-		a->setScale(glm::vec3(1, 1, 0.00000000001));
+		a->setScale(glm::vec3(1, 1, 0.001));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/LoadingBox.obj"));
 		model->setupVAOs();
@@ -159,7 +159,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
 		a->updatePosition(glm::vec3(2.2, 1.5, -5.));
-		a->setScale(glm::vec3(1, 1, 0.00000000001));
+		a->setScale(glm::vec3(1, 1, 0.001));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/LoadingBox.obj"));
 		model->setupVAOs();
@@ -172,7 +172,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
 		a->updatePosition(glm::vec3(-2.2, -1.5, -5.));
-		a->setScale(glm::vec3(1, 1, 0.00000000001));
+		a->setScale(glm::vec3(1, 1, 0.001));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/LoadingBox.obj"));
 		model->setupVAOs();
@@ -185,7 +185,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
 		a->updatePosition(glm::vec3(2.2, -1.5, -5.));
-		a->setScale(glm::vec3(1, 1, 0.00000000001));
+		a->setScale(glm::vec3(1, 1, 0.001));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/LoadingBox.obj"));
 		model->setupVAOs();
