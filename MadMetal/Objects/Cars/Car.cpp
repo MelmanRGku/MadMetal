@@ -75,6 +75,7 @@ void Car::pickUpPowerUp(PowerUpType type)
 
 void Car::usePowerUp()
 {
+	m_heldPowerUp = PowerUpType::SPEED;
 	if (m_heldPowerUp != PowerUpType::NONE)
 	{
 		

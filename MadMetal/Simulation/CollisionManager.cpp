@@ -270,9 +270,8 @@ void CollisionManager::processSpeedPowerUpHit(long speedPowerUpId, long carId)
 	
 	if (car != NULL && !shield->isOwner(car))
 	{
-		
-		
-		car->getCar().getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 50, 0));
+		car->getCar().getRigidDynamicActor()->setGlobalPose(PxTransform(car->getCar().getRigidDynamicActor()->getGlobalPose().p + PxVec3(0, 15, 0)));
+		car->getCar().getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 20, 0));
 		car->takeDamage(PowerUp::getSpeedImpactDamage());
 		shield->getOwner()->addDamageDealt(PowerUp::getSpeedImpactDamage());
 	}

@@ -94,7 +94,6 @@
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
     <ClCompile Include="Objects\PowerUp.cpp" />
-    <ClCompile Include="Objects\PowerUpSpeed.cpp" />
     <ClCompile Include="Objects\Waypoint.cpp" />
     <ClCompile Include="Objects\Track.cpp" />
     <ClCompile Include="Renderer\NoShaderProgram.cpp" />

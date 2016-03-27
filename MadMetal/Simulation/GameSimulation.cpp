@@ -49,9 +49,9 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
-			PxTransform *pos = new PxTransform(0, 1, 0);//-130 + i * 10, 40, 0);
-			MeowMix *car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
-			//ExplosivelyDelicious *car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS, pos, NULL, NULL));
+			PxTransform *pos = new PxTransform(-10 + 20 * i, 1, 0);//-130 + i * 10, 40, 0);
+			//MeowMix *car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
+			ExplosivelyDelicious *car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS, pos, NULL, NULL));
 			humanPlayer->setCar(car);
 			delete pos;
 
@@ -382,7 +382,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &newMessage)
 	simulatePhysics(dt);
 	simulateAnimation();
 	updateObjects(dt);
-	m_positionManager->updatePlayerPositions();
+	//m_positionManager->updatePlayerPositions();
 
 	//std::cout << "player position in race: " << m_players[0]->getCar()->getPositionInRace() << "\n";
 	return false;
