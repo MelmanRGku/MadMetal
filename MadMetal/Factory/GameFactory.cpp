@@ -374,11 +374,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	}
 	case OBJECT_HEALTH_BAR:
 	{
-		Renderable2D *renderable = new Renderable2D(NULL);
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_HEALTH_HUD)));
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(-.75f, -.8f, 0));
+		animatable->setScale(glm::vec3(.55f, .38f, 1));
 
-		HealthBar2D *bar = new HealthBar2D(objectId, audioable, animatable, renderable);
+		Model2D *currentHealthModel = static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_HEALTH_CURRENT)),
+			*lostHealthModel = static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_HEALTH_LOST));
+		HealthBar2D *bar = new HealthBar2D(objectId, audioable, animatable, renderable, currentHealthModel, lostHealthModel);
 
 		return bar;
 	}

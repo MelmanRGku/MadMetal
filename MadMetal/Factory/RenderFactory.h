@@ -62,6 +62,11 @@ public:
 		RENDERABLE_OBJECT_DEFENSE_POWERUP_ICON,
 		RENDERABLE_OBJECT_SPEED_POWERUP_ICON,
 		RENDERABLE_OBJECT_POWERUP_BORDER,
+
+
+		RENDERABLE_OBJECT_UI_HEALTH_HUD,
+		RENDERABLE_OBJECT_UI_HEALTH_CURRENT,
+		RENDERABLE_OBJECT_UI_HEALTH_LOST,
 	};
 
 	
@@ -158,6 +163,12 @@ public:
 			return new Model2D(Assets::getTexture("speed_icon"));
 		case RENDERABLE_OBJECT_POWERUP_BORDER:
 			return new Model2D(Assets::getTexture("powerup_border"));
+		case RENDERABLE_OBJECT_UI_HEALTH_HUD:
+			return new Model2D(Assets::getTexture("health_hud"));
+		case RENDERABLE_OBJECT_UI_HEALTH_CURRENT:
+			return new Model2D(Assets::getTexture("current_health"));
+		case RENDERABLE_OBJECT_UI_HEALTH_LOST:
+			return new Model2D(Assets::getTexture("health_lost"));
 		}
 	}
 	
