@@ -46,3 +46,7 @@ bool TexturedObject2D::draw(Renderer *renderer, Renderer::ShaderType type, int p
 
 	return false;
 }
+
+void TexturedObject2D::update(float dt) {
+	Object2D::update(dt);
+}

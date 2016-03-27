@@ -18,6 +18,7 @@ public:
 	void adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewports);
 	void setPowerup(PowerUpType type);
 	void unsetPowerup();
+	virtual void update(float dt);
 
 	HealthBar2D *healthBar;
 	GaugeBar *gaugeBar;

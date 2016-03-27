@@ -207,6 +207,7 @@ void Car::update(float dt) {
 			s << "Lap: " << getLap();
 			ui->lap->setString(s.str());
 		}
+		ui->update(dt);
 	}
 }
 

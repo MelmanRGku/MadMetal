@@ -126,3 +126,16 @@ void UI::adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewp
 		}
 	}
 }
+
+
+void UI::update(float dt) {
+	Object2D::update(dt);
+	healthBar->update(dt);
+	gaugeBar->update(dt);
+	lap->update(dt);
+	map->update(dt);
+	powerupBorder->update(dt);
+	scoreTable->update(dt);
+	if (powerupIcon != NULL)
+		powerupIcon->update(dt);
+}

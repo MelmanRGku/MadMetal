@@ -377,7 +377,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Renderable2D *renderable = new Renderable2D(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_HEALTH_HUD)));
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
-		animatable->setPosition(glm::vec3(-.75f, -.8f, 0));
+		animatable->setPosition(glm::vec3(-.75f, -.5f, 0));
 		animatable->setScale(glm::vec3(.55f, .38f, 1));
 
 		Model2D *currentHealthModel = static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_HEALTH_CURRENT)),
@@ -388,11 +388,22 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	}
 	case OBJECT_GAUGE_BAR:
 	{
-		Renderable2D *renderable = new Renderable2D(NULL);
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_HUD)));
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(-.70f, -.8f, 0));
+		animatable->setScale(glm::vec3(.55f, .38f, 1));
 
-		GaugeBar *bar = new GaugeBar(objectId, audioable, animatable, renderable);
+		Model2D *currentGaugeModel = static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_CURRENT));
+		std::vector<Model2D *> animationModels;
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_1)));
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_2)));
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_3)));
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_4)));
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_5)));
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_6)));
+
+		GaugeBar *bar = new GaugeBar(objectId, audioable, animatable, renderable, currentGaugeModel, animationModels);
 
 		return bar;
 	}
