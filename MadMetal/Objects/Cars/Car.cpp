@@ -15,6 +15,7 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 	m_powerUpRemaining = 0;
 	Car::positionGlobalID++;
 	m_positionInRace = positionGlobalID;
+	m_waypointHitList.clear();
 }
 
 
@@ -313,4 +314,9 @@ bool Car::isAtStartingCollisionVolume()
 bool Car::isAtMidCollisionVolume()
 {
 	return m_isAtMidCollisionVolume;
+}
+
+void Car::addWaypointHit(Waypoint* waypoint)
+{
+	m_waypointHitList.push_back(waypoint);
 }

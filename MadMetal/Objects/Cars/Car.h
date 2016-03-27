@@ -100,5 +100,7 @@ public:
 	void deactivatePowerUp(){ m_activePowerUp = PowerUpType::NONE; }
 	void updateHealth(float dtMillis);
 
+	void addWaypointHit(Waypoint* waypoint);
+	std::vector<Waypoint*> m_waypointHitList;
 };
 

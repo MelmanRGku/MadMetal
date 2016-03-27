@@ -37,7 +37,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	m_waypointSystems.push_back(nextLocation1);
 
-	setInvalid1();
+	//setInvalid1();
 
 	WaypointSystem * nextLocation2 = new WaypointSystem(
 		getDrivablePart()->getWorldBounds().maximum.x - 180,
@@ -75,7 +75,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	m_waypointSystems.push_back(nextLocation3);
 
-	setInvalid2();
+	//setInvalid2();
 
 	WaypointSystem * nextLocation4 = new WaypointSystem(
 		getDrivablePart()->getWorldBounds().minimum.x + 40,
@@ -219,12 +219,11 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
 	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation11, lastWaypointSystem->getWaypointMap().at(0).size() - 2, 0, true);
-	stitchWaypointSystems(BOTTOM, TOP, *nextLocation11, *m_waypointSystems.at(0), 0, 0, false);
+	//stitchWaypointSystems(BOTTOM, TOP, *nextLocation11, *m_waypointSystems.at(0), 0, 0, false);
 
 	m_waypointSystems.push_back(nextLocation11);
 
-	std::cout << "here";
-
+	setValidPath();
 }
 
 Track::~Track()
@@ -431,144 +430,154 @@ void Track::recalculateWaypointSystemIds(WaypointSystem& waypointSystem1, Waypoi
 	}
 }
 
-void Track::setInvalid2()
+//void Track::setInvalid2()
+//{
+//	for (int i = 578; i < 592; i += 2)
+//	{
+//		m_waypointList[i]->setValid(false);
+//	}
+//
+//	for (int i = 602; i < 714; i++)
+//	{
+//		if ((i > 605 && i < 623) ||
+//			(i > 637 && i < 647) ||
+//			(i > 649 && i < 664) ||
+//			//(i > 668 && i < 673) ||
+//			(i > 676 && i < 685) ||
+//			(i > 689 && i < 714))
+//		{
+//			m_waypointList[i]->setValid(false);
+//
+//			//std::cout << "making invalid: " << m_waypointList[i]->getIndex() << "\n";
+//		}
+//	}
+//}
+//
+//
+//void Track::setInvalid1()
+//{
+//	m_waypointList[0]->setValid(false);
+//	m_waypointList[1]->setValid(false);
+//
+//	m_waypointList[2]->setValid(false);
+//	m_waypointList[4]->setValid(false);
+//	m_waypointList[6]->setValid(false);
+//	m_waypointList[8]->setValid(false);
+//	m_waypointList[10]->setValid(false);
+//	m_waypointList[12]->setValid(false);
+//	m_waypointList[14]->setValid(false);
+//
+//	for (int i = 16; i < 555; i++)
+//	{
+//		if ((i > 16 && i < 21) ||
+//			(i > 22 && i < 33) ||
+//			(i > 34 && i < 45) ||
+//			(i > 46 && i < 58) ||
+//			(i > 59 && i < 70) ||
+//			(i > 71 && i < 82) ||
+//			(i > 83 && i < 94) ||
+//			(i > 95 && i < 105) ||
+//			(i > 107 && i < 118) ||
+//			(i > 120 && i < 131) ||
+//			(i > 132 && i < 143) ||
+//			(i > 144 && i < 155) ||
+//			(i > 157 && i < 168) ||
+//			(i > 170 && i < 180) ||
+//			(i > 182 && i < 193) ||
+//			(i > 195 && i < 205) ||
+//			(i > 207 && i < 217) ||
+//			(i > 219 && i < 229) ||
+//			(i > 231 && i < 241) ||
+//			(i > 243 && i < 252) ||
+//			(i > 255 && i < 264) ||
+//			(i > 266 && i < 276) ||
+//			(i > 277 && i < 287) ||
+//
+//
+//			(i > 289 && i < 298) ||
+//			(i > 300 && i < 310) ||
+//			(i > 311 && i < 321) ||
+//			(i > 322 && i < 333) ||
+//			(i > 334 && i < 344) ||
+//			(i > 345 && i < 355) ||
+//			(i > 356 && i < 366) ||
+//			(i > 367 && i < 378) ||
+//			(i > 379 && i < 390) ||
+//			(i > 391 && i < 402) ||
+//			(i > 402 && i < 414) ||
+//			(i > 414 && i < 426) ||
+//			(i > 426 && i < 438) ||
+//			(i > 438 && i < 451) ||
+//			(i > 451 && i < 463) ||
+//			(i > 463 && i < 475) ||
+//			(i > 476 && i < 487) ||
+//			(i > 488 && i < 500) ||
+//			(i > 502 && i < 513) ||
+//			(i > 513 && i < 524) ||
+//			(i > 524 && i < 537) ||
+//			(i > 537 && i < 550) ||
+//			(i > 550 && i < 555))
+//		{
+//			m_waypointList[i]->setValid(false);
+//
+//			//std::cout << "making invalid: " << m_waypointList[i]->getIndex() << "\n";
+//		}
+//	}
+//}
+//
+//void Track::setInvalid3()
+//{
+//	for (int i = 780; i < 802; i++)
+//	{
+//		if ((i > 779 && i < 783) ||
+//			(i > 784 && i < 788) ||
+//			(i > 789 && i < 793) ||
+//			(i > 799 && i < 803))
+//		{
+//			m_waypointList[i]->setValid(false);
+//		}
+//	}
+//
+//	for (int i = 725; i < 773; i++)
+//	{
+//		if ((i > 726 && i < 729) ||
+//			(i > 760 && i < 764) ||
+//			(i > 786 && i < 769) ||
+//			(i > 772 && i < 774))
+//		{
+//			m_waypointList[i]->setValid(false);
+//		}
+//	}
+//
+//	for (int i = 739; i < 750; i++)
+//	{
+//		if ((i > 738 && i < 741) ||
+//			(i > 743 && i < 746) ||
+//			(i > 748 && i < 751))
+//		{
+//			m_waypointList[i]->setValid(false);
+//		}
+//	}
+//
+//	for (int i = 714; i < 733; i++)
+//	{
+//		if ( i != 716 ||
+//			 i != 721 || 
+//			 i != 726 || 
+//			 i != 711 )
+//		{
+//			m_waypointList[i]->setValid(false);
+//		}
+//	}
+//
+//}
+
+void Track::setValidPath()
 {
-	for (int i = 578; i < 592; i += 2)
+	std::vector<int> validWaypoints{ 1, 3, 5, 7, 9, 11, 13, 15, 22, 34, 46, 58, 70, 82, 83, 95, 107, 119, 120, 132, 144, 145, 157, 169, 170, 182, 194, 206, 218, 230, 242, 241, 253, 265, 277, 276, 288, 287, 300, 299, 311, 310, 322, 334, 333, 345, 344, 356, 355, 367, 379, 378, 390, 391, 402, 414, 426, 438, 439, 451, 463, 464, 476, 488, 489, 501, 513, 526, 537, 550, 557, 559, 561, 563, 565, 567, 569, 571, 573, 575, 577, 579, 581, 583, 585, 587, 589, 591, 593, 595, 594, 596, 598, 629, 657, 656, 655, 654, 653, 625, 662, 661, 650, 649, 648, 676, 675, 703, 674, 702, 701, 700, 699, 698, 697, 669, 668, 667, 666, 665, 664, 663, 635, 634, 606, 605, 812, 813, 808, 803, 798, 797, 792, 787, 786, 781, 776, 775, 770, 765, 760, 755, 750, 745, 740, 735, 730, 725, 726, 721, 716, 854, 855, 850, 845, 846, 841, 836, 837, 832, 833, 828, 823, 928, 818, 925, 922, 919, 916, 913, 910, 907, 904, 901, 898, 895, 892, 889, 886, 883, 880, 877, 874, 871, 987, 981, 980, 974, 968, 967, 966, 960, 959, 953, 952, 946, 940, 1043, 1041, 1039, 1037, 1036, 1035, 1034, 1033, 1031, 1029, 1027, 1025, 1023, 1021, 1019, 1017, 1015, 1013, 1011, 1009, 1007, 1005, 1003, 1001, 999, 997, 995, 1065, 1066, 1061, 1062, 1057, 1058, 1059, 1054, 1070, 1071, 1072, 1073, 1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083, 1084, 1085, 1086, 1087, 1088, 1089, 1090, 1091, 1116, 1117, 1092, 1118, 1120, 1121, 1123, 1122, 1124, 1125, 1127, 1129, 1131, 1133};
+
+	for (int i = 0; i < validWaypoints.size(); i++)
 	{
-		m_waypointList[i]->setValid(false);
+		m_waypointList[validWaypoints.at(i)]->setValid(true);
 	}
-
-	for (int i = 602; i < 714; i++)
-	{
-		if ((i > 605 && i < 623) ||
-			(i > 637 && i < 647) ||
-			(i > 649 && i < 664) ||
-			//(i > 668 && i < 673) ||
-			(i > 676 && i < 685) ||
-			(i > 689 && i < 714))
-		{
-			m_waypointList[i]->setValid(false);
-
-			//std::cout << "making invalid: " << m_waypointList[i]->getIndex() << "\n";
-		}
-	}
-}
-
-
-void Track::setInvalid1()
-{
-	m_waypointList[0]->setValid(false);
-	m_waypointList[1]->setValid(false);
-
-	m_waypointList[2]->setValid(false);
-	m_waypointList[4]->setValid(false);
-	m_waypointList[6]->setValid(false);
-	m_waypointList[8]->setValid(false);
-	m_waypointList[10]->setValid(false);
-	m_waypointList[12]->setValid(false);
-	m_waypointList[14]->setValid(false);
-
-	for (int i = 16; i < 555; i++)
-	{
-		if ((i > 16 && i < 21) ||
-			(i > 22 && i < 33) ||
-			(i > 34 && i < 45) ||
-			(i > 46 && i < 58) ||
-			(i > 59 && i < 70) ||
-			(i > 71 && i < 82) ||
-			(i > 83 && i < 94) ||
-			(i > 95 && i < 105) ||
-			(i > 107 && i < 118) ||
-			(i > 120 && i < 131) ||
-			(i > 132 && i < 143) ||
-			(i > 144 && i < 155) ||
-			(i > 157 && i < 168) ||
-			(i > 170 && i < 180) ||
-			(i > 182 && i < 193) ||
-			(i > 195 && i < 205) ||
-			(i > 207 && i < 217) ||
-			(i > 219 && i < 229) ||
-			(i > 231 && i < 241) ||
-			(i > 243 && i < 252) ||
-			(i > 255 && i < 264) ||
-			(i > 266 && i < 276) ||
-			(i > 277 && i < 287) ||
-
-
-			(i > 289 && i < 298) ||
-			(i > 300 && i < 310) ||
-			(i > 311 && i < 321) ||
-			(i > 322 && i < 333) ||
-			(i > 334 && i < 344) ||
-			(i > 345 && i < 355) ||
-			(i > 356 && i < 366) ||
-			(i > 367 && i < 378) ||
-			(i > 379 && i < 390) ||
-			(i > 391 && i < 402) ||
-			(i > 402 && i < 414) ||
-			(i > 414 && i < 426) ||
-			(i > 426 && i < 438) ||
-			(i > 438 && i < 451) ||
-			(i > 451 && i < 463) ||
-			(i > 463 && i < 475) ||
-			(i > 476 && i < 487) ||
-			(i > 488 && i < 500) ||
-			(i > 502 && i < 513) ||
-			(i > 513 && i < 524) ||
-			(i > 524 && i < 537) ||
-			(i > 537 && i < 550) ||
-			(i > 550 && i < 555))
-		{
-			m_waypointList[i]->setValid(false);
-
-			//std::cout << "making invalid: " << m_waypointList[i]->getIndex() << "\n";
-		}
-	}
-}
-
-void Track::setInvalid3()
-{
-	for (int i = 780; i < 802; i++)
-	{
-		if ((i > 779 && i < 783) ||
-			(i > 784 && i < 788) ||
-			(i > 789 && i < 793) ||
-			(i > 799 && i < 803))
-		{
-			m_waypointList[i]->setValid(false);
-		}
-	}
-
-	for (int i = 725; i < 773; i++)
-	{
-		if ((i > 726 && i < 729) ||
-			(i > 760 && i < 764) ||
-			(i > 786 && i < 769) ||
-			(i > 772 && i < 774))
-		{
-			m_waypointList[i]->setValid(false);
-		}
-	}
-
-	for (int i = 739; i < 750; i++)
-	{
-		if ((i > 738 && i < 741) ||
-			(i > 743 && i < 746) ||
-			(i > 748 && i < 751))
-		{
-			m_waypointList[i]->setValid(false);
-		}
-	}
-
-	for (int i = 714; i < 733; i++)
-	{
-		if ( i != 716 ||
-			 i != 721 || 
-			 i != 726 || 
-			 i != 711 )
-		{
-			m_waypointList[i]->setValid(false);
-		}
-	}
-
 }

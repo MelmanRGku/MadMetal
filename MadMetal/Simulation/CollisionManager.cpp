@@ -163,7 +163,9 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 			}
 		}
 		
-		std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getIndex() << "\n";
+		//std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getIndex() << "\n";
+		//waypoint->setValid(true);
+		//car->addWaypointHit(waypoint);
 	}
 }
 
