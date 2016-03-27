@@ -56,6 +56,26 @@ public:
 		RENDERABLE_OBJECT_PARTICLE_POWERUP_ATTACK,
 		RENDERABLE_OBJECT_PARTICLE_POWERUP_DEFENSE,
 		RENDERABLE_OBJECT_PARTICLE_POWERUP_SPEED,
+
+
+		RENDERABLE_OBJECT_ATTACK_POWERUP_ICON,
+		RENDERABLE_OBJECT_DEFENSE_POWERUP_ICON,
+		RENDERABLE_OBJECT_SPEED_POWERUP_ICON,
+		RENDERABLE_OBJECT_POWERUP_BORDER,
+
+
+		RENDERABLE_OBJECT_UI_HEALTH_HUD,
+		RENDERABLE_OBJECT_UI_HEALTH_CURRENT,
+		RENDERABLE_OBJECT_UI_HEALTH_LOST,
+
+		RENDERABLE_OBJECT_UI_GAUGE_HUD,
+		RENDERABLE_OBJECT_UI_GAUGE_CURRENT,
+		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_1,
+		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_2,
+		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_3,
+		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_4,
+		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_5,
+		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_6,
 	};
 
 	
@@ -144,6 +164,36 @@ public:
 			return new Model2D(Assets::getTexture("red-car-top-view"));
 		case (RENDERABLE_OBJECT_ANIMATION_TEST) :
 			return Assets::getModel("animation1");
+		case RENDERABLE_OBJECT_ATTACK_POWERUP_ICON:
+			return new Model2D(Assets::getTexture("life_steal"));
+		case RENDERABLE_OBJECT_DEFENSE_POWERUP_ICON:
+			return new Model2D(Assets::getTexture("shield-reflect"));
+		case RENDERABLE_OBJECT_SPEED_POWERUP_ICON:
+			return new Model2D(Assets::getTexture("speed_icon"));
+		case RENDERABLE_OBJECT_POWERUP_BORDER:
+			return new Model2D(Assets::getTexture("powerup_border"));
+		case RENDERABLE_OBJECT_UI_HEALTH_HUD:
+			return new Model2D(Assets::getTexture("health_hud"));
+		case RENDERABLE_OBJECT_UI_HEALTH_CURRENT:
+			return new Model2D(Assets::getTexture("current_health"));
+		case RENDERABLE_OBJECT_UI_HEALTH_LOST:
+			return new Model2D(Assets::getTexture("health_lost"));
+		case RENDERABLE_OBJECT_UI_GAUGE_HUD:
+			return new Model2D(Assets::getTexture("super_guage"));
+		case RENDERABLE_OBJECT_UI_GAUGE_CURRENT:
+			return new Model2D(Assets::getTexture("current_super_amount"));
+		case RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_1:
+			return new Model2D(Assets::getTexture("super_animation_1"));
+		case RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_2:
+			return new Model2D(Assets::getTexture("super_animation_2"));
+		case RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_3:
+			return new Model2D(Assets::getTexture("super_animation_3"));
+		case RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_4:
+			return new Model2D(Assets::getTexture("super_animation_4"));
+		case RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_5:
+			return new Model2D(Assets::getTexture("super_animation_5"));
+		case RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_6:
+			return new Model2D(Assets::getTexture("super_animation_6"));
 		}
 	}
 	

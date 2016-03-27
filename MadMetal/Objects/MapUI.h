@@ -20,5 +20,6 @@ public:
 	void setTrackBounds(glm::vec3 min, glm::vec3 max) { trackMinBounds = min; trackMaxBounds = max; trackSize = max - min; }
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	void setPlayerModel(Model2D *playerModel) { this->playerModel = playerModel; }
+	float clip(float value, float lower, float upper);
 };
 

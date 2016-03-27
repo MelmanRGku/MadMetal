@@ -3,6 +3,7 @@
 #include "Objects\CollisionVolume.h"
 #include "Objects\Particle.h"
 #include "Objects\PowerUpAttack.h"
+#include "Objects\UIScoreTable.h"
 
 long GameFactory::lastId = 0;
 
@@ -21,6 +22,7 @@ GameFactory::~GameFactory()
 	delete m_audioFactory;
 	delete m_renderFactory;
 	delete m_physicsFactory;
+	m_factory = NULL;
 }
 
 bool GameFactory::sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal maxDistance, PxRaycastBuffer &hit)
@@ -148,13 +150,13 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		UI *ui = new UI(objectId, audioable, animatable, renderable);
 		ui->healthBar = static_cast<HealthBar2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_HEALTH_BAR, NULL, NULL, NULL));
 		ui->gaugeBar = static_cast<GaugeBar *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_GAUGE_BAR, NULL, NULL, NULL));
-		ui->score = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
-		ui->score->setString("Score: 0");
 		ui->lap = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
 		ui->lap->setString("Lap: 0");
-		ui->lap->setPosition(glm::vec3(10, 70, 0));
+		ui->lap->centerize(true);
+		ui->lap->setPosition(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) - 150, glutGet(GLUT_WINDOW_HEIGHT) - 36, 0));
 		ui->map = static_cast<MapUI *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_MAP, NULL, NULL, NULL));
-
+		ui->powerupBorder = static_cast<TexturedObject2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_POWERUP_BORDER_ICON, NULL, NULL, NULL));
+		ui->scoreTable = static_cast<UIScoreTable *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_SCORE_TABLE, NULL, NULL, NULL));
 		return ui;
 	}
 	case OBJECT_DISPLAY_MESSAGE:
@@ -342,6 +344,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 											   m_world.addGameObject(superExplosion);
 											   m_scene.addActor(*explosion);
+											   return superExplosion;
 	}
 	case OBJECT_MEOW_MIX_SUPER:
 	{
@@ -367,24 +370,40 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 											   m_world.addGameObject(superBeam);
 											   m_scene.addActor(*beam);
+											   return superBeam;
 	}
 	case OBJECT_HEALTH_BAR:
 	{
-		Renderable2D *renderable = new Renderable2D(NULL);
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_HEALTH_HUD)));
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(-.75f, -.5f, 0));
+		animatable->setScale(glm::vec3(.55f, .38f, 1));
 
-		HealthBar2D *bar = new HealthBar2D(objectId, audioable, animatable, renderable);
+		Model2D *currentHealthModel = static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_HEALTH_CURRENT)),
+			*lostHealthModel = static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_HEALTH_LOST));
+		HealthBar2D *bar = new HealthBar2D(objectId, audioable, animatable, renderable, currentHealthModel, lostHealthModel);
 
 		return bar;
 	}
 	case OBJECT_GAUGE_BAR:
 	{
-		Renderable2D *renderable = new Renderable2D(NULL);
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_HUD)));
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(-.70f, -.8f, 0));
+		animatable->setScale(glm::vec3(.55f, .38f, 1));
 
-		GaugeBar *bar = new GaugeBar(objectId, audioable, animatable, renderable);
+		Model2D *currentGaugeModel = static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_CURRENT));
+		std::vector<Model2D *> animationModels;
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_1)));
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_2)));
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_3)));
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_4)));
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_5)));
+		animationModels.push_back(static_cast<Model2D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_6)));
+
+		GaugeBar *bar = new GaugeBar(objectId, audioable, animatable, renderable, currentGaugeModel, animationModels);
 
 		return bar;
 	}
@@ -710,12 +729,60 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return image;
 	}
+	case OBJECT_UI_POWERUP_BORDER_ICON:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_POWERUP_BORDER)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, -.75f, 0));
+		animatable->setScale(glm::vec3(.38f, .38f, 0));
+
+		TexturedObject2D *border = new TexturedObject2D(objectId, audioable, animatable, renderable);
+
+		return border;
+	}
+	case OBJECT_UI_SHIELD_POWERUP_ICON:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_DEFENSE_POWERUP_ICON)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, -.75f, 0));
+		animatable->setScale(glm::vec3(.34f, .34f, 0));
+
+		TexturedObject2D *icon = new TexturedObject2D(objectId, audioable, animatable, renderable);
+
+		return icon;
+	}
+	case OBJECT_UI_ATTACK_POWERUP_ICON:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP_ICON)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, -.75f, 0));
+		animatable->setScale(glm::vec3(.34f, .34f, 0));
+
+		TexturedObject2D *icon = new TexturedObject2D(objectId, audioable, animatable, renderable);
+
+		return icon;
+	}
+	case OBJECT_UI_SPEED_POWERUP_ICON:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_SPEED_POWERUP_ICON)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, -.75f, 0));
+		animatable->setScale(glm::vec3(.34f, .34f, 0));
+
+		TexturedObject2D *icon = new TexturedObject2D(objectId, audioable, animatable, renderable);
+
+		return icon;
+	}
 	case OBJECT_UI_MAP:
 	{
 		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MAP_TEXTURE)));
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
-		animatable->setPosition(glm::vec3(.8f, .8f, 0));
+		animatable->setPosition(glm::vec3(.75f, -.75f, 0));
 		animatable->setScale(glm::vec3(.38f, .38f, 0));
 
 		MapUI *map = new MapUI(objectId, audioable, animatable, renderable);
@@ -740,6 +807,17 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 								  m_scene.addActor(*animationTestTriggerVolume);
 
 								  return animation;
+	}
+	case OBJECT_UI_SCORE_TABLE:
+	{
+		Renderable2D *renderable = new Renderable2D(NULL);
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+
+		UIScoreTable *table = new UIScoreTable(objectId, audioable, animatable, renderable);
+		animatable->setPosition(glm::vec3(0, glutGet(GLUT_WINDOW_HEIGHT) - table->getFontSize(), 0));
+
+		return table;
 	}
 	}
 }

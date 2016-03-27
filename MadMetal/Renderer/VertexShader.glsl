@@ -18,6 +18,7 @@ layout (location = 3) in vec3 texcoords_attr;
 uniform highp mat4 model_matrix;
 uniform highp mat4 view_matrix;
 uniform highp mat4 proj_matrix;
+uniform highp vec3 camera_pos;
 
 // Inputs from vertex shader
 out VS_OUT
@@ -31,36 +32,30 @@ out VS_OUT
 } vs_out;
 
 // Position of light
-uniform vec3 light_pos = vec3(0.0, 0.0, 0.0);
+uniform vec3 light_pos = vec3(-151, 500, 400);
 
-void main(void)
+void main()
 {
-    // Calculate model-view matrix
-    mat4 mv_matrix = view_matrix * model_matrix;
+    // position in world space
+   vec4 worldPosition = model_matrix * position_attr;
 
-    // Calculate view-space coordinate
-    vec4 P = mv_matrix * position_attr;
+   // normal in world space
+   vs_out.N = vec3(normalize(model_matrix * vec4(normal_attr, 0)));
 
-    // Calculate normal in view-space
-    vs_out.N = mat3(mv_matrix) * normal_attr;
+   // direction to light
+   vs_out.L = normalize(light_pos - worldPosition.xyz);
 
-//    vs_out.N = vec3(inverse(transpose(model_matrix)) * vec4(normal_attr, 0));
+   // direction to camera
+   vs_out.V = normalize(camera_pos - worldPosition.xyz);
 
-    // Calculate light vector
-//    vs_out.L = light_pos;
-    vs_out.L = light_pos - P.xyz;
+   // texture coordinates to fragment shader
+   vs_out.uv = texcoords_attr.xy;
 
-    // Calculate view vector
-    vs_out.V = -P.xyz;
+   //colour
+   vs_out.C = colour_attr;
+   
+   vs_out.position_attr = position_attr;
 
-    // Store the colour attribute
-    vs_out.C = colour_attr;
-
-    // Pass along the texture coordinates
-    vs_out.uv = texcoords_attr.st;
-
-	vs_out.position_attr = position_attr;
-
-    // Calculate the clip-space position of each vertex
-    gl_Position = proj_matrix * P;
+   // screen space coordinates of the vertex
+   gl_Position = proj_matrix * view_matrix * worldPosition;
 }

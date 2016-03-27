@@ -61,7 +61,7 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 		a->updatePosition(glm::vec3(-7, -2, -35));
 		a->setScale(glm::vec3(5, 4, 7));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/UglyCarWithCannon.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Meowmix.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		car1 = new Object3D(3, au, p, a, r, NULL);
@@ -76,11 +76,12 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 		a->updatePosition(glm::vec3(0, -2, -25));
 		a->setScale(glm::vec3(5, 4, 7));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/UglyCarWithCannon.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/twisted1.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		car2 = new Object3D(4, au, p, a, r, NULL);
 		selectedObject = car2;
+		selectedCar = car2;
 		m_world->addGameObject(car2);
 	}
 
@@ -92,7 +93,7 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 		a->updatePosition(glm::vec3(7, -2, -35));
 		a->setScale(glm::vec3(5, 4, 7));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/UglyCarWithGuns.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Gargantulous.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		car3 = new Object3D(5, au, p, a, r, NULL);
@@ -109,12 +110,23 @@ bool SinglePlayerMenu::simulateScene(double dt, SceneMessage &message)
 	m_world->update(dt);
 	if (messageToReturn != SceneMessage::eNone) {
 		message.setTag(messageToReturn);
-		std::vector<ControllableTemplate *> templates;
-		templates.push_back(new ControllableTemplate(m_gamePad));
-		for (int i = 0; i < numberOfAIs; i++) {
-			templates.push_back(new ControllableTemplate(1));
+		if (message.getTag() == SceneMessage::eLoadScreen) {
+			std::vector<ControllableTemplate *> templates;
+
+			Characters carType;
+			if (selectedCar == car1)
+				carType = Characters::CHARACTER_MEOW_MIX;
+			else if (selectedCar == car2)
+				carType = Characters::CHARACTER_EXPLOSIVELY_DELICIOUS;
+			else if (selectedCar == car3)
+				carType = Characters::CHARACTER_GARGANTULOUS;
+
+			templates.push_back(new ControllableTemplate(carType, m_gamePad));
+			for (int i = 0; i < numberOfAIs; i++) {
+				templates.push_back(new ControllableTemplate(1));
+			}
+			message.setPlayerTemplates(templates);
 		}
-		message.setPlayerTemplates(templates);
 		messageToReturn = SceneMessage::eNone;
 		return true;
 	}
