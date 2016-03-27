@@ -2,19 +2,21 @@
 
 #include "Bullet.h"
 
-class HomingBullet : public Bullet
+class HomingBullet : public Object3D
 {
 public:
-	HomingBullet(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Car *owner) : Bullet(id, aable, pable, anable, rable, owner)
+	HomingBullet(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Car *owner) : Object3D(id, aable, pable, anable, rable, NULL)
 	{
-		std::cout << "Made new homing bullet \n";
+		//std::cout << "Made new homing bullet \n";
 		m_isTracking = true;
-		m_damage = 50;
+		m_owner = owner;
 		m_speed = 60;
 		maxLifeTime = 10;
 		m_trackingDelay = 1;
-		PxVec3 startVelocity = m_owner->getCar().getRigidDynamicActor()->getLinearVelocity() + PxVec3(0,20,0);
-		static_cast<PxRigidDynamic *>(&m_physicable->getActor())->setLinearVelocity(startVelocity);
+		PxVec3 startVelocity = m_owner->getCar().getRigidDynamicActor()->getLinearVelocity();
+		PxRigidDynamic* actor = static_cast<PxRigidDynamic *>(&m_physicable->getActor());//
+		actor->setLinearVelocity(startVelocity + PxVec3(0,20,0));
+		
 
 	}
 	~HomingBullet()
@@ -23,9 +25,10 @@ public:
 	}
 	virtual void update(float dt)
 	{
-		Bullet::update(dt); 
-		if (m_trackingDelay -= dt < 0)
+		Object3D::update(dt); 
+		if ((m_trackingDelay -= dt) < 0)
 		{
+			std::cout << "started tracking \n";
 			if (m_isTracking)
 			{
 				if (m_targetCar != NULL && m_targetCar->isAlive())
@@ -56,9 +59,10 @@ public:
 	{
 		m_targetCar = target;
 	}
-
+	Car * getOwner() { return m_owner; }
 private:
 	Car * m_targetCar;
+	Car* m_owner;
 	float m_speed;
 	bool m_isTracking;
 	PxVec3 m_targetLocation;

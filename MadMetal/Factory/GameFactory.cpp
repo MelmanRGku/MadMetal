@@ -4,6 +4,8 @@
 #include "Objects\Particle.h"
 #include "Objects\PowerUpAttack.h"
 #include "Objects\MeowMixSuper.h"
+#include "Objects\GargantulousSuper.h"
+#include "Objects\HomingBullet.h"
 
 long GameFactory::lastId = 0;
 
@@ -141,6 +143,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	{
 		Object3D *drivableTrack = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_DRIVABLE, pos, geom, parent));
 		Object3D *nonDrivableTrack = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_NON_DRIVABLE, pos, geom, parent));
+		Object3D *trackWalls = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_WALLS, pos, geom, parent));
 
 		Track *track;
 		
@@ -148,7 +151,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
-		track = new Track(objectId, audioable, physicable, animatable, renderable, drivableTrack, nonDrivableTrack);
+		track = new Track(objectId, audioable, physicable, animatable, renderable, drivableTrack, nonDrivableTrack, trackWalls);
 		return track;
 	}
 	case OBJECT_TRACK_DRIVABLE:
@@ -208,6 +211,35 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		m_world.addGameObject(nonDrivableTrack);
 
 		return nonDrivableTrack;
+	}
+	case OBJECT_TRACK_WALLS:
+	{
+									  Object3D *trackWalls;
+									  Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRACK_WALLS));
+									  Renderable3D *renderable = new Renderable3D(model);
+									  Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+									  Animatable *animatable = new Animatable();
+
+									  PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0);    //static friction, dynamic friction, restitution
+									  PxTriangleMesh ** mesh = model->getPhysicsTriangleMesh();
+									  PxGeometry ** geom = new PxGeometry *[model->getMeshes()->size()];
+									  for (unsigned int i = 0; i < model->getMeshes()->size(); i++) {
+										  geom[i] = new PxTriangleMeshGeometry(mesh[i]);
+									  }
+									  delete[] mesh;
+									  PxRigidStatic *physicalTrackWalls = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_TRACK_WALLS, objectId, pos, geom, model->getMeshes()->size(), material, NULL, NULL));
+									  for (unsigned int i = 0; i < model->getMeshes()->size(); i++) {
+										  delete geom[i];
+									  }
+									  delete geom;
+
+									  Physicable *physicable = new Physicable(physicalTrackWalls);
+									  trackWalls = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
+
+									  m_scene.addActor(*physicalTrackWalls);
+									  m_world.addGameObject(trackWalls);
+
+									  return trackWalls;
 	}
 	case OBJECT_BULLET_MEOW_MIX:
 	{
@@ -295,10 +327,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 											   PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 
 											   PxRigidDynamic *beam = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_MEOW_MIX_SUPER, objectId, pos, geom, 0, NULL, NULL, NULL));
-											   
-											   
-											   //animatable->setScale(glm::vec3(3, 3, 300));
-											   //animatable->setRotation(static_cast<Object3D *>(parent)->getFullRotation());
 											  
 											   Physicable *physicable = new Physicable(beam);
 
@@ -309,6 +337,57 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 											   m_world.addGameObject(superBeam);
 											   m_scene.addActor(*beam);
 											   return superBeam;
+	}
+	case OBJECT_GARGANTULOUS_SUPER_VOLUME:
+	{
+											   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GARGANTULOUS_SUPER_VOLUME));
+											   Renderable3D *renderable = new Renderable3D(model, true, true);
+											   renderable->setModel(NULL); //remove when we have a good model
+											   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+											   Animatable *animatable = new Animatable();
+
+
+											   PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+
+											   PxRigidDynamic *superVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_GARGANTULOUS_SUPER_VOLUME, objectId, pos, geom, 0, NULL, NULL, NULL));
+
+											   //animatable->setRotation(static_cast<Object3D *>(parent)->getFullRotation());
+											   //animatable->setScale(glm::vec3(superVolume->getWorldBounds().getDimensions().x / 5, superVolume->getWorldBounds().getDimensions().y / 5, superVolume->getWorldBounds().getDimensions().z / 5));
+											   Physicable *physicable = new Physicable(superVolume);
+
+											   GargantulousSuper *super = new GargantulousSuper(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
+											   super->setSound(ExplosionSound());
+											   super->playSound();
+
+											   m_world.addGameObject(super);
+											   m_scene.addActor(*superVolume);
+											   return super;
+	}
+
+	case OBJECT_GARGANTULOUS_SUPER_BULLET:
+	{
+											 Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GARGANTULOUS_SUPER_BULLET));
+											 Renderable3D *renderable = new Renderable3D(model, true, true);
+											
+											 Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+											 Animatable *animatable = new Animatable();
+
+
+											 PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+
+											 PxRigidDynamic *superVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_GARGANTULOUS_SUPER_BULLET, objectId, pos, geom, 0, NULL, NULL, NULL));
+
+											 animatable->setRotation(static_cast<Object3D *>(parent)->getFullRotation());
+											 animatable->setScale(glm::vec3(superVolume->getWorldBounds().getDimensions().x, superVolume->getWorldBounds().getDimensions().y, superVolume->getWorldBounds().getDimensions().z));
+											 Physicable *physicable = new Physicable(superVolume);
+
+											 HomingBullet *super = new HomingBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
+											 super->setSound(ExplosionSound());
+											 super->playSound();
+
+											 m_world.addGameObject(super);
+											 m_scene.addActor(*superVolume);
+											 return super;
 	}
 	case OBJECT_HEALTH_BAR:
 	{

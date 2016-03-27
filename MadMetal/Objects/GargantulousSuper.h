@@ -22,7 +22,7 @@ public:
 
 	void addTarget(Car * toShoot)
 	{
-		std::cout << "added new target to list \n";
+		//std::cout << "added new target to list \n";
 		m_targets.push_back(toShoot);
 	}
 
@@ -41,7 +41,7 @@ public:
 
 			if (m_targets.size())
 			{
-				std::cout << "Firing at new target \n";
+				//std::cout << "Firing at new target \n";
 				m_fireCounter = GARGANTULOUS_FIRE_RATE_SECONDS;
 				PxGeometry * geom[1];
 				geom[0] = new PxSphereGeometry(4);

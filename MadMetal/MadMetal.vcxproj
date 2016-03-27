@@ -165,6 +165,8 @@
     <ClInclude Include="Objects\Cars\ExplosivelyDelicious.h" />
     <ClInclude Include="Objects\ExplosivelyDeliciousSuper.h" />
     <ClInclude Include="Objects\ExplosivelyDeliciousBullet.h" />
+    <ClInclude Include="Objects\GargantulousSuper.h" />
+    <ClInclude Include="Objects\HomingBullet.h" />
     <ClInclude Include="Objects\MeowMixSuper.h" />
     <ClInclude Include="Objects\PowerUpAttack.h" />
     <ClInclude Include="Objects\Header.h" />

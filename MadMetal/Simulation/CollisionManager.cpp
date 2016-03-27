@@ -6,6 +6,8 @@
 #include "Objects\CollisionVolume.h"
 #include "Objects\PowerUpShield.h"
 #include "Objects\PowerUpSpeed.h"
+#include "Objects\GargantulousSuper.h"
+#include "Objects\HomingBullet.h"
 #include "PxQueryReport.h"
 
 CollisionManager::CollisionManager(World &world) : m_world(world)
@@ -73,6 +75,17 @@ PxFilterFlags CollisionManager::TestFilterShader(
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
+
+	if (filterData0.word0 == COLLISION_FLAG_GARGANTULOUS_SUPER_VOLUME || filterData1.word0 == COLLISION_FLAG_GARGANTULOUS_SUPER_VOLUME){
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
+
+	if (filterData0.word0 == COLLISION_FLAG_GARGANTULOUS_SUPER_BULLET || filterData1.word0 == COLLISION_FLAG_GARGANTULOUS_SUPER_BULLET){
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
+
 
 
 
@@ -299,6 +312,46 @@ void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, lon
 	}
 }
 
+void CollisionManager::processGargantulousSuperBulletHit(long bulletId, long carId)
+{
+	HomingBullet * super = dynamic_cast<HomingBullet *>(m_world.findObject(bulletId));
+
+	if (super == NULL)
+	{
+		return;
+	}
+
+	TestObject * otherObject = m_world.findObject(carId);
+	Car * car = dynamic_cast<Car *>(otherObject);
+
+	if (car != NULL  && car != super->getOwner()) // if the car hasn't already been hit by the super
+	{
+		super->getOwner()->addDamageDealt(car->getHealthRemaining());
+		car->takeDamage(car->getHealthRemaining());
+		
+		super->setHasToBeDeleted(true);
+	}
+}
+
+void CollisionManager::processGargantulousSuperVolumeHit(long volumeId, long carId)
+{
+	GargantulousSuper * super = dynamic_cast<GargantulousSuper *>(m_world.findObject(volumeId));
+
+	if (super == NULL)
+	{
+		return;
+	}
+
+	TestObject * otherObject = m_world.findObject(carId);
+	Car * car = dynamic_cast<Car *>(otherObject);
+
+	if (car != NULL  && car != super->getOwner()) // if the car hasn't already been hit by the super
+	{
+		super->addTarget(car);
+		
+	}
+}
+
 void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
 	Car *car1 = dynamic_cast<Car *>(m_world.findObject(car1Id));
 	Car *car2 = dynamic_cast<Car *>(m_world.findObject(car2Id));
@@ -404,6 +457,22 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 	else if (filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER && filterData0.word0 == COLLISION_FLAG_CHASSIS)
 	{
 		processExplosivelyDeliciousSuperHit(filterData1.word2, filterData0.word2);
+	}
+	else if (filterData0.word0 == COLLISION_FLAG_GARGANTULOUS_SUPER_VOLUME && filterData1.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processGargantulousSuperVolumeHit(filterData0.word2, filterData1.word2);
+	}
+	else if (filterData1.word0 == COLLISION_FLAG_GARGANTULOUS_SUPER_VOLUME && filterData0.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processGargantulousSuperVolumeHit(filterData1.word2, filterData0.word2);
+	}
+	else if (filterData0.word0 == COLLISION_FLAG_GARGANTULOUS_SUPER_BULLET && filterData1.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processGargantulousSuperBulletHit(filterData0.word2, filterData1.word2);
+	}
+	else if (filterData1.word0 == COLLISION_FLAG_GARGANTULOUS_SUPER_BULLET && filterData0.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processGargantulousSuperBulletHit(filterData1.word2, filterData0.word2);
 	}
 
 	//shield power up is done in two steps because since both bullet and shield are trigger objects then the shield could be object 0 or 1

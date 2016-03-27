@@ -69,11 +69,14 @@ void MeowMix::useSuper() {
 	//m_renderable->setModel(Assets::getModel("UglyCarWithGuns"));
 
 	PxGeometry * geom[1];
-	geom[0] = new PxSphereGeometry(1);
+	/*geom[0] = new PxSphereGeometry(1);
 	GameFactory::instance()->makeObject(GameFactory::OBJECT_MEOW_MIX_SUPER, &m_car.getRigidDynamicActor()->getGlobalPose(), geom, this);
+	delete geom[0];*/
+
+	geom[0] = new PxSphereGeometry(50);
+	GameFactory::instance()->makeObject(GameFactory::OBJECT_GARGANTULOUS_SUPER_VOLUME, &m_car.getRigidDynamicActor()->getGlobalPose(), geom, this);
 	delete geom[0];
-	//static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
-	//m_animatable->updateScale(glm::vec3(0, 2, 0));
+	
 }
 
 void MeowMix::unuseSuper() {

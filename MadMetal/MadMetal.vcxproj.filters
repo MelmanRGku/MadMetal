@@ -587,6 +587,12 @@
     <ClInclude Include="Game Logic\PositionManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\GargantulousSuper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\HomingBullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />

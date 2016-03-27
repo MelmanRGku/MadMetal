@@ -20,6 +20,7 @@ public:
 		RENDERABLE_OBJECT_MEOW_MIX_SUPER,
 		RENDERABLE_OBJECT_BULLET_EXPLOSIVELY_DELICIOUS,
 		RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
+		RENDERABLE_OBJECT_GARGANTULOUS_SUPER_VOLUME,
 		RENDERABLE_OBJECT_GARGANTULOUS_SUPER_BULLET,
 		
 		RENDERABLE_OBJECT_GGO,
@@ -77,13 +78,17 @@ public:
 		case RENDERABLE_OBJECT_TRACK_NON_DRIVABLE:
 			return Assets::getModel("trackv2enviro");
 		case RENDERABLE_OBJECT_TRACK_WALLS:
-			return Assets::getModel("track2walls");
+			return Assets::getModel("trackv2walls");
 		case RENDERABLE_OBJECT_BULLET_EXPLOSIVELY_DELICIOUS:
 			return Assets::getModel("explosively_delicious_bullet");
 		case RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER:
 			return Assets::getModel("explosively_delicious_super");
 		case RENDERABLE_OBJECT_MEOW_MIX_SUPER:
 			return Assets::getModel("powerup_particle_attack"); //put in beam!
+		case RENDERABLE_OBJECT_GARGANTULOUS_SUPER_BULLET:
+			return Assets::getModel("scareMoon");
+		case RENDERABLE_OBJECT_GARGANTULOUS_SUPER_VOLUME:
+			return Assets::getModel("scareMoon"); //do something for the super model
 		case RENDERABLE_OBJECT_GGO:
 			return Assets::getModel("GGO");
 		case (RENDERABLE_OBJECT_ATTACK_POWERUP_PICKUP) :
