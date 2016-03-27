@@ -85,6 +85,7 @@
     <ClCompile Include="Objects\Cars\DrivingStyleGargantulous.cpp" />
     <ClCompile Include="Objects\VehicleSpecifications.cpp" />
     <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp" />
+    <ClCompile Include="Renderer\CellTireShaderProgram.cpp" />
     <ClCompile Include="Simulation\MainMenu.cpp" />
     <ClCompile Include="Objects\MapUI.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Objects\VehicleSpecifications.h" />
     <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h" />
     <ClInclude Include="Objects\TrainCar.h" />
+    <ClInclude Include="Renderer\CellTireShaderProgram.h" />
     <ClInclude Include="Simulation\MainMenu.h" />
     <ClInclude Include="Objects\MapUI.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectScaleUpdater.h" />

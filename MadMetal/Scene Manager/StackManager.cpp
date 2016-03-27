@@ -91,6 +91,7 @@ StackManager::StackManager()
 	m_renderer = new Renderer();
 	m_renderer->setShader(Renderer::ShaderType::SHADER_TYPE_CELL, new CellShaderProgram("Renderer/VertexShader.glsl", "Renderer/FragmentShader.glsl"));
 	m_renderer->setShader(Renderer::ShaderType::SHADER_TYPE_NONE, new NoShaderProgram());
+	m_renderer->setShader(Renderer::ShaderType::SHADER_TYPR_CELLTIRE, new NoShaderProgram());
 
 	m_audio = new Audio();
 

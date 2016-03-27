@@ -16,6 +16,7 @@ public:
 	enum ShaderType {
 		SHADER_TYPE_NONE,
 		SHADER_TYPE_CELL,
+		SHADER_TYPR_CELLTIRE,
 		NUMBER_OF_SHADER_TYPES
 	};
 

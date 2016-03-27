@@ -57,6 +57,7 @@ private:
 public:
 
 	UI *ui;
+	float distanceTraveled = 0;
 
 	Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	virtual ~Car();

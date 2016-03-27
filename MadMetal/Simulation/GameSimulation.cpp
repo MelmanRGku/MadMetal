@@ -156,6 +156,8 @@ void GameSimulation::simulatePhysics(double dt)
 
 	for (unsigned int i = 0; i < m_players.size(); i++)
 	{
+		//This updates the ditance that the player has traveled. This is later used by the renderer ro render the tires.
+		m_players[i]->getCar()->distanceTraveled += m_players[i]->getCar()->getCar().computeForwardSpeed() * dt;
 
 		//Raycasts.
 
@@ -187,10 +189,10 @@ void GameSimulation::simulatePhysics(double dt)
 		}
 	}
 
-	
-
 	m_scene->simulate(dt);
 	m_scene->fetchResults(true);
+
+
 }
 }
 

@@ -89,5 +89,4 @@ public:
 	void setupBasicGameWorldObjects();
 
 	std::vector<PlayerControllable*> *getHumanPlayers() { return &m_humanPlayers; }
-
 };

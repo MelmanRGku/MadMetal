@@ -106,7 +106,7 @@ void MeowMix::useSuper() {
 }
 
 void MeowMix::unuseSuper() {
-	m_renderable->setModel(Assets::getModel("UglyCarWithGuns"));
+	m_renderable->setModel(Assets::getModel("Meowmix"));
 	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 	m_animatable->updateScale(glm::vec3(0, -2, 0));
 }

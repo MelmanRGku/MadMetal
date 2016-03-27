@@ -9,7 +9,7 @@
 		//For the record, MeowMix has high maneuverability, standard speed, and low health
 
 		m_chassisMass = 1500.0f;
-		m_chassisDims = PxVec3(5.f, 5.0f, 7.0f);
+		m_chassisDims = PxVec3(5.0f, 10.0f, 10.0f);
 		m_chassisMOI = PxVec3((m_chassisDims.y*m_chassisDims.y + m_chassisDims.z*m_chassisDims.z)*m_chassisMass / 12.0f,
 			                  (m_chassisDims.x*m_chassisDims.x + m_chassisDims.z*m_chassisDims.z)*0.8f*m_chassisMass / 12.0f,
 			                  (m_chassisDims.x*m_chassisDims.x + m_chassisDims.y*m_chassisDims.y)*m_chassisMass / 12.0f);
