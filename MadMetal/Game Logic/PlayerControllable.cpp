@@ -116,7 +116,7 @@ void PlayerControllable::playFrame(double dt)
 
 				if (m_gamePad->getRightTrigger())
 				{
-					std::cout << "Gear: " << m_car->getCar().mDriveDynData.getGearChange() << "\n";
+					//std::cout << "Gear: " << m_car->getCar().mDriveDynData.getGearChange() << "\n";
 					if (m_car->getActivePowerUpType() != PowerUpType::SPEED)
 					{
 						if (m_car->getCar().computeForwardSpeed() < -0.1)
@@ -139,7 +139,7 @@ void PlayerControllable::playFrame(double dt)
 				}
 				else if (m_gamePad->getLeftTrigger())
 				{
-					std::cout << "Gear: " << m_car->getCar().mDriveDynData.getGearChange() << "\n";
+					//std::cout << "Gear: " << m_car->getCar().mDriveDynData.getGearChange() << "\n";
 					if (m_car->getCar().computeForwardSpeed() > 0.1)
 					{
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 1);

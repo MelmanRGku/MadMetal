@@ -3,6 +3,7 @@
 #include "Objects\CollisionVolume.h"
 #include "Objects\Particle.h"
 #include "Objects\PowerUpAttack.h"
+#include "Objects\MeowMixSuper.h"
 
 long GameFactory::lastId = 0;
 
@@ -23,9 +24,9 @@ GameFactory::~GameFactory()
 	delete m_physicsFactory;
 }
 
-bool GameFactory::sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal maxDistance, PxRaycastBuffer &hit)
+bool GameFactory::sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal maxDistance, PxRaycastBuffer &hit, PxHitFlags flags, PxQueryFilterData fd)
 {
-	return m_scene.raycast(origin, direction, maxDistance, hit);
+	return m_scene.raycast(origin, direction, maxDistance, hit, flags, fd);
 }
 
 bool GameFactory::sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit)
@@ -281,6 +282,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 											   m_world.addGameObject(superExplosion);
 											   m_scene.addActor(*explosion);
+											   return superExplosion;
 	}
 	case OBJECT_MEOW_MIX_SUPER:
 	{
@@ -292,10 +294,10 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 											   PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 
-											   PxRigidDynamic *beam = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER, objectId, pos, geom, 0, NULL, NULL, NULL));
+											   PxRigidDynamic *beam = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_MEOW_MIX_SUPER, objectId, pos, geom, 0, NULL, NULL, NULL));
 											   
 											   
-											   animatable->setScale(glm::vec3(beam->getWorldBounds().getDimensions().x, beam->getWorldBounds().getDimensions().y, beam->getWorldBounds().getDimensions().z));
+											   //animatable->setScale(glm::vec3(3, 3, 300));
 											   //animatable->setRotation(static_cast<Object3D *>(parent)->getFullRotation());
 											  
 											   Physicable *physicable = new Physicable(beam);
@@ -306,6 +308,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 											   m_world.addGameObject(superBeam);
 											   m_scene.addActor(*beam);
+											   return superBeam;
 	}
 	case OBJECT_HEALTH_BAR:
 	{

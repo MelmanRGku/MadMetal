@@ -50,8 +50,8 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
 			PxTransform *pos = new PxTransform(-10 + 20 * i, 1, 0);//-130 + i * 10, 40, 0);
-			//MeowMix *car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
-			ExplosivelyDelicious *car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS, pos, NULL, NULL));
+			MeowMix *car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
+			//ExplosivelyDelicious *car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS, pos, NULL, NULL));
 			humanPlayer->setCar(car);
 			delete pos;
 

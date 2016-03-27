@@ -14,7 +14,7 @@
 #include "Renderer\Renderable2D.h"
 #include "Objects\DrivingStyleFast.h"
 #include "Objects\Cars\MeowMix.h"
-#include "Objects\MeowMixSuper.h"
+
 #include "Objects\Cars\ExplosivelyDelicious.h"
 #include "Objects\ExplosivelyDeliciousSuper.h"
 #include "Objects\Bullet.h"
@@ -48,6 +48,8 @@ public:
 		OBJECT_MEOW_MIX_SUPER,
 		OBJECT_BULLET_EXPLOSIVELY_DELICIOUS,
 		OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
+		OBJECT_GARGANTULOUS_SUPER_VOLUME,
+		OBJECT_GARGANTULOUS_SUPER_BULLET,
 		OBJECT_PLANE,
 		OBJECT_HEALTH_BAR,
 		OBJECT_GAUGE_BAR,
@@ -55,6 +57,7 @@ public:
 		OBJECT_TRACK,
 		OBJECT_TRACK_DRIVABLE,
 		OBJECT_TRACK_NON_DRIVABLE,
+		OBJECT_TRACK_WALLS,
 		OBJECT_WAYPOINT,
 		OBJECT_UI,
 		OBJECT_DISPLAY_MESSAGE,
@@ -79,8 +82,8 @@ public:
 	
 
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);
-
-	bool sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal MaxDistance, PxRaycastBuffer &hit);
+	World& getWorld() { return m_world; }
+	bool sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal MaxDistance, PxRaycastBuffer &hit, PxHitFlags flag = PxHitFlags(PxHitFlag::eDEFAULT), PxQueryFilterData fd = PxQueryFilterData());
 	bool sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit);
 
 	static long getNextId() { return ++lastId; }
