@@ -2,7 +2,7 @@
 #include "Game Logic\SearchWaypoint.h"
 #include "Objects\Waypoint.h"
 
-static const float BIG_VALUE = 99999.9;
+static const float BIG_VALUE = 999999999.9;
 static const float ADDED_G_VALUE_DIAGONAL = 14.14213;
 static const float ADDED_G_VALUE_NORMAL = 10.0;
 
@@ -27,10 +27,6 @@ PathFinding::~PathFinding()
 	delete m_goalWaypoint;
 }
 
-void PathFinding::setWaypointCostOf(std::vector<int> listOfHighWaypoints)
-{
-	m_indexWithHighCost = listOfHighWaypoints;
-}
 
 std::vector<Waypoint*> PathFinding::findPath(Waypoint * currentPosition, Waypoint * targetPosition)
 {
@@ -106,6 +102,10 @@ SearchWaypoint* PathFinding::getNextCell()
 		m_visitedList.push_back(nextCell);
 		m_openList.erase(m_openList.begin() + cellIndex);
 	}
+	else if (cellIndex == -1)
+	{
+		std::cout << "here\n";
+	}
 
 	return nextCell;
 }
@@ -126,20 +126,6 @@ void PathFinding::pathOpened(Waypoint& waypoint, float newCost, SearchWaypoint *
 	}
 
 	SearchWaypoint* newChild = new SearchWaypoint(waypoint, parent);
-	for (int i = 0; i < m_indexWithHighCost.size(); i++)
-	{
-		if (newChild->getWaypoint().getIndex() == m_indexWithHighCost[i])
-		{
-			newChild->setHighCost(9999.9);
-		}
-		
-	}
-
-	if (!newChild->getWaypoint().isValid())
-	{
-		newChild->setHighCost(9999.9);
-	}
-
 	newChild->setG(newCost);
 	newChild->setH(newChild->ManHattanDistance(m_goalWaypoint));
 

@@ -311,7 +311,7 @@ void AIControllable::setHighCostWaypointsToHigh()
 {
 	for (int i = 0; i < m_listOfWaypointsHighCost.size(); i++)
 	{
-		m_pathFinder->setWaypointCostOf(m_listOfWaypointsHighCost);
+		//m_pathFinder->setWaypointCostOf(m_listOfWaypointsHighCost);
 	}
 }
 
@@ -320,7 +320,7 @@ void AIControllable::setHighCostWaypointsToLow()
 	for (int i = 0; i < m_listOfWaypointsHighCost.size(); i++)
 	{
 		std::vector<int> temp;
-		m_pathFinder->setWaypointCostOf(temp);
+		//m_pathFinder->setWaypointCostOf(temp);
 	}
 }
 

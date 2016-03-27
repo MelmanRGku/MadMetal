@@ -8,6 +8,7 @@ Waypoint::Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *ana
 	m_index = Waypoint::globalID;
 	m_id = m_index;
 	Waypoint::globalID++;
+	m_highCost = 999999.0;
 	m_isValid = false;
 }
 
@@ -38,6 +39,14 @@ bool Waypoint::isFinish() {
 void Waypoint::setValid(bool isValid)
 {
 	m_isValid = isValid;
+	if (isValid)
+	{
+		m_highCost = 0.0;
+	}
+	else
+	{
+		m_highCost = 999999.0;
+	}
 }
 
 
@@ -54,6 +63,16 @@ void Waypoint::setId(int id)
 {
 	m_id = id;
 }
+
+void Waypoint::setHighCost(float highCost)
+{
+	m_highCost = highCost;
+}
+float Waypoint::getHighCost()
+{
+	return m_highCost;
+}
+
 
 bool Waypoint::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 #ifdef _RENDER_WAYPOINT

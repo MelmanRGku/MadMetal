@@ -13,7 +13,6 @@ public: //Constructors
 
 public: // functions
 	std::vector<Waypoint*> findPath(Waypoint * currentPosition, Waypoint * targetPosition);
-	void setWaypointCostOf(std::vector<int> listOfHighWaypoints);
 	//glm::vec3 NextPathPosition();
 	//void clearOpenList();
 	//void clearVisitedList();
@@ -34,5 +33,4 @@ private: //memebers
 	std::vector<SearchWaypoint*> m_openList;
 	std::vector<SearchWaypoint*> m_visitedList;
 	std::vector<Waypoint*> m_pathToGoal;
-	std::vector<int> m_indexWithHighCost;
 };
