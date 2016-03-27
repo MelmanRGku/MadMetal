@@ -11,6 +11,9 @@
 #include "winerror.h"
 #include "winternl.h"
 #include "winnt.h"
+#include "Renderer/CellShaderProgram.h"
+#include "Renderer/NoShaderProgram.h"
+#include "Renderer/CellTireShaderProgram.h"
 
 SceneStack::SceneStack(Scene * scene)
 {
@@ -82,7 +85,7 @@ StackManager::StackManager()
 	m_renderer = new Renderer();
 	m_renderer->setShader(Renderer::ShaderType::SHADER_TYPE_CELL, new CellShaderProgram("Renderer/VertexShader.glsl", "Renderer/FragmentShader.glsl"));
 	m_renderer->setShader(Renderer::ShaderType::SHADER_TYPE_NONE, new NoShaderProgram());
-	m_renderer->setShader(Renderer::ShaderType::SHADER_TYPR_CELLTIRE, new NoShaderProgram());
+	m_renderer->setShader(Renderer::ShaderType::SHADER_TYPE_CELLTIRE, new CellTireShaderProgram("Renderer/VertexShader.glsl", "Renderer/TireFragmentShader.glsl"));
 
 	m_audio = new Audio();
 

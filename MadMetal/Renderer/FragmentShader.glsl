@@ -81,4 +81,6 @@ void main(void)
 	 resultingColor.a = texture(texObject, fs_in.uv).w;
 
    gl_FragColor = resultingColor;
+
+   gl_FragColor = round(gl_FragColor * 8) / 8;
 } 

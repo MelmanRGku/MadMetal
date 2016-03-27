@@ -43,8 +43,18 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	switch (objectToMake) {
 	case OBJECT_MEOW_MIX:
 	{
-		Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIX));
-		Renderable3D *renderable = new Renderable3D(model, true, true);
+//		Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXWHEEL));
+//		Renderable3D *renderable = new Renderable3D(model, true, true);
+//		Model3D *model2 = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXBODY));
+//		Renderable3D *renderable2 = new Renderable3D(model2, true, true);
+
+
+Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXBODY));
+Renderable3D *renderable = new Renderable3D(model, true, true);
+Model3D *model2 = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXWHEEL));
+Renderable3D *renderable2 = new Renderable3D(model2, true, true);
+
+
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5f, 0.3f, 0.1f);    //static friction, dynamic friction, restitution
@@ -55,7 +65,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Physicable *physicable = new Physicable(physicalCar->getRigidDynamicActor());
 
 
-		MeowMix *car = new MeowMix(objectId, drivingStyle, *physicalCar, audioable, physicable, animatable, renderable);
+		MeowMix *car = new MeowMix(objectId, drivingStyle, *physicalCar, audioable, physicable, animatable, renderable, renderable2);
 
 		int k = (int)physicalCar->mWheelsSimData.getWheelData(0).mRadius * 2;
 		PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();

@@ -3,8 +3,7 @@
 #include "..\Libraries\glm\mat4x4.hpp"
 #include "..\Libraries\glm\gtc\matrix_transform.hpp"
 #include "..\Global\Settings.h"
-#include "CellShaderProgram.h"
-#include "NoShaderProgram.h"
+#include "ShaderProgram.h"
 
 class PlayerControllable;
 class TestObject;
@@ -16,7 +15,7 @@ public:
 	enum ShaderType {
 		SHADER_TYPE_NONE,
 		SHADER_TYPE_CELL,
-		SHADER_TYPR_CELLTIRE,
+		SHADER_TYPE_CELLTIRE,
 		NUMBER_OF_SHADER_TYPES
 	};
 

@@ -292,13 +292,13 @@
     <Text Include="Files\test.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\Models\asphalt_texture409.jpg" />
-    <Image Include="Assets\Models\Building_texture4.jpg" />
+    <Image Include="Assets\Useless\asphalt_texture409.jpg" />
+    <Image Include="Assets\Useless\Building_texture4.jpg" />
     <Image Include="Assets\Models\lava rock.jpg" />
     <Image Include="Assets\Models\lavaRocks.png" />
     <Image Include="Assets\Models\Skirt.png" />
     <Image Include="Assets\Models\Staff.png" />
-    <Image Include="Assets\Models\Terrain-Road.jpg" />
+    <Image Include="Assets\Useless\Terrain-Road.jpg" />
     <Image Include="Assets\Models\TikiTest.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

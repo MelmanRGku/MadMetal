@@ -1,5 +1,5 @@
 #include "CellShaderProgram.h"
-
+#include <iostream>
 /*
 	Constructor. Takes path to the vertex shader and fragment shader,
 	loads them, links them and stores all the needed information (programID, attributes
@@ -36,6 +36,7 @@ CellShaderProgram::~CellShaderProgram()
 void CellShaderProgram::start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatrix, glm::vec3 *cameraPos) {
 	//tether the program
 	glUseProgram(programID);
+
 
 	//set view and projection matrices
 	glUniformMatrix4fv(viewMatrixUniform, 1, false, glm::value_ptr(*viewMatrix));

@@ -2,8 +2,9 @@
 #include "Factory\GameFactory.h"
 
 
-MeowMix::MeowMix(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Car(id, style, car, aable, pable, anable, rable)
+MeowMix::MeowMix(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Renderable3D *rable2) : Car(id, style, car, aable, pable, anable, rable)
 {
+	rableWheel = rable2;
 	m_lastWeaponShot = LAST_WEAPON_SHOT_LEFT;
 	m_reloadRateSeconds = 0.15;						//in s
 	m_superReloadRateSeconds = 1;
@@ -100,13 +101,91 @@ void MeowMix::useSuper() {
 	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
 	m_reloadRemainingSeconds = 0;
 	m_superGauge = 0;
-	m_renderable->setModel(Assets::getModel("UglyCarWithCannon"));
+	m_renderable->setModel(Assets::getModel("Meowmix"));
 	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
-	m_animatable->updateScale(glm::vec3(0, 2, 0));
+	//m_animatable->updateScale(glm::vec3(0, 2, 0));
 }
 
 void MeowMix::unuseSuper() {
 	m_renderable->setModel(Assets::getModel("Meowmix"));
 	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
-	m_animatable->updateScale(glm::vec3(0, -2, 0));
+	//m_animatable->updateScale(glm::vec3(0, -2, 0));
+}
+
+bool MeowMix::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
+{
+	if (type == Renderer::ShaderType::SHADER_TYPE_CELLTIRE || passNumber > 1)
+	{
+		std::cout << "Drawing the wheel" << std::endl;
+		if (type != Renderer::ShaderType::SHADER_TYPE_CELLTIRE || passNumber > 1)
+			return false;
+
+		if (rableWheel->getModel() == NULL)
+			return false;
+
+		std::vector<Mesh *> *meshes = static_cast<Model3D *>(rableWheel->getModel())->getMeshes();
+
+		glm::mat4x4 modelMatrix = getModelMatrix();
+
+		CellTireShaderProgram *program = static_cast<CellTireShaderProgram *>(renderer->getShaderProgram(Renderer::ShaderType::SHADER_TYPE_CELLTIRE));
+
+		glUniform1f(program->distanceTraveledUniform, distanceTraveled);
+
+		glUniform1i(program->textureUniform, 0);
+		glUniformMatrix4fv(program->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
+		for (unsigned int i = 0; i < meshes->size(); i++) {
+			Mesh *mesh = meshes->at(i);
+			if (mesh->hasTexture()) {
+				mesh->getTexture()->Bind(GL_TEXTURE0);
+				glUniform1i(program->textureValidUniform, true);
+			}
+			else {
+				glUniform1i(program->textureValidUniform, false);
+			}
+			// Draw mesh
+			glBindVertexArray(mesh->getVAO());
+			glDrawElements(GL_TRIANGLES, mesh->getIndices()->size(), GL_UNSIGNED_INT, 0);
+			//glDrawArrays(GL_TRIANGLES, 0, mesh->getVertices()->size());
+			glBindVertexArray(0);
+			if (mesh->hasTexture()) {
+				mesh->getTexture()->unBind(GL_TEXTURE0);
+			}
+		}
+
+	}
+	else if (type == Renderer::ShaderType::SHADER_TYPE_CELL || passNumber > 1)
+	{
+
+		std::cout << "Drawing the body" << std::endl;
+		std::vector<Mesh *> *meshes = static_cast<Model3D *>(m_renderable->getModel())->getMeshes();
+		std::cout << "Meshes" << std::endl;
+		CellShaderProgram *program = static_cast<CellShaderProgram *>(renderer->getShaderProgram(Renderer::ShaderType::SHADER_TYPE_CELL));
+		std::cout << "Program" << std::endl;
+		glUniform1i(program->textureUniform, 0);
+		std::cout << "tecture" << std::endl;
+
+		glm::mat4x4 modelMatrix = getModelMatrix();
+
+		glUniformMatrix4fv(program->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
+		std::cout << "ModelMatrix" << std::endl;
+		for (unsigned int i = 0; i < meshes->size(); i++) {
+			Mesh *mesh = meshes->at(i);
+			if (mesh->hasTexture()) {
+				mesh->getTexture()->Bind(GL_TEXTURE0);
+				glUniform1i(program->textureValidUniform, true);
+			}
+			else {
+				glUniform1i(program->textureValidUniform, false);
+			}
+			// Draw mesh
+			glBindVertexArray(mesh->getVAO());
+			glDrawElements(GL_TRIANGLES, mesh->getIndices()->size(), GL_UNSIGNED_INT, 0);
+			//glDrawArrays(GL_TRIANGLES, 0, mesh->getVertices()->size());
+			glBindVertexArray(0);
+			if (mesh->hasTexture()) {
+				mesh->getTexture()->unBind(GL_TEXTURE0);
+			}
+		}
+	}
+	return false;
 }

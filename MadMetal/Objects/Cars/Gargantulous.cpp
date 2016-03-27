@@ -78,13 +78,13 @@ void Gargantulous::useSuper() {
 	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
 	m_reloadRemainingSeconds = 0;
 	m_superGauge = 0;
-	m_renderable->setModel(Assets::getModel("UglyCarWithCannon"));
+	m_renderable->setModel(Assets::getModel("Gargantulous"));
 	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
-	m_animatable->updateScale(glm::vec3(0, 2, 0));
+	//m_animatable->updateScale(glm::vec3(0, 2, 0));
 }
 
 void Gargantulous::unuseSuper() {
-	m_renderable->setModel(Assets::getModel("UglyCarWithGuns"));
+	m_renderable->setModel(Assets::getModel("Gargantulous"));
 	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
-	m_animatable->updateScale(glm::vec3(0, -2, 0));
+	//m_animatable->updateScale(glm::vec3(0, -2, 0));
 }

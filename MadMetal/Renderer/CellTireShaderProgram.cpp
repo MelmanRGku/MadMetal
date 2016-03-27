@@ -1,5 +1,5 @@
 #include "CellTireShaderProgram.h"
-
+#include <iostream>
 /*
 Constructor. Takes path to the vertex shader and fragment shader,
 loads them, links them and stores all the needed information (programID, attributes
@@ -24,7 +24,8 @@ CellTireShaderProgram::CellTireShaderProgram(const char* vertexShaderPath, const
 	modelMatrixUniform = glGetUniformLocation(programID, "model_matrix");
 	textureUniform = glGetUniformLocation(programID, "texObject");
 	textureValidUniform = glGetUniformLocation(programID, "texValid");
-
+	cameraPosUniform = glGetUniformLocation(programID, "camera_pos");
+	distanceTraveledUniform = glGetUniformLocation(programID, "distanceTraveled");
 }
 
 
@@ -32,13 +33,16 @@ CellTireShaderProgram::~CellTireShaderProgram()
 {
 }
 
-void CellTireShaderProgram::start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatrix) {
+void CellTireShaderProgram::start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatrix, glm::vec3 *cameraPos) {
 	//tether the program
+
+
 	glUseProgram(programID);
 
 	//set view and projection matrices
 	glUniformMatrix4fv(viewMatrixUniform, 1, false, glm::value_ptr(*viewMatrix));
 	glUniformMatrix4fv(projectionMatrixUniform, 1, false, glm::value_ptr(*projMatrix));
+	glUniformMatrix3fv(cameraPosUniform, 1, false, glm::value_ptr(*cameraPos));
 }
 
 void CellTireShaderProgram::end() {

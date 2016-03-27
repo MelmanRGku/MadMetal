@@ -1,5 +1,4 @@
 #version 410 core
-//This is the shader for MeowMix's tire. It works as follows: The texture coordinate is altered such that the new coordinate fs_in.uv.y, equals the origional + the distance traveled % pi * the dimension of the wheel
 
 // Input from vertex shader
 in VS_OUT
@@ -13,51 +12,81 @@ in VS_OUT
 } fs_in;
 
 // Material properties
-uniform vec3 diffuse_albedo = vec3(0.5, 0.2, 0.7);
-uniform vec3 ambient = vec3(0.1, 0.1, 0.1);
-uniform float distanceTraveled = 0;
+uniform float diffuse_albedo = .7f;
+uniform float specular_albedo = 1;
+uniform float specular_power = 128.0;
+uniform float ambient = 0.3f;
+uniform float distanceTraveled = 0.0f;
 
 // Texture Mapping
 uniform sampler2D texObject;
 uniform bool texValid;
 
+// returns intensity of reflected ambient lighting
+float ambientLighting()
+{
+   return ambient;
+}
+
+// returns intensity of diffuse reflection
+float diffuseLighting(in vec3 N, in vec3 L)
+{
+   // calculation as for Lambertian reflection
+   float diffuseTerm = clamp(dot(N, L), 0, 1) ;
+   return diffuse_albedo * diffuseTerm;
+}
+
+// returns intensity of specular reflection
+float specularLighting(in vec3 N, in vec3 L, in vec3 V)
+{
+   float specularTerm = 0;
+
+   // calculate specular reflection only if
+   // the surface is oriented to the light source
+   if(dot(N, L) > 0)
+   {
+      // half vector
+      vec3 H = normalize(L + V);
+      specularTerm = pow(dot(N, H), specular_power);
+   }
+   return specular_albedo * specularTerm;
+}
+
 void main(void)
 {
-    // Normalize the incoming N, L and V vectors
-    vec3 N = normalize(fs_in.N);
-    vec3 L = normalize(fs_in.L);
-    vec3 V = normalize(fs_in.V);
+   // normalize vectors after interpolation
+   vec3 L = fs_in.L;
+   vec3 V = fs_in.V;
+   vec3 N = fs_in.N;
 
-    // Compute the diffuse and specular components for each fragment
-    // May replace the colour value with diffuse albedo
-    vec3 diffuse = max(dot(N, L), 0.7) * fs_in.C.xyz; // diffuse_albedo;
+   vec2 uvtest;
 
-	fs_in.uv.y = fs_in.uv.y + distanceTraveled % (3.14159 * 10.0)
+   // get Blinn-Phong reflectance components
+   float Iamb = ambientLighting();
+   float Idif = diffuseLighting(N, L);
+   float Ispe = specularLighting(N, L, V);
 
-	if (texValid)
-	{
-		diffuse *= vec3(texture(texObject, fs_in.uv));
-	}
-	else
-		diffuse *= vec3(1, 1, 1);
+   // diffuse color of the object from texture
+   vec3 diffuseColor;
+   float hello = 0;
+   if (!texValid)
+	 diffuseColor = vec3(fs_in.C);
+   else
+   	 uvtest = fs_in.uv;
+	 uvtest.y = mod((uvtest.y - mod(distanceTraveled / 5.0, 31.4159) / 31.4159), 1.0); 
+	 diffuseColor = texture(texObject, uvtest).rgb;
 
-    float iambi = 0.1;
-    float idiff = clamp(dot(L,N),0.0,1.0);
+   // combination of all components and diffuse color of the object
+   vec4 resultingColor;
+   resultingColor.xyz = diffuseColor * (Iamb + Idif + Ispe);
 
-    float intensity = iambi + idiff;
+   if (!texValid)
+	 resultingColor.a = fs_in.C.w;
+   else
+	 resultingColor.a = texture(texObject, fs_in.uv).w;
 
-    // quantize intensity for cel shading
-    float shadeIntensity = ceil(intensity * 5)/ 5;
+   gl_FragColor = resultingColor;
 
-    // Write final colour to the framebuffer
-	if (texValid)
-	{
-		float alpha = texture(texObject, fs_in.uv).w;
-		gl_FragColor = texture(texObject, fs_in.uv);
+   gl_FragColor = round(gl_FragColor * 8) / 8;
 
-	} else {
-		gl_FragColor = vec4(ambient + diffuse * shadeIntensity, fs_in.C.w);
-	}
-		
-
-}
+} 
