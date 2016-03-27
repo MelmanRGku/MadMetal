@@ -326,17 +326,24 @@ void AIControllable::setHighCostWaypointsToLow()
 
 void AIControllable::processInputAcceleration(float amount)
 {
-	if (amount > 0)
+	if (amount > 0.3)
 	{
 		//std::cout << "Applying acceleration : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, amount);
 	}
-	else if (amount < 0 && m_car->getCar().computeForwardSpeed() > 10.0)
+	else if (amount < 0.3 && m_car->getCar().computeForwardSpeed() > 10.0)
 	{
 		//std::cout << "Applying break with : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
+		if (amount < 0)
+		{
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
+		}
+		else
+		{
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, amount);
+		}
 	}
 	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
 	{

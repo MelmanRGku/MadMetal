@@ -95,9 +95,136 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	m_waypointSystems.push_back(nextLocation4);
 
-	setInvalid3();
+	WaypointSystem * nextLocation5 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().minimum.x + 80,
+		getDrivablePart()->getWorldBounds().minimum.x + 180,
+		getDrivablePart()->getWorldBounds().maximum.z - 680,
+		getDrivablePart()->getWorldBounds().maximum.z - 500,
+		getDrivablePart()->getWorldBounds().maximum.y,
+		BOTTOM);
+	
+	for (int i = 0; i < nextLocation5->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation5->getWaypointMap().at(i).begin(), nextLocation5->getWaypointMap().at(i).end());
+	}
+	
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystems(TOP, BOTTOM, *lastWaypointSystem, *nextLocation5, 2, 0, true);
+	
+	m_waypointSystems.push_back(nextLocation5);
 
-	std::cout << "crazy";
+	WaypointSystem * nextLocation6 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().minimum.x + 180,
+		getDrivablePart()->getWorldBounds().minimum.x + 240,
+		getDrivablePart()->getWorldBounds().maximum.z - 1120,
+		getDrivablePart()->getWorldBounds().maximum.z - 620,
+		getDrivablePart()->getWorldBounds().maximum.y,
+		BOTTOM);
+
+	for (int i = 0; i < nextLocation6->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation6->getWaypointMap().at(i).begin(), nextLocation6->getWaypointMap().at(i).end());
+	}
+
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystems(RIGHT, LEFT, *lastWaypointSystem, *nextLocation6, 0, nextLocation6->getWaypointMap().size() - 3, true);
+
+	m_waypointSystems.push_back(nextLocation6);
+
+	WaypointSystem * nextLocation7 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().minimum.x + 60,
+		getDrivablePart()->getWorldBounds().minimum.x + 180,
+		getDrivablePart()->getWorldBounds().maximum.z - 1220,
+		getDrivablePart()->getWorldBounds().maximum.z - 1040,
+		getDrivablePart()->getWorldBounds().maximum.y,
+		BOTTOM);
+
+	for (int i = 0; i < nextLocation7->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation7->getWaypointMap().at(i).begin(), nextLocation7->getWaypointMap().at(i).end());
+	}
+
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystems(LEFT, RIGHT, *lastWaypointSystem, *nextLocation7, 0, nextLocation7->getWaypointMap().size() - 4, true);
+
+	m_waypointSystems.push_back(nextLocation7);
+
+	WaypointSystem * nextLocation8 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().minimum.x + 20,
+		getDrivablePart()->getWorldBounds().minimum.x + 60,
+		getDrivablePart()->getWorldBounds().minimum.z + 40,
+		getDrivablePart()->getWorldBounds().maximum.z - 1120,
+		getDrivablePart()->getWorldBounds().maximum.y,
+		BOTTOM);
+
+	for (int i = 0; i < nextLocation8->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation8->getWaypointMap().at(i).begin(), nextLocation8->getWaypointMap().at(i).end());
+	}
+
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystems(LEFT, RIGHT, *lastWaypointSystem, *nextLocation8, 0, nextLocation8->getWaypointMap().size() - 5, true);
+
+	m_waypointSystems.push_back(nextLocation8);
+
+	WaypointSystem * nextLocation9 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().minimum.x + 60,
+		getDrivablePart()->getWorldBounds().minimum.x + 160,
+		getDrivablePart()->getWorldBounds().minimum.z + 20,
+		getDrivablePart()->getWorldBounds().minimum.z + 100,
+		getDrivablePart()->getWorldBounds().maximum.y,
+		LEFT);
+
+	for (int i = 0; i < nextLocation9->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation9->getWaypointMap().at(i).begin(), nextLocation9->getWaypointMap().at(i).end());
+	}
+
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystems(RIGHT, LEFT, *lastWaypointSystem, *nextLocation9, 0, 1, true);
+
+	m_waypointSystems.push_back(nextLocation9);
+
+
+	WaypointSystem * nextLocation10 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().minimum.x + 160,
+		getDrivablePart()->getWorldBounds().maximum.x - 140,
+		getDrivablePart()->getWorldBounds().minimum.z + 20,
+		getDrivablePart()->getWorldBounds().minimum.z + 60,
+		getDrivablePart()->getWorldBounds().maximum.y,
+		LEFT);
+
+	for (int i = 0; i < nextLocation10->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation10->getWaypointMap().at(i).begin(), nextLocation10->getWaypointMap().at(i).end());
+	}
+
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystems(RIGHT, LEFT, *lastWaypointSystem, *nextLocation10, 0, 0, true);
+
+	m_waypointSystems.push_back(nextLocation10);
+
+	WaypointSystem * nextLocation11 = new WaypointSystem(
+		getDrivablePart()->getWorldBounds().maximum.x - 180,
+		getDrivablePart()->getWorldBounds().maximum.x - 140,
+		getDrivablePart()->getWorldBounds().minimum.z + 60,
+		getDrivablePart()->getWorldBounds().minimum.z + 200,
+		getDrivablePart()->getWorldBounds().maximum.y,
+		TOP);
+
+	for (int i = 0; i < nextLocation11->getWaypointMap().size(); i++)
+	{
+		m_waypointList.insert(m_waypointList.end(), nextLocation11->getWaypointMap().at(i).begin(), nextLocation11->getWaypointMap().at(i).end());
+	}
+
+	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
+	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation11, lastWaypointSystem->getWaypointMap().at(0).size() - 2, 0, true);
+	stitchWaypointSystems(BOTTOM, TOP, *nextLocation11, *m_waypointSystems.at(0), 0, 0, false);
+
+	m_waypointSystems.push_back(nextLocation11);
+
+	std::cout << "here";
+
 }
 
 Track::~Track()
@@ -306,7 +433,7 @@ void Track::recalculateWaypointSystemIds(WaypointSystem& waypointSystem1, Waypoi
 
 void Track::setInvalid2()
 {
-	for (int i = 560; i < 592; i += 2)
+	for (int i = 578; i < 592; i += 2)
 	{
 		m_waypointList[i]->setValid(false);
 	}
@@ -314,7 +441,6 @@ void Track::setInvalid2()
 	for (int i = 602; i < 714; i++)
 	{
 		if ((i > 605 && i < 623) ||
-			(i > 624 && i < 629) ||
 			(i > 637 && i < 647) ||
 			(i > 649 && i < 664) ||
 			//(i > 668 && i < 673) ||
@@ -376,20 +502,20 @@ void Track::setInvalid1()
 			(i > 334 && i < 344) ||
 			(i > 345 && i < 355) ||
 			(i > 356 && i < 366) ||
-			(i > 367 && i < 377) ||
+			(i > 367 && i < 378) ||
 			(i > 379 && i < 390) ||
-			(i > 391 && i < 401) ||
-			(i > 402 && i < 413) ||
-			(i > 414 && i < 425) ||
+			(i > 391 && i < 402) ||
+			(i > 402 && i < 414) ||
+			(i > 414 && i < 426) ||
 			(i > 426 && i < 438) ||
-			(i > 439 && i < 451) ||
-			(i > 451 && i < 462) ||
-			(i > 462 && i < 475) ||
+			(i > 438 && i < 451) ||
+			(i > 451 && i < 463) ||
+			(i > 463 && i < 475) ||
 			(i > 476 && i < 487) ||
 			(i > 488 && i < 500) ||
-			(i > 502 && i < 512) ||
-			(i > 513 && i < 525) ||
-			(i > 525 && i < 537) ||
+			(i > 502 && i < 513) ||
+			(i > 513 && i < 524) ||
+			(i > 524 && i < 537) ||
 			(i > 537 && i < 550) ||
 			(i > 550 && i < 555))
 		{
