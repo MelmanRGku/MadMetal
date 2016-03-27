@@ -25,9 +25,9 @@ GameFactory::~GameFactory()
 	m_factory = NULL;
 }
 
-bool GameFactory::sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal maxDistance, PxRaycastBuffer &hit)
+bool GameFactory::sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal maxDistance, PxRaycastBuffer &hit, PxHitFlags hitFlags, const PxQueryFilterData &filterData)
 {
-	return m_scene.raycast(origin, direction, maxDistance, hit);
+	return m_scene.raycast(origin, direction, maxDistance, hit, hitFlags, filterData);
 }
 
 bool GameFactory::sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit)
