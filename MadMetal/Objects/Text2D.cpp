@@ -21,7 +21,6 @@ bool Text2D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glMultMatrixf(glm::value_ptr(glm::scale(glm::mat4x4(), glm::vec3(.1, .1, 1))));
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glDisable(GL_LIGHTING);
 

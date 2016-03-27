@@ -111,6 +111,7 @@ void Renderer::draw(std::vector<TestObject *> *objects, std::vector<PlayerContro
 	}
 
 	for (int j = 0; j < viewPortDesc.size(); j++) {
+		glm::vec3 cameraPos = glm::vec3(0, 0, 0);
 		if (players != NULL) {
 			projectionMatrix = glm::perspective(
 				glm::radians(std::stof(Settings::getSetting("fovy")) + 0.3f * max(players->at(j)->getCar()->getCar().computeForwardSpeed(), 1) + 30),
@@ -119,6 +120,7 @@ void Renderer::draw(std::vector<TestObject *> *objects, std::vector<PlayerContro
 				1000.f
 				);
 			viewMatrix = players->at(j)->getCamera()->getMatrix();
+			cameraPos = players->at(j)->getCamera()->getPosition();
 		}
 		currentViewPort = viewPortDesc.at(j);
 		glViewport(currentViewPort.x, currentViewPort.y, currentViewPort.z, currentViewPort.w);
@@ -128,7 +130,7 @@ void Renderer::draw(std::vector<TestObject *> *objects, std::vector<PlayerContro
 			keepGoing = false;
 			for (int i = 0; i < NUMBER_OF_SHADER_TYPES; i++) {
 				if (shader[i] != NULL) {
-					shader[i]->start(&viewMatrix, &projectionMatrix);
+					shader[i]->start(&viewMatrix, &projectionMatrix, &cameraPos);
 					for (unsigned int j = 0; j < objects->size(); j++) {
 						TestObject *obj = objects->at(j);
 						keepGoing = obj->draw(this, (ShaderType)i, passNumber) || keepGoing;

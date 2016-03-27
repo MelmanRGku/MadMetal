@@ -12,6 +12,7 @@
 #include "Objects\PowerUp.h"
 #include "Game Logic\PositionManager.h"
 #include "Global\Definitions.h"
+#include "Objects\UIScoreTable.h"
 #include <sstream>
 
 
@@ -103,6 +104,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	//m_mainCamera = m_humanPlayers[0]->getCamera();
 	
 	initialize();
+	m_scoreTable = new ScoreTable(m_players);
 
 	PxVec3 minTrackBounds = m_track->getDrivablePart()->getActor().getWorldBounds().minimum;
 	PxVec3 maxTrackBounds = m_track->getDrivablePart()->getActor().getWorldBounds().maximum;
@@ -111,9 +113,11 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	for (unsigned int i = 0; i < m_humanPlayers.size(); i++) {
 		m_humanPlayers.at(i)->getCar()->getUI()->map->setTrackBounds(minBounds, maxBounds);
 		m_humanPlayers.at(i)->getCar()->getUI()->map->setPlayers(&m_players);
+		m_humanPlayers.at(i)->getCar()->getUI()->scoreTable->setScoreTable(m_scoreTable);
+		std::stringstream ss;
+		ss << "Player " << (i + 1);
+		m_humanPlayers.at(i)->getCar()->getUI()->scoreTable->setOwnerName(ss.str());
 	}
-	
-
 	m_positionManager = new PositionManager(m_players);
 	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
 	pauseControls(true);
@@ -235,6 +239,7 @@ void GameSimulation::updateObjects(double dt) {
 
 	m_world->update(dt);
 	m_displayMessage->update(dt);
+	m_scoreTable->updateTable();
 	
 }
 

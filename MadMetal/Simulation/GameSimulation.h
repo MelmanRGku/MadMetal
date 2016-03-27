@@ -15,6 +15,7 @@
 #include "Objects\ObjectUpdaters\ObjectUpdaterSequence.h"
 #include "Objects\ObjectUpdaters\ObjectUpdaterParallel.h"
 #include "Audio\MusicManager.h"
+#include "Objects\ScoreTable.h"
 #include <time.h>
 
 class Scene;
@@ -78,6 +79,8 @@ private: //members
 	
 	MusicManager *musicManager;
 	PositionManager* m_positionManager;
+	ScoreTable *m_scoreTable;
+
 
 public:
 	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle);

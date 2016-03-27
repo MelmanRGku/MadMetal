@@ -7,6 +7,8 @@
 #include "MapUI.h"
 #include "PowerUp.h"
 
+class UIScoreTable;
+
 class UI : public Object2D
 {
 public:
@@ -23,6 +25,7 @@ public:
 	MapUI *map;
 	TexturedObject2D *powerupBorder;
 	TexturedObject2D *powerupIcon;
+	UIScoreTable *scoreTable;
 		
 };
 

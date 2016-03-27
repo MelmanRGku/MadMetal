@@ -3,6 +3,7 @@
 #include "Objects\CollisionVolume.h"
 #include "Objects\Particle.h"
 #include "Objects\PowerUpAttack.h"
+#include "Objects\UIScoreTable.h"
 
 long GameFactory::lastId = 0;
 
@@ -155,7 +156,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		ui->lap->setPosition(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) - 150, glutGet(GLUT_WINDOW_HEIGHT) - 36, 0));
 		ui->map = static_cast<MapUI *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_MAP, NULL, NULL, NULL));
 		ui->powerupBorder = static_cast<TexturedObject2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_POWERUP_BORDER_ICON, NULL, NULL, NULL));
-
+		ui->scoreTable = static_cast<UIScoreTable *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_SCORE_TABLE, NULL, NULL, NULL));
 		return ui;
 	}
 	case OBJECT_DISPLAY_MESSAGE:
@@ -791,6 +792,17 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 								  m_scene.addActor(*animationTestTriggerVolume);
 
 								  return animation;
+	}
+	case OBJECT_UI_SCORE_TABLE:
+	{
+		Renderable2D *renderable = new Renderable2D(NULL);
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+
+		UIScoreTable *table = new UIScoreTable(objectId, audioable, animatable, renderable);
+		animatable->setPosition(glm::vec3(0, glutGet(GLUT_WINDOW_HEIGHT) - table->getFontSize(), 0));
+
+		return table;
 	}
 	}
 }

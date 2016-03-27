@@ -212,6 +212,7 @@ void Car::update(float dt) {
 
 void Car::addDamageDealt(float damage) {
 	m_damageDealt += damage;
+	m_score += damage;
 	
 	if (m_activePowerUp == PowerUpType::ATTACK)
 	{

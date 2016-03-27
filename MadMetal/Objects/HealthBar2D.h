@@ -10,6 +10,6 @@ public:
 	HealthBar2D(long id, Audioable *aable, Animatable *anable, Renderable2D *rable);
 	~HealthBar2D();
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
-	void setHealthPercentage(float percentage) { healthPercentage = percentage; }
+	void setHealthPercentage(float percentage) { healthPercentage = percentage; if (healthPercentage < 0) healthPercentage = 0; }
 };
 

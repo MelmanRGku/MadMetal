@@ -162,6 +162,7 @@
     <ClCompile Include="Audio\MusicManager.cpp" />
     <ClCompile Include="Objects\TexturedObject2D.cpp" />
     <ClCompile Include="Simulation\SinglePlayerMenu.cpp" />
+    <ClCompile Include="Objects\UIScoreTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
@@ -282,6 +283,7 @@
     <ClInclude Include="Audio\MusicManager.h" />
     <ClInclude Include="Objects\TexturedObject2D.h" />
     <ClInclude Include="Simulation\SinglePlayerMenu.h" />
+    <ClInclude Include="Objects\UIScoreTable.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Audio\MusicLibrary.txt" />

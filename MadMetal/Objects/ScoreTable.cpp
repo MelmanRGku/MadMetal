@@ -49,7 +49,14 @@ void ScoreTable::updateTable(){
 
 	m_playerPoints.clear();
 	for (int i = 0; i < m_players.size(); i++) {
-		m_playerPositionsInRace.push_back(m_players.at(i)->getCar()->getScore());
+		m_playerPoints.push_back(m_players.at(i)->getCar()->getScore());
+	}
+
+	m_playerPointsStrings.clear();
+	for (int i = 0; i < m_players.size(); i++) {
+		std::stringstream ss;
+		ss << m_players.at(i)->getCar()->getScore();
+		m_playerPointsStrings.push_back(ss.str());
 	}
 
 	sort();
