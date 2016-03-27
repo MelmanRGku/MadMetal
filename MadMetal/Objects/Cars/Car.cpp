@@ -58,6 +58,13 @@ void Car::respawn()
 	
 }
 
+void Car::useSuper() {
+	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
+	m_superGauge = 0;
+	ui->gaugeBar->superUsed(m_superMaxDurationSeconds);
+	ui->gaugeBar->setSuperDurationRemaining(m_superDurationRemainingSeconds);
+}
+
 PowerUpType Car::getActivePowerUpType()
 {
 	return m_activePowerUp;
@@ -158,7 +165,9 @@ void Car::updateSuper(float dt)
 {
 	if (m_superDurationRemainingSeconds > 0)
 	{
-		if ((m_superDurationRemainingSeconds -= dt) <= 0)
+		m_superDurationRemainingSeconds -= dt;
+		ui->gaugeBar->setSuperDurationRemaining(m_superDurationRemainingSeconds);
+		if (m_superDurationRemainingSeconds <= 0)
 		{
 			unuseSuper();
 		}
