@@ -22,18 +22,18 @@ bool GaugeBar::draw(Renderer *renderer, Renderer::ShaderType type, int passNumbe
 
 	glColor3f(0.f, 0.f, 1.f);
 	glBegin(GL_QUADS);
-	glVertex2f(.98f, -.98f);
-	glVertex2f(.98f, -.95f);
-	glVertex2f(.98f - gaugePercentage * .3f, -.95f);
-	glVertex2f(.98f - gaugePercentage * .3f, -.98f);
+	glVertex2f(-.98f, -.98f);
+	glVertex2f(-.98f, -.95f);
+	glVertex2f(-.98f + gaugePercentage * .3f, -.95f);
+	glVertex2f(-.98f + gaugePercentage * .3f, -.98f);
 	glEnd();
 
 	glColor3f(.3f, .4f, .7f);
 	glBegin(GL_QUADS);
-	glVertex2f(.98f - .3f, -.98f);
-	glVertex2f(.98f - .3f, -.95f);
-	glVertex2f(.98f - gaugePercentage * .3f, -.95f);
-	glVertex2f(.98f - gaugePercentage * .3f, -.98f);
+	glVertex2f(-.98f + .3f, -.98f);
+	glVertex2f(-.98f + .3f, -.95f);
+	glVertex2f(-.98f + gaugePercentage * .3f, -.95f);
+	glVertex2f(-.98f + gaugePercentage * .3f, -.98f);
 	glEnd();
 
 

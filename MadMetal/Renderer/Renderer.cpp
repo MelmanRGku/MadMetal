@@ -131,10 +131,10 @@ void Renderer::draw(std::vector<TestObject *> *objects, std::vector<PlayerContro
 					shader[i]->start(&viewMatrix, &projectionMatrix);
 					for (unsigned int j = 0; j < objects->size(); j++) {
 						TestObject *obj = objects->at(j);
-						keepGoing = keepGoing || obj->draw(this, (ShaderType)i, passNumber);
+						keepGoing = obj->draw(this, (ShaderType)i, passNumber) || keepGoing;
 					}
 					if (players != NULL) {
-						keepGoing = keepGoing || players->at(j)->getCar()->getUI()->draw(this, (ShaderType)i, passNumber);
+						keepGoing = players->at(j)->getCar()->getUI()->draw(this, (ShaderType)i, passNumber) || keepGoing;
 					}
 					shader[i]->end();
 				}

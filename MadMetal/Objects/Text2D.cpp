@@ -28,8 +28,7 @@ bool Text2D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
 	glColor4f(1.0, 0.0, 0.0, 1.0);
 	// Set the font size and render a small text.	
 	glm::vec3 pos = m_animatable->getPosition();
-	glm::vec4 viewportPos = renderer->getCurrentViewPort();
-	font->Render(stringToRender.c_str(), -1, FTPoint(viewportPos.x + pos.x - xOffset / 2, viewportPos.y + pos.y - yOffset / 2, pos.z));
+	font->Render(stringToRender.c_str(), -1, FTPoint(pos.x - xOffset / 2, pos.y - yOffset / 2, pos.z));
 	glPopAttrib();
 	return false;
 }

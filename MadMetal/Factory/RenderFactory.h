@@ -56,6 +56,12 @@ public:
 		RENDERABLE_OBJECT_PARTICLE_POWERUP_ATTACK,
 		RENDERABLE_OBJECT_PARTICLE_POWERUP_DEFENSE,
 		RENDERABLE_OBJECT_PARTICLE_POWERUP_SPEED,
+
+
+		RENDERABLE_OBJECT_ATTACK_POWERUP_ICON,
+		RENDERABLE_OBJECT_DEFENSE_POWERUP_ICON,
+		RENDERABLE_OBJECT_SPEED_POWERUP_ICON,
+		RENDERABLE_OBJECT_POWERUP_BORDER,
 	};
 
 	
@@ -144,6 +150,14 @@ public:
 			return new Model2D(Assets::getTexture("red-car-top-view"));
 		case (RENDERABLE_OBJECT_ANIMATION_TEST) :
 			return Assets::getModel("animation1");
+		case RENDERABLE_OBJECT_ATTACK_POWERUP_ICON:
+			return new Model2D(Assets::getTexture("life_steal"));
+		case RENDERABLE_OBJECT_DEFENSE_POWERUP_ICON:
+			return new Model2D(Assets::getTexture("shield-reflect"));
+		case RENDERABLE_OBJECT_SPEED_POWERUP_ICON:
+			return new Model2D(Assets::getTexture("speed_icon"));
+		case RENDERABLE_OBJECT_POWERUP_BORDER:
+			return new Model2D(Assets::getTexture("powerup_border"));
 		}
 	}
 	

@@ -56,11 +56,10 @@ Model *Assets::loadObjFromDirectory(std::string path) {
 		m.unlock();
 		return getModel(objectName);
 	}
-	m.lock();
 	if (getModel(objectName) != NULL) {
-		m.unlock();
 		return getModel(objectName);
 	}
+	m.lock();
 	if (status != NULL)
 		status->setCurrentLoadingFile(objectName);
 	ObjModelLoader *loader = new ObjModelLoader();

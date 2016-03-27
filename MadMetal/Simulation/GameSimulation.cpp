@@ -235,8 +235,8 @@ void GameSimulation::updateObjects(double dt) {
 
 	m_world->update(dt);
 	m_displayMessage->update(dt);
-
-	}
+	
+}
 
 void GameSimulation::initialize() {
 	setupBasicGameWorldObjects();
@@ -442,7 +442,7 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 void GameSimulation::setupBasicGameWorldObjects() {
 	//Power up test
 	PxTransform * pos;
-	/*PxGeometry **powerGeom = new PxGeometry*[1];
+	PxGeometry **powerGeom = new PxGeometry*[1];
 	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
 	pos = new PxTransform(0, 5, 20);
 	PowerUp * powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
@@ -457,7 +457,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	pos = new PxTransform(10, 5, 20);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(3);
-	delete pos;*/
+	delete pos;
 	
 	//trainCar test
 	PxGeometry **trainGeom = new PxGeometry*[1];

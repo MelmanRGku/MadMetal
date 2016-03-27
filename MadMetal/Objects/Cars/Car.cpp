@@ -69,6 +69,7 @@ void Car::pickUpPowerUp(PowerUpType type)
 	{
 		std::cout << "Picked up Power up " << type << std::endl;
 		m_heldPowerUp = type;
+		ui->setPowerup(type);
 	}
 	
 }
@@ -77,7 +78,7 @@ void Car::usePowerUp()
 {
 	if (m_heldPowerUp != PowerUpType::NONE)
 	{
-		
+		ui->unsetPowerup();
 		m_activePowerUp = m_heldPowerUp;
 		m_heldPowerUp = PowerUpType::NONE;
 		m_powerUpRemaining = PowerUp::getPowerUpDuration(m_activePowerUp);
@@ -200,12 +201,6 @@ void Car::update(float dt) {
 	if (ui != NULL) {
 		ui->healthBar->setHealthPercentage(m_currentHealth / m_maxHealth);
 		ui->gaugeBar->setGaugePercentage(getSuperGauge());
-
-		{
-	std::stringstream s;
-	s << "Score: " << tallyScore();
-			ui->score->setString(s.str());
-		}
 
 		{
 			std::stringstream s;

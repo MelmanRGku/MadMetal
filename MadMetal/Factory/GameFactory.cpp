@@ -149,12 +149,12 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		UI *ui = new UI(objectId, audioable, animatable, renderable);
 		ui->healthBar = static_cast<HealthBar2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_HEALTH_BAR, NULL, NULL, NULL));
 		ui->gaugeBar = static_cast<GaugeBar *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_GAUGE_BAR, NULL, NULL, NULL));
-		ui->score = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
-		ui->score->setString("Score: 0");
 		ui->lap = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
 		ui->lap->setString("Lap: 0");
-		ui->lap->setPosition(glm::vec3(10, 70, 0));
+		ui->lap->centerize(true);
+		ui->lap->setPosition(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) - 150, glutGet(GLUT_WINDOW_HEIGHT) - 36, 0));
 		ui->map = static_cast<MapUI *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_MAP, NULL, NULL, NULL));
+		ui->powerupBorder = static_cast<TexturedObject2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_POWERUP_BORDER_ICON, NULL, NULL, NULL));
 
 		return ui;
 	}
@@ -713,12 +713,60 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return image;
 	}
+	case OBJECT_UI_POWERUP_BORDER_ICON:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_POWERUP_BORDER)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, -.75f, 0));
+		animatable->setScale(glm::vec3(.38f, .38f, 0));
+
+		TexturedObject2D *border = new TexturedObject2D(objectId, audioable, animatable, renderable);
+
+		return border;
+	}
+	case OBJECT_UI_SHIELD_POWERUP_ICON:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_DEFENSE_POWERUP_ICON)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, -.75f, 0));
+		animatable->setScale(glm::vec3(.34f, .34f, 0));
+
+		TexturedObject2D *icon = new TexturedObject2D(objectId, audioable, animatable, renderable);
+
+		return icon;
+	}
+	case OBJECT_UI_ATTACK_POWERUP_ICON:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP_ICON)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, -.75f, 0));
+		animatable->setScale(glm::vec3(.34f, .34f, 0));
+
+		TexturedObject2D *icon = new TexturedObject2D(objectId, audioable, animatable, renderable);
+
+		return icon;
+	}
+	case OBJECT_UI_SPEED_POWERUP_ICON:
+	{
+		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_SPEED_POWERUP_ICON)));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(0, -.75f, 0));
+		animatable->setScale(glm::vec3(.34f, .34f, 0));
+
+		TexturedObject2D *icon = new TexturedObject2D(objectId, audioable, animatable, renderable);
+
+		return icon;
+	}
 	case OBJECT_UI_MAP:
 	{
 		Renderable2D *renderable = new Renderable2D(static_cast<Model2D*>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MAP_TEXTURE)));
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
-		animatable->setPosition(glm::vec3(.8f, .8f, 0));
+		animatable->setPosition(glm::vec3(.75f, -.75f, 0));
 		animatable->setScale(glm::vec3(.38f, .38f, 0));
 
 		MapUI *map = new MapUI(objectId, audioable, animatable, renderable);
