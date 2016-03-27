@@ -125,6 +125,7 @@ void Camera::update(double dtMilli)
 		if (shapes[0]->getSimulationFilterData().word0 == COLLISION_FLAG_OBSTACLE) {
 			m_distance = glm::distance(m_lookAt, m_currentPos) - buf.block.distance - .5f;
 		}
+		free(shapes);
 	}
 	else {
 		m_distance += m_distanceDt;
@@ -146,6 +147,7 @@ void Camera::update(double dtMilli)
 			if (shapes[0]->getSimulationFilterData().word0 == COLLISION_FLAG_OBSTACLE) {
 				m_distance = glm::distance(m_lookAt, m_currentPos) - buf.block.distance - .5f;
 			}
+			free(shapes);
 		}
 	}
 

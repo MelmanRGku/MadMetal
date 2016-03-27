@@ -20,8 +20,7 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 
 Car::~Car()
 {
-	//TODO: revive later ?
-	//delete ui;
+	delete ui;
 	delete m_drivingStyle;
 }
 
@@ -196,6 +195,7 @@ void Car::updateHealth(float dtMillis)
 			explosionGeom[0] = new PxSphereGeometry(7);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &getCar().getRigidDynamicActor()->getGlobalPose(), explosionGeom, NULL);
 			delete explosionGeom[0];
+			delete[] explosionGeom;
 		}
 	}
 	

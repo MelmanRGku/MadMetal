@@ -272,6 +272,9 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 
 MultiPlayerMenu::~MultiPlayerMenu()
 {
+	for (PlayerSelection *ps : m_players) {
+		delete ps;
+	}
 }
 
 bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {

@@ -20,6 +20,7 @@ MeowMix::MeowMix(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable 
 
 MeowMix::~MeowMix()
 {
+	delete rableWheel;
 }
 
 void MeowMix::fire()

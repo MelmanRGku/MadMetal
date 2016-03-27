@@ -240,6 +240,7 @@ public:
 			{
 				shapes[i]->setSimulationFilterData(simFilterData);
 			}
+			free(shapes);
 			setFilterDataId(objectId, plane);
 			toReturn = plane;
 			break;

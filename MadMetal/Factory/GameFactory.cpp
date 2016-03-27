@@ -22,6 +22,7 @@ GameFactory::~GameFactory()
 	delete m_audioFactory;
 	delete m_renderFactory;
 	delete m_physicsFactory;
+	delete m_animationFactory;
 	m_factory = NULL;
 }
 
@@ -49,10 +50,10 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 //		Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 
-Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXBODY));
-Renderable3D *renderable = new Renderable3D(model, true, true);
-Model3D *model2 = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXWHEEL));
-Renderable3D *renderable2 = new Renderable3D(model2, true, true);
+		Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXBODY));
+		Renderable3D *renderable = new Renderable3D(model, true, true);
+		Model3D *model2 = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXWHEEL));
+		Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
