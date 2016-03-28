@@ -695,5 +695,14 @@
     <Image Include="Assets\Models\Panel.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Assets\Models\Chest paint Lava.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\MaskLava.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\TikiTestLava.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

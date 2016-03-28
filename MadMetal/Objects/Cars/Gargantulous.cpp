@@ -59,10 +59,13 @@ void Gargantulous::useSuper() {
 	PxGeometry * geom[1];
 	geom[0] = new PxSphereGeometry(50);
 	GameFactory::instance()->makeObject(GameFactory::OBJECT_GARGANTULOUS_SUPER_VOLUME, &m_car.getRigidDynamicActor()->getGlobalPose(), geom, this);
+	m_renderable->setModel(Assets::getModel("Gargantulous_Lava"));
+	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
+	//m_animatable->updateScale(glm::vec3(0, 2, 0));
 }
 
 void Gargantulous::unuseSuper() {
-	//m_renderable->setModel(Assets::getModel("Gargantulous"));
-	//static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
+	m_renderable->setModel(Assets::getModel("Gargantulous"));
+	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 	//m_animatable->updateScale(glm::vec3(0, -2, 0));
 }
