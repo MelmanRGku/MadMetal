@@ -15,6 +15,7 @@ UIScoreTable::UIScoreTable(long id, Audioable *aable, Animatable *anable, Render
 
 UIScoreTable::~UIScoreTable()
 {
+	delete font;
 }
 
 void UIScoreTable::setScoreTable(ScoreTable *table) {

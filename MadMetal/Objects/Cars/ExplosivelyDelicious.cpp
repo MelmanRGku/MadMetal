@@ -68,8 +68,7 @@ void ExplosivelyDelicious::unuseSuper()
 #define LAUNCH_ANGLE 0,0,0
 #define CAR_LAUNCH_SPEED 40000
 void ExplosivelyDelicious::useSuper() {
-	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
-	m_superGauge = 0;
+	Car::useSuper();
 	m_currentHealth = 1;
 	m_numExplosions = 3;
 	PxGeometry* geom[1];

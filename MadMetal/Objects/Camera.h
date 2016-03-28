@@ -7,7 +7,7 @@ class Camera
 private:
 	Object3D * m_toFollow;
 	glm::vec3 m_up, m_currentPos, m_desiredPos, m_rotation, m_lookAt; 
-	float m_rotateScalar, m_distance, m_gravityScalar;
+	float m_rotateScalar, m_distance, m_gravityScalar, m_distanceDt, m_distanceMin, m_distanceMax;
 	float m_inclinationAngle;
 
 	bool m_recentlyMoved;

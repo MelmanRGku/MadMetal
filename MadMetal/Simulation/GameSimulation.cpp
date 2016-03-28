@@ -127,6 +127,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 GameSimulation::~GameSimulation()
 {
 	delete m_positionManager;
+	delete m_scoreTable;
 	m_scene->release();
 	delete m_track;
 	for (int i = 0; i < m_players.size(); i++)
@@ -454,16 +455,22 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	pos = new PxTransform(0, 5, 20);
 	PowerUp * powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(1);
+	delete powerGeom[0];
+	delete pos;
 	
 	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
 	pos = new PxTransform(-10, 5, 20);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
+	delete powerGeom[0];
+	delete pos;
 
 	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
 	pos = new PxTransform(10, 5, 20);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(3);
+	delete powerGeom[0];
+	delete[] powerGeom;
 	delete pos;
 	
 	//trainCar test
@@ -471,6 +478,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	trainGeom[0] = new PxBoxGeometry(PxVec3(6,5,50));
 	pos = new PxTransform(-450, 0, 360);
 	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
+	delete trainGeom[0];
+	delete[] trainGeom;
 	delete pos;
 
 	trainGeom = new PxGeometry*[1];
@@ -479,6 +488,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
 	delete pos;
 	delete trainGeom[0];
+	delete[] trainGeom;
 
 	//death pit
 	PxGeometry **deathPitGeom = new PxGeometry*[1];
@@ -487,6 +497,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL);
 	delete pos;
 	delete deathPitGeom[0];
+	delete[] deathPitGeom;
 
 	PxGeometry **geom1 = new PxGeometry *[1];
 	PxGeometry **geom2 = new PxGeometry *[1];

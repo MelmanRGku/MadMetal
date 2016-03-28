@@ -46,6 +46,8 @@ void Assets::release() {
 		delete iterator->second;
 	}
 	delete textures;
+
+	delete modelsToBeLoadedBeforeTheGameStarts;
 }
 
 Model *Assets::loadObjFromDirectory(std::string path) {
