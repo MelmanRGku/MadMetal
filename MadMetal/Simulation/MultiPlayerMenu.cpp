@@ -9,6 +9,8 @@
 #include "Objects\ObjectUpdaters\ObjectUpdaterParallel.h"
 #include "Settings.h"
 #include <sstream>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 PlayerSelection::PlayerSelection(GamePad *gamePad, Audio *audio, World *world) {
 	m_gamePad = gamePad;
@@ -327,8 +329,10 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 				templates.push_back(m_players.at(i)->getControllableTemplate());
 			}
 		}
+
+		srand(time(NULL));
 		for (int i = 0; i < numberOfAIs; i++) {
-			templates.push_back(new ControllableTemplate(1));
+			templates.push_back(new ControllableTemplate(rand() % 3));
 		}
 		message.setPlayerTemplates(templates);
 		messageToReturn = SceneMessage::eNone;
@@ -378,8 +382,13 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 			//right press indicates that the number of AI's should be increased
 			if (ps->getGamePad()->isPressed(GamePad::DPadRight)) {
 				numberOfAIs++;
+
 				if (numberOfAIs > MAX_NUM_OF_AIS)
 					numberOfAIs = MAX_NUM_OF_AIS;
+
+				if (numberOfAIs > MAX_NUM_OF_AIS - numOfPlayersWhoJoinedTheGame)
+					numberOfAIs = MAX_NUM_OF_AIS - numOfPlayersWhoJoinedTheGame;
+
 				std::stringstream s;
 				s << numberOfAIs;
 				numberOfAIsString->setString(s.str());
@@ -412,16 +421,40 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 		//a button click when the car hasn't been selected means that the player wants to select the car
 		if (ps->getGamePad()->isPressed(GamePad::AButton) && !ps->carSelected()) {
 			ps->selectCar();
+
+			//if together with this player everyone has selected the car 0 highlight the number of AI's
+			if (numOfPlayersWhoSelectedTheCar + 1 == numOfPlayersWhoJoinedTheGame) {
+				ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, 3), .5f);
+				m_world->addObjectUpdater(upd);
+				ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, 3), .5f);
+				m_world->addObjectUpdater(upd2);
+			}
 		}
 
 		if (ps->getGamePad()->isPressed(GamePad::BButton)) {
 			//b button click when the car has been selected means that the player wants to unselect it
 			if (ps->carSelected()) {
 				ps->unselectCar();
+
+				//if AI selection has been selected - unhighlight it
+				if (numOfPlayersWhoSelectedTheCar == numOfPlayersWhoJoinedTheGame) {
+					ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, -3), .5f);
+					m_world->addObjectUpdater(upd);
+					ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, -3), .5f);
+					m_world->addObjectUpdater(upd2);
+				}
 			}
 			//b button click when the car hasn't been selected means that the player wants to unjoin the game
 			else {
 				ps->unjoinGame();
+
+				//if all the players that are left have selected the cars - select it
+				if (numOfPlayersWhoSelectedTheCar == numOfPlayersWhoJoinedTheGame - 1) {
+					ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, 3), .5f);
+					m_world->addObjectUpdater(upd);
+					ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, 3), .5f);
+					m_world->addObjectUpdater(upd2);
+				}
 			}
 		}
 	}
@@ -463,6 +496,22 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 				playerIndicatorInitialPosition = playerIndicatorInitialPosition + xOffset - yOffset;
 
 			ps->joinGame(positionToAssign, playerIndicatorInitialPosition, playerBoxes.at(positionToAssign - 1)->getAnimatablePos());
+
+			//recalculate number of AIs
+			if (numberOfAIs > MAX_NUM_OF_AIS - numOfPlayersWhoJoinedTheGame - 1)
+				numberOfAIs = MAX_NUM_OF_AIS - numOfPlayersWhoJoinedTheGame - 1;
+
+			std::stringstream s;
+			s << numberOfAIs;
+			numberOfAIsString->setString(s.str());
+
+			//if AI selection has been selected - unhighlight it
+			if (numOfPlayersWhoSelectedTheCar == numOfPlayersWhoJoinedTheGame && numOfPlayersWhoJoinedTheGame != 0) {
+				ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, -3), .5f);
+				m_world->addObjectUpdater(upd);
+				ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, -3), .5f);
+				m_world->addObjectUpdater(upd2);
+			}
 		}
 	}
 

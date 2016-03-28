@@ -45,13 +45,23 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 	PxMaterial* mMaterial;
 	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
+
+	std::vector<PxTransform *> spawnLocations;
+	spawnLocations.push_back(new PxTransform(-15, 1, 0));
+	spawnLocations.push_back(new PxTransform(0, 1, 0));
+	spawnLocations.push_back(new PxTransform(-15, 1, -15));
+	spawnLocations.push_back(new PxTransform(0, 1, -15));
+	spawnLocations.push_back(new PxTransform(-15, 1, -30));
+	spawnLocations.push_back(new PxTransform(0, 1, -30));
+	spawnLocations.push_back(new PxTransform(-15, 1, -45));
+	spawnLocations.push_back(new PxTransform(0, 1, -45));
 	//create characters for game from templates
-	for (int i = 0; i < playerTemplates.size(); i++)
+	for (unsigned int i = 0; i < playerTemplates.size(); i++)
 	{
 		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
-			PxTransform *pos = new PxTransform(-15 + i * 7.5, 1, 0);//-130 + i * 10, 40, 0);
+			PxTransform *pos = spawnLocations.at(i);
 			Car *car = NULL;
 			if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {
 				car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
@@ -63,7 +73,6 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_GARGANTULOUS, pos, NULL, NULL));
 			} 
 			humanPlayer->setCar(car);
-			delete pos;
 
 			UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
 			humanPlayer->getCar()->ui = ui;
@@ -80,17 +89,31 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		}
 		else {
 			AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
-			PxTransform *pos = new PxTransform(10, 0, 10);
-			ai->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL)));
-			delete pos;
+			PxTransform *pos = spawnLocations.at(i);
+			Car *car = NULL;
+			if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {
+				car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
+			}
+			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_EXPLOSIVELY_DELICIOUS) {
+				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS, pos, NULL, NULL));
+			}
+			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_GARGANTULOUS) {
+				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_GARGANTULOUS, pos, NULL, NULL));
+			}
+			ai->setCar(car);
 			m_aiPlayers.push_back(ai);
 			m_players.push_back(ai);
 			//make a car for ai based off template
 		}
-		}
+	}
+
+	//delete all spawn locations
+	for (unsigned int i = 0; i < spawnLocations.size(); i++) {
+		delete spawnLocations.at(i);
+	}
 
 	//adjust strings
-	for (int i = 0; i < m_humanPlayers.size(); i++) {
+	for (unsigned int i = 0; i < m_humanPlayers.size(); i++) {
 		m_humanPlayers.at(i)->getCar()->getUI()->adjustStringsForViewport(i + 1, m_humanPlayers.size());
 	}
 

@@ -9,6 +9,8 @@
 #include "Objects\ObjectUpdaters\ObjectUpdaterParallel.h"
 #include "Settings.h"
 #include <sstream>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 {
@@ -147,8 +149,10 @@ bool SinglePlayerMenu::simulateScene(double dt, SceneMessage &message)
 				carType = Characters::CHARACTER_GARGANTULOUS;
 
 			templates.push_back(new ControllableTemplate(carType, m_gamePad));
+
+			srand(time(NULL));
 			for (int i = 0; i < numberOfAIs; i++) {
-				templates.push_back(new ControllableTemplate(1));
+				templates.push_back(new ControllableTemplate(rand() % 3));
 			}
 			message.setPlayerTemplates(templates);
 		}
@@ -263,8 +267,8 @@ void SinglePlayerMenu::rightPressed() {
 	}
 	else if (selectedObject == numberOfAIsButton) {
 		numberOfAIs++;
-		if (numberOfAIs > MAX_NUM_OF_AIS)
-			numberOfAIs = MAX_NUM_OF_AIS;
+		if (numberOfAIs > MAX_NUM_OF_AIS - 1)
+			numberOfAIs = MAX_NUM_OF_AIS - 1;
 		std::stringstream s;
 		s << numberOfAIs;
 		numberOfAIsString->setString(s.str());

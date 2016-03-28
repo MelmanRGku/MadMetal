@@ -143,6 +143,9 @@ bool EndingScene::simulateScene(double dt, SceneMessage &message)
 	m_world->update(dt);
 
 	for (ControllableTemplate *ct : m_players) {
+		if (ct->getGamePad() == NULL)
+			continue;
+
 		if (ct->getGamePad()->isPressed(GamePad::AButton)) {
 			message.setTag(SceneMessage::eMainMenu);
 			return true;
