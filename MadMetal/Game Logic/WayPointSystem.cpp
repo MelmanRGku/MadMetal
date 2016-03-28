@@ -55,9 +55,9 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 				tempWaypoint->setId(numberOfRows);
 				m_waypointMap[index].push_back(tempWaypoint);
 				m_waypoints.push_back(tempWaypoint);
-				numberOfRows--;
 			}
 			index++;
+			numberOfRows--;
 		}
 		break;
 	case LEFT:
