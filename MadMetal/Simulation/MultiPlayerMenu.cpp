@@ -9,6 +9,8 @@
 #include "Objects\ObjectUpdaters\ObjectUpdaterParallel.h"
 #include "Settings.h"
 #include <sstream>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 PlayerSelection::PlayerSelection(GamePad *gamePad, Audio *audio, World *world) {
 	m_gamePad = gamePad;
@@ -327,8 +329,10 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 				templates.push_back(m_players.at(i)->getControllableTemplate());
 			}
 		}
+
+		srand(time(NULL));
 		for (int i = 0; i < numberOfAIs; i++) {
-			templates.push_back(new ControllableTemplate(1));
+			templates.push_back(new ControllableTemplate(rand() % 3));
 		}
 		message.setPlayerTemplates(templates);
 		messageToReturn = SceneMessage::eNone;
