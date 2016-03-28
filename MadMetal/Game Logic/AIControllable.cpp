@@ -10,7 +10,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(1133);
+	m_goalWaypoint = m_track.getWaypointAt(15);
 	m_currentPath.clear();
 	//m_listOfWaypointsHighCost.push_back(4);
 	//m_listOfWaypointsHighCost.push_back(11);
@@ -57,7 +57,7 @@ void AIControllable::playFrame(double dt)
 	}
 
 
-	checkCollisionVolumes();
+	//checkCollisionVolumes();
 
 
 	if (m_currentKnownWaypoint == NULL)
@@ -83,10 +83,72 @@ void AIControllable::playFrame(double dt)
 
 	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getIndex() == m_goalWaypoint->getIndex()))
 	{
-		recalculatePath();
+		if (m_goalWaypoint->getIndex() == 15)
+		{
+			m_goalWaypoint = m_track.getWaypointAt(367);
+			recalculatePath();
+		}
+		//else if (m_goalWaypoint->getIndex() == 206)
+		//{
+		//	m_goalWaypoint = m_track.getWaypointAt(367);
+		//	recalculatePath();
+		//}
+		else if (m_goalWaypoint->getIndex() == 367)
+		{
+			m_goalWaypoint = m_track.getWaypointAt(550);
+			recalculatePath();
+		}
+		else if (m_goalWaypoint->getIndex() == 550)
+		{
+			m_goalWaypoint = m_track.getWaypointAt(657);
+			recalculatePath();
+		}
+		else if (m_goalWaypoint->getIndex() == 657)
+		{
+			m_goalWaypoint = m_track.getWaypointAt(813);
+			recalculatePath();
+		}
+		else if (m_goalWaypoint->getIndex() == 813)
+		{
+			m_goalWaypoint = m_track.getWaypointAt(716);
+			recalculatePath();
+		}
+		else if (m_goalWaypoint->getIndex() == 716)
+		{
+			m_goalWaypoint = m_track.getWaypointAt(895);
+			recalculatePath();
+		}
+		else if (m_goalWaypoint->getIndex() == 895)
+		{
+			m_goalWaypoint = m_track.getWaypointAt(953);
+			recalculatePath();
+		}
+		else if (m_goalWaypoint->getIndex() == 953)
+		{
+			m_goalWaypoint = m_track.getWaypointAt(1003);
+			recalculatePath();
+		}
+		else if (m_goalWaypoint->getIndex() == 1003)
+		{
+			m_goalWaypoint = m_track.getWaypointAt(1074);
+			recalculatePath();
+		}
+		else if (m_goalWaypoint->getIndex() == 1074)
+		{
+			m_goalWaypoint = m_track.getWaypointAt(1133);
+			recalculatePath();
+		}
+		else if (m_goalWaypoint->getIndex() == 1133)
+		{
+			m_goalWaypoint = m_track.getWaypointAt(15);
+			recalculatePath();
+		}
+
+		//recalculatePath();
 	}
 	else
 	{
+
 		//std::cout << "path exists\n";
 		if (m_car->getCurrentWaypoint()->getIndex() == m_nextWaypoint->getIndex())
 		{
