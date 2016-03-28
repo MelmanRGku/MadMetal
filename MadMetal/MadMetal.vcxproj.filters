@@ -231,9 +231,6 @@
     <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\PowerUpSpeed.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Audio\MusicManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -249,34 +246,10 @@
     <ClCompile Include="Simulation\SinglePlayerMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game Logic\PositionManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\VehicleSpecifications.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\Cars\Gargantulous.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\Cars\ExplosivelyDelicious.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Cars\DrivingStyle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\Cars\DrivingStyleMeowmix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\Cars\DrivingStyleGargantulous.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\Cars\DrivingStyleExplosivelyDelicious.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\CellTireShaderProgram.cpp">
+    <ClCompile Include="Game Logic\PositionManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\ScoreTable.cpp">
@@ -286,6 +259,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Simulation\MultiPlayerMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Cars\DrivingStyleExplosivelyDelicious.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Cars\Gargantulous.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Cars\DrivingStyleGargantulous.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\VehicleSpecifications.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\CellTireShaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Cars\DrivingStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Cars\DrivingStyleMeowmix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\UIScoreTable.cpp">
@@ -581,12 +578,6 @@
     <ClInclude Include="Objects\AnimatedExplosion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game Logic\WaypointDefinitions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Logic\PositionManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\MainMenuSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -596,22 +587,31 @@
  <ClInclude Include="Game Logic\WaypointDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\TrainCar.h">
+    <ClInclude Include="Objects\PowerUpAttack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Cars\DrivingStyle.h">
+    <ClInclude Include="Objects\Cars\ExplosivelyDelicious.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Cars\DrivingStyleMeowMix.h">
+    <ClInclude Include="Objects\ExplosivelyDeliciousBullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Cars\DrivingStyleGargantulous.h">
+    <ClInclude Include="Objects\ExplosivelyDeliciousSuper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Cars\DrivingStyleExplosivelyDelicious.h">
+    <ClInclude Include="Objects\MeowMixSuper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\CellTireShaderProgram.h">
+    <ClInclude Include="Game Logic\WaypointDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Logic\PositionManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GargantulousSuper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\HomingBullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Global\Definitions.h">
@@ -626,7 +626,34 @@
     <ClInclude Include="Simulation\MultiPlayerMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Cars\DrivingStyleExplosivelyDelicious.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Cars\Gargantulous.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Cars\DrivingStyleGargantulous.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\VehicleSpecifications.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\CellTireShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Cars\DrivingStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Cars\DrivingStyleMeowMix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Objects\UIScoreTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GargantulousBullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -635,6 +662,12 @@
     <Text Include="Audio\MusicLibrary.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Assets\Useless\asphalt_texture409.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Useless\Building_texture4.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
     <Image Include="Assets\Models\asphalt_texture409.jpg">
       <Filter>Resource Files</Filter>
     </Image>
@@ -658,16 +691,25 @@
     <Image Include="Assets\Models\Staff.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Assets\Useless\Terrain-Road.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
     <Image Include="Assets\Models\TikiTest.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Assets\Useless\Building_texture4.jpg">
+    <Image Include="Assets\Models\DeathEye.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Assets\Useless\asphalt_texture409.jpg">
+    <Image Include="Assets\Models\Panel.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Assets\Useless\Terrain-Road.jpg">
+    <Image Include="Assets\Models\Chest paint Lava.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\MaskLava.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\TikiTestLava.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
