@@ -674,6 +674,12 @@
     <ClInclude Include="Objects\EndingScreenUIScoreTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\TrainCar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />
@@ -686,13 +692,7 @@
     <Image Include="Assets\Useless\Building_texture4.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Assets\Models\asphalt_texture409.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Models\Building_texture4.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Models\Terrain-Road.jpg">
+    <Image Include="Assets\Models\Day_Skybox.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

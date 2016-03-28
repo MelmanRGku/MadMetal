@@ -301,6 +301,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Models\Chest paint Lava.png" />
+    <Image Include="Assets\Models\Day_Skybox.png" />
     <Image Include="Assets\Models\DeathEye.png" />
     <Image Include="Assets\Models\MaskLava.png" />
     <Image Include="Assets\Models\Panel.jpg" />
