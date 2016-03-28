@@ -126,6 +126,19 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 		background = new Object3D(3, au, p, a, r, NULL);
 		m_world->addGameObject(background);
 	}
+
+	{
+		Animatable *a = new Animatable();
+		a->setPosition(glm::vec3(0, -0.80f, 0));
+		a->setScale(glm::vec3(0.7f, 0.2f, 0));
+		Audioable *au = new Audioable(*audio);
+		Model2D *model;
+		model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/press_a_to_start.png"));
+		model->getTexture()->Load();
+		Renderable2D *r = new Renderable2D(model);
+		aToStart = new TexturedObject2D(1, au, a, r);
+		m_world->addGameObject(aToStart);
+	}
 }
 
 SinglePlayerMenu::~SinglePlayerMenu() {
@@ -199,12 +212,14 @@ void SinglePlayerMenu::upPressed() {
 			selectedObject = selectedCar;
 		else
 			selectedObject = car2;
+		aToStart->setScale(glm::vec3(0.7f, 0.2f, 0));
 	}
 	else if (selectedObject == numberOfAIsButton) {
 		selectedObject = backButton;
 	}
 	else if (selectedObject == car1 || selectedObject == car2 || selectedObject == car3) {
 		selectedObject = numberOfAIsButton;
+		aToStart->setScale(glm::vec3(0, 0, 0));
 	}
 	selectMenuItem(selectedObject);
 }
@@ -219,9 +234,11 @@ void SinglePlayerMenu::downPressed() {
 			selectedObject = selectedCar;
 		else
 			selectedObject = car2;
+		aToStart->setScale(glm::vec3(0.7f, 0.2f, 0));
 	}
 	else if (selectedObject == car1 || selectedObject == car2 || selectedObject == car3) {
 		selectedObject = backButton;
+		aToStart->setScale(glm::vec3(0, 0, 0));
 	}
 	selectMenuItem(selectedObject);
 }
@@ -242,8 +259,8 @@ void SinglePlayerMenu::leftPressed() {
 	}
 	else if (selectedObject == numberOfAIsButton) {
 		numberOfAIs--;
-		if (numberOfAIs < 1)
-			numberOfAIs = 1;
+		if (numberOfAIs < 0)
+			numberOfAIs = 0;
 		std::stringstream s;
 		s << numberOfAIs;
 		numberOfAIsString->setString(s.str());

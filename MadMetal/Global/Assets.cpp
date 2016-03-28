@@ -12,6 +12,7 @@ std::map<std::string, Model*> *Assets::models;
 std::map<std::string, Texture *> *Assets::textures;
 std::vector<std::string> *Assets::modelsToBeLoadedBeforeTheGameStarts;
 std::mutex Assets::m;
+std::mutex Assets::mForTextures;
 LoadingStatus *Assets::status;
 
 Assets::~Assets()
@@ -28,8 +29,10 @@ void Assets::init() {
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Gargantulous.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/LoadingBox.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Arrows.obj");
-	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/P1.obj");
-	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/P2.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Player1.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Player2.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Player3.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Player4.obj");
 }
 
 void Assets::release() {
@@ -76,10 +79,10 @@ Model *Assets::loadObjFromDirectory(std::string path) {
 Texture *Assets::loadTextureFromDirectory(std::string path) {
 	int lastSlashPos = path.rfind("/") + 1;
 	std::string objectName = path.substr(lastSlashPos, path.rfind(".") - lastSlashPos);
-	m.lock();
+	mForTextures.lock();
 	Texture *tex = new Texture(GL_TEXTURE_2D, path);
 	textures->insert(std::pair<std::string, Texture *>(objectName, tex));
-	m.unlock();
+	mForTextures.unlock();
 	return tex;
 }
 

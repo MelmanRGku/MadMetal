@@ -4,7 +4,7 @@
 class ControllableTemplate
 {
 public:
-	ControllableTemplate(int carSelection) : m_carSelection(carSelection){ std::cout << carSelection << std::endl; };
+	ControllableTemplate(int carSelection) : m_carSelection(carSelection){};
 	ControllableTemplate(int carSelection, GamePad * gamePad) : m_carSelection(carSelection), m_gamePad(gamePad){};
 	ControllableTemplate(GamePad * gamePad) : m_gamePad(gamePad), m_carSelection(-1){};
 	

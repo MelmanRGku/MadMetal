@@ -2,6 +2,7 @@
 
 #include "Scene Manager\Scene.h"
 #include "Objects\Text3D.h"
+#include "Objects\TexturedObject2D.h"
 
 class SinglePlayerMenu : public Scene
 {
@@ -17,6 +18,7 @@ private:
 		*background;
 	Text3D *numberOfAIsString;
 	SceneMessage::SceneEnum messageToReturn = SceneMessage::eNone;
+	TexturedObject2D *aToStart;
 	int numberOfAIs = 4;
 
 public:

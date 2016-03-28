@@ -31,6 +31,19 @@ PlayerSelection::PlayerSelection(GamePad *gamePad, Audio *audio, World *world) {
 	}
 
 	{
+		Animatable *a = new Animatable();
+		a->setPosition(glm::vec3(-0.78f, 0.73f, 0));
+		a->setScale(glm::vec3(0, 0, 0));
+		Audioable *au = new Audioable(*audio);
+		Model2D *model;
+		model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/press_b_to_leave.png"));
+		model->getTexture()->Load();
+		Renderable2D *r = new Renderable2D(model);
+		bToQuit = new TexturedObject2D(1, au, a, r);
+		m_world->addGameObject(bToQuit);
+	}
+
+	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
 		a->setScale(glm::vec3(0, 0, 0));
@@ -41,32 +54,6 @@ PlayerSelection::PlayerSelection(GamePad *gamePad, Audio *audio, World *world) {
 		Renderable3D *r = new Renderable3D(model, true, true);
 		selectionIndicator = new Object3D(1, au, p, a, r, NULL);
 		m_world->addGameObject(selectionIndicator);
-	}
-
-
-	/*
-	{
-		Physicable *p = new Physicable(NULL);
-		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, -0.8, 0));
-		a->setScale(glm::vec3(0.8, 0.2, 0.1));
-		Audioable *au = new Audioable(*audio);
-		Model2D *model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/JoinQuit.png"));
-		Renderable2D *r = new Renderable2D(model);
-		joinquit = new TexturedObject2D(3, au, a, r);
-		m_world->addGameObject(joinquit);
-	}
-	*/
-	{
-		Renderable3D *renderable = new Renderable3D(NULL);
-		Audioable *audioable = new Audioable(*audio);
-		Animatable *animatable = new Animatable();
-		Physicable *physicable = new Physicable(NULL);
-
-		Text3D *loadingInfoString = new Text3D(3, audioable, physicable, animatable, renderable, 1);
-		loadingInfoString->setPosition(glm::vec3(0, -7, -20));
-		loadingInfoString->setString("A to join        B to quit");
-		m_world->addGameObject(loadingInfoString);
 	}
 
 	{
@@ -92,7 +79,7 @@ void PlayerSelection::joinGame(int position, glm::vec3 selectionIndicatorInitial
 	selectionIndicator->setPosition(glm::vec3(selectionIndicatorInitialPosition + (float)tempSelection * selectionIndicatorOffset));
 	selectionIndicator->setScale(glm::vec3(1.5, 1.5, 0.000000001f));
 	Model3D *model;
-	if (position == 1)
+	if (position == 1) 
 		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Player1.obj"));
 	else if (position == 2)
 		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Player2.obj"));
@@ -105,6 +92,16 @@ void PlayerSelection::joinGame(int position, glm::vec3 selectionIndicatorInitial
 	renderable->setModel(model);
 	renderable->adjustModel(true, true);
 
+	if (position == 1)
+		bToQuit->setPosition(glm::vec3(-0.78f, 0.73f, 0));
+	else if (position == 2)
+		bToQuit->setPosition(glm::vec3(0.81f, 0.73f, 0));
+	else if (position == 3)
+		bToQuit->setPosition(glm::vec3(-0.78f, -0.73f, 0));
+	else if (position == 4)
+		bToQuit->setPosition(glm::vec3(0.81f, -0.73f, 0));
+	bToQuit->setScale(glm::vec3(0.3f, 0.3f, 1));
+
 }
 
 bool PlayerSelection::joinedGame() {
@@ -113,6 +110,7 @@ bool PlayerSelection::joinedGame() {
 
 void PlayerSelection::unjoinGame() {
 	selectionIndicator->setScale(glm::vec3(0, 0, 0));
+	bToQuit->setScale(glm::vec3(0, 0, 0));
 	assignedPosition = -1;
 	delete playerTemplate;
 	playerTemplate = NULL;
@@ -138,12 +136,14 @@ void PlayerSelection::selectCar() {
 	renderable->adjustModel(true, true);
 
 	selectionIndicator->setScale(glm::vec3(0, 0, 0));
+	bToQuit->setScale(glm::vec3(0, 0, 0));
 }
 
 void PlayerSelection::unselectCar() {
 	playerTemplate->setCarSelection(-1);
 	selectedCar->setScale(glm::vec3(0, 0, 0));
 	selectionIndicator->setScale(glm::vec3(1.5, 1.5, 0.000000001f));
+	bToQuit->setScale(glm::vec3(0.3f, 0.3f, 1));
 }
 
 bool PlayerSelection::carSelected() {
@@ -236,9 +236,86 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	}
 
 	{
+		Animatable *a = new Animatable();
+		a->setPosition(glm::vec3(-0.78f, 0.73f, 0));
+		a->setScale(glm::vec3(0.3f, 0.3f, 1));
+		Audioable *au = new Audioable(*audio);
+		Model2D *model;
+		model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/press_a_to_join.png"));
+		model->getTexture()->Load();
+		Renderable2D *r = new Renderable2D(model);
+		aToJoins.push_back(new TexturedObject2D(1, au, a, r));
+		m_world->addGameObject(aToJoins.at(0));
+	}
+
+	{
+		Animatable *a = new Animatable();
+		a->setPosition(glm::vec3(0.81f, 0.73f, 0));
+		a->setScale(glm::vec3(0.3f, 0.3f, 1));
+		Audioable *au = new Audioable(*audio);
+		Model2D *model;
+		model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/press_a_to_join.png"));
+		model->getTexture()->Load();
+		Renderable2D *r = new Renderable2D(model);
+		aToJoins.push_back(new TexturedObject2D(1, au, a, r));
+		m_world->addGameObject(aToJoins.at(1));
+	}
+
+	{
+		Animatable *a = new Animatable();
+		a->setPosition(glm::vec3(-0.78f, -0.73f, 0));
+		a->setScale(glm::vec3(0.3f, 0.3f, 1));
+		Audioable *au = new Audioable(*audio);
+		Model2D *model;
+		model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/press_a_to_join.png"));
+		model->getTexture()->Load();
+		Renderable2D *r = new Renderable2D(model);
+		aToJoins.push_back(new TexturedObject2D(1, au, a, r));
+		m_world->addGameObject(aToJoins.at(2));
+	}
+
+	{
+		Animatable *a = new Animatable();
+		a->setPosition(glm::vec3(0.81f, -0.73f, 0));
+		a->setScale(glm::vec3(0.3f, 0.3f, 1));
+		Audioable *au = new Audioable(*audio);
+		Model2D *model;
+		model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/press_a_to_join.png"));
+		model->getTexture()->Load();
+		Renderable2D *r = new Renderable2D(model);
+		aToJoins.push_back(new TexturedObject2D(1, au, a, r));
+		m_world->addGameObject(aToJoins.at(3));
+	}
+
+	{
+		Animatable *a = new Animatable();
+		a->setPosition(glm::vec3(0, -0.87f, 0));
+		a->setScale(glm::vec3(0, 0, 0));
+		Audioable *au = new Audioable(*audio);
+		Model2D *model;
+		model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/press_a_to_start.png"));
+		model->getTexture()->Load();
+		Renderable2D *r = new Renderable2D(model);
+		aToStart = new TexturedObject2D(1, au, a, r);
+		m_world->addGameObject(aToStart);
+	}
+
+	{
+		Renderable3D *renderable = new Renderable3D(NULL);
+		Audioable *audioable = new Audioable(*audio);
+		Animatable *animatable = new Animatable();
+		Physicable *physicable = new Physicable(NULL);
+
+		Text3D *loadingInfoString = new Text3D(3, audioable, physicable, animatable, renderable, 1);
+		loadingInfoString->setPosition(glm::vec3(0, -3, -25));
+		loadingInfoString->setString("Computer Players");
+		m_world->addGameObject(loadingInfoString);
+	}
+
+	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, -5, -25));
+		a->updatePosition(glm::vec3(0, -6, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Arrows.obj"));
@@ -251,7 +328,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, -5, -25));
+		a->updatePosition(glm::vec3(0, -6, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/loadingBox.obj"));
@@ -265,7 +342,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(-7, -1, -25));
+		a->updatePosition(glm::vec3(-7, 0, -25));
 		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Meowmix.obj"));
@@ -280,7 +357,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, -1, -25));
+		a->updatePosition(glm::vec3(0, 0, -25));
 		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/twisted1.obj"));
@@ -295,7 +372,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(7, -1, -25));
+		a->updatePosition(glm::vec3(7, 0, -25));
 		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Gargantulous.obj"));
@@ -372,8 +449,8 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 			//left press indicates that the number of AI's should be decreased
 			if (ps->getGamePad()->isPressed(GamePad::DPadLeft)) {
 				numberOfAIs--;
-				if (numberOfAIs < 1)
-					numberOfAIs = 1;
+				if (numberOfAIs < 0)
+					numberOfAIs = 0;
 				std::stringstream s;
 				s << numberOfAIs;
 				numberOfAIsString->setString(s.str());
@@ -424,10 +501,11 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 			//if together with this player everyone has selected the car 0 highlight the number of AI's
 			if (numOfPlayersWhoSelectedTheCar + 1 == numOfPlayersWhoJoinedTheGame) {
-				ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, 3), .5f);
+				ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, 2), .5f);
 				m_world->addObjectUpdater(upd);
-				ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, 3), .5f);
+				ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, 2), .5f);
 				m_world->addObjectUpdater(upd2);
+				aToStart -> setScale(glm::vec3(0.7f, 0.2f, 1));
 			}
 		}
 
@@ -438,22 +516,27 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 				//if AI selection has been selected - unhighlight it
 				if (numOfPlayersWhoSelectedTheCar == numOfPlayersWhoJoinedTheGame) {
-					ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, -3), .5f);
+					ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, -2), .5f);
 					m_world->addObjectUpdater(upd);
-					ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, -3), .5f);
+					ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, -2), .5f);
 					m_world->addObjectUpdater(upd2);
+					aToStart->setScale(glm::vec3(0, 0, 0));
 				}
 			}
 			//b button click when the car hasn't been selected means that the player wants to unjoin the game
 			else {
+				//bring back the a to join stuff
+				aToJoins.at(ps->getAssignedPosition() - 1)->setScale(glm::vec3(0.3f, 0.3f, 0));
+
 				ps->unjoinGame();
 
 				//if all the players that are left have selected the cars - select it
-				if (numOfPlayersWhoSelectedTheCar == numOfPlayersWhoJoinedTheGame - 1) {
-					ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, 3), .5f);
+				if (numOfPlayersWhoSelectedTheCar == numOfPlayersWhoJoinedTheGame - 1 && numOfPlayersWhoJoinedTheGame - 1 != 0) {
+					ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, 2), .5f);
 					m_world->addObjectUpdater(upd);
-					ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, 3), .5f);
+					ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, 2), .5f);
 					m_world->addObjectUpdater(upd2);
+					aToStart->setScale(glm::vec3(0.7f, 0.2f, 1));
 				}
 			}
 		}
@@ -497,6 +580,9 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 			ps->joinGame(positionToAssign, playerIndicatorInitialPosition, playerBoxes.at(positionToAssign - 1)->getAnimatablePos());
 
+			//remove the a to join stuff
+			aToJoins.at(positionToAssign - 1)->setScale(glm::vec3(0, 0, 0));
+
 			//recalculate number of AIs
 			if (numberOfAIs > MAX_NUM_OF_AIS - numOfPlayersWhoJoinedTheGame - 1)
 				numberOfAIs = MAX_NUM_OF_AIS - numOfPlayersWhoJoinedTheGame - 1;
@@ -507,11 +593,13 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 			//if AI selection has been selected - unhighlight it
 			if (numOfPlayersWhoSelectedTheCar == numOfPlayersWhoJoinedTheGame && numOfPlayersWhoJoinedTheGame != 0) {
-				ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, -3), .5f);
+				ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, -2), .5f);
 				m_world->addObjectUpdater(upd);
-				ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, -3), .5f);
+				ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, -2), .5f);
 				m_world->addObjectUpdater(upd2);
+				aToStart->setScale(glm::vec3(0, 0, 0));
 			}
+
 		}
 	}
 
