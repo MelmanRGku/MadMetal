@@ -119,33 +119,36 @@ void Camera::update(double dtMilli)
 
 	GameFactory::instance()->sceneRayCast(rayPos, rayDir, glm::distance(m_lookAt, m_currentPos) - 5.f, buf, PxHitFlags(PxHitFlag::eMESH_BOTH_SIDES), fd);
 
+	bool colidedWithWall = false;
 	if (buf.hasBlock) {
 		PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*1);
 		buf.block.actor->getShapes(shapes, 1);
 		if (shapes[0]->getSimulationFilterData().word0 == COLLISION_FLAG_OBSTACLE) {
 			m_distance = glm::distance(m_lookAt, m_currentPos) - buf.block.distance - .5f;
+			colidedWithWall = true;
 		}
 		free(shapes);
 	}
-	else {
+	
+	if (!colidedWithWall){
 		m_distance += m_distanceDt;
 		if (m_distance > m_distanceMax)
 			m_distance = m_distanceMax;
 
-		m_lookAt = glm::vec3(m_toFollow->getGlobalPose().x, m_toFollow->getGlobalPose().y, m_toFollow->getGlobalPose().z);
-		m_desiredPos = (m_toFollow->getFullPosition() - m_toFollow->getForwardVector() * m_distance);
-		m_currentPos = glm::vec3(m_desiredPos.x, m_toFollow->getFullPosition().y + 7.0f, m_desiredPos.z);
-		glm::vec3 cameraDirection = glm::normalize(m_lookAt - m_currentPos);
-		PxVec3 rayPos = PxVec3(m_currentPos.x, m_currentPos.y, m_currentPos.z);
-		PxVec3 rayDir = PxVec3(cameraDirection.x, cameraDirection.y, cameraDirection.z);
+		glm::vec3 newLookAt = glm::vec3(m_toFollow->getGlobalPose().x, m_toFollow->getGlobalPose().y, m_toFollow->getGlobalPose().z);
+		glm::vec3 newDesiredPos = (m_toFollow->getFullPosition() - m_toFollow->getForwardVector() * m_distance);
+		glm::vec3 newCurrentPos = glm::vec3(newDesiredPos.x, m_toFollow->getFullPosition().y + 7.0f, newDesiredPos.z);
+		glm::vec3 newCameraDirection = glm::normalize(newLookAt - newCurrentPos);
+		PxVec3 rayPos = PxVec3(newCurrentPos.x, newCurrentPos.y, newCurrentPos.z);
+		PxVec3 rayDir = PxVec3(newCameraDirection.x, newCameraDirection.y, newCameraDirection.z);
 
 		//perform the raycast again
-		GameFactory::instance()->sceneRayCast(rayPos, rayDir, glm::distance(m_lookAt, m_currentPos) - 5.f, buf, PxHitFlags(PxHitFlag::eMESH_ANY));
+		GameFactory::instance()->sceneRayCast(rayPos, rayDir, glm::distance(newLookAt, newCurrentPos) - 5.f, buf, PxHitFlags(PxHitFlag::eMESH_ANY));
 		if (buf.hasBlock) {
 			PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)* 1);
 			buf.block.actor->getShapes(shapes, 1);
 			if (shapes[0]->getSimulationFilterData().word0 == COLLISION_FLAG_OBSTACLE) {
-				m_distance = glm::distance(m_lookAt, m_currentPos) - buf.block.distance - .5f;
+				m_distance = glm::distance(newLookAt, newCurrentPos) - buf.block.distance - .5f;
 			}
 			free(shapes);
 		}

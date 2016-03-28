@@ -70,10 +70,9 @@ void PlayerControllable::playFrame(double dt)
 				}
 
 				if (m_gamePad->isPressed(GamePad::YButton)) {
-					//if (m_car->superReady()) {
+					if (m_car->superReady()) {
 						m_car->useSuper();
-						//std::cout << "I shot" << std::endl;
-					//}
+					}
 				}
 
 				if (m_gamePad->isHeld(GamePad::BButton))
@@ -93,38 +92,14 @@ void PlayerControllable::playFrame(double dt)
 				if (m_gamePad->isPressed(GamePad::AButton))
 				{
 					m_car->usePowerUp();
-					//std::string loco;
-					//for (int i = 0; i < m_car->m_waypointHitList.size(); i++)
-					//{
-					//	std::cout << m_car->m_waypointHitList.at(i)->getIndex() <<  ", ";
-					//	loco.append(std::to_string(m_car->m_waypointHitList.at(i)->getIndex()));
-					//	loco.append(", ");
-					//}
-					//std::cout << "\n";
-					//FileHandlingHelpers::appendToFile("waypoints.txt", (loco + "\n"));
 
 
 				}
-				/*
-				if (m_gamePad->isPressed(GamePad::BButton))
-				{
-				std::cout << "Bpressed \n";
-				}*/
 
 				if (m_gamePad->isPressed(GamePad::BackButton))
 				{
 					m_car->respawn();
 				}
-
-				/*
-				if (m_gamePad->isPressed(GamePad::LShoulder))
-				{
-				std::cout << "LShoulderpressed \n";
-				}
-
-				if (m_gamePad->isPressed(GamePad::RShoulder))
-				{
-				}*/
 
 				if (m_gamePad->getRightTrigger())
 				{
