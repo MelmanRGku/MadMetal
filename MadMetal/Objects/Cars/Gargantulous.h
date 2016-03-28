@@ -18,9 +18,6 @@ public:
 	void useSuper();
 private:
 
-	enum LastWeaponShot {
-		LAST_WEAPON_SHOT_LEFT,
-		LAST_WEAPON_SHOT_RIGHT
-	} m_lastWeaponShot;
+	
 };
 

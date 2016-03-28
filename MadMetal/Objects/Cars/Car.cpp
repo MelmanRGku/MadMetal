@@ -82,6 +82,7 @@ void Car::pickUpPowerUp(PowerUpType type)
 
 void Car::usePowerUp()
 {
+	m_heldPowerUp = PowerUpType::SPEED;
 	if (m_heldPowerUp != PowerUpType::NONE)
 	{
 		ui->unsetPowerup();
@@ -109,7 +110,8 @@ void Car::usePowerUp()
 			break;
 		case (PowerUpType::SPEED) :
 			//add particle system
-			geom[0] = new PxSphereGeometry(dim.x > dim.z ? dim.z : dim.x);
+			
+			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SPEED_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), geom, this);
 			PxRigidDynamic* actor = static_cast<PxRigidDynamic*>(&getActor());
 			glm::vec3 direction = glm::normalize(getForwardVector());
@@ -228,6 +230,7 @@ void Car::addDamageDealt(float damage) {
 	{
 
 		m_currentHealth += PowerUp::getLifeStealPercentage() * damage;
+		if (m_currentHealth > m_maxHealth) m_currentHealth = m_maxHealth;
 	}
 	
 	if (m_superDurationRemainingSeconds <= 0) {

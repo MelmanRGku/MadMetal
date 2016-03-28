@@ -51,7 +51,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		if (playerTemplates[i]->getGamePad() != NULL) //if a game pad is assigned, it is a human player
 		{
 			PlayerControllable * humanPlayer = new PlayerControllable(*playerTemplates[i]);
-			PxTransform *pos = new PxTransform(0, 1, 0);//-130 + i * 10, 40, 0);
+			PxTransform *pos = new PxTransform(-15 + i * 7.5, 1, 0);//-130 + i * 10, 40, 0);
 			Car *car = NULL;
 			if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {
 				car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
