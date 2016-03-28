@@ -220,7 +220,7 @@ void Car::updateHealth(float dtMillis)
 }
 
 void Car::update(float dt) {
-	//std::cout << m_currentLap << std::endl;
+	std::cout << getGlobalPose().x << " " << getGlobalPose().y << " " << getGlobalPose().z << " " << std::endl;
 	updateHealth(dt);
 	m_reloadRemainingSeconds -= dt;
 	updateSuper(dt);

@@ -14,6 +14,8 @@
 #include "Global\Definitions.h"
 #include "Objects\UIScoreTable.h"
 #include <sstream>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 
 #define NUM_OF_PLAYERS 12
@@ -481,36 +483,68 @@ PxVehicleDrivableSurfaceToTireFrictionPairs* GameSimulation::createFrictionPairs
 	return surfaceTirePairs;
 }
 
-void GameSimulation::setupBasicGameWorldObjects() {
-	//Power up test
+void GameSimulation::setupPowerups() {
+	//initial 3 powerups are fixed and all have shield setup in the beginning
 	PxTransform * pos;
 	PxGeometry **powerGeom = new PxGeometry*[1];
 	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
+
 	pos = new PxTransform(0, 5, 20);
 	PowerUp * powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
-	powerup->setActiveType(1);
-	delete powerGeom[0];
+	powerup->setActiveType(2);
 	delete pos;
-	
-	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
+
 	pos = new PxTransform(-10, 5, 20);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
-	delete powerGeom[0];
 	delete pos;
 
-	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
 	pos = new PxTransform(10, 5, 20);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
-	powerup->setActiveType(3);
+	powerup->setActiveType(2);
+	delete pos;
+
+
+	//now setup all other powerup locations
+	std::vector<PxTransform *> powerupLocations;
+	//sand
+	powerupLocations.push_back(new PxTransform(61, 5, 494));
+	powerupLocations.push_back(new PxTransform(86, 5, 504));
+	powerupLocations.push_back(new PxTransform(111, 5, 514));
+
+	//caves
+	powerupLocations.push_back(new PxTransform(-34, 5, 1406));
+	powerupLocations.push_back(new PxTransform(1, 5, 1410));
+	powerupLocations.push_back(new PxTransform(36, 5, 1415));
+
+	//first tunnel
+	powerupLocations.push_back(new PxTransform(-454, 5, 841));
+	powerupLocations.push_back(new PxTransform(-452, 5, 635));
+
+	//second tunnel
+	powerupLocations.push_back(new PxTransform(-589, 5, -19));
+
+	//before finish line
+	powerupLocations.push_back(new PxTransform(-279, 5, -201));
+	powerupLocations.push_back(new PxTransform(-279, 5, -160));
+
+	srand(time(NULL));
+	for (PxTransform *t : powerupLocations) {
+		powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, t, powerGeom, NULL));
+		powerup->setActiveType(rand() % 3 + 1);
+		delete t;
+	}
 	delete powerGeom[0];
 	delete[] powerGeom;
-	delete pos;
-	
+}
+
+void GameSimulation::setupBasicGameWorldObjects() {
+	setupPowerups();
+
 	//trainCar test
 	PxGeometry **trainGeom = new PxGeometry*[1];
 	trainGeom[0] = new PxBoxGeometry(PxVec3(6,5,50));
-	pos = new PxTransform(-450, 0, 360);
+	PxTransform *pos = new PxTransform(-450, 0, 360);
 	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
 	delete trainGeom[0];
 	delete[] trainGeom;

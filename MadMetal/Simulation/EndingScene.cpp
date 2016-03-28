@@ -2,6 +2,7 @@
 #include "Global\Assets.h"
 #include "Global\Definitions.h"
 #include "Libraries\freeglut\freeglut.h"
+#include "Objects\TexturedObject2D.h"
 
 EndingScene::EndingScene(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audio(audioHandle), m_players(playerTemplates)
 {
@@ -119,6 +120,30 @@ EndingScene::EndingScene(std::vector<ControllableTemplate *> playerTemplates, Au
 		Renderable2D *r = new Renderable2D(NULL);
 		scoreTable = new EndingScreenUIScoreTable(1, au, a, r, m_players);
 		m_world->addGameObject(scoreTable);
+	}
+
+	{
+		Animatable *a = new Animatable();
+		a->setPosition(glm::vec3(0.8f, -0.7f, 0));
+		a->setScale(glm::vec3(0.35f, 0.15f, 0));
+		Audioable *au = new Audioable(audioHandle);
+		Model2D *model;
+		model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/restart_x.png"));
+		model->getTexture()->Load();
+		Renderable2D *r = new Renderable2D(model);
+		m_world->addGameObject(new TexturedObject2D(1, au, a, r));
+	}
+
+	{
+		Animatable *a = new Animatable();
+		a->setPosition(glm::vec3(0.8f, -0.9f, 0));
+		a->setScale(glm::vec3(0.35f, 0.15f, 0));
+		Audioable *au = new Audioable(audioHandle);
+		Model2D *model;
+		model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/main_menu_a.png"));
+		model->getTexture()->Load();
+		Renderable2D *r = new Renderable2D(model);
+		m_world->addGameObject(new TexturedObject2D(1, au, a, r));
 	}
 }
 
