@@ -19,7 +19,7 @@ private:
 	glm::vec3 selectedCarPosition;
 
 	glm::vec3 selectionIndicatorInitialPosition;
-	glm::vec3 selectionIndicatorOffset = glm::vec3(10, 0, 0);
+	glm::vec3 selectionIndicatorOffset = glm::vec3(7, 0, 0);
 
 	int assignedPosition = -1;
 

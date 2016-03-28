@@ -282,7 +282,7 @@ void SinglePlayerMenu::aPressed() {
 }
 
 void SinglePlayerMenu::selectMenuItem(Object3D *menuItem) {
-	glm::vec3 offset = glm::vec3(0, 0, 10);
+	glm::vec3 offset = glm::vec3(0, 0, 5);
 	if (menuItem == backButton) {
 		offset = glm::vec3(0, 0, .1f);
 	}
@@ -300,7 +300,7 @@ void SinglePlayerMenu::selectMenuItem(Object3D *menuItem) {
 }
 
 void SinglePlayerMenu::unselectMenuItem(Object3D *menuItem) {
-	glm::vec3 offset = glm::vec3(0, 0, -10);
+	glm::vec3 offset = glm::vec3(0, 0, -5);
 	if (menuItem == backButton) {
 		offset = glm::vec3(0, 0, -.1f);
 	}

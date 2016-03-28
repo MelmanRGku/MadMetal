@@ -263,7 +263,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(-5, -1, -25));
+		a->updatePosition(glm::vec3(-7, -1, -25));
 		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Meowmix.obj"));
@@ -293,7 +293,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(5, -1, -25));
+		a->updatePosition(glm::vec3(7, -1, -25));
 		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Gargantulous.obj"));
