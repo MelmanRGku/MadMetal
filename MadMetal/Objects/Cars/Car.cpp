@@ -220,7 +220,16 @@ void Car::updateHealth(float dtMillis)
 }
 
 void Car::update(float dt) {
-	//std::cout << m_currentLap << std::endl;
+	float angle;
+	PxVec3 axis;
+	m_car.getRigidDynamicActor()->getGlobalPose().q.toRadiansAndUnitAxis(angle, axis);
+	//std::cout << angle << "  :  " << axis.x << "," << axis.y << "," << axis.z << std::endl;
+	if (abs(axis.y) != 0)
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, PxQuat(angle, PxVec3(0, abs(axis.y) / axis.y, 0))));
+	PxVec3 angVel = m_car.getRigidDynamicActor()->getAngularVelocity();
+	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, angVel.y, 0), true);
+	
+	
 	updateHealth(dt);
 	m_reloadRemainingSeconds -= dt;
 	updateSuper(dt);
