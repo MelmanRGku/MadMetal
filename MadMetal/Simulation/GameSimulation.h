@@ -51,6 +51,8 @@ private:
 
 	void processInput();
 
+	void setupPowerups();
+
 private: //members
 	std::vector<Controllable *> m_players;
 	std::vector<PlayerControllable*> m_humanPlayers;

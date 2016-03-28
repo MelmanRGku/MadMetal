@@ -689,6 +689,20 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 						   m_world.addGameObject(powerup);
 						   m_scene.addActor(*powerupTriggerVolume);
 
+						   //setup updaters
+						   ObjectPositionUpdater *updUp1 = new ObjectPositionUpdater(powerup, glm::vec3(0, 1, 0), .4f);
+						   ObjectPositionUpdater *updDown = new ObjectPositionUpdater(powerup, glm::vec3(0, -2, 0), .8f);
+						   ObjectPositionUpdater *updUp2 = new ObjectPositionUpdater(powerup, glm::vec3(0, 1, 0), .4f);
+						   ObjectUpdaterSequence *seq = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
+						   seq->addObjectUpdater(updUp1);
+						   seq->addObjectUpdater(updDown);
+						   seq->addObjectUpdater(updUp2);
+						   ObjectRotationUpdater *updRot = new ObjectRotationUpdater(powerup, glm::vec3(0, 30, 0), .3f, ObjectRotationUpdater::ANGLE_TYPE_DEGREES);
+						   ObjectUpdaterParallel *par = new ObjectUpdaterParallel(ObjectUpdaterParallel::TYPE_INFINITE);
+						   par->addObjectUpdater(seq);
+						   par->addObjectUpdater(updRot);
+						   m_world.addObjectUpdater(par);
+
 						   return powerup;
 	}
 	case OBJECT_PARTICLE:
