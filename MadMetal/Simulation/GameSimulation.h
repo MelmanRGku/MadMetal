@@ -52,6 +52,8 @@ private:
 	void processInput();
 
 	void setupPowerups();
+	void setupTrains();
+	void setupDeathPit();
 
 private: //members
 	std::vector<Controllable *> m_players;
