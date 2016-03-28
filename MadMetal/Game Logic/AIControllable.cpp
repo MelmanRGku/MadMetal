@@ -303,17 +303,17 @@ void AIControllable::checkCollisionVolumes()
 	}
 	else if (m_car->getLastHitCollisionVolume()->getIndex() == 1)
 	{
-		m_goalWaypoint = m_track.getWaypointAt(488);
+		m_goalWaypoint = m_track.getWaypointAt(550);
 		recalculatePath();
 	}
 	else if (m_car->getLastHitCollisionVolume()->getIndex() == 2)
 	{
-		m_goalWaypoint = m_track.getWaypointAt(657);
+		m_goalWaypoint = m_track.getWaypointAt(629);
 		recalculatePath();
 	}
 	else if (m_car->getLastHitCollisionVolume()->getIndex() == 3)
 	{
-		m_goalWaypoint = m_track.getWaypointAt(813);
+		m_goalWaypoint = m_track.getWaypointAt(633);
 		recalculatePath();
 	}
 	else if (m_car->getLastHitCollisionVolume()->getIndex() == 4)
@@ -323,7 +323,7 @@ void AIControllable::checkCollisionVolumes()
 	}
 	else if (m_car->getLastHitCollisionVolume()->getIndex() == 5)
 	{
-		m_goalWaypoint = m_track.getWaypointAt(895);
+		m_goalWaypoint = m_track.getWaypointAt(896);
 		recalculatePath();
 	}
 	else if (m_car->getLastHitCollisionVolume()->getIndex() == 6)
