@@ -99,6 +99,18 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 		car3 = new Object3D(5, au, p, a, r, NULL);
 		m_world->addGameObject(car3);
 	}
+
+	{
+		Renderable3D *renderable = new Renderable3D(NULL);
+		Audioable *audioable = new Audioable(*audio);
+		Animatable *animatable = new Animatable();
+		Physicable *physicable = new Physicable(NULL);
+
+		Text3D *loadingInfoString = new Text3D(3, audioable, physicable, animatable, renderable, 1);
+		loadingInfoString->setPosition(glm::vec3(0, 5, -20));
+		loadingInfoString->setString("Computer Players");
+		m_world->addGameObject(loadingInfoString);
+	}
 }
 
 SinglePlayerMenu::~SinglePlayerMenu() {

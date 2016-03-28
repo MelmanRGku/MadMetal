@@ -3,6 +3,7 @@
 #include "Global\Definitions.h"
 #include "Scene Manager\Scene.h"
 #include "Objects\Text3D.h"
+#include "Objects\TexturedObject2D.h"
 
 class PlayerSelection {
 private:
@@ -13,6 +14,7 @@ private:
 	Characters tempSelection;
 	Object3D *selectionIndicator;
 	Object3D *selectedCar;
+	TexturedObject2D *joinquit;
 	glm::vec3 selectedCarPosition;
 
 	glm::vec3 selectionIndicatorInitialPosition;
