@@ -5,6 +5,7 @@
 #include "Simulation\SinglePlayerMenu.h"
 #include "Simulation\MultiPlayerMenu.h"
 #include "Simulation\PauseMenu.h"
+#include "Simulation\EndingScene.h"
 #include <windows.h>
 #include "winbase.h"
 #include "wingdi.h"
@@ -157,7 +158,10 @@ void StackManager::readMailBox()
 	case (SceneMessage::ePause) :
 		m_stack->pushScene(new PauseMenu(m_mailBox->getPlayerTemplates(), m_audio));
 		break;
-
+	case (SceneMessage::eEnd) :
+		m_stack->clearStack();
+		m_stack->pushScene(new EndingScene(m_mailBox->getPlayerTemplates(), *m_audio));
+		break;
 	case (SceneMessage::eRestart):
 		m_stack->clearStack();
 		m_stack->pushScene(new MainMenu(m_input, m_audio));
@@ -170,6 +174,7 @@ void StackManager::readMailBox()
 		std::cout << "Got a Default message.. Something went wrong \n";
 		break;
 	}
+
 	//set message to blank
 	m_mailBox->resetMessage();
 }

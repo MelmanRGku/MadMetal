@@ -1,6 +1,8 @@
 
 #include "PlayerControllable.h"
 #include <iostream>
+#include <Files\FIleHandlingHelpers.h>
+#include <string>
 
 // assign car to player and set camera to follow it
 void PlayerControllable::setCar(Car * toAdd)
@@ -68,10 +70,9 @@ void PlayerControllable::playFrame(double dt)
 				}
 
 				if (m_gamePad->isPressed(GamePad::YButton)) {
-					//if (m_car->superReady()) {
+					if (m_car->superReady()) {
 						m_car->useSuper();
-						//std::cout << "I shot" << std::endl;
-					//}
+				}
 				}
 
 				if (m_gamePad->isHeld(GamePad::BButton))
@@ -92,27 +93,13 @@ void PlayerControllable::playFrame(double dt)
 				{
 					m_car->usePowerUp();
 
+
 				}
-				/*
-				if (m_gamePad->isPressed(GamePad::BButton))
-				{
-				std::cout << "Bpressed \n";
-				}*/
 
 				if (m_gamePad->isPressed(GamePad::BackButton))
 				{
 					m_car->respawn();
 				}
-
-				/*
-				if (m_gamePad->isPressed(GamePad::LShoulder))
-				{
-				std::cout << "LShoulderpressed \n";
-				}
-
-				if (m_gamePad->isPressed(GamePad::RShoulder))
-				{
-				}*/
 
 				if (m_gamePad->getRightTrigger())
 				{

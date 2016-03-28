@@ -17,7 +17,7 @@
 
 
 #define NUM_OF_PLAYERS 12
-#define NUM_LAPS_FOR_VICTORY 10
+#define NUM_LAPS_FOR_VICTORY 1
 #define RACE_FINISH_DELAY 10
 
 using namespace std;
@@ -79,16 +79,15 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
-			/*AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
-			PxTransform *pos = new PxTransform(0 + i * 1000, 1, 20);
+			AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
+			PxTransform *pos = new PxTransform(10, 0, 10);
 			ai->setCar(dynamic_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL)));
 			delete pos;
 			m_aiPlayers.push_back(ai);
 			m_players.push_back(ai);
 			//make a car for ai based off template
-			*/
 		}
-	}
+		}
 
 	//adjust strings
 	for (int i = 0; i < m_humanPlayers.size(); i++) {
@@ -118,6 +117,8 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		ss << "Player " << (i + 1);
 		m_humanPlayers.at(i)->getCar()->getUI()->scoreTable->setOwnerName(ss.str());
 	}
+	
+
 	m_positionManager = new PositionManager(m_players);
 	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
 	pauseControls(true);
@@ -390,12 +391,22 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 	simulatePlayers(dt);
 	}
 	else {
-		int player = getFirstPlace();
-		int score = m_players[player]->getCar()->tallyScore();
-		std::stringstream s;
-		s << "Player " << player + 1 << " Wins with " << score << "Points!!!";
-		m_displayMessage->setFontSize(45);
-		m_displayMessage->initializeMessage(s.str(), 10);
+		std::vector<ControllableTemplate *> playerTemplates;
+
+		//put the controllables into the vector incase the player trys to restart
+		for (int i = 0; i < m_players.size(); i++)
+		{
+			playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+		}
+
+		for (int i = 0; i < playerTemplates.size(); i++) {
+			playerTemplates.at(i)->setPlayerNumber(i+1);
+			playerTemplates.at(i)->setFinalPosition(m_players.at(i)->getCar()->getPositionInRace());
+			playerTemplates.at(i)->setFinalScore(m_players.at(i)->getCar()->tallyScore());
+		}
+		message.setTag(SceneMessage::eEnd);
+		message.setPlayerTemplates(playerTemplates);
+		return true;
 		
 	}
 	simulatePhysics(dt);
@@ -409,7 +420,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 		return true;
 	}
 
-	//m_positionManager->updatePlayerPositions();
+	m_positionManager->updatePlayerPositions();
 
 	//std::cout << "player position in race: " << m_players[0]->getCar()->getPositionInRace() << "\n";
 	return false;
@@ -499,23 +510,23 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	delete deathPitGeom[0];
 	delete[] deathPitGeom;
 
-	PxGeometry **geom1 = new PxGeometry *[1];
-	PxGeometry **geom2 = new PxGeometry *[1];
-	geom1[0] = new PxBoxGeometry(PxVec3(60, m_track->getDrivablePart()->getWorldBounds().maximum.y, 30));
-	geom2[0] = new PxBoxGeometry(PxVec3(40, m_track->getDrivablePart()->getWorldBounds().maximum.y, 60));
-	
-	pos = new PxTransform(m_track->getWaypointAt(13)->getGlobalPose().x, m_track->getWaypointAt(13)->getGlobalPose().y, m_track->getWaypointAt(13)->getGlobalPose().z);
-	m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL);
-	delete pos;
-	pos = new PxTransform(m_track->getWaypointAt(72)->getGlobalPose().x, m_track->getWaypointAt(72)->getGlobalPose().y, m_track->getWaypointAt(72)->getGlobalPose().z);
-	m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2 , NULL);
+	//PxGeometry **geom1 = new PxGeometry *[1];
+	//PxGeometry **geom2 = new PxGeometry *[1];
+	//geom1[0] = new PxBoxGeometry(PxVec3(60, m_track->getDrivablePart()->getWorldBounds().maximum.y, 30));
+	//geom2[0] = new PxBoxGeometry(PxVec3(40, m_track->getDrivablePart()->getWorldBounds().maximum.y, 60));
+	//
+	//pos = new PxTransform(m_track->getWaypointAt(13)->getGlobalPose().x, m_track->getWaypointAt(95)->getGlobalPose().y, m_track->getWaypointAt(13)->getGlobalPose().z);
+	//m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL);
+	//delete pos;
+	//pos = new PxTransform(m_track->getWaypointAt(72)->getGlobalPose().x, m_track->getWaypointAt(73)->getGlobalPose().y, m_track->getWaypointAt(72)->getGlobalPose().z);
+	//m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2 , NULL);
 
 
-	delete pos;
-	delete geom1[0];
-	delete geom2[0];
-	delete[] geom1;
-	delete[] geom2;
+	//delete pos;
+	//delete geom1[0];
+	//delete geom2[0];
+	//delete[] geom1;
+	//delete[] geom2;
 }
 
 float GameSimulation::getFinishLineBonus(int position)

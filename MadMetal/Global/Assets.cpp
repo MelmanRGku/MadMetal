@@ -154,7 +154,7 @@ void Assets::loadBeforeGameStarts(HDC dc, HGLRC sharedOpenglContext) {
 
 	for (unsigned int i = 0; i < modelsToBeLoadedBeforeTheGameStarts->size(); i++) {
 		totalFilesSize += (std::ifstream((modelsToBeLoadedBeforeTheGameStarts->at(i)), std::ifstream::ate | std::ifstream::binary)).tellg();
-	}
+}
 
 	double loadedFilesSize = 0;
 

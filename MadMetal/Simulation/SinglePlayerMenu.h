@@ -13,7 +13,8 @@ private:
 		*car3,
 		*numberOfAIsButton,
 		*selectedObject,
-		*selectedCar;
+		*selectedCar,
+		*background;
 	Text3D *numberOfAIsString;
 	SceneMessage::SceneEnum messageToReturn = SceneMessage::eNone;
 	int numberOfAIs = 4;

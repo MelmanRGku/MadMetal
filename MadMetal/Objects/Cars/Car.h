@@ -8,6 +8,7 @@
 #include "Global\Definitions.h"
 
 class Waypoint;
+class CollisionVolume;
 
 class Car : public Object3D
 {
@@ -38,6 +39,8 @@ protected: //members
 	Waypoint *m_nextWaypoint;
 	bool m_isAtStartingCollisionVolume;
 	bool m_isAtMidCollisionVolume;
+	CollisionVolume* m_lastCollisionVolume;
+
 	bool m_newLap;
 
 	Sound soundChassis;
@@ -89,7 +92,7 @@ public:
 	void playSoundChassis();
 	bool isAtStartingCollisionVolume();
 	bool isAtMidCollisionVolume();
-	int tallyScore() { return m_score + m_damageDealt; }
+	int tallyScore() { return m_score; }
 	Waypoint* Car::getLastWaypoint();
 	bool isFinishedRace() { return m_finishedRace; }
 	void setFinishedRace(bool finished) { m_finishedRace = finished; }
@@ -107,5 +110,10 @@ public:
 	
 	float getHealthRemaining(){ return m_currentHealth; }
 
+	void addWaypointHit(Waypoint* waypoint);
+	std::vector<Waypoint*> m_waypointHitList;
+
+	void setLastHitCollisionVolume(CollisionVolume* collisionVolume);
+	CollisionVolume* getLastHitCollisionVolume();
 };
 

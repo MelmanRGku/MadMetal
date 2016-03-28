@@ -58,8 +58,8 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(-7, -2, -35));
-		a->setScale(glm::vec3(5, 4, 7));
+		a->updatePosition(glm::vec3(-7, -2, -25));
+		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Meowmix.obj"));
 		model->setupVAOs();
@@ -73,8 +73,8 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, -2, -25));
-		a->setScale(glm::vec3(5, 4, 7));
+		a->updatePosition(glm::vec3(0, -2, -20));
+		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/twisted1.obj"));
 		model->setupVAOs();
@@ -90,14 +90,39 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(7, -2, -35));
-		a->setScale(glm::vec3(5, 4, 7));
+		a->updatePosition(glm::vec3(7, -2, -25));
+		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Gargantulous.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		car3 = new Object3D(5, au, p, a, r, NULL);
 		m_world->addGameObject(car3);
+	}
+
+	{
+		Renderable3D *renderable = new Renderable3D(NULL);
+		Audioable *audioable = new Audioable(*audio);
+		Animatable *animatable = new Animatable();
+		Physicable *physicable = new Physicable(NULL);
+
+		Text3D *loadingInfoString = new Text3D(3, audioable, physicable, animatable, renderable, 1);
+		loadingInfoString->setPosition(glm::vec3(0, 5, -20));
+		loadingInfoString->setString("Computer Players");
+		m_world->addGameObject(loadingInfoString);
+	}
+
+	{
+		Physicable *p = new Physicable(NULL);
+		Animatable *a = new Animatable();
+		a->updatePosition(glm::vec3(0, 0, -30));
+		a->setScale(glm::vec3(33, 24.5, 1));
+		Audioable *au = new Audioable(*audio);
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Background.obj"));
+		model->setupVAOs();
+		Renderable3D *r = new Renderable3D(model, true, true);
+		background = new Object3D(3, au, p, a, r, NULL);
+		m_world->addGameObject(background);
 	}
 }
 
@@ -257,7 +282,7 @@ void SinglePlayerMenu::aPressed() {
 }
 
 void SinglePlayerMenu::selectMenuItem(Object3D *menuItem) {
-	glm::vec3 offset = glm::vec3(0, 0, 10);
+	glm::vec3 offset = glm::vec3(0, 0, 5);
 	if (menuItem == backButton) {
 		offset = glm::vec3(0, 0, .1f);
 	}
@@ -275,7 +300,7 @@ void SinglePlayerMenu::selectMenuItem(Object3D *menuItem) {
 }
 
 void SinglePlayerMenu::unselectMenuItem(Object3D *menuItem) {
-	glm::vec3 offset = glm::vec3(0, 0, -10);
+	glm::vec3 offset = glm::vec3(0, 0, -5);
 	if (menuItem == backButton) {
 		offset = glm::vec3(0, 0, -.1f);
 	}

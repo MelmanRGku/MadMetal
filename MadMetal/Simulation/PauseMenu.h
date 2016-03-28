@@ -14,7 +14,8 @@ private:
 		*restartButton,
 		*exitToMainMenuButton,
 		*exitToWindowsButton,
-		*selectedButton;
+		*selectedButton,
+		*background;
 	SceneMessage::SceneEnum messageToReturn = SceneMessage::eNone;
 
 public:

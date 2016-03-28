@@ -34,11 +34,50 @@ PlayerSelection::PlayerSelection(GamePad *gamePad, Audio *audio, World *world) {
 		a->setScale(glm::vec3(0, 0, 0));
 		Audioable *au = new Audioable(*m_audio);
 		Model3D *model;
-		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/P1.obj"));
+		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Player1.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		selectionIndicator = new Object3D(1, au, p, a, r, NULL);
 		m_world->addGameObject(selectionIndicator);
+	}
+
+
+	/*
+	{
+		Physicable *p = new Physicable(NULL);
+		Animatable *a = new Animatable();
+		a->updatePosition(glm::vec3(0, -0.8, 0));
+		a->setScale(glm::vec3(0.8, 0.2, 0.1));
+		Audioable *au = new Audioable(*audio);
+		Model2D *model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/JoinQuit.png"));
+		Renderable2D *r = new Renderable2D(model);
+		joinquit = new TexturedObject2D(3, au, a, r);
+		m_world->addGameObject(joinquit);
+	}
+	*/
+	{
+		Renderable3D *renderable = new Renderable3D(NULL);
+		Audioable *audioable = new Audioable(*audio);
+		Animatable *animatable = new Animatable();
+		Physicable *physicable = new Physicable(NULL);
+
+		Text3D *loadingInfoString = new Text3D(3, audioable, physicable, animatable, renderable, 1);
+		loadingInfoString->setPosition(glm::vec3(0, -7, -20));
+		loadingInfoString->setString("A to join        B to quit");
+		m_world->addGameObject(loadingInfoString);
+	}
+
+	{
+		Physicable *p = new Physicable(NULL);
+		Animatable *a = new Animatable();
+		a->updatePosition(glm::vec3(0, 0, -30));
+		a->setScale(glm::vec3(33, 24.5, 1));
+		Audioable *au = new Audioable(*audio);
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Background.obj"));
+		model->setupVAOs();
+		Renderable3D *r = new Renderable3D(model, true, true);
+		background = new Object3D(3, au, p, a, r, NULL);
+		m_world->addGameObject(background);
 	}
 }
 
@@ -49,16 +88,16 @@ void PlayerSelection::joinGame(int position, glm::vec3 selectionIndicatorInitial
 	this->selectionIndicatorInitialPosition = selectionIndicatorInitialPosition;
 
 	selectionIndicator->setPosition(glm::vec3(selectionIndicatorInitialPosition + (float)tempSelection * selectionIndicatorOffset));
-	selectionIndicator->setScale(glm::vec3(.7, .7, 0.000000001f));
+	selectionIndicator->setScale(glm::vec3(1.5, 1.5, 0.000000001f));
 	Model3D *model;
 	if (position == 1)
-		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/P1.obj"));
+		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Player1.obj"));
 	else if (position == 2)
-		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/P2.obj"));
+		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Player2.obj"));
 	else if (position == 3)
-		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/P1.obj"));
+		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Player3.obj"));
 	else
-		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/P2.obj"));
+		model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Player4.obj"));
 	model->setupVAOs();
 	Renderable3D *renderable = static_cast<Renderable3D*>(selectionIndicator->getRenderable());
 	renderable->setModel(model);
@@ -102,7 +141,7 @@ void PlayerSelection::selectCar() {
 void PlayerSelection::unselectCar() {
 	playerTemplate->setCarSelection(-1);
 	selectedCar->setScale(glm::vec3(0, 0, 0));
-	selectionIndicator->setScale(glm::vec3(.7, .7, 0.000000001f));
+	selectionIndicator->setScale(glm::vec3(1.5, 1.5, 0.000000001f));
 }
 
 bool PlayerSelection::carSelected() {
@@ -224,8 +263,8 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(-10, -1, -35));
-		a->setScale(glm::vec3(5, 4, 7));
+		a->updatePosition(glm::vec3(-7, -1, -25));
+		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Meowmix.obj"));
 		model->setupVAOs();
@@ -239,8 +278,8 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, -1, -35));
-		a->setScale(glm::vec3(5, 4, 7));
+		a->updatePosition(glm::vec3(0, -1, -25));
+		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/twisted1.obj"));
 		model->setupVAOs();
@@ -254,8 +293,8 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(10, -1, -35));
-		a->setScale(glm::vec3(5, 4, 7));
+		a->updatePosition(glm::vec3(7, -1, -25));
+		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Gargantulous.obj"));
 		model->setupVAOs();

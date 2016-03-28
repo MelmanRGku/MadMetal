@@ -288,6 +288,15 @@
     <ClCompile Include="Objects\UIScoreTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Simulation\EndingScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\EndingScreenCarInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\EndingScreenUIScoreTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global\Settings.h">
@@ -584,10 +593,7 @@
     <ClInclude Include="Objects\MenuSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\TrainCar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\Header.h">
+    <ClInclude Include="Game Logic\WaypointDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\PowerUpAttack.h">
@@ -659,6 +665,15 @@
     <ClInclude Include="Objects\GargantulousBullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Simulation\EndingScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\EndingScreenCarInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\EndingScreenUIScoreTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />
@@ -671,6 +686,17 @@
     <Image Include="Assets\Useless\Building_texture4.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Assets\Models\asphalt_texture409.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\Building_texture4.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\Terrain-Road.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
     <Image Include="Assets\Models\lava rock.jpg">
       <Filter>Resource Files</Filter>
     </Image>

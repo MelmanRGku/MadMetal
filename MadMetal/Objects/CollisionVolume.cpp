@@ -21,7 +21,7 @@ const int& CollisionVolume::getIndex()
 
 bool CollisionVolume::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 #ifdef _RENDER_COLLISION_VOLUME
-	return TestObject::draw(renderer, type, passNumber);
+	return Object3D::draw(renderer, type, passNumber);
 #else
 	return false;
 #endif

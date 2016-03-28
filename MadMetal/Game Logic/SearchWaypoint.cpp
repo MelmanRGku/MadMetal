@@ -8,7 +8,6 @@ SearchWaypoint::SearchWaypoint(Waypoint& waypoint, SearchWaypoint* parent, float
 	m_parent = parent;
 	m_G = G;
 	m_H = H;
-	m_highCost = 0.0;
 }
 
 SearchWaypoint::~SearchWaypoint()
@@ -18,7 +17,7 @@ SearchWaypoint::~SearchWaypoint()
 
 float SearchWaypoint::GetF()
 {
-	return m_G + m_H + m_highCost;
+	return m_G + m_H + m_waypoint.getHighCost();
 }
 
 Waypoint& SearchWaypoint::getWaypoint()
@@ -57,13 +56,4 @@ float SearchWaypoint::getH()
 SearchWaypoint* SearchWaypoint::getParent()
 {
 	return m_parent;
-}
-
-void SearchWaypoint::setHighCost(float highCost)
-{
-	m_highCost = highCost;
-}
-float SearchWaypoint::getHighCost()
-{
-	return m_highCost;
 }
