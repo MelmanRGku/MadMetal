@@ -130,6 +130,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		explosionGeom[0] = new PxSphereGeometry(1);
 		GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &bullet->getActor().getGlobalPose(), explosionGeom, NULL);
 		delete explosionGeom[0];
+		delete[] explosionGeom;
 		bullet->playCollisionSound();
 	}
 	else if (car == NULL) {//if dynamic cast to car returns NULL its probably a wall so get rid of it

@@ -31,7 +31,7 @@ void Gargantulous::fire()
 	PxTransform *pos;
 	if (m_superDurationRemainingSeconds > 0)
 	{
-		
+
 
 	}
 	else {
@@ -52,7 +52,7 @@ void Gargantulous::update(float dt) {
 }
 
 void Gargantulous::useSuper() {
-	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
+	Car::useSuper();
 	m_reloadRemainingSeconds = 0;
 	m_superGauge = 0;
 	//m_renderable->setModel(Assets::getModel("Gargantulous"));

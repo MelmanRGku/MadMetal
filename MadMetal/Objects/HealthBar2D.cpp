@@ -19,9 +19,16 @@ bool HealthBar2D::draw(Renderer *renderer, Renderer::ShaderType type, int passNu
 		toReturn = true;
 	}
 
-	if (type != Renderer::ShaderType::SHADER_TYPE_NONE || passNumber > 1)
+	if (passNumber < 2)
+		return true;
+
+	if (passNumber > 2)
 		return false || toReturn;
 
+	if (type != Renderer::ShaderType::SHADER_TYPE_NONE)
+		return false || toReturn;
+
+	glDisable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
@@ -57,7 +64,7 @@ bool HealthBar2D::draw(Renderer *renderer, Renderer::ShaderType type, int passNu
 	glVertex2f(healthParams.x + (healthParams.z - healthParams.x) * healthPercentage, healthParams.w);
 	glEnd();
 	lostHealthModel->getTexture()->unBind(GL_TEXTURE_2D);
-
+	glEnable(GL_DEPTH_TEST);
 
 	return false || toReturn;
 }

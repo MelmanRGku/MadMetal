@@ -20,8 +20,7 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 
 Car::~Car()
 {
-	//TODO: revive later ?
-	//delete ui;
+	delete ui;
 	delete m_drivingStyle;
 }
 
@@ -56,6 +55,13 @@ void Car::respawn()
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0));
 	
 	
+}
+
+void Car::useSuper() {
+	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
+	m_superGauge = 0;
+	ui->gaugeBar->superUsed(m_superMaxDurationSeconds);
+	ui->gaugeBar->setSuperDurationRemaining(m_superDurationRemainingSeconds);
 }
 
 PowerUpType Car::getActivePowerUpType()
@@ -159,7 +165,9 @@ void Car::updateSuper(float dt)
 {
 	if (m_superDurationRemainingSeconds > 0)
 	{
-		if ((m_superDurationRemainingSeconds -= dt) <= 0)
+		m_superDurationRemainingSeconds -= dt;
+		ui->gaugeBar->setSuperDurationRemaining(m_superDurationRemainingSeconds);
+		if (m_superDurationRemainingSeconds <= 0)
 		{
 			unuseSuper();
 		}
@@ -188,6 +196,7 @@ void Car::updateHealth(float dtMillis)
 			explosionGeom[0] = new PxSphereGeometry(7);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &getCar().getRigidDynamicActor()->getGlobalPose(), explosionGeom, NULL);
 			delete explosionGeom[0];
+			delete[] explosionGeom;
 		}
 	}
 	

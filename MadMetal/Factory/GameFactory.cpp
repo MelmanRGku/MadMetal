@@ -26,6 +26,7 @@ GameFactory::~GameFactory()
 	delete m_audioFactory;
 	delete m_renderFactory;
 	delete m_physicsFactory;
+	delete m_animationFactory;
 	m_factory = NULL;
 }
 
@@ -54,7 +55,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 
 Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXBODY));
-		Renderable3D *renderable = new Renderable3D(model, true, true);
+Renderable3D *renderable = new Renderable3D(model, true, true);
 Model3D *model2 = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXWHEEL));
 Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
@@ -139,21 +140,21 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 							Gargantulous *car = new Gargantulous(objectId, drivingStyle, *physicalCar, audioable, physicable, animatable, renderable);
 
 							int k = (int)physicalCar->mWheelsSimData.getWheelData(0).mRadius * 2;
-										 PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();
-										 car->setScale(glm::vec3(physicalCarDimensions.x, physicalCarDimensions.y + k, physicalCarDimensions.z));
+							PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();
+							car->setScale(glm::vec3(physicalCarDimensions.x, physicalCarDimensions.y + k, physicalCarDimensions.z));
 
-										 m_world.addGameObject(car);
-										 m_scene.addActor(*physicalCar->getRigidDynamicActor());
+							m_world.addGameObject(car);
+							m_scene.addActor(*physicalCar->getRigidDynamicActor());
 
-										 //Set the vehicle to rest in first gear.
-										 //Set the vehicle to use auto-gears.
-										 physicalCar->setToRestState();
-										 physicalCar->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
-										 physicalCar->mDriveDynData.setUseAutoGears(true);
+							//Set the vehicle to rest in first gear.
+							//Set the vehicle to use auto-gears.
+							physicalCar->setToRestState();
+							physicalCar->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
+							physicalCar->mDriveDynData.setUseAutoGears(true);
 
 
-										 car->setSoundChassis(ChassisCrashSound());
-										 return car;
+							car->setSoundChassis(ChassisCrashSound());
+							return car;
 	}
 
 	case OBJECT_UI:

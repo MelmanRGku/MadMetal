@@ -115,7 +115,7 @@ Model3D *ObjModelLoader::processScene(const aiScene *scene) {
 			}
 		}
 		
-		Mesh *newMesh = new Mesh(vertices, uvs, colours, normals, indices, texture);
+		Mesh *newMesh = new Mesh(vertices, uvs, colours, normals, indices, texture, mesh->mNumFaces);
 		model->addMesh(newMesh);
 		boundingBox->finalize();
 	}

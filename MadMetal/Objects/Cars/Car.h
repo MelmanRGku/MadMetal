@@ -68,7 +68,7 @@ public:
 	
 	//void usePowerUp();
 	bool isAlive() { return m_currentHealth > 0; }
-	virtual void useSuper() = 0;
+	virtual void useSuper();
 	virtual void fire() = 0;
 	void takeDamage(float damage);
 	

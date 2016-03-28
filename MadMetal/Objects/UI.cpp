@@ -9,6 +9,14 @@ UI::UI(long id, Audioable *aable, Animatable *anable, Renderable2D *rable) : Obj
 
 UI::~UI()
 {
+	delete healthBar;
+	delete gaugeBar;
+	delete lap;
+	delete map;
+	delete powerupBorder;
+	delete scoreTable;
+	if (powerupIcon != NULL)
+		delete powerupIcon;
 }
 
 bool UI::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {

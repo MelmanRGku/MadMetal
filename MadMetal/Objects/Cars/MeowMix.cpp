@@ -19,6 +19,7 @@ MeowMix::MeowMix(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable 
 
 MeowMix::~MeowMix()
 {
+	delete rableWheel;
 }
 
 void MeowMix::fire()
@@ -39,7 +40,7 @@ void MeowMix::fire()
 		if (m_lastWeaponShot == LAST_WEAPON_SHOT_LEFT)
 		{
 			m_lastWeaponShot = LAST_WEAPON_SHOT_RIGHT;
-			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 3) + left * (getScale().x / 2);
+			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) +  + left * (getScale().x / 2);
 			pos = new PxTransform(weaponPos.x, weaponPos.y, weaponPos.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_MEOW_MIX, pos, NULL, this);
 			delete pos;
@@ -47,7 +48,7 @@ void MeowMix::fire()
 		else
 		{
 			m_lastWeaponShot = LAST_WEAPON_SHOT_LEFT;
-			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 3) - left * (getScale().x / 2);
+			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) +  - left * (getScale().x / 2);
 			pos = new PxTransform(weaponPos.x, weaponPos.y, weaponPos.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_MEOW_MIX, pos, NULL, this);
 			delete pos;
@@ -63,7 +64,7 @@ void MeowMix::update(float dt) {
 }
 
 void MeowMix::useSuper() {
-	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
+	Car::useSuper();
 	m_reloadRemainingSeconds = 0;
 	m_superGauge = 0;
 
@@ -88,7 +89,6 @@ bool MeowMix::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber
 {
 	if (type == Renderer::ShaderType::SHADER_TYPE_CELLTIRE || passNumber > 1)
 	{
-		//std::cout << "Drawing the wheel" << std::endl;
 		if (type != Renderer::ShaderType::SHADER_TYPE_CELLTIRE || passNumber > 1)
 			return false;
 
@@ -128,18 +128,13 @@ bool MeowMix::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber
 	else if (type == Renderer::ShaderType::SHADER_TYPE_CELL || passNumber > 1)
 	{
 
-		//std::cout << "Drawing the body" << std::endl;
 		std::vector<Mesh *> *meshes = static_cast<Model3D *>(m_renderable->getModel())->getMeshes();
-		//std::cout << "Meshes" << std::endl;
 		CellShaderProgram *program = static_cast<CellShaderProgram *>(renderer->getShaderProgram(Renderer::ShaderType::SHADER_TYPE_CELL));
-		//std::cout << "Program" << std::endl;
 		glUniform1i(program->textureUniform, 0);
-		//std::cout << "tecture" << std::endl;
 
 		glm::mat4x4 modelMatrix = getModelMatrix();
 
 		glUniformMatrix4fv(program->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
-		//std::cout << "ModelMatrix" << std::endl;
 		for (unsigned int i = 0; i < meshes->size(); i++) {
 			Mesh *mesh = meshes->at(i);
 			if (mesh->hasTexture()) {
