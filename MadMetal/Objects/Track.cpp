@@ -2,6 +2,7 @@
 #include "Waypoint.h"
 #include "Game Logic\WayPointSystem.h"
 #include "Game Logic\WaypointDefinitions.h"
+#include "Objects\CollisionVolume.h"
 
 Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Object3D *drivablePart, Object3D *nonDrivablePart, Object3D* trackWalls) : Object3D(id, aable, pable, anable, rable, NULL), drivablePart(drivablePart), nonDrivablePart(nonDrivablePart), trackWalls(trackWalls)
 {
@@ -224,19 +225,65 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 	m_waypointSystems.push_back(nextLocation11);
 
 	setValidPath();
+
+	PxTransform * pos;
+	PxGeometry **geom1 = new PxGeometry *[1];
+	PxGeometry **geom2 = new PxGeometry *[1];
+	PxGeometry **geom3 = new PxGeometry *[1];
+	geom1[0] = new PxBoxGeometry(PxVec3(80, getDrivablePart()->getWorldBounds().maximum.y, 10));
+	geom2[0] = new PxBoxGeometry(PxVec3(10, getDrivablePart()->getWorldBounds().maximum.y, 80));
+	geom3[0] = new PxBoxGeometry(PxVec3(80, getDrivablePart()->getWorldBounds().maximum.y, 20));
+	
+	pos = new PxTransform(getWaypointAt(0)->getGlobalPose().x, getWaypointAt(0)->getGlobalPose().y, getWaypointAt(0)->getGlobalPose().z);
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom3, NULL)));
+	delete pos;
+	pos = new PxTransform(getWaypointAt(367)->getGlobalPose().x, getWaypointAt(367)->getGlobalPose().y, getWaypointAt(367)->getGlobalPose().z);
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	delete pos;
+	pos = new PxTransform(getWaypointAt(550)->getGlobalPose().x, getWaypointAt(550)->getGlobalPose().y, getWaypointAt(550)->getGlobalPose().z);
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	delete pos;
+	pos = new PxTransform(getWaypointAt(657)->getGlobalPose().x, getWaypointAt(657)->getGlobalPose().y, getWaypointAt(657)->getGlobalPose().z);
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2, NULL)));
+	delete pos;
+	pos = new PxTransform(getWaypointAt(813)->getGlobalPose().x, getWaypointAt(813)->getGlobalPose().y, getWaypointAt(813)->getGlobalPose().z);
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2, NULL)));
+	delete pos;
+	pos = new PxTransform(getWaypointAt(716)->getGlobalPose().x, getWaypointAt(716)->getGlobalPose().y, getWaypointAt(716)->getGlobalPose().z);
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	delete pos;
+	pos = new PxTransform(getWaypointAt(895)->getGlobalPose().x, getWaypointAt(896)->getGlobalPose().y, getWaypointAt(895)->getGlobalPose().z);
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	delete pos;
+	pos = new PxTransform(getWaypointAt(953)->getGlobalPose().x, getWaypointAt(953)->getGlobalPose().y, getWaypointAt(953)->getGlobalPose().z);
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2, NULL)));
+	delete pos;
+	pos = new PxTransform(getWaypointAt(1003)->getGlobalPose().x, getWaypointAt(1003)->getGlobalPose().y, getWaypointAt(1003)->getGlobalPose().z);
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	delete pos;
+	pos = new PxTransform(getWaypointAt(1074)->getGlobalPose().x, getWaypointAt(1074)->getGlobalPose().y, getWaypointAt(1074)->getGlobalPose().z);
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2, NULL)));
+	delete pos;
+
+	delete geom1[0];
+	delete geom2[0];
+	delete geom3[0];
+	delete[] geom1;
+	delete[] geom2;
+	delete[] geom3;
 }
 
 Track::~Track()
 {
-	for (std::vector<Waypoint*>::iterator it = m_waypointList.begin(); it != m_waypointList.end(); ++it)
-	{
-	//	delete *it;
-	}
-	
 	for (std::vector<WaypointSystem*>::iterator it = m_waypointSystems.begin(); it != m_waypointSystems.end(); ++it)
 	{
 		delete *it;
-}
+	}
+
+	for (std::vector<CollisionVolume*>::iterator it = m_collisionVolumes.begin(); it != m_collisionVolumes.end(); ++it)
+	{
+		delete *it;
+	}
 }
 
 bool Track::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {

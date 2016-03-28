@@ -5,6 +5,7 @@
 
 class WaypointSystem;
 class Waypoint;
+class CollisionVolume;
 
 
 class Track : public Object3D
@@ -24,6 +25,7 @@ private: //members
 		*trackWalls;
 	std::vector<WaypointSystem*> m_waypointSystems;
 	std::vector<Waypoint*> m_waypointList;
+	std::vector<CollisionVolume*> m_collisionVolumes;
 private: //helper functions 
 	void stitchWaypointSystems(Boundry lastWaypointSystemLocation, Boundry newWaypointSystemPosition, WaypointSystem& lastWaypointSystem, WaypointSystem& newWaypointSystem, int lastWaypointSystemIntialPosition, int newWaypointSystemIntialPosition, bool recalculateIds);
 	void determineStitchingBoundaries(Boundry locationOfStiching, int initialPosition, bool& isStichingRow, int& RowIndex, int& ColumnIndex, WaypointSystem& system);

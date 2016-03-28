@@ -3,6 +3,7 @@
 #include "Factory\GameFactory.h"
 #include <sstream>
 #include "Objects\Waypoint.h"
+#include "Objects\CollisionVolume.h"
 
 int Car::positionGlobalID = 0;
 
@@ -11,6 +12,7 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 	m_currentWaypoint = NULL;
 	m_isAtMidCollisionVolume = false;
 	m_isAtStartingCollisionVolume = false;
+	m_lastCollisionVolume = NULL;
 	m_newLap = true;
 	m_powerUpRemaining = 0;
 	Car::positionGlobalID++;
@@ -340,4 +342,14 @@ bool Car::isAtMidCollisionVolume()
 void Car::addWaypointHit(Waypoint* waypoint)
 {
 	m_waypointHitList.push_back(waypoint);
+}
+
+void Car::setLastHitCollisionVolume(CollisionVolume* collisionVolume)
+{
+	m_lastCollisionVolume = collisionVolume;
+}
+
+CollisionVolume* Car::getLastHitCollisionVolume()
+{
+	return m_lastCollisionVolume;
 }

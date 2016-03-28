@@ -1,6 +1,7 @@
 #include "AIControllable.h"
 #include "Game Logic\PathFinding.h"
 #include "Game Logic\WayPointSystem.h"
+#include "Objects\CollisionVolume.h"
 #include "Objects\Track.h"
 
 AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
@@ -10,7 +11,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(15);
+	m_goalWaypoint = m_track.getWaypointAt(367);
 	m_currentPath.clear();
 	//m_listOfWaypointsHighCost.push_back(4);
 	//m_listOfWaypointsHighCost.push_back(11);
@@ -57,7 +58,7 @@ void AIControllable::playFrame(double dt)
 	}
 
 
-	//checkCollisionVolumes();
+	checkCollisionVolumes();
 
 
 	if (m_currentKnownWaypoint == NULL)
@@ -83,68 +84,7 @@ void AIControllable::playFrame(double dt)
 
 	if (m_currentPath.empty() && (m_nextWaypoint == NULL || m_car->getCurrentWaypoint()->getIndex() == m_goalWaypoint->getIndex()))
 	{
-		if (m_goalWaypoint->getIndex() == 15)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(367);
-			recalculatePath();
-		}
-		//else if (m_goalWaypoint->getIndex() == 206)
-		//{
-		//	m_goalWaypoint = m_track.getWaypointAt(367);
-		//	recalculatePath();
-		//}
-		else if (m_goalWaypoint->getIndex() == 367)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(488);
-			recalculatePath();
-		}
-		else if (m_goalWaypoint->getIndex() == 488)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(657);
-			recalculatePath();
-		}
-		else if (m_goalWaypoint->getIndex() == 657)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(813);
-			recalculatePath();
-		}
-		else if (m_goalWaypoint->getIndex() == 813)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(716);
-			recalculatePath();
-		}
-		else if (m_goalWaypoint->getIndex() == 716)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(895);
-			recalculatePath();
-		}
-		else if (m_goalWaypoint->getIndex() == 895)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(953);
-			recalculatePath();
-		}
-		else if (m_goalWaypoint->getIndex() == 953)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(1003);
-			recalculatePath();
-		}
-		else if (m_goalWaypoint->getIndex() == 1003)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(1074);
-			recalculatePath();
-		}
-		else if (m_goalWaypoint->getIndex() == 1074)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(1133);
-			recalculatePath();
-		}
-		else if (m_goalWaypoint->getIndex() == 1133)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(15);
-			recalculatePath();
-		}
-
-		//recalculatePath();
+		recalculatePath();
 	}
 	else
 	{
@@ -351,21 +291,60 @@ void AIControllable::setCar(Car * toAdd)
 
 void AIControllable::checkCollisionVolumes()
 {
-	if (m_car->isAtStartingCollisionVolume())
+	if (m_car->getLastHitCollisionVolume() == NULL)
 	{
-		setHighCostWaypointsToHigh();
-		m_goalWaypoint = m_track.getWaypointAt(10);
-		recalculatePath();
-
-		m_car->setStartingCollisionVolumeFlag(false);
+		return;
 	}
-	else if (m_car->isAtMidCollisionVolume())
+
+	if (m_car->getLastHitCollisionVolume()->getIndex() == 0)
 	{
-		setHighCostWaypointsToLow();
-		m_goalWaypoint = m_track.getWaypointAt(13);
+		m_goalWaypoint = m_track.getWaypointAt(367);
 		recalculatePath();
-		
-		m_car->setMidCollisionVolumeFlag(false);
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 1)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(488);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 2)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(657);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 3)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(813);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 4)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(716);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 5)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(895);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 6)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(953);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 7)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(1003);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 8)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(1074);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 9)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(15);
+		recalculatePath();
 	}
 }
 
