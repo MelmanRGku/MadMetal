@@ -82,5 +82,5 @@ void main(void)
 
    gl_FragColor = resultingColor;
 
-   gl_FragColor = round(gl_FragColor * 8) / 8;
+ //  gl_FragColor = round(gl_FragColor * 8) / 8;
 } 

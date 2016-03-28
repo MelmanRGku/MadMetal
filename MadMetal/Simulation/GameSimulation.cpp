@@ -17,7 +17,7 @@
 
 
 #define NUM_OF_PLAYERS 12
-#define NUM_LAPS_FOR_VICTORY 10
+#define NUM_LAPS_FOR_VICTORY 1
 #define RACE_FINISH_DELAY 10
 
 using namespace std;
@@ -390,12 +390,22 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 	simulatePlayers(dt);
 	}
 	else {
-		int player = getFirstPlace();
-		int score = m_players[player]->getCar()->tallyScore();
-		std::stringstream s;
-		s << "Player " << player + 1 << " Wins with " << score << "Points!!!";
-		m_displayMessage->setFontSize(45);
-		m_displayMessage->initializeMessage(s.str(), 10);
+		std::vector<ControllableTemplate *> playerTemplates;
+
+		//put the controllables into the vector incase the player trys to restart
+		for (int i = 0; i < m_players.size(); i++)
+		{
+			playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+		}
+
+		for (int i = 0; i < playerTemplates.size(); i++) {
+			playerTemplates.at(i)->setPlayerNumber(i+1);
+			playerTemplates.at(i)->setFinalPosition(m_players.at(i)->getCar()->getPositionInRace());
+			playerTemplates.at(i)->setFinalScore(m_players.at(i)->getCar()->tallyScore());
+		}
+		message.setTag(SceneMessage::eEnd);
+		message.setPlayerTemplates(playerTemplates);
+		return true;
 		
 	}
 	simulatePhysics(dt);
