@@ -66,6 +66,19 @@ PlayerSelection::PlayerSelection(GamePad *gamePad, Audio *audio, World *world) {
 		loadingInfoString->setString("A to join        B to quit");
 		m_world->addGameObject(loadingInfoString);
 	}
+
+	{
+		Physicable *p = new Physicable(NULL);
+		Animatable *a = new Animatable();
+		a->updatePosition(glm::vec3(0, 0, -30));
+		a->setScale(glm::vec3(33, 24.5, 1));
+		Audioable *au = new Audioable(*audio);
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Background.obj"));
+		model->setupVAOs();
+		Renderable3D *r = new Renderable3D(model, true, true);
+		background = new Object3D(3, au, p, a, r, NULL);
+		m_world->addGameObject(background);
+	}
 }
 
 void PlayerSelection::joinGame(int position, glm::vec3 selectionIndicatorInitialPosition, glm::vec3 carPosition) {
@@ -250,8 +263,8 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(-10, -1, -35));
-		a->setScale(glm::vec3(5, 4, 7));
+		a->updatePosition(glm::vec3(-5, -1, -25));
+		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Meowmix.obj"));
 		model->setupVAOs();
@@ -265,8 +278,8 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, -1, -35));
-		a->setScale(glm::vec3(5, 4, 7));
+		a->updatePosition(glm::vec3(0, -1, -25));
+		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/twisted1.obj"));
 		model->setupVAOs();
@@ -280,8 +293,8 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(10, -1, -35));
-		a->setScale(glm::vec3(5, 4, 7));
+		a->updatePosition(glm::vec3(5, -1, -25));
+		a->setScale(glm::vec3(4, 3, 6));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Gargantulous.obj"));
 		model->setupVAOs();

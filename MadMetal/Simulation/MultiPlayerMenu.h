@@ -14,6 +14,7 @@ private:
 	Characters tempSelection;
 	Object3D *selectionIndicator;
 	Object3D *selectedCar;
+	Object3D *background;
 	TexturedObject2D *joinquit;
 	glm::vec3 selectedCarPosition;
 

@@ -196,6 +196,7 @@ void Car::updateSuper(float dt)
 #define CAR_SPIN 45, 0, 45
 void Car::updateHealth(float dtMillis)
 {
+
 	if (m_currentHealth <= 0)	
 	{
 		if (m_deathTimerMillis > 0)
@@ -214,6 +215,7 @@ void Car::updateHealth(float dtMillis)
 			delete explosionGeom[0];
 			delete[] explosionGeom;
 		}
+		m_superDurationRemainingSeconds = 0.1;
 	}
 	
 }

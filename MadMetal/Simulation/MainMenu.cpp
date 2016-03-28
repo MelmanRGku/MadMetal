@@ -63,6 +63,19 @@ MainMenu::MainMenu(Input * input, Audio *audio)
 		loadingInfoString->setString("Mad Metal");
 		m_world->addGameObject(loadingInfoString);
 	}
+	{
+		Physicable *p = new Physicable(NULL);
+		Animatable *a = new Animatable();
+		a->updatePosition(glm::vec3(0, 0, -30));
+		a->setScale(glm::vec3(33, 24.5, 1));
+		Audioable *au = new Audioable(*audio);
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Background.obj"));
+		model->setupVAOs();
+		Renderable3D *r = new Renderable3D(model, true, true);
+		background = new Object3D(3, au, p, a, r, NULL);
+		m_world->addGameObject(background);
+	}
+
 }
 
 MainMenu::~MainMenu() {

@@ -9,6 +9,7 @@ private:
 	Object3D *singlePlayerButton,
 		*multiPlayerButton,
 		*exitButton,
+		*background,
 		*selectedButton;
 	SceneMessage::SceneEnum messageToReturn = SceneMessage::eNone;
 
