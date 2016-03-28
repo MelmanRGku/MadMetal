@@ -77,7 +77,7 @@ void Gargantulous::update(float dt) {
 void Gargantulous::useSuper() {
 	Car::useSuper();
 	m_reloadRemainingSeconds = 0;
-	m_renderable->setModel(Assets::getModel("Gargantulous"));
+	m_renderable->setModel(Assets::getModel("Gargantulous_Lava"));
 	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 	//m_animatable->updateScale(glm::vec3(0, 2, 0));
 }
