@@ -73,7 +73,7 @@ void main(void)
 	 diffuseColor = vec3(fs_in.C);
    else
    	 uvtest = fs_in.uv;
-	 uvtest.y = mod((uvtest.y - mod(distanceTraveled / 5.0, 31.4159) / 31.4159), 1.0); 
+	 uvtest.y = mod((uvtest.y - mod(distanceTraveled / 5.0, 21.991148575128552669238503682957) / 21.991148575128552669238503682957), 1.0); 
 	 diffuseColor = texture(texObject, uvtest).rgb;
 
    // combination of all components and diffuse color of the object
@@ -87,6 +87,6 @@ void main(void)
 
    gl_FragColor = resultingColor;
 
-   gl_FragColor = round(gl_FragColor * 8) / 8;
+   //gl_FragColor = round(gl_FragColor * 8) / 8;
 
 } 

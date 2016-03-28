@@ -74,7 +74,7 @@ void MeowMix::fire()
 		if (m_lastWeaponShot == LAST_WEAPON_SHOT_LEFT)
 		{
 			m_lastWeaponShot = LAST_WEAPON_SHOT_RIGHT;
-			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 3) + left * (getScale().x / 2);
+			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) +  + left * (getScale().x / 2);
 			pos = new PxTransform(weaponPos.x, weaponPos.y, weaponPos.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_MEOW_MIX, pos, NULL, this);
 			delete pos;
@@ -82,7 +82,7 @@ void MeowMix::fire()
 		else
 		{
 			m_lastWeaponShot = LAST_WEAPON_SHOT_LEFT;
-			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) + up * (getScale().y / 3) - left * (getScale().x / 2);
+			glm::vec4 weaponPos = glm::vec4(getFullPosition(), 1.0) +  - left * (getScale().x / 2);
 			pos = new PxTransform(weaponPos.x, weaponPos.y, weaponPos.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_BULLET_MEOW_MIX, pos, NULL, this);
 			delete pos;
@@ -101,13 +101,13 @@ void MeowMix::useSuper() {
 	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
 	m_reloadRemainingSeconds = 0;
 	m_superGauge = 0;
-	m_renderable->setModel(Assets::getModel("Meowmix"));
+	m_renderable->setModel(Assets::getModel("MeowmixDeathComplete"));
 	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 	//m_animatable->updateScale(glm::vec3(0, 2, 0));
 }
 
 void MeowMix::unuseSuper() {
-	m_renderable->setModel(Assets::getModel("Meowmix"));
+	m_renderable->setModel(Assets::getModel("Meowmixbody"));
 	static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 	//m_animatable->updateScale(glm::vec3(0, -2, 0));
 }

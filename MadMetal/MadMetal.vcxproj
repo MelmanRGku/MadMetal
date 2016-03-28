@@ -292,6 +292,8 @@
     <Text Include="Files\test.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Assets\Models\DeathEye.png" />
+    <Image Include="Assets\Models\Panel.jpg" />
     <Image Include="Assets\Useless\asphalt_texture409.jpg" />
     <Image Include="Assets\Useless\Building_texture4.jpg" />
     <Image Include="Assets\Models\lava rock.jpg" />

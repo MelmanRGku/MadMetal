@@ -683,5 +683,11 @@
     <Image Include="Assets\Useless\Terrain-Road.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Assets\Models\DeathEye.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\Panel.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
