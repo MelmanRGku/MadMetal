@@ -3,6 +3,7 @@
 #include "Factory\GameFactory.h"
 #include <sstream>
 #include "Objects\Waypoint.h"
+#include "Objects\CollisionVolume.h"
 
 int Car::positionGlobalID = 0;
 
@@ -11,10 +12,12 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 	m_currentWaypoint = NULL;
 	m_isAtMidCollisionVolume = false;
 	m_isAtStartingCollisionVolume = false;
+	m_lastCollisionVolume = NULL;
 	m_newLap = true;
 	m_powerUpRemaining = 0;
 	Car::positionGlobalID++;
 	m_positionInRace = positionGlobalID;
+	m_waypointHitList.clear();
 }
 
 
@@ -60,8 +63,11 @@ void Car::respawn()
 void Car::useSuper() {
 	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
 	m_superGauge = 0;
-	ui->gaugeBar->superUsed(m_superMaxDurationSeconds);
-	ui->gaugeBar->setSuperDurationRemaining(m_superDurationRemainingSeconds);
+	if (ui != NULL)
+	{
+		ui->gaugeBar->superUsed(m_superMaxDurationSeconds);
+		ui->gaugeBar->setSuperDurationRemaining(m_superDurationRemainingSeconds);
+	}
 }
 
 PowerUpType Car::getActivePowerUpType()
@@ -75,17 +81,23 @@ void Car::pickUpPowerUp(PowerUpType type)
 	{
 		std::cout << "Picked up Power up " << type << std::endl;
 		m_heldPowerUp = type;
-		ui->setPowerup(type);
+		if (ui != NULL)
+		{
+			ui->setPowerup(type);
+		}
 	}
 	
 }
 
 void Car::usePowerUp()
 {
-	//m_heldPowerUp = PowerUpType::SPEED;
+	m_heldPowerUp = PowerUpType::SPEED;
 	if (m_heldPowerUp != PowerUpType::NONE)
 	{
-		ui->unsetPowerup();
+		if (ui != NULL)
+		{
+			ui->unsetPowerup();
+		}
 		m_activePowerUp = m_heldPowerUp;
 		m_heldPowerUp = PowerUpType::NONE;
 		m_powerUpRemaining = PowerUp::getPowerUpDuration(m_activePowerUp);
@@ -110,7 +122,8 @@ void Car::usePowerUp()
 			break;
 		case (PowerUpType::SPEED) :
 			//add particle system
-			geom[0] = new PxSphereGeometry(dim.x > dim.z ? dim.z : dim.x);
+			
+			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SPEED_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), geom, this);
 			PxRigidDynamic* actor = static_cast<PxRigidDynamic*>(&getActor());
 			glm::vec3 direction = glm::normalize(getForwardVector());
@@ -166,7 +179,10 @@ void Car::updateSuper(float dt)
 	if (m_superDurationRemainingSeconds > 0)
 	{
 		m_superDurationRemainingSeconds -= dt;
-		ui->gaugeBar->setSuperDurationRemaining(m_superDurationRemainingSeconds);
+		if (ui != NULL)
+		{
+			ui->gaugeBar->setSuperDurationRemaining(m_superDurationRemainingSeconds);
+		}
 		if (m_superDurationRemainingSeconds <= 0)
 		{
 			unuseSuper();
@@ -213,7 +229,7 @@ void Car::update(float dt) {
 		ui->gaugeBar->setGaugePercentage(getSuperGauge());
 
 		{
-			std::stringstream s;
+	std::stringstream s;
 			s << "Lap: " << getLap();
 			ui->lap->setString(s.str());
 		}
@@ -321,4 +337,19 @@ bool Car::isAtStartingCollisionVolume()
 bool Car::isAtMidCollisionVolume()
 {
 	return m_isAtMidCollisionVolume;
+}
+
+void Car::addWaypointHit(Waypoint* waypoint)
+{
+	m_waypointHitList.push_back(waypoint);
+}
+
+void Car::setLastHitCollisionVolume(CollisionVolume* collisionVolume)
+{
+	m_lastCollisionVolume = collisionVolume;
+}
+
+CollisionVolume* Car::getLastHitCollisionVolume()
+{
+	return m_lastCollisionVolume;
 }

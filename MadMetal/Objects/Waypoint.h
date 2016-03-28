@@ -14,6 +14,7 @@ class Waypoint : public Object3D
 	int m_id;
 	bool m_isValid;
 	bool m_isFinish;
+	float m_highCost;
 	std::vector<Waypoint*> m_adjecentWaypoints;
 
 public:
@@ -29,4 +30,7 @@ public:
 	void addAdjecentWaypoint(Waypoint* waypoint);
 	int getId();
 	void setId(int id);
+
+	void setHighCost(float highCost);
+	float getHighCost();
 };

@@ -1,6 +1,7 @@
 #include "AIControllable.h"
 #include "Game Logic\PathFinding.h"
 #include "Game Logic\WayPointSystem.h"
+#include "Objects\CollisionVolume.h"
 #include "Objects\Track.h"
 
 AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
@@ -10,11 +11,11 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_pathFinder = new PathFinding();
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(10);
+	m_goalWaypoint = m_track.getWaypointAt(367);
 	m_currentPath.clear();
-	m_listOfWaypointsHighCost.push_back(4);
-	m_listOfWaypointsHighCost.push_back(11);
-	m_listOfWaypointsHighCost.push_back(18);
+	//m_listOfWaypointsHighCost.push_back(4);
+	//m_listOfWaypointsHighCost.push_back(11);
+	//m_listOfWaypointsHighCost.push_back(18);
 	setHighCostWaypointsToHigh();
 	m_needsToBackup = false;
 	m_counter = 0;
@@ -87,6 +88,7 @@ void AIControllable::playFrame(double dt)
 	}
 	else
 	{
+
 		//std::cout << "path exists\n";
 		if (m_car->getCurrentWaypoint()->getIndex() == m_nextWaypoint->getIndex())
 		{
@@ -179,7 +181,7 @@ void AIControllable::accelerateToNextWaypoint()
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
 	changeTurning(crossProductResult.y, amountToSteerBy);
-	accelerate(amountToAccelerate);
+	accelerate(amountToAccelerate * 0.65);
 
 	//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
 	//std::cout << "z value: " << crossProductResult.z << "\n";
@@ -234,7 +236,7 @@ void AIControllable::recalculatePath()
 	m_currentPath.clear();
 	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-//	std::cout << "THe new path is: ";
+	//std::cout << "THe new path is: ";
 
 	//for (int i = 0; i < m_currentPath.size(); i++)
 	//{
@@ -289,21 +291,60 @@ void AIControllable::setCar(Car * toAdd)
 
 void AIControllable::checkCollisionVolumes()
 {
-	if (m_car->isAtStartingCollisionVolume())
+	if (m_car->getLastHitCollisionVolume() == NULL)
 	{
-		setHighCostWaypointsToHigh();
-		m_goalWaypoint = m_track.getWaypointAt(10);
-		recalculatePath();
-
-		m_car->setStartingCollisionVolumeFlag(false);
+		return;
 	}
-	else if (m_car->isAtMidCollisionVolume())
+
+	if (m_car->getLastHitCollisionVolume()->getIndex() == 0)
 	{
-		setHighCostWaypointsToLow();
-		m_goalWaypoint = m_track.getWaypointAt(13);
+		m_goalWaypoint = m_track.getWaypointAt(367);
 		recalculatePath();
-		
-		m_car->setMidCollisionVolumeFlag(false);
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 1)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(488);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 2)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(657);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 3)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(813);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 4)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(716);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 5)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(895);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 6)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(953);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 7)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(1003);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 8)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(1074);
+		recalculatePath();
+	}
+	else if (m_car->getLastHitCollisionVolume()->getIndex() == 9)
+	{
+		m_goalWaypoint = m_track.getWaypointAt(15);
+		recalculatePath();
 	}
 }
 
@@ -311,7 +352,7 @@ void AIControllable::setHighCostWaypointsToHigh()
 {
 	for (int i = 0; i < m_listOfWaypointsHighCost.size(); i++)
 	{
-		m_pathFinder->setWaypointCostOf(m_listOfWaypointsHighCost);
+		//m_pathFinder->setWaypointCostOf(m_listOfWaypointsHighCost);
 	}
 }
 
@@ -320,23 +361,30 @@ void AIControllable::setHighCostWaypointsToLow()
 	for (int i = 0; i < m_listOfWaypointsHighCost.size(); i++)
 	{
 		std::vector<int> temp;
-		m_pathFinder->setWaypointCostOf(temp);
+		//m_pathFinder->setWaypointCostOf(temp);
 	}
 }
 
 void AIControllable::processInputAcceleration(float amount)
 {
-	if (amount > 0)
+	if (amount > 0.3)
 	{
 		//std::cout << "Applying acceleration : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, amount);
 	}
-	else if (amount < 0 && m_car->getCar().computeForwardSpeed() > 10.0)
+	else if (amount < 0.3 && m_car->getCar().computeForwardSpeed() > 10.0)
 	{
 		//std::cout << "Applying break with : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
+		if (amount < 0)
+		{
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
+		}
+		else
+		{
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, amount);
+		}
 	}
 	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
 	{

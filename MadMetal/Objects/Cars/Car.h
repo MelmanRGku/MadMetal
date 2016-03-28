@@ -8,6 +8,7 @@
 #include "Global\Definitions.h"
 
 class Waypoint;
+class CollisionVolume;
 
 class Car : public Object3D
 {
@@ -38,6 +39,8 @@ protected: //members
 	Waypoint *m_nextWaypoint;
 	bool m_isAtStartingCollisionVolume;
 	bool m_isAtMidCollisionVolume;
+	CollisionVolume* m_lastCollisionVolume;
+
 	bool m_newLap;
 
 	Sound soundChassis;
@@ -107,5 +110,10 @@ public:
 	
 	float getHealthRemaining(){ return m_currentHealth; }
 
+	void addWaypointHit(Waypoint* waypoint);
+	std::vector<Waypoint*> m_waypointHitList;
+
+	void setLastHitCollisionVolume(CollisionVolume* collisionVolume);
+	CollisionVolume* getLastHitCollisionVolume();
 };
 

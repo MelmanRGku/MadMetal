@@ -5,6 +5,7 @@
 
 class WaypointSystem;
 class Waypoint;
+class CollisionVolume;
 
 
 class Track : public Object3D
@@ -24,10 +25,16 @@ private: //members
 		*trackWalls;
 	std::vector<WaypointSystem*> m_waypointSystems;
 	std::vector<Waypoint*> m_waypointList;
+	std::vector<CollisionVolume*> m_collisionVolumes;
 private: //helper functions 
 	void stitchWaypointSystems(Boundry lastWaypointSystemLocation, Boundry newWaypointSystemPosition, WaypointSystem& lastWaypointSystem, WaypointSystem& newWaypointSystem, int lastWaypointSystemIntialPosition, int newWaypointSystemIntialPosition, bool recalculateIds);
 	void determineStitchingBoundaries(Boundry locationOfStiching, int initialPosition, bool& isStichingRow, int& RowIndex, int& ColumnIndex, WaypointSystem& system);
 	void stitch(WaypointSystem& waypointSystem1, bool isRowStiching1, int limitOfStichingIteration1, int indexOfEdge1, WaypointSystem& waypointSystem2, bool isRowStiching2, int limitOfStichingIteration2, int indexOfEdge2);
 	void determinePlaceInAdjecencyListAndPush(WaypointSystem& waypointSystem1, bool isRowStiching1, int indexOfEdge1, int indexOfIncrement1, WaypointSystem& waypointSystem2, bool isRowStiching2, int indexOfEdge2, int indexOfIncrement2);
 	void recalculateWaypointSystemIds(WaypointSystem& waypointSystem1, WaypointSystem& waypointSystem2, bool& recalculateIds);
+	//void setInvalid1();
+	//void setInvalid2();
+	//void setInvalid3();
+
+	void setValidPath();
 };

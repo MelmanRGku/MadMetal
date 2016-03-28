@@ -636,15 +636,15 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 	}
 	case OBJECT_SPEED_POWERUP:
 	{
-						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_ATTACK_POWERUP_PICKUP));
+						   Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_SPEED_POWERUP_ACTIVE));
 						   Renderable3D *renderable = new Renderable3D(model, true, true);
-						   renderable->setModel(NULL);  // remove when there is a model for the powerup
+						 
 						   Animatable *animatable = new Animatable();
 						   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
 						   PxRigidDynamic *powerupTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::SPEED_POWERUP, objectId, pos, geom, 0, NULL, NULL, NULL));
 						   Physicable *physicable = new Physicable(powerupTriggerVolume);
-						   animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
+						   animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x/1.2, powerupTriggerVolume->getWorldBounds().getDimensions().y/4, 3));
 
 						   PowerUpSpeed *powerup = new PowerUpSpeed(objectId, audioable, physicable, animatable, renderable, static_cast<Car*>(parent));
 

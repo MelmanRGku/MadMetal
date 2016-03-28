@@ -584,10 +584,7 @@
     <ClInclude Include="Objects\MenuSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\TrainCar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\Header.h">
+ <ClInclude Include="Game Logic\WaypointDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\PowerUpAttack.h">
@@ -671,6 +668,17 @@
     <Image Include="Assets\Useless\Building_texture4.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Assets\Models\asphalt_texture409.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\Building_texture4.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\Terrain-Road.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
     <Image Include="Assets\Models\lava rock.jpg">
       <Filter>Resource Files</Filter>
     </Image>

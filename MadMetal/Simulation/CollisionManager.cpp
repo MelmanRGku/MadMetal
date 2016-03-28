@@ -182,7 +182,9 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 			}
 		}
 		
-		//std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getId() << "\n";
+		std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getId() << "\n";
+		//waypoint->setValid(true);
+		//car->addWaypointHit(waypoint);
 	}
 }
 
@@ -198,16 +200,21 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 
 	if (car != NULL)
 	{
+
+		car->setLastHitCollisionVolume(collisionVolume);
+
 		if (collisionVolume->getIndex() == 0)
 		{
 			//std::cout << "car: " << car->getIndex() << " collided with starting CollisionVolume \n";
 			car->setStartingCollisionVolumeFlag(true);
 		}
-		else if (collisionVolume->getIndex() == 1)
+		else if (collisionVolume->getIndex() == 5)
 		{
 			//std::cout << "car: " << car->getIndex() << " collided with mid CollisionVolume \n";
 			car->setMidCollisionVolumeFlag(true);
 		}
+
+		std::cout << "car: " << car->getIndex() << " collided with volume: " << collisionVolume->getIndex();
 	}
 }
 
@@ -301,7 +308,7 @@ void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, lon
 	if (super == NULL)
 	{
 		return;
-	}
+}
 
 	TestObject * otherObject = m_world.findObject(carId);
 	Car * car = dynamic_cast<Car *>(otherObject);

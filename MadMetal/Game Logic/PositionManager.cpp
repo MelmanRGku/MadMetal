@@ -20,6 +20,8 @@ void PositionManager::updatePlayerPositions()
 	{
 		for (int j = i + 1; j < m_players.size(); j++)
 		{
+			if (m_players.at(i)->getCar()->getCurrentWaypoint() == NULL || m_players.at(j)->getCar()->getCurrentWaypoint() == NULL)
+				continue;
 			if (m_players.at(i)->getCar()->getLap() < m_players.at(j)->getCar()->getLap())
 			{
 				if (m_players.at(i)->getCar()->getPositionInRace() < m_players.at(j)->getCar()->getPositionInRace())
