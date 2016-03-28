@@ -329,7 +329,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 								   Animatable *animatable = new Animatable();
 
 								   PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-								   glm::vec3 speed = 150.0f * static_cast<Object3D *>(parent)->getForwardVector();
+		glm::vec3 speed = 250.0f * static_cast<Object3D *>(parent)->getForwardVector();
 								   PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 								   PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_GARGANTULOUS_BULLET, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
 								   delete physicsSpeed;
@@ -355,7 +355,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-		glm::vec3 speed = 150.f * static_cast<Object3D *>(parent)->getForwardVector(); speed += glm::vec3(0, 5.f, 0);
+		glm::vec3 speed = 160.f * static_cast<Object3D *>(parent)->getForwardVector(); speed += glm::vec3(0, 10.f, 0);
 		PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
 		
@@ -709,6 +709,20 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 						   m_world.addGameObject(powerup);
 						   m_scene.addActor(*powerupTriggerVolume);
+
+						   //setup updaters
+						   ObjectPositionUpdater *updUp1 = new ObjectPositionUpdater(powerup, glm::vec3(0, 1, 0), .4f);
+						   ObjectPositionUpdater *updDown = new ObjectPositionUpdater(powerup, glm::vec3(0, -2, 0), .8f);
+						   ObjectPositionUpdater *updUp2 = new ObjectPositionUpdater(powerup, glm::vec3(0, 1, 0), .4f);
+						   ObjectUpdaterSequence *seq = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_ONCE);
+						   seq->addObjectUpdater(updUp1);
+						   seq->addObjectUpdater(updDown);
+						   seq->addObjectUpdater(updUp2);
+						   ObjectRotationUpdater *updRot = new ObjectRotationUpdater(powerup, glm::vec3(0, 30, 0), .3f, ObjectRotationUpdater::ANGLE_TYPE_DEGREES);
+						   ObjectUpdaterParallel *par = new ObjectUpdaterParallel(ObjectUpdaterParallel::TYPE_INFINITE);
+						   par->addObjectUpdater(seq);
+						   par->addObjectUpdater(updRot);
+						   m_world.addObjectUpdater(par);
 
 						   return powerup;
 	}

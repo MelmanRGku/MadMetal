@@ -201,7 +201,6 @@ void WaypointSystem::createWaypointConnections()
 
 void WaypointSystem::addIdToAllWaypointsInTheSystem(int id)
 {
-	std::cout << "applying a change of: " << id << " \n";
 	for (int i = 0; i < m_waypointMap.size(); i++)
 	{
 		for (int j = 0; j < m_waypointMap.at(i).size(); j++)

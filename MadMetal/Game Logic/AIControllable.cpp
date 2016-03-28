@@ -26,20 +26,21 @@ AIControllable::~AIControllable()
 }
 
 void AIControllable::processFire(std::vector<Controllable *> *players) {
-
-	glm::vec3 forwardVector = m_car->getForwardVector();
-	forwardVector.y = 0;
-	forwardVector = glm::normalize(forwardVector);
-	for (unsigned int i = 0; i < players->size(); i++) {
-		if (players->at(i) != this) {
-			glm::vec3 vecToPlayer = players->at(i)->getCar()->getFullPosition() - m_car->getFullPosition();
-			vecToPlayer.y = 0;
-			vecToPlayer = glm::normalize(vecToPlayer);
-			if (glm::dot(vecToPlayer, forwardVector) > .9) {
-				if (m_car->superReady()) {
-					m_car->useSuper();
+	if (!m_controlsPaused) {
+		glm::vec3 forwardVector = m_car->getForwardVector();
+		forwardVector.y = 0;
+		forwardVector = glm::normalize(forwardVector);
+		for (unsigned int i = 0; i < players->size(); i++) {
+			if (players->at(i) != this) {
+				glm::vec3 vecToPlayer = players->at(i)->getCar()->getFullPosition() - m_car->getFullPosition();
+				vecToPlayer.y = 0;
+				vecToPlayer = glm::normalize(vecToPlayer);
+				if (glm::dot(vecToPlayer, forwardVector) > .9) {
+					if (m_car->superReady()) {
+						m_car->useSuper();
+					}
+					m_car->fire();
 				}
-				m_car->fire();
 			}
 		}
 	}

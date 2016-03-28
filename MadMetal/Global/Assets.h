@@ -60,6 +60,7 @@ class Assets
 {
 private:
 	static std::mutex m;
+	static std::mutex mForTextures;
 	static std::map<std::string, Model *> *models;
 	static std::map<std::string, Texture *> *textures;
 	static std::vector<std::string> *modelsToBeLoadedBeforeTheGameStarts;

@@ -9,6 +9,8 @@
 #include "Objects\ObjectUpdaters\ObjectUpdaterParallel.h"
 #include "Settings.h"
 #include <sstream>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 {
@@ -124,6 +126,19 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 		background = new Object3D(3, au, p, a, r, NULL);
 		m_world->addGameObject(background);
 	}
+
+	{
+		Animatable *a = new Animatable();
+		a->setPosition(glm::vec3(0, -0.80f, 0));
+		a->setScale(glm::vec3(0.7f, 0.2f, 0));
+		Audioable *au = new Audioable(*audio);
+		Model2D *model;
+		model = new Model2D(Assets::loadTextureFromDirectory("Assets/Textures/press_a_to_start.png"));
+		model->getTexture()->Load();
+		Renderable2D *r = new Renderable2D(model);
+		aToStart = new TexturedObject2D(1, au, a, r);
+		m_world->addGameObject(aToStart);
+	}
 }
 
 SinglePlayerMenu::~SinglePlayerMenu() {
@@ -147,8 +162,10 @@ bool SinglePlayerMenu::simulateScene(double dt, SceneMessage &message)
 				carType = Characters::CHARACTER_GARGANTULOUS;
 
 			templates.push_back(new ControllableTemplate(carType, m_gamePad));
+
+			srand(time(NULL));
 			for (int i = 0; i < numberOfAIs; i++) {
-				templates.push_back(new ControllableTemplate(1));
+				templates.push_back(new ControllableTemplate(rand() % 3));
 			}
 			message.setPlayerTemplates(templates);
 		}
@@ -195,12 +212,14 @@ void SinglePlayerMenu::upPressed() {
 			selectedObject = selectedCar;
 		else
 			selectedObject = car2;
+		aToStart->setScale(glm::vec3(0.7f, 0.2f, 0));
 	}
 	else if (selectedObject == numberOfAIsButton) {
 		selectedObject = backButton;
 	}
 	else if (selectedObject == car1 || selectedObject == car2 || selectedObject == car3) {
 		selectedObject = numberOfAIsButton;
+		aToStart->setScale(glm::vec3(0, 0, 0));
 	}
 	selectMenuItem(selectedObject);
 }
@@ -215,9 +234,11 @@ void SinglePlayerMenu::downPressed() {
 			selectedObject = selectedCar;
 		else
 			selectedObject = car2;
+		aToStart->setScale(glm::vec3(0.7f, 0.2f, 0));
 	}
 	else if (selectedObject == car1 || selectedObject == car2 || selectedObject == car3) {
 		selectedObject = backButton;
+		aToStart->setScale(glm::vec3(0, 0, 0));
 	}
 	selectMenuItem(selectedObject);
 }
@@ -238,8 +259,8 @@ void SinglePlayerMenu::leftPressed() {
 	}
 	else if (selectedObject == numberOfAIsButton) {
 		numberOfAIs--;
-		if (numberOfAIs < 1)
-			numberOfAIs = 1;
+		if (numberOfAIs < 0)
+			numberOfAIs = 0;
 		std::stringstream s;
 		s << numberOfAIs;
 		numberOfAIsString->setString(s.str());
@@ -263,8 +284,8 @@ void SinglePlayerMenu::rightPressed() {
 	}
 	else if (selectedObject == numberOfAIsButton) {
 		numberOfAIs++;
-		if (numberOfAIs > MAX_NUM_OF_AIS)
-			numberOfAIs = MAX_NUM_OF_AIS;
+		if (numberOfAIs > MAX_NUM_OF_AIS - 1)
+			numberOfAIs = MAX_NUM_OF_AIS - 1;
 		std::stringstream s;
 		s << numberOfAIs;
 		numberOfAIsString->setString(s.str());
@@ -282,7 +303,7 @@ void SinglePlayerMenu::aPressed() {
 }
 
 void SinglePlayerMenu::selectMenuItem(Object3D *menuItem) {
-	glm::vec3 offset = glm::vec3(0, 0, 10);
+	glm::vec3 offset = glm::vec3(0, 0, 5);
 	if (menuItem == backButton) {
 		offset = glm::vec3(0, 0, .1f);
 	}
@@ -300,7 +321,7 @@ void SinglePlayerMenu::selectMenuItem(Object3D *menuItem) {
 }
 
 void SinglePlayerMenu::unselectMenuItem(Object3D *menuItem) {
-	glm::vec3 offset = glm::vec3(0, 0, -10);
+	glm::vec3 offset = glm::vec3(0, 0, -5);
 	if (menuItem == backButton) {
 		offset = glm::vec3(0, 0, -.1f);
 	}
