@@ -86,6 +86,8 @@ public:
 		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_4,
 		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_5,
 		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_6,
+
+		RENDERABLE_OBJECT_SKY_BOX,
 	};
 
 	
@@ -178,6 +180,8 @@ public:
 			return Assets::getModel("explosion1_12");
 		case RENDERABLE_OBJECT_EXPLOSION1_13:
 			return Assets::getModel("explosion1_13");
+		case RENDERABLE_OBJECT_SKY_BOX:
+			return Assets::getModel("Skybox");
 		case RENDERABLE_OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE:
 			return new Model2D(Assets::getTexture("disturbed"));
 		case RENDERABLE_OBJECT_UI_SICK_PUPPIES_SONG_TEXTURE_YOURE_GOING_DOWN:

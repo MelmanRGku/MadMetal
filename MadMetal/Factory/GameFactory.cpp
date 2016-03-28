@@ -973,6 +973,22 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 		return table;
 	}
+	case OBJECT_SKY_BOX:
+	{
+		Renderable3D *renderable = new Renderable3D(static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_SKY_BOX)), true, true);
+		Animatable *animatable = new Animatable();
+		animatable->setScale(glm::vec3(5000, 5000, 5000));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+		Physicable *physicable = new Physicable(NULL);
+
+		Object3D *skybox = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
+
+		m_world.addGameObject(skybox);
+
+		return skybox;
+	
+	}
 	}
 }
 

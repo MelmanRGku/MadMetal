@@ -571,7 +571,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	setupPowerups();
 	setupTrains();
 	setupDeathPit();
-
+	m_gameFactory->makeObject(GameFactory::OBJECT_SKY_BOX, NULL, NULL, NULL);
 	//PxGeometry **geom1 = new PxGeometry *[1];
 	//PxGeometry **geom2 = new PxGeometry *[1];
 	//geom1[0] = new PxBoxGeometry(PxVec3(60, m_track->getDrivablePart()->getWorldBounds().maximum.y, 30));
