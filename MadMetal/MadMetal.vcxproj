@@ -74,6 +74,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\EndingScreenUIScoreTable.cpp" />
+    <ClCompile Include="Objects\EndingScreenCarInfoManager.cpp" />
+    <ClCompile Include="Simulation\EndingScene.cpp" />
     <ClCompile Include="Game Logic\AIControllable.cpp" />
     <ClCompile Include="Game Logic\PathFinding.cpp" />
     <ClCompile Include="Game Logic\PositionManager.cpp" />
@@ -166,6 +169,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Objects\EndingScreenUIScoreTable.h" />
+    <ClInclude Include="Objects\EndingScreenCarInfoManager.h" />
+    <ClInclude Include="Simulation\EndingScene.h" />
     <ClInclude Include="Factory\AnimationFactory.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />
     <ClInclude Include="Game Logic\PositionManager.h" />

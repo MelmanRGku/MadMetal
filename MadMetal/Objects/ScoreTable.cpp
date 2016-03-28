@@ -70,6 +70,7 @@ void ScoreTable::sort() {
 				std::iter_swap(m_playerNames.begin() + j, m_playerNames.begin() + j + 1);
 				std::iter_swap(m_playerPositionsInRaceStrings.begin() + j, m_playerPositionsInRaceStrings.begin() + j + 1);
 				std::iter_swap(m_playerPoints.begin() + j, m_playerPoints.begin() + j + 1);
+				std::iter_swap(m_playerPointsStrings.begin() + j, m_playerPointsStrings.begin() + j + 1);
 			}
 		}
 	}

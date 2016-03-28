@@ -24,7 +24,7 @@ PauseMenu::PauseMenu(std::vector<ControllableTemplate *> players, Audio *audio)
 		a->updatePosition(glm::vec3(0, 2, -15));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Singleplayer.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Resume.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		resumeButton = new Object3D(1, au, p, a, r, NULL);
@@ -38,7 +38,7 @@ PauseMenu::PauseMenu(std::vector<ControllableTemplate *> players, Audio *audio)
 		a->updatePosition(glm::vec3(0, 0, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Singleplayer.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Restart.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		restartButton = new Object3D(2, au, p, a, r, NULL);
@@ -51,7 +51,7 @@ PauseMenu::PauseMenu(std::vector<ControllableTemplate *> players, Audio *audio)
 		a->updatePosition(glm::vec3(0, -2, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Multiplayer.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/MainMenu.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		exitToMainMenuButton = new Object3D(3, au, p, a, r, NULL);

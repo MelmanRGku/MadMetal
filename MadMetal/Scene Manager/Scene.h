@@ -20,6 +20,7 @@ public:
 		eGameSimulation,
 		ePause,
 		eRestart,
+		eEnd,
 		ePop,
 		eDefault,
 		eNone,
