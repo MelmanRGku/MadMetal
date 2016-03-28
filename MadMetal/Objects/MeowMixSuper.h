@@ -28,9 +28,9 @@ public:
 			return;
 		}
 		
-		PxVec3 initialPosition = m_owner->getCar().getRigidDynamicActor()->getGlobalPose().p;
+		PxVec3 initialPosition = m_owner->getCar().getRigidDynamicActor()->getGlobalPose().p; 
 		glm::vec3 forward = glm::normalize(m_owner->getForwardVector());
-		PxVec3 newPosition = initialPosition + PxVec3(forward.x, forward.y, forward.z) * BEAM_DISTANCE /2;
+		PxVec3 newPosition = initialPosition - PxVec3(0, 0, m_owner->getCar().getRigidDynamicActor()->getWorldBounds().getDimensions().z/10) + PxVec3(forward.x, forward.y, forward.z) * BEAM_DISTANCE / 2;
 		getActor().setGlobalPose(PxTransform(newPosition, m_owner->getCar().getRigidDynamicActor()->getGlobalPose().q));
 		m_animatable->setRotation(glm::vec3(0, 0, 0));
 
@@ -39,7 +39,7 @@ public:
 		PxRaycastBuffer hit;              // [out] Sweep results
 		PxQueryFilterData fd = PxQueryFilterData(PxQueryFlag::eDYNAMIC);
 		PxVec3 rayDirection = PxVec3(forward.x, forward.y, forward.z);    // [in] normalized sweep direction
-		initialPosition += rayDirection * 5;
+		initialPosition += rayDirection * (m_owner->getCar().getRigidDynamicActor()->getWorldBounds().getDimensions().z + 1);
 		initialPosition.y += 1;
 		GameFactory::instance()->sceneRayCast(initialPosition, rayDirection, BEAM_DISTANCE, hit, PxHitFlag::eDEFAULT, fd);
 		
@@ -57,7 +57,11 @@ public:
 				case (2) : //COLLISION_FLAG_CHASSIS
 					//std::cout << "hit a car" << std::endl;
 					Car * car = static_cast<Car *>(GameFactory::instance()->getWorld().findObject(shapes[0]->getSimulationFilterData().word2));
-					if (car->isAlive())
+					if (car == m_owner)
+					{
+						std::cout << "Clipping with self. increase ray start offset \n";
+					}
+					else if (car->isAlive())
 					{
 						m_owner->addDamageDealt(car->getHealthRemaining());
 						car->takeDamage(car->getHealthRemaining());

@@ -8,5 +8,6 @@ public:
 	TexturedObject2D(long id, Audioable *aable, Animatable *anable, Renderable2D *rable);
 	virtual ~TexturedObject2D();
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
+	virtual void update(float dt);
 };
 

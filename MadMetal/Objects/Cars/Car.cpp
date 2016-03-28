@@ -1,5 +1,5 @@
 #include "Car.h"
-#include "../DrivingStyleFast.h"
+#include "../Cars/DrivingStyleMeowMix.h"
 #include "Factory\GameFactory.h"
 #include <sstream>
 #include "Objects\Waypoint.h"
@@ -69,6 +69,7 @@ void Car::pickUpPowerUp(PowerUpType type)
 	{
 		std::cout << "Picked up Power up " << type << std::endl;
 		m_heldPowerUp = type;
+		ui->setPowerup(type);
 	}
 	
 }
@@ -78,7 +79,7 @@ void Car::usePowerUp()
 	//m_heldPowerUp = PowerUpType::SPEED;
 	if (m_heldPowerUp != PowerUpType::NONE)
 	{
-		
+		ui->unsetPowerup();
 		m_activePowerUp = m_heldPowerUp;
 		m_heldPowerUp = PowerUpType::NONE;
 		m_powerUpRemaining = PowerUp::getPowerUpDuration(m_activePowerUp);
@@ -203,26 +204,23 @@ void Car::update(float dt) {
 		ui->gaugeBar->setGaugePercentage(getSuperGauge());
 
 		{
-	std::stringstream s;
-	s << "Score: " << tallyScore();
-			ui->score->setString(s.str());
-		}
-
-		{
 			std::stringstream s;
 			s << "Lap: " << getLap();
 			ui->lap->setString(s.str());
 		}
+		ui->update(dt);
 	}
 }
 
 void Car::addDamageDealt(float damage) {
 	m_damageDealt += damage;
+	m_score += damage;
 	
 	if (m_activePowerUp == PowerUpType::ATTACK)
 	{
 
 		m_currentHealth += PowerUp::getLifeStealPercentage() * damage;
+		if (m_currentHealth > m_maxHealth) m_currentHealth = m_maxHealth;
 	}
 	
 	if (m_superDurationRemainingSeconds <= 0) {

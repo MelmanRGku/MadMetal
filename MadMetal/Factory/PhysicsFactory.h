@@ -26,6 +26,7 @@ public:
 		PHYSICAL_OBJECT_EXPLOSION,
 		PHYSICAL_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
 		PHYSICAL_OBJECT_GARGANTULOUS_SUPER_BULLET,
+		PHYSICAL_OBJECT_GARGANTULOUS_BULLET,
 		PHYSICAL_OBJECT_GARGANTULOUS_SUPER_VOLUME,
 		PHYSICAL_OBJECT_MEOW_MIX_SUPER,
 		SPEED_POWERUP,
@@ -150,6 +151,29 @@ public:
 
 			toReturn = bullet;
 			break;
+		}
+
+		case PHYSICAL_OBJECT_GARGANTULOUS_BULLET:
+		{
+												PxRigidDynamic * bullet = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+												bullet->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+												PxFilterData simFilterData;
+												simFilterData.word0 = COLLISION_FLAG_BULLET;
+												simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
+
+												bullet->createShape(PxBoxGeometry(1, 1, 2), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+
+												PxShape* shapes[1];
+												bullet->getShapes(shapes, 1);
+												shapes[0]->setSimulationFilterData(simFilterData);
+												shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+												shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+												setFilterDataId(objectId, bullet);
+												bullet->setLinearVelocity(*velocity);
+
+												toReturn = bullet;
+												break;
 		}
 		case PHYSICAL_OBJECT_GARGANTULOUS_SUPER_BULLET:
 		{

@@ -335,6 +335,7 @@ void CollisionManager::processGargantulousSuperBulletHit(long bulletId, long car
 
 void CollisionManager::processGargantulousSuperVolumeHit(long volumeId, long carId)
 {
+	std::cout << "Collided with Collision Volume \n";
 	GargantulousSuper * super = dynamic_cast<GargantulousSuper *>(m_world.findObject(volumeId));
 
 	if (super == NULL)

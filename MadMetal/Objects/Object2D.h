@@ -17,6 +17,7 @@ public:
 	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 
 	virtual glm::mat4x4 getModelMatrix();
+	virtual void update(float dt);
 	void playSound();
 };
 

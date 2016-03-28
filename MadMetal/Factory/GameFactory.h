@@ -12,10 +12,18 @@
 #include "Objects\Physicable.h"
 #include "Renderer\Renderable3D.h"
 #include "Renderer\Renderable2D.h"
-#include "Objects\DrivingStyleFast.h"
+
+#include "Objects\Cars\DrivingStyleMeowMix.h"
+#include "Objects\Cars\DrivingStyleExplosivelyDelicious.h"
+#include "Objects\Cars\DrivingStyleGargantulous.h"
+
+
 #include "Objects\Cars\MeowMix.h"
 
 #include "Objects\Cars\ExplosivelyDelicious.h"
+#include "Objects\Cars\Gargantulous.h"
+
+
 #include "Objects\ExplosivelyDeliciousSuper.h"
 #include "Objects\Bullet.h"
 #include "Objects\MeowMixBullet.h"
@@ -38,18 +46,23 @@
 #include "Objects\AnimatedExplosion.h"
 #include "Objects\TrainCar.h"
 #include "PxQueryReport.h"
+#include "Objects\VehicleSpecificationsMeowMix.h"
+
 class GameFactory
 {
 public:
 	enum Objects {
 		OBJECT_MEOW_MIX,
 		OBJECT_EXPLOSIVELY_DELICIOUS,
+		OBJECT_GARGANTULOUS,
 		OBJECT_BULLET_MEOW_MIX,
 		OBJECT_MEOW_MIX_SUPER,
 		OBJECT_BULLET_EXPLOSIVELY_DELICIOUS,
 		OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
 		OBJECT_GARGANTULOUS_SUPER_VOLUME,
 		OBJECT_GARGANTULOUS_SUPER_BULLET,
+		OBJECT_GARGANTULOUS_BULLET,
+		OBJECT_BULLET_SUPER_VOLCANO,
 		OBJECT_PLANE,
 		OBJECT_HEALTH_BAR,
 		OBJECT_GAUGE_BAR,
@@ -76,7 +89,12 @@ public:
 		OBJECT_EXPLOSION_1,
 		OBJECT_TRAIN_CAR,
 		OBJECT_DEATH_PIT,
-		OBJECT_ANIMATION_TEST
+		OBJECT_ANIMATION_TEST,
+		OBJECT_UI_POWERUP_BORDER_ICON,
+		OBJECT_UI_SHIELD_POWERUP_ICON,
+		OBJECT_UI_ATTACK_POWERUP_ICON,
+		OBJECT_UI_SPEED_POWERUP_ICON,
+		OBJECT_UI_SCORE_TABLE,
 	};
 
 	

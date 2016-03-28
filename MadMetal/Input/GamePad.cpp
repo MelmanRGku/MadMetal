@@ -63,6 +63,9 @@ void GamePad::setButtonStates()
 	//startButton
 	updateButtonState(startState, m_state.Gamepad.wButtons & StartButton);
 
+	//backButton
+	updateButtonState(backState, m_state.Gamepad.wButtons & BackButton);
+
 
 #define JOYSTICK_SENSITIVITY 0.3
 	//Left JoyStick Left
@@ -159,6 +162,8 @@ bool GamePad::isPressed(int gamePadButton)
 		return ljdState == PRESSED;
 	case (StartButton) :
 		return startState == PRESSED;
+	case (BackButton) :
+		return backState == PRESSED;
 	default:
 		std::cout << "Checking for button not yet assigned \n";
 		return false;

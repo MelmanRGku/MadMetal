@@ -2,9 +2,10 @@
 
 #include "PxVehicleDrive4W.h"
 #include "../Object3D.h"
-#include "Objects\DrivingStyle.h"
+#include "Objects\Cars\DrivingStyle.h"
 #include "Objects\PowerUp.h"
 #include "Objects/UI.h"
+#include "Global\Definitions.h"
 
 class Waypoint;
 
@@ -57,6 +58,7 @@ private:
 public:
 
 	UI *ui;
+	float distanceTraveled = 0;
 
 	Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	virtual ~Car();

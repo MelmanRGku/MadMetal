@@ -16,7 +16,8 @@ bool Texture::Load()
 	{
 		glGenTextures(1, &textureObj);
 		glBindTexture(textureTarget, textureObj);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTexEnvf(GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data); 
 		glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glBindTexture(textureTarget, 0);

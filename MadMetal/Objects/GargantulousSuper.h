@@ -28,6 +28,7 @@ public:
 
 	virtual void update(float dtMillis)
 	{
+		m_physicable->getActor().setGlobalPose(m_owner->getActor().getGlobalPose());
 		if (m_owner->getSuperDurationRemaining() <= 0 )//|| !m_owner->isAlive())
 		{
 			setHasToBeDeleted(true);
@@ -46,6 +47,7 @@ public:
 				PxGeometry * geom[1];
 				geom[0] = new PxSphereGeometry(4);
 				HomingBullet * bullet = static_cast<HomingBullet*> (GameFactory::instance()->makeObject(GameFactory::OBJECT_GARGANTULOUS_SUPER_BULLET, &m_owner->getActor().getGlobalPose(), geom, m_owner));
+				delete geom[0];
 				bullet->setTarget(m_targets[0]);
 				m_targets.erase(m_targets.begin());
 

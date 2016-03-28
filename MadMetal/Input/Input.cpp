@@ -60,6 +60,19 @@ bool Input::getGamePadHandle(int portNum, GamePad** handle)
 }
 
 
+std::vector<GamePad *> Input::getAllGamePads() {
+	std::vector<GamePad *> gamePadsToReturn;
+	for (int portNum = 0; portNum < 4; portNum++)
+	{
+		if (gamePads[portNum]->checkConnection())
+		{
+			gamePadsToReturn.push_back(gamePads[portNum]);
+		}
+	}
+	return gamePadsToReturn;
+}
+
+
 GamePad * Input::getGamePadHandle()
 {
 

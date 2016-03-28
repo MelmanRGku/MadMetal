@@ -1,13 +1,14 @@
 #pragma once
 #include "Text2D.h"
 #include <string>
+#include "Libraries\freeglut\freeglut.h"
 
 class DisplayMessage : public Object2D
 {
 public:
 	DisplayMessage(long id, Audioable *aable, Animatable *anable, Renderable2D *rable) : Object2D(id, aable, anable, rable)
 	{
-		m_centerOfScreen = glm::vec3(std::stof(Settings::getSetting("screenWidth")) / 2, std::stof(Settings::getSetting("screenHeight")) / 2, 0);
+		m_centerOfScreen = glm::vec3(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2, 0);
 	}
 	~DisplayMessage(){ 
 	

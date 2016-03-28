@@ -79,7 +79,16 @@
     <ClCompile Include="Game Logic\PositionManager.cpp" />
     <ClCompile Include="Game Logic\SearchWaypoint.cpp" />
     <ClCompile Include="Game Logic\WayPointSystem.cpp" />
+    <ClCompile Include="Objects\ScoreTable.cpp" />
+    <ClCompile Include="Simulation\PauseMenu.cpp" />
+    <ClCompile Include="Simulation\MultiPlayerMenu.cpp" />
+    <ClCompile Include="Objects\Cars\DrivingStyleExplosivelyDelicious.cpp" />
     <ClCompile Include="Objects\Cars\ExplosivelyDelicious.cpp" />
+    <ClCompile Include="Objects\Cars\Gargantulous.cpp" />
+    <ClCompile Include="Objects\Cars\DrivingStyleGargantulous.cpp" />
+    <ClCompile Include="Objects\VehicleSpecifications.cpp" />
+    <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp" />
+    <ClCompile Include="Renderer\CellTireShaderProgram.cpp" />
     <ClCompile Include="Simulation\MainMenu.cpp" />
     <ClCompile Include="Objects\MapUI.cpp" />
     <ClCompile Include="Objects\ObjectUpdaters\ObjectScaleUpdater.cpp" />
@@ -108,7 +117,7 @@
     <ClCompile Include="Global\Assets.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="Objects\Cars\MeowMix.cpp" />
-    <ClCompile Include="Objects\DrivingStyle.cpp" />
+    <ClCompile Include="Objects\Cars\DrivingStyle.cpp" />
     <ClCompile Include="Objects\ObjectCreators\PhysicsObjectCreator.cpp" />
     <ClCompile Include="Objects\TestObject.cpp" />
     <ClCompile Include="Renderer\Renderable.cpp" />
@@ -123,7 +132,7 @@
     <ClCompile Include="Global\Log.cpp" />
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="Global\Settings.cpp" />
-    <ClCompile Include="Objects\DrivingStyleFast.cpp" />
+    <ClCompile Include="Objects\Cars\DrivingStyleMeowmix.cpp" />
     <ClCompile Include="Objects\Mesh.cpp" />
     <ClCompile Include="Objects\Model.cpp" />
     <ClCompile Include="Objects\Object.cpp" />
@@ -153,6 +162,7 @@
     <ClCompile Include="Audio\MusicManager.cpp" />
     <ClCompile Include="Objects\TexturedObject2D.cpp" />
     <ClCompile Include="Simulation\SinglePlayerMenu.cpp" />
+    <ClCompile Include="Objects\UIScoreTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
@@ -160,8 +170,16 @@
     <ClInclude Include="Game Logic\PathFinding.h" />
     <ClInclude Include="Game Logic\PositionManager.h" />
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
+    <ClInclude Include="Global\Definitions.h" />
+    <ClInclude Include="Objects\GargantulousBullet.h" />
+    <ClInclude Include="Objects\ScoreTable.h" />
+    <ClInclude Include="Simulation\PauseMenu.h" />
+    <ClInclude Include="Simulation\MultiPlayerMenu.h" />
     <ClInclude Include="Objects\AnimatedExplosion.h" />
     <ClInclude Include="Objects\AnimatedModel.h" />
+    <ClInclude Include="Objects\Cars\DrivingStyleExplosivelyDelicious.h" />
+    <ClInclude Include="Objects\Cars\Gargantulous.h" />
+    <ClInclude Include="Objects\Cars\DrivingStyleGargantulous.h" />
     <ClInclude Include="Objects\Cars\ExplosivelyDelicious.h" />
     <ClInclude Include="Objects\ExplosivelyDeliciousSuper.h" />
     <ClInclude Include="Objects\ExplosivelyDeliciousBullet.h" />
@@ -174,7 +192,10 @@
     <ClInclude Include="Game Logic\WaypointDefinitions.h" />
     <ClInclude Include="Objects\MainMenuSystem.h" />
     <ClInclude Include="Objects\MenuSystem.h" />
+    <ClInclude Include="Objects\VehicleSpecifications.h" />
+    <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h" />
     <ClInclude Include="Objects\TrainCar.h" />
+    <ClInclude Include="Renderer\CellTireShaderProgram.h" />
     <ClInclude Include="Simulation\MainMenu.h" />
     <ClInclude Include="Objects\MapUI.h" />
     <ClInclude Include="Objects\ObjectUpdaters\ObjectScaleUpdater.h" />
@@ -229,8 +250,8 @@
     <ClInclude Include="Libraries\stb_image.h" />
     <ClInclude Include="Objects\Camera.h" />
     <ClInclude Include="Input\GamePad.h" />
-    <ClInclude Include="Objects\DrivingStyle.h" />
-    <ClInclude Include="Objects\DrivingStyleFast.h" />
+    <ClInclude Include="Objects\Cars\DrivingStyle.h" />
+    <ClInclude Include="Objects\Cars\DrivingStyleMeowMix.h" />
     <ClInclude Include="Objects\Mesh.h" />
     <ClInclude Include="Objects\Model.h" />
     <ClInclude Include="Objects\Object.h" />
@@ -266,10 +287,21 @@
     <ClInclude Include="Audio\MusicManager.h" />
     <ClInclude Include="Objects\TexturedObject2D.h" />
     <ClInclude Include="Simulation\SinglePlayerMenu.h" />
+    <ClInclude Include="Objects\UIScoreTable.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Audio\MusicLibrary.txt" />
     <Text Include="Files\test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Useless\asphalt_texture409.jpg" />
+    <Image Include="Assets\Useless\Building_texture4.jpg" />
+    <Image Include="Assets\Models\lava rock.jpg" />
+    <Image Include="Assets\Models\lavaRocks.png" />
+    <Image Include="Assets\Models\Skirt.png" />
+    <Image Include="Assets\Models\Staff.png" />
+    <Image Include="Assets\Useless\Terrain-Road.jpg" />
+    <Image Include="Assets\Models\TikiTest.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

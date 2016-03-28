@@ -5,7 +5,8 @@ class ControllableTemplate
 {
 public:
 	ControllableTemplate(int carSelection): m_carSelection(carSelection){};
-	ControllableTemplate(GamePad * gamePad) : m_gamePad(gamePad){};
+	ControllableTemplate(int carSelection, GamePad * gamePad) : m_carSelection(carSelection), m_gamePad(gamePad){};
+	ControllableTemplate(GamePad * gamePad) : m_gamePad(gamePad), m_carSelection(-1){};
 	
 	~ControllableTemplate()
 	{
@@ -16,6 +17,7 @@ public:
 	int getCarSelection() { return m_carSelection; }
 	void setCarSelection(int selection) { m_carSelection = selection; }
 	bool isHumanPlayer() { return m_gamePad == NULL; }
+	bool carSelected() { return m_carSelection != -1; }
 	
 private://members
 	GamePad * m_gamePad;

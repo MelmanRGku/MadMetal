@@ -2,8 +2,7 @@
 #include "GamePad.h"
 #include "../Global/Log.h"
 #include <iostream>
-#ifndef INPUT_H
-#define INPUT_H
+#include <vector>
 class Input
 {
 private:
@@ -16,7 +15,6 @@ public:
 	void updateGamePads(double dt);
 	bool getGamePadHandle(int portNumber, GamePad** handle);
 	GamePad * getGamePadHandle();
+	std::vector<GamePad *> getAllGamePads();
 	void releaseGamePadHandle(int portNumber, GamePad* handle);
 };
-
-#endif

@@ -60,3 +60,7 @@ void Object2D::playSound()
 
 	m_audioable->getAudioHandle().queAudioSource(NULL, m_sound);
 }
+
+void Object2D::update(float dt) {
+	TestObject::update(dt);
+}
