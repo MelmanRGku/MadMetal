@@ -282,7 +282,7 @@ Track::~Track()
 
 	for (std::vector<CollisionVolume*>::iterator it = m_collisionVolumes.begin(); it != m_collisionVolumes.end(); ++it)
 	{
-		delete *it;
+		//delete *it;
 	}
 }
 
