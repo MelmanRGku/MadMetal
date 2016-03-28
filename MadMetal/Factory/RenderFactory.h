@@ -13,6 +13,7 @@ public:
 		RENDERABLE_OBJECT_CAR,
 		RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS,
 		RENDERABLE_OBJECT_MEOWMIX,
+		RENDERABLE_OBJECT_MEOWMIX_DEATHSTAR,
 		RENDERABLE_OBJECT_MEOWMIXBODY,
 		RENDERABLE_OBJECT_MEOWMIXWHEEL,
 		RENDERABLE_OBJECT_MEOWMIXDEATHSTAR,
@@ -20,11 +21,16 @@ public:
 		RENDERABLE_OBJECT_PLANE,
 		RENDERABLE_OBJECT_TRACK_DRIVABLE,
 		RENDERABLE_OBJECT_TRACK_NON_DRIVABLE,
+		RENDERABLE_OBJECT_TRACK_WALLS,
 		RENDERABLE_OBJECT_BULLET_MEOW_MIX,
 		RENDERABLE_OBJECT_MEOW_MIX_SUPER,
 		RENDERABLE_OBJECT_BULLET_EXPLOSIVELY_DELICIOUS,
 		RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
 		RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO,
+		RENDERABLE_OBJECT_GARGANTULOUS_SUPER_VOLUME,
+		RENDERABLE_OBJECT_GARGANTULOUS_SUPER_BULLET,
+		RENDERABLE_OBJECT_GARGANTULOUS_BULLET,
+		
 		RENDERABLE_OBJECT_GGO,
 		RENDERABLE_OBJECT_EXPLOSION1_1,
 		RENDERABLE_OBJECT_EXPLOSION1_2,
@@ -87,6 +93,8 @@ public:
 		switch (objectToMake) {
 		case RENDERABLE_OBJECT_CAR:
 			return Assets::getModel("Gargantulous");
+		case RENDERABLE_OBJECT_MEOWMIX_DEATHSTAR:
+			return Assets::getModel("MeowmixDeathComplete");
 		case RENDERABLE_OBJECT_MEOWMIX:
 			return Assets::getModel("Meowmix");
 		case RENDERABLE_OBJECT_MEOWMIXWHEEL:
@@ -105,18 +113,26 @@ public:
 			return Assets::getModel("plane");
 		case RENDERABLE_OBJECT_BULLET_MEOW_MIX:
 			return Assets::getModel("bullet");
+		case RENDERABLE_OBJECT_GARGANTULOUS_BULLET:
+			return Assets::getModel("Rocket");
 		case RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO:
 			return Assets::getModel("scareMoon");
 		case RENDERABLE_OBJECT_TRACK_DRIVABLE:
 			return Assets::getModel("trackv2ground");
 		case RENDERABLE_OBJECT_TRACK_NON_DRIVABLE:
 			return Assets::getModel("trackv2enviro");
+		case RENDERABLE_OBJECT_TRACK_WALLS:
+			return Assets::getModel("trackv2walls");
 		case RENDERABLE_OBJECT_BULLET_EXPLOSIVELY_DELICIOUS:
 			return Assets::getModel("explosively_delicious_bullet");
 		case RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER:
 			return Assets::getModel("explosively_delicious_super");
 		case RENDERABLE_OBJECT_MEOW_MIX_SUPER:
-			return Assets::getModel("powerup_particle_attack"); //put in beam!
+			return Assets::getModel("meowmix_superbeam"); //put in beam!
+		case RENDERABLE_OBJECT_GARGANTULOUS_SUPER_BULLET:
+			return Assets::getModel("Meteor");
+		case RENDERABLE_OBJECT_GARGANTULOUS_SUPER_VOLUME:
+			return Assets::getModel("Meteor"); //do something for the super model
 		case RENDERABLE_OBJECT_GGO:
 			return Assets::getModel("GGO");
 		case (RENDERABLE_OBJECT_ATTACK_POWERUP_PICKUP) :

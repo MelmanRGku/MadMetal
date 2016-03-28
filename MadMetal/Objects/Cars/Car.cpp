@@ -82,6 +82,7 @@ void Car::pickUpPowerUp(PowerUpType type)
 
 void Car::usePowerUp()
 {
+	//m_heldPowerUp = PowerUpType::SPEED;
 	if (m_heldPowerUp != PowerUpType::NONE)
 	{
 		ui->unsetPowerup();
@@ -228,6 +229,7 @@ void Car::addDamageDealt(float damage) {
 	{
 
 		m_currentHealth += PowerUp::getLifeStealPercentage() * damage;
+		if (m_currentHealth > m_maxHealth) m_currentHealth = m_maxHealth;
 	}
 	
 	if (m_superDurationRemainingSeconds <= 0) {

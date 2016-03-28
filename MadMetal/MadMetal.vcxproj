@@ -103,7 +103,6 @@
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
     <ClCompile Include="Objects\PowerUp.cpp" />
-    <ClCompile Include="Objects\PowerUpSpeed.cpp" />
     <ClCompile Include="Objects\Waypoint.cpp" />
     <ClCompile Include="Objects\Track.cpp" />
     <ClCompile Include="Renderer\NoShaderProgram.cpp" />
@@ -172,6 +171,7 @@
     <ClInclude Include="Game Logic\PositionManager.h" />
     <ClInclude Include="Game Logic\SearchWaypoint.h" />
     <ClInclude Include="Global\Definitions.h" />
+    <ClInclude Include="Objects\GargantulousBullet.h" />
     <ClInclude Include="Objects\ScoreTable.h" />
     <ClInclude Include="Simulation\PauseMenu.h" />
     <ClInclude Include="Simulation\MultiPlayerMenu.h" />
@@ -183,6 +183,8 @@
     <ClInclude Include="Objects\Cars\ExplosivelyDelicious.h" />
     <ClInclude Include="Objects\ExplosivelyDeliciousSuper.h" />
     <ClInclude Include="Objects\ExplosivelyDeliciousBullet.h" />
+    <ClInclude Include="Objects\GargantulousSuper.h" />
+    <ClInclude Include="Objects\HomingBullet.h" />
     <ClInclude Include="Objects\MeowMixSuper.h" />
     <ClInclude Include="Objects\PowerUpAttack.h" />
     <ClInclude Include="Objects\Header.h" />
