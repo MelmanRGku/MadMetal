@@ -6,6 +6,7 @@ class PowerUpSpeed : public PowerUpVolume
 public:
 	PowerUpSpeed(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Car * owner) : PowerUpVolume(id, aable, pable, anable, rable, owner)
 	{
+		m_animatable->setPosition(glm::vec3(0, -2, owner->getCar().getRigidDynamicActor()->getWorldBounds().getDimensions().z - 1));
 
 	}
 	virtual ~PowerUpSpeed()
