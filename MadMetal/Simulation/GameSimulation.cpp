@@ -475,21 +475,21 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	delete pos;
 	
 	//trainCar test
-	//PxGeometry **trainGeom = new PxGeometry*[1];
-	//trainGeom[0] = new PxBoxGeometry(PxVec3(6,5,50));
-	//pos = new PxTransform(-450, 0, 360);
-	//m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
-	//delete trainGeom[0];
-	//delete[] trainGeom;
-	//delete pos;
+	PxGeometry **trainGeom = new PxGeometry*[1];
+	trainGeom[0] = new PxBoxGeometry(PxVec3(6,5,50));
+	pos = new PxTransform(-450, 0, 360);
+	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
+	delete trainGeom[0];
+	delete[] trainGeom;
+	delete pos;
 
-	//trainGeom = new PxGeometry*[1];
-	//trainGeom[0] = new PxBoxGeometry(PxVec3(6, 5, 50));
-	//pos = new PxTransform(-579, 0, -183.85);
-	//m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
-	//delete pos;
-	//delete trainGeom[0];
-	//delete[] trainGeom;
+	trainGeom = new PxGeometry*[1];
+	trainGeom[0] = new PxBoxGeometry(PxVec3(6, 5, 50));
+	pos = new PxTransform(-579, 0, -183.85);
+	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
+	delete pos;
+	delete trainGeom[0];
+	delete[] trainGeom;
 
 	//death pit
 	PxGeometry **deathPitGeom = new PxGeometry*[1];
