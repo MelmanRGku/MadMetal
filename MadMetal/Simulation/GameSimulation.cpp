@@ -538,12 +538,10 @@ void GameSimulation::setupPowerups() {
 	delete[] powerGeom;
 }
 
-void GameSimulation::setupBasicGameWorldObjects() {
-	setupPowerups();
 
-	//trainCar test
+void GameSimulation::setupTrains() {
 	PxGeometry **trainGeom = new PxGeometry*[1];
-	trainGeom[0] = new PxBoxGeometry(PxVec3(6,5,50));
+	trainGeom[0] = new PxBoxGeometry(PxVec3(6, 5, 50));
 	PxTransform *pos = new PxTransform(-450, 0, 360);
 	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
 	delete trainGeom[0];
@@ -557,15 +555,22 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	delete pos;
 	delete trainGeom[0];
 	delete[] trainGeom;
+}
 
-	//death pit
+void GameSimulation::setupDeathPit() {
 	PxGeometry **deathPitGeom = new PxGeometry*[1];
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(250, 5, 50));
-	pos = new PxTransform(-275, -40, 1500);
+	PxTransform *pos = new PxTransform(-275, -40, 1500);
 	m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL);
 	delete pos;
 	delete deathPitGeom[0];
 	delete[] deathPitGeom;
+}
+
+void GameSimulation::setupBasicGameWorldObjects() {
+	setupPowerups();
+	setupTrains();
+	setupDeathPit();
 
 	//PxGeometry **geom1 = new PxGeometry *[1];
 	//PxGeometry **geom2 = new PxGeometry *[1];
