@@ -333,8 +333,8 @@ public:
 												   PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
 												   walls->getShapes(shapes, numShapes);
 												   PxFilterData simFilterData;
-												   simFilterData.word0 = COLLISION_FLAG_TRACK_WALLS;
-												   simFilterData.word1 = COLLISION_FLAG_TRACK_WALLS_AGAINST;
+												   simFilterData.word0 = COLLISION_FLAG_OBSTACLE;
+												   simFilterData.word1 = COLLISION_FLAG_OBSTACLE_AGAINST;
 												   for (int i = 0; i < numShapes; i++)
 												   {
 													   shapes[i]->setSimulationFilterData(simFilterData);

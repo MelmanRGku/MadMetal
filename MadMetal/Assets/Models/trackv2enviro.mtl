@@ -1,5 +1,5 @@
 # Blender MTL File: 'trackv2seperated.blend'
-# Material Count: 9
+# Material Count: 14
 
 newmtl Material
 Ns 96.078431
@@ -10,6 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd concrete_wall.jpg
 
 newmtl Material.001
 Ns 96.078431
@@ -31,16 +32,6 @@ Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl Material.003
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.012962 0.026152 0.236554
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-
 newmtl Material.004
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
@@ -52,6 +43,17 @@ d 1.000000
 illum 2
 
 newmtl Material.005
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.316466 0.297592 0.336019
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd concrete_wall.jpg
+
+newmtl Material.005_NONE
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.316466 0.297592 0.336019
@@ -90,3 +92,52 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+
+newmtl Material.010
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.599383 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material_NONE
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.102474 0.102474 0.102474
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material_finish_line.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.102474 0.102474 0.102474
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd finish_line.jpg
+
+newmtl None
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd concrete_wall.jpg
+
+newmtl None_fence.tga
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd fence.tga

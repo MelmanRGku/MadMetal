@@ -484,7 +484,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 
 	trainGeom = new PxGeometry*[1];
 	trainGeom[0] = new PxBoxGeometry(PxVec3(6, 5, 50));
-	pos = new PxTransform(-579, 0, -183.85);
+	pos = new PxTransform(-579, 0, -260.85);
 	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
 	delete pos;
 	delete trainGeom[0];
