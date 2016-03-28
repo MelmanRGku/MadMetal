@@ -487,19 +487,19 @@ void GameSimulation::setupPowerups() {
 	//initial 3 powerups are fixed and all have shield setup in the beginning
 	PxTransform * pos;
 	PxGeometry **powerGeom = new PxGeometry*[1];
-	powerGeom[0] = new PxBoxGeometry(PxVec3(3, 3, 1));
+	powerGeom[0] = new PxBoxGeometry(PxVec3(4.5, 4.5, 1.5));
 
-	pos = new PxTransform(0, 5, 20);
+	pos = new PxTransform(0, 6, 20);
 	PowerUp * powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
 	delete pos;
 
-	pos = new PxTransform(-10, 5, 20);
+	pos = new PxTransform(-15, 6, 20);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
 	delete pos;
 
-	pos = new PxTransform(10, 5, 20);
+	pos = new PxTransform(15, 6, 20);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
 	delete pos;
@@ -508,25 +508,25 @@ void GameSimulation::setupPowerups() {
 	//now setup all other powerup locations
 	std::vector<PxTransform *> powerupLocations;
 	//sand
-	powerupLocations.push_back(new PxTransform(61, 5, 494));
-	powerupLocations.push_back(new PxTransform(86, 5, 504));
-	powerupLocations.push_back(new PxTransform(111, 5, 514));
+	powerupLocations.push_back(new PxTransform(61, 6, 494));
+	powerupLocations.push_back(new PxTransform(86, 6, 504));
+	powerupLocations.push_back(new PxTransform(111, 6, 514));
 
 	//caves
-	powerupLocations.push_back(new PxTransform(-34, 5, 1406));
-	powerupLocations.push_back(new PxTransform(1, 5, 1410));
-	powerupLocations.push_back(new PxTransform(36, 5, 1415));
+	powerupLocations.push_back(new PxTransform(-34, 6, 1406));
+	powerupLocations.push_back(new PxTransform(1, 6, 1410));
+	powerupLocations.push_back(new PxTransform(36, 6, 1415));
 
 	//first tunnel
-	powerupLocations.push_back(new PxTransform(-454, 5, 841));
-	powerupLocations.push_back(new PxTransform(-452, 5, 635));
+	powerupLocations.push_back(new PxTransform(-454, 6, 841));
+	powerupLocations.push_back(new PxTransform(-452, 6, 635));
 
 	//second tunnel
-	powerupLocations.push_back(new PxTransform(-589, 5, -19));
+	powerupLocations.push_back(new PxTransform(-589, 6, -19));
 
 	//before finish line
-	powerupLocations.push_back(new PxTransform(-279, 5, -201));
-	powerupLocations.push_back(new PxTransform(-279, 5, -160));
+	powerupLocations.push_back(new PxTransform(-279, 6, -201));
+	powerupLocations.push_back(new PxTransform(-279, 6, -160));
 
 	srand(time(NULL));
 	for (PxTransform *t : powerupLocations) {

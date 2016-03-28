@@ -718,7 +718,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 						   seq->addObjectUpdater(updUp1);
 						   seq->addObjectUpdater(updDown);
 						   seq->addObjectUpdater(updUp2);
-						   ObjectRotationUpdater *updRot = new ObjectRotationUpdater(powerup, glm::vec3(0, 30, 0), .3f, ObjectRotationUpdater::ANGLE_TYPE_DEGREES);
+						   ObjectRotationUpdater *updRot = new ObjectRotationUpdater(powerup, glm::vec3(0, 180, 0), 1.6f, ObjectRotationUpdater::ANGLE_TYPE_DEGREES);
 						   ObjectUpdaterParallel *par = new ObjectUpdaterParallel(ObjectUpdaterParallel::TYPE_INFINITE);
 						   par->addObjectUpdater(seq);
 						   par->addObjectUpdater(updRot);
