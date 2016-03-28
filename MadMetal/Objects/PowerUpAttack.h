@@ -9,7 +9,7 @@ public:
 
 	PowerUpAttack(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Car * owner) : PowerUpVolume(id, aable, pable, anable, rable, owner)
 	{
-		m_emitter = new ParticleEmitter(.5, PxVec3(0, 5, 0), 1, "healthCross", static_cast<Object3D *>(owner));
+		m_emitter = new ParticleEmitter(.25, PxVec3(0, 5, 0), 1, "healthCross", static_cast<Object3D *>(owner));
 	}
 	virtual ~PowerUpAttack()
 	{

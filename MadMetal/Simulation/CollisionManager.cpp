@@ -64,7 +64,12 @@ PxFilterFlags CollisionManager::TestFilterShader(
 	}
 
 	if (filterData0.word0 == COLLISION_FLAG_DEATH_VOLUME || filterData1.word0 == COLLISION_FLAG_DEATH_VOLUME){
-		std::cout << "registered \n";
+		//std::cout << "registered \n";
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
+
+	if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER || filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER){
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
@@ -112,6 +117,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		explosionGeom[0] = new PxSphereGeometry(1);
 		GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &bullet->getActor().getGlobalPose(), explosionGeom, NULL);
 		delete explosionGeom[0];
+		delete[] explosionGeom;
 		bullet->playCollisionSound();
 	}
 	else if (car == NULL) {//if dynamic cast to car returns NULL its probably a wall so get rid of it
@@ -278,6 +284,24 @@ void CollisionManager::processSpeedPowerUpHit(long speedPowerUpId, long carId)
 	}
 }
 
+void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, long carId)
+{
+	ExplosivelyDeliciousSuper * super = dynamic_cast<ExplosivelyDeliciousSuper *>(m_world.findObject(explosiveId));
+
+	if (super == NULL)
+	{
+		return;
+}
+
+	TestObject * otherObject = m_world.findObject(carId);
+	Car * car = dynamic_cast<Car *>(otherObject);
+
+	if (car != NULL  && car != super->getOwner() && super->addCarHit(carId)) // if the car hasn't already been hit by the super
+	{
+		car->takeDamage(super->getDamage());
+		super->getOwner()->addDamageDealt(super->getDamage());
+	}
+}
 
 void CollisionManager::processCarCarHit(long car1Id, long car2Id) {
 	Car *car1 = dynamic_cast<Car *>(m_world.findObject(car1Id));
@@ -375,7 +399,15 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 	}
 	else if (filterData1.word0 == COLLISION_FLAG_DEATH_VOLUME && filterData0.word0 == COLLISION_FLAG_CHASSIS)
 	{
-		processBulletHit(filterData1.word2, filterData0.word2);
+		processDeathVolumeHit(filterData1.word2, filterData0.word2);
+	}
+	else if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER && filterData1.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processExplosivelyDeliciousSuperHit(filterData0.word2, filterData1.word2);
+	}
+	else if (filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER && filterData0.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processExplosivelyDeliciousSuperHit(filterData1.word2, filterData0.word2);
 	}
 
 	//shield power up is done in two steps because since both bullet and shield are trigger objects then the shield could be object 0 or 1

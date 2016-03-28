@@ -11,9 +11,16 @@ TexturedObject2D::~TexturedObject2D()
 }
 
 bool TexturedObject2D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
-	if (type != Renderer::ShaderType::SHADER_TYPE_NONE || passNumber > 1)
+	if (passNumber < 2)
+		return true;
+
+	if (passNumber > 2)
 		return false;
 
+	if (type != Renderer::ShaderType::SHADER_TYPE_NONE)
+		return false;
+
+	glDisable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
@@ -21,7 +28,7 @@ bool TexturedObject2D::draw(Renderer *renderer, Renderer::ShaderType type, int p
 
 	glm::vec3 pos = m_animatable->getPosition();
 	glm::vec3 size = m_animatable->getScale();
-	glColor3f(1.f, 1.f, 1.f);
+	glColor4f(1.f, 1.f, 1.f, 1.f);
 	Model2D *model = static_cast<Model2D*>(m_renderable->getModel());
 	model->getTexture()->Bind(GL_TEXTURE_2D);
 	glBegin(GL_QUADS);
@@ -35,6 +42,11 @@ bool TexturedObject2D::draw(Renderer *renderer, Renderer::ShaderType type, int p
 	glVertex2f(pos.x - size.x / 2, pos.y + size.y / 2);
 	glEnd();
 	model->getTexture()->unBind(GL_TEXTURE_2D);
+	glEnable(GL_DEPTH_TEST);
 
 	return false;
+}
+
+void TexturedObject2D::update(float dt) {
+	Object2D::update(dt);
 }

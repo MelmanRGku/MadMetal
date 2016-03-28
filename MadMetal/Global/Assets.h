@@ -95,6 +95,6 @@ public:
 	}
 	static void release();
 	static void load(std::string objPath, std::string pngPath, HDC dc, HGLRC sharedOpenglContext);
-	static void loadBeforeGameStarts();
+	static void loadBeforeGameStarts(HDC dc, HGLRC sharedOpenglContext);
 };
 

@@ -2,9 +2,10 @@
 
 #include "PxVehicleDrive4W.h"
 #include "../Object3D.h"
-#include "Objects\DrivingStyle.h"
+#include "Objects\Cars\DrivingStyle.h"
 #include "Objects\PowerUp.h"
 #include "Objects/UI.h"
+#include "Global\Definitions.h"
 
 class Waypoint;
 
@@ -57,6 +58,7 @@ private:
 public:
 
 	UI *ui;
+	float distanceTraveled = 0;
 
 	Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	virtual ~Car();
@@ -66,7 +68,7 @@ public:
 	
 	//void usePowerUp();
 	bool isAlive() { return m_currentHealth > 0; }
-	virtual void useSuper() = 0;
+	virtual void useSuper();
 	virtual void fire() = 0;
 	void takeDamage(float damage);
 	
@@ -99,6 +101,7 @@ public:
 	UI *getUI() { return ui; }
 	void deactivatePowerUp(){ m_activePowerUp = PowerUpType::NONE; }
 	void updateHealth(float dtMillis);
+	float getSuperDurationRemaining(){ return m_superDurationRemainingSeconds; }
 
 	void addWaypointHit(Waypoint* waypoint);
 	std::vector<Waypoint*> m_waypointHitList;

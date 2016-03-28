@@ -1,5 +1,5 @@
 #include "Car.h"
-#include "../DrivingStyleFast.h"
+#include "../Cars/DrivingStyleMeowMix.h"
 #include "Factory\GameFactory.h"
 #include <sstream>
 #include "Objects\Waypoint.h"
@@ -21,8 +21,7 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 
 Car::~Car()
 {
-	//TODO: revive later ?
-	//delete ui;
+	delete ui;
 	delete m_drivingStyle;
 }
 
@@ -59,6 +58,16 @@ void Car::respawn()
 	
 }
 
+void Car::useSuper() {
+	m_superDurationRemainingSeconds = m_superMaxDurationSeconds;
+	m_superGauge = 0;
+	if (ui != NULL)
+	{
+		ui->gaugeBar->superUsed(m_superMaxDurationSeconds);
+		ui->gaugeBar->setSuperDurationRemaining(m_superDurationRemainingSeconds);
+	}
+}
+
 PowerUpType Car::getActivePowerUpType()
 {
 	return m_activePowerUp;
@@ -70,6 +79,10 @@ void Car::pickUpPowerUp(PowerUpType type)
 	{
 		std::cout << "Picked up Power up " << type << std::endl;
 		m_heldPowerUp = type;
+		if (ui != NULL)
+		{
+			ui->setPowerup(type);
+		}
 	}
 	
 }
@@ -78,7 +91,10 @@ void Car::usePowerUp()
 {
 	if (m_heldPowerUp != PowerUpType::NONE)
 	{
-		
+		if (ui != NULL)
+		{
+			ui->unsetPowerup();
+		}
 		m_activePowerUp = m_heldPowerUp;
 		m_heldPowerUp = PowerUpType::NONE;
 		m_powerUpRemaining = PowerUp::getPowerUpDuration(m_activePowerUp);
@@ -158,7 +174,12 @@ void Car::updateSuper(float dt)
 {
 	if (m_superDurationRemainingSeconds > 0)
 	{
-		if ((m_superDurationRemainingSeconds -= dt) <= 0)
+		m_superDurationRemainingSeconds -= dt;
+		if (ui != NULL)
+		{
+			ui->gaugeBar->setSuperDurationRemaining(m_superDurationRemainingSeconds);
+		}
+		if (m_superDurationRemainingSeconds <= 0)
 		{
 			unuseSuper();
 		}
@@ -171,7 +192,7 @@ void Car::updateSuper(float dt)
 #define CAR_SPIN 45, 0, 45
 void Car::updateHealth(float dtMillis)
 {
-	if (m_currentHealth < 0)	
+	if (m_currentHealth <= 0)	
 	{
 		if (m_deathTimerMillis > 0)
 		{
@@ -187,6 +208,7 @@ void Car::updateHealth(float dtMillis)
 			explosionGeom[0] = new PxSphereGeometry(7);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &getCar().getRigidDynamicActor()->getGlobalPose(), explosionGeom, NULL);
 			delete explosionGeom[0];
+			delete[] explosionGeom;
 		}
 	}
 	
@@ -204,20 +226,16 @@ void Car::update(float dt) {
 
 		{
 	std::stringstream s;
-	s << "Score: " << tallyScore();
-			ui->score->setString(s.str());
-		}
-
-		{
-			std::stringstream s;
 			s << "Lap: " << getLap();
 			ui->lap->setString(s.str());
 		}
+		ui->update(dt);
 	}
 }
 
 void Car::addDamageDealt(float damage) {
 	m_damageDealt += damage;
+	m_score += damage;
 	
 	if (m_activePowerUp == PowerUpType::ATTACK)
 	{

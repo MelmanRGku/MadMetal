@@ -45,7 +45,7 @@ public:
 	//true if game has ended, false otherwise
 	bool progressScene(int newTime);
 	void readMailBox();
-
+	void onWindowResize(float width, float height);
 
 };
 

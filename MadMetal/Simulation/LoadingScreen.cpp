@@ -25,12 +25,13 @@ bool LoadingScreen::simulateScene(double dt, SceneMessage &newMessage) {
 	bar->setProgress(status->getPercentage());
 	loadingInfoString->setString(status->getMessage());
 	if (status->done){
+		status->done = false;
 		if (t != NULL) {
 			t->join();
 			Assets::initializeVAOs();
 		}
 
-		newMessage.setTag(SceneMessage::eGameSimulation);
+		newMessage.setTag(m_toDeliver.getTag());
 		newMessage.setPlayerTemplates(m_toDeliver.getPlayerTemplates());
 		return true;
 	}
@@ -59,7 +60,7 @@ void LoadingScreen::createLoadingString() {
 
 	loadingString = new Text3D(3, audioable, physicable, animatable, renderable, 1);
 	loadingString->setString("Loading");
-	loadingString->setPosition(glm::vec3(0, 0, -10));
+	loadingString->setPosition(glm::vec3(0, .7, -10));
 	m_world->addGameObject(loadingString);
 }
 

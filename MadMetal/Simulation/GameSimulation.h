@@ -15,6 +15,7 @@
 #include "Objects\ObjectUpdaters\ObjectUpdaterSequence.h"
 #include "Objects\ObjectUpdaters\ObjectUpdaterParallel.h"
 #include "Audio\MusicManager.h"
+#include "Objects\ScoreTable.h"
 #include <time.h>
 
 class Scene;
@@ -55,6 +56,7 @@ private: //members
 	std::vector<PlayerControllable*> m_humanPlayers;
 	std::vector<AIControllable*> m_aiPlayers;
 	PxScene* m_scene;
+	SceneMessage newMessage;
 
 	PxVehicleDrivableSurfaceToTireFrictionPairs* gFrictionPairs = NULL; 
 	PxVehicleDrivableSurfaceToTireFrictionPairs* createFrictionPairs(const PxMaterial* defaultMaterial);
@@ -77,6 +79,8 @@ private: //members
 	
 	MusicManager *musicManager;
 	PositionManager* m_positionManager;
+	ScoreTable *m_scoreTable;
+
 
 public:
 	GameSimulation(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle);
@@ -89,5 +93,4 @@ public:
 	void setupBasicGameWorldObjects();
 
 	std::vector<PlayerControllable*> *getHumanPlayers() { return &m_humanPlayers; }
-
 };

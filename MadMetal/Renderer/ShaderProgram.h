@@ -16,7 +16,7 @@ public:
 		TOTAL_NUMBER_OF_ATTRIBUTES = 4;
 	ShaderProgram();
 	~ShaderProgram();
-	virtual void start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatrix) {}
+	virtual void start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatrix, glm::vec3 *cameraPos) {}
 	virtual void end() {}
 };
 

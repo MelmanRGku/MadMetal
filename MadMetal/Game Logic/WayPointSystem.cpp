@@ -62,20 +62,20 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 		break;
 	case LEFT:
 		for (int i = trackLengthMin + WAYPOINT_TRUE_LENGTH; i < trackLengthMax; i += ((WAYPOINT_TRUE_LENGTH)* 2))
-		{
-			std::vector<Waypoint*> newVectorWaypoint;
-			m_waypointMap.push_back(newVectorWaypoint);
+	{
+		std::vector<Waypoint*> newVectorWaypoint;
+		m_waypointMap.push_back(newVectorWaypoint);
 			int columnIndex = 0;
 			for (int j = trackWidthMin + WAYPOINT_TRUE_WIDTH; j < trackWidthMax; j += ((WAYPOINT_TRUE_WIDTH)* 2))
-			{
+		{
 				PxGeometry **geom = new PxGeometry *[1];
 				geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_LENGTH_COLLISION, yposition, WAYPOINT_WIDTH_COLLISION));
 				PxTransform *pos = new PxTransform(j, yposition, i);
-				Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
+			Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
 				tempWaypoint->setId(index);
-				delete pos;
-				delete geom[0];
-				delete[] geom;
+			delete pos;
+			delete geom[0];
+			delete[] geom;
 				tempWaypoint->setId(columnIndex);
 				m_waypointMap[index].push_back(tempWaypoint);
 				m_waypoints.push_back(tempWaypoint);
@@ -97,17 +97,17 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 				geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_LENGTH_COLLISION, yposition, WAYPOINT_WIDTH_COLLISION));
 				PxTransform *pos = new PxTransform(j, yposition, i);
 				Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
-				tempWaypoint->setId(index);
+			tempWaypoint->setId(index);
 				delete pos;
 				delete geom[0];
 				delete[] geom;
 				tempWaypoint->setId(columnIndex);
-				m_waypointMap[index].push_back(tempWaypoint);
-				m_waypoints.push_back(tempWaypoint);
+			m_waypointMap[index].push_back(tempWaypoint);
+			m_waypoints.push_back(tempWaypoint);
 				columnIndex--;
-			}
-			index++;
 		}
+		index++;
+	}
 		break;
 	}
 	
@@ -196,7 +196,7 @@ void WaypointSystem::createWaypointConnections()
 			}
 		}
 	}
-	
+
 }
 
 void WaypointSystem::addIdToAllWaypointsInTheSystem(int id)

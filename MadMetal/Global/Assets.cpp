@@ -23,8 +23,13 @@ void Assets::init() {
 	models = new std::map<std::string, Model*>();
 	textures = new std::map<std::string, Texture*>();
 	modelsToBeLoadedBeforeTheGameStarts = new std::vector<std::string>();
-	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/UglyCarWithCannon.obj");
-	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/UglyCarWithGuns.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Meowmix.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/twisted1.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Gargantulous.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/LoadingBox.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Arrows.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/P1.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/P2.obj");
 }
 
 void Assets::release() {
@@ -41,6 +46,8 @@ void Assets::release() {
 		delete iterator->second;
 	}
 	delete textures;
+
+	delete modelsToBeLoadedBeforeTheGameStarts;
 }
 
 Model *Assets::loadObjFromDirectory(std::string path) {
@@ -139,9 +146,33 @@ void Assets::initializeVAOs() {
 	}
 }
 
-void Assets::loadBeforeGameStarts() {
+void Assets::loadBeforeGameStarts(HDC dc, HGLRC sharedOpenglContext) {
+	//share the device and opengl contexts with this new thread
+	wglMakeCurrent(dc, sharedOpenglContext);
+
+	double totalFilesSize = 0;
+
 	for (unsigned int i = 0; i < modelsToBeLoadedBeforeTheGameStarts->size(); i++) {
+		totalFilesSize += (std::ifstream((modelsToBeLoadedBeforeTheGameStarts->at(i)), std::ifstream::ate | std::ifstream::binary)).tellg();
+}
+
+	double loadedFilesSize = 0;
+
+	for (unsigned int i = 0; i < modelsToBeLoadedBeforeTheGameStarts->size(); i++) {
+		int lastSlashPos = modelsToBeLoadedBeforeTheGameStarts->at(i).rfind("/") + 1;
+		std::string objectName = modelsToBeLoadedBeforeTheGameStarts->at(i).substr(lastSlashPos, modelsToBeLoadedBeforeTheGameStarts->at(i).rfind(".") - lastSlashPos);
+		
+		status->setStatus(loadedFilesSize / totalFilesSize, "Loading file " + objectName);
+
 		Model3D *model = static_cast<Model3D *>(loadObjFromDirectory(modelsToBeLoadedBeforeTheGameStarts->at(i)));
-		model->setupVAOs();
+
+		loadedFilesSize += (std::ifstream((modelsToBeLoadedBeforeTheGameStarts->at(i)), std::ifstream::ate | std::ifstream::binary)).tellg();
+
+		status->setStatus(loadedFilesSize / totalFilesSize, "Loading file " + objectName);
 	}
+	status->done = true;
+	
+	//remove the newly created opengl context and unbind everything from this thread (by everything I mean DC and opengl context)
+	wglMakeCurrent(NULL, NULL);
+	wglDeleteContext(sharedOpenglContext);
 }

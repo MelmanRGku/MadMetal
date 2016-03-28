@@ -95,10 +95,10 @@ void AIControllable::playFrame(double dt)
 		//}
 		else if (m_goalWaypoint->getIndex() == 367)
 		{
-			m_goalWaypoint = m_track.getWaypointAt(550);
+			m_goalWaypoint = m_track.getWaypointAt(488);
 			recalculatePath();
 		}
-		else if (m_goalWaypoint->getIndex() == 550)
+		else if (m_goalWaypoint->getIndex() == 488)
 		{
 			m_goalWaypoint = m_track.getWaypointAt(657);
 			recalculatePath();
