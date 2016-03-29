@@ -1,8 +1,8 @@
-# Blender MTL File: 'trackv2seperated.blend'
+# Blender MTL File: 'trackv2ground.blend'
 # Material Count: 2
 
 newmtl Material
-Ns 96.078431
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 0.102474 0.102474 0.102474
 Ks 0.500000 0.500000 0.500000
@@ -11,8 +11,8 @@ Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl Material.002
-Ns 96.078431
+newmtl Material.007
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 0.206546 0.047609 0.005210
 Ks 0.500000 0.500000 0.500000
