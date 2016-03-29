@@ -23,6 +23,8 @@ using namespace physx;
 
 extern PxF32 gSteerVsForwardSpeedData[2 * 8];
 
+extern PxFixedSizeLookupTable<8> gSteerVsForwardSpeedTable;
+
 //Drivable surface types.
 enum
 {

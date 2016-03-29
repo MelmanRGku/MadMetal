@@ -169,8 +169,6 @@ GameSimulation::~GameSimulation()
 	delete musicManager;
 }
 
-PxFixedSizeLookupTable<8> gSteerVsForwardSpeedTable(gSteerVsForwardSpeedData, 4);
-
 PxVehicleDrive4WRawInputData gVehicleInputData;
 
 bool PxVehicleIsInAir(const PxVehicleWheelQueryResult& vehWheelQueryResults)

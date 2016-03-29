@@ -355,7 +355,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-		glm::vec3 speed = 160.f * static_cast<Object3D *>(parent)->getForwardVector(); speed += glm::vec3(0, 10.f, 0);
+		glm::vec3 speed = 160.f * static_cast<Object3D *>(parent)->getForwardVector(); speed += glm::vec3(0, 7.f, 0);
 		PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
 		
