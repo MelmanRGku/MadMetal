@@ -115,6 +115,11 @@ public:
 		delete m_factory;
 	}
 
+	static void resetId()
+	{
+		lastId = 0;
+	}
+
 private:
 	GameFactory(World& world, PxScene& scene, Audio& audioHandle);
 	~GameFactory();

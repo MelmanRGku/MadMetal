@@ -36,6 +36,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	createPhysicsScene();
 	musicManager = new MusicManager(audioHandle);
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
+	GameFactory::resetId();
 	m_displayMessage = static_cast<DisplayMessage *>(m_gameFactory->makeObject(GameFactory::OBJECT_DISPLAY_MESSAGE, NULL, NULL, NULL));
 	PxTransform *pos = new PxTransform(PxVec3(0, 0, 0));
 	m_track = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, pos, NULL, NULL));
@@ -566,7 +567,7 @@ void GameSimulation::setupDeathPit() {
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-	setupPowerups();
+	//setupPowerups();
 	setupTrains();
 	setupDeathPit();
 	m_gameFactory->makeObject(GameFactory::OBJECT_SKY_BOX, NULL, NULL, NULL);
