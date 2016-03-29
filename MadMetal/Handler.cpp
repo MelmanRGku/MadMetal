@@ -93,7 +93,7 @@ void onWindowResize(int width, int height) {
 void initOpengl(int argc, char **argv) {
 	//initialize the window
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
 	glutInitWindowPosition(300, 300);
 	glutInitWindowSize(std::stoi(Settings::getSetting("screenWidth")), std::stoi(Settings::getSetting("screenHeight")));
 	glutCreateWindow("MadMetal");
@@ -103,6 +103,7 @@ void initOpengl(int argc, char **argv) {
 #endif
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
 	// register callbacks
 	glutDisplayFunc(renderScene);
 	glutIdleFunc(renderScene);

@@ -51,7 +51,6 @@ protected: //members
 	PowerUpType m_activePowerUp;
 	float m_powerUpRemaining;
 	static int positionGlobalID;
-	
 private:
 	//update functions
 	void updatePowerUp(float dt);
@@ -115,5 +114,7 @@ public:
 
 	void setLastHitCollisionVolume(CollisionVolume* collisionVolume);
 	CollisionVolume* getLastHitCollisionVolume();
+
+	static void resetGlobalPositionID();
 };
 

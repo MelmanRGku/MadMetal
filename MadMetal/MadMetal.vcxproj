@@ -41,6 +41,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ReferencePath>$(ProjectDir)\Libraries\physx\gpu;$(ProjectDir)\Libraries\physx\characterkinematic;$(ProjectDir)\Libraries\physx\geometry;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx;$(ReferencePath)</ReferencePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ReferencePath>$(ProjectDir)\Libraries\physx\gpu;$(ProjectDir)\Libraries\physx\characterkinematic;$(ProjectDir)\Libraries\physx\geometry;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx;$(ReferencePath)</ReferencePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -55,7 +58,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>Libraries\vld;Libraries\freeglut;Libraries\freetype;Libraries\assimp;Libraries\physx;Libraries\glew;Libraries\sdl;Libraries\ftgl</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vld.lib;opengl32.lib;freeglut.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;LowLevelClothDEBUG.lib;LowLevelDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3CookingDEBUG_x86.lib;PhysX3DEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3Gpu_x86.lib;PhysX3GpuCHECKED_x86.lib;PhysX3GpuDEBUG_x86.lib;PhysX3GpuPROFILE_x86.lib;PhysX3VehicleDEBUG.lib;PhysXProfileSDKDEBUG.lib;PhysXVisualDebuggerSDKDEBUG.lib;PxTaskDEBUG.lib;SceneQueryDEBUG.lib;SimulationControllerDEBUG.lib;SDL2.lib;SDL2_mixer.lib;SDL2main.lib;XINPUT9_1_0.LIB;assimp.lib;freetype.lib;ftgl_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vld.lib;opengl32.lib;freeglut.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;LowLevelClothDEBUG.lib;LowLevelDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3CookingDEBUG_x86.lib;PhysX3DEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3GpuDEBUG_x86.lib;PhysX3GpuCHECKED_x86.lib;PhysX3GpuPROFILE_x86.lib;PhysX3VehicleDEBUG.lib;PhysXProfileSDKDEBUG.lib;PhysXVisualDebuggerSDKDEBUG.lib;PxTaskDEBUG.lib;SceneQueryDEBUG.lib;SimulationControllerDEBUG.lib;SDL2.lib;SDL2_mixer.lib;SDL2main.lib;XINPUT9_1_0.LIB;assimp.lib;freetype.lib;ftgl_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -66,11 +69,18 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Libraries\vld;$(ProjectDir)\Libraries\ftgl;$(ProjectDir)\Libraries\freeglut;$(ProjectDir)\Libraries;$(ProjectDir)\Libraries\freetype;$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx\foundation\windows;$(ProjectDir)\Libraries\physx\common;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx;$(ProjectDir)\Libraries\physx\extensions;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>$(ProjectDir)\Libraries\physx;$(ProjectDir)\Libraries\physx\foundation\windows;$(ProjectDir)\Libraries\physx\common;$(ProjectDir)\Libraries\physx\vehicle;$(ProjectDir)\Libraries\physx\foundation;$(ProjectDir)\Libraries\physx\extensions;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>Libraries\vld;Libraries\freeglut;Libraries\freetype;Libraries\assimp;Libraries\physx;Libraries\glew;Libraries\sdl;Libraries\ftgl</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>vld.lib;opengl32.lib;freeglut.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;LowLevelCloth.lib;LowLevel.lib;PhysX3CharacterKinematic_x86.lib;PhysX3Common_x86.lib;PhysX3Cooking_x86.lib;PhysX3_x86.lib;PhysX3Extensions.lib;PhysX3Gpu_x86.lib;PhysX3GpuCHECKED_x86.lib;PhysX3GpuPROFILE_x86.lib;PhysX3Vehicle.lib;PhysXProfileSDK.lib;PhysXVisualDebuggerSDK.lib;PxTask.lib;SceneQuery.lib;SimulationController.lib;SDL2.lib;SDL2_mixer.lib;SDL2main.lib;XINPUT9_1_0.LIB;assimp.lib;freetype.lib;ftgl_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -301,6 +311,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Models\Chest paint Lava.png" />
+    <Image Include="Assets\Models\Day_Skybox.png" />
     <Image Include="Assets\Models\DeathEye.png" />
     <Image Include="Assets\Models\MaskLava.png" />
     <Image Include="Assets\Models\Panel.jpg" />

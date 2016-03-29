@@ -11,6 +11,7 @@ private:
 	Audio &m_audio;
 	Object3D *map;
 	std::vector<ControllableTemplate *> m_players;
+	std::vector<ControllableTemplate *> m_playersToReturn;
 	Object3D *car1,
 		*car2,
 		*car3;

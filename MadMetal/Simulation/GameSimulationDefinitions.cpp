@@ -67,5 +67,5 @@ enum DriveMode
 PxF32 gTireFrictionMultipliers[MAX_NUM_SURFACE_TYPES][MAX_NUM_TIRE_TYPES] =
 {
 	//NORMAL,	WORN
-	{ 10.00f, 0.1f }//TARMAC
+	{ 7.00f, 0.1f }//TARMAC
 };

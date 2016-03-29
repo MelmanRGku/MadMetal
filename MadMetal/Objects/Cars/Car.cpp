@@ -7,6 +7,11 @@
 
 int Car::positionGlobalID = 0;
 
+void Car::resetGlobalPositionID()
+{
+	Car::positionGlobalID = 0;
+}
+
 Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL), m_car(car), m_drivingStyle(style)
 {
 	m_currentWaypoint = NULL;

@@ -4,7 +4,7 @@
 #include "Libraries\freeglut\freeglut.h"
 #include "Objects\TexturedObject2D.h"
 
-EndingScene::EndingScene(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audio(audioHandle), m_players(playerTemplates)
+EndingScene::EndingScene(std::vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audio(audioHandle), m_players(playerTemplates), m_playersToReturn(playerTemplates)
 {
 	//set player number to show later
 	for (int i = 0; i < playerTemplates.size(); i++) {
@@ -177,7 +177,7 @@ bool EndingScene::simulateScene(double dt, SceneMessage &message)
 		}
 		else if (ct->getGamePad()->isPressed(GamePad::XButton)) {
 			message.setTag(SceneMessage::eGameSimulation);
-			message.setPlayerTemplates(m_players);
+			message.setPlayerTemplates(m_playersToReturn);
 			return true;
 		}
 	}

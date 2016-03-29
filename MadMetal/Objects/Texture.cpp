@@ -18,8 +18,8 @@ bool Texture::Load()
 		glBindTexture(textureTarget, textureObj);
 		glTexEnvf(GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data); 
-		glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glGenerateMipmap(GL_TEXTURE_2D); // Allocate the mipmaps 
+		glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glBindTexture(textureTarget, 0);
 		stbi_image_free(data);
 		return true;
