@@ -182,7 +182,7 @@ void AIControllable::accelerateToNextWaypoint()
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
 	changeTurning(crossProductResult.y, amountToSteerBy);
-	accelerate(amountToAccelerate * 0.65);
+	accelerate(amountToAccelerate * 0.7);
 
 	//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
 	//std::cout << "z value: " << crossProductResult.z << "\n";
@@ -368,13 +368,13 @@ void AIControllable::setHighCostWaypointsToLow()
 
 void AIControllable::processInputAcceleration(float amount)
 {
-	if (amount > 0.3)
+	if (amount > 0.1)
 	{
 		//std::cout << "Applying acceleration : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, amount);
 	}
-	else if (amount < 0.3 && m_car->getCar().computeForwardSpeed() > 10.0)
+	else if (amount < 0.1 && m_car->getCar().computeForwardSpeed() > 10.0)
 	{
 		//std::cout << "Applying break with : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);

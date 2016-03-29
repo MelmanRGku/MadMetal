@@ -162,7 +162,7 @@ void PlayerControllable::playFrame(double dt)
 						{
 							const PxF32 k = maxSteer / steer;
 							steer *= k;
-							std::cout << vzAbs << " " << maxSteer << std::endl;
+							//std::cout << vzAbs << " " << maxSteer << std::endl;
 						}
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, -steer * turnScalar);
@@ -178,7 +178,7 @@ void PlayerControllable::playFrame(double dt)
 						if (steer>maxSteer)
 						{
 							steer = maxSteer;
-							std::cout << vzAbs << " " << maxSteer << std::endl;
+							//std::cout << vzAbs << " " << maxSteer << std::endl;
 						}
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, -steer * turnScalar);
