@@ -9,7 +9,9 @@ MapUI::MapUI(long id, Audioable *aable, Animatable *anable, Renderable2D *rable)
 
 MapUI::~MapUI()
 {
-	delete playerModel;
+	delete meowModel;
+	delete gargModel;
+	delete explosiveModel;
 }
 
 float MapUI::clip(float value, float lower, float upper) {
@@ -83,8 +85,21 @@ bool MapUI::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) 
 	//--------------DRAW THE PLAYERS----------------------------
 	//----------------------------------------------------------
 
-	playerModel->getTexture()->Bind(GL_TEXTURE_2D);
+
 	for (unsigned int i = 0; i < players->size(); i++) {
+
+		if (dynamic_cast<MeowMix *>(players->at(i)->getCar()) != NULL)
+		{
+			meowModel->getTexture()->Bind(GL_TEXTURE_2D);
+		}
+		if (dynamic_cast<Gargantulous *>(players->at(i)->getCar()) != NULL)
+		{
+			gargModel->getTexture()->Bind(GL_TEXTURE_2D);
+		}
+		if (dynamic_cast<ExplosivelyDelicious *>(players->at(i)->getCar()) != NULL)
+		{
+			explosiveModel->getTexture()->Bind(GL_TEXTURE_2D);
+		}
 		PxVec3 playerPos = players->at(i)->getCar()->getActor().getGlobalPose().p;
 		glm::vec3 playerDimensions = playerSizes.at(i);
 		glm::vec3 relativePos = (glm::vec3(playerPos.x, playerPos.y, playerPos.z) - trackMinBounds);
@@ -137,9 +152,22 @@ bool MapUI::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) 
 		glTexCoord2f(0, 1);
 		glVertex3f(- playerDimensions.z, playerDimensions.x, 0);
 		glEnd();
-		
+
+		if (dynamic_cast<MeowMix *>(players->at(i)->getCar()) == NULL)
+		{
+			meowModel->getTexture()->unBind(GL_TEXTURE_2D);
+		}
+		if (dynamic_cast<Gargantulous *>(players->at(i)->getCar()) == NULL)
+		{
+			gargModel->getTexture()->unBind(GL_TEXTURE_2D);
+		}
+		if (dynamic_cast<ExplosivelyDelicious *>(players->at(i)->getCar()) == NULL)
+		{
+			explosiveModel->getTexture()->unBind(GL_TEXTURE_2D);
+		}
 	}
-	playerModel->getTexture()->unBind(GL_TEXTURE_2D);
+
+
 
 	//----------------------------------------------------------
 	//--------------END DRAW THE PLAYERS------------------------
