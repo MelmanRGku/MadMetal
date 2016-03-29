@@ -176,27 +176,22 @@ bool SinglePlayerMenu::simulateScene(double dt, SceneMessage &message)
 	if (m_gamePad->checkConnection() && m_sceneGameTimeSeconds>1)
 	{
 
-		if (m_gamePad->isPressed(GamePad::DPadUp)) {
+		if (m_gamePad->isPressed(GamePad::DPadUp) || m_gamePad->isPressed(GamePad::LJoyUp)) {
 			upPressed();
-		}
-
-		if (m_gamePad->isPressed(GamePad::DPadDown)) {
+		} 
+		else if (m_gamePad->isPressed(GamePad::DPadDown) || m_gamePad->isPressed(GamePad::LJoyDown)) {
 			downPressed();
-		}
-
-		if (m_gamePad->isPressed(GamePad::AButton)) {
+		} 
+		else if (m_gamePad->isPressed(GamePad::AButton)) {
 			aPressed();
 		}
-
-		if (m_gamePad->isPressed(GamePad::DPadLeft)) {
+		else if (m_gamePad->isPressed(GamePad::DPadLeft) || m_gamePad->isPressed(GamePad::LJoyLeft)) {
 			leftPressed();
 		}
-
-		if (m_gamePad->isPressed(GamePad::DPadRight)) {
+		else if (m_gamePad->isPressed(GamePad::DPadRight) || m_gamePad->isPressed(GamePad::LJoyRight)) {
 			rightPressed();
-		}
-
-		if (m_gamePad->isPressed(GamePad::BButton)) {
+		} 
+		else if (m_gamePad->isPressed(GamePad::BButton)) {
 			message.setTag(SceneMessage::ePop);
 			return true;
 		}

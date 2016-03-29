@@ -167,6 +167,9 @@ bool EndingScene::simulateScene(double dt, SceneMessage &message)
 	m_sceneGameTimeSeconds += dt;
 	m_world->update(dt);
 
+	if (m_sceneGameTimeSeconds < 1)
+		return false;
+
 	for (ControllableTemplate *ct : m_players) {
 		if (ct->getGamePad() == NULL)
 			continue;
