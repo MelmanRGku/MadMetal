@@ -175,6 +175,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		ui->map = static_cast<MapUI *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_MAP, NULL, NULL, NULL));
 		ui->powerupBorder = static_cast<TexturedObject2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_POWERUP_BORDER_ICON, NULL, NULL, NULL));
 		ui->scoreTable = static_cast<UIScoreTable *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_UI_SCORE_TABLE, NULL, NULL, NULL));
+		ui->displayMessage = static_cast<DisplayMessage *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_DISPLAY_MESSAGE, NULL, NULL, NULL));
 		return ui;
 	}
 	case OBJECT_DISPLAY_MESSAGE:
@@ -185,7 +186,6 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		DisplayMessage * display = new DisplayMessage(objectId, audioable, animatable, renderable);
 		Text2D *text = static_cast<Text2D *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_TEXT_2D, NULL, NULL, NULL));
 		text->centerize(true);
-		m_world.addGameObject(text);
 		display->setText2D(text);
 		
 		return display;

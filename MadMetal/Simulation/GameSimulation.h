@@ -68,7 +68,6 @@ private: //members
 	PxBatchQuery* gBatchQuery = NULL;
 	GameFactory* m_gameFactory;
 	Audio &m_audioHandle;
-	DisplayMessage * m_displayMessage;
 	Track* m_track;
 	CollisionManager *manager;
 
