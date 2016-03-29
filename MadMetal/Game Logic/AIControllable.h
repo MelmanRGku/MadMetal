@@ -2,7 +2,7 @@
 #include "Controllable.h"
 #include "ControllableTemplate.h"
 #include "Objects\Cars\Car.h"
-
+#include "Objects\CollisionVolume.h"
 class PathFinding;
 class Track;
 
@@ -39,6 +39,7 @@ private: //members
 	Waypoint* m_nextWaypoint;
 	Waypoint* m_potentialWaypoint;
 	Waypoint* m_currentKnownWaypoint;
+	CollisionVolume* m_lastKnowCollisionVolue;
 	std::vector<Waypoint*> m_currentPath;
 	std::vector<int> m_listOfWaypointsHighCost;
 	bool m_needsToBackup;

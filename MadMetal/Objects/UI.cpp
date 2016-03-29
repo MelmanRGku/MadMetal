@@ -27,6 +27,7 @@ bool UI::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 	toReturn = map->draw(renderer, type, passNumber) || toReturn;
 	toReturn = powerupBorder->draw(renderer, type, passNumber) || toReturn;
 	toReturn = scoreTable->draw(renderer, type, passNumber) || toReturn;
+	toReturn = displayMessage->getText2D()->draw(renderer, type, passNumber) || toReturn;
 	if (powerupIcon != NULL)
 		toReturn = powerupIcon->draw(renderer, type, passNumber) || toReturn;
 	return  toReturn;
@@ -61,6 +62,8 @@ void UI::adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewp
 			float newFontSize = scoreTable->getFontSize() / 1.5;
 			scoreTable->setFontSize(newFontSize);
 			scoreTable->setPosition(glm::vec3(0, glutGet(GLUT_WINDOW_HEIGHT) - newFontSize, 0));
+			displayMessage->setCenterOfScreen(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) / 2, 3 * glutGet(GLUT_WINDOW_HEIGHT) / 4, 0));
+			displayMessage->getText2D()->setFontSize(newFontSize * 2);
 		}
 
 		if (thisViewportNumber == 2) {
@@ -69,6 +72,8 @@ void UI::adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewp
 			float newFontSize = scoreTable->getFontSize() / 1.5;
 			scoreTable->setFontSize(newFontSize);
 			scoreTable->setPosition(glm::vec3(0, glutGet(GLUT_WINDOW_HEIGHT) / 2 - newFontSize, 0));
+			displayMessage->setCenterOfScreen(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 4, 0));
+			displayMessage->getText2D()->setFontSize(newFontSize * 2);
 		}
 	}
 
@@ -80,6 +85,8 @@ void UI::adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewp
 			float newFontSize = scoreTable->getFontSize() / 3;
 			scoreTable->setFontSize(newFontSize);
 			scoreTable->setPosition(glm::vec3(0, glutGet(GLUT_WINDOW_HEIGHT) - newFontSize, 0));
+			displayMessage->setCenterOfScreen(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) / 4, 3 * glutGet(GLUT_WINDOW_HEIGHT) / 4, 0));
+			displayMessage->getText2D()->setFontSize(newFontSize * 2);
 		}
 		//top right
 		else if (thisViewportNumber == 2) {
@@ -88,6 +95,8 @@ void UI::adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewp
 			float newFontSize = scoreTable->getFontSize() / 3;
 			scoreTable->setFontSize(newFontSize);
 			scoreTable->setPosition(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) - newFontSize, 0));
+			displayMessage->setCenterOfScreen(glm::vec3(3 * glutGet(GLUT_WINDOW_WIDTH) / 4, 3 * glutGet(GLUT_WINDOW_HEIGHT) / 4, 0));
+			displayMessage->getText2D()->setFontSize(newFontSize * 2);
 		}
 		//bottom one
 		else if (thisViewportNumber == 3) {
@@ -96,6 +105,8 @@ void UI::adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewp
 			float newFontSize = scoreTable->getFontSize() / 1.5;
 			scoreTable->setFontSize(newFontSize);
 			scoreTable->setPosition(glm::vec3(0, glutGet(GLUT_WINDOW_HEIGHT) / 2 - newFontSize, 0));
+			displayMessage->setCenterOfScreen(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 4, 0));
+			displayMessage->getText2D()->setFontSize(newFontSize * 2);
 		}
 	}
 
@@ -107,6 +118,8 @@ void UI::adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewp
 			float newFontSize = scoreTable->getFontSize() / 3;
 			scoreTable->setFontSize(newFontSize);
 			scoreTable->setPosition(glm::vec3(0, glutGet(GLUT_WINDOW_HEIGHT) - newFontSize, 0));
+			displayMessage->setCenterOfScreen(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) / 4, 3 * glutGet(GLUT_WINDOW_HEIGHT) / 4, 0));
+			displayMessage->getText2D()->setFontSize(newFontSize * 2);
 		}
 		//top right
 		else if (thisViewportNumber == 2) {
@@ -115,6 +128,8 @@ void UI::adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewp
 			float newFontSize = scoreTable->getFontSize() / 3;
 			scoreTable->setFontSize(newFontSize);
 			scoreTable->setPosition(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) - newFontSize, 0));
+			displayMessage->setCenterOfScreen(glm::vec3(3 * glutGet(GLUT_WINDOW_WIDTH) / 4, 3 * glutGet(GLUT_WINDOW_HEIGHT) / 4, 0));
+			displayMessage->getText2D()->setFontSize(newFontSize * 2);
 		}
 		//bottom left
 		else if (thisViewportNumber == 3) {
@@ -123,6 +138,8 @@ void UI::adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewp
 			float newFontSize = scoreTable->getFontSize() / 3;
 			scoreTable->setFontSize(newFontSize);
 			scoreTable->setPosition(glm::vec3(0, glutGet(GLUT_WINDOW_HEIGHT) / 2 - newFontSize, 0));
+			displayMessage->setCenterOfScreen(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) / 4, glutGet(GLUT_WINDOW_HEIGHT) / 4, 0));
+			displayMessage->getText2D()->setFontSize(newFontSize * 2);
 		} 
 		//bottom right
 		else if (thisViewportNumber == 4) {
@@ -131,6 +148,8 @@ void UI::adjustStringsForViewport(int thisViewportNumber, int totalNumberOfViewp
 			float newFontSize = scoreTable->getFontSize() / 3;
 			scoreTable->setFontSize(newFontSize);
 			scoreTable->setPosition(glm::vec3(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2 - newFontSize, 0));
+			displayMessage->setCenterOfScreen(glm::vec3(3 * glutGet(GLUT_WINDOW_WIDTH) / 4, glutGet(GLUT_WINDOW_HEIGHT) / 4, 0));
+			displayMessage->getText2D()->setFontSize(newFontSize * 2);
 		}
 	}
 }

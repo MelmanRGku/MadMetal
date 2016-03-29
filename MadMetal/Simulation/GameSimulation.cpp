@@ -19,7 +19,7 @@
 
 
 #define NUM_OF_PLAYERS 12
-#define NUM_LAPS_FOR_VICTORY 1
+#define NUM_LAPS_FOR_VICTORY 3
 #define RACE_FINISH_DELAY 10
 
 using namespace std;
@@ -37,7 +37,6 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	musicManager = new MusicManager(audioHandle);
 	m_gameFactory = GameFactory::instance(*m_world, *m_scene, audioHandle);
 	GameFactory::resetId();
-	m_displayMessage = static_cast<DisplayMessage *>(m_gameFactory->makeObject(GameFactory::OBJECT_DISPLAY_MESSAGE, NULL, NULL, NULL));
 	PxTransform *pos = new PxTransform(PxVec3(0, 0, 0));
 	m_track = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, pos, NULL, NULL));
 	delete pos;
@@ -161,7 +160,6 @@ GameSimulation::~GameSimulation()
 	{
 		delete m_players[i];
 	}
-	delete m_displayMessage;
 	gVehicleSceneQueryData->free(*PhysicsManager::getAllocator());
 	gFrictionPairs->release();
 	GameFactory::release();
@@ -266,7 +264,9 @@ void GameSimulation::simulatePlayers(double dt)
 void GameSimulation::updateObjects(double dt) {
 
 	m_world->update(dt);
-	m_displayMessage->update(dt);
+	for (int i = 0; i < m_humanPlayers.size(); i++) {
+		m_humanPlayers.at(i)->getCar()->getUI()->displayMessage->update(dt);
+	}
 	m_scoreTable->updateTable();
 
 	}
@@ -350,17 +350,33 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 	{
 		switch ((int)m_sceneGameTimeSeconds){
 		case(0) :
-			m_displayMessage->initializeMessage("3", 0.5);
+		{
+			for (int i = 0; i < m_humanPlayers.size(); i++) {
+				m_humanPlayers.at(i)->getCar()->getUI()->displayMessage->initializeMessage("3", 0.5);
+			}
 			break;
+		}
 		case(1) :
-			m_displayMessage->initializeMessage("2", 0.5);
+		{
+			for (int i = 0; i < m_humanPlayers.size(); i++) {
+				m_humanPlayers.at(i)->getCar()->getUI()->displayMessage->initializeMessage("2", 0.5);
+			}
 			break;
+		}
 		case(2) :
-			m_displayMessage->initializeMessage("1", 0.5);
+		{
+			for (int i = 0; i < m_humanPlayers.size(); i++) {
+				m_humanPlayers.at(i)->getCar()->getUI()->displayMessage->initializeMessage("1", 0.5);
+			}
 			break;
+		}
 		case(3) :
-			m_displayMessage->initializeMessage("GO!!", 0.5);
+		{
+			for (int i = 0; i < m_humanPlayers.size(); i++) {
+				m_humanPlayers.at(i)->getCar()->getUI()->displayMessage->initializeMessage("GO!", 0.5);
+			}
 			break;
+		}
 		default:
 			break;
 		}
@@ -376,15 +392,19 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 			{
 				if (!m_raceFinishedCountdownSeconds)
 				{
-					if (i != 0)
-						m_displayMessage->initializeMessage("You Better Hurry...", 2);
+					for (int j = 0; j < m_humanPlayers.size(); j++) {
+						if (m_players[i]->getCar() != m_humanPlayers[j]->getCar())
+							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("You Better Hurry...", 2);
 					else 
-						m_displayMessage->initializeMessage("First Across... Like a Boss", 2);
+							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("First Across... Like a Boss", 2);
+					}
 					m_raceFinishedCountdownSeconds = RACE_FINISH_DELAY; //start count down
 				}
 				else if (RACE_FINISH_DELAY - m_raceFinishedCountdownSeconds >= 2)
 				{
-					m_displayMessage->initializeMessage(std::to_string((int)m_raceFinishedCountdownSeconds), 1);
+					for (int j = 0; j < m_humanPlayers.size(); j++) {
+						m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage(std::to_string((int)m_raceFinishedCountdownSeconds), 1);
+					}
 				}
 				if (!m_players[i]->getCar()->isFinishedRace())
 				{

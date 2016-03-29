@@ -6,6 +6,7 @@
 #include "Text2D.h"
 #include "MapUI.h"
 #include "PowerUp.h"
+#include "DisplayMessage.h"
 
 class UIScoreTable;
 
@@ -27,6 +28,6 @@ public:
 	TexturedObject2D *powerupBorder;
 	TexturedObject2D *powerupIcon;
 	UIScoreTable *scoreTable;
-		
+	DisplayMessage *displayMessage;
 };
 

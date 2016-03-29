@@ -182,6 +182,8 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 			}
 		}
 	}
+
+	//std::cout << "Current Waypoint" << waypoint->getIndex() << "\n";
 }
 
 void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
@@ -343,7 +345,7 @@ void CollisionManager::processGargantulousSuperBulletHit(long bulletId, long car
 
 void CollisionManager::processGargantulousSuperVolumeHit(long volumeId, long carId)
 {
-	std::cout << "Collided with Collision Volume \n";
+	//std::cout << "Collided with Collision Volume \n";
 	GargantulousSuper * super = dynamic_cast<GargantulousSuper *>(m_world.findObject(volumeId));
 
 	if (super == NULL)
