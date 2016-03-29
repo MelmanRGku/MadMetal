@@ -567,7 +567,7 @@ void GameSimulation::setupDeathPit() {
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-	//setupPowerups();
+	setupPowerups();
 	setupTrains();
 	setupDeathPit();
 	m_gameFactory->makeObject(GameFactory::OBJECT_SKY_BOX, NULL, NULL, NULL);

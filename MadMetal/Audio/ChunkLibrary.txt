@@ -7,3 +7,11 @@
 6 countdown.wav
 7 shot.wav
 8 start-beep.wav
+9 GargantulousSuper.wav
+10 MeowMixSuper.wav
+11 Train.wav
+12 BombFuse.wav
+13 BombExplosion.wav
+14 regen.wav
+15 Rocketlaunch.wav
+16 ExplosivelyDeliciousSuper.wav

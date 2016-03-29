@@ -143,3 +143,84 @@ public:
 	};
 	virtual ~MetalMusicDarknessFallsSong(){};
 };
+
+class GargantulousSuperSound : public Sound
+{
+public:
+	GargantulousSuperSound() : Sound()
+	{
+		m_libraryIndex = 9;
+	};
+	virtual ~GargantulousSuperSound(){};
+};
+
+class MeowmixSuperSound : public Sound
+{
+public:
+	MeowmixSuperSound() : Sound()
+	{
+		m_libraryIndex = 10;
+	};
+	virtual ~MeowmixSuperSound(){};
+};
+
+
+class SizzleSound : public Sound
+{
+public:
+	SizzleSound() : Sound()
+	{
+		m_libraryIndex = 12;
+	};
+	virtual ~SizzleSound(){};
+};
+
+class BoomSound : public Sound
+{
+public:
+	BoomSound() : Sound()
+	{
+		m_libraryIndex = 13;
+	};
+	virtual ~BoomSound(){};
+};
+
+class TrainSound : public Sound
+{
+public:
+	TrainSound() : Sound()
+	{
+		m_libraryIndex = 11;
+	};
+	virtual ~TrainSound(){};
+};
+
+class RocketSound : public Sound
+{
+public:
+	RocketSound() : Sound()
+	{
+		m_libraryIndex = 15;
+	};
+	virtual ~RocketSound(){};
+};
+
+class RegenSound : public Sound
+{
+public:
+	RegenSound() : Sound()
+	{
+		m_libraryIndex = 14;
+	};
+	virtual ~RegenSound(){};
+};
+
+class ExplosivelyDeliciousSuperSound : public Sound
+{
+public:
+	ExplosivelyDeliciousSuperSound() : Sound()
+	{
+		m_libraryIndex = 16;
+	};
+	virtual ~ExplosivelyDeliciousSuperSound(){};
+};

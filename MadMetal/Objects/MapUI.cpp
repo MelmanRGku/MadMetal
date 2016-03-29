@@ -106,8 +106,8 @@ bool MapUI::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) 
 		relativePos.x = relativePos.x / trackSize.x;
 		relativePos.z = relativePos.z / trackSize.z;
 
-		playerDimensions.x = playerDimensions.x / (trackSize.x * 2 * (partOfTheMapDisplayed.w - partOfTheMapDisplayed.y));
-		playerDimensions.z = playerDimensions.z / (trackSize.z * 2 * (partOfTheMapDisplayed.z - partOfTheMapDisplayed.x));
+		playerDimensions.x = (playerDimensions.x / (trackSize.x * 2 * (partOfTheMapDisplayed.w - partOfTheMapDisplayed.y))) * 2;
+		playerDimensions.z = (playerDimensions.z / (trackSize.z * 2 * (partOfTheMapDisplayed.z - partOfTheMapDisplayed.x))) * 2;
 
 		//if out of bound of the displayed map, don't render the player
 		if (relativePos.z > partOfTheMapDisplayed.z ||
@@ -130,10 +130,10 @@ bool MapUI::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glTranslatef(playerPosOnMapUI.x, playerPosOnMapUI.y, -1);
-		glm::vec2 normalVector = glm::normalize(glm::vec2(0, -1));
-		glm::vec2 forwardVector = glm::normalize(glm::vec2(players->at(i)->getCar()->getForwardVector().x, players->at(i)->getCar()->getForwardVector().z));
-		float angle = glm::degrees(glm::orientedAngle(normalVector, forwardVector));
-		glRotatef(angle, 0, 0, -1);
+//		glm::vec2 normalVector = glm::normalize(glm::vec2(0, -1));
+//		glm::vec2 forwardVector = glm::normalize(glm::vec2(players->at(i)->getCar()->getForwardVector().x, players->at(i)->getCar()->getForwardVector().z));
+//		float angle = glm::degrees(glm::orientedAngle(normalVector, forwardVector));
+//		glRotatef(angle, 0, 0, -1);
 
 
 		if (players->at(i)->getCar()->getId() == mainPlayer->getCar()->getId())

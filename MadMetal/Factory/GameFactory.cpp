@@ -297,8 +297,8 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 	}
 	case OBJECT_BULLET_MEOW_MIX:
 	{
-								   Model3D *model = NULL;
-								   model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_BULLET_MEOW_MIX));
+		Model3D *model = NULL;
+		 model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_BULLET_MEOW_MIX));
 		Renderable3D *renderable = new Renderable3D(model, true, true);
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
@@ -338,7 +338,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 								   Physicable *physicable = new Physicable(physicalBullet);
 
 								   Bullet *bullet = new GargantulousBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
-								   bullet->setSound(GunShotSound());
+								   bullet->setSound(RocketSound());
 								   bullet->playSound();
 								   m_world.addGameObject(bullet);
 								   m_scene.addActor(*physicalBullet);
@@ -365,7 +365,8 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		Physicable *physicable = new Physicable(physicalBullet);
 
 		Bullet *bullet = new ExplosivelyDeliciousBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
-		bullet->setSound(ExplosionSound());
+		bullet->explosivelyBullet = true;
+		bullet->setSound(SizzleSound());
 		bullet->playSound();
 
 		m_world.addGameObject(bullet);
@@ -419,7 +420,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 											   Physicable *physicable = new Physicable(explosion);
 
 											   ExplosivelyDeliciousSuper *superExplosion = new ExplosivelyDeliciousSuper(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
-											   superExplosion->setSound(ExplosionSound());
+											   superExplosion->setSound(ExplosivelyDeliciousSuperSound());
 											   superExplosion->playSound();
 
 											   m_world.addGameObject(superExplosion);
@@ -442,7 +443,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 											   Physicable *physicable = new Physicable(beam);
 
 											   MeowMixSuper * superBeam = new MeowMixSuper(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
-											   superBeam->setSound(ExplosionSound());
+											   superBeam->setSound(MeowmixSuperSound());
 											   superBeam->playSound();
 
 											   m_world.addGameObject(superBeam);
@@ -468,7 +469,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 											   Physicable *physicable = new Physicable(superVolume);
 
 											   GargantulousSuper *super = new GargantulousSuper(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
-											   super->setSound(ExplosionSound());
+											   super->setSound(GargantulousSuperSound());
 											   super->playSound();
 
 											   m_world.addGameObject(super);
@@ -625,6 +626,9 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		pos->p.y += dim.y / 2;
 		TrainCar *trainCar = new TrainCar(objectId, audioable, physicable, animatable, renderable, pos->p);
 
+		trainCar->setSound(TrainSound());
+		trainCar->playSound();
+
 		m_world.addGameObject(trainCar);
 		m_scene.addActor(*trainCarTriggerVolume);
 		return trainCar;
@@ -686,7 +690,9 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 								 //animatable->setScale(glm::vec3(powerupTriggerVolume->getWorldBounds().getDimensions().x, powerupTriggerVolume->getWorldBounds().getDimensions().y, powerupTriggerVolume->getWorldBounds().getDimensions().z));
 
 								 PowerUpAttack *powerup = new PowerUpAttack(objectId, audioable, physicable, animatable, renderable, static_cast<Car*>(parent));
-
+								 std::cout << " Played a sound \n";
+								 powerup->setSound(RegenSound());
+								 powerup->playSound();
 								 m_world.addGameObject(powerup);
 								 m_scene.addActor(*powerupTriggerVolume);
 
