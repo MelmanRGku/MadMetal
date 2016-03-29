@@ -196,21 +196,25 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 
 	if (car != NULL)
 	{
-
-		car->setLastHitCollisionVolume(collisionVolume);
-
-		if (collisionVolume->getIndex() == 0)
+		if (car->getLastHitCollisionVolume() == NULL)
 		{
-			//std::cout << "car: " << car->getIndex() << " collided with starting CollisionVolume \n";
-			car->setStartingCollisionVolumeFlag(true);
+			std::cout << "set first time way point of " << collisionVolume->getIndex() << std::endl;
+			car->setLastHitCollisionVolume(collisionVolume);
 		}
-		else if (collisionVolume->getIndex() == 5)
-		{
-			//std::cout << "car: " << car->getIndex() << " collided with mid CollisionVolume \n";
-			car->setMidCollisionVolumeFlag(true);
+		else {
+			if ((car->getLastHitCollisionVolume()->getIndex() + 1) % (CollisionVolume::globalID) == (collisionVolume->getIndex()))
+			{
+				std::cout << "set Next way point of " << collisionVolume->getIndex() << std::endl;
+				car->setLastHitCollisionVolume(collisionVolume);
+				if (collisionVolume->getIndex() == 0)
+				{
+					std::cout << "incremented lap \n";
+					car->incrementLap();
+				}
+			}
 		}
-
-		std::cout << "car: " << car->getIndex() << " collided with volume: " << collisionVolume->getIndex();
+		
+		std::cout << "car: " << car->getIndex() << " collided with volume: " << collisionVolume->getIndex() << std::endl;
 	}
 }
 
