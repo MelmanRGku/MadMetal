@@ -447,7 +447,7 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 				continue;
 
 			//left press indicates that the number of AI's should be decreased
-			if (ps->getGamePad()->isPressed(GamePad::DPadLeft)) {
+			if (ps->getGamePad()->isPressed(GamePad::DPadLeft) || ps->getGamePad()->isPressed(GamePad::LJoyLeft)) {
 				numberOfAIs--;
 				if (numberOfAIs < 0)
 					numberOfAIs = 0;
@@ -457,7 +457,7 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 			}
 
 			//right press indicates that the number of AI's should be increased
-			if (ps->getGamePad()->isPressed(GamePad::DPadRight)) {
+			if (ps->getGamePad()->isPressed(GamePad::DPadRight) || ps->getGamePad()->isPressed(GamePad::LJoyRight)) {
 				numberOfAIs++;
 
 				if (numberOfAIs > MAX_NUM_OF_AIS)
@@ -486,12 +486,12 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 			continue;
 
 		//right click when the car hasn't been selected means to go to the next car
-		if (ps->getGamePad()->isPressed(GamePad::DPadRight) && !ps->carSelected()) {
+		if ((ps->getGamePad()->isPressed(GamePad::DPadRight) || ps->getGamePad()->isPressed(GamePad::LJoyRight)) && !ps->carSelected()) {
 			ps->selectNextCar();
 		}
 
 		//left click when the car hasn't been selected means to go to the previous car
-		if (ps->getGamePad()->isPressed(GamePad::DPadLeft) && !ps->carSelected()) {
+		if ((ps->getGamePad()->isPressed(GamePad::DPadLeft) || ps->getGamePad()->isPressed(GamePad::LJoyLeft)) && !ps->carSelected()) {
 			ps->selectPrevCar();
 		}
 

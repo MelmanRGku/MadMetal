@@ -101,9 +101,6 @@ void initOpengl(int argc, char **argv) {
 #ifdef FULL_SCREEN
 	glutFullScreen();
 #endif
-
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_MULTISAMPLE);
 	// register callbacks
 	glutDisplayFunc(renderScene);
 	glutIdleFunc(renderScene);
@@ -112,8 +109,10 @@ void initOpengl(int argc, char **argv) {
 	//initialize opengl functions
 	glewInit();
 	glEnable(GL_BLEND);
-	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
 	setVSync(false);
 }
 

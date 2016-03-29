@@ -88,6 +88,10 @@ public:
 		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_6,
 
 		RENDERABLE_OBJECT_SKY_BOX,
+
+		RENDERABLE_OBJECT_MASKICON,
+		RENDERABLE_OBJECT_BOMBICON,
+		RENDERABLE_OBJECT_CATICON,
 	};
 
 	
@@ -226,6 +230,13 @@ public:
 			return new Model2D(Assets::getTexture("super_animation_5"));
 		case RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_6:
 			return new Model2D(Assets::getTexture("super_animation_6"));
+
+		case RENDERABLE_OBJECT_MASKICON:
+			return new Model2D(Assets::getTexture("MaskIcon"));
+		case RENDERABLE_OBJECT_BOMBICON:
+			return new Model2D(Assets::getTexture("Bombcone"));
+		case RENDERABLE_OBJECT_CATICON:
+			return new Model2D(Assets::getTexture("Meowicon"));
 		}
 	}
 	

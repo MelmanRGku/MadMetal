@@ -73,9 +73,9 @@ void PlayerControllable::playFrame(double dt)
 				}
 
 				if (m_gamePad->isPressed(GamePad::YButton)) {
-					//if (m_car->superReady()) {
+					if (m_car->superReady()) {
 						m_car->useSuper();
-				//}
+					}
 				}
 
 				if (m_gamePad->isHeld(GamePad::BButton))
