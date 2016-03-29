@@ -151,15 +151,34 @@ void PlayerControllable::playFrame(double dt)
 				{
 					if (m_gamePad->getLeftStick().x < 0)
 					{
+						const PxF32 vz = m_car->getCar().computeForwardSpeed();
+						const PxF32 vzAbs = PxAbs(vz);
+						const PxF32 maxSteer = gSteerVsForwardSpeedTable.getYVal(vzAbs);
+						PxF32 steer = PxAbs(m_gamePad->getLeftStick().x);
+						if (steer>maxSteer)
+						{
+							const PxF32 k = maxSteer / steer;
+							steer *= k;
+							std::cout << vzAbs << " " << maxSteer << std::endl;
+						}
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
-						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, m_gamePad->getLeftStick().x * turnScalar);
+						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, -steer * turnScalar);
 
 					}
 
 					if (m_gamePad->getLeftStick().x > 0)
 					{
+						const PxF32 vz = m_car->getCar().computeForwardSpeed();
+						const PxF32 vzAbs = PxAbs(vz);
+						const PxF32 maxSteer = gSteerVsForwardSpeedTable.getYVal(vzAbs);
+						PxF32 steer = PxAbs(m_gamePad->getLeftStick().x);
+						if (steer>maxSteer)
+						{
+							steer = maxSteer;
+							std::cout << vzAbs << " " << maxSteer << std::endl;
+						}
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
-						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, -m_gamePad->getLeftStick().x * turnScalar);
+						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, -steer * turnScalar);
 					}
 				}
 				else
