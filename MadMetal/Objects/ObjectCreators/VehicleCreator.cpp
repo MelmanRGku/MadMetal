@@ -95,12 +95,12 @@ PxVehicleDrive4W* VehicleCreator::create(DrivingStyle* style)
 
 		//Gears
 		PxVehicleGearsData gears;
-		gears.mSwitchTime = 0.5f;
+		gears.mSwitchTime = 0.1f;
 		driveSimData.setGearsData(gears);
 
 		//Clutch
 		PxVehicleClutchData clutch;
-		clutch.mStrength = 10.0f;
+		clutch.mStrength = 1000.0f;
 		driveSimData.setClutchData(clutch);
 
 		//Ackermann steer accuracy
@@ -140,12 +140,13 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 			wheels[i].mMOI = style->getWheelMOI();
 			wheels[i].mRadius = style->getWheelRadius();
 			wheels[i].mWidth = style->getWheelWidth();
-		
+			wheels[i].mMaxBrakeTorque = 100000.f;
+			wheels[i].mMaxHandBrakeTorque = 10000000.f;
 		}
 
 		//Enable the handbrake for the rear wheels only.
-		wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxHandBrakeTorque = 25000.0f;
-		wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxHandBrakeTorque = 25000.0f;
+		//wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxHandBrakeTorque = 25000.0f;
+		//wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxHandBrakeTorque = 25000.0f;
 		//Enable steering for the front wheels only.
 		wheels[PxVehicleDrive4WWheelOrder::eFRONT_LEFT].mMaxSteer = PxPi*0.06666f;
 		wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mMaxSteer = PxPi*0.06666f;
