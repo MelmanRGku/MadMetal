@@ -105,7 +105,9 @@ public:
 	bool sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal MaxDistance, PxRaycastBuffer &hit, PxHitFlags flag = PxHitFlags(PxHitFlag::eDEFAULT), PxQueryFilterData fd = PxQueryFilterData());
 	bool sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit);
 
-	static long getNextId() { return ++lastId; }
+	static long getNextId() { 
+		return ++lastId; 
+	}
 
 	static GameFactory *instance();
 

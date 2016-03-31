@@ -45,6 +45,9 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 {
 	long objectId = getNextId();
 
+	if (objectId == 3 || objectId == 4)
+		std::cout << "ASD : " << objectToMake << std::endl;
+
 	switch (objectToMake) {
 	case OBJECT_MEOW_MIX:
 	{
@@ -636,25 +639,12 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 	case OBJECT_DEATH_PIT:
 	{
-							 //Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRAIN_CAR));
-							 //Renderable3D *renderable = new Renderable3D(model, true, true);
-							 //renderable->setModel(NULL);
-							 //Animatable *animatable = new Animatable();
-							 //Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		PxRigidDynamic *deathPitVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::DEATH_VOLUME, objectId, pos, geom, 0, NULL, NULL, NULL));
 
+		PxVec3 dim = deathPitVolume->getWorldBounds().getDimensions();
 
-							 PxRigidDynamic *trainCarTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::DEATH_VOLUME, objectId, pos, geom, 0, NULL, NULL, NULL));
-
-							 //Physicable *physicable = new Physicable(trainCarTriggerVolume);
-							 PxVec3 dim = trainCarTriggerVolume->getWorldBounds().getDimensions();
-
-							 //animatable->setScale(glm::vec3(dim.x, dim.y, dim.z));
-							 //pos->p.y += dim.y / 2;
-							 //TrainCar *trainCar = new TrainCar(objectId, audioable, physicable, animatable, renderable, pos->p);
-
-							 //m_world.addGameObject(trainCar);
-							 m_scene.addActor(*trainCarTriggerVolume);
-							 return NULL;
+		m_scene.addActor(*deathPitVolume);
+		return NULL;
 	}
 	case OBJECT_SPEED_POWERUP:
 	{

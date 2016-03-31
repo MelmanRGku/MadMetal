@@ -30,7 +30,6 @@ bool temporary = false;
 
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audioHandle(audioHandle)
 {
-	std::cout << "GameSimulation pushed onto the stack \n";
 	Car::resetGlobalPositionID();
 	newMessage.setTag(SceneMessage::eNone);
 	createPhysicsScene();
@@ -79,8 +78,6 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
 			humanPlayer->getCar()->ui = ui;
 			ui->map->setMainPlayer(humanPlayer);
-			//m_world->addGameObject(ui);
-			//todo: make a car for player based off template
 			m_humanPlayers.push_back(humanPlayer);
 			
 			m_players.push_back(humanPlayer);
@@ -119,13 +116,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		m_humanPlayers.at(i)->getCar()->getUI()->adjustStringsForViewport(i + 1, m_humanPlayers.size());
 	}
 
-	//if there is only one player, set audio to do sound attenuation to that player
-	//if (m_humanPlayers.size() == 1)
-	//{
-		m_audioHandle.assignListener(m_humanPlayers[0]->getCar());
-	//}
-	
-	//m_mainCamera = m_humanPlayers[0]->getCamera();
+	m_audioHandle.assignListener(m_humanPlayers[0]->getCar());
 	
 	initialize();
 	m_scoreTable = new ScoreTable(m_players);
@@ -578,7 +569,7 @@ void GameSimulation::setupTrains() {
 
 void GameSimulation::setupDeathPit() {
 	PxGeometry **deathPitGeom = new PxGeometry*[1];
-	deathPitGeom[0] = new PxBoxGeometry(PxVec3(250, 5, 50));
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(400, 5, 70));
 	PxTransform *pos = new PxTransform(-275, -40, 1500);
 	m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL);
 	delete pos;
@@ -591,23 +582,6 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	setupTrains();
 	setupDeathPit();
 	m_gameFactory->makeObject(GameFactory::OBJECT_SKY_BOX, NULL, NULL, NULL);
-	//PxGeometry **geom1 = new PxGeometry *[1];
-	//PxGeometry **geom2 = new PxGeometry *[1];
-	//geom1[0] = new PxBoxGeometry(PxVec3(60, m_track->getDrivablePart()->getWorldBounds().maximum.y, 30));
-	//geom2[0] = new PxBoxGeometry(PxVec3(40, m_track->getDrivablePart()->getWorldBounds().maximum.y, 60));
-	//
-	//pos = new PxTransform(m_track->getWaypointAt(13)->getGlobalPose().x, m_track->getWaypointAt(95)->getGlobalPose().y, m_track->getWaypointAt(13)->getGlobalPose().z);
-	//m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL);
-	//delete pos;
-	//pos = new PxTransform(m_track->getWaypointAt(72)->getGlobalPose().x, m_track->getWaypointAt(73)->getGlobalPose().y, m_track->getWaypointAt(72)->getGlobalPose().z);
-	//m_gameFactory->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2 , NULL);
-
-
-	//delete pos;
-	//delete geom1[0];
-	//delete geom2[0];
-	//delete[] geom1;
-	//delete[] geom2;
 }
 
 float GameSimulation::getFinishLineBonus(int position)

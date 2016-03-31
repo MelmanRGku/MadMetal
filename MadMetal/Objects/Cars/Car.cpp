@@ -131,7 +131,8 @@ void Car::usePowerUp()
 			glm::vec3 direction = glm::normalize(getForwardVector());
 			direction.y = 0;
 			float currentSpeed = getCar().computeForwardSpeed();
-			direction *= (getDrivingStyle().getMaxSpeed() - currentSpeed) / getDrivingStyle().getMaxSpeed() * PowerUp::getSpeedImpulse() * 20;
+#undef max
+			direction *= std::max(getDrivingStyle().getMaxSpeed() - currentSpeed, 30.f) / getDrivingStyle().getMaxSpeed() * PowerUp::getSpeedImpulse() * 20;
 			actor->setAngularVelocity(PxVec3(0, 0, 0));
 			actor->addForce(PxVec3(direction.x, direction.y, direction.z), PxForceMode::eIMPULSE);
 			delete geom[0];

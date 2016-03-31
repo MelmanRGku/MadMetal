@@ -33,6 +33,8 @@ bool MapUI::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+#define PERCENTAGE_OF_MAP_TO_DISPLAY 40
+#define PERCENTAGE_OF_MAP_TO_DISPLAY_IN_MAP_COORDS (PERCENTAGE_OF_MAP_TO_DISPLAY / 100.f)
 	glm::vec4 partOfTheMapDisplayed;
 	{
 		PxVec3 playerPos = mainPlayer->getCar()->getActor().getGlobalPose().p;
@@ -40,38 +42,42 @@ bool MapUI::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) 
 		relativePos.x = relativePos.x / trackSize.x;
 		relativePos.z = relativePos.z / trackSize.z;
 		glm::vec2 playerPosOnMapUI = glm::vec2(relativePos.z, relativePos.x);
-		partOfTheMapDisplayed.x = clip(playerPosOnMapUI.x - .1f, 0, 1);
-		partOfTheMapDisplayed.y = clip(playerPosOnMapUI.y - .1f, 0, 1);
-		partOfTheMapDisplayed.z = clip(playerPosOnMapUI.x + .1f, 0, 1);
-		partOfTheMapDisplayed.w = clip(playerPosOnMapUI.y + .1f, 0, 1);
+		partOfTheMapDisplayed.x = playerPosOnMapUI.x - PERCENTAGE_OF_MAP_TO_DISPLAY_IN_MAP_COORDS;
+		partOfTheMapDisplayed.y = playerPosOnMapUI.y - PERCENTAGE_OF_MAP_TO_DISPLAY_IN_MAP_COORDS;
+		partOfTheMapDisplayed.z = playerPosOnMapUI.x + PERCENTAGE_OF_MAP_TO_DISPLAY_IN_MAP_COORDS;
+		partOfTheMapDisplayed.w = playerPosOnMapUI.y + PERCENTAGE_OF_MAP_TO_DISPLAY_IN_MAP_COORDS;
 	}
 
-	glm::vec3 pos = m_animatable->getPosition();
-	glm::vec3 size = m_animatable->getScale();
-	glColor3f(1.f, 1.f, 1.f);
-	Model2D *model = static_cast<Model2D*>(m_renderable->getModel());
-	model->getTexture()->Bind(GL_TEXTURE_2D);
-	glBegin(GL_QUADS);
-	//bottom left
-	glTexCoord2f(partOfTheMapDisplayed.x, 1 - partOfTheMapDisplayed.y);
-	glVertex2f(pos.x - size.x / 2, pos.y - size.y / 2);
-	//bottom right
-	glTexCoord2f(partOfTheMapDisplayed.z, 1 - partOfTheMapDisplayed.y);
-	glVertex2f(pos.x + size.x / 2, pos.y - size.y / 2);
-	//top right
-	glTexCoord2f(partOfTheMapDisplayed.z, 1 - partOfTheMapDisplayed.w);
-	glVertex2f(pos.x + size.x / 2, pos.y + size.y / 2);
-	//top left
-	glTexCoord2f(partOfTheMapDisplayed.x, 1 - partOfTheMapDisplayed.w);
-	glVertex2f(pos.x - size.x / 2, pos.y + size.y / 2);
-	glEnd();
-	model->getTexture()->unBind(GL_TEXTURE_2D);
+	{
+		glm::vec3 pos = m_animatable->getPosition();
+		glm::vec3 size = m_animatable->getScale();
+		glColor3f(1.f, 1.f, 1.f);
+		Model2D *model = static_cast<Model2D*>(m_renderable->getModel());
+		model->getTexture()->Bind(GL_TEXTURE_2D);
+		glBegin(GL_QUADS);
+		float bottomCutOff = (partOfTheMapDisplayed.w > 1) ? partOfTheMapDisplayed.w - 1 : 0;
+		float topCutOff = (partOfTheMapDisplayed.y < 0) ? -partOfTheMapDisplayed.y : 0;
+		float rightCutOff = (partOfTheMapDisplayed.x < 0) ? -partOfTheMapDisplayed.x : 0;
+		float leftCutOff = (partOfTheMapDisplayed.z > 1) ? partOfTheMapDisplayed.z - 1 : 0;
+		//bottom left
+		glTexCoord2f(std::max(partOfTheMapDisplayed.x, 0.f), std::min(1 - partOfTheMapDisplayed.y, 1.f));
+		glVertex2f(pos.x - size.x / 2 + leftCutOff * size.x, pos.y - size.y / 2 + bottomCutOff * size.y);
+		//bottom right
+		glTexCoord2f(std::min(partOfTheMapDisplayed.z, 1.f), std::min(1 - partOfTheMapDisplayed.y, 1.f));
+		glVertex2f(pos.x + size.x / 2 - rightCutOff * size.x, pos.y - size.y / 2 + bottomCutOff * size.y);
+		//top right
+		glTexCoord2f(std::min(partOfTheMapDisplayed.z, 1.f), std::max(1 - partOfTheMapDisplayed.w, 0.f));
+		glVertex2f(pos.x + size.x / 2 - rightCutOff * size.x, pos.y + size.y / 2 - topCutOff * size.y);
+		//top left
+		glTexCoord2f(std::max(partOfTheMapDisplayed.x, 0.f), std::max(1 - partOfTheMapDisplayed.w, 0.f));
+		glVertex2f(pos.x - size.x / 2 + leftCutOff * size.x, pos.y + size.y / 2 - topCutOff * size.y);
+		glEnd();
+		model->getTexture()->unBind(GL_TEXTURE_2D);
+	}
 
 	//----------------------------------------------------------
 	//-------------- END DRAW THE MAP---------------------------
 	//----------------------------------------------------------
-
-
 
 
 
