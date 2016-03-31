@@ -1,5 +1,5 @@
 # Blender MTL File: 'Gargantulous.blend'
-# Material Count: 44
+# Material Count: 38
 
 newmtl Material
 Ns 96.078431
@@ -11,66 +11,6 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd lavaRocks.png
-
-newmtl Material.001
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.578433 0.304040 0.000000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-
-newmtl Material.002
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-
-newmtl Material.003
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.147575 0.018639 0.000000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-
-newmtl Material.004
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.026442 0.424339 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-
-newmtl Material.005
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.000000 0.000000 0.000000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-
-newmtl Material.006
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.408350 0.640000 0.000000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
 
 newmtl Material.007
 Ns 96.078431
@@ -229,6 +169,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd TestImage.png
 
 newmtl Material.022
 Ns 96.078431
@@ -239,6 +180,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd TestImage.png
 
 newmtl Material.023
 Ns 96.078431
@@ -249,6 +191,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd TestImage.png
 
 newmtl Material.024
 Ns 96.078431
@@ -303,7 +246,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd lava rock.jpg
+map_Kd lavarock.jpg
 
 newmtl Material.029
 Ns 94.117647
@@ -432,15 +375,16 @@ Kd 0.8 0.8 0.8
 Ks 0.8 0.8 0.8
 d 1
 illum 2
-map_Kd Chest paint.png
+map_Kd Chestpaint.png
 
-newmtl None_NONE
+newmtl None_Mask.png
 Ns 0
 Ka 0.000000 0.000000 0.000000
 Kd 0.8 0.8 0.8
 Ks 0.8 0.8 0.8
 d 1
 illum 2
+map_Kd Mask.png
 
 newmtl None_TikiTest.png
 Ns 0

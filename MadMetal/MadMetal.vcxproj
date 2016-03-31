@@ -309,22 +309,6 @@
     <Text Include="Audio\MusicLibrary.txt" />
     <Text Include="Files\test.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="Assets\Models\Chest paint Lava.png" />
-    <Image Include="Assets\Models\Day_Skybox.png" />
-    <Image Include="Assets\Models\DeathEye.png" />
-    <Image Include="Assets\Models\MaskLava.png" />
-    <Image Include="Assets\Models\Panel.jpg" />
-    <Image Include="Assets\Models\TikiTestLava.png" />
-    <Image Include="Assets\Useless\asphalt_texture409.jpg" />
-    <Image Include="Assets\Useless\Building_texture4.jpg" />
-    <Image Include="Assets\Models\lava rock.jpg" />
-    <Image Include="Assets\Models\lavaRocks.png" />
-    <Image Include="Assets\Models\Skirt.png" />
-    <Image Include="Assets\Models\Staff.png" />
-    <Image Include="Assets\Useless\Terrain-Road.jpg" />
-    <Image Include="Assets\Models\TikiTest.png" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -7,8 +7,8 @@
 #include <string>
 
 bool Audio::m_musicPlaying = false;
-#define SFX_VOLUME 100
-#define MUSIC_VOLUME 0
+#define SFX_VOLUME 128
+#define MUSIC_VOLUME 70
 
 //set up audio library
 void Audio::initializeMusicLibrary(char * fileToLoad)

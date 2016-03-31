@@ -10,7 +10,7 @@ public:
 		//std::cout << "Made new homing bullet \n";
 		m_isTracking = true;
 		m_owner = owner;
-		m_speed = 60;
+		m_speed = 80;
 		maxLifeTime = 10;
 		m_trackingDelay = 1;
 		PxVec3 startVelocity = m_owner->getCar().getRigidDynamicActor()->getLinearVelocity();
@@ -44,7 +44,7 @@ public:
 			PxVec3 distanceToTarget = m_targetLocation - currentLocation;
 			if (distanceToTarget.magnitude() > 1)
 			{
-				PxVec3 newVelocity = distanceToTarget.getNormalized()  * m_speed;
+				PxVec3 newVelocity = distanceToTarget.getNormalized()  * (m_speed +=  6 * dt);
 				static_cast<PxRigidDynamic *>(&m_physicable->getActor())->setLinearVelocity(newVelocity);
 			}
 			else {

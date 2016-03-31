@@ -149,6 +149,8 @@ void Car::usePowerUp()
 void Car::takeDamage(float damage)
 {
 	m_currentHealth -= damage;
+	if (m_currentHealth > m_maxHealth)
+		m_currentHealth = m_maxHealth;
 }
 
 

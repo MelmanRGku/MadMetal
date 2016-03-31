@@ -143,7 +143,7 @@ public:
 		case RENDERABLE_OBJECT_GGO:
 			return Assets::getModel("GGO");
 		case (RENDERABLE_OBJECT_ATTACK_POWERUP_PICKUP) :
-			return Assets::getModel("attackPowerUp_pickup");
+			return Assets::getModel("healthCross");
 		case (RENDERABLE_OBJECT_DEFENSE_POWERUP_PICKUP) :
 			return Assets::getModel("defensePowerUp_pickup");
 		case (RENDERABLE_OBJECT_SPEED_POWERUP_PICKUP) :

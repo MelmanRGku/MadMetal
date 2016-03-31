@@ -61,7 +61,7 @@ void PowerUp::setActiveType(int type)
 	{
 	case(1) :
 		m_type = PowerUpType::ATTACK;
-		m_renderable->setModel(Assets::getModel("attackPowerUp_pickup"));
+		m_renderable->setModel(Assets::getModel("healthCross"));
 		m_emitter->setParticleModel("powerup_particle_attack");
 		break;
 	case(2) :
@@ -89,7 +89,7 @@ void PowerUp::activate()
 	{
 	case(1) :
 		m_type = PowerUpType::ATTACK;
-		m_renderable->setModel(Assets::getModel("attackPowerUp_pickup"));
+		m_renderable->setModel(Assets::getModel("healthCross"));
 		m_emitter->setParticleModel("powerup_particle_attack");
 		break;
 	case(2) :

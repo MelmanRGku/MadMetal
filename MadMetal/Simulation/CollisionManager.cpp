@@ -216,7 +216,7 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 			}
 		}
 		
-		std::cout << "car: " << car->getIndex() << " collided with volume: " << collisionVolume->getIndex() << std::endl;
+		//std::cout << "car: " << car->getIndex() << " collided with volume: " << collisionVolume->getIndex() << std::endl;
 	}
 }
 
