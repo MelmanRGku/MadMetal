@@ -13,7 +13,13 @@ public:
 		modelMatrixUniform,				//model matrix uniform
 		textureUniform,					//texture uniform
 		textureValidUniform,			//uniform that specifies if there is any texture loaded or if color should be used instead
-		cameraPosUniform;				//pos of the camera
+		cameraPosUniform,
+
+		bitmaskUniform,		//pos of the camera
+		lightPosUniform,
+		constUniform,
+		linearUniform,
+		quadUniform;
 
 	CellShaderProgram(const char* vertexShaderPath, const char* fragmentShaderPath);
 	~CellShaderProgram();

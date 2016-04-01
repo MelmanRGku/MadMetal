@@ -37,6 +37,7 @@ Renderer::~Renderer()
 	for (int i = 0; i < NUMBER_OF_SHADER_TYPES; i++) {
 		delete shader[i];
 	}
+
 }
 
 void Renderer::setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt)

@@ -24,15 +24,12 @@ uniform highp vec3 camera_pos;
 out VS_OUT
 {
     vec3 N;
-    vec3 L;
     vec3 V;
     vec4 C;
     vec2 uv;
 	vec4 position_attr;
-} vs_out;
 
-// Position of light
-uniform vec3 light_pos = vec3(-151, 500, 400);
+} vs_out;
 
 void main()
 {
@@ -41,9 +38,6 @@ void main()
 
    // normal in world space
    vs_out.N = vec3(normalize(model_matrix * vec4(normal_attr, 0)));
-
-   // direction to light
-   vs_out.L = normalize(light_pos - worldPosition.xyz);
 
    // direction to camera
    vs_out.V = normalize(camera_pos - worldPosition.xyz);
@@ -54,7 +48,7 @@ void main()
    //colour
    vs_out.C = colour_attr;
    
-   vs_out.position_attr = position_attr;
+   vs_out.position_attr = worldPosition ;
 
    // screen space coordinates of the vertex
    gl_Position = proj_matrix * view_matrix * worldPosition;
