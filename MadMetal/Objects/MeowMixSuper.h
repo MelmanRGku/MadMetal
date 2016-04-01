@@ -65,8 +65,10 @@ public:
 					}
 					else if (car->isAlive())
 					{
-						m_owner->addDamageDealt(car->getHealthRemaining());
-						car->takeDamage(car->getHealthRemaining());
+						float damageToDeal = car->getHealthRemaining();
+						if (car->takeDamage(damageToDeal)) {
+							m_owner->addDamageDealt(damageToDeal);
+						}
 					}
 					break;
 				case (131072) : // hitting the delicious collision volume
@@ -79,8 +81,10 @@ public:
 									std::cout << abs(forward.cross(toCar).magnitude() - 1) << std::endl;
 									if (abs(forward.cross(toCar).magnitude() - 1) < 0.2)
 									{
-										m_owner->addDamageDealt(car->getHealthRemaining());
-										car->takeDamage(car->getHealthRemaining());
+										float damageToDeal = car->getHealthRemaining();
+										if (car->takeDamage(damageToDeal)) {
+											m_owner->addDamageDealt(damageToDeal);
+										}
 									}
 
 									break;

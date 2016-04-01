@@ -23,6 +23,7 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 	Car::positionGlobalID++;
 	m_positionInRace = positionGlobalID;
 	m_waypointHitList.clear();
+	m_invincibilityTimeRemaining = 0;
 }
 
 
@@ -39,23 +40,22 @@ DrivingStyle& Car::getDrivingStyle()
 
 void Car::respawn()
 {
-	//std::cout << "Respawned? \n";
+	//if the car is alive and is in its period of invincibility - prevent respawning
+	if (m_invincibilityTimeRemaining > 0 && m_currentHealth > 0)
+		return;
+
 	m_currentHealth = m_maxHealth;
+	m_invincibilityTimeRemaining = 3;
 	
 	if (m_lastCollisionVolume != NULL)
 	{
-		
-		
 		m_car.getRigidDynamicActor()->setGlobalPose(m_lastCollisionVolume->getActor().getGlobalPose());
 		
 	}
 	else {
-		//std::cout << "Invalid Waypoint Respawn" << std::endl;
 		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
 		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, 5, currentPosition.p.z)));
 	}
-
-	//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(0, 5, 0)));
 
 	m_car.getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 0, 0));
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0));
@@ -146,12 +146,24 @@ void Car::usePowerUp()
 
 }
 
+#define INVINICIBILITY_FLASH_PERIOD 0.2f
+bool Car::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
+	if (m_invincibilityTimeRemaining <= 0 || std::fmod(m_invincibilityTimeRemaining, (INVINICIBILITY_FLASH_PERIOD * 2)) < INVINICIBILITY_FLASH_PERIOD) {
+		return Object3D::draw(renderer, type, passNumber);
+	}
+	else return false;
+}
 
-void Car::takeDamage(float damage)
+bool Car::takeDamage(float damage, bool applyAnyway)
 {
-	m_currentHealth -= damage;
-	if (m_currentHealth > m_maxHealth)
-		m_currentHealth = m_maxHealth;
+	if (m_invincibilityTimeRemaining <= 0 || applyAnyway) {
+		m_currentHealth -= damage;
+		if (m_currentHealth > m_maxHealth)
+			m_currentHealth = m_maxHealth;
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -235,7 +247,7 @@ void Car::update(float dt) {
 	PxVec3 angVel = m_car.getRigidDynamicActor()->getAngularVelocity();
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, angVel.y, 0), true);
 	
-	
+	m_invincibilityTimeRemaining -= dt;
 	updateHealth(dt);
 	m_reloadRemainingSeconds -= dt;
 	updateSuper(dt);
@@ -272,7 +284,6 @@ void Car::addDamageDealt(float damage, bool addToSuper) {
 
 bool Car::setCurrentWaypoint(Waypoint* waypoint)
 {
-	//std::cout << "current waypoint is " << waypoint->getIndex() << "\n";
 	if (waypoint != m_currentWaypoint) {
 		m_lastWayPoint = m_currentWaypoint;
 	m_currentWaypoint = waypoint;
@@ -289,7 +300,6 @@ Waypoint* Car::getLastWaypoint()
 
 Waypoint* Car::getCurrentWaypoint()
 {
-	//if (m_currentWaypoint!=NULL)
 	return m_currentWaypoint;
 }
 

@@ -30,8 +30,9 @@ void BombExplosion::onCarHit(Car *car) {
 	float distanceBetweenCarAndCenterOfExplosion = glm::length(thisPos - car->getGlobalPose());
 	float damageMultiplier = 1 - distanceBetweenCarAndCenterOfExplosion / geom.radius;
 	float damageToDeal = m_maxDamage * damageMultiplier;
-	car->takeDamage(damageToDeal);
-	owner->addDamageDealt(damageToDeal);
+	if (car->takeDamage(damageToDeal)) {
+		owner->addDamageDealt(damageToDeal);
+	}
 
 	carsHit.push_back(car);
 }

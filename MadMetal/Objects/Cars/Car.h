@@ -51,6 +51,8 @@ protected: //members
 	PowerUpType m_activePowerUp;
 	float m_powerUpRemaining;
 	static int positionGlobalID;
+
+	float m_invincibilityTimeRemaining;
 private:
 	//update functions
 	void updatePowerUp(float dt);
@@ -72,7 +74,7 @@ public:
 	bool isAlive() { return m_currentHealth > 0; }
 	virtual void useSuper();
 	virtual void fire() = 0;
-	void takeDamage(float damage);
+	bool takeDamage(float damage, bool applyAnyway = false);
 	
 	virtual void update(float dt);
 	void addDamageDealt(float damage, bool addToSuper = true);
@@ -116,5 +118,8 @@ public:
 	CollisionVolume* getLastHitCollisionVolume();
 
 	static void resetGlobalPositionID();
+
+	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
+
 };
 

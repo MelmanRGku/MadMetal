@@ -132,9 +132,11 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		//ignore
 	}
 	else if (car != NULL && (car->getId() != bullet->getOwner()->getId()) && car->getActivePowerUpType() != PowerUpType::DEFENSE) {
-		car->takeDamage(bullet->getDamage());
-		bullet->getOwner()->addDamageDealt(bullet->getDamage());
+		if (car->takeDamage(bullet->getDamage())) {
+			bullet->getOwner()->addDamageDealt(bullet->getDamage());
+		}
 		bullet->setHasToBeDeleted(true);
+
 
 		PxGeometry **explosionGeom = new PxGeometry*[1];
 		explosionGeom[0] = new PxSphereGeometry(1);
@@ -153,7 +155,7 @@ void CollisionManager::processDeathVolumeHit(long deathVolumeId, long otherId)
 	Car *car = dynamic_cast<Car *>(otherObj);
 
 	if (car != NULL) {
-		car->takeDamage(10000);
+		car->takeDamage(10000, true);
 	}
 }
 
@@ -275,8 +277,9 @@ void CollisionManager::processSpeedPowerUpHit(long speedPowerUpId, long carId)
 	{
 		car->getCar().getRigidDynamicActor()->setGlobalPose(PxTransform(car->getCar().getRigidDynamicActor()->getGlobalPose().p + PxVec3(0, 15, 0)));
 		car->getCar().getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 20, 0));
-		car->takeDamage(PowerUp::getSpeedImpactDamage());
-		shield->getOwner()->addDamageDealt(PowerUp::getSpeedImpactDamage());
+		if (car->takeDamage(PowerUp::getSpeedImpactDamage())) {
+			shield->getOwner()->addDamageDealt(PowerUp::getSpeedImpactDamage());
+		}
 	}
 }
 
@@ -294,8 +297,9 @@ void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, lon
 
 	if (car != NULL  && car != super->getOwner() && super->addCarHit(carId)) // if the car hasn't already been hit by the super
 	{
-		car->takeDamage(super->getDamage());
-		super->getOwner()->addDamageDealt(super->getDamage(), false);
+		if (car->takeDamage(super->getDamage())) {
+			super->getOwner()->addDamageDealt(super->getDamage(), false);
+		}
 	}
 }
 
@@ -313,8 +317,10 @@ void CollisionManager::processGargantulousSuperBulletHit(long bulletId, long car
 
 	if (car != NULL  && car != super->getOwner()) // if the car hasn't already been hit by the super
 	{
-		super->getOwner()->addDamageDealt(car->getHealthRemaining());
-		car->takeDamage(car->getHealthRemaining());
+		float damageToDeal = car->getHealthRemaining();
+		if (car->takeDamage(damageToDeal)) {
+			super->getOwner()->addDamageDealt(damageToDeal);
+		}
 		
 		super->setHasToBeDeleted(true);
 	}
