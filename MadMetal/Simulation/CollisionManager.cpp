@@ -120,8 +120,14 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	TestObject *otherObj = m_world.findObject(otherId);
 	Car *car = dynamic_cast<Car *>(otherObj);
 
-	if (car != NULL && (car->getId() != bullet->getOwner()->getId()) && car->getActivePowerUpType() != PowerUpType::DEFENSE) {
-		//std::cout << "Bullet " << bulletId << " hit car\n";
+	if (car == NULL){ //if dynamic cast to car returns NULL its probably a wall so get rid of it
+		bullet->setHasToBeDeleted(true);
+	}
+	//self hit - ignore
+	else if (car != NULL && (car->getId() == bullet->getOwner()->getId())) {
+		//ignore
+	}
+	else if (car != NULL && (car->getId() != bullet->getOwner()->getId()) && car->getActivePowerUpType() != PowerUpType::DEFENSE) {
 		car->takeDamage(bullet->getDamage());
 		bullet->getOwner()->addDamageDealt(bullet->getDamage());
 		bullet->setHasToBeDeleted(true);
@@ -133,34 +139,17 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		delete[] explosionGeom;
 		bullet->playCollisionSound();
 	}
-	else if (car == NULL) {//if dynamic cast to car returns NULL its probably a wall so get rid of it
-	
-		bullet->setHasToBeDeleted(true);
-	}
 	
 }
 
 void CollisionManager::processDeathVolumeHit(long deathVolumeId, long otherId)
 {
-	//std::cout << "got here \n";
-	//TrainCar * traincar = static_cast<TrainCar*>(m_world.findObject(deathVolumeId));
-
-	//if (traincar == NULL)
-	//{
-		//std::cout << "failed to cast to train car" << std::endl;
-		//return;
-	//}
 
 	TestObject *otherObj = m_world.findObject(otherId);
 	Car *car = dynamic_cast<Car *>(otherObj);
 
 	if (car != NULL) {
-		//std::cout << "Bullet " << bulletId << " hit car\n";
 		car->takeDamage(10000);
-	}
-	else if (car == NULL) {//if dynamic cast to car returns NULL its probably a wall so get rid of it
-
-		std::cout << "failed to cast to car " << std::endl;
 	}
 }
 
@@ -176,16 +165,10 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 
 	if (car != NULL) 
 	{
-		if (car->setCurrentWaypoint(waypoint)) {
-			if (car->getCurrentWaypoint()->isFinish()) {
-			//	car->incrementLap();
-			}
-		}
-		
-		//std::cout << "car is: " << car->getId() << " waypoint is: " << waypoint->getId() << "\n";
-		//waypoint->setValid(true);
-		//car->addWaypointHit(waypoint);
+		car->setCurrentWaypoint(waypoint);
 	}
+
+	//std::cout << "Current Waypoint" << waypoint->getIndex() << "\n";
 }
 
 void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
@@ -200,21 +183,25 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 
 	if (car != NULL)
 	{
-
-		car->setLastHitCollisionVolume(collisionVolume);
-
-		if (collisionVolume->getIndex() == 0)
+		if (car->getLastHitCollisionVolume() == NULL)
 		{
-			//std::cout << "car: " << car->getIndex() << " collided with starting CollisionVolume \n";
-			car->setStartingCollisionVolumeFlag(true);
+			std::cout << "set first time way point of " << collisionVolume->getIndex() << std::endl;
+			car->setLastHitCollisionVolume(collisionVolume);
 		}
-		else if (collisionVolume->getIndex() == 5)
-		{
-			//std::cout << "car: " << car->getIndex() << " collided with mid CollisionVolume \n";
-			car->setMidCollisionVolumeFlag(true);
+		else {
+			if ((car->getLastHitCollisionVolume()->getIndex() + 1) % (CollisionVolume::globalID) == (collisionVolume->getIndex()))
+			{
+				std::cout << "set Next way point of " << collisionVolume->getIndex() << std::endl;
+				car->setLastHitCollisionVolume(collisionVolume);
+				if (collisionVolume->getIndex() == 0)
+				{
+					std::cout << "incremented lap \n";
+					car->incrementLap();
+				}
+			}
 		}
-
-		std::cout << "car: " << car->getIndex() << " collided with volume: " << collisionVolume->getIndex();
+		
+		//std::cout << "car: " << car->getIndex() << " collided with volume: " << collisionVolume->getIndex() << std::endl;
 	}
 }
 
@@ -235,13 +222,7 @@ void CollisionManager::processPowerUpHit(long powerupId, long otherId)
 		{
 			car->pickUpPowerUp(powerUp->pickup());
 		}
-		else{
-			//std::cout << "PowerUp wasn't active\n";
-		}
 
-	}
-	else {
-		std::cout << "Couldn't Cast to car \n";
 	}
 }
 
@@ -272,9 +253,6 @@ void CollisionManager::processShieldPowerUpHit(long shieldPowerUpId, long bullet
 		//bullets need to be rotated
 		
 	}
-	else{
-		std::cout << "Failed to cast to Bullet \n";
-	}
 }
 
 void CollisionManager::processSpeedPowerUpHit(long speedPowerUpId, long carId)
@@ -296,9 +274,6 @@ void CollisionManager::processSpeedPowerUpHit(long speedPowerUpId, long carId)
 		car->takeDamage(PowerUp::getSpeedImpactDamage());
 		shield->getOwner()->addDamageDealt(PowerUp::getSpeedImpactDamage());
 	}
-	else{
-		std::cout << "Failed to cast to Car \n";
-	}
 }
 
 void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, long carId)
@@ -308,7 +283,7 @@ void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, lon
 	if (super == NULL)
 	{
 		return;
-}
+	}
 
 	TestObject * otherObject = m_world.findObject(carId);
 	Car * car = dynamic_cast<Car *>(otherObject);
@@ -343,7 +318,7 @@ void CollisionManager::processGargantulousSuperBulletHit(long bulletId, long car
 
 void CollisionManager::processGargantulousSuperVolumeHit(long volumeId, long carId)
 {
-	std::cout << "Collided with Collision Volume \n";
+	//std::cout << "Collided with Collision Volume \n";
 	GargantulousSuper * super = dynamic_cast<GargantulousSuper *>(m_world.findObject(volumeId));
 
 	if (super == NULL)
@@ -443,13 +418,15 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 	else if ((filterData0.word0 == COLLISION_FLAG_SPEED_POWERUP) && (filterData1.word0 & filterData0.word1))
 		processSpeedPowerUpHit(filterData0.word2, filterData1.word2);
 	
-	else if (filterData0.word0 == COLLISION_FLAG_BULLET && filterData1.word0 == COLLISION_FLAG_CHASSIS )
+	else if (filterData0.word0 == COLLISION_FLAG_BULLET && (filterData0.word1 & filterData1.word0) || filterData1.word0 == COLLISION_FLAG_BULLET && (filterData1.word1 & filterData0.word0))
 	{
-		processBulletHit(filterData0.word2, filterData1.word2);
-	}
-	else if (filterData1.word0 == COLLISION_FLAG_BULLET && filterData0.word0 == COLLISION_FLAG_CHASSIS)
-	{
-		processBulletHit(filterData1.word2, filterData0.word2);
+		long bulletId = (filterData0.word0 == COLLISION_FLAG_BULLET) ? filterData0.word2 : filterData1.word2;
+		long otherId = (filterData0.word0 == COLLISION_FLAG_BULLET) ? filterData1.word2 : filterData0.word2;
+
+		if (filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP || filterData1.word0 == COLLISION_FLAG_SHIELD_POWERUP)
+			processShieldPowerUpHit(otherId, bulletId);
+		else 
+			processBulletHit(bulletId, otherId);
 	}
 	else if (filterData0.word0 == COLLISION_FLAG_DEATH_VOLUME && filterData1.word0 == COLLISION_FLAG_CHASSIS)
 	{
@@ -483,12 +460,6 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 	{
 		processGargantulousSuperBulletHit(filterData1.word2, filterData0.word2);
 	}
-
-	//shield power up is done in two steps because since both bullet and shield are trigger objects then the shield could be object 0 or 1
-	else if (filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP && filterData1.word0 == COLLISION_FLAG_BULLET)
-		processShieldPowerUpHit(filterData0.word2, filterData1.word2);
-	else if (filterData0.word0 == COLLISION_FLAG_BULLET && filterData1.word0 == COLLISION_FLAG_SHIELD_POWERUP)
-		processShieldPowerUpHit(filterData1.word2, filterData0.word2);
 	
 	return PxFilterFlags(PxFilterFlag::eDEFAULT);
 }

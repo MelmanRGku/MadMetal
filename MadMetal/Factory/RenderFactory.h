@@ -86,6 +86,12 @@ public:
 		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_4,
 		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_5,
 		RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_6,
+
+		RENDERABLE_OBJECT_SKY_BOX,
+
+		RENDERABLE_OBJECT_MASKICON,
+		RENDERABLE_OBJECT_BOMBICON,
+		RENDERABLE_OBJECT_CATICON,
 	};
 
 	
@@ -137,7 +143,7 @@ public:
 		case RENDERABLE_OBJECT_GGO:
 			return Assets::getModel("GGO");
 		case (RENDERABLE_OBJECT_ATTACK_POWERUP_PICKUP) :
-			return Assets::getModel("attackPowerUp_pickup");
+			return Assets::getModel("healthCross");
 		case (RENDERABLE_OBJECT_DEFENSE_POWERUP_PICKUP) :
 			return Assets::getModel("defensePowerUp_pickup");
 		case (RENDERABLE_OBJECT_SPEED_POWERUP_PICKUP) :
@@ -178,6 +184,8 @@ public:
 			return Assets::getModel("explosion1_12");
 		case RENDERABLE_OBJECT_EXPLOSION1_13:
 			return Assets::getModel("explosion1_13");
+		case RENDERABLE_OBJECT_SKY_BOX:
+			return Assets::getModel("Skybox");
 		case RENDERABLE_OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE:
 			return new Model2D(Assets::getTexture("disturbed"));
 		case RENDERABLE_OBJECT_UI_SICK_PUPPIES_SONG_TEXTURE_YOURE_GOING_DOWN:
@@ -222,6 +230,13 @@ public:
 			return new Model2D(Assets::getTexture("super_animation_5"));
 		case RENDERABLE_OBJECT_UI_GAUGE_FULL_EFFECT_6:
 			return new Model2D(Assets::getTexture("super_animation_6"));
+
+		case RENDERABLE_OBJECT_MASKICON:
+			return new Model2D(Assets::getTexture("MaskIcon"));
+		case RENDERABLE_OBJECT_BOMBICON:
+			return new Model2D(Assets::getTexture("Bombcone"));
+		case RENDERABLE_OBJECT_CATICON:
+			return new Model2D(Assets::getTexture("Meowicon"));
 		}
 	}
 	

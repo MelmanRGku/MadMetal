@@ -220,6 +220,8 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	lastWaypointSystem = m_waypointSystems.at(m_waypointSystems.size() - 1);
 	stitchWaypointSystems(BOTTOM, TOP, *lastWaypointSystem, *nextLocation11, lastWaypointSystem->getWaypointMap().at(0).size() - 2, 0, true);
+	lastWaypointSystem = m_waypointSystems.at(0);
+	stitchWaypointSystems(TOP, BOTTOM, *lastWaypointSystem, *nextLocation11, 0, 0, false);
 	//stitchWaypointSystems(BOTTOM, TOP, *nextLocation11, *m_waypointSystems.at(0), 0, 0, false);
 
 	m_waypointSystems.push_back(nextLocation11);
@@ -231,37 +233,63 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 	PxGeometry **geom2 = new PxGeometry *[1];
 	PxGeometry **geom3 = new PxGeometry *[1];
 	geom1[0] = new PxBoxGeometry(PxVec3(80, getDrivablePart()->getWorldBounds().maximum.y, 10));
-	geom2[0] = new PxBoxGeometry(PxVec3(10, getDrivablePart()->getWorldBounds().maximum.y, 80));
+	geom2[0] = new PxBoxGeometry(PxVec3(10, getDrivablePart()->getWorldBounds().maximum.y, 100));
 	geom3[0] = new PxBoxGeometry(PxVec3(80, getDrivablePart()->getWorldBounds().maximum.y, 20));
 	
-	pos = new PxTransform(getWaypointAt(0)->getGlobalPose().x, getWaypointAt(0)->getGlobalPose().y, getWaypointAt(0)->getGlobalPose().z);
+	/***************
+	3              4
+	2              
+	1              5
+	
+	0           6 
+	
+	             7 
+		           8 
+	      9         
+	*/
+	//clockwise 
+
+
+
+	CollisionVolume::globalID = 0;
+	//0
+	pos = new PxTransform(getWaypointAt(0)->getActor().getGlobalPose().p + PxVec3(10,0,0));
 	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom3, NULL)));
 	delete pos;
-	pos = new PxTransform(getWaypointAt(367)->getGlobalPose().x, getWaypointAt(367)->getGlobalPose().y, getWaypointAt(367)->getGlobalPose().z);
+	//1
+	pos = new PxTransform(getWaypointAt(367)->getActor().getGlobalPose().p + PxVec3(-20,0,0));
 	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	delete pos;
-	pos = new PxTransform(getWaypointAt(550)->getGlobalPose().x, getWaypointAt(550)->getGlobalPose().y, getWaypointAt(550)->getGlobalPose().z);
+	//2
+	pos = new PxTransform(getWaypointAt(550)->getActor().getGlobalPose());
 	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	delete pos;
-	pos = new PxTransform(getWaypointAt(657)->getGlobalPose().x, getWaypointAt(657)->getGlobalPose().y, getWaypointAt(657)->getGlobalPose().z);
+	//3
+	pos = new PxTransform(getWaypointAt(629)->getActor().getGlobalPose().p, PxQuat(3.14 / 2, PxVec3(0,-1,0)));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom3, NULL)));
+	delete pos;
+	//4
+	pos = new PxTransform(getWaypointAt(813)->getActor().getGlobalPose().p + PxVec3(-20,0,0), PxQuat(3.14, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2, NULL)));
 	delete pos;
-	pos = new PxTransform(getWaypointAt(813)->getGlobalPose().x, getWaypointAt(813)->getGlobalPose().y, getWaypointAt(813)->getGlobalPose().z);
+	//5
+	pos = new PxTransform(getWaypointAt(716)->getActor().getGlobalPose().p, PxQuat( 1.73758, PxVec3(0, 1, 0)));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	delete pos;
+	//6
+	pos = new PxTransform(getWaypointAt(896)->getActor().getGlobalPose().p, PxQuat(3.14, PxVec3(0,1,0)));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	delete pos;
+	//7
+	pos = new PxTransform(getWaypointAt(953)->getActor().getGlobalPose().p, PxQuat(2.61412, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2, NULL)));
 	delete pos;
-	pos = new PxTransform(getWaypointAt(716)->getGlobalPose().x, getWaypointAt(716)->getGlobalPose().y, getWaypointAt(716)->getGlobalPose().z);
+	//8
+	pos = new PxTransform(getWaypointAt(1003)->getActor().getGlobalPose().p + PxVec3(-10,0,0), PxQuat(3.14, PxVec3(0,1,0)));
 	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	delete pos;
-	pos = new PxTransform(getWaypointAt(896)->getGlobalPose().x, getWaypointAt(896)->getGlobalPose().y, getWaypointAt(896)->getGlobalPose().z);
-	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
-	delete pos;
-	pos = new PxTransform(getWaypointAt(953)->getGlobalPose().x, getWaypointAt(953)->getGlobalPose().y, getWaypointAt(953)->getGlobalPose().z);
-	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2, NULL)));
-	delete pos;
-	pos = new PxTransform(getWaypointAt(1003)->getGlobalPose().x, getWaypointAt(1003)->getGlobalPose().y, getWaypointAt(1003)->getGlobalPose().z);
-	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
-	delete pos;
-	pos = new PxTransform(getWaypointAt(1074)->getGlobalPose().x, getWaypointAt(1074)->getGlobalPose().y, getWaypointAt(1074)->getGlobalPose().z);
+	//9
+	pos = new PxTransform(getWaypointAt(1074)->getActor().getGlobalPose().p, PxQuat(3.14 / 2, PxVec3(0, 1, 0)));
 	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom2, NULL)));
 	delete pos;
 
@@ -621,7 +649,7 @@ void Track::recalculateWaypointSystemIds(WaypointSystem& waypointSystem1, Waypoi
 
 void Track::setValidPath()
 {
-	std::vector<int> validWaypoints{ 0, 1132, 1133, 1131, 1, 3, 5, 7, 9, 11, 13, 15, 22, 34, 46, 58, 70, 82, 83, 95, 107, 119, 120, 132, 144, 156, 157, 169, 181, 182, 194, 206, 218, 230, 242, 254, 266, 265, 277, 276, 288, 300, 299, 311, 310, 322, 321, 333, 345, 344, 356, 355, 367, 366, 378, 390, 389, 401, 413, 425, 437, 449, 450, 462, 474, 475, 487, 488, 500, 501, 513, 525, 526, 538, 550, 557, 559, 561, 563, 565, 567, 569, 571, 573, 575, 577, 579, 581, 583, 585, 587, 589, 591, 594, 596, 629, 628, 627, 626, 625, 652, 651, 650, 649, 648, 676, 675, 674, 702, 701, 700, 699, 698, 670, 697, 669, 668, 667, 666, 665, 664, 663, 662, 661, 633, 632, 660, 604, 603, 811, 812, 807, 802, 803, 798, 797, 792, 787, 782, 781, 776, 771, 766, 761, 756, 751, 746, 741, 736, 731, 726, 721, 716, 854, 855, 850, 845, 846, 841, 836, 837, 832, 833, 828, 931, 928, 925, 926, 923, 920, 917, 914, 911, 908, 905, 902, 899, 896, 893, 890, 887, 884, 881, 878, 875, 874, 871, 868, 987, 981, 980, 974, 973, 967, 966, 960, 959, 953, 952, 946, 940, 1043, 1041, 1039, 1037, 1036, 1034, 1032, 1030, 1028, 1026, 1024, 1022, 1020, 1018, 1016, 1014, 1012, 1010, 1008, 1006, 1004, 1005, 1002, 1003, 1001, 1052, 1051, 1056, 1055, 1060, 1065, 995, 997, 1000, 999, 1066, 1061, 1057, 1058, 1053, 1054, 1070, 1071, 1072, 1073, 1074, 1075, 1076, 1077, 1078, 1081, 1082, 1083, 1084, 1085, 1086, 1087, 1088, 1089, 1090, 1091, 1092, 1117, 1118, 1120, 1122, 1123, 1093, 1116, 1115, 1114, 1080, 1112, 1113, 1119, 1121, 1125, 1127, 1129};
+	std::vector<int> validWaypoints{ 0, 1054, 1059, 1070, 1095, 1132, 1133, 673, 1131, 1, 3, 5, 7, 9, 11, 13, 15, 22, 34, 46, 58, 70, 82, 83, 95, 107, 119, 120, 132, 144, 156, 157, 169, 181, 182, 194, 206, 218, 230, 242, 254, 266, 265, 277, 276, 288, 300, 299, 311, 310, 322, 321, 333, 345, 344, 356, 355, 367, 366, 378, 390, 389, 401, 413, 425, 437, 449, 450, 462, 474, 475, 487, 488, 500, 501, 513, 525, 526, 538, 550, 557, 559, 561, 563, 565, 567, 569, 571, 573, 575, 577, 579, 581, 583, 585, 587, 589, 591, 593, 598, 605, 594, 596, 629, 628, 627, 626, 625, 652, 651, 650, 649, 648, 675, 674, 673, 672, 700, 699, 698, 670, 669, 668, 667, 666, 665, 664, 663, 662, 661, 633, 660, 812, 807, 802, 798, 797, 792, 787, 782, 781, 776, 771, 766, 761, 756, 751, 746, 741, 736, 731, 726, 721, 716, 855, 856, 717, 850, 845, 846, 841, 836, 837, 832, 833, 828, 931, 928, 925, 922, 672, 919, 917, 914, 911, 908, 905, 902, 899, 896, 893, 890, 887, 884, 881, 878, 875, 874, 871, 868, 987, 981, 980, 974, 973, 967, 966, 960, 959, 953, 952, 946, 940, 1043, 1041, 1039, 1037, 1036, 1034, 1032, 1030, 1028, 1026, 1024, 1022, 1020, 1018, 1016, 1014, 1012, 1010, 1008, 1006, 1004, 1005, 1002, 1003, 1001, 1065, 995, 997, 1000, 999, 1066, 1061, 1057, 1058, 1054, 1070, 1071, 1072, 1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111,  1086, 1087, 1088, 1089, 1090, 1091, 1092, 1117, 1118, 1120, 1122, 1123, 1093, 1116, 1115, 1114, 1080, 1112, 1113, 1119, 1121, 1125, 1127, 1129};
 
 	for (int i = 0; i < validWaypoints.size(); i++)
 	{

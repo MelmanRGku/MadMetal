@@ -2,6 +2,7 @@
 #include "Controllable.h"
 #include "ControllableTemplate.h"
 #include "Objects\Cars\Car.h"
+#include "Objects\CollisionVolume.h"
 #include "Game Logic\AIDefinitions.h"
 
 class PathFinding;
@@ -42,6 +43,7 @@ private: //members
 	Waypoint* m_potentialWaypoint;
 	Waypoint* m_currentKnownWaypoint;
 	AiStateMovement m_movementState;
+	CollisionVolume* m_lastKnowCollisionVolue;
 	std::vector<Waypoint*> m_currentPath;
 	std::vector<int> m_listOfWaypointsHighCost;
 	bool m_needsToBackup;

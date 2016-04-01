@@ -33,7 +33,6 @@ std::vector<Waypoint*> PathFinding::findPath(Waypoint * currentPosition, Waypoin
 	
 	if (currentPosition->getIndex() == 48)
 	{
-		std::cout << "loco" << "\n";
 	}
 	if (!m_initializedStartGOal)
 	{
@@ -104,7 +103,6 @@ SearchWaypoint* PathFinding::getNextCell()
 	}
 	else if (cellIndex == -1)
 	{
-		std::cout << "here\n";
 	}
 
 	return nextCell;

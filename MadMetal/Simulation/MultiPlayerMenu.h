@@ -15,11 +15,11 @@ private:
 	Object3D *selectionIndicator;
 	Object3D *selectedCar;
 	Object3D *background;
-	TexturedObject2D *joinquit;
+	TexturedObject2D *bToQuit;
 	glm::vec3 selectedCarPosition;
 
 	glm::vec3 selectionIndicatorInitialPosition;
-	glm::vec3 selectionIndicatorOffset = glm::vec3(10, 0, 0);
+	glm::vec3 selectionIndicatorOffset = glm::vec3(7, 0, 0);
 
 	int assignedPosition = -1;
 
@@ -55,6 +55,8 @@ private:
 	std::vector<GamePad *> m_gamePads;
 	std::vector<PlayerSelection *> m_players;
 	std::vector<Object3D *> playerBoxes;
+	std::vector<TexturedObject2D *> aToJoins;
+	TexturedObject2D *aToStart;
 	Object3D *car1,
 		*car2,
 		*car3,

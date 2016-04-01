@@ -2,6 +2,7 @@
 #include "Object3D.h"
 #include "PxQueryReport.h"
 #include "Factory\GameFactory.h"
+#include "GargantulousSuper.h"
 
 #define BEAM_DISTANCE 300
 #define BEAM_RADIUS 3
@@ -52,11 +53,12 @@ public:
 				PxShape * shapes[1];
 				hit.block.actor->getShapes(shapes, 1);
 				//std::cout << shapes[0]->getSimulationFilterData().word0 << std::endl;
+				Car * car;
 				switch (shapes[0]->getSimulationFilterData().word0)
 				{
 				case (2) : //COLLISION_FLAG_CHASSIS
 					//std::cout << "hit a car" << std::endl;
-					Car * car = static_cast<Car *>(GameFactory::instance()->getWorld().findObject(shapes[0]->getSimulationFilterData().word2));
+					car = static_cast<Car *>(GameFactory::instance()->getWorld().findObject(shapes[0]->getSimulationFilterData().word2));
 					if (car == m_owner)
 					{
 						std::cout << "Clipping with self. increase ray start offset \n";
@@ -66,7 +68,25 @@ public:
 						m_owner->addDamageDealt(car->getHealthRemaining());
 						car->takeDamage(car->getHealthRemaining());
 					}
+					break;
+				case (131072) : // hitting the delicious collision volume
+				{
+									car = static_cast<GargantulousSuper *>(GameFactory::instance()->getWorld().findObject(shapes[0]->getSimulationFilterData().word2))->getOwner();
+									PxVec3 toCar = (car->getActor().getGlobalPose().p - m_owner->getActor().getGlobalPose().p);
+									if (toCar.magnitude() > BEAM_DISTANCE)
+										break;
+									PxVec3 forward = PxVec3(m_owner->getForwardVector().x, m_owner->getForwardVector().y, m_owner->getForwardVector().z).getNormalized();
+									std::cout << abs(forward.cross(toCar).magnitude() - 1) << std::endl;
+									if (abs(forward.cross(toCar).magnitude() - 1) < 0.2)
+									{
+										m_owner->addDamageDealt(car->getHealthRemaining());
+										car->takeDamage(car->getHealthRemaining());
+									}
+
+									break;
 				}
+				}
+				
 			}
 			
 			

@@ -8,8 +8,11 @@ protected:
 	Car *m_owner;
 	int m_damage;
 	Sound m_collisionSound;
+	Sound m_explosivelyBulletSound;
+
 
 public:
+	bool explosivelyBullet = false;
 	Bullet(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Car *owner);
 	virtual ~Bullet();
 	void setOwner(Car *car) { m_owner = car; }

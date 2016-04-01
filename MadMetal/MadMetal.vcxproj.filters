@@ -683,52 +683,15 @@
     <ClInclude Include="Game Logic\AIDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\TrainCar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Files\test.txt" />
     <Text Include="Audio\MusicLibrary.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Assets\Useless\asphalt_texture409.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Useless\Building_texture4.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Assets\Models\lava rock.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Models\lavaRocks.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Models\Skirt.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Models\Staff.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Useless\Terrain-Road.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Models\TikiTest.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Models\DeathEye.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Models\Panel.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Models\Chest paint Lava.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Models\MaskLava.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Models\TikiTestLava.png">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>

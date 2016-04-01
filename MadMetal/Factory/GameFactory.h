@@ -95,6 +95,7 @@ public:
 		OBJECT_UI_ATTACK_POWERUP_ICON,
 		OBJECT_UI_SPEED_POWERUP_ICON,
 		OBJECT_UI_SCORE_TABLE,
+		OBJECT_SKY_BOX,
 	};
 
 	
@@ -104,7 +105,9 @@ public:
 	bool sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal MaxDistance, PxRaycastBuffer &hit, PxHitFlags flag = PxHitFlags(PxHitFlag::eDEFAULT), PxQueryFilterData fd = PxQueryFilterData());
 	bool sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit);
 
-	static long getNextId() { return ++lastId; }
+	static long getNextId() { 
+		return ++lastId; 
+	}
 
 	static GameFactory *instance();
 
@@ -112,6 +115,11 @@ public:
 
 	static void release() {
 		delete m_factory;
+	}
+
+	static void resetId()
+	{
+		lastId = 0;
 	}
 
 private:

@@ -51,6 +51,10 @@ private:
 
 	void processInput();
 
+	void setupPowerups();
+	void setupTrains();
+	void setupDeathPit();
+
 private: //members
 	std::vector<Controllable *> m_players;
 	std::vector<PlayerControllable*> m_humanPlayers;
@@ -64,7 +68,6 @@ private: //members
 	PxBatchQuery* gBatchQuery = NULL;
 	GameFactory* m_gameFactory;
 	Audio &m_audioHandle;
-	DisplayMessage * m_displayMessage;
 	Track* m_track;
 	CollisionManager *manager;
 

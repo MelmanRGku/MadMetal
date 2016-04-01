@@ -22,6 +22,7 @@ public:
 		m_message->setString(text);
 		m_message->setPosition(m_centerOfScreen);
 	}
+	void setCenterOfScreen(glm::vec3 center) { m_centerOfScreen = center; }
 	virtual void update(float dtMillis)
 	{
 		if ((m_messageLife += dtMillis) >= 0)
@@ -32,6 +33,7 @@ public:
 	}
 	void setFontSize(float size)  { m_message->setFontSize(size); }
 	void resetFontSize() { m_message->resetFontSize(); }
+	Text2D *getText2D() { return m_message; }
 private: // members
 	float m_messageLife;
 	glm::vec3 m_centerOfScreen;

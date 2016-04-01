@@ -19,7 +19,7 @@ Renderer::Renderer()
 		glm::radians(std::stof(Settings::getSetting("fovy"))),
 		windowWidth / windowHeight,
 		0.5f,
-		1000.f
+		5000.f
 		);
 
 	viewMatrix = glm::lookAt(
@@ -117,7 +117,7 @@ void Renderer::draw(std::vector<TestObject *> *objects, std::vector<PlayerContro
 				glm::radians(std::stof(Settings::getSetting("fovy")) + 0.3f * max(players->at(j)->getCar()->getCar().computeForwardSpeed(), 1) + 30),
 				windowWidth / windowHeight,
 				0.5f,
-				1000.f
+				5000.f
 				);
 			viewMatrix = players->at(j)->getCamera()->getMatrix();
 			cameraPos = players->at(j)->getCamera()->getPosition();

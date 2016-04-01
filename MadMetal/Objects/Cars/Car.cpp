@@ -7,6 +7,11 @@
 
 int Car::positionGlobalID = 0;
 
+void Car::resetGlobalPositionID()
+{
+	Car::positionGlobalID = 0;
+}
+
 Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL), m_car(car), m_drivingStyle(style)
 {
 	m_currentWaypoint = NULL;
@@ -37,22 +42,20 @@ void Car::respawn()
 	//std::cout << "Respawned? \n";
 	m_currentHealth = m_maxHealth;
 	
-	/*if (m_currentWaypoint != NULL)
+	if (m_lastCollisionVolume != NULL)
 	{
-		//std::cout << "Valid Waypoint Respawn" << std::endl;
-		glm::vec3 waypointPos = m_currentWaypoint->getGlobalPose();
 		
 		
-		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(waypointPos.x, 5, waypointPos.z)));
+		m_car.getRigidDynamicActor()->setGlobalPose(m_lastCollisionVolume->getActor().getGlobalPose());
 		
 	}
 	else {
 		//std::cout << "Invalid Waypoint Respawn" << std::endl;
 		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
 		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, 5, currentPosition.p.z)));
-	}*/
+	}
 
-	m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(0, 5, 0)));
+	//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(0, 5, 0)));
 
 	m_car.getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 0, 0));
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0));
@@ -128,7 +131,8 @@ void Car::usePowerUp()
 			glm::vec3 direction = glm::normalize(getForwardVector());
 			direction.y = 0;
 			float currentSpeed = getCar().computeForwardSpeed();
-			direction *= (getDrivingStyle().getMaxSpeed() - currentSpeed) / getDrivingStyle().getMaxSpeed() * PowerUp::getSpeedImpulse() * 20;
+#undef max
+			direction *= std::max(getDrivingStyle().getMaxSpeed() - currentSpeed, 30.f) / getDrivingStyle().getMaxSpeed() * PowerUp::getSpeedImpulse() * 20;
 			actor->setAngularVelocity(PxVec3(0, 0, 0));
 			actor->addForce(PxVec3(direction.x, direction.y, direction.z), PxForceMode::eIMPULSE);
 			delete geom[0];
@@ -146,6 +150,8 @@ void Car::usePowerUp()
 void Car::takeDamage(float damage)
 {
 	m_currentHealth -= damage;
+	if (m_currentHealth > m_maxHealth)
+		m_currentHealth = m_maxHealth;
 }
 
 
@@ -220,7 +226,16 @@ void Car::updateHealth(float dtMillis)
 }
 
 void Car::update(float dt) {
-	//std::cout << m_currentLap << std::endl;
+	float angle;
+	PxVec3 axis;
+	m_car.getRigidDynamicActor()->getGlobalPose().q.toRadiansAndUnitAxis(angle, axis);
+	//std::cout << angle << "  :  " << axis.x << "," << axis.y << "," << axis.z << std::endl;
+	if (abs(axis.y) != 0)
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, PxQuat(angle, PxVec3(0, abs(axis.y) / axis.y, 0))));
+	PxVec3 angVel = m_car.getRigidDynamicActor()->getAngularVelocity();
+	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, angVel.y, 0), true);
+	
+	
 	updateHealth(dt);
 	m_reloadRemainingSeconds -= dt;
 	updateSuper(dt);

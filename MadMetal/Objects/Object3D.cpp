@@ -10,6 +10,7 @@ Object3D::Object3D(long id, Audioable *aable, Physicable *pable, Animatable *ana
 
 Object3D::~Object3D()
 {
+	if (m_physicable != NULL)
 	delete m_physicable;
 
 }

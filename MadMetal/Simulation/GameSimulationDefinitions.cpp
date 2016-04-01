@@ -6,15 +6,17 @@ glm::vec3 upVector = glm::vec3(0, 1, 0);
 
 PxF32 gSteerVsForwardSpeedData[2 * 8] =
 {
-	0.0f, 0.75f,
-	5.0f, 0.75f,
-	30.0f, 0.125f,
-	120.0f, 0.1f,
-	PX_MAX_F32, PX_MAX_F32,
+	0.0f, .95f,
+	20.0f, .75f,
+	50.0f, .5f,
+	80.0f, .45f,
+	100.0f, 0.4f,
 	PX_MAX_F32, PX_MAX_F32,
 	PX_MAX_F32, PX_MAX_F32,
 	PX_MAX_F32, PX_MAX_F32
 };
+
+PxFixedSizeLookupTable<8> gSteerVsForwardSpeedTable(gSteerVsForwardSpeedData, 5);
 
 PxVehicleKeySmoothingData gKeySmoothingData =
 {
@@ -67,5 +69,5 @@ enum DriveMode
 PxF32 gTireFrictionMultipliers[MAX_NUM_SURFACE_TYPES][MAX_NUM_TIRE_TYPES] =
 {
 	//NORMAL,	WORN
-	{ 10.00f, 0.1f }//TARMAC
+	{ 7.00f, 0.1f }//TARMAC
 };

@@ -50,24 +50,7 @@ void PowerUp::update(float dtMillis)
 			activate();
 		}
 	} else 
-	 {
-		if (m_floatingUp)
-		{
-			
-			if (getAnimatablePos().y > m_floatingYUpperLimit)
-			{
-				m_floatingUp = false;
-			}
-		}
-		else {
-			if (getAnimatablePos().y < m_floatingYLowerLimit)
-			{
-				m_floatingUp = true;
-			}
-		}
-		//std::cout << getPosition().y << ", " << m_floatLowerLimit.y << "," << m_floatUpperLimit.y << std::endl;
-		updatePosition(glm::vec3(0, m_floatingUp ? dtMillis * 2 : -dtMillis * 2, 0));
-		
+	 {		
 		 m_emitter->update(dtMillis);
 	 }
 }
@@ -78,7 +61,7 @@ void PowerUp::setActiveType(int type)
 	{
 	case(1) :
 		m_type = PowerUpType::ATTACK;
-		m_renderable->setModel(Assets::getModel("attackPowerUp_pickup"));
+		m_renderable->setModel(Assets::getModel("healthCross"));
 		m_emitter->setParticleModel("powerup_particle_attack");
 		break;
 	case(2) :
@@ -106,7 +89,7 @@ void PowerUp::activate()
 	{
 	case(1) :
 		m_type = PowerUpType::ATTACK;
-		m_renderable->setModel(Assets::getModel("attackPowerUp_pickup"));
+		m_renderable->setModel(Assets::getModel("healthCross"));
 		m_emitter->setParticleModel("powerup_particle_attack");
 		break;
 	case(2) :
