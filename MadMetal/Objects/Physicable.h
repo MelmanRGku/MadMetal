@@ -14,7 +14,8 @@ public:
 		physicsActor = actor;
 		
 	};
-	virtual ~Physicable() {}
+	virtual ~Physicable() {
+	}
 
 	glm::mat4x4 getPhysicsModelMatrix() {
 		if (!physicsActor)

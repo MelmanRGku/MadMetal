@@ -28,7 +28,7 @@ public:
 		
 	}
 
-	void update(float dt)
+	virtual void update(float dt)
 	{
 		m_counter += dt;
 		if (m_counter > m_duration)

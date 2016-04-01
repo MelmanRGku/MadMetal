@@ -8,6 +8,7 @@
 #include "Objects\PowerUpSpeed.h"
 #include "Objects\GargantulousSuper.h"
 #include "Objects\HomingBullet.h"
+#include "Objects\BombExplosion.h"
 #include "PxQueryReport.h"
 
 CollisionManager::CollisionManager(World &world) : m_world(world)
@@ -39,6 +40,13 @@ PxFilterFlags CollisionManager::TestFilterShader(
 
 		return PxFilterFlag::eSUPPRESS;
 	}
+
+	if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData1.word0 == COLLISION_FLAG_CHASSIS ||
+		filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData0.word0 == COLLISION_FLAG_CHASSIS) {
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
+
 	//just notify about car-car collision
 	if ((filterData0.word0 == COLLISION_FLAG_CHASSIS || filterData0.word0 == COLLISION_FLAG_WHEEL) && (filterData1.word0 == COLLISION_FLAG_CHASSIS || filterData1.word0 == COLLISION_FLAG_WHEEL)) {
 		
@@ -66,7 +74,6 @@ PxFilterFlags CollisionManager::TestFilterShader(
 	}
 
 	if (filterData0.word0 == COLLISION_FLAG_DEATH_VOLUME || filterData1.word0 == COLLISION_FLAG_DEATH_VOLUME){
-		//std::cout << "registered \n";
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
@@ -85,9 +92,6 @@ PxFilterFlags CollisionManager::TestFilterShader(
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
-
-
-
 
 	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
 	{
@@ -318,7 +322,6 @@ void CollisionManager::processGargantulousSuperBulletHit(long bulletId, long car
 
 void CollisionManager::processGargantulousSuperVolumeHit(long volumeId, long carId)
 {
-	//std::cout << "Collided with Collision Volume \n";
 	GargantulousSuper * super = dynamic_cast<GargantulousSuper *>(m_world.findObject(volumeId));
 
 	if (super == NULL)
@@ -380,7 +383,29 @@ void CollisionManager::onContact(const PxContactPairHeader& pairHeader, const Px
 	}
 }
 
+void CollisionManager::processBombExplosion(long volumeId, long otherId) {
+	
+	BombExplosion *exp = NULL; Car *car = NULL;
+	exp = dynamic_cast<BombExplosion *>(m_world.findObject(volumeId));
+	car = dynamic_cast<Car *>(m_world.findObject(otherId));
 
+	if (car == NULL || exp == NULL)
+		return;
+
+	exp->onCarHit(car);
+
+}
+
+void CollisionManager::processExplosivelyDeliciousBulletChassisHit(long bulletId, long otherId) {
+	ExplosivelyDeliciousBullet *bullet = dynamic_cast<ExplosivelyDeliciousBullet *>(m_world.findObject(bulletId));
+	Car *car = dynamic_cast<Car *>(m_world.findObject(otherId));
+
+	if (bullet == NULL || car == NULL || bullet->getOwner() == car)
+		return;
+
+	bullet->setHasToBeDeleted(true);
+	bullet->spawnExplosion();
+}
 
 void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 {
@@ -404,6 +429,9 @@ void CollisionManager::onTrigger(PxTriggerPair* pairs, PxU32 count)
 		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_POWERUP && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_POWERUP_AGAINST))
 		{
 			processPowerUpHit(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
+		}
+		else if (pairs[i].triggerShape->getSimulationFilterData().word0 == COLLISION_FLAG_BOMB_EXPLOSION && (pairs[i].otherShape->getSimulationFilterData().word0 & COLLISION_FLAG_BOMB_EXPLOSION_AGAINST)) {
+			processBombExplosion(pairs[i].triggerShape->getSimulationFilterData().word2, pairs[i].otherShape->getSimulationFilterData().word2);
 		}
 		
 	}
@@ -459,6 +487,14 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 	else if (filterData1.word0 == COLLISION_FLAG_GARGANTULOUS_SUPER_BULLET && filterData0.word0 == COLLISION_FLAG_CHASSIS)
 	{
 		processGargantulousSuperBulletHit(filterData1.word2, filterData0.word2);
+	}
+	else if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData1.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processExplosivelyDeliciousBulletChassisHit(filterData0.word2, filterData1.word2);
+	}
+	else if (filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData0.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processExplosivelyDeliciousBulletChassisHit(filterData1.word2, filterData0.word2);
 	}
 	
 	return PxFilterFlags(PxFilterFlag::eDEFAULT);

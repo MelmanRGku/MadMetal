@@ -4,16 +4,14 @@
 
 class ExplosivelyDeliciousBullet : public Bullet
 {
+private:
+
 public:
-	ExplosivelyDeliciousBullet(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Car *owner) : Bullet(id, aable, pable, anable, rable, owner)
-	{
-		m_damage = 35;
-	}
+	ExplosivelyDeliciousBullet(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Car *owner);
 
-	virtual ~ExplosivelyDeliciousBullet()
-	{
+	virtual ~ExplosivelyDeliciousBullet();
 
-	}
-	virtual void update(float dt) { Bullet::update(dt); }
+	virtual void update(float dt);
+	void spawnExplosion();
 };
 
