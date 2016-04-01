@@ -165,11 +165,7 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 
 	if (car != NULL) 
 	{
-		if (car->setCurrentWaypoint(waypoint)) {
-			if (car->getCurrentWaypoint()->isFinish()) {
-			//	car->incrementLap();
-			}
-		}
+		car->setCurrentWaypoint(waypoint);
 	}
 
 	//std::cout << "Current Waypoint" << waypoint->getIndex() << "\n";
@@ -226,13 +222,7 @@ void CollisionManager::processPowerUpHit(long powerupId, long otherId)
 		{
 			car->pickUpPowerUp(powerUp->pickup());
 		}
-		else{
-			//std::cout << "PowerUp wasn't active\n";
-		}
 
-	}
-	else {
-		std::cout << "Couldn't Cast to car \n";
 	}
 }
 
@@ -263,9 +253,6 @@ void CollisionManager::processShieldPowerUpHit(long shieldPowerUpId, long bullet
 		//bullets need to be rotated
 		
 	}
-	else{
-		std::cout << "Failed to cast to Bullet \n";
-	}
 }
 
 void CollisionManager::processSpeedPowerUpHit(long speedPowerUpId, long carId)
@@ -287,9 +274,6 @@ void CollisionManager::processSpeedPowerUpHit(long speedPowerUpId, long carId)
 		car->takeDamage(PowerUp::getSpeedImpactDamage());
 		shield->getOwner()->addDamageDealt(PowerUp::getSpeedImpactDamage());
 	}
-	else{
-		std::cout << "Failed to cast to Car \n";
-	}
 }
 
 void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, long carId)
@@ -299,7 +283,7 @@ void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, lon
 	if (super == NULL)
 	{
 		return;
-}
+	}
 
 	TestObject * otherObject = m_world.findObject(carId);
 	Car * car = dynamic_cast<Car *>(otherObject);

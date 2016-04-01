@@ -233,7 +233,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 	PxGeometry **geom2 = new PxGeometry *[1];
 	PxGeometry **geom3 = new PxGeometry *[1];
 	geom1[0] = new PxBoxGeometry(PxVec3(80, getDrivablePart()->getWorldBounds().maximum.y, 10));
-	geom2[0] = new PxBoxGeometry(PxVec3(10, getDrivablePart()->getWorldBounds().maximum.y, 80));
+	geom2[0] = new PxBoxGeometry(PxVec3(10, getDrivablePart()->getWorldBounds().maximum.y, 100));
 	geom3[0] = new PxBoxGeometry(PxVec3(80, getDrivablePart()->getWorldBounds().maximum.y, 20));
 	
 	/***************
