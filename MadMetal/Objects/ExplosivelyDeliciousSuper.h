@@ -8,20 +8,19 @@ public:
 	{
 		m_owner = owner;
 		m_damage = 200;
+		maxLifeTime = 5;
 	}
 	virtual ~ExplosivelyDeliciousSuper()
 	{
 
 	}
+
 	virtual void update(float dtMillis)
 	{
+		Object3D::update(dtMillis);
 		m_animatable->updateRotation(glm::vec3(0, dtMillis * 1.5, 0));
 		m_animatable->updateScale(glm::vec3( dtMillis * 15, dtMillis * 5, dtMillis * 15 ));
-		m_animatable->updatePosition(glm::vec3(0, dtMillis * 3, 0));
-		if (m_owner->getSuperDurationRemaining() <= 0)
-		{
-			setHasToBeDeleted(true);
-		}
+		m_animatable->updatePosition(glm::vec3(0, dtMillis * 3, 0));\
 	}
 
 	bool addCarHit(long id)

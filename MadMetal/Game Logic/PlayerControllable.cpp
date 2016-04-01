@@ -36,27 +36,7 @@ void PlayerControllable::playFrame(double dt)
 				if (m_car->getCar().getRigidDynamicActor()->isSleeping()) {
 					m_car->getCar().getRigidDynamicActor()->wakeUp();
 				}
-				//std::cout << m_car->getCar().computeForwardSpeed() << std::endl;
-				/*
-				if (m_gamePad->isPressed(GamePad::LJoyRight))
-				{
-				std::cout << "Left Joy Pressed \n";
-				//m_car->getActor().setLinearVelocity(PxVec3(10, 0, 0));
-				//m_car->getActor().setAngularVelocity(PxVec3(10, 10, 10));
-				}
 
-				if (m_gamePad->isPressed(GamePad::DPadRight))
-				{
-
-				//m_car->getActor().setLinearVelocity(PxVec3(-10, 0, 0));
-				}
-
-				if (m_gamePad->isPressed(GamePad::DPadUp))
-				{
-
-				//m_car->getActor().setLinearVelocity(PxVec3(0, 0, 10));
-				}
-				*/
 				if (m_gamePad->isPressed(GamePad::DPadDown))
 				{
 					PxVec3 axis;
@@ -73,9 +53,9 @@ void PlayerControllable::playFrame(double dt)
 				}
 
 				if (m_gamePad->isPressed(GamePad::YButton)) {
-					if (m_car->superReady()) {
+					//if (m_car->superReady()) {
 						m_car->useSuper();
-					}
+					//}
 				}
 
 				if (m_gamePad->isHeld(GamePad::BButton))

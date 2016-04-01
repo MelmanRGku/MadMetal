@@ -9,6 +9,8 @@
 #include "Objects\HomingBullet.h"
 #include "Objects\GargantulousBullet.h"
 #include "Objects\BombExplosion.h"
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 long GameFactory::lastId = 0;
 
@@ -20,6 +22,7 @@ GameFactory::GameFactory(World& world, PxScene& scene, Audio& audioHandle) :m_wo
 	m_renderFactory = new RenderFactory();
 	m_audioFactory = new AudioFactory(audioHandle);
 	m_animationFactory = new AnimationFactory();
+	srand(time(NULL));
 }
 
 GameFactory::~GameFactory()
@@ -352,6 +355,39 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 		glm::vec3 speed = 40.f * static_cast<Car *>(parent)->getForwardVector() + static_cast<Car *>(parent)->getCar().computeForwardSpeed() * static_cast<Car *>(parent)->getForwardVector();
+		PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
+		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
+		
+		delete physicsSpeed;
+		animatable->setRotation(static_cast<Object3D *>(parent)->getFullRotation());
+		animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
+		Physicable *physicable = new Physicable(physicalBullet);
+
+		Bullet *bullet = new ExplosivelyDeliciousBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
+		bullet->explosivelyBullet = true;
+		bullet->setSound(SizzleSound());
+		bullet->playSound();
+
+		m_world.addGameObject(bullet);
+		m_scene.addActor(*physicalBullet);
+
+		return bullet;
+	}
+	case OBJECT_BULLET_EXPLOSIVELY_DELICIOUS_RANDOM_DIRECTION:
+	{
+		Model3D *model = NULL;
+		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_BULLET_EXPLOSIVELY_DELICIOUS));
+		Renderable3D *renderable = new Renderable3D(model, true, true);
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Animatable *animatable = new Animatable();
+
+
+		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+		float xDirection = ((float(rand()) / float(RAND_MAX)) * 2.f) - 1.f;
+		float zDirection = ((float(rand()) / float(RAND_MAX)) * 2.f) - 1.f;
+		glm::vec3 direction = glm::normalize(glm::vec3(xDirection, static_cast<Car *>(parent)->getForwardVector().y, zDirection));
+		std::cout << direction.x << " " << direction.y << " " << direction.z << std::endl;
+		glm::vec3 speed = 40.f * direction + static_cast<Car *>(parent)->getCar().computeForwardSpeed() * static_cast<Car *>(parent)->getForwardVector();
 		PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
 		
