@@ -253,7 +253,7 @@ void Car::update(float dt) {
 	}
 }
 
-void Car::addDamageDealt(float damage) {
+void Car::addDamageDealt(float damage, bool addToSuper) {
 	m_damageDealt += damage;
 	m_score += damage;
 	
@@ -264,7 +264,7 @@ void Car::addDamageDealt(float damage) {
 		if (m_currentHealth > m_maxHealth) m_currentHealth = m_maxHealth;
 	}
 	
-	if (m_superDurationRemainingSeconds <= 0) {
+	if (m_superDurationRemainingSeconds <= 0 && addToSuper) {
 		m_superGauge += damage / 100;
 	}
 }

@@ -75,7 +75,7 @@ public:
 	void takeDamage(float damage);
 	
 	virtual void update(float dt);
-	void addDamageDealt(float damage);
+	void addDamageDealt(float damage, bool addToSuper = true);
 	bool superReady() { return m_superGauge >= 1.f; }
 	float getSuperGauge() { return m_superGauge > 1.f ? 1.f : m_superGauge; }
 	int getScore() { return m_score; }

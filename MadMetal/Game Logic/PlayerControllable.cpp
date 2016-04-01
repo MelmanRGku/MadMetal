@@ -43,7 +43,6 @@ void PlayerControllable::playFrame(double dt)
 					float angle;
 					m_car->getCar().getRigidDynamicActor()->getGlobalPose().q.toRadiansAndUnitAxis(angle, axis);
 					std::cout << angle << "   :     " << axis.x << "," << axis.y << "," << axis.z << std::endl;
-				//m_car->getActor().setLinearVelocity(PxVec3(0, 0, -10));
 				}
 
 
@@ -53,9 +52,9 @@ void PlayerControllable::playFrame(double dt)
 				}
 
 				if (m_gamePad->isPressed(GamePad::YButton)) {
-					//if (m_car->superReady()) {
+					if (m_car->superReady()) {
 						m_car->useSuper();
-					//}
+					}
 				}
 
 				if (m_gamePad->isHeld(GamePad::BButton))

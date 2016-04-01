@@ -41,8 +41,8 @@ PxFilterFlags CollisionManager::TestFilterShader(
 		return PxFilterFlag::eSUPPRESS;
 	}
 
-	if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData1.word0 == COLLISION_FLAG_CHASSIS ||
-		filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData0.word0 == COLLISION_FLAG_CHASSIS) {
+	if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET ||
+		filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET) {
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
@@ -295,7 +295,7 @@ void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, lon
 	if (car != NULL  && car != super->getOwner() && super->addCarHit(carId)) // if the car hasn't already been hit by the super
 	{
 		car->takeDamage(super->getDamage());
-		super->getOwner()->addDamageDealt(super->getDamage());
+		super->getOwner()->addDamageDealt(super->getDamage(), false);
 	}
 }
 
@@ -488,13 +488,15 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 	{
 		processGargantulousSuperBulletHit(filterData1.word2, filterData0.word2);
 	}
-	else if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData1.word0 == COLLISION_FLAG_CHASSIS)
+	else if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && (filterData0.word1 & filterData1.word0) || filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && (filterData1.word1 & filterData0.word0))
 	{
-		processExplosivelyDeliciousBulletChassisHit(filterData0.word2, filterData1.word2);
-	}
-	else if (filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData0.word0 == COLLISION_FLAG_CHASSIS)
-	{
-		processExplosivelyDeliciousBulletChassisHit(filterData1.word2, filterData0.word2);
+		long bulletId = (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET) ? filterData0.word2 : filterData1.word2;
+		long otherId = (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET) ? filterData1.word2 : filterData0.word2;
+
+		if (filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP || filterData1.word0 == COLLISION_FLAG_SHIELD_POWERUP)
+			processShieldPowerUpHit(otherId, bulletId);
+		else
+			processExplosivelyDeliciousBulletChassisHit(bulletId, otherId);
 	}
 	
 	return PxFilterFlags(PxFilterFlag::eDEFAULT);
