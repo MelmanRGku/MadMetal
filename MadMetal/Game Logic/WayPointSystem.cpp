@@ -146,6 +146,14 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 
 }
 
+WaypointSystem::WaypointSystem(Object3D& drivingMesh)
+{
+	for (unsigned int i = 0; i < dynamic_cast<Model3D*>(drivingMesh.getRenderable()->getModel())->getMeshes()->size(); i++)
+	{
+
+	}
+}
+
 void WaypointSystem::createWaypointConnections()
 {
 	for (int i = 0; i < m_waypointMap.size(); i++)
