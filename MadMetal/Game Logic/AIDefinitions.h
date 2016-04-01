@@ -6,3 +6,11 @@ enum class AiStateMovement
 	MOVE_BACKWARDS,
 	DEAD,
 };
+
+enum class AiPlaceInTrack
+{
+	DESSERT,
+	CANYON,
+	SUBWAY,
+	CITY
+};

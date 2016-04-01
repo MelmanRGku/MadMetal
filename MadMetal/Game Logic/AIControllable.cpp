@@ -18,6 +18,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_needsToBackup = false;
 	m_counter = 0;
 	m_movementState = AiStateMovement::INITIAL_STATE;
+	m_AiTrackAreaPosition = AiPlaceInTrack::CITY;
 }
 AIControllable::~AIControllable()
 {
@@ -48,125 +49,26 @@ void AIControllable::processFire(std::vector<Controllable *> *players) {
 
 void AIControllable::playFrame(double dt)
 {
-	switch (m_movementState)
+	switch (m_AiTrackAreaPosition)
 	{
-	case AiStateMovement::INITIAL_STATE:
-		if (m_currentKnownWaypoint == NULL)
-		{
-			m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-		}
-		if (m_car->getCurrentWaypoint() != NULL && m_goalWaypoint != NULL)
-		{
-			recalculatePath();
-		}
-		if (m_nextWaypoint != NULL && !m_currentPath.empty())
-		{
-			m_movementState = AiStateMovement::CONTROLS_PAUSED;
-		}
+	case AiPlaceInTrack::DESSERT:
+		updateMovementState(0.80);
 		break;
-	case AiStateMovement::CONTROLS_PAUSED:
-		if (!m_controlsPaused)
-		{
-			if (m_needsToBackup)
-			{
-				m_movementState = AiStateMovement::MOVE_BACKWARDS;
-			}
-			else
-			{
-				m_movementState = AiStateMovement::MOVE_FORWARD;
-			}
-		}
+	case AiPlaceInTrack::CANYON:
+		updateMovementState(0.65);
 		break;
-	case AiStateMovement::MOVE_FORWARD:
-
-		if (m_controlsPaused)
-		{
-			m_movementState = AiStateMovement::CONTROLS_PAUSED;
-			break;
-		}
-		if (!m_car->isAlive())
-		{
-			m_movementState = AiStateMovement::DEAD;
-			break;
-		}
-
-		checkCollisionVolumes();
-
-		// Waypoint hit is not the next waypoint
-		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() && 
-			m_car->getCurrentWaypoint()->getIndex() != m_nextWaypoint->getIndex())
-		{
-			recalculatePath();
-			//m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-		}
-		// Hit the goal node
-		if (m_car->getCurrentWaypoint()->getIndex() == m_goalWaypoint->getIndex())
-		{
-			recalculatePath();
-		}
-		// Update the last known waypoint
-		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex())
-		{
-			m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-		}
-
-		if (m_car->getCurrentWaypoint()->getIndex() == m_nextWaypoint->getIndex())
-		{
-			//std::cout << "Reached Next Waypoint\n";
-			updateNextWaypoint();
-		}
-
-		checkStuckInWall();
-		
-		if (m_needsToBackup)
-		{
-			m_movementState = AiStateMovement::MOVE_BACKWARDS;
-		}
-		else
-		{
-			accelerateToNextWaypoint();
-		}
-		
+	case AiPlaceInTrack::SUBWAY:
+		updateMovementState(0.7);
 		break;
-	case AiStateMovement::MOVE_BACKWARDS:
-		if (m_controlsPaused)
-		{
-			m_movementState = AiStateMovement::CONTROLS_PAUSED;
-			break;
-		}
-		if (!m_car->isAlive())
-		{
-			m_movementState = AiStateMovement::DEAD;
-			break;
-		}
-		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex())
-		{
-			recalculatePath();
-			m_needsToBackup = false;
-			m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-			m_counter = 0;
-			m_movementState = AiStateMovement::MOVE_FORWARD;
-		}
-
-		reverseToPreviousWaypoint();
+	case AiPlaceInTrack::CITY:
+		updateMovementState(1.0);
 		break;
-	case AiStateMovement::DEAD:
-		if (m_car->isAlive())
-		{
-			if (m_needsToBackup)
-			{
-				m_movementState = AiStateMovement::MOVE_BACKWARDS;
-			}
-			else
-			{
-				m_movementState = AiStateMovement::MOVE_FORWARD;
-			}
-		}
+	default:
 		break;
 	}
 }
 
-void AIControllable::accelerateToNextWaypoint()
+void AIControllable::accelerateToNextWaypoint(float speedDamping)
 {
 	//glm::vec4 vectorToNextWaypoint4 = glm::vec4(m_nextWaypoint->getPosition() - m_car->getPosition(), 1.0);
 	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
@@ -194,7 +96,7 @@ void AIControllable::accelerateToNextWaypoint()
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
 	changeTurning(crossProductResult.y, amountToSteerBy);
-	accelerate(amountToAccelerate * 0.7);
+	accelerate(amountToAccelerate * speedDamping);
 
 	//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
 	//std::cout << "z value: " << crossProductResult.z << "\n";
@@ -323,6 +225,7 @@ void AIControllable::checkCollisionVolumes()
 		}
 		else if (m_car->getLastHitCollisionVolume()->getIndex() == 1)
 		{
+			m_AiTrackAreaPosition = AiPlaceInTrack::DESSERT;
 			m_goalWaypoint = m_track.getWaypointAt(550);
 			recalculatePath();
 		}
@@ -333,6 +236,7 @@ void AIControllable::checkCollisionVolumes()
 		}
 		else if (m_car->getLastHitCollisionVolume()->getIndex() == 3)
 		{
+			m_AiTrackAreaPosition = AiPlaceInTrack::CANYON;
 			m_goalWaypoint = m_track.getWaypointAt(633);
 			recalculatePath();
 		}
@@ -343,6 +247,7 @@ void AIControllable::checkCollisionVolumes()
 		}
 		else if (m_car->getLastHitCollisionVolume()->getIndex() == 5)
 		{
+			m_AiTrackAreaPosition = AiPlaceInTrack::SUBWAY;
 			m_goalWaypoint = m_track.getWaypointAt(896);
 			recalculatePath();
 		}
@@ -358,6 +263,7 @@ void AIControllable::checkCollisionVolumes()
 		}
 		else if (m_car->getLastHitCollisionVolume()->getIndex() == 8)
 		{
+			m_AiTrackAreaPosition = AiPlaceInTrack::CITY;
 			m_goalWaypoint = m_track.getWaypointAt(3);
 			recalculatePath();
 		}
@@ -483,4 +389,125 @@ void AIControllable::checkStuckInWall()
 	{
 		m_counter = 0;
 	}
+}
+
+void AIControllable::updateMovementState(float speedDamping)
+{
+	switch (m_movementState)
+	{
+	case AiStateMovement::INITIAL_STATE:
+		if (m_currentKnownWaypoint == NULL)
+		{
+			m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+		}
+		if (m_car->getCurrentWaypoint() != NULL && m_goalWaypoint != NULL)
+		{
+			recalculatePath();
+		}
+		if (m_nextWaypoint != NULL && !m_currentPath.empty())
+		{
+			m_movementState = AiStateMovement::CONTROLS_PAUSED;
+		}
+		break;
+	case AiStateMovement::CONTROLS_PAUSED:
+		if (!m_controlsPaused)
+		{
+			if (m_needsToBackup)
+			{
+				m_movementState = AiStateMovement::MOVE_BACKWARDS;
+			}
+			else
+			{
+				m_movementState = AiStateMovement::MOVE_FORWARD;
+			}
+		}
+		break;
+	case AiStateMovement::MOVE_FORWARD:
+
+		if (m_controlsPaused)
+		{
+			m_movementState = AiStateMovement::CONTROLS_PAUSED;
+			break;
+		}
+		if (!m_car->isAlive())
+		{
+			m_movementState = AiStateMovement::DEAD;
+			break;
+		}
+
+		checkCollisionVolumes();
+
+		// Waypoint hit is not the next waypoint
+		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() &&
+			m_car->getCurrentWaypoint()->getIndex() != m_nextWaypoint->getIndex())
+		{
+			recalculatePath();
+			//m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+		}
+		// Hit the goal node
+		if (m_car->getCurrentWaypoint()->getIndex() == m_goalWaypoint->getIndex())
+		{
+			recalculatePath();
+		}
+		// Update the last known waypoint
+		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex())
+		{
+			m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+		}
+
+		if (m_car->getCurrentWaypoint()->getIndex() == m_nextWaypoint->getIndex())
+		{
+			//std::cout << "Reached Next Waypoint\n";
+			updateNextWaypoint();
+		}
+
+		checkStuckInWall();
+
+		if (m_needsToBackup)
+		{
+			m_movementState = AiStateMovement::MOVE_BACKWARDS;
+		}
+		else
+		{
+			accelerateToNextWaypoint(speedDamping);
+		}
+
+		break;
+	case AiStateMovement::MOVE_BACKWARDS:
+		if (m_controlsPaused)
+		{
+			m_movementState = AiStateMovement::CONTROLS_PAUSED;
+			break;
+		}
+		if (!m_car->isAlive())
+		{
+			m_movementState = AiStateMovement::DEAD;
+			break;
+		}
+		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex())
+		{
+			recalculatePath();
+			m_needsToBackup = false;
+			m_currentKnownWaypoint = m_car->getCurrentWaypoint();
+			m_counter = 0;
+			m_movementState = AiStateMovement::MOVE_FORWARD;
+		}
+
+		reverseToPreviousWaypoint();
+		break;
+	case AiStateMovement::DEAD:
+		if (m_car->isAlive())
+		{
+			if (m_needsToBackup)
+			{
+				m_movementState = AiStateMovement::MOVE_BACKWARDS;
+			}
+			else
+			{
+				m_movementState = AiStateMovement::MOVE_FORWARD;
+			}
+		}
+		break;
+	}
+
 }
