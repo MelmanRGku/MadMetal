@@ -2,6 +2,7 @@
 #include "Controllable.h"
 #include "ControllableTemplate.h"
 #include "Objects\Cars\Car.h"
+#include "Game Logic\AIDefinitions.h"
 
 class PathFinding;
 class Track;
@@ -30,6 +31,7 @@ private: //helper functions
 	void accelerateToNextWaypoint();
 	void reverseToPreviousWaypoint();
 	void changeTurning(float turningDirectionValue, float turningAmountValue);
+	void checkStuckInWall();
 
 private: //members
 	//Car* m_car;
@@ -39,6 +41,7 @@ private: //members
 	Waypoint* m_nextWaypoint;
 	Waypoint* m_potentialWaypoint;
 	Waypoint* m_currentKnownWaypoint;
+	AiStateMovement m_movementState;
 	std::vector<Waypoint*> m_currentPath;
 	std::vector<int> m_listOfWaypointsHighCost;
 	bool m_needsToBackup;

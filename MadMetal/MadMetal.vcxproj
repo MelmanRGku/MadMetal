@@ -169,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Game Logic\AIDefinitions.h" />
     <ClInclude Include="Objects\EndingScreenUIScoreTable.h" />
     <ClInclude Include="Objects\EndingScreenCarInfoManager.h" />
     <ClInclude Include="Simulation\EndingScene.h" />
