@@ -148,9 +148,35 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 
 WaypointSystem::WaypointSystem(Object3D& drivingMesh)
 {
-	for (unsigned int i = 0; i < dynamic_cast<Model3D*>(drivingMesh.getRenderable()->getModel())->getMeshes()->size(); i++)
+	Model3D* drivingMeshModel = dynamic_cast<Model3D*>(drivingMesh.getRenderable()->getModel());
+	if (drivingMeshModel == NULL)
 	{
+		m_waypointMap.clear();
+		m_waypoints.clear();
+	}
+	else
+	{
+		for (unsigned int i = 0; i < drivingMeshModel->getMeshes()->size(); i++)
+		{
 
+			for (unsigned int j = 0; j < drivingMeshModel->getMeshes()->at(i)->getVertices()->size; j++)
+			{
+				PxGeometry **geom = new PxGeometry *[1];
+				geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_LENGTH_COLLISION, drivingMeshModel->getMeshes()->at(i)->getVertices()->at(j).y, WAYPOINT_WIDTH_COLLISION));
+				PxTransform *pos = new PxTransform(drivingMeshModel->getMeshes()->at(i)->getVertices()->at(j).x, 
+					                               drivingMeshModel->getMeshes()->at(i)->getVertices()->at(j).y, 
+												   drivingMeshModel->getMeshes()->at(i)->getVertices()->at(j).z);
+				Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
+				delete pos;
+				delete geom[0];
+				delete[] geom;
+				m_waypoints.push_back(tempWaypoint);
+			}
+			for (unsigned int j = 0; j < drivingMeshModel->getMeshes()->at(i)->get; j++)
+			{
+
+			}
+		}
 	}
 }
 
