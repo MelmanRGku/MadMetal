@@ -259,7 +259,8 @@ void CollisionManager::processShieldPowerUpHit(long shieldPowerUpId, long bullet
 		
 		//if it is gargantulous' bullet then it should stop following the target 
 		GargantulousBullet *gBullet = dynamic_cast<GargantulousBullet *>(bullet);
-		gBullet->setToFollow(NULL);
+		if (gBullet != NULL)
+			gBullet->setToFollow(NULL);
 		
 	}
 }
