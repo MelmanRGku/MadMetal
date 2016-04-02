@@ -39,9 +39,9 @@ bool GameFactory::sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal maxDistan
 	return m_scene.raycast(origin, direction, maxDistance, hit, flags, fd);
 }
 
-bool GameFactory::sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit)
+bool GameFactory::sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit, PxHitFlags hitFlags, const PxQueryFilterData &filterData)
 {
-	return m_scene.sweep(sweepShape, origin, sweepDirection, maxDistance, hit);
+	return m_scene.sweep(sweepShape, origin, sweepDirection, maxDistance, hit, hitFlags, filterData);
 }
 
 
@@ -336,9 +336,30 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		animatable->setScale(glm::vec3(physicalBullet->getWorldBounds().getDimensions().x, physicalBullet->getWorldBounds().getDimensions().y, physicalBullet->getWorldBounds().getDimensions().z));
 		Physicable *physicable = new Physicable(physicalBullet);
 
-		Bullet *bullet = new GargantulousBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
+		GargantulousBullet *bullet = new GargantulousBullet(objectId, audioable, physicable, animatable, renderable, static_cast<Car *>(parent));
 		bullet->setSound(RocketSound());
 		bullet->playSound();
+		bullet->setSpeed(250.0f);
+
+		//now do the sweep and find the car to home on. Try at max 20 objects
+		PxGeometry *sweepShape = new PxBoxGeometry(10, 10, 10);
+		PxSweepHit hit[20];
+		PxSweepBuffer buf(hit, 20);
+		PxQueryFilterData fd(PxQueryFlag::eDYNAMIC);
+		PxTransform position = static_cast<Object3D *>(parent)->getGlobalPosePhysx();
+		PxVec3 dir = PxVec3(static_cast<Object3D *>(parent)->getForwardVector().x, static_cast<Object3D *>(parent)->getForwardVector().y, static_cast<Object3D *>(parent)->getForwardVector().z);
+		position.p = position.p + dir * 10.f;
+		sceneSweep(*sweepShape, position, dir, 300.f, buf, PxHitFlags(PxHitFlag::ePRECISE_SWEEP), fd);
+		for (int i = 0; i < buf.nbTouches; i++) {
+			PxShape* shapes[1];
+			buf.touches[i].actor->getShapes(shapes, 1);
+			Car *car = dynamic_cast<Car *>(m_world.findObject(shapes[0]->getSimulationFilterData().word2));
+			if (car != NULL) {
+				bullet->setToFollow(car);
+				break;
+			}
+		}
+
 		m_world.addGameObject(bullet);
 		m_scene.addActor(*physicalBullet);
 

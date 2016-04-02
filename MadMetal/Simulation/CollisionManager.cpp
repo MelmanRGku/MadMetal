@@ -9,6 +9,7 @@
 #include "Objects\GargantulousSuper.h"
 #include "Objects\HomingBullet.h"
 #include "Objects\BombExplosion.h"
+#include "Objects\GargantulousBullet.h"
 #include "PxQueryReport.h"
 
 CollisionManager::CollisionManager(World &world) : m_world(world)
@@ -246,7 +247,6 @@ void CollisionManager::processShieldPowerUpHit(long shieldPowerUpId, long bullet
 
 	if (bullet != NULL && !shield->isOwner(bullet->getOwner()))
 	{
-		
 		PxRigidDynamic * bulletActor = static_cast<PxRigidDynamic*>(&bullet->getActor());
 		bullet->setOwner(shield->getOwner());
 		PxVec3 bulletVelocity = bulletActor->getLinearVelocity();
@@ -256,7 +256,10 @@ void CollisionManager::processShieldPowerUpHit(long shieldPowerUpId, long bullet
 		directionVec *= bulletSpeed;
 		bulletActor->setLinearVelocity(PxVec3(directionVec.x, directionVec.y, directionVec.z));
 		bullet->resetLifeTime();
-		//bullets need to be rotated
+		
+		//if it is gargantulous' bullet then it should stop following the target 
+		GargantulousBullet *gBullet = dynamic_cast<GargantulousBullet *>(bullet);
+		gBullet->setToFollow(NULL);
 		
 	}
 }
