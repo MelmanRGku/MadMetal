@@ -5,8 +5,7 @@ DrivingStyleExplosivelyDelicious::DrivingStyleExplosivelyDelicious(PxMaterial *c
 	//Set up the chassis mass, dimensions, moment of inertia, and center of mass offset.
 	//The moment of inertia is just the moment of inertia of a cuboid but modified for easier steering.
 	//Center of mass offset is 0.65m above the base of the chassis and 0.25m towards the front.
-
-	//For the record, MeowMix has high maneuverability, standard speed, and low health
+	 
 
 	m_chassisMass = 1500.0f;
 	m_chassisDims = PxVec3(5.f, 5.0f, 7.0f);
@@ -28,7 +27,21 @@ DrivingStyleExplosivelyDelicious::DrivingStyleExplosivelyDelicious(PxMaterial *c
 	m_nbWheels = 4;
 
 	//handling variables
-	m_maxSpeed = 100;
+	m_maxSpeed = 100; 
+	m_maxBrakeTorque = 100000.f;
+	m_maxHandBrakeTorque = 10000000.f;
+	m_frontWheelsMaxSteer = PxPi*0.06666f;
+	m_enginePeakTorque = 7000.0f;
+	m_engineMaxOmega = 1000.0f;//approx 10000 rpm
+	m_gearsSwitchTime = 0.1f;
+	m_clutchStrength = 1000.0f;
+	m_suspensionSpringStrength = 100000.0f; // !
+	m_suspensionSpringDamperRate = 20000.0f;
+	m_suspensionMaxCompression = 0.01f;
+	m_suspensionMaxDroop = 0.1f;
+	m_suspensionCamberAngleAtRest = 0.0;
+	m_suspensionCamberAngleAtMaxDroop = 2.14;
+	m_suspensionCamberAngleAtMaxCompression = -2.14;
 }
 
 DrivingStyleExplosivelyDelicious::~DrivingStyleExplosivelyDelicious()

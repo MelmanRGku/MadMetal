@@ -89,18 +89,18 @@ PxVehicleDrive4W* VehicleCreator::create(DrivingStyle* style)
 
 		//Engine
 		PxVehicleEngineData engine;
-		engine.mPeakTorque = 7000.0f;
-		engine.mMaxOmega = 1000.0f;//approx 10000 rpm
+		engine.mPeakTorque = style->getEnginePeakTorque();
+		engine.mMaxOmega = style->getEngineMaxOmega();
 		driveSimData.setEngineData(engine);
 
 		//Gears
 		PxVehicleGearsData gears;
-		gears.mSwitchTime = 0.1f;
+		gears.mSwitchTime = style->getGearsSwitchTime();
 		driveSimData.setGearsData(gears);
 
 		//Clutch
 		PxVehicleClutchData clutch;
-		clutch.mStrength = 1000.0f;
+		clutch.mStrength = style->getClutchStrength();
 		driveSimData.setClutchData(clutch);
 
 		//Ackermann steer accuracy
@@ -140,16 +140,13 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 			wheels[i].mMOI = style->getWheelMOI();
 			wheels[i].mRadius = style->getWheelRadius();
 			wheels[i].mWidth = style->getWheelWidth();
-			wheels[i].mMaxBrakeTorque = 100000.f;
-			wheels[i].mMaxHandBrakeTorque = 10000000.f;
+			wheels[i].mMaxBrakeTorque = style->getMaxBrakeTorque();
+			wheels[i].mMaxHandBrakeTorque = style->getMaxHandBrakeTorque();
 		}
 
-		//Enable the handbrake for the rear wheels only.
-		//wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxHandBrakeTorque = 25000.0f;
-		//wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxHandBrakeTorque = 25000.0f;
 		//Enable steering for the front wheels only.
-		wheels[PxVehicleDrive4WWheelOrder::eFRONT_LEFT].mMaxSteer = PxPi*0.06666f;
-		wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mMaxSteer = PxPi*0.06666f;
+		wheels[PxVehicleDrive4WWheelOrder::eFRONT_LEFT].mMaxSteer = style->getFrontWheelsMaxSteer();
+		wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mMaxSteer = style->getFrontWheelsMaxSteer();
 		wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxSteer = 0;
 		wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxSteer = 0;
 		//wheels[PxVehicleDrive4WWheelOrder::eFRONT_LEFT].mToeAngle = -1.0 / (2 * 3.14);
@@ -178,17 +175,19 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 		//Set the suspension data.
 		for (PxU32 i = 0; i < style->getNbWheels(); i++)
 		{
-			suspensions[i].mMaxCompression = 0.01;
-			suspensions[i].mMaxDroop = 0.1f;
-			suspensions[i].mSpringStrength = 100000.0f;
-			suspensions[i].mSpringDamperRate = 20000.0f;
+			suspensions[i].mMaxCompression = style->getSuspensionMaxCompression();
+			suspensions[i].mMaxDroop = style->getSuspensionMaxDroop();
+			suspensions[i].mSpringStrength = style->getSuspensionSpringStrength();
+			suspensions[i].mSpringDamperRate = style->getSuspensionSpringDamperRate();
 			suspensions[i].mSprungMass = suspSprungMasses[i];
 		}
 
 		//Set the camber angles.
-		const PxF32 camberAngleAtRest = 0.0;
-		const PxF32 camberAngleAtMaxDroop = 2.14;
-		const PxF32 camberAngleAtMaxCompression = -2.14;
+
+		//negative - more stability
+		const PxF32 camberAngleAtRest = style->getSuspensionCamberAngleAtRest();
+		const PxF32 camberAngleAtMaxDroop = style->getSuspensionCamberAngleAtMaxDroop();
+		const PxF32 camberAngleAtMaxCompression = style->getSuspensionCamberAngleAtMaxCompression();
 		for (PxU32 i = 0; i < style->getNbWheels(); i += 2)
 		{
 			suspensions[i + 0].mCamberAtRest = camberAngleAtRest;
@@ -269,10 +268,4 @@ void VehicleCreator::computeWheelCenterActorOffsets4W(DrivingStyle *style, const
 	wheelCentreOffsets[PxVehicleDrive4WWheelOrder::eREAR_RIGHT] = PxVec3((+style->getChassisDimensions().x - style->getWheelWidth())*0.5f, -(style->getChassisDimensions().y / 2 + style->getWheelRadius()), wheelRearZ + 0 * deltaZ*0.5f);
 	wheelCentreOffsets[PxVehicleDrive4WWheelOrder::eFRONT_LEFT] = PxVec3((-style->getChassisDimensions().x + style->getWheelWidth())*0.5f, -(style->getChassisDimensions().y / 2 + style->getWheelRadius()), wheelRearZ + (numLeftWheels - 1)*deltaZ);
 	wheelCentreOffsets[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT] = PxVec3((+style->getChassisDimensions().x - style->getWheelWidth())*0.5f, -(style->getChassisDimensions().y / 2 + style->getWheelRadius()), wheelRearZ + (numLeftWheels - 1)*deltaZ);
-	//Set the remaining wheels.
-	for (PxU32 i = 2, wheelCount = 4; i < style->getNbWheels() - 2; i += 2, wheelCount += 2)
-	{
-		wheelCentreOffsets[wheelCount + 0] = PxVec3((-style->getChassisDimensions().x + style->getWheelWidth())*0.5f, -(style->getChassisDimensions().y / 2 + style->getWheelRadius()), wheelRearZ + i*deltaZ*0.5f);
-		wheelCentreOffsets[wheelCount + 1] = PxVec3((+style->getChassisDimensions().x - style->getWheelWidth())*0.5f, -(style->getChassisDimensions().y / 2 + style->getWheelRadius()), wheelRearZ + i*deltaZ*0.5f);
-	}
 }
