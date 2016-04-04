@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cfloat>
 
 bool Audio::m_musicPlaying = false;
 
@@ -68,6 +69,14 @@ void Audio::initializeMusicLibrary(char * fileToLoad)
 		std::cout << "File reading error" << std::endl;
 	}
 
+}
+
+void Audio::setMusicVolume(int value) {
+	Mix_VolumeMusic(value);
+}
+
+void Audio::resetMusicVolume() {
+	Mix_VolumeMusic(MUSIC_VOLUME);
 }
 
 //set up audio library
@@ -134,7 +143,7 @@ void Audio::update()
 		}
 		else if (m_audioChannels[i]->needsUpdate())
 		{
-			m_audioChannels[i]->setAudioPosition(m_listener);
+			m_audioChannels[i]->setAudioPosition(m_listeners);
 		}
 		
 		
@@ -150,7 +159,7 @@ void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound toPlay, float vo
 	//set the audio channel to the next available channel, and play the specified sound
 	
 	toAdd->setChannel(Mix_FadeInChannel(-1, m_chunkLibrary[toPlay.getLibraryIndex()], loopCount, 200));
-	toAdd->setAudioPosition(m_listener);
+	toAdd->setAudioPosition(m_listeners);
 	toPlay.setChannel(toAdd->getChannel());
 	//add new channel to the list of currently playing sounds
 	m_audioChannels.push_back(toAdd);
@@ -180,10 +189,10 @@ void Audio::stopSource(int channel)
 
 //todo:: need to incorporate forward vector into calculations!!
 
-bool AudioChannel::setAudioPosition(Car * listener)
+bool AudioChannel::setAudioPosition(std::vector<Car *> listeners)
 {
 	//if not listener - return
-	if (listener == NULL) {
+	if (listeners.size() == 0) {
 		return false;
 	}
 
@@ -194,22 +203,32 @@ bool AudioChannel::setAudioPosition(Car * listener)
 	}
 
 	//calculate distance between the listener and source. 
-	float listenerX = 0 , listenerZ =0, sourceX =0, sourceZ =0;
+	float listenerX = 0, listenerZ = 0, sourceX = 0, sourceZ = 0;
+	float minDistance = FLT_MAX;
+	int minDistancePlayer = 0;
 	if (m_audioPosition != NULL)
 	{
-		if (listener != NULL)
-		{
-			listenerX = listener->getActor().getGlobalPose().p.x;
-			listenerZ = listener->getActor().getGlobalPose().p.z;
-		}
-	
-		sourceX = m_audioPosition->getGlobalPose().p.x;
-		sourceZ = m_audioPosition->getGlobalPose().p.z;
-	}
+		for (int playerNum = 0; playerNum < listeners.size(); playerNum++) {
+			if (listeners.at(playerNum) != NULL)
+			{
+				listenerX = listeners.at(playerNum)->getActor().getGlobalPose().p.x;
+				listenerZ = listeners.at(playerNum)->getActor().getGlobalPose().p.z;
+			}
+
+			sourceX = m_audioPosition->getGlobalPose().p.x;
+			sourceZ = m_audioPosition->getGlobalPose().p.z;
 
 			sourceX = sourceX - listenerX;
-	sourceZ = sourceZ - listenerZ;
-	float distance = sqrt((powf(sourceX, 2) + powf(sourceZ, 2))) + (1 - m_volumeScalar) * 255;
+			sourceZ = sourceZ - listenerZ;
+			float distance = sqrt((powf(sourceX, 2) + powf(sourceZ, 2))) + (1 - m_volumeScalar) * 255;
+			if (distance < minDistance) {
+				minDistance = distance;
+				minDistancePlayer = playerNum;
+			}
+		}
+	}
+
+	float distance = minDistance;
 	if (distance < 0) distance = 0;
 	
 	// if sound is too far away to hear, halt playing and return
@@ -221,7 +240,7 @@ bool AudioChannel::setAudioPosition(Car * listener)
 
 
 	//calculate where the sound is in relation to the player
-	glm::vec3 forwardVector = glm::normalize(glm::vec3( listener->getForwardVector().x, 0, listener->getForwardVector().z));
+	glm::vec3 forwardVector = glm::normalize(glm::vec3(listeners.at(minDistancePlayer)->getForwardVector().x, 0, listeners.at(minDistancePlayer)->getForwardVector().z));
 	glm::vec3 vectorToSound = glm::normalize(glm::vec3(sourceX, 0,sourceZ));
 	
 	float degree = 180.f / 3.14 * acos(glm::dot(forwardVector, vectorToSound));

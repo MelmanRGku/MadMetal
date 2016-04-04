@@ -148,7 +148,7 @@ void PauseMenu::aPressed() {
 	}
 	else if (selectedButton == exitToMainMenuButton) {
 		m_audio->queAudioSource(NULL, MenuBackButtonSound());
-		m_audio->assignListener(NULL);
+		m_audio->clearListeners();
 		messageToReturn = SceneMessage::eMainMenu;
 		m_audio->stopMusic();
 	}

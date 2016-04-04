@@ -42,6 +42,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 	m_isPaused = false;
 	m_numLapsVictory = NUM_LAPS_FOR_VICTORY;
+	audioHandle.resetMusicVolume();
 
 
 	PxMaterial* mMaterial;
@@ -74,6 +75,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_GARGANTULOUS, pos, NULL, NULL));
 			} 
 			humanPlayer->setCar(car);
+			m_audioHandle.assignListener(car);
 
 			UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
 			humanPlayer->getCar()->ui = ui;
@@ -115,8 +117,6 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	for (unsigned int i = 0; i < m_humanPlayers.size(); i++) {
 		m_humanPlayers.at(i)->getCar()->getUI()->adjustStringsForViewport(i + 1, m_humanPlayers.size());
 	}
-
-	m_audioHandle.assignListener(m_humanPlayers[0]->getCar());
 	
 	initialize();
 	m_scoreTable = new ScoreTable(m_players);
@@ -270,7 +270,7 @@ void GameSimulation::initialize() {
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(PhysicsManager::getScale());
-	sceneDesc.gravity = PxVec3(0.0f, -18.0f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -18.f, 0.0f);
 
 	manager = new CollisionManager(*m_world);
 	sceneDesc.simulationEventCallback = manager;
