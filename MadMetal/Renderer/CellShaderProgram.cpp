@@ -29,9 +29,10 @@ CellShaderProgram::CellShaderProgram(const char* vertexShaderPath, const char* f
 
 	bitmaskUniform = glGetUniformLocation(programID, "bitmask");		//pos of the camera
 	lightPosUniform = glGetUniformLocation(programID, "lightPosArray");
-	constUniform = glGetUniformLocation(programID, "constArray");
-	linearUniform = glGetUniformLocation(programID, "linearArray");
-	quadUniform = glGetUniformLocation(programID, "quadArray");
+	constUniform = glGetUniformLocation(programID, "constants");
+	linearUniform = glGetUniformLocation(programID, "linears");
+	quadUniform = glGetUniformLocation(programID, "quads");
+	lightUniform = glGetUniformLocation(programID, "lightColorArray");
 }
 
 
@@ -48,8 +49,13 @@ void CellShaderProgram::start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatrix, 
 	glUniformMatrix4fv(viewMatrixUniform, 1, false, glm::value_ptr(*viewMatrix));
 	glUniformMatrix4fv(projectionMatrixUniform, 1, false, glm::value_ptr(*projMatrix));
 	glUniformMatrix3fv(cameraPosUniform, 1, false, glm::value_ptr(*cameraPos));
-	GLfloat testArray[30] = { 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	glUniform3fv(lightPosUniform, 30, testArray);
+	GLfloat testArray[30] = { 100, 10, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	glUniform3fv(lightPosUniform, 10, testArray);
+
+//	glm::vec3 lightArray[10] = { glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0) };
+	GLfloat lightArray[30] = { 1.0, 1.0, 1.0,0.0, 0.0, 0.0,0.0, 0.0, 0.0,0.0, 0.0, 0.0,0.0, 0.0, 0.0,0.0, 0.0, 0.0,0.0, 0.0, 0.0,0.0, 0.0, 0.0,0.0, 0.0, 0.0,0.0, 0.0, 0.0 };
+
+	glUniform3fv(lightUniform, 10, lightArray);
 
 	GLfloat testArray2[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	GLfloat testArray3[10] = { 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0 };

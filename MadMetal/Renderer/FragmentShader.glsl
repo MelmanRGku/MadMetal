@@ -18,10 +18,9 @@ uniform float ambient = 0.3f;
 
 uniform int bitmask = 0x00000001;
 
-uniform lights
-{
-  vec3 lightPosArray[10];
-};
+uniform vec3 lightPosArray[10];
+
+uniform vec3 lightColorArray[10];
 
 uniform constants
 {
@@ -37,6 +36,8 @@ uniform quads
 {
   float quadArray[10];
 };
+
+
 
 // Texture Mapping
 uniform sampler2D texObject;
@@ -110,7 +111,8 @@ void main(void)
 	   float Idif = diffuseLighting(N, L);
 	   float Ispe = specularLighting(N, L, V);
 
-	   resultingColor.xyz *= (Iamb + Idif + Ispe) * dropoffFunction(0, 0.01, 0, L, fs_in.position_attr);      
+   
+	 resultingColor.xyz *= (Iamb + Idif + Ispe) * dropoffFunction(0, 0.01, 0,lightPosArray[0] , fs_in.position_attr) * lightColorArray[0];      
 
    }
 

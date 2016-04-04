@@ -19,7 +19,8 @@ public:
 		lightPosUniform,
 		constUniform,
 		linearUniform,
-		quadUniform;
+		quadUniform,
+		lightUniform;
 
 	CellShaderProgram(const char* vertexShaderPath, const char* fragmentShaderPath);
 	~CellShaderProgram();
