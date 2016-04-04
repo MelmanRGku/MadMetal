@@ -310,7 +310,8 @@ void GameSimulation::processInput() {
 	//check for pause button
 	for (int i = 0; i < m_humanPlayers.size(); i++)
 	{
-		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
+		//no pausing in the first 3 seconds
+		if (m_sceneGameTimeSeconds > 3 && m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
 		{
 			newMessage.setTag(SceneMessage::ePause);
 			std::vector<ControllableTemplate *> playerTemplates;
@@ -323,10 +324,10 @@ void GameSimulation::processInput() {
 			playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
 			newMessage.setPlayerTemplates(playerTemplates);
 		}
-	}
 
-	if (m_humanPlayers[0]->getGamePad() != NULL && (m_humanPlayers[0]->getGamePad()->isPressed(GamePad::DPadLeft) || m_humanPlayers[0]->getGamePad()->isPressed(GamePad::DPadRight))) {
-		musicManager->changeSong();
+		if (m_humanPlayers[i]->getGamePad() != NULL && (m_humanPlayers[i]->getGamePad()->isPressed(GamePad::DPadLeft) || m_humanPlayers[i]->getGamePad()->isPressed(GamePad::DPadRight))) {
+			musicManager->changeSong();
+		}
 	}
 }
 
@@ -340,7 +341,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 
 		//make everyone invincible for 3 seconds
 		for (int i = 0; i < m_players.size(); i++) {
-			m_players.at(i)->getCar()->setInvincibility(1.5f);
+			m_players.at(i)->getCar()->setInvincibility(2.5f);
 		}
 	}
 	if (m_sceneGameTimeSeconds < 4 )
