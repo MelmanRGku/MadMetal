@@ -19,3 +19,7 @@
 18 menuButtonChange.wav
 19 menuBackButton.wav
 20 menuButtonNextPrev.wav
+21 CarExplode.wav
+22 BulletReflect.wav
+23 PowerUpAcceleration.wav
+24 PowerUpShield.wav

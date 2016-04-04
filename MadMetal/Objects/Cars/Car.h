@@ -56,6 +56,7 @@ protected: //members
 
 	float m_invincibilityTimeRemaining;
 	float m_timeSinceLastTimeHit;
+	float m_timeSinceRespawn;
 private:
 	//update functions
 	void updatePowerUp(float dt);

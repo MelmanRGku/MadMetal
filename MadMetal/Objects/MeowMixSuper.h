@@ -65,7 +65,7 @@ public:
 					}
 					else if (car->isAlive())
 					{
-						float damageToDeal = car->getHealthRemaining();
+						float damageToDeal = 200.f;
 						if (car->takeDamage(damageToDeal)) {
 							m_owner->addDamageDealt(damageToDeal);
 						}
@@ -81,7 +81,7 @@ public:
 									std::cout << abs(forward.cross(toCar).magnitude() - 1) << std::endl;
 									if (abs(forward.cross(toCar).magnitude() - 1) < 0.2)
 									{
-										float damageToDeal = car->getHealthRemaining();
+										float damageToDeal = 200.f;
 										if (car->takeDamage(damageToDeal)) {
 											m_owner->addDamageDealt(damageToDeal);
 										}

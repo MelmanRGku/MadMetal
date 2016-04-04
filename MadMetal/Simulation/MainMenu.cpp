@@ -12,7 +12,7 @@ MainMenu::MainMenu(Input * input, Audio *audio)
 	m_gamePad = input->getGamePadHandle();
 	m_audio = audio;
 	m_audio->clearListeners();
-	m_audio->setMusicVolume(100);
+	m_audio->setMusicVolume(128);
 
 	m_defaultSceneCamera->setLookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -3), glm::vec3(0, 1, 0));
 	{

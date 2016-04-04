@@ -230,6 +230,46 @@ public:
 	virtual ~MenuButtonNextPrevSound(){};
 };
 
+class CarExplodeSound : public Sound
+{
+public:
+	CarExplodeSound() : Sound()
+	{
+		m_libraryIndex = 21;
+	};
+	virtual ~CarExplodeSound(){};
+};
+
+class BulletReflectSound : public Sound
+{
+public:
+	BulletReflectSound() : Sound()
+	{
+		m_libraryIndex = 22;
+	};
+	virtual ~BulletReflectSound(){};
+};
+
+class CarAccelerationSound : public Sound
+{
+public:
+	CarAccelerationSound() : Sound()
+	{
+		m_libraryIndex = 23;
+	};
+	virtual ~CarAccelerationSound(){};
+};
+
+class ShieldPowerupSound : public Sound
+{
+public:
+	ShieldPowerupSound() : Sound()
+	{
+		m_libraryIndex = 24;
+	};
+	virtual ~ShieldPowerupSound(){};
+};
+
 //-----------------------------------------------------------------
 //--------------------------END SOUNDS-----------------------------
 //-----------------------------------------------------------------

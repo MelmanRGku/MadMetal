@@ -15,7 +15,7 @@ bool Audio::m_musicPlaying = false;
 	#define MUSIC_VOLUME 0
 #else
 	#define SFX_VOLUME 128
-	#define MUSIC_VOLUME 70
+	#define MUSIC_VOLUME 0
 #endif
 
 
@@ -204,7 +204,7 @@ bool AudioChannel::setAudioPosition(std::vector<Car *> listeners)
 
 	//calculate distance between the listener and source. 
 	float listenerX = 0, listenerZ = 0, sourceX = 0, sourceZ = 0;
-	float minDistance = FLT_MAX;
+	float minDistance = 256;
 	int minDistancePlayer = 0;
 	if (m_audioPosition != NULL)
 	{
@@ -253,13 +253,9 @@ bool AudioChannel::setAudioPosition(std::vector<Car *> listeners)
 			270 - to the left
 			*/
 	if (glm::cross(forwardVector, vectorToSound).y > 0)
-			{
-		//std::cout << "Sound is to the Left\n";
+	{
 		degree = 360 - degree;
-			}
-	else {
-		//std::cout << "Sound is to the Right\n";	
-			}
+	}
 
 	Mix_SetPosition(m_playingChannel, Sint16(degree), Uint8(distance));
 	return true;

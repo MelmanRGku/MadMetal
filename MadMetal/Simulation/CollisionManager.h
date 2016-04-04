@@ -2,10 +2,13 @@
 #include "PhysicsManager.h"
 #include "World.h"
 
+class Audio;
+
 class CollisionManager : public PxSimulationEventCallback, public PxSimulationFilterCallback
 {
 private:
 	World &m_world;
+	Audio &m_audioHandle;
 
 private:
 	void processBulletHit(long bulletId, long otherId);
@@ -23,7 +26,7 @@ private:
 	void processExplosivelyDeliciousBulletChassisHit(long bulletId, long otherId);
 
 public:
-	CollisionManager(World &world);
+	CollisionManager(World &world, Audio &audioHandle);
 	~CollisionManager();
 
 

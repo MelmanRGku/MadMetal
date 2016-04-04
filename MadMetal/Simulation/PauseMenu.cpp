@@ -14,6 +14,7 @@
 PauseMenu::PauseMenu(std::vector<ControllableTemplate *> players, Audio *audio)
 {
 	m_audio = audio;
+	m_audio->clearListeners();
 	m_gamePad = players.at(players.size()-1)->getGamePad();
 	m_playerTemplates = players;
 	m_playerTemplates.pop_back();

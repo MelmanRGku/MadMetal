@@ -272,7 +272,7 @@ void GameSimulation::createPhysicsScene()
 	PxSceneDesc sceneDesc(PhysicsManager::getScale());
 	sceneDesc.gravity = PxVec3(0.0f, -18.f, 0.0f);
 
-	manager = new CollisionManager(*m_world);
+	manager = new CollisionManager(*m_world, m_audioHandle);
 	sceneDesc.simulationEventCallback = manager;
 	sceneDesc.filterCallback = manager;
 	sceneDesc.cpuDispatcher = &PhysicsManager::getCpuDispatcher();
@@ -625,3 +625,13 @@ int GameSimulation::getFirstPlace()
 
 }
 
+
+void GameSimulation::onPause() {
+	m_audioHandle.clearListeners();
+}
+
+void GameSimulation::onResume() {
+	for (PlayerControllable *p : m_humanPlayers) {
+		m_audioHandle.assignListener(p->getCar());
+	}
+}

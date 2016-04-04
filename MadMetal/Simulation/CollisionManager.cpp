@@ -11,8 +11,9 @@
 #include "Objects\BombExplosion.h"
 #include "Objects\GargantulousBullet.h"
 #include "PxQueryReport.h"
+#include "Audio\Audio.h"
 
-CollisionManager::CollisionManager(World &world) : m_world(world)
+CollisionManager::CollisionManager(World &world, Audio &audioHandle) : m_world(world), m_audioHandle(audioHandle)
 {
 }
 
@@ -256,6 +257,7 @@ void CollisionManager::processShieldPowerUpHit(long shieldPowerUpId, long bullet
 		directionVec *= bulletSpeed;
 		bulletActor->setLinearVelocity(PxVec3(directionVec.x, directionVec.y, directionVec.z));
 		bullet->resetLifeTime();
+		m_audioHandle.queAudioSource(&shield->getActor(), BulletReflectSound());
 		
 		//if it is gargantulous' bullet then it should stop following the target 
 		GargantulousBullet *gBullet = dynamic_cast<GargantulousBullet *>(bullet);
@@ -321,7 +323,7 @@ void CollisionManager::processGargantulousSuperBulletHit(long bulletId, long car
 
 	if (car != NULL  && car != super->getOwner()) // if the car hasn't already been hit by the super
 	{
-		float damageToDeal = car->getHealthRemaining();
+		float damageToDeal = 200.f;
 		if (car->takeDamage(damageToDeal)) {
 			super->getOwner()->addDamageDealt(damageToDeal);
 		}

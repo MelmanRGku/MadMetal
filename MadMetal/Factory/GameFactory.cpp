@@ -727,9 +727,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Physicable *physicable = new Physicable(powerupTriggerVolume);
 		
 		PowerUpAttack *powerup = new PowerUpAttack(objectId, audioable, physicable, animatable, renderable, static_cast<Car*>(parent));
-		std::cout << " Played a sound \n";
-		powerup->setSound(RegenSound());
-		powerup->playSound();
+
 		m_world.addGameObject(powerup);
 		m_scene.addActor(*powerupTriggerVolume);
 

@@ -40,12 +40,16 @@ DrivingStyle& Car::getDrivingStyle()
 
 void Car::respawn()
 {
-	//if the car is alive and is in its period of invincibility - prevent respawning
-	if (m_invincibilityTimeRemaining > 0 && m_currentHealth > 0)
+	//if the car is alive and it respawned recently
+	if (m_timeSinceRespawn <= 3 && m_currentHealth > 0)
 		return;
 
-	m_currentHealth = m_maxHealth;
-	m_invincibilityTimeRemaining = 3;
+	//if player is not alive
+	if (m_currentHealth <= 0) {
+		m_currentHealth = m_maxHealth;
+		m_invincibilityTimeRemaining = 3;
+	}
+	m_timeSinceRespawn = 0;
 	
 	if (m_lastCollisionVolume != NULL)
 	{
@@ -98,7 +102,7 @@ void Car::pickUpPowerUp(PowerUpType type)
 
 void Car::usePowerUp()
 {
-	if (m_heldPowerUp != PowerUpType::NONE)
+	if (m_heldPowerUp != PowerUpType::NONE && m_activePowerUp == PowerUpType::NONE)
 	{
 		if (ui != NULL)
 		{
@@ -119,12 +123,14 @@ void Car::usePowerUp()
 			geom[0] = new PxSphereGeometry(.1);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_ATTACK_POWERUP, &PxTransform(PxVec3(pos.x, pos.y, pos.x)), geom, this);
 			delete geom[0];
+			m_audioable->getAudioHandle().queAudioSource(&getActor(), RegenSound());
 			break;
 		case (PowerUpType::DEFENSE) :
 			
 			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(pos.x,pos.y,pos.x)), geom, this);
 			delete geom[0];
+			m_audioable->getAudioHandle().queAudioSource(&getActor(), ShieldPowerupSound());
 			break;
 		case (PowerUpType::SPEED) :
 			//add particle system
@@ -140,6 +146,7 @@ void Car::usePowerUp()
 			actor->setAngularVelocity(PxVec3(0, 0, 0));
 			actor->addForce(PxVec3(direction.x, direction.y, direction.z), PxForceMode::eIMPULSE);
 			delete geom[0];
+			m_audioable->getAudioHandle().queAudioSource(&getActor(), CarAccelerationSound());
 			break;
 
 		}
@@ -235,6 +242,7 @@ void Car::updateHealth(float dtMillis)
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &getCar().getRigidDynamicActor()->getGlobalPose(), explosionGeom, NULL);
 			delete explosionGeom[0];
 			delete[] explosionGeom;
+			m_audioable->getAudioHandle().queAudioSource(getCar().getRigidDynamicActor(), CarExplodeSound(), 2);
 		}
 		m_superDurationRemainingSeconds = 0.1;
 	}
@@ -255,6 +263,7 @@ void Car::update(float dt) {
 	updateHealth(dt);
 	m_reloadRemainingSeconds -= dt;
 	m_timeSinceLastTimeHit += dt;
+	m_timeSinceRespawn += dt;
 	updateSuper(dt);
 	updatePowerUp(dt);
 	if (ui != NULL) {
