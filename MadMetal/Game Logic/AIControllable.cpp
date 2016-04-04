@@ -32,11 +32,12 @@ void AIControllable::processFire(std::vector<Controllable *> *players) {
 		forwardVector.y = 0;
 		forwardVector = glm::normalize(forwardVector);
 		for (unsigned int i = 0; i < players->size(); i++) {
-			if (players->at(i) != this) {
+			if (players->at(i) != this && players->at(i)->getCar()->getInvinsibilityTimeRemaining() <= 0.5f) {
 				glm::vec3 vecToPlayer = players->at(i)->getCar()->getFullPosition() - m_car->getFullPosition();
+				float distance = glm::length(vecToPlayer);
 				vecToPlayer.y = 0;
 				vecToPlayer = glm::normalize(vecToPlayer);
-				if (glm::dot(vecToPlayer, forwardVector) > .9) {
+				if (glm::dot(vecToPlayer, forwardVector) > .9 && distance <= 300) {
 					if (m_car->superReady()) {
 						m_car->useSuper();
 					}

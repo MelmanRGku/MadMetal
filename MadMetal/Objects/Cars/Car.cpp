@@ -146,7 +146,6 @@ void Car::usePowerUp()
 
 }
 
-#define INVINICIBILITY_FLASH_PERIOD 0.2f
 bool Car::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 	if (m_invincibilityTimeRemaining <= 0 || std::fmod(m_invincibilityTimeRemaining, (INVINICIBILITY_FLASH_PERIOD * 2)) < INVINICIBILITY_FLASH_PERIOD) {
 		return Object3D::draw(renderer, type, passNumber);
@@ -378,4 +377,17 @@ void Car::setLastHitCollisionVolume(CollisionVolume* collisionVolume)
 CollisionVolume* Car::getLastHitCollisionVolume()
 {
 	return m_lastCollisionVolume;
+}
+
+
+bool Car::isInvincible() {
+	return m_invincibilityTimeRemaining > 0;
+}
+
+float Car::getInvinsibilityTimeRemaining() {
+	return m_invincibilityTimeRemaining;
+}
+
+void Car::setInvincibility(float time) {
+	m_invincibilityTimeRemaining = time;
 }

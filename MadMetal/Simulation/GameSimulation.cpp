@@ -336,6 +336,11 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 	m_sceneGameTimeSeconds += dt;
 	if (m_sceneGameTimeSeconds > 3 && m_controlsPaused) {
 		pauseControls(false);
+
+		//make everyone invincible for 3 seconds
+		for (int i = 0; i < m_players.size(); i++) {
+			m_players.at(i)->getCar()->setInvincibility(3);
+		}
 	}
 	if (m_sceneGameTimeSeconds < 4 )
 	{

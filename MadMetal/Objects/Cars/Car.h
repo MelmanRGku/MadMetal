@@ -7,6 +7,8 @@
 #include "Objects/UI.h"
 #include "Global\Definitions.h"
 
+#define INVINICIBILITY_FLASH_PERIOD 0.2f
+
 class Waypoint;
 class CollisionVolume;
 
@@ -120,6 +122,9 @@ public:
 	static void resetGlobalPositionID();
 
 	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
+	bool isInvincible();
+	float getInvinsibilityTimeRemaining();
+	void setInvincibility(float time);
 
 };
 
