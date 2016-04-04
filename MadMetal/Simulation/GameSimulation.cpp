@@ -247,6 +247,7 @@ void GameSimulation::simulatePlayers(double dt)
 	}
 
 	for (unsigned int i = 0; i < m_aiPlayers.size(); i++) {
+		m_aiPlayers[i]->processPowerups();
 		m_aiPlayers[i]->processFire(&m_players);
 	}
 
@@ -339,7 +340,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 
 		//make everyone invincible for 3 seconds
 		for (int i = 0; i < m_players.size(); i++) {
-			m_players.at(i)->getCar()->setInvincibility(3);
+			m_players.at(i)->getCar()->setInvincibility(1.5f);
 		}
 	}
 	if (m_sceneGameTimeSeconds < 4 )

@@ -78,6 +78,10 @@ PowerUpType Car::getActivePowerUpType()
 	return m_activePowerUp;
 }
 
+PowerUpType Car::getHeldPowerUp() {
+	return m_heldPowerUp;
+}
+
 void Car::pickUpPowerUp(PowerUpType type)
 {
 	if (m_heldPowerUp == PowerUpType::NONE)
@@ -159,6 +163,7 @@ bool Car::takeDamage(float damage, bool applyAnyway)
 		m_currentHealth -= damage;
 		if (m_currentHealth > m_maxHealth)
 			m_currentHealth = m_maxHealth;
+		m_timeSinceLastTimeHit = 0;
 		return true;
 	}
 
@@ -249,6 +254,7 @@ void Car::update(float dt) {
 	m_invincibilityTimeRemaining -= dt;
 	updateHealth(dt);
 	m_reloadRemainingSeconds -= dt;
+	m_timeSinceLastTimeHit += dt;
 	updateSuper(dt);
 	updatePowerUp(dt);
 	if (ui != NULL) {
@@ -390,4 +396,8 @@ float Car::getInvinsibilityTimeRemaining() {
 
 void Car::setInvincibility(float time) {
 	m_invincibilityTimeRemaining = time;
+}
+
+float Car::getTimeSinceLastTimeHit() {
+	return m_timeSinceLastTimeHit;
 }

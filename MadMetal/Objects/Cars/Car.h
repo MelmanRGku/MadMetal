@@ -55,6 +55,7 @@ protected: //members
 	static int positionGlobalID;
 
 	float m_invincibilityTimeRemaining;
+	float m_timeSinceLastTimeHit;
 private:
 	//update functions
 	void updatePowerUp(float dt);
@@ -104,6 +105,7 @@ public:
 	void pickUpPowerUp(PowerUpType type);
 	void usePowerUp();
 	PowerUpType getActivePowerUpType();
+	PowerUpType getHeldPowerUp();
 	UI *getUI() { return ui; }
 	void deactivatePowerUp(){ m_activePowerUp = PowerUpType::NONE; }
 	void updateHealth(float dtMillis);
@@ -125,6 +127,7 @@ public:
 	bool isInvincible();
 	float getInvinsibilityTimeRemaining();
 	void setInvincibility(float time);
+	float getTimeSinceLastTimeHit();
 
 };
 

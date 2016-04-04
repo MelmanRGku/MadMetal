@@ -26,6 +26,24 @@ AIControllable::~AIControllable()
 	delete m_pathFinder;
 }
 
+void AIControllable::processPowerups() {
+	if (m_car->getHeldPowerUp() == PowerUpType::ATTACK) {
+		if (m_car->getHealthRemaining() <= 50) {
+			m_car->usePowerUp();
+		}
+	}
+	else if (m_car->getHeldPowerUp() == PowerUpType::SPEED) {
+		if (m_car->getCar().computeForwardSpeed() > 70) {
+			m_car->usePowerUp();
+		}
+	}
+	else if (m_car->getHeldPowerUp() == PowerUpType::DEFENSE) {
+		if (m_car->getTimeSinceLastTimeHit() > 0.1f && m_car->getTimeSinceLastTimeHit() < .5f) {
+			m_car->usePowerUp();
+		}
+	}
+}
+
 void AIControllable::processFire(std::vector<Controllable *> *players) {
 	if (!m_controlsPaused) {
 		glm::vec3 forwardVector = m_car->getForwardVector();
