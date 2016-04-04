@@ -32,6 +32,11 @@ protected: //members
 	int m_currentChannel;
 };
 
+
+//-----------------------------------------------------------------
+//----------------------------SOUNDS-------------------------------
+//-----------------------------------------------------------------
+
 class AccelerationSound : public Sound
 {
 public:
@@ -102,46 +107,6 @@ public:
 		m_libraryIndex = 5;
 	};
 	virtual ~ChassisCrashSound(){};
-};
-
-class AllGoodThingsIAmTheEnemySong : public Sound
-{
-public:
-	AllGoodThingsIAmTheEnemySong() : Sound()
-	{
-		m_libraryIndex = 0;
-	};
-	virtual ~AllGoodThingsIAmTheEnemySong(){};
-};
-
-class DisturbedVengefulOneSong : public Sound
-{
-public:
-	DisturbedVengefulOneSong() : Sound()
-	{
-		m_libraryIndex = 1;
-	};
-	virtual ~DisturbedVengefulOneSong(){};
-};
-
-class SickPuppiedYoureGoingDownSong : public Sound
-{
-public:
-	SickPuppiedYoureGoingDownSong() : Sound()
-	{
-		m_libraryIndex = 2;
-	};
-	virtual ~SickPuppiedYoureGoingDownSong(){};
-};
-
-class MetalMusicDarknessFallsSong : public Sound
-{
-public:
-	MetalMusicDarknessFallsSong() : Sound()
-	{
-		m_libraryIndex = 3;
-	};
-	virtual ~MetalMusicDarknessFallsSong(){};
 };
 
 class GargantulousSuperSound : public Sound
@@ -224,3 +189,120 @@ public:
 	};
 	virtual ~ExplosivelyDeliciousSuperSound(){};
 };
+
+class MenuButtonClickSound : public Sound
+{
+public:
+	MenuButtonClickSound() : Sound()
+	{
+		m_libraryIndex = 17;
+	};
+	virtual ~MenuButtonClickSound(){};
+};
+
+class MenuButtonChangeSound : public Sound
+{
+public:
+	MenuButtonChangeSound() : Sound()
+	{
+		m_libraryIndex = 18;
+	};
+	virtual ~MenuButtonChangeSound(){};
+};
+
+class MenuBackButtonSound : public Sound
+{
+public:
+	MenuBackButtonSound() : Sound()
+	{
+		m_libraryIndex = 19;
+	};
+	virtual ~MenuBackButtonSound(){};
+};
+
+class MenuButtonNextPrevSound : public Sound
+{
+public:
+	MenuButtonNextPrevSound() : Sound()
+	{
+		m_libraryIndex = 20;
+	};
+	virtual ~MenuButtonNextPrevSound(){};
+};
+
+//-----------------------------------------------------------------
+//--------------------------END SOUNDS-----------------------------
+//-----------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-----------------------------------------------------------------
+//-----------------------------SONGS-------------------------------
+//-----------------------------------------------------------------
+
+class AllGoodThingsIAmTheEnemySong : public Sound
+{
+public:
+	AllGoodThingsIAmTheEnemySong() : Sound()
+	{
+		m_libraryIndex = 0;
+	};
+	virtual ~AllGoodThingsIAmTheEnemySong(){};
+};
+
+class DisturbedVengefulOneSong : public Sound
+{
+public:
+	DisturbedVengefulOneSong() : Sound()
+	{
+		m_libraryIndex = 1;
+	};
+	virtual ~DisturbedVengefulOneSong(){};
+};
+
+class SickPuppiedYoureGoingDownSong : public Sound
+{
+public:
+	SickPuppiedYoureGoingDownSong() : Sound()
+	{
+		m_libraryIndex = 2;
+	};
+	virtual ~SickPuppiedYoureGoingDownSong(){};
+};
+
+class MetalMusicDarknessFallsSong : public Sound
+{
+public:
+	MetalMusicDarknessFallsSong() : Sound()
+	{
+		m_libraryIndex = 3;
+	};
+	virtual ~MetalMusicDarknessFallsSong(){};
+};
+
+class CrysisTwoThemeSong : public Sound
+{
+public:
+	CrysisTwoThemeSong() : Sound()
+	{
+		m_libraryIndex = 4;
+	};
+	virtual ~CrysisTwoThemeSong(){};
+};
+
+//-----------------------------------------------------------------
+//---------------------------END SONGS-----------------------------
+//-----------------------------------------------------------------

@@ -180,6 +180,7 @@ int PlayerSelection::getAssignedPosition() {
 
 MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 {
+	m_audio = audio;
 	m_gamePads = input->getAllGamePads();
 	m_defaultSceneCamera->setLookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -3), glm::vec3(0, 1, 0));
 
@@ -416,6 +417,12 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 		return true;
 	}
 
+	//music
+	if (m_audio->getMusicFinished()) {
+		m_audio->playMusic(CrysisTwoThemeSong(), 1);
+	}
+
+
 	//calculate number of players who joined the game
 	int numOfPlayersWhoJoinedTheGame = 0;
 	for (PlayerSelection *ps : m_players) {
@@ -427,6 +434,7 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 	if (numOfPlayersWhoJoinedTheGame == 0) {
 		for (int i = 0; i < m_gamePads.size(); i++) {
 			if (m_gamePads.at(i)->isPressed(GamePad::BButton)) {
+				m_audio->queAudioSource(NULL, MenuBackButtonSound());
 				messageToReturn = SceneMessage::ePop;
 			}
 		}
@@ -448,6 +456,7 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 			//left press indicates that the number of AI's should be decreased
 			if (ps->getGamePad()->isPressed(GamePad::DPadLeft) || ps->getGamePad()->isPressed(GamePad::LJoyLeft)) {
+				m_audio->queAudioSource(NULL, MenuButtonNextPrevSound());
 				numberOfAIs--;
 				if (numberOfAIs < 0)
 					numberOfAIs = 0;
@@ -458,6 +467,7 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 			//right press indicates that the number of AI's should be increased
 			if (ps->getGamePad()->isPressed(GamePad::DPadRight) || ps->getGamePad()->isPressed(GamePad::LJoyRight)) {
+				m_audio->queAudioSource(NULL, MenuButtonNextPrevSound());
 				numberOfAIs++;
 
 				if (numberOfAIs > MAX_NUM_OF_AIS)
@@ -473,6 +483,8 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 			//a button press indicates that the game should be started
 			if (ps->getGamePad()->isPressed(GamePad::AButton)) {
+				m_audio->queAudioSource(NULL, MenuButtonClickSound());
+				m_audio->stopMusic();
 				messageToReturn = SceneMessage::eLoadScreen;
 			}
 		}
@@ -487,16 +499,19 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 		//right click when the car hasn't been selected means to go to the next car
 		if ((ps->getGamePad()->isPressed(GamePad::DPadRight) || ps->getGamePad()->isPressed(GamePad::LJoyRight)) && !ps->carSelected()) {
+			m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 			ps->selectNextCar();
 		}
 
 		//left click when the car hasn't been selected means to go to the previous car
 		if ((ps->getGamePad()->isPressed(GamePad::DPadLeft) || ps->getGamePad()->isPressed(GamePad::LJoyLeft)) && !ps->carSelected()) {
+			m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 			ps->selectPrevCar();
 		}
 
 		//a button click when the car hasn't been selected means that the player wants to select the car
 		if (ps->getGamePad()->isPressed(GamePad::AButton) && !ps->carSelected()) {
+			m_audio->queAudioSource(NULL, MenuButtonClickSound());
 			ps->selectCar();
 
 			//if together with this player everyone has selected the car 0 highlight the number of AI's
@@ -510,6 +525,7 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 		}
 
 		if (ps->getGamePad()->isPressed(GamePad::BButton)) {
+			m_audio->queAudioSource(NULL, MenuButtonClickSound());
 			//b button click when the car has been selected means that the player wants to unselect it
 			if (ps->carSelected()) {
 				ps->unselectCar();
@@ -578,6 +594,7 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 			else if (positionToAssign == 4)
 				playerIndicatorInitialPosition = playerIndicatorInitialPosition + xOffset - yOffset;
 
+			m_audio->queAudioSource(NULL, MenuButtonClickSound());
 			ps->joinGame(positionToAssign, playerIndicatorInitialPosition, playerBoxes.at(positionToAssign - 1)->getAnimatablePos());
 
 			//remove the a to join stuff

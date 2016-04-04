@@ -15,3 +15,7 @@
 14 regen.wav
 15 Rocketlaunch.wav
 16 ExplosivelyDeliciousSuper.wav
+17 menuButtonClick.wav
+18 menuButtonChange.wav
+19 menuBackButton.wav
+20 menuButtonNextPrev.wav

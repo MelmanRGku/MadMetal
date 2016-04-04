@@ -17,6 +17,7 @@ private:
 		*selectedButton,
 		*background;
 	SceneMessage::SceneEnum messageToReturn = SceneMessage::eNone;
+	bool stopMusic = false;
 
 public:
 	PauseMenu(std::vector<ControllableTemplate *> players, Audio *audio);

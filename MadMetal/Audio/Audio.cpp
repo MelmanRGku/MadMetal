@@ -1,14 +1,22 @@
 #include "Audio.h"
 #include "Sound.h"
 #include "Objects\Cars\Car.h"
+#include "Settings.h"
 
 #include <iostream>
 #include <fstream>
 #include <string>
 
 bool Audio::m_musicPlaying = false;
-#define SFX_VOLUME 128
-#define MUSIC_VOLUME 70
+
+#ifdef NO_SOUND
+	#define SFX_VOLUME 0
+	#define MUSIC_VOLUME 0
+#else
+	#define SFX_VOLUME 128
+	#define MUSIC_VOLUME 70
+#endif
+
 
 //set up audio library
 void Audio::initializeMusicLibrary(char * fileToLoad)
@@ -174,6 +182,11 @@ void Audio::stopSource(int channel)
 
 bool AudioChannel::setAudioPosition(Car * listener)
 {
+	//if not listener - return
+	if (listener == NULL) {
+		return false;
+	}
+
 	//if sound has stopped playing, return 
 	if (!Mix_Playing(m_playingChannel))
 {

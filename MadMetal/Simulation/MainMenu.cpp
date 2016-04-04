@@ -10,6 +10,7 @@
 MainMenu::MainMenu(Input * input, Audio *audio)
 {
 	m_gamePad = input->getGamePadHandle();
+	m_audio = audio;
 	m_defaultSceneCamera->setLookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -3), glm::vec3(0, 1, 0));
 	{
 		Physicable *p = new Physicable(NULL);
@@ -83,6 +84,7 @@ MainMenu::~MainMenu() {
 
 
 void MainMenu::upPressed() {
+	m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 	unselectMenuItem(selectedButton);
 	if (selectedButton == singlePlayerButton) {
 		selectedButton = exitButton;
@@ -97,6 +99,7 @@ void MainMenu::upPressed() {
 }
 
 void MainMenu::downPressed() {
+	m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 	unselectMenuItem(selectedButton);
 	if (selectedButton == singlePlayerButton) {
 		selectedButton = multiPlayerButton;
@@ -111,6 +114,7 @@ void MainMenu::downPressed() {
 }
 
 void MainMenu::aPressed() {
+	m_audio->queAudioSource(NULL, MenuButtonClickSound());
 	if (selectedButton == singlePlayerButton) {
 		messageToReturn = SceneMessage::eSingleCharSelect;
 	}
@@ -146,6 +150,12 @@ bool MainMenu::simulateScene(double dt, SceneMessage &message)
 		messageToReturn = SceneMessage::eNone;
 		return true;
 	}
+
+	//music
+	if (m_audio->getMusicFinished()) {
+		m_audio->playMusic(CrysisTwoThemeSong(), 1);
+	}
+
 	//check gamepad stuff
 	if (m_gamePad->checkConnection() && m_sceneGameTimeSeconds > 1)
 	{
