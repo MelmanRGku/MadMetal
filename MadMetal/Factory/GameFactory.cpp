@@ -8,6 +8,8 @@
 #include "Objects\GargantulousSuper.h"
 #include "Objects\HomingBullet.h"
 #include "Objects\GargantulousBullet.h"
+#include "Objects\DeathPit.h"
+#include "Objects\GooMonster.h"
 
 long GameFactory::lastId = 0;
 
@@ -193,8 +195,8 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 	case OBJECT_TRACK:
 	{
 		Object3D *drivableTrack = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_DRIVABLE, pos, geom, parent));
-		Object3D *nonDrivableTrack = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_NON_DRIVABLE, pos, geom, parent));
-		Object3D *trackWalls = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_WALLS, pos, geom, parent));
+		//Object3D *nonDrivableTrack = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_NON_DRIVABLE, pos, geom, parent));
+		//Object3D *trackWalls = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_WALLS, pos, geom, parent));
 
 		Track *track;
 		
@@ -202,7 +204,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
-		track = new Track(objectId, audioable, physicable, animatable, renderable, drivableTrack, nonDrivableTrack, trackWalls);
+		track = new Track(objectId, audioable, physicable, animatable, renderable, drivableTrack, NULL, NULL);// nonDrivableTrack, trackWalls);
 		return track;
 	}
 	case OBJECT_TRACK_DRIVABLE:
@@ -211,7 +213,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		Model3D *model = NULL;
 		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRACK_DRIVABLE));
 		Renderable3D *renderable = new Renderable3D(model);
-		//Renderable3D *renderable = new Renderable3D(NULL);
+		//renderable->setModel(NULL);
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 
@@ -636,25 +638,47 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 	case OBJECT_DEATH_PIT:
 	{
-							 //Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRAIN_CAR));
-							 //Renderable3D *renderable = new Renderable3D(model, true, true);
+							 Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_DEATH_PIT));
+							 Renderable3D *renderable = new Renderable3D(model, true, true);
 							 //renderable->setModel(NULL);
-							 //Animatable *animatable = new Animatable();
-							 //Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+							 Animatable *animatable = new Animatable();
+							 Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
 
-							 PxRigidDynamic *trainCarTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::DEATH_VOLUME, objectId, pos, geom, 0, NULL, NULL, NULL));
+							 PxRigidStatic *deathVolume = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::DEATH_VOLUME, objectId, pos, geom, 0, NULL, NULL, NULL));
 
-							 //Physicable *physicable = new Physicable(trainCarTriggerVolume);
-							 PxVec3 dim = trainCarTriggerVolume->getWorldBounds().getDimensions();
+							 Physicable *physicable = new Physicable(deathVolume);
+							 PxVec3 dim = deathVolume->getWorldBounds().getDimensions();
 
-							 //animatable->setScale(glm::vec3(dim.x, dim.y, dim.z));
+							 animatable->setScale(glm::vec3(dim.x, dim.y * 2, dim.z));
+							 pos->p.y += dim.y / 2;
+							 DeathPit *deathPit = new DeathPit(objectId, audioable, physicable, animatable, renderable);
+
+							 m_world.addGameObject(deathPit);
+							 m_scene.addActor(*deathVolume);
+							 return deathPit;
+	}
+	case OBJECT_GOO_MONSTER:
+	{
+							 Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GOO_MONSTER));
+							 Renderable3D *renderable = new Renderable3D(model, true, true);
+							 //renderable->setModel(NULL);
+							 Animatable *animatable = new Animatable();
+							 Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+
+							 PxRigidDynamic *gooMonsterVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_GOO_MONSTER, objectId, pos, geom, 0, NULL, NULL, NULL));
+
+							 Physicable *physicable = new Physicable(gooMonsterVolume);
+							 PxVec3 dim = gooMonsterVolume->getWorldBounds().getDimensions();
+
+							 animatable->setScale(glm::vec3(dim.x, dim.y, dim.z));
 							 //pos->p.y += dim.y / 2;
-							 //TrainCar *trainCar = new TrainCar(objectId, audioable, physicable, animatable, renderable, pos->p);
+							 GooMonster *gooMonster = new GooMonster(objectId, audioable, physicable, animatable, renderable);
 
-							 //m_world.addGameObject(trainCar);
-							 m_scene.addActor(*trainCarTriggerVolume);
-							 return NULL;
+							 m_world.addGameObject(gooMonster);
+							 m_scene.addActor(*gooMonsterVolume);
+							 return gooMonster;
 	}
 	case OBJECT_SPEED_POWERUP:
 	{

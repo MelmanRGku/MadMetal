@@ -19,6 +19,7 @@ private:
 	void processExplosivelyDeliciousSuperHit(long explosionId, long otherId);
 	void processGargantulousSuperBulletHit(long bulletId, long otherId);
 	void processGargantulousSuperVolumeHit(long volumeId, long otherId);
+	void processGooMonsterVolumeHit(long volumeId, long otherId);
 
 public:
 	CollisionManager(World &world);

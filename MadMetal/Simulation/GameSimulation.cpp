@@ -13,6 +13,8 @@
 #include "Game Logic\PositionManager.h"
 #include "Global\Definitions.h"
 #include "Objects\UIScoreTable.h"
+#include "Objects\DeathPit.h"
+#include "Objects\GooMonster.h"
 #include <sstream>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
@@ -214,7 +216,7 @@ void GameSimulation::simulatePhysics(double dt)
 			PxVehicleUpdates(dt, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
 		//Work out if the vehicle is in the air.
-		gIsVehicleInAir = m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
+		m_players[i]->getCar()->setIsInAir(gIsVehicleInAir = m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]));
 
 
 		PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
@@ -278,7 +280,7 @@ void GameSimulation::initialize() {
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(PhysicsManager::getScale());
-	sceneDesc.gravity = PxVec3(0.0f, -18.0f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -30.0f, 0.0f);
 
 	manager = new CollisionManager(*m_world);
 	sceneDesc.simulationEventCallback = manager;
@@ -560,16 +562,17 @@ void GameSimulation::setupPowerups() {
 
 void GameSimulation::setupTrains() {
 	PxGeometry **trainGeom = new PxGeometry*[1];
-	trainGeom[0] = new PxBoxGeometry(PxVec3(6, 5, 50));
-	PxTransform *pos = new PxTransform(-450, 0, 360);
-	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
+	trainGeom[0] = new PxBoxGeometry(PxVec3(10, 10, 50));
+	PxTransform *pos = new PxTransform(-960, -30, 665);
+	static_cast<TrainCar*>(m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL))->setTravelDistance(1200);
+	
 	delete trainGeom[0];
 	delete[] trainGeom;
 	delete pos;
 
 	trainGeom = new PxGeometry*[1];
-	trainGeom[0] = new PxBoxGeometry(PxVec3(6, 5, 50));
-	pos = new PxTransform(-579, 0, -260.85);
+	trainGeom[0] = new PxBoxGeometry(PxVec3(10, 10, 50));
+	pos = new PxTransform(-765, -30, 125);
 	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
 	delete pos;
 	delete trainGeom[0];
@@ -578,16 +581,41 @@ void GameSimulation::setupTrains() {
 
 void GameSimulation::setupDeathPit() {
 	PxGeometry **deathPitGeom = new PxGeometry*[1];
-	deathPitGeom[0] = new PxBoxGeometry(PxVec3(250, 5, 50));
-	PxTransform *pos = new PxTransform(-275, -40, 1500);
-	m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL);
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 10, 45));
+	PxTransform *pos = new PxTransform(15, -20, 445);
+	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->setRespawnLocation(pos->p + PxVec3(0,21,465));
+
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 10, 60));
+	pos = new PxTransform(-25, -20, 765);
+	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->setRespawnLocation(pos->p + PxVec3(0, 21, 465));
+
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(350, 5, 200));
+	pos = new PxTransform(-713, -40, 1560);
+	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->getRenderable()->setModel(NULL);
+
+
 	delete pos;
 	delete deathPitGeom[0];
 	delete[] deathPitGeom;
+
+	PxGeometry ** gooMonsterGeom = new PxGeometry*[1];
+	gooMonsterGeom[0] = new PxBoxGeometry(10,20,25);
+	pos = new PxTransform(-700, -40, 1555);
+	GooMonster * monster = static_cast<GooMonster *>(m_gameFactory->makeObject(GameFactory::OBJECT_GOO_MONSTER, pos, gooMonsterGeom, NULL));
+	monster->setSpawnVelocity(PxVec3(0, 55,-30));
+
+	gooMonsterGeom[0] = new PxBoxGeometry(10, 20, 25);
+	pos = new PxTransform(-600, -40, 1565);
+	monster = static_cast<GooMonster *>(m_gameFactory->makeObject(GameFactory::OBJECT_GOO_MONSTER, pos, gooMonsterGeom, NULL));
+	monster->setSpawnVelocity(PxVec3(0, 55, 20));
+
+	delete pos;
+	delete gooMonsterGeom[0];
+	delete[] gooMonsterGeom;
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-	setupPowerups();
+	//setupPowerups();
 	setupTrains();
 	setupDeathPit();
 	m_gameFactory->makeObject(GameFactory::OBJECT_SKY_BOX, NULL, NULL, NULL);

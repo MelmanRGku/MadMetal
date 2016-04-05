@@ -39,6 +39,7 @@ protected: //members
 	Waypoint *m_nextWaypoint;
 	bool m_isAtStartingCollisionVolume;
 	bool m_isAtMidCollisionVolume;
+	bool m_isInAir;
 	CollisionVolume* m_lastCollisionVolume;
 
 	bool m_newLap;
@@ -56,6 +57,7 @@ private:
 	void updatePowerUp(float dt);
 	void updateReload(float dt);
 	void updateSuper(float dt);
+	void updateOrientation(float dt);
 
 public:
 
@@ -111,6 +113,7 @@ public:
 
 	void addWaypointHit(Waypoint* waypoint);
 	std::vector<Waypoint*> m_waypointHitList;
+	void setIsInAir(bool inAir) { m_isInAir = inAir; }
 
 	void setLastHitCollisionVolume(CollisionVolume* collisionVolume);
 	CollisionVolume* getLastHitCollisionVolume();
