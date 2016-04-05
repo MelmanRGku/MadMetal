@@ -270,6 +270,26 @@ public:
 	virtual ~ShieldPowerupSound(){};
 };
 
+class PowerupPickupSound : public Sound
+{
+public:
+	PowerupPickupSound() : Sound()
+	{
+		m_libraryIndex = 25;
+	};
+	virtual ~PowerupPickupSound(){};
+};
+
+class CarBrakeSound : public Sound
+{
+public:
+	CarBrakeSound() : Sound()
+	{
+		m_libraryIndex = 26;
+	};
+	virtual ~CarBrakeSound(){};
+};
+
 //-----------------------------------------------------------------
 //--------------------------END SOUNDS-----------------------------
 //-----------------------------------------------------------------

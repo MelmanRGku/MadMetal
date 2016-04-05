@@ -90,12 +90,12 @@ void Car::pickUpPowerUp(PowerUpType type)
 {
 	if (m_heldPowerUp == PowerUpType::NONE)
 	{
-		std::cout << "Picked up Power up " << type << std::endl;
 		m_heldPowerUp = type;
 		if (ui != NULL)
 		{
 			ui->setPowerup(type);
 		}
+		m_audioable->getAudioHandle().queAudioSource(&getActor(), PowerupPickupSound());
 	}
 	
 }

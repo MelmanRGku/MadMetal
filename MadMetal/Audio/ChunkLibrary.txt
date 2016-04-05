@@ -23,3 +23,5 @@
 22 BulletReflect.wav
 23 PowerUpAcceleration.wav
 24 PowerUpShield.wav
+25 PowerupPickup.wav
+26 CarBrake.wav
