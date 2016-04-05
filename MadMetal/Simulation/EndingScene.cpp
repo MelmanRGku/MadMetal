@@ -12,7 +12,8 @@ EndingScene::EndingScene(std::vector<ControllableTemplate *> playerTemplates, Au
 	}
 	sortPlayers();
 
-	m_audio.stopMusic();
+	m_audio.clearListeners();
+	m_audio.setMusicVolume(128);
 
 	m_defaultSceneCamera->setLookAt(glm::vec3(0, 0, 30), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	{

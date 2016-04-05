@@ -135,6 +135,7 @@ public:
 		case PHYSICAL_OBJECT_BULLET_MEOW_MIX:
 		{
 			PxRigidDynamic * bullet = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+			bullet->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 			PxFilterData simFilterData;
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
