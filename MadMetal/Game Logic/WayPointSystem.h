@@ -10,11 +10,13 @@
 #include <vector>
 #include <iostream>
 
+class NavigationalGrid;
+
 class WaypointSystem
 {
 public:
 	WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition, Boundry startingPosition);
-	WaypointSystem(Object3D& drivingMesh);
+	WaypointSystem(NavigationalGrid& drivingMesh);
 	~WaypointSystem();
 	void addIdToAllWaypointsInTheSystem(int id);
 
