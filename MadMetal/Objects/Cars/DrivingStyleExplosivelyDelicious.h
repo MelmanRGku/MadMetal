@@ -6,7 +6,7 @@ class DrivingStyleExplosivelyDelicious : public DrivingStyle
 private:
 
 public:
-	DrivingStyleExplosivelyDelicious(PxMaterial *chassisMaterial, PxMaterial *wheelMaterial);
+	DrivingStyleExplosivelyDelicious();
 	virtual ~DrivingStyleExplosivelyDelicious();
 };
 

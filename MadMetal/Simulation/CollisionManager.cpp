@@ -133,11 +133,8 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	TestObject *otherObj = m_world.findObject(otherId);
 	Car *car = dynamic_cast<Car *>(otherObj);
 
-	if (car == NULL){ //if dynamic cast to car returns NULL its probably a wall so get rid of it
-		bullet->setHasToBeDeleted(true);
-	}
 	//self hit - ignore
-	else if (car != NULL && (car->getId() == bullet->getOwner()->getId())) {
+	if (car != NULL && (car->getId() == bullet->getOwner()->getId())) {
 		//ignore
 	}
 	else if (car != NULL && (car->getId() != bullet->getOwner()->getId()) && car->getActivePowerUpType() != PowerUpType::DEFENSE) {

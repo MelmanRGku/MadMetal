@@ -65,8 +65,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
-		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5f, 0.3f, 0.1f);    //static friction, dynamic friction, restitution
-		DrivingStyle * drivingStyle = new DrivingStyleMeowMix(material, material);
+		DrivingStyle * drivingStyle = new DrivingStyleMeowMix();
 		PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, 0, NULL, drivingStyle, NULL);
 
 		PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
@@ -99,8 +98,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 										 Renderable3D *renderable = new Renderable3D(model, true, true);
 										 Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 										 Animatable *animatable = new Animatable();
-										 PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5f, 0.3f, 0.1f);    //static friction, dynamic friction, restitution
-										 DrivingStyle * drivingStyle = new DrivingStyleExplosivelyDelicious(material, material);
+										 DrivingStyle * drivingStyle = new DrivingStyleExplosivelyDelicious();
 										 PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, 0, NULL, drivingStyle, NULL);
 
 										 PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
@@ -133,8 +131,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 							Renderable3D *renderable = new Renderable3D(model, true, true);
 							Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 							Animatable *animatable = new Animatable();
-							PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5f, 0.3f, 0.1f);    //static friction, dynamic friction, restitution
-							DrivingStyle * drivingStyle = new DrivingStyleGargantulous(material, material);
+							DrivingStyle * drivingStyle = new DrivingStyleGargantulous();
 							PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, 0, NULL, drivingStyle, NULL);
 
 							PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
@@ -689,7 +686,8 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 	case OBJECT_DEATH_PIT:
 	{
-							 Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_DEATH_PIT));
+							 Model3D *model = NULL;
+							 model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_DEATH_PIT));
 							 Renderable3D *renderable = new Renderable3D(model, true, true);
 							 //renderable->setModel(NULL);
 							 Animatable *animatable = new Animatable();
@@ -711,7 +709,8 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 	}
 	case OBJECT_GOO_MONSTER:
 	{
-							 Model3D *model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GOO_MONSTER));
+							 Model3D *model = NULL;
+							 model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GOO_MONSTER));
 							 Renderable3D *renderable = new Renderable3D(model, true, true);
 							 //renderable->setModel(NULL);
 							 Animatable *animatable = new Animatable();

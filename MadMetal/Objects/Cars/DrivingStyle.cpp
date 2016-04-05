@@ -65,10 +65,14 @@ PxMaterial *DrivingStyle::getChassisMaterial()
 	return m_chassisMaterial;
 }
 
-
-PxMaterial *DrivingStyle::getWheelMaterial()
+PxMaterial *DrivingStyle::getFrontWheelMaterial()
 {
-	return m_wheelMaterial;
+	return m_frontWheelMaterial;
+}
+
+PxMaterial *DrivingStyle::getBackWheelMaterial()
+{
+	return m_backWheelMaterial;
 }
 
 
@@ -138,4 +142,13 @@ PxReal DrivingStyle::getSuspensionCamberAngleAtMaxDroop() {
 
 PxReal DrivingStyle::getSuspensionCamberAngleAtMaxCompression() {
 	return m_suspensionCamberAngleAtMaxCompression;
+}
+
+int DrivingStyle::getFrontTireType() {
+	return m_frontTireType;
+}
+
+
+int DrivingStyle::getBackTireType() {
+	return m_backTireType;
 }

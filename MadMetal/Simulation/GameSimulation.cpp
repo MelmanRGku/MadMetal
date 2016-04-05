@@ -208,19 +208,6 @@ void GameSimulation::simulatePhysics(double dt)
 
 		//Work out if the vehicle is in the air.
 		m_players[i]->getCar()->setIsInAir(gIsVehicleInAir = m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]));
-
-
-		PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
-		m_players[i]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_players[i]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
-
-		PxVec3 test = m_players[i]->getCar()->getCar().getRigidDynamicActor()->getGlobalPose().q.getBasisVector1();
-
-		if (test.y < 0.9 && gIsVehicleInAir)
-		{
-			//cout << "PITCH ME" << endl;
-			m_players[i]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_players[i]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.01, 0, 0));
-
-		}
 	}
 
 	m_scene->simulate(dt);

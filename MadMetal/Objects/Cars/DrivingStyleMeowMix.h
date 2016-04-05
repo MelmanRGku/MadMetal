@@ -6,7 +6,7 @@ class DrivingStyleMeowMix : public DrivingStyle
 private:
 	
 public:
-	DrivingStyleMeowMix(PxMaterial *chassisMaterial, PxMaterial *wheelMaterial);
+	DrivingStyleMeowMix();
 	virtual ~DrivingStyleMeowMix();
 };
 

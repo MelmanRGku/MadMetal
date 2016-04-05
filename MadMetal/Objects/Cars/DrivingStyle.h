@@ -1,5 +1,6 @@
 #pragma once
 #include "Simulation\PhysicsManager.h"
+#include "Simulation\GameSimulationDefinitions.h"
 
 class DrivingStyle
 {
@@ -17,7 +18,8 @@ public:
 	float getWheelMOI();
 	float getNbWheels();
 	PxMaterial *getChassisMaterial();
-	PxMaterial *getWheelMaterial();
+	PxMaterial *getFrontWheelMaterial();
+	PxMaterial *getBackWheelMaterial();
 	float getMaxSpeed();
 	PxReal getMaxBrakeTorque();
 	PxReal getMaxHandBrakeTorque();
@@ -33,6 +35,8 @@ public:
 	PxReal getSuspensionCamberAngleAtRest();
 	PxReal getSuspensionCamberAngleAtMaxDroop();
 	PxReal getSuspensionCamberAngleAtMaxCompression();
+	int getFrontTireType();
+	int getBackTireType();
 
 protected: //members
 	float m_chassisMass;
@@ -46,7 +50,8 @@ protected: //members
 	float m_nbWheels;
 	float m_maxSpeed;
 	PxMaterial* m_chassisMaterial;
-	PxMaterial* m_wheelMaterial;
+	PxMaterial* m_frontWheelMaterial;
+	PxMaterial* m_backWheelMaterial;
 	PxReal m_maxBrakeTorque;
 	PxReal m_maxHandBrakeTorque;
 	PxReal m_frontWheelsMaxSteer;
@@ -61,6 +66,8 @@ protected: //members
 	PxReal m_suspensionCamberAngleAtRest;
 	PxReal m_suspensionCamberAngleAtMaxDroop;
 	PxReal m_suspensionCamberAngleAtMaxCompression;
+	int m_frontTireType;
+	int m_backTireType;
 
 };
 

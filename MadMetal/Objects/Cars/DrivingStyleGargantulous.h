@@ -6,7 +6,7 @@ class DrivingStyleGargantulous : public DrivingStyle
 private:
 
 public:
-	DrivingStyleGargantulous(PxMaterial *chassisMaterial, PxMaterial *wheelMaterial);
+	DrivingStyleGargantulous();
 	virtual ~DrivingStyleGargantulous();
 };
 

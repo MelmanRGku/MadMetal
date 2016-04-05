@@ -260,7 +260,7 @@ void Car::updateOrientation(float dt)
 	float angle;
 	PxVec3 axis;
 	m_car.getRigidDynamicActor()->getGlobalPose().q.toRadiansAndUnitAxis(angle, axis);
-	m_car.getRigidDynamicActor()->setAngularDamping(5);
+	//m_car.getRigidDynamicActor()->setAngularDamping(5);
 	//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, PxQuat(0, axis)));
 	if (axis.y != 0)
 		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, PxQuat(angle, PxVec3(0, abs(axis.y) / axis.y, 0))));
@@ -308,7 +308,7 @@ void Car::updateOrientation(float dt)
 
 void Car::update(float dt) {
 	
-	
+	std::cout << getCar().computeForwardSpeed() << std::endl;
 	
 	m_invincibilityTimeRemaining -= dt;
 	updateHealth(dt);

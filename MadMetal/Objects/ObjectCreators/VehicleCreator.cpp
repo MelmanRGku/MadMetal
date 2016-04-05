@@ -32,17 +32,25 @@ PxVehicleDrive4W* VehicleCreator::create(DrivingStyle* style)
 		PxConvexMesh* wheelConvexMeshes[PX_MAX_NB_WHEELS];
 		PxMaterial* wheelMaterials[PX_MAX_NB_WHEELS];
 
-		//Set the meshes and materials for the driven wheels.
-		for (PxU32 i = PxVehicleDrive4WWheelOrder::eFRONT_LEFT; i <= PxVehicleDrive4WWheelOrder::eREAR_RIGHT; i++)
+		//Set the meshes and materials for the front wheels.
+		for (PxU32 i = PxVehicleDrive4WWheelOrder::eFRONT_LEFT; i <= PxVehicleDrive4WWheelOrder::eFRONT_RIGHT; i++)
 		{
 			wheelConvexMeshes[i] = wheelMesh;
-			wheelMaterials[i] = style->getWheelMaterial();
+			wheelMaterials[i] = style->getFrontWheelMaterial();
 		}
+
+		//Set the meshes and materials for the back wheels.
+		for (PxU32 i = PxVehicleDrive4WWheelOrder::eREAR_LEFT; i <= PxVehicleDrive4WWheelOrder::eREAR_RIGHT; i++)
+		{
+			wheelConvexMeshes[i] = wheelMesh;
+			wheelMaterials[i] = style->getBackWheelMaterial();
+		}
+
 		//Set the meshes and materials for the non-driven wheels
 		for (PxU32 i = PxVehicleDrive4WWheelOrder::eREAR_RIGHT + 1; i < numWheels; i++)
 		{
 			wheelConvexMeshes[i] = wheelMesh;
-			wheelMaterials[i] = style->getWheelMaterial();
+			wheelMaterials[i] = style->getBackWheelMaterial();
 		}
 
 		//Chassis just has a single convex shape for simplicity.
@@ -149,6 +157,8 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 		wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mMaxSteer = style->getFrontWheelsMaxSteer();
 		wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxSteer = 0;
 		wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxSteer = 0;
+		wheels[PxVehicleDrive4WWheelOrder::eREAR_LEFT].mMaxHandBrakeTorque = 0;
+		wheels[PxVehicleDrive4WWheelOrder::eREAR_RIGHT].mMaxHandBrakeTorque = 0;
 		//wheels[PxVehicleDrive4WWheelOrder::eFRONT_LEFT].mToeAngle = -1.0 / (2 * 3.14);
 		//wheels[PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mToeAngle = 1.0 / (2 * 3.14);
 	}
@@ -157,9 +167,15 @@ void VehicleCreator::setupWheelsSimulationData(DrivingStyle* style, const PxVec3
 	PxVehicleTireData tires[PX_MAX_NB_WHEELS];
 	{
 		//Set up the tires.
-		for (PxU32 i = 0; i < style->getNbWheels(); i++)
+		for (PxU32 i = 0; i < 2; i++)
 		{
-			tires[i].mType = TIRE_TYPE_NORMAL;
+			tires[i].mType = style->getFrontTireType();
+		}
+
+		//Set up the tires.
+		for (PxU32 i = 2; i < 4; i++)
+		{
+			tires[i].mType = style->getBackTireType();
 		}
 	}
 
