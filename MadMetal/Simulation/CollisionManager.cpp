@@ -7,6 +7,7 @@
 #include "Objects\PowerUpShield.h"
 #include "Objects\PowerUpSpeed.h"
 #include "Objects\GargantulousSuper.h"
+#include "Objects\GooMonster.h"
 #include "Objects\HomingBullet.h"
 #include "Objects\BombExplosion.h"
 #include "Objects\GargantulousBullet.h"
@@ -80,6 +81,12 @@ PxFilterFlags CollisionManager::TestFilterShader(
 		return PxFilterFlag::eCALLBACK;
 	}
 
+	if (filterData0.word0 == COLLISION_FLAG_GOO_MONSTER || filterData1.word0 == COLLISION_FLAG_GOO_MONSTER){
+		//std::cout << "registered \n";
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
+
 	if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER || filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER){
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
@@ -148,6 +155,21 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 		bullet->playCollisionSound();
 	}
 	
+}
+
+void CollisionManager::processGooMonsterVolumeHit(long volumeId, long otherId)
+{
+	GooMonster * gooMonster = static_cast<GooMonster *>(m_world.findObject(volumeId));
+
+	TestObject * otherObj = m_world.findObject(otherId);
+	Car * car = dynamic_cast<Car *>(otherObj);
+
+	if (car != NULL)
+	{
+		PxVec3 direction = static_cast<PxRigidDynamic *>(&gooMonster->getActor())->getLinearVelocity();
+
+		car->getCar().getRigidDynamicActor()->setLinearVelocity(car->getCar().getRigidDynamicActor()->getLinearVelocity() + direction * 2);
+	}
 }
 
 void CollisionManager::processDeathVolumeHit(long deathVolumeId, long otherId)
@@ -475,6 +497,14 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 	else if (filterData1.word0 == COLLISION_FLAG_DEATH_VOLUME && filterData0.word0 == COLLISION_FLAG_CHASSIS)
 	{
 		processDeathVolumeHit(filterData1.word2, filterData0.word2);
+	}
+	else if (filterData0.word0 == COLLISION_FLAG_GOO_MONSTER && filterData1.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processGooMonsterVolumeHit(filterData0.word2, filterData1.word2);
+	}
+	else if (filterData1.word0 == COLLISION_FLAG_GOO_MONSTER && filterData0.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processGooMonsterVolumeHit(filterData1.word2, filterData0.word2);
 	}
 	else if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER && filterData1.word0 == COLLISION_FLAG_CHASSIS)
 	{

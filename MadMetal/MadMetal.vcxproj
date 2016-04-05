@@ -84,9 +84,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\DeathPit.cpp" />
     <ClCompile Include="Objects\BombExplosion.cpp" />
     <ClCompile Include="Objects\EndingScreenUIScoreTable.cpp" />
     <ClCompile Include="Objects\EndingScreenCarInfoManager.cpp" />
+    <ClCompile Include="Objects\GooMonster.cpp" />
     <ClCompile Include="Objects\ExplosivelyDeliciousBullet.cpp" />
     <ClCompile Include="Simulation\EndingScene.cpp" />
     <ClCompile Include="Game Logic\AIControllable.cpp" />
@@ -181,9 +183,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Objects\DeathPit.h" />
     <ClInclude Include="Objects\BombExplosion.h" />
     <ClInclude Include="Objects\EndingScreenUIScoreTable.h" />
     <ClInclude Include="Objects\EndingScreenCarInfoManager.h" />
+    <ClInclude Include="Objects\GooMonster.h" />
     <ClInclude Include="Simulation\EndingScene.h" />
     <ClInclude Include="Factory\AnimationFactory.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />

@@ -31,7 +31,10 @@ public:
 		m_audioable->getAudioHandle().queAudioSource(&this->getActor(), m_sound, 1.0f, false, -1);
 	}
 
-
+	void setTravelDistance(float distance)
+	{
+		m_endPos = m_startPos + PxVec3(0, 0, distance);
+	}
 private: //members
 	PxVec3 m_startPos;
 	PxVec3 m_endPos;

@@ -35,10 +35,10 @@ DrivingStyleMeowMix::DrivingStyleMeowMix(PxMaterial *chassisMaterial, PxMaterial
 	m_engineMaxOmega = 1000.0f;//approx 10000 rpm
 	m_gearsSwitchTime = 0.1f;
 	m_clutchStrength = 1000.0f;
-	m_suspensionSpringStrength = 100000.0f;
+	m_suspensionSpringStrength = 100.0f; // !
 	m_suspensionSpringDamperRate = 20000.0f;
-	m_suspensionMaxCompression = 0.01f;
-	m_suspensionMaxDroop = 0.1f;
+	m_suspensionMaxCompression = 2.5f;
+	m_suspensionMaxDroop = 3.0f;
 	m_suspensionCamberAngleAtRest = 0.0;
 	m_suspensionCamberAngleAtMaxDroop = 2.14;
 	m_suspensionCamberAngleAtMaxCompression = -2.14;
