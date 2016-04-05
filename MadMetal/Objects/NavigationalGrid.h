@@ -17,8 +17,8 @@ public:
 	NavigationalGrid(std::vector<glm::vec3> vertices, std::vector<std::vector<unsigned int>> faces, int numOfQuads);
 	~NavigationalGrid();
 
-	std::vector<glm::vec3> *getVertices() { return &m_vertices; }
-	std::vector<std::vector<unsigned int>> *getFaces() { return &m_faces; }
-	int getNumOfQuads() { return m_numOfQuads; }
+	std::vector<glm::vec3> *getVertices();
+	std::vector<std::vector<unsigned int>> *getFaces();
+	int getNumOfQuads();
 };
 
