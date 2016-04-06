@@ -97,6 +97,7 @@ public:
 		OBJECT_UI_SPEED_POWERUP_ICON,
 		OBJECT_UI_SCORE_TABLE,
 		OBJECT_SKY_BOX,
+		OBJECT_GOO_MONSTER,
 		OBJECT_BOMB_EXPLOSION,
 	};
 
@@ -105,7 +106,7 @@ public:
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);
 	World& getWorld() { return m_world; }
 	bool sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal MaxDistance, PxRaycastBuffer &hit, PxHitFlags flag = PxHitFlags(PxHitFlag::eDEFAULT), PxQueryFilterData fd = PxQueryFilterData());
-	bool sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit);
+	bool sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit, PxHitFlags	hitFlags = PxHitFlags(PxHitFlag::eDEFAULT),	const PxQueryFilterData &filterData = PxQueryFilterData());
 
 	static long getNextId() { 
 		return ++lastId; 

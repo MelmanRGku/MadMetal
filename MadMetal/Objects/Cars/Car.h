@@ -7,6 +7,8 @@
 #include "Objects/UI.h"
 #include "Global\Definitions.h"
 
+#define INVINICIBILITY_FLASH_PERIOD 0.2f
+
 class Waypoint;
 class CollisionVolume;
 
@@ -39,6 +41,7 @@ protected: //members
 	Waypoint *m_nextWaypoint;
 	bool m_isAtStartingCollisionVolume;
 	bool m_isAtMidCollisionVolume;
+	bool m_isInAir;
 	CollisionVolume* m_lastCollisionVolume;
 
 	bool m_newLap;
@@ -53,11 +56,14 @@ protected: //members
 	static int positionGlobalID;
 
 	float m_invincibilityTimeRemaining;
+	float m_timeSinceLastTimeHit;
+	float m_timeSinceRespawn;
 private:
 	//update functions
 	void updatePowerUp(float dt);
 	void updateReload(float dt);
 	void updateSuper(float dt);
+	void updateOrientation(float dt);
 
 public:
 
@@ -102,6 +108,7 @@ public:
 	void pickUpPowerUp(PowerUpType type);
 	void usePowerUp();
 	PowerUpType getActivePowerUpType();
+	PowerUpType getHeldPowerUp();
 	UI *getUI() { return ui; }
 	void deactivatePowerUp(){ m_activePowerUp = PowerUpType::NONE; }
 	void updateHealth(float dtMillis);
@@ -113,6 +120,7 @@ public:
 
 	void addWaypointHit(Waypoint* waypoint);
 	std::vector<Waypoint*> m_waypointHitList;
+	void setIsInAir(bool inAir) { m_isInAir = inAir; }
 
 	void setLastHitCollisionVolume(CollisionVolume* collisionVolume);
 	CollisionVolume* getLastHitCollisionVolume();
@@ -120,6 +128,10 @@ public:
 	static void resetGlobalPositionID();
 
 	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
+	bool isInvincible();
+	float getInvinsibilityTimeRemaining();
+	void setInvincibility(float time);
+	float getTimeSinceLastTimeHit();
 
 };
 

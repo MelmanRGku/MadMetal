@@ -15,6 +15,8 @@ private:
 	std::vector<TestObject*> *gameObjects;
 	PxScene *scene;
 	std::vector<ObjectUpdater *> updaters;
+	std::vector<std::pair<PxActor *, float>> actorsToDelete;
+	float worldTime;
 public:
 	
 	World();

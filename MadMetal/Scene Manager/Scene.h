@@ -101,6 +101,9 @@ public:
 		}
 		return m_sceneCameras; 
 	}
+
+	virtual void onPause() {}
+	virtual void onResume() {}
 	//virtual void loadFromFile();
 
 };

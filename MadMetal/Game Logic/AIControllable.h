@@ -18,6 +18,7 @@ public:
 	Waypoint* getGoalWaypoint(Waypoint* waypoint);
 	void setGoalWaypoint();
 	void updateNextWaypoint();
+	void processPowerups();
 	void processFire(std::vector<Controllable *> *players);
 private: //helper functions
 	void accelerate(float amount);

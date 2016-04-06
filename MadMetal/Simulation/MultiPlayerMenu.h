@@ -65,6 +65,7 @@ private:
 	Text3D *numberOfAIsString;
 	SceneMessage::SceneEnum messageToReturn = SceneMessage::eNone;
 	int numberOfAIs = 4;
+	Audio *m_audio;
 public:
 	MultiPlayerMenu(Input * input, Audio *audio);
 	~MultiPlayerMenu();

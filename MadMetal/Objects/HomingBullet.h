@@ -28,7 +28,6 @@ public:
 		Object3D::update(dt); 
 		if ((m_trackingDelay -= dt) < 0)
 		{
-			std::cout << "started tracking \n";
 			if (m_isTracking)
 			{
 				if (m_targetCar != NULL && m_targetCar->isAlive())
@@ -44,7 +43,7 @@ public:
 			PxVec3 distanceToTarget = m_targetLocation - currentLocation;
 			if (distanceToTarget.magnitude() > 1)
 			{
-				PxVec3 newVelocity = distanceToTarget.getNormalized()  * (m_speed +=  6 * dt);
+				PxVec3 newVelocity = distanceToTarget.getNormalized()  * m_speed;
 				static_cast<PxRigidDynamic *>(&m_physicable->getActor())->setLinearVelocity(newVelocity);
 			}
 			else {

@@ -1,5 +1,6 @@
 #pragma once
 #include "Simulation\PhysicsManager.h"
+#include "Simulation\GameSimulationDefinitions.h"
 
 class DrivingStyle
 {
@@ -7,30 +8,35 @@ public:
 	DrivingStyle() {};
 	virtual ~DrivingStyle() {};
 
-	void setChassisMass(float mass);
 	float getChassisMass();
-	void setChassisDimensions(PxVec3 dimensions);
 	PxVec3 getChassisDimensions();
-	void setChassisMOI(PxVec3 moi);
 	PxVec3 getChassisMOI();
-	void setChassisCenterOfMassOffsset(PxVec3 mass);
 	PxVec3 getChassisCenterOfMassOffsset();
-	void setWheelMass(float mass);
 	float getWheelMass();
-	void setWheelRadius(float radius);
 	float getWheelRadius();
-	void setWheelWidth(float width);
 	float getWheelWidth();
-	void setWheelMOI(float wheelMOI);
 	float getWheelMOI();
-	void setNbWheels(float numberOfWheels);
 	float getNbWheels();
-	void setChassisMaterial(PxMaterial *material);
 	PxMaterial *getChassisMaterial();
-	void setWheelMaterial(PxMaterial *material);
-	PxMaterial *getWheelMaterial();
+	PxMaterial *getFrontWheelMaterial();
+	PxMaterial *getBackWheelMaterial();
 	float getMaxSpeed();
-	void setMaxSpeed(float maxSpeed);
+	PxReal getMaxBrakeTorque();
+	PxReal getMaxHandBrakeTorque();
+	PxReal getFrontWheelsMaxSteer();
+	PxReal getEnginePeakTorque();
+	PxReal getEngineMaxOmega();
+	PxReal getGearsSwitchTime();
+	PxReal getClutchStrength();
+	PxReal getSuspensionSpringStrength();
+	PxReal getSuspensionSpringDamperRate();
+	PxReal getSuspensionMaxCompression();
+	PxReal getSuspensionMaxDroop();
+	PxReal getSuspensionCamberAngleAtRest();
+	PxReal getSuspensionCamberAngleAtMaxDroop();
+	PxReal getSuspensionCamberAngleAtMaxCompression();
+	int getFrontTireType();
+	int getBackTireType();
 
 protected: //members
 	float m_chassisMass;
@@ -44,7 +50,24 @@ protected: //members
 	float m_nbWheels;
 	float m_maxSpeed;
 	PxMaterial* m_chassisMaterial;
-	PxMaterial* m_wheelMaterial;
+	PxMaterial* m_frontWheelMaterial;
+	PxMaterial* m_backWheelMaterial;
+	PxReal m_maxBrakeTorque;
+	PxReal m_maxHandBrakeTorque;
+	PxReal m_frontWheelsMaxSteer;
+	PxReal m_enginePeakTorque;
+	PxReal m_engineMaxOmega;
+	PxReal m_gearsSwitchTime;
+	PxReal m_clutchStrength;
+	PxReal m_suspensionSpringStrength;
+	PxReal m_suspensionSpringDamperRate;
+	PxReal m_suspensionMaxCompression;
+	PxReal m_suspensionMaxDroop;
+	PxReal m_suspensionCamberAngleAtRest;
+	PxReal m_suspensionCamberAngleAtMaxDroop;
+	PxReal m_suspensionCamberAngleAtMaxCompression;
+	int m_frontTireType;
+	int m_backTireType;
 
 };
 
