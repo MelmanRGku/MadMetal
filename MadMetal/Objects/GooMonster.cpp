@@ -4,7 +4,7 @@
 
 GooMonster::GooMonster(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
-	std::cout << "Spawned goo monster\n";
+	//std::cout << "Spawned goo monster\n";
 	m_respawnCounter = 0;
 	
 	m_spawnLocation = m_physicable->getActor().getGlobalPose().p;

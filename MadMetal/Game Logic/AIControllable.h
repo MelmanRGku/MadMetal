@@ -3,6 +3,8 @@
 #include "ControllableTemplate.h"
 #include "Objects\Cars\Car.h"
 #include "Objects\CollisionVolume.h"
+#include "Game Logic\AIDefinitions.h"
+
 class PathFinding;
 class Track;
 
@@ -28,9 +30,11 @@ private: //helper functions
 	void setHighCostWaypointsToLow();
 	void backUp(float amount);
 	void processInputAcceleration(float amount);
-	void accelerateToNextWaypoint();
+	void accelerateToNextWaypoint(float speedDamping);
 	void reverseToPreviousWaypoint();
 	void changeTurning(float turningDirectionValue, float turningAmountValue);
+	void checkStuckInWall();
+	void updateMovementState(float speedDamping);
 
 private: //members
 	//Car* m_car;
@@ -40,6 +44,8 @@ private: //members
 	Waypoint* m_nextWaypoint;
 	Waypoint* m_potentialWaypoint;
 	Waypoint* m_currentKnownWaypoint;
+	AiStateMovement m_movementState;
+	AiPlaceInTrack m_AiTrackAreaPosition;
 	CollisionVolume* m_lastKnowCollisionVolue;
 	std::vector<Waypoint*> m_currentPath;
 	std::vector<int> m_listOfWaypointsHighCost;

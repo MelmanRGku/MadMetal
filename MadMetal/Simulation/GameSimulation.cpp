@@ -495,17 +495,17 @@ void GameSimulation::setupPowerups() {
 	PxGeometry **powerGeom = new PxGeometry*[1];
 	powerGeom[0] = new PxBoxGeometry(PxVec3(4.5, 4.5, 1.5));
 
-	pos = new PxTransform(0, 6, 20);
+	pos = new PxTransform(-25, 6, 30);
 	PowerUp * powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
 	delete pos;
 
-	pos = new PxTransform(-15, 6, 20);
+	pos = new PxTransform(0, 6, 30);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
 	delete pos;
 
-	pos = new PxTransform(15, 6, 20);
+	pos = new PxTransform(25, 6, 30);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
 	delete pos;
@@ -514,25 +514,40 @@ void GameSimulation::setupPowerups() {
 	//now setup all other powerup locations
 	std::vector<PxTransform *> powerupLocations;
 	//sand
-	powerupLocations.push_back(new PxTransform(61, 6, 494));
-	powerupLocations.push_back(new PxTransform(86, 6, 504));
-	powerupLocations.push_back(new PxTransform(111, 6, 514));
+	powerupLocations.push_back(new PxTransform(-9, 6, 606));
+	powerupLocations.push_back(new PxTransform(-40,31, 450));
+	powerupLocations.push_back(new PxTransform(-8.75, 26, 1050));
 
 	//caves
-	powerupLocations.push_back(new PxTransform(-34, 6, 1406));
-	powerupLocations.push_back(new PxTransform(1, 6, 1410));
-	powerupLocations.push_back(new PxTransform(36, 6, 1415));
+	powerupLocations.push_back(new PxTransform(14.5, 6, 1502.5));
+	powerupLocations.push_back(new PxTransform(-19.375, 6, 1507.5));
+	powerupLocations.push_back(new PxTransform(-250, 6, 1550));
+	powerupLocations.push_back(new PxTransform(-600, 16, 1600));
+	powerupLocations.push_back(new PxTransform(-650, 9, 1500));
 
 	//first tunnel
-	powerupLocations.push_back(new PxTransform(-454, 6, 841));
-	powerupLocations.push_back(new PxTransform(-452, 6, 635));
+	powerupLocations.push_back(new PxTransform(-960, -24, 1350));
+	powerupLocations.push_back(new PxTransform(-964, -24, 950));
+
+	//middle tunnel 
+	powerupLocations.push_back(new PxTransform(-862, -24, 775));
+	powerupLocations.push_back(new PxTransform(-862, -24, 745));
 
 	//second tunnel
-	powerupLocations.push_back(new PxTransform(-589, 6, -19));
+	powerupLocations.push_back(new PxTransform(-762, -24, 525));
+	powerupLocations.push_back(new PxTransform(-762, -24, 394));
 
-	//before finish line
-	powerupLocations.push_back(new PxTransform(-279, 6, -201));
-	powerupLocations.push_back(new PxTransform(-279, 6, -160));
+	//before circle
+	//powerupLocations.push_back(new PxTransform(-543, 6, -87.5));
+	//powerupLocations.push_back(new PxTransform(-543, 6, -122.5));
+
+	//circle 
+	powerupLocations.push_back(new PxTransform(-378, 6, 21.5));
+	powerupLocations.push_back(new PxTransform(-378, 6, -231.5));
+
+	//after circle
+	//powerupLocations.push_back(new PxTransform(-210, 6, -87.5));
+	//powerupLocations.push_back(new PxTransform(-219, 6, -122.5));
 
 	srand(time(NULL));
 	for (PxTransform *t : powerupLocations) {
@@ -600,7 +615,7 @@ void GameSimulation::setupDeathPit() {
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
-	//setupPowerups();
+	setupPowerups();
 	setupTrains();
 	setupDeathPit();
 	m_gameFactory->makeObject(GameFactory::OBJECT_SKY_BOX, NULL, NULL, NULL);

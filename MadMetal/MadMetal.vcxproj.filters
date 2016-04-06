@@ -309,6 +309,9 @@
     <ClCompile Include="Objects\ExplosivelyDeliciousBullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\NavigationalGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global\Settings.h">
@@ -692,6 +695,15 @@
     <ClInclude Include="Objects\TrainCar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game Logic\AIDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\TrainCar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Objects\DeathPit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -699,6 +711,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\BombExplosion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\NavigationalGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
