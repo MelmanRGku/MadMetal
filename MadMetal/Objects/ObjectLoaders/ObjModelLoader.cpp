@@ -132,7 +132,7 @@ NavigationalGrid* ObjModelLoader::loadNavGridFromFile(std::string fileName)
 {
 	// Read file via ASSIMP
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
+	const aiScene* scene = importer.ReadFile(fileName, aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
 	// Check for errors
 	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 	{
@@ -178,7 +178,7 @@ NavigationalGrid *ObjModelLoader::createNavigationalGrid(const aiScene *scene)
 			indicesVector.push_back(face.mIndices[0]);
 			indicesVector.push_back(face.mIndices[1]);
 			indicesVector.push_back(face.mIndices[2]);
-			indicesVector.push_back(face.mIndices[4]);
+			indicesVector.push_back(face.mIndices[3]);
 
 			faces.push_back(indicesVector);
 		}

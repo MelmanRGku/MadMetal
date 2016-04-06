@@ -268,7 +268,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_WAYPOINT;
 			simFilterData.word1 = COLLISION_FLAG_WAYPOINT_AGAINST;
 
-			wapoint->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			PxShape* temp = wapoint->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			wapoint->getShapes(shapes, 1);
