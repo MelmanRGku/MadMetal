@@ -406,7 +406,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		float xDirection = ((float(rand()) / float(RAND_MAX)) * 2.f) - 1.f;
 		float zDirection = ((float(rand()) / float(RAND_MAX)) * 2.f) - 1.f;
 		glm::vec3 direction = glm::normalize(glm::vec3(xDirection, static_cast<Car *>(parent)->getForwardVector().y, zDirection));
-		std::cout << direction.x << " " << direction.y << " " << direction.z << std::endl;
+		//std::cout << direction.x << " " << direction.y << " " << direction.z << std::endl;
 		glm::vec3 speed = 40.f * direction + static_cast<Car *>(parent)->getCar().computeForwardSpeed() * static_cast<Car *>(parent)->getForwardVector();
 		PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));

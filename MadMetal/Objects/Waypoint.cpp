@@ -76,8 +76,8 @@ float Waypoint::getHighCost()
 
 bool Waypoint::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 #ifdef _RENDER_WAYPOINT
-	if (!isValid())
-		return false;
+	//if (!isValid())
+	//	return false;
 	if (passNumber < 2)
 		return true;
 
