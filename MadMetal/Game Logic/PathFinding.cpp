@@ -184,13 +184,13 @@ void PathFinding::continuePath()
 				fabs(currentWaypoint->getWaypoint().getGlobalPose().z - currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)->getGlobalPose().z) == 0)
 			{
 				pathOpened(*(currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)),
-					currentWaypoint->getG() + ADDED_G_VALUE_NORMAL,
+					currentWaypoint->getG() + ADDED_G_VALUE_NORMAL + glm::distance2(currentWaypoint->getWaypoint().getGlobalPose(), currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)->getGlobalPose()),
 					currentWaypoint);
 			}
 			else
 			{
 				pathOpened(*(currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)),
-					currentWaypoint->getG() + ADDED_G_VALUE_DIAGONAL,
+					currentWaypoint->getG() + ADDED_G_VALUE_DIAGONAL + glm::distance2(currentWaypoint->getWaypoint().getGlobalPose(), currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)->getGlobalPose()),
 					currentWaypoint);
 			}
 		}
