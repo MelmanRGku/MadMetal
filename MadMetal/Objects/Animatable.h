@@ -24,11 +24,11 @@ public:
 	glm::vec3  getPosition(){ return position; }
 	void recalculateModelMatrix() {
 		glm::mat4x4 translate = glm::translate(glm::mat4x4(), position);
-		glm::mat4x4 rotateX = glm::rotate(glm::mat4x4(), rotation.x, glm::vec3(1, 0, 0));
-		glm::mat4x4 rotateY = glm::rotate(glm::mat4x4(), rotation.y, glm::vec3(0, 1, 0));
-		glm::mat4x4 rotateZ = glm::rotate(glm::mat4x4(), rotation.z, glm::vec3(0, 0, 1));
-		glm::mat4x4 scaleMat = glm::scale(glm::mat4x4(), this->scale);
-		modelMatrix = translate * rotateX * rotateY * rotateZ * scaleMat;
+		glm::mat4x4 trx = glm::rotate(translate, rotation.x, glm::vec3(1, 0, 0));
+		glm::mat4x4 trxry = glm::rotate(trx, rotation.y, glm::vec3(0, 1, 0));
+		glm::mat4x4 trxryrz = glm::rotate(trxry, rotation.z, glm::vec3(0, 0, 1));
+		glm::mat4x4 trxryrzs= glm::scale(trxryrz, this->scale);
+		modelMatrix = trxryrzs;
 	}
 
 protected:
