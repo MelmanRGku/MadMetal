@@ -25,17 +25,36 @@ AIControllable::~AIControllable()
 	delete m_pathFinder;
 }
 
+void AIControllable::processPowerups() {
+	if (m_car->getHeldPowerUp() == PowerUpType::ATTACK) {
+		if (m_car->getHealthRemaining() <= 50) {
+			m_car->usePowerUp();
+		}
+	}
+	else if (m_car->getHeldPowerUp() == PowerUpType::SPEED) {
+		if (m_car->getCar().computeForwardSpeed() > 70) {
+			m_car->usePowerUp();
+		}
+	}
+	else if (m_car->getHeldPowerUp() == PowerUpType::DEFENSE) {
+		if (m_car->getTimeSinceLastTimeHit() > 0.1f && m_car->getTimeSinceLastTimeHit() < .5f) {
+			m_car->usePowerUp();
+		}
+	}
+}
+
 void AIControllable::processFire(std::vector<Controllable *> *players) {
 	if (!m_controlsPaused) {
 		glm::vec3 forwardVector = m_car->getForwardVector();
 		forwardVector.y = 0;
 		forwardVector = glm::normalize(forwardVector);
 		for (unsigned int i = 0; i < players->size(); i++) {
-			if (players->at(i) != this) {
+			if (players->at(i) != this && players->at(i)->getCar()->getInvinsibilityTimeRemaining() <= 0.5f) {
 				glm::vec3 vecToPlayer = players->at(i)->getCar()->getFullPosition() - m_car->getFullPosition();
+				float distance = glm::length(vecToPlayer);
 				vecToPlayer.y = 0;
 				vecToPlayer = glm::normalize(vecToPlayer);
-				if (glm::dot(vecToPlayer, forwardVector) > .9) {
+				if (glm::dot(vecToPlayer, forwardVector) > .9 && distance <= 300) {
 					if (m_car->superReady()) {
 						m_car->useSuper();
 					}

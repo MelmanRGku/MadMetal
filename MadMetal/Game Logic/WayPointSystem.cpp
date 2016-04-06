@@ -1,9 +1,12 @@
 #include "WaypointSystem.h"
 #include "Game Logic\PathFinding.h"
 #include "Factory\GameFactory.h"
+#include "Objects\NavigationalGrid.h"
+#include <algorithm>
 
 static const float WAYPOINT_WIDTH_COLLISION = 8;
 static const float WAYPOINT_LENGTH_COLLISION = 8;
+static const float WAYPOINT_HEIGHT_COLLISION = 2;
 static const float WAYPOINT_TRUE_WIDTH = 10;
 static const float WAYPOINT_TRUE_LENGTH = 10;
 
@@ -146,6 +149,62 @@ WaypointSystem::WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLe
 
 }
 
+WaypointSystem::WaypointSystem(NavigationalGrid& drivingMesh)
+{
+	m_waypointMap.clear();
+	m_waypoints.clear();
+
+	for (unsigned int i = 0; i < drivingMesh.getVertices()->size(); i++)
+	{
+		PxGeometry **geom = new PxGeometry *[1];
+		geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_LENGTH_COLLISION, WAYPOINT_HEIGHT_COLLISION, WAYPOINT_WIDTH_COLLISION));
+		PxTransform *pos = new PxTransform(drivingMesh.getVertices()->at(i).x,
+			drivingMesh.getVertices()->at(i).y,
+			drivingMesh.getVertices()->at(i).z);
+		Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
+		delete pos;
+		delete geom[0];
+		delete[] geom;
+		m_waypoints.push_back(tempWaypoint);
+	}
+	for (unsigned int i = 0; i < drivingMesh.getFaces()->size(); i++)
+	{
+		for (unsigned int j = 0; j < drivingMesh.getFaces()->at(i).size() - 1; j++)
+		{
+			for (unsigned int k = j + 1; k < drivingMesh.getFaces()->at(i).size(); k++)
+			{
+				std::vector<Waypoint*>& adjecencyList = m_waypoints[drivingMesh.getFaces()->at(i).at(j)]->getListOfAdjacentWaypoints();
+				Waypoint* temp = m_waypoints[drivingMesh.getFaces()->at(i).at(j)];
+				Waypoint* valueToLookFor = m_waypoints[drivingMesh.getFaces()->at(i).at(k)];
+				std::vector<Waypoint*>::iterator matching_iter_one = std::find_if(adjecencyList.begin(),
+					adjecencyList.end(),
+					[&valueToLookFor](Waypoint* waypoint) {
+					return valueToLookFor->getIndex() == waypoint->getIndex();
+				});
+
+				if (matching_iter_one == adjecencyList.end())
+				{
+					adjecencyList.push_back(valueToLookFor);
+				}
+
+				std::vector<Waypoint*>& adjecencyList2 = m_waypoints[drivingMesh.getFaces()->at(i).at(k)]->getListOfAdjacentWaypoints();
+				valueToLookFor = m_waypoints[drivingMesh.getFaces()->at(i).at(j)];
+				std::vector<Waypoint*>::iterator matching_iter_two = std::find_if(adjecencyList2.begin(),
+					adjecencyList2.end(),
+					[&valueToLookFor](Waypoint* waypoint) {
+					return valueToLookFor->getIndex() == waypoint->getIndex();
+				});
+
+				if (matching_iter_two == adjecencyList2.end())
+				{
+					adjecencyList2.push_back(valueToLookFor);
+				}
+
+			}
+		}
+	}
+
+}
 void WaypointSystem::createWaypointConnections()
 {
 	for (int i = 0; i < m_waypointMap.size(); i++)

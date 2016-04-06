@@ -18,7 +18,7 @@ public:
 #define HEALTH_AMOUNT 75
 	virtual void update(float dtMillis)
 	{
-		m_car->takeDamage(-75 / PowerUp::getPowerUpDuration(PowerUpType::ATTACK) * dtMillis);
+		m_car->takeDamage(-75 / PowerUp::getPowerUpDuration(PowerUpType::ATTACK) * dtMillis, true);
 		m_emitter->update(dtMillis);
 		PowerUpVolume::update(dtMillis);
 	}

@@ -23,6 +23,7 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 	Car::positionGlobalID++;
 	m_positionInRace = positionGlobalID;
 	m_waypointHitList.clear();
+	m_invincibilityTimeRemaining = 0;
 }
 
 
@@ -39,23 +40,29 @@ DrivingStyle& Car::getDrivingStyle()
 
 void Car::respawn()
 {
-	//std::cout << "Respawned? \n";
+	//if the car is alive and it respawned recently
+	if (m_timeSinceRespawn <= 3 && m_currentHealth > 0)
+		return;
+
+	//if player is not alive
+	if (m_currentHealth <= 0) {
 	m_currentHealth = m_maxHealth;
+		m_invincibilityTimeRemaining = 3;
+	}
+	m_timeSinceRespawn = 0;
 	
 	if (m_lastCollisionVolume != NULL)
 	{
-		
-		
 		m_car.getRigidDynamicActor()->setGlobalPose(m_lastCollisionVolume->getActor().getGlobalPose());
 		
 	}
 	else {
-		//std::cout << "Invalid Waypoint Respawn" << std::endl;
 		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
 		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, 5, currentPosition.p.z)));
 	}
 
-	//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(0, 5, 0)));
+
+	m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(0, 5, 0)));
 
 	m_car.getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 0, 0));
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0));
@@ -78,23 +85,27 @@ PowerUpType Car::getActivePowerUpType()
 	return m_activePowerUp;
 }
 
+PowerUpType Car::getHeldPowerUp() {
+	return m_heldPowerUp;
+}
+
 void Car::pickUpPowerUp(PowerUpType type)
 {
 	if (m_heldPowerUp == PowerUpType::NONE)
 	{
-		std::cout << "Picked up Power up " << type << std::endl;
 		m_heldPowerUp = type;
 		if (ui != NULL)
 		{
 			ui->setPowerup(type);
 		}
+		m_audioable->getAudioHandle().queAudioSource(&getActor(), PowerupPickupSound());
 	}
 	
 }
 
 void Car::usePowerUp()
 {
-	if (m_heldPowerUp != PowerUpType::NONE)
+	if (m_heldPowerUp != PowerUpType::NONE && m_activePowerUp == PowerUpType::NONE)
 	{
 		if (ui != NULL)
 		{
@@ -115,12 +126,14 @@ void Car::usePowerUp()
 			geom[0] = new PxSphereGeometry(.1);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_ATTACK_POWERUP, &PxTransform(PxVec3(pos.x, pos.y, pos.x)), geom, this);
 			delete geom[0];
+			m_audioable->getAudioHandle().queAudioSource(&getActor(), RegenSound());
 			break;
 		case (PowerUpType::DEFENSE) :
 			
 			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(pos.x,pos.y,pos.x)), geom, this);
 			delete geom[0];
+			m_audioable->getAudioHandle().queAudioSource(&getActor(), ShieldPowerupSound());
 			break;
 		case (PowerUpType::SPEED) :
 			//add particle system
@@ -136,6 +149,7 @@ void Car::usePowerUp()
 			actor->setAngularVelocity(PxVec3(0, 0, 0));
 			actor->addForce(PxVec3(direction.x, direction.y, direction.z), PxForceMode::eIMPULSE);
 			delete geom[0];
+			m_audioable->getAudioHandle().queAudioSource(&getActor(), CarAccelerationSound());
 			break;
 
 		}
@@ -146,12 +160,24 @@ void Car::usePowerUp()
 
 }
 
+bool Car::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
+	if (m_invincibilityTimeRemaining <= 0 || std::fmod(m_invincibilityTimeRemaining, (INVINICIBILITY_FLASH_PERIOD * 2)) < INVINICIBILITY_FLASH_PERIOD) {
+		return Object3D::draw(renderer, type, passNumber);
+	}
+	else return false;
+}
 
-void Car::takeDamage(float damage)
+bool Car::takeDamage(float damage, bool applyAnyway)
 {
+	if (m_invincibilityTimeRemaining <= 0 || applyAnyway) {
 	m_currentHealth -= damage;
 	if (m_currentHealth > m_maxHealth)
 		m_currentHealth = m_maxHealth;
+		m_timeSinceLastTimeHit = 0;
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -173,7 +199,7 @@ void Car::updatePowerUp(float dt)
 		else {
 			if (m_activePowerUp == PowerUpType::SPEED)
 			{
-				std::cout << "Speed: " << getCar().computeForwardSpeed() << std::endl;
+				//std::cout << "Speed: " << getCar().computeForwardSpeed() << std::endl;
 			}
 		}
 	}
@@ -219,25 +245,78 @@ void Car::updateHealth(float dtMillis)
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &getCar().getRigidDynamicActor()->getGlobalPose(), explosionGeom, NULL);
 			delete explosionGeom[0];
 			delete[] explosionGeom;
+			m_audioable->getAudioHandle().queAudioSource(getCar().getRigidDynamicActor(), CarExplodeSound(), 2);
 		}
 		m_superDurationRemainingSeconds = 0.1;
 	}
 	
 }
 
-void Car::update(float dt) {
+void Car::updateOrientation(float dt)
+{
+
+
+	
 	float angle;
 	PxVec3 axis;
 	m_car.getRigidDynamicActor()->getGlobalPose().q.toRadiansAndUnitAxis(angle, axis);
-	//std::cout << angle << "  :  " << axis.x << "," << axis.y << "," << axis.z << std::endl;
-	if (abs(axis.y) != 0)
+	//m_car.getRigidDynamicActor()->setAngularDamping(5);
+	//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, PxQuat(0, axis)));
+	if (axis.y != 0)
 		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, PxQuat(angle, PxVec3(0, abs(axis.y) / axis.y, 0))));
 	PxVec3 angVel = m_car.getRigidDynamicActor()->getAngularVelocity();
+	if (m_isInAir)
+		m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0), true);
+	else
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, angVel.y, 0), true);
 	
 	
+	
+	PxRaycastBuffer hit;
+	PxQueryFilterData fd = PxQueryFilterData(PxQueryFlag::eSTATIC);
+	GameFactory::instance()->sceneRayCast(m_car.getRigidDynamicActor()->getGlobalPose().p + PxVec3(0,1,0), PxVec3(0, -1, 0), 100, hit, PxHitFlag::eDEFAULT, fd);
+	if (hit.hasBlock)
+	{
+		if (hit.block.actor != NULL)
+		{
+			PxShape * shapes[1];
+			hit.block.actor->getShapes(shapes, 1);
+			if (shapes[0]->getSimulationFilterData().word0 == 1)
+			{
+				//std::cout << shapes[0]->getSimulationFilterData().word0 << std::endl;
+				PxVec3 up = hit.block.normal;
+				//std::cout << hit.block.distance << std::endl;
+				
+
+				PxQuat initQuat(angle, PxVec3(0, abs(axis.y) / axis.y, 0));
+				PxVec3 rotationVector = up.cross(PxVec3(0, 1, 0)).getNormalized();
+				//std::cout << rotationVector.x << "," << rotationVector.y << "," << rotationVector.z << std::endl;
+				PxReal rotationAngle = acos(PxVec3(0, 1, 0).dot(up.getNormalized()));
+				//std::cout << rotationAngle * 180 / 3.14 << std::endl;
+				PxQuat rotationQuat(rotationAngle, rotationVector);
+
+				//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, PxQuat(-rotationAngle, rotationVector)));// +rotationQuat));
+				//std::cout << normal.x << "," << normal.y << "," << normal.z << std::endl;
+				//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, initQuat * rotationQuat));// +rotationQuat));
+			}
+		}
+	}
+	
+	//std::cout << angle << "  :  " << axis.x << "," << axis.y << "," << axis.z << std::endl;
+	
+}
+
+void Car::update(float dt) {
+	
+	//std::cout << getCar().computeForwardSpeed() << std::endl;
+	
+	m_invincibilityTimeRemaining -= dt;
 	updateHealth(dt);
+	if (m_currentHealth > 0)
+		updateOrientation(dt);
 	m_reloadRemainingSeconds -= dt;
+	m_timeSinceLastTimeHit += dt;
+	m_timeSinceRespawn += dt;
 	updateSuper(dt);
 	updatePowerUp(dt);
 	if (ui != NULL) {
@@ -253,7 +332,7 @@ void Car::update(float dt) {
 	}
 }
 
-void Car::addDamageDealt(float damage) {
+void Car::addDamageDealt(float damage, bool addToSuper) {
 	m_damageDealt += damage;
 	m_score += damage;
 	
@@ -264,7 +343,7 @@ void Car::addDamageDealt(float damage) {
 		if (m_currentHealth > m_maxHealth) m_currentHealth = m_maxHealth;
 	}
 	
-	if (m_superDurationRemainingSeconds <= 0) {
+	if (m_superDurationRemainingSeconds <= 0 && addToSuper) {
 		m_superGauge += damage / 100;
 	}
 }
@@ -272,7 +351,6 @@ void Car::addDamageDealt(float damage) {
 
 bool Car::setCurrentWaypoint(Waypoint* waypoint)
 {
-	//std::cout << "current waypoint is " << waypoint->getIndex() << "\n";
 	if (waypoint != m_currentWaypoint) {
 		m_lastWayPoint = m_currentWaypoint;
 	m_currentWaypoint = waypoint;
@@ -289,7 +367,6 @@ Waypoint* Car::getLastWaypoint()
 
 Waypoint* Car::getCurrentWaypoint()
 {
-	//if (m_currentWaypoint!=NULL)
 	return m_currentWaypoint;
 }
 
@@ -368,4 +445,21 @@ void Car::setLastHitCollisionVolume(CollisionVolume* collisionVolume)
 CollisionVolume* Car::getLastHitCollisionVolume()
 {
 	return m_lastCollisionVolume;
+}
+
+
+bool Car::isInvincible() {
+	return m_invincibilityTimeRemaining > 0;
+}
+
+float Car::getInvinsibilityTimeRemaining() {
+	return m_invincibilityTimeRemaining;
+}
+
+void Car::setInvincibility(float time) {
+	m_invincibilityTimeRemaining = time;
+}
+
+float Car::getTimeSinceLastTimeHit() {
+	return m_timeSinceLastTimeHit;
 }

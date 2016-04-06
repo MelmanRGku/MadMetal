@@ -156,6 +156,7 @@ void StackManager::readMailBox()
 		break;
 	}
 	case (SceneMessage::ePause) :
+		m_stack->getTopScene()->onPause();
 		m_stack->pushScene(new PauseMenu(m_mailBox->getPlayerTemplates(), m_audio));
 		break;
 	case (SceneMessage::eEnd) :
@@ -169,6 +170,7 @@ void StackManager::readMailBox()
 
 	case (SceneMessage::ePop) :
 		m_stack->popScene();
+		m_stack->getTopScene()->onResume();
 		break;
 	case (SceneMessage::eDefault) :
 		std::cout << "Got a Default message.. Something went wrong \n";

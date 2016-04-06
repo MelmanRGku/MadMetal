@@ -7,6 +7,8 @@
 #include "Objects/UI.h"
 #include "Global\Definitions.h"
 
+#define INVINICIBILITY_FLASH_PERIOD 0.2f
+
 class Waypoint;
 class CollisionVolume;
 
@@ -39,6 +41,7 @@ protected: //members
 	Waypoint *m_nextWaypoint;
 	bool m_isAtStartingCollisionVolume;
 	bool m_isAtMidCollisionVolume;
+	bool m_isInAir;
 	CollisionVolume* m_lastCollisionVolume;
 
 	bool m_newLap;
@@ -51,11 +54,16 @@ protected: //members
 	PowerUpType m_activePowerUp;
 	float m_powerUpRemaining;
 	static int positionGlobalID;
+
+	float m_invincibilityTimeRemaining;
+	float m_timeSinceLastTimeHit;
+	float m_timeSinceRespawn;
 private:
 	//update functions
 	void updatePowerUp(float dt);
 	void updateReload(float dt);
 	void updateSuper(float dt);
+	void updateOrientation(float dt);
 
 public:
 
@@ -72,10 +80,10 @@ public:
 	bool isAlive() { return m_currentHealth > 0; }
 	virtual void useSuper();
 	virtual void fire() = 0;
-	void takeDamage(float damage);
+	bool takeDamage(float damage, bool applyAnyway = false);
 	
 	virtual void update(float dt);
-	void addDamageDealt(float damage);
+	void addDamageDealt(float damage, bool addToSuper = true);
 	bool superReady() { return m_superGauge >= 1.f; }
 	float getSuperGauge() { return m_superGauge > 1.f ? 1.f : m_superGauge; }
 	int getScore() { return m_score; }
@@ -100,6 +108,7 @@ public:
 	void pickUpPowerUp(PowerUpType type);
 	void usePowerUp();
 	PowerUpType getActivePowerUpType();
+	PowerUpType getHeldPowerUp();
 	UI *getUI() { return ui; }
 	void deactivatePowerUp(){ m_activePowerUp = PowerUpType::NONE; }
 	void updateHealth(float dtMillis);
@@ -111,10 +120,18 @@ public:
 
 	void addWaypointHit(Waypoint* waypoint);
 	std::vector<Waypoint*> m_waypointHitList;
+	void setIsInAir(bool inAir) { m_isInAir = inAir; }
 
 	void setLastHitCollisionVolume(CollisionVolume* collisionVolume);
 	CollisionVolume* getLastHitCollisionVolume();
 
 	static void resetGlobalPositionID();
+
+	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
+	bool isInvincible();
+	float getInvinsibilityTimeRemaining();
+	void setInvincibility(float time);
+	float getTimeSinceLastTimeHit();
+
 };
 

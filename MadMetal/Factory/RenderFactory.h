@@ -46,6 +46,8 @@ public:
 		RENDERABLE_OBJECT_EXPLOSION1_12,
 		RENDERABLE_OBJECT_EXPLOSION1_13,
 		RENDERABLE_OBJECT_TRAIN_CAR,
+		RENDERABLE_OBJECT_DEATH_PIT,
+		RENDERABLE_OBJECT_GOO_MONSTER,
 
 		
 		RENDERABLE_OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE,
@@ -125,11 +127,15 @@ public:
 		case RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO:
 			return Assets::getModel("scareMoon");
 		case RENDERABLE_OBJECT_TRACK_DRIVABLE:
-			return Assets::getModel("trackv2ground");
+			return Assets::getModel("trackv3");
 		case RENDERABLE_OBJECT_TRACK_NON_DRIVABLE:
-			return Assets::getModel("trackv2enviro");
+			return Assets::getModel("trackv3enviro");
 		case RENDERABLE_OBJECT_TRACK_WALLS:
-			return Assets::getModel("trackv2walls");
+			return Assets::getModel("trackv3");
+		case RENDERABLE_OBJECT_DEATH_PIT:
+			return Assets::getModel("death_pit");
+		case RENDERABLE_OBJECT_GOO_MONSTER:
+			return Assets::getModel("Gargantulous");
 		case RENDERABLE_OBJECT_BULLET_EXPLOSIVELY_DELICIOUS:
 			return Assets::getModel("explosively_delicious_bullet");
 		case RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER:

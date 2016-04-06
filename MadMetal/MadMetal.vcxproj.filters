@@ -297,10 +297,19 @@
     <ClCompile Include="Objects\EndingScreenUIScoreTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\DeathPit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\GooMonster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Objects\BombExplosion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\ExplosivelyDeliciousBullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\NavigationalGrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -695,7 +704,16 @@
     <ClInclude Include="Objects\TrainCar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\DeathPit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GooMonster.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Objects\BombExplosion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\NavigationalGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

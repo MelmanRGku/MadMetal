@@ -14,6 +14,7 @@
 PauseMenu::PauseMenu(std::vector<ControllableTemplate *> players, Audio *audio)
 {
 	m_audio = audio;
+	m_audio->clearListeners();
 	m_gamePad = players.at(players.size()-1)->getGamePad();
 	m_playerTemplates = players;
 	m_playerTemplates.pop_back();
@@ -104,6 +105,7 @@ PauseMenu::~PauseMenu()
 }
 
 void PauseMenu::upPressed() {
+	m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 	unselectMenuItem(selectedButton);
 	if (selectedButton == resumeButton) {
 		selectedButton = exitToWindowsButton;
@@ -121,6 +123,7 @@ void PauseMenu::upPressed() {
 }
 
 void PauseMenu::downPressed() {
+	m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 	unselectMenuItem(selectedButton);
 	if (selectedButton == resumeButton) {
 		selectedButton = restartButton;
@@ -139,17 +142,25 @@ void PauseMenu::downPressed() {
 
 void PauseMenu::aPressed() {
 	if (selectedButton == resumeButton) {
+		m_audio->queAudioSource(NULL, MenuButtonClickSound());
 		messageToReturn = SceneMessage::ePop;
+		if (stopMusic)
+			m_audio->stopMusic();
 	}
 	else if (selectedButton == exitToMainMenuButton) {
+		m_audio->queAudioSource(NULL, MenuBackButtonSound());
+		m_audio->clearListeners();
 		messageToReturn = SceneMessage::eMainMenu;
 		m_audio->stopMusic();
 	}
 	else if (selectedButton == exitToWindowsButton) {
+		m_audio->queAudioSource(NULL, MenuBackButtonSound());
 		messageToReturn = SceneMessage::eExit;
 	}
 	else if (selectedButton == restartButton) {
+		m_audio->queAudioSource(NULL, MenuButtonClickSound());
 		messageToReturn = SceneMessage::eGameSimulation;
+		m_audio->stopMusic();
 	}
 }
 
@@ -180,6 +191,13 @@ bool PauseMenu::simulateScene(double dt, SceneMessage &message)
 		messageToReturn = SceneMessage::eNone;
 		return true;
 	}
+
+	//music
+	if (m_audio->getMusicFinished()) {
+		stopMusic = true;
+		m_audio->playMusic(CrysisTwoThemeSong(), 1);
+	}
+
 	//check gamepad stuff
 	if (m_gamePad->checkConnection() && m_sceneGameTimeSeconds > 1)
 	{
@@ -197,6 +215,7 @@ bool PauseMenu::simulateScene(double dt, SceneMessage &message)
 		}
 
 		if (m_gamePad->isPressed(GamePad::BButton)) {
+			m_audio->queAudioSource(NULL, MenuButtonClickSound());
 			messageToReturn = SceneMessage::ePop;
 		}
 

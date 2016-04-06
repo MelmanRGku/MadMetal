@@ -12,8 +12,11 @@
 #include "..\Object.h"
 #include "..\Texture.h"
 #include "..\Model3D.h"
+#include "Objects\NavigationalGrid.h"
 #include <iostream>
 #include <string>
+
+class NavigationalGrid;
 
 class ObjModelLoader
 {
@@ -23,9 +26,13 @@ public:
 	Model3D *loadFromFile(const char* fileName);
 	Model3D *loadFromFile(std::string fileName);
 
+	NavigationalGrid* loadNavGridFromFile(std::string fileName);
+	NavigationalGrid* loadNavGridFromFile(const char* fileName);
+
 private:
 	std::string directory;
 
 	Model3D *processScene(const aiScene *scene);
+	NavigationalGrid *createNavigationalGrid(const aiScene *scene);
 };
 

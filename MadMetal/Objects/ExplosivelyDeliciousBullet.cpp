@@ -25,4 +25,6 @@ void ExplosivelyDeliciousBullet::spawnExplosion() {
 	GameFactory::instance()->makeObject(GameFactory::OBJECT_BOMB_EXPLOSION, &m_physicable->getActor().getGlobalPose(), explosionGeom, m_owner);
 	delete explosionGeom[0];
 	delete[] explosionGeom;
+
+	m_audioable->getAudioHandle().queAudioSource(&m_physicable->getActor(), BoomSound());
 }

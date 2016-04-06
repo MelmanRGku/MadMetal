@@ -12,6 +12,9 @@ EndingScene::EndingScene(std::vector<ControllableTemplate *> playerTemplates, Au
 	}
 	sortPlayers();
 
+	m_audio.clearListeners();
+	m_audio.setMusicVolume(128);
+
 	m_defaultSceneCamera->setLookAt(glm::vec3(0, 0, 30), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	{
 		Physicable *p = new Physicable(NULL);
@@ -167,6 +170,11 @@ bool EndingScene::simulateScene(double dt, SceneMessage &message)
 	m_sceneGameTimeSeconds += dt;
 	m_world->update(dt);
 
+	//music
+	if (m_audio.getMusicFinished()) {
+		m_audio.playMusic(CrysisTwoThemeSong(), 1);
+	}
+
 	if (m_sceneGameTimeSeconds < 1)
 		return false;
 
@@ -175,10 +183,12 @@ bool EndingScene::simulateScene(double dt, SceneMessage &message)
 			continue;
 
 		if (ct->getGamePad()->isPressed(GamePad::AButton)) {
+			m_audio.stopMusic();
 			message.setTag(SceneMessage::eMainMenu);
 			return true;
 		}
 		else if (ct->getGamePad()->isPressed(GamePad::XButton)) {
+			m_audio.stopMusic();
 			message.setTag(SceneMessage::eGameSimulation);
 			message.setPlayerTemplates(m_playersToReturn);
 			return true;

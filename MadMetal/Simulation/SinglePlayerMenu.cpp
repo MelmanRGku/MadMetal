@@ -14,6 +14,7 @@
 
 SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 {
+	m_audio = audio;
 	m_gamePad = input->getGamePadHandle();
 	m_defaultSceneCamera->setLookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -3), glm::vec3(0, 1, 0));
 
@@ -172,6 +173,12 @@ bool SinglePlayerMenu::simulateScene(double dt, SceneMessage &message)
 		messageToReturn = SceneMessage::eNone;
 		return true;
 	}
+
+	//music
+	if (m_audio->getMusicFinished()) {
+		m_audio->playMusic(CrysisTwoThemeSong(), 1);
+	}
+
 	//check gamepad stuff
 	if (m_gamePad->checkConnection() && m_sceneGameTimeSeconds>1)
 	{
@@ -192,6 +199,7 @@ bool SinglePlayerMenu::simulateScene(double dt, SceneMessage &message)
 			rightPressed();
 		} 
 		else if (m_gamePad->isPressed(GamePad::BButton)) {
+			m_audio->queAudioSource(NULL, MenuBackButtonSound());
 			message.setTag(SceneMessage::ePop);
 			return true;
 		}
@@ -201,6 +209,7 @@ bool SinglePlayerMenu::simulateScene(double dt, SceneMessage &message)
 
 
 void SinglePlayerMenu::upPressed() {
+	m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 	unselectMenuItem(selectedObject);
 	if (selectedObject == backButton) {
 		if (selectedCar != NULL)
@@ -220,6 +229,7 @@ void SinglePlayerMenu::upPressed() {
 }
 
 void SinglePlayerMenu::downPressed() {
+	m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 	unselectMenuItem(selectedObject);
 	if (selectedObject == backButton) {
 		selectedObject = numberOfAIsButton;
@@ -241,18 +251,22 @@ void SinglePlayerMenu::downPressed() {
 void SinglePlayerMenu::leftPressed() {
 	unselectMenuItem(selectedObject);
 	if (selectedObject == car1) {
+		m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 		selectedObject = car3;
 		selectedCar = car3;
 	}
 	else if (selectedObject == car2) {
+		m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 		selectedObject = car1;
 		selectedCar = car1;
 	}
 	else if (selectedObject == car3) {
+		m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 		selectedObject = car2;
 		selectedCar = car2;
 	}
 	else if (selectedObject == numberOfAIsButton) {
+		m_audio->queAudioSource(NULL, MenuButtonNextPrevSound());
 		numberOfAIs--;
 		if (numberOfAIs < 0)
 			numberOfAIs = 0;
@@ -266,18 +280,22 @@ void SinglePlayerMenu::leftPressed() {
 void SinglePlayerMenu::rightPressed() {
 	unselectMenuItem(selectedObject);
 	if (selectedObject == car1) {
+		m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 		selectedObject = car2;
 		selectedCar = car2;
 	}
 	else if (selectedObject == car2) {
+		m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 		selectedObject = car3;
 		selectedCar = car3;
 	}
 	else if (selectedObject == car3) {
+		m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 		selectedObject = car1;
 		selectedCar = car1;
 	}
 	else if (selectedObject == numberOfAIsButton) {
+		m_audio->queAudioSource(NULL, MenuButtonNextPrevSound());
 		numberOfAIs++;
 		if (numberOfAIs > MAX_NUM_OF_AIS - 1)
 			numberOfAIs = MAX_NUM_OF_AIS - 1;
@@ -291,8 +309,11 @@ void SinglePlayerMenu::rightPressed() {
 void SinglePlayerMenu::aPressed() {
 	if (selectedObject == backButton) {
 		messageToReturn = SceneMessage::ePop;
+		m_audio->queAudioSource(NULL, MenuBackButtonSound());
 	}
 	else if (selectedObject == car1 || selectedObject == car2 || selectedObject == car3) {
+		m_audio->queAudioSource(NULL, MenuButtonClickSound());
+		m_audio->stopMusic();
 		messageToReturn = SceneMessage::eLoadScreen;
 	}
 }

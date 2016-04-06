@@ -18,7 +18,7 @@ public:
 	
 private:
 	float m_explosionTimer;
-	int m_numExplosions;
+	int m_numOfBombs;
 	
 };
 

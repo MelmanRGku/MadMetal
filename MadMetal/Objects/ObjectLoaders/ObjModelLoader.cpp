@@ -122,3 +122,70 @@ Model3D *ObjModelLoader::processScene(const aiScene *scene) {
 
 	return model;
 }
+
+NavigationalGrid* ObjModelLoader::loadNavGridFromFile(const char* fileName)
+{
+	return loadNavGridFromFile(std::string(fileName));
+}
+
+NavigationalGrid* ObjModelLoader::loadNavGridFromFile(std::string fileName)
+{
+	// Read file via ASSIMP
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(fileName, aiProcess_JoinIdenticalVertices);
+	// Check for errors
+	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+	{
+		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+		return NULL;
+	}
+	// Retrieve the directory path of the filepath
+	directory = fileName.substr(0, fileName.find_last_of('/'));
+
+	return createNavigationalGrid(scene);
+}
+
+NavigationalGrid *ObjModelLoader::createNavigationalGrid(const aiScene *scene)
+{
+	int numberOfFaces = 0;
+	// Data to fill
+	std::vector<glm::vec3> vertices;
+	std::vector<std::vector<unsigned int>> faces;
+	// Process each mesh 
+	for (unsigned int i = 0; i < scene->mNumMeshes; i++)
+	{
+		aiMesh* mesh = scene->mMeshes[i];
+
+		// Walk through each of the mesh's vertices
+		for (unsigned int j = 0; j < mesh->mNumVertices; j++)
+		{
+			glm::vec3 vector; // We declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
+			// Positions
+			vector.x = mesh->mVertices[j].x;
+			vector.y = mesh->mVertices[j].y;
+			vector.z = mesh->mVertices[j].z;
+			vertices.push_back(vector);
+		}
+
+		// Now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+		for (unsigned int j = 0; j < mesh->mNumFaces; j++)
+		{
+			aiFace face = mesh->mFaces[j];
+			assert(face.mNumIndices == 4);
+
+			std::vector<unsigned int> indicesVector;
+
+			indicesVector.push_back(face.mIndices[0]);
+			indicesVector.push_back(face.mIndices[1]);
+			indicesVector.push_back(face.mIndices[2]);
+			indicesVector.push_back(face.mIndices[3]);
+
+			faces.push_back(indicesVector);
+		}
+
+		numberOfFaces += mesh->mNumFaces;
+	}
+
+	NavigationalGrid* grid = new NavigationalGrid(vertices,faces, numberOfFaces);
+	return grid;
+}

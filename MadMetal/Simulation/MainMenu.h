@@ -12,6 +12,7 @@ private:
 		*background,
 		*selectedButton;
 	SceneMessage::SceneEnum messageToReturn = SceneMessage::eNone;
+	Audio *m_audio;
 
 public:
 	MainMenu(Input * input, Audio *audio);

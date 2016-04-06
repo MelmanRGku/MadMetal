@@ -17,55 +17,18 @@ GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
 void PlayerControllable::playFrame(double dt)
 {
 	if (m_car->isAlive()) m_camera->update(dt);
+
 	if (!m_controlsPaused) {
-		
-		/*if (m_car->isAtStartingCollisionVolume() && m_car->isAtMidCollisionVolume())
-		{
-			m_car->incrementLap();
-			m_car->setMidCollisionVolumeFlag(false);
-		}
-		else if (m_car->isAtMidCollisionVolume()){
-			m_car->setStartingCollisionVolumeFlag(false);
-		}*/
 			
 		if (m_car->isAlive())
 		{
 			
 			if (m_gamePad != NULL && m_gamePad->checkConnection())
 			{
-				if (m_car->getCar().getRigidDynamicActor()->isSleeping()) {
+				/*if (m_car->getCar().getRigidDynamicActor()->isSleeping()) {
 					m_car->getCar().getRigidDynamicActor()->wakeUp();
 				}
-				//std::cout << m_car->getCar().computeForwardSpeed() << std::endl;
-				/*
-				if (m_gamePad->isPressed(GamePad::LJoyRight))
-				{
-				std::cout << "Left Joy Pressed \n";
-				//m_car->getActor().setLinearVelocity(PxVec3(10, 0, 0));
-				//m_car->getActor().setAngularVelocity(PxVec3(10, 10, 10));
-				}
-
-				if (m_gamePad->isPressed(GamePad::DPadRight))
-				{
-
-				//m_car->getActor().setLinearVelocity(PxVec3(-10, 0, 0));
-				}
-
-				if (m_gamePad->isPressed(GamePad::DPadUp))
-				{
-
-				//m_car->getActor().setLinearVelocity(PxVec3(0, 0, 10));
-				}
-				*/
-				if (m_gamePad->isPressed(GamePad::DPadDown))
-				{
-					PxVec3 axis;
-					float angle;
-					m_car->getCar().getRigidDynamicActor()->getGlobalPose().q.toRadiansAndUnitAxis(angle, axis);
-					std::cout << angle << "   :     " << axis.x << "," << axis.y << "," << axis.z << std::endl;
-				//m_car->getActor().setLinearVelocity(PxVec3(0, 0, -10));
-				}
-
+*/
 
 				if (m_gamePad->isHeld(GamePad::XButton))
 				{
@@ -162,7 +125,6 @@ void PlayerControllable::playFrame(double dt)
 						{
 							const PxF32 k = maxSteer / steer;
 							steer *= k;
-							//std::cout << vzAbs << " " << maxSteer << std::endl;
 						}
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, -steer * turnScalar);
@@ -178,7 +140,6 @@ void PlayerControllable::playFrame(double dt)
 						if (steer>maxSteer)
 						{
 							steer = maxSteer;
-							//std::cout << vzAbs << " " << maxSteer << std::endl;
 						}
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, -steer * turnScalar);
@@ -195,13 +156,6 @@ void PlayerControllable::playFrame(double dt)
 					m_camera->rotateCamera(m_gamePad->getRightStick().x, m_gamePad->getRightStick().y);
 				}
 			}
-			else
-			{
-				//do nothing cause you dead bro
-			}
-		}
-		else {
-			
 		}
 	}
 }

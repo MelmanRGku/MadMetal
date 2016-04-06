@@ -6,13 +6,17 @@
 #include "Factory\GameFactory.h"
 #include "Game Logic\WaypointDefinitions.h"
 #include "Objects\TestObject.h"
+#include "Objects\Object3D.h"
 #include <vector>
 #include <iostream>
+
+class NavigationalGrid;
 
 class WaypointSystem
 {
 public:
 	WaypointSystem(int trackWidthMin, int trackWidthMax, int trackLengthMin, int trackLengthMax, int yposition, Boundry startingPosition);
+	WaypointSystem(NavigationalGrid& drivingMesh);
 	~WaypointSystem();
 	void addIdToAllWaypointsInTheSystem(int id);
 
