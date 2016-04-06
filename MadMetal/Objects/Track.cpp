@@ -9,7 +9,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 {
 	
 	ObjModelLoader *loader = new ObjModelLoader();
-	NavigationalGrid *model = loader->loadNavGridFromFile("Assets/NavigationalGrid/trackv3ground.obj");
+	NavigationalGrid *model = loader->loadNavGridFromFile("Assets/NavigationalGrid/trackv3ground2.obj");
 
 	std::cout << "hello";
 
