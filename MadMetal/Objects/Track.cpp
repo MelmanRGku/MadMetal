@@ -312,6 +312,64 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 //	delete[] geom1;
 //	delete[] geom2;
 //	delete[] geom3;
+
+	PxTransform * pos;
+	PxGeometry **geom1 = new PxGeometry *[1];
+	geom1[0] = new PxBoxGeometry(10, 10, 10);
+
+	//startLine
+	pos = new PxTransform(PxVec3(4, 0 ,-35));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//path branch leading into the dessert
+	pos = new PxTransform(PxVec3(0, 0 ,225));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//top of the jump ramp in the dessert
+	pos = new PxTransform(PxVec3(-30, 25, 325));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//deathPit 1
+	pos = new PxTransform(PxVec3(15, 0,515));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//second death pit
+	pos = new PxTransform(PxVec3(-25, 0, 860));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//start of the canyon
+	pos = new PxTransform(PxVec3(0, 0, 1100));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//branch path in the canyon
+	pos = new PxTransform(PxVec3(-45, 0, 1555));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//landing platform in the goo pit
+	pos = new PxTransform(PxVec3(-800, -30, 1550));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//end of the first train tunnel
+	pos = new PxTransform(PxVec3(-856, -30, 751));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//maybe the ramp exit of tunnel :p
+	pos = new PxTransform(PxVec3(-730, 0, 120));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//entrence to the trafic circle
+	pos = new PxTransform(PxVec3(-625, 0, -105));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//top of the traffic circle
+	pos = new PxTransform(PxVec3(-378, 6, 21.5));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+	//bottom of the traffic circle
+	pos = new PxTransform(PxVec3(-378, 6, -231.5));
+	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+
+
 }
 
 Track::~Track()

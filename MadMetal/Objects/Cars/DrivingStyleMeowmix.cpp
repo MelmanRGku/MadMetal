@@ -35,7 +35,7 @@ DrivingStyleMeowMix::DrivingStyleMeowMix()
 	m_enginePeakTorque = 7000.0f;
 	m_engineMaxOmega = 1000.0f;//approx 10000 rpm
 	m_gearsSwitchTime = 0.1f;
-	m_clutchStrength = 1000.0f;
+	m_clutchStrength = 50.0f;
 	m_suspensionSpringStrength = 100.0f; // !
 	m_suspensionSpringDamperRate = 10000.0f;
 	m_suspensionMaxCompression = 0.5f;
