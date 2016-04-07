@@ -5,12 +5,36 @@
 
 CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
-	
+	m_respawnIndex = 0;
 }
 
 
 CollisionVolume::~CollisionVolume()
 {
+}
+
+void CollisionVolume::setRespawnLocations(std::vector<PxVec3> locations)
+{
+	m_respawnLocations.clear();
+	PxQuat quat = m_physicable->getActor().getGlobalPose().q;
+	for (int i = 0; i < locations.size(); i++)
+	{
+		m_respawnLocations.push_back(PxTransform(locations[i], quat));
+	}
+}
+
+PxTransform CollisionVolume::getRespawnLocation()
+{
+	if (m_respawnLocations.size() == 0)
+	{
+		return m_physicable->getActor().getGlobalPose();
+	}
+	PxTransform  transform = m_respawnLocations[m_respawnIndex++];
+	if (m_respawnIndex == m_respawnLocations.size())
+	{
+		m_respawnIndex = 0;
+	}
+	return transform;
 }
 
 void CollisionVolume::addAdjacentVolume(CollisionVolume * toAdd)

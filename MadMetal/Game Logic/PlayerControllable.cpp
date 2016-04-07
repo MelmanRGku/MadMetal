@@ -34,6 +34,15 @@ void PlayerControllable::playFrame(double dt)
 				{
 					m_car->fire();
 				}
+				if (m_gamePad->isPressed(GamePad::DPadUp))
+				{
+					float angle;
+					PxVec3 axis;
+					m_car->getCar().getRigidDynamicActor()->getGlobalPose().q.toRadiansAndUnitAxis(angle, axis);
+					PxVec3 position = m_car->getCar().getRigidDynamicActor()->getGlobalPose().p;
+					std::cout << "Position " << position.x << "," << position.y << "," << position.z << std::endl;
+					std::cout << "Angle " << angle << "    " << axis.x << "," << axis.y << "," << axis.z << std::endl;
+				}
 
 				if (m_gamePad->isPressed(GamePad::YButton)) {
 					if (m_car->superReady()) {
