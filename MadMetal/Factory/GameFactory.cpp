@@ -213,7 +213,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 
-		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+		PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 		PxTriangleMesh ** mesh = model->getPhysicsTriangleMesh();
 		PxGeometry ** geom = new PxGeometry *[model->getMeshes()->size()];
 		for (unsigned int i = 0; i < model->getMeshes()->size(); i++) {
@@ -242,7 +242,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 
-		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+		PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 		PxTriangleMesh ** mesh = model->getPhysicsTriangleMesh();
 		PxGeometry ** geom = new PxGeometry *[model->getMeshes()->size()];
 		for (unsigned int i = 0; i < model->getMeshes()->size(); i++) {
@@ -272,7 +272,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 									  Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 									  Animatable *animatable = new Animatable();
 
-									  PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0);    //static friction, dynamic friction, restitution
+									  PxMaterial* material = PhysicsManager::createMaterial(0, 0, 0);    //static friction, dynamic friction, restitution
 									  PxTriangleMesh ** mesh = model->getPhysicsTriangleMesh();
 									  PxGeometry ** geom = new PxGeometry *[model->getMeshes()->size()];
 									  for (unsigned int i = 0; i < model->getMeshes()->size(); i++) {
@@ -301,7 +301,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 
-		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+		PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 		glm::vec3 speed = 300.f * static_cast<Object3D *>(parent)->getForwardVector(); speed += glm::vec3(0, -.4f, 0);
 		PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_MEOW_MIX, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
@@ -326,7 +326,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 								   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 								   Animatable *animatable = new Animatable();
 
-								   PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+								   PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 		glm::vec3 speed = 250.0f * static_cast<Object3D *>(parent)->getForwardVector();
 								   PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 								   PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_GARGANTULOUS_BULLET, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
@@ -373,7 +373,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		Animatable *animatable = new Animatable();
 
 
-		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+		PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 		glm::vec3 speed = 40.f * static_cast<Car *>(parent)->getForwardVector() + static_cast<Car *>(parent)->getCar().computeForwardSpeed() * static_cast<Car *>(parent)->getForwardVector();
 		PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
@@ -402,7 +402,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		Animatable *animatable = new Animatable();
 
 
-		PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+		PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 		float xDirection = ((float(rand()) / float(RAND_MAX)) * 2.f) - 1.f;
 		float zDirection = ((float(rand()) / float(RAND_MAX)) * 2.f) - 1.f;
 		glm::vec3 direction = glm::normalize(glm::vec3(xDirection, static_cast<Car *>(parent)->getForwardVector().y, zDirection));
@@ -435,7 +435,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 										Animatable *animatable = new Animatable();
 
 
-										PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+										PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 										glm::vec3 speed = 150.f * static_cast<Object3D *>(parent)->getForwardVector(); speed += glm::vec3(0, 5.f, 0);
 										PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 										PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
@@ -463,7 +463,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 											   Animatable *animatable = new Animatable();
 
 
-											   PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+											   PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 											   
 											   PxRigidDynamic *explosion = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER, objectId, pos, geom, 0, NULL, NULL, NULL));
 											   
@@ -488,7 +488,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 											   Animatable *animatable = new Animatable();
 
 
-											   PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+											   PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 
 											   PxRigidDynamic *beam = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_MEOW_MIX_SUPER, objectId, pos, geom, 0, NULL, NULL, NULL));
 											   
@@ -512,7 +512,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 											   Animatable *animatable = new Animatable();
 
 
-											   PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+											   PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 
 											   PxRigidDynamic *superVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_GARGANTULOUS_SUPER_VOLUME, objectId, pos, geom, 0, NULL, NULL, NULL));
 
@@ -537,7 +537,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 											 Animatable *animatable = new Animatable();
 
 
-											 PxMaterial* material = PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
+											 PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
 
 											 PxRigidDynamic *superVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_GARGANTULOUS_SUPER_BULLET, objectId, pos, geom, 0, NULL, NULL, NULL));
 

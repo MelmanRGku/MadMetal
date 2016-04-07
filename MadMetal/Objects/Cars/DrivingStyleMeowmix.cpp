@@ -9,13 +9,11 @@ DrivingStyleMeowMix::DrivingStyleMeowMix()
 	//For the record, MeowMix has high maneuverability, standard speed, and low health
 	m_chassisMass = 1500.0f;
 	m_chassisDims = PxVec3(5.0f, 7.0f, 7.0f);
-	m_chassisMOI = PxVec3((m_chassisDims.y*m_chassisDims.y + m_chassisDims.z*m_chassisDims.z)*m_chassisMass / 12.0f,
-		(m_chassisDims.x*m_chassisDims.x + m_chassisDims.z*m_chassisDims.z)*0.8f*m_chassisMass / 12.0f,
-		(m_chassisDims.x*m_chassisDims.x + m_chassisDims.y*m_chassisDims.y)*m_chassisMass / 12.0f);
-	m_chassisMOI.x *= 1.1;
-	m_chassisMOI.z *= 1.2;
+	m_chassisMOI = PxVec3(0,
+		(m_chassisDims.x*m_chassisDims.x + m_chassisDims.z*m_chassisDims.z)*m_chassisMass / 12.0f,
+		0);
 	m_chassisCMOffset = PxVec3(0.0f, -m_chassisDims.y*0.5f, 0.0f);
-	m_chassisMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0.5f, 0.3f, 0.1f);
+	m_chassisMaterial = PhysicsManager::createMaterial(0.5f, 0.3f, 0.1f);
 
 	//Set up the wheel mass, radius, width, moment of inertia, and number of wheels.
 	//Moment of inertia is just the moment of inertia of a cylinder.
@@ -23,8 +21,8 @@ DrivingStyleMeowMix::DrivingStyleMeowMix()
 	m_wheelRadius = 0.7f;
 	m_wheelWidth = 0.6f;
 	m_wheelMOI = 0.5f*m_wheelMass*m_wheelRadius*m_wheelRadius;
-	m_backWheelMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0.0f, 0.0f, 1.f);
-	m_frontWheelMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0.5f, 0.3f, 0.3f);
+	m_backWheelMaterial = PhysicsManager::createMaterial(0.0f, 0.0f, 1.f);
+	m_frontWheelMaterial = PhysicsManager::createMaterial(0.5f, 0.3f, 0.3f);
 	m_nbWheels = 4;
 
 	//handling variables
@@ -32,13 +30,13 @@ DrivingStyleMeowMix::DrivingStyleMeowMix()
 	m_maxBrakeTorque = 1000.f;
 	m_maxHandBrakeTorque = 100000.f;
 	m_frontWheelsMaxSteer = PxPi*0.06666f;
-	m_enginePeakTorque = 7000.0f;
-	m_engineMaxOmega = 1000.0f;//approx 10000 rpm
+	m_enginePeakTorque = 8000.0f;
+	m_engineMaxOmega = 1500.0f;//approx 10000 rpm
 	m_gearsSwitchTime = 0.1f;
-	m_clutchStrength = 1000.0f;
-	m_suspensionSpringStrength = 100.0f; // !
-	m_suspensionSpringDamperRate = 10000.0f;
-	m_suspensionMaxCompression = 0.5f;
+	m_clutchStrength = 20.0f;
+	m_suspensionSpringStrength = 300.0f; // !
+	m_suspensionSpringDamperRate = 30000.0f;
+	m_suspensionMaxCompression = 2.5f;
 	m_suspensionMaxDroop = 3.0f;
 	m_suspensionCamberAngleAtRest = 0.0;
 	m_suspensionCamberAngleAtMaxDroop = 2.14;
