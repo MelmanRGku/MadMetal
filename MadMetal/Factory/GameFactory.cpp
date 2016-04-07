@@ -712,7 +712,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	case OBJECT_GOO_MONSTER:
 	{
 							 Model3D *model = NULL;
-							 model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GOO_MONSTER));
+							 model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GOO_MONSTER_KILLER));
 							 Renderable3D *renderable = new Renderable3D(model, true, true);
 							 //renderable->setModel(NULL);
 							 Animatable *animatable = new Animatable();
