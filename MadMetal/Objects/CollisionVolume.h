@@ -14,9 +14,11 @@ public:
 	~CollisionVolume();
 	PxTransform getRespawnLocation();
 	void setRespawnLocations(std::vector<PxVec3> locations);
+	void setIsStartCollisionVolume(bool isStartCollisionVolume);
+	bool getIsStartCollisionVolume();
 
-	void addAdjacentVolume(CollisionVolume * toAdd);
-	bool isAdjacent(CollisionVolume *toCheck);
+	void addNextVolume(CollisionVolume * toAdd);
+	bool isPrevVolumeOf(CollisionVolume *toCheck);
 	
 	void setCurrentWaypointIndex(Waypoint* waypoint);
 	void setGoalWaypointIndex(Waypoint* waypoint);
@@ -27,9 +29,11 @@ public:
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 
 private: //members
-	std::vector<CollisionVolume *> m_adjacentVolumes;
-	Waypoint* m_indexOfCurrentWaypoint;
-	Waypoint* m_indexOfGoalWaypoint;
+	Waypoint* m_currentWaypoint;
+	Waypoint* m_goalWaypoint;
 	int m_respawnIndex;
+	std::vector<CollisionVolume *> m_nextVolumes;
 	std::vector<PxTransform> m_respawnLocations;
+	bool m_isStartCollisionVolume;
+
 };

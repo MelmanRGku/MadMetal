@@ -661,8 +661,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	}
 	case OBJECT_TRAIN_CAR:
 	{
-							 Model3D *model = NULL;
-							 model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRAIN_CAR));
+		Model3D *model = NULL;
+		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRAIN_CAR));
 		Renderable3D *renderable = new Renderable3D(model, true, true);
 
 		Animatable *animatable = new Animatable();
@@ -702,7 +702,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							 PxVec3 dim = deathVolume->getWorldBounds().getDimensions();
 
 							 animatable->setScale(glm::vec3(dim.x, dim.y * 2, dim.z));
-							 pos->p.y += dim.y / 2;
+							 deathVolume->setGlobalPose(PxTransform(deathVolume->getGlobalPose().p + PxVec3(0, dim.y / 2, 2), deathVolume->getGlobalPose().q));
 							 DeathPit *deathPit = new DeathPit(objectId, audioable, physicable, animatable, renderable);
 
 							 m_world.addGameObject(deathPit);

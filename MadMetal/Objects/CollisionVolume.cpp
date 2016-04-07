@@ -6,6 +6,7 @@
 CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
 	m_respawnIndex = 0;
+	m_isStartCollisionVolume = false;
 }
 
 
@@ -37,16 +38,16 @@ PxTransform CollisionVolume::getRespawnLocation()
 	return transform;
 }
 
-void CollisionVolume::addAdjacentVolume(CollisionVolume * toAdd)
+void CollisionVolume::addNextVolume(CollisionVolume * toAdd)
 {
-	m_adjacentVolumes.push_back(toAdd);
+	m_nextVolumes.push_back(toAdd);
 }
 
-bool CollisionVolume::isAdjacent(CollisionVolume * toCheck)
+bool CollisionVolume::isPrevVolumeOf(CollisionVolume * toCheck)
 {
-	for (int i = 0; i < m_adjacentVolumes.size(); i++)
+	for (int i = 0; i < m_nextVolumes.size(); i++)
 	{
-		if (m_adjacentVolumes[i] == toCheck)
+		if (m_nextVolumes[i] == toCheck)
 		{
 			return true;
 		}
@@ -55,23 +56,33 @@ bool CollisionVolume::isAdjacent(CollisionVolume * toCheck)
 	
 }
 
+void CollisionVolume::setIsStartCollisionVolume(bool isStartCollisionVolume) {
+	m_isStartCollisionVolume = isStartCollisionVolume;
+}
+
 void CollisionVolume::setCurrentWaypointIndex(Waypoint* waypoint)
 {
-	m_indexOfCurrentWaypoint = waypoint;
+	m_currentWaypoint = waypoint;
 }
+
 void CollisionVolume::setGoalWaypointIndex(Waypoint* waypoint)
 {
-	m_indexOfGoalWaypoint = waypoint;
+	m_goalWaypoint = waypoint;
+}
+
+bool CollisionVolume::getIsStartCollisionVolume() {
+	return m_isStartCollisionVolume;
 }
 
 Waypoint* CollisionVolume::getCurrentWaypointIndex()
 {
-	return m_indexOfCurrentWaypoint;
+	return m_currentWaypoint;
 }
 Waypoint* CollisionVolume::getGoalWaypointIndex()
 {
-	return m_indexOfGoalWaypoint;
+	return m_goalWaypoint;
 }
+
 
 bool CollisionVolume::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 #ifdef _RENDER_COLLISION_VOLUME
