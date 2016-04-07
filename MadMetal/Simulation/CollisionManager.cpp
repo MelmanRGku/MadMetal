@@ -210,6 +210,8 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 
 	if (car != NULL)
 	{
+		car->setLastHitCollisionVolume(collisionVolume);
+		car->setCurrentWaypoint(collisionVolume->getCurrentWaypointIndex());
 		/*if (car->getLastHitCollisionVolume() == NULL)
 		{
 			//std::cout << "set first time way point of " << collisionVolume->getIndex() << std::endl;

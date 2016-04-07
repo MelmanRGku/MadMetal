@@ -9,7 +9,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 {
 	
 	ObjModelLoader *loader = new ObjModelLoader();
-	NavigationalGrid *model = loader->loadNavGridFromFile("Assets/NavigationalGrid/trackv3ground2.obj");
+	NavigationalGrid *model = loader->loadNavGridFromFile("Assets/NavigationalGrid/trackv3ground4.obj");
 
 	std::cout << "hello";
 
@@ -19,6 +19,10 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	delete model;
 	delete loader;
+
+
+	m_waypointList.insert(m_waypointList.end(), navigationalGrid->getWaypointList().begin(), navigationalGrid->getWaypointList().end());
+
 //	WaypointSystem * startLocation = new WaypointSystem(
 //		getDrivablePart()->getWorldBounds().maximum.x - 180,
 //		getDrivablePart()->getWorldBounds().maximum.x - 140,
@@ -315,27 +319,45 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 
 	PxTransform * pos;
 	PxGeometry **geom1 = new PxGeometry *[1];
-	geom1[0] = new PxBoxGeometry(10, 10, 10);
+	geom1[0] = new PxBoxGeometry(50, 10, 10);
+	//geom1[0] = new PxBoxGeometry(10, 10, 10);
+	//geom1[0] = new PxBoxGeometry(10, 10, 10);
+	//geom1[0] = new PxBoxGeometry(10, 10, 10);
 
 	//startLine
-	pos = new PxTransform(PxVec3(4, 0 ,-35));
-	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	pos = new PxTransform(PxVec3(4, 0 , 0));
+	CollisionVolume* temp = dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
+	temp->setGoalWaypointIndex(getWaypointAt(4));
+	temp->setCurrentWaypointIndex(getWaypointAt(48));
+	m_collisionVolumes.push_back(temp);
 
 	//path branch leading into the dessert
 	pos = new PxTransform(PxVec3(0, 0 ,225));
-	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	temp = dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
+	temp->setGoalWaypointIndex(getWaypointAt(4));
+	temp->setCurrentWaypointIndex(getWaypointAt(70));
+	m_collisionVolumes.push_back(temp);
 
 	//top of the jump ramp in the dessert
-	pos = new PxTransform(PxVec3(-30, 25, 325));
-	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	//pos = new PxTransform(PxVec3(-30, 25, 325));
+	//temp = dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
+	//temp->setGoalWaypointIndex(getWaypointAt(216));
+	//temp->setCurrentWaypointIndex(getWaypointAt(198));
+	//m_collisionVolumes.push_back(temp);
 
 	//deathPit 1
-	pos = new PxTransform(PxVec3(15, 0,515));
-	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	pos = new PxTransform(PxVec3(15, 0, 490));
+	temp = dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
+	temp->setGoalWaypointIndex(getWaypointAt(216));
+	temp->setCurrentWaypointIndex(getWaypointAt(1014));
+	m_collisionVolumes.push_back(temp);
 
 	//second death pit
 	pos = new PxTransform(PxVec3(-25, 0, 860));
-	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	temp = dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
+	temp->setGoalWaypointIndex(getWaypointAt(19));
+	temp->setCurrentWaypointIndex(getWaypointAt(16));
+	m_collisionVolumes.push_back(temp);
 
 	//start of the canyon
 	pos = new PxTransform(PxVec3(0, 0, 1100));

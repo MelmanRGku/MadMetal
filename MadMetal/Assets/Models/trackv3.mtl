@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd broken_building_6.jpg
+map_Kd broken_building_10.jpg
 
 newmtl Material_NONE
 Ns 96.078431
@@ -32,17 +32,6 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd asphalt_texture441.jpg
-
-newmtl Material_broken_building_10.jpg
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.397538 0.397538 0.397538
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd broken_building_10.jpg
 
 newmtl Material_broken_building_11.jpg
 Ns 96.078431
@@ -98,6 +87,17 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd broken_building_5.jpg
+
+newmtl Material_broken_building_6.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.397538 0.397538 0.397538
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd broken_building_6.jpg
 
 newmtl Material_broken_building_7.jpg
 Ns 96.078431

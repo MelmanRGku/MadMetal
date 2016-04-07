@@ -23,6 +23,7 @@ public:
 public: // member functions
 	Waypoint * getWaypointAt(int index) { return m_waypoints[index]; }
 	std::vector<std::vector<Waypoint*>>& getWaypointMap() { return m_waypointMap; }
+	std::vector<Waypoint*>& getWaypointList() { return m_waypoints; }
 	void createWaypointConnections();
 
 private: // members

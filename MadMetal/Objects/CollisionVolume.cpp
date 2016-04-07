@@ -31,6 +31,24 @@ bool CollisionVolume::isAdjacent(CollisionVolume * toCheck)
 	
 }
 
+void CollisionVolume::setCurrentWaypointIndex(Waypoint* waypoint)
+{
+	m_indexOfCurrentWaypoint = waypoint;
+}
+void CollisionVolume::setGoalWaypointIndex(Waypoint* waypoint)
+{
+	m_indexOfGoalWaypoint = waypoint;
+}
+
+Waypoint* CollisionVolume::getCurrentWaypointIndex()
+{
+	return m_indexOfCurrentWaypoint;
+}
+Waypoint* CollisionVolume::getGoalWaypointIndex()
+{
+	return m_indexOfGoalWaypoint;
+}
+
 bool CollisionVolume::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 #ifdef _RENDER_COLLISION_VOLUME
 	return Object3D::draw(renderer, type, passNumber);
