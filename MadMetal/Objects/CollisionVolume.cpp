@@ -1,12 +1,11 @@
 #include "CollisionVolume.h"
 #include "Settings.h"
 
-int CollisionVolume::globalID = 0;
+
 
 CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
-	m_id = CollisionVolume::globalID;
-	CollisionVolume::globalID++;
+	
 }
 
 
@@ -14,9 +13,22 @@ CollisionVolume::~CollisionVolume()
 {
 }
 
-const int& CollisionVolume::getIndex()
+void CollisionVolume::addAdjacentVolume(CollisionVolume * toAdd)
 {
-	return CollisionVolume::m_id;
+	m_adjacentVolumes.push_back(toAdd);
+}
+
+bool CollisionVolume::isAdjacent(CollisionVolume * toCheck)
+{
+	for (int i = 0; i < m_adjacentVolumes.size(); i++)
+	{
+		if (m_adjacentVolumes[i] == toCheck)
+		{
+			return true;
+		}
+	}
+	return false;
+	
 }
 
 bool CollisionVolume::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
