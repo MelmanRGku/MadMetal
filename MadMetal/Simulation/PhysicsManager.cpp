@@ -16,7 +16,8 @@ PxPhysics* PhysicsManager::topLevelPhysics_ = NULL;
 PxCooking* PhysicsManager::m_cooking = NULL;
 PxDefaultCpuDispatcher* PhysicsManager::mCpuDispatcher = NULL;
 PxTolerancesScale *PhysicsManager::m_scale = NULL;
-PxDefaultCpuDispatcher *PhysicsManager::cpuDispatcher;
+PxDefaultCpuDispatcher *PhysicsManager::cpuDispatcher; 
+std::vector<PxMaterial*> PhysicsManager::m_materials;
 
 PhysicsManager::PhysicsManager()
 {
@@ -100,6 +101,9 @@ void PhysicsManager::initCarPhysics() {
 
 void PhysicsManager::shutdownPhysicsSimualtion()
 {
+	for (int i = 0; i < m_materials.size(); i++) {
+		m_materials.at(i)->release();
+	}
 	cpuDispatcher->release();
 	PxCloseVehicleSDK();
 	m_cooking->release();
@@ -139,4 +143,17 @@ PxCooking& PhysicsManager::getCookingInstance()
 
 PxDefaultCpuDispatcher& PhysicsManager::getCpuDispatcher() {
 	return *cpuDispatcher;
+}
+
+
+PxMaterial *PhysicsManager::createMaterial(PxReal staticFriction, PxReal dynamicFriction, PxReal restitution) {
+	for (int i = 0; i < m_materials.size(); i++) {
+		PxMaterial *mat = m_materials.at(i);
+		if (mat->getStaticFriction() == staticFriction && mat->getDynamicFriction() == dynamicFriction && mat->getRestitution() == restitution) {
+			return mat;
+		}
+	}
+	PxMaterial *mat = topLevelPhysics_->createMaterial(staticFriction, dynamicFriction, restitution);
+	m_materials.push_back(mat);
+	return mat;
 }

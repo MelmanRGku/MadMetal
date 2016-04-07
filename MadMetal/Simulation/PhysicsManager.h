@@ -3,6 +3,7 @@
 #include	<PxPhysicsAPI.h>
 #include	<PxFoundation.h>
 #include	<PxPhysics.h>
+#include	<vector>
 
 using namespace physx;
 
@@ -32,6 +33,7 @@ public:
 	static PxFoundation& getFoundation();
 	static PxCooking& getCookingInstance();
 	static PxDefaultCpuDispatcher &getCpuDispatcher();
+	static PxMaterial *createMaterial(PxReal staticFriction, PxReal dynamicFriction, PxReal restitution);
 
 public:
 	static void init();
@@ -56,6 +58,6 @@ private: // members
 	static PxTolerancesScale *m_scale;
 
 	static bool initialized;
-
+	static std::vector<PxMaterial*> m_materials;
 	static PxDefaultCpuDispatcher *cpuDispatcher;
 };

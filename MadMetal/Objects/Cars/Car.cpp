@@ -41,8 +41,8 @@ DrivingStyle& Car::getDrivingStyle()
 void Car::respawn()
 {
 	//if the car is alive and it respawned recently
-	if (m_timeSinceRespawn <= 3 && m_currentHealth > 0)
-		return;
+	//if (m_timeSinceRespawn <= 3 && m_currentHealth > 0)
+	//	return;
 
 	//if player is not alive
 	if (m_currentHealth <= 0) {
@@ -53,16 +53,13 @@ void Car::respawn()
 	
 	if (m_lastCollisionVolume != NULL)
 	{
-		m_car.getRigidDynamicActor()->setGlobalPose(m_lastCollisionVolume->getActor().getGlobalPose());
+		m_car.getRigidDynamicActor()->setGlobalPose(m_lastCollisionVolume->getRespawnLocation());
 		
 	}
 	else {
-		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
-		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, 5, currentPosition.p.z)));
+		
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(0, 5, 0)));
 	}
-
-
-	m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(0, 5, 0)));
 
 	m_car.getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 0, 0));
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0));
@@ -308,7 +305,7 @@ void Car::updateOrientation(float dt)
 
 void Car::update(float dt) {
 	
-	//std::cout << getCar().computeForwardSpeed() << std::endl;
+	std::cout << getCar().computeForwardSpeed() << std::endl;
 	
 	m_invincibilityTimeRemaining -= dt;
 	updateHealth(dt);
