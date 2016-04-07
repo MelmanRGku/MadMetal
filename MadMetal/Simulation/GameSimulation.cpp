@@ -48,7 +48,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 
 	PxMaterial* mMaterial;
-	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
+	mMaterial = PhysicsManager::createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
 	std::vector<PxTransform *> spawnLocations;
 	spawnLocations.push_back(new PxTransform(-15, 1, 0));
@@ -189,33 +189,31 @@ void GameSimulation::simulatePhysics(double dt)
 	}
 	for (int i = 0; i < numSteps; i++) {
 
-	for (unsigned int i = 0; i < m_players.size(); i++)
-	{
-		//This updates the ditance that the player has traveled. This is later used by the renderer ro render the tires.
-		m_players[i]->getCar()->distanceTraveled += m_players[i]->getCar()->getCar().computeForwardSpeed() * dt;
+		for (unsigned int i = 0; i < m_players.size(); i++)
+		{
+			//This updates the ditance that the player has traveled. This is later used by the renderer ro render the tires.
+			m_players[i]->getCar()->distanceTraveled += m_players[i]->getCar()->getCar().computeForwardSpeed() * dt;
 
-		//Raycasts.
+			//Raycasts.
 
-		PxVehicleWheels* vehicles[1] = { &m_players[i]->getCar()->getCar() };
-		PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
-		const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
-		PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
+			PxVehicleWheels* vehicles[1] = { &m_players[i]->getCar()->getCar() };
+			PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
+			const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
+			PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
 
-		//Vehicle update.
-		const PxVec3 grav = m_scene->getGravity();
-		PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
-		PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, m_players[i]->getCar()->getCar().mWheelsSimData.getNbWheels() } };
-			PxVehicleUpdates(dt, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
+			//Vehicle update.
+			const PxVec3 grav = m_scene->getGravity();
+			PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
+			PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, m_players[i]->getCar()->getCar().mWheelsSimData.getNbWheels() } };
+				PxVehicleUpdates(dt, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
-		//Work out if the vehicle is in the air.
-		m_players[i]->getCar()->setIsInAir(gIsVehicleInAir = m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]));
+			//Work out if the vehicle is in the air.
+			m_players[i]->getCar()->setIsInAir(gIsVehicleInAir = m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]));
+		}
+
+		m_scene->simulate(dt);
+		m_scene->fetchResults(true);
 	}
-
-	m_scene->simulate(dt);
-	m_scene->fetchResults(true);
-	
-
-}
 }
 
 void GameSimulation::simulateAnimation()
@@ -286,7 +284,7 @@ void GameSimulation::createPhysicsScene()
 
 
 	PxMaterial* mMaterial;
-	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
+	mMaterial = PhysicsManager::createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
 	//Create the batched scene queries for the suspension raycasts.
 	gVehicleSceneQueryData = VehicleSceneQueryData::allocate(NUM_OF_PLAYERS, PX_MAX_NB_WHEELS, NUM_OF_PLAYERS, *PhysicsManager::getAllocator());

@@ -12,9 +12,12 @@ class CollisionVolume : public Object3D
 public:
 	CollisionVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	~CollisionVolume();
+	PxTransform getRespawnLocation();
+	void setRespawnLocations(std::vector<PxVec3> locations);
+
 	void addAdjacentVolume(CollisionVolume * toAdd);
 	bool isAdjacent(CollisionVolume *toCheck);
-
+	
 	void setCurrentWaypointIndex(Waypoint* waypoint);
 	void setGoalWaypointIndex(Waypoint* waypoint);
 
@@ -27,4 +30,6 @@ private: //members
 	std::vector<CollisionVolume *> m_adjacentVolumes;
 	Waypoint* m_indexOfCurrentWaypoint;
 	Waypoint* m_indexOfGoalWaypoint;
+	int m_respawnIndex;
+	std::vector<PxTransform> m_respawnLocations;
 };

@@ -94,6 +94,8 @@ public:
 		RENDERABLE_OBJECT_MASKICON,
 		RENDERABLE_OBJECT_BOMBICON,
 		RENDERABLE_OBJECT_CATICON,
+
+		RENDERABLE_OBJECT_GOO_MONSTER_KILLER,
 	};
 
 	
@@ -243,6 +245,8 @@ public:
 			return new Model2D(Assets::getTexture("Bombcone"));
 		case RENDERABLE_OBJECT_CATICON:
 			return new Model2D(Assets::getTexture("Meowicon"));
+		case RENDERABLE_OBJECT_GOO_MONSTER_KILLER:
+			return Assets::getModel("Creature");
 		}
 	}
 	

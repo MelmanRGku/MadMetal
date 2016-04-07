@@ -165,7 +165,8 @@ void CollisionManager::processGooMonsterVolumeHit(long volumeId, long otherId)
 	{
 		PxVec3 direction = static_cast<PxRigidDynamic *>(&gooMonster->getActor())->getLinearVelocity();
 
-		car->getCar().getRigidDynamicActor()->setLinearVelocity(car->getCar().getRigidDynamicActor()->getLinearVelocity() + direction * 2);
+		car->getCar().getRigidDynamicActor()->addForce(direction * 5000, PxForceMode::eIMPULSE);
+		car->takeDamage(52);
 	}
 }
 
@@ -230,6 +231,7 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 			}
 		}
 		*/
+		
 		//std::cout << "car: " << car->getIndex() << " collided with volume: " << collisionVolume->getIndex() << std::endl;
 	}
 }
