@@ -69,5 +69,5 @@ enum DriveMode
 PxF32 gTireFrictionMultipliers[MAX_NUM_SURFACE_TYPES][MAX_NUM_TIRE_TYPES] =
 {
 	//FRONT_MEOW,	BACK_MEOW   FRONT_ED	BACK_ED    FRONT_GARG	BACK_GARG
-	{ 7.0f,			6.0f,		7.0f,		2.0f,		7.0f,		2.0f }//TARMAC
+	{ 7.0f,			6.0f,		7.0f,		5.7f,		7.0f,		6.3f }//TARMAC
 };

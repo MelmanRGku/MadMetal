@@ -29,16 +29,11 @@ void Gargantulous::fire()
 
 
 	PxTransform *pos;
-	if (m_superDurationRemainingSeconds > 0)
+	if (m_superDurationRemainingSeconds <= 0) 
 	{
-
-
-	}
-	else {
 		
 		m_reloadRemainingSeconds = m_reloadRateSeconds;
 		PxVec3 spawnPosition = m_car.getRigidDynamicActor()->getGlobalPose().p;
-		spawnPosition.y += m_car.getRigidDynamicActor()->getWorldBounds().getDimensions().y / 2;
 		GameFactory::instance()->makeObject(GameFactory::OBJECT_GARGANTULOUS_BULLET, &PxTransform(spawnPosition), NULL, this);
 		
 	}

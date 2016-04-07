@@ -142,7 +142,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
 			
-			bullet->createShape(PxBoxGeometry(.3, .3, 1), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			bullet->createShape(PxBoxGeometry(.3, .3, 1), *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			bullet->getShapes(shapes, 1);
@@ -165,7 +165,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
 
-			bullet->createShape(PxBoxGeometry(2, 2, 4), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			bullet->createShape(PxBoxGeometry(2, 2, 4), *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			bullet->getShapes(shapes, 1);
@@ -188,7 +188,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_GARGANTULOUS_SUPER_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_GARGANTULOUS_SUPER_BULLET_AGAINST;
 
-			bullet->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			bullet->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			bullet->getShapes(shapes, 1);
@@ -211,7 +211,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_GARGANTULOUS_SUPER_VOLUME;
 			simFilterData.word1 = COLLISION_FLAG_GARGANTULOUS_SUPER_VOLUME_AGAINST;
 
-			volume->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			volume->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			volume->getShapes(shapes, 1);
@@ -232,7 +232,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_MEOW_MIX_SUPER;
 			simFilterData.word1 = COLLISION_FLAG_MEOW_MIX_SUPER_AGAINST;
 
-			beam->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			beam->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			beam->getShapes(shapes, 1);
@@ -252,7 +252,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET_AGAINST;
 			
-			bullet->createShape(PxSphereGeometry(3.f), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			bullet->createShape(PxSphereGeometry(3.f), *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			bullet->getShapes(shapes, 1);
@@ -271,7 +271,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_WAYPOINT;
 			simFilterData.word1 = COLLISION_FLAG_WAYPOINT_AGAINST;
 
-			PxShape* temp = wapoint->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			PxShape* temp = wapoint->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			wapoint->getShapes(shapes, 1);
@@ -352,7 +352,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_COLLISION_VOLUME;
 			simFilterData.word1 = COLLISION_FLAG_COLLISION_VOLUME_AGAINST;
 
-			wapoint->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			wapoint->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			wapoint->getShapes(shapes, 1);
@@ -372,7 +372,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_POWERUP;
 			simFilterData.word1 = COLLISION_FLAG_POWERUP_AGAINST;
 
-			powerup->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			powerup->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			powerup->getShapes(shapes, 1);
@@ -393,7 +393,7 @@ public:
 							 simFilterData.word0 = COLLISION_FLAG_DEATH_VOLUME;
 							 simFilterData.word1 = COLLISION_FLAG_DEATH_VOLUME_AGAINST;
 
-							 deathVolume->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+							 deathVolume->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 							 PxShape* shapes[1];
 							 deathVolume->getShapes(shapes, 1);
@@ -414,7 +414,7 @@ public:
 							 simFilterData.word0 = COLLISION_FLAG_GOO_MONSTER;
 							 simFilterData.word1 = COLLISION_FLAG_GOO_MONSTER_AGAINST;
 
-							 gooMonster->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+							 gooMonster->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 							 PxShape* shapes[1];
 							 gooMonster->getShapes(shapes, 1);
@@ -437,7 +437,7 @@ public:
 															simFilterData.word0 = COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER;
 															simFilterData.word1 = COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER_AGAINST;
 
-															explosion->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+															explosion->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 															PxShape* shapes[1];
 															explosion->getShapes(shapes, 1);
@@ -458,7 +458,7 @@ public:
 							   simFilterData.word0 = COLLISION_FLAG_SHIELD_POWERUP;
 							   simFilterData.word1 = COLLISION_FLAG_SHIELD_POWERUP_AGAINST;
 
-							   powerup->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+							   powerup->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 							   PxShape* shapes[1];
 							   powerup->getShapes(shapes, 1);
@@ -478,7 +478,7 @@ public:
 							  simFilterData.word0 = COLLISION_FLAG_SPEED_POWERUP;
 							  simFilterData.word1 = COLLISION_FLAG_POWERUP_AGAINST;
 
-							  powerup->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+							  powerup->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 							  PxShape* shapes[1];
 							  powerup->getShapes(shapes, 1);
@@ -495,7 +495,7 @@ public:
 		{
 			PxRigidStatic * powerup = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
 
-			powerup->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			powerup->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			toReturn = powerup;
 			break;
@@ -511,7 +511,7 @@ public:
 										 simFilterData.word0 = COLLISION_FLAG_PARTICLE;
 										 simFilterData.word1 = 0;
 
-										 particle->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+										 particle->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 										 PxShape* shapes[1];
 										 particle->getShapes(shapes, 1);
@@ -534,7 +534,7 @@ public:
 										 simFilterData.word0 = 0;
 										 simFilterData.word1 = 0;
 
-										 explosion->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+										 explosion->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 										 PxShape* shapes[1];
 										 explosion->getShapes(shapes, 1);
@@ -556,7 +556,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_BOMB_EXPLOSION;
 			simFilterData.word1 = COLLISION_FLAG_BOMB_EXPLOSION_AGAINST;
 
-			explosion->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			explosion->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			explosion->getShapes(shapes, 1);
