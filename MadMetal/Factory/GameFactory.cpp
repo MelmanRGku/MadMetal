@@ -55,12 +55,12 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	case OBJECT_MEOW_MIX:
 	{
 
-	Model3D *model = NULL;
-	model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXBODY));
-Renderable3D *renderable = new Renderable3D(model, true, true);
-Model3D *model2 = NULL;
-model2 = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXWHEEL));
-Renderable3D *renderable2 = new Renderable3D(model2, true, true);
+		Model3D *model = NULL;
+		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXBODY));
+		Renderable3D *renderable = new Renderable3D(model, true, true);
+		Model3D *model2 = NULL;
+		model2 = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOWMIXWHEEL));
+		Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
@@ -327,7 +327,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 								   Animatable *animatable = new Animatable();
 
 								   PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-		glm::vec3 speed = 250.0f * static_cast<Object3D *>(parent)->getForwardVector();
+		glm::vec3 speed = 300.0f * static_cast<Object3D *>(parent)->getForwardVector();
 								   PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 								   PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_GARGANTULOUS_BULLET, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
 								   delete physicsSpeed;
@@ -348,7 +348,7 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 		PxTransform position = static_cast<Object3D *>(parent)->getGlobalPosePhysx();
 		PxVec3 dir = PxVec3(static_cast<Object3D *>(parent)->getForwardVector().x, static_cast<Object3D *>(parent)->getForwardVector().y, static_cast<Object3D *>(parent)->getForwardVector().z);
 		position.p = position.p + dir * 10.f;
-		sceneSweep(*sweepShape, position, dir, 300.f, buf, PxHitFlags(PxHitFlag::ePRECISE_SWEEP), fd);
+		sceneSweep(*sweepShape, position, dir, 600.f, buf, PxHitFlags(PxHitFlag::ePRECISE_SWEEP), fd);
 		for (int i = 0; i < buf.nbTouches; i++) {
 			PxShape* shapes[1];
 			buf.touches[i].actor->getShapes(shapes, 1);
@@ -374,7 +374,9 @@ Renderable3D *renderable2 = new Renderable3D(model2, true, true);
 
 
 		PxMaterial* material = PhysicsManager::createMaterial(0.5, 0.3, 0.1f);    //static friction, dynamic friction, restitution
-		glm::vec3 speed = 40.f * static_cast<Car *>(parent)->getForwardVector() + static_cast<Car *>(parent)->getCar().computeForwardSpeed() * static_cast<Car *>(parent)->getForwardVector();
+		float carSpeed = static_cast<Car *>(parent)->getCar().computeForwardSpeed();
+		float carMaxSpeed = static_cast<Car *>(parent)->getDrivingStyle().getMaxSpeed();
+		glm::vec3 speed = (40.f + carSpeed + 40.f*(1 - carSpeed/carMaxSpeed)) * static_cast<Car *>(parent)->getForwardVector();
 		PxVec3 *physicsSpeed = new PxVec3(speed.x, speed.y, speed.z);
 		PxRigidDynamic *physicalBullet = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BULLET_SUPER_VOLCANO, objectId, pos, NULL, 0, NULL, NULL, physicsSpeed));
 		
