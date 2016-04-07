@@ -324,7 +324,7 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 	//startLine
 	pos = new PxTransform(PxVec3(4, 0 ,-35));
 	CollisionVolume* temp = dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	temp->setGoalWaypointIndex(getWaypointAt(4));
+	temp->setGoalWaypointIndex(getWaypointAt(7));
 	temp->setCurrentWaypointIndex(getWaypointAt(48));
 	m_collisionVolumes.push_back(temp);
 	respawnLocations.push_back(PxVec3(25, 20, -35));
@@ -344,8 +344,8 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 	respawnLocations.push_back(PxVec3(25, 20, 200));
 	respawnLocations.push_back(PxVec3(5, 20, 200));
 	temp = dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	temp->setGoalWaypointIndex(getWaypointAt(4));
-	temp->setCurrentWaypointIndex(getWaypointAt(70));
+	temp->setGoalWaypointIndex(getWaypointAt(7));
+	temp->setCurrentWaypointIndex(getWaypointAt(84));
 	m_collisionVolumes.push_back(temp);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -357,7 +357,9 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 	respawnLocations.push_back(PxVec3(25, 20, 500));
 	respawnLocations.push_back(PxVec3(5, 20, 500));
 	pos = new PxTransform(PxVec3(15, 0,450));
-	m_collisionVolumes.push_back(dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	temp = dynamic_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
+	temp->setGoalWaypointIndex(getWaypointAt(216));
+	temp->setCurrentWaypointIndex(getWaypointAt(1014));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
 
