@@ -22,7 +22,7 @@
 
 #define NUM_OF_PLAYERS 12
 #define NUM_LAPS_FOR_VICTORY 3
-#define RACE_FINISH_DELAY 10
+#define RACE_FINISH_DELAY 30
 
 using namespace std;
 bool gIsVehicleInAir = true;
@@ -379,7 +379,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 				{
 					for (int j = 0; j < m_humanPlayers.size(); j++) {
 						if (m_players[i]->getCar() != m_humanPlayers[j]->getCar())
-							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("You Better Hurry...", 2);
+							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("You have 30 seconds to finish!", 2);
 					else 
 							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("First Across... Like a Boss", 2);
 					}
@@ -388,7 +388,14 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 				else if (RACE_FINISH_DELAY - m_raceFinishedCountdownSeconds >= 2)
 				{
 					for (int j = 0; j < m_humanPlayers.size(); j++) {
-						m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage(std::to_string((int)m_raceFinishedCountdownSeconds), 1);
+						if ((int)m_raceFinishedCountdownSeconds % 10 == 0 && (int)m_raceFinishedCountdownSeconds) {
+							std::stringstream ss;
+							ss << (int)m_raceFinishedCountdownSeconds << " seconds left!";
+							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage(ss.str(), 1);
+						}
+						else if (m_raceFinishedCountdownSeconds <= 5) {
+							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage(std::to_string((int)m_raceFinishedCountdownSeconds), 1);
+						}
 					}
 				}
 				if (!m_players[i]->getCar()->isFinishedRace())
@@ -402,8 +409,8 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 		}
 
 		if (m_raceFinishedCountdownSeconds) {
-			//have all players crossed the finish line or count down done?
-			if (m_numPlayersFinishedRace == m_players.size() || (m_raceFinishedCountdownSeconds -= dt) <= 0)
+			//have first 3 players crossed the finish line or count down done?
+			if (m_numPlayersFinishedRace == m_players.size() || m_numPlayersFinishedRace == 3 || (m_raceFinishedCountdownSeconds -= dt) <= 0)
 			{
 				m_raceFinished = true;
 				//m_displayMessage->initializeMessage("FINISHED", 3);
