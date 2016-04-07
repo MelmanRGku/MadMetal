@@ -12,7 +12,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
 	m_lastKnowCollisionVolue = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(367);
+	m_goalWaypoint = m_track.getWaypointAt(7);
 	m_currentPath.clear();
 	setHighCostWaypointsToHigh();
 	m_needsToBackup = false;
@@ -170,14 +170,14 @@ void AIControllable::recalculatePath()
 	m_currentPath.clear();
 	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-	//std::cout << "THe new path is: ";
+	std::cout << "THe new path is: ";
 
-	//for (int i = 0; i < m_currentPath.size(); i++)
-	//{
-	//	std::cout << m_currentPath[i]->getIndex() << ", ";
-	//}
+	for (int i = 0; i < m_currentPath.size(); i++)
+	{
+		std::cout << m_currentPath[i]->getIndex() << ", ";
+	}
 
-	//std::cout << "\n";
+	std::cout << "\n";
 	updateNextWaypoint();
 }
 
@@ -237,60 +237,8 @@ void AIControllable::checkCollisionVolumes()
 	{
 		m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
 
-		if (m_car->getLastHitCollisionVolume()->getIndex() == 0)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(367);
-			recalculatePath();
-		}
-		else if (m_car->getLastHitCollisionVolume()->getIndex() == 1)
-		{
-			m_AiTrackAreaPosition = AiPlaceInTrack::DESSERT;
-			m_goalWaypoint = m_track.getWaypointAt(550);
-			recalculatePath();
-		}
-		else if (m_car->getLastHitCollisionVolume()->getIndex() == 2)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(629);
-			recalculatePath();
-		}
-		else if (m_car->getLastHitCollisionVolume()->getIndex() == 3)
-		{
-			m_AiTrackAreaPosition = AiPlaceInTrack::CANYON;
-			m_goalWaypoint = m_track.getWaypointAt(633);
-			recalculatePath();
-		}
-		else if (m_car->getLastHitCollisionVolume()->getIndex() == 4)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(716);
-			recalculatePath();
-		}
-		else if (m_car->getLastHitCollisionVolume()->getIndex() == 5)
-		{
-			m_AiTrackAreaPosition = AiPlaceInTrack::SUBWAY;
-			m_goalWaypoint = m_track.getWaypointAt(896);
-			recalculatePath();
-		}
-		else if (m_car->getLastHitCollisionVolume()->getIndex() == 6)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(953);
-			recalculatePath();
-		}
-		else if (m_car->getLastHitCollisionVolume()->getIndex() == 7)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(1003);
-			recalculatePath();
-		}
-		else if (m_car->getLastHitCollisionVolume()->getIndex() == 8)
-		{
-			m_AiTrackAreaPosition = AiPlaceInTrack::CITY;
-			m_goalWaypoint = m_track.getWaypointAt(3);
-			recalculatePath();
-		}
-		else if (m_car->getLastHitCollisionVolume()->getIndex() == 9)
-		{
-			m_goalWaypoint = m_track.getWaypointAt(3);
-			recalculatePath();
-		}
+		m_goalWaypoint = m_lastKnowCollisionVolue->getGoalWaypointIndex();
+		recalculatePath();
 	}
 
 }
@@ -320,19 +268,19 @@ void AIControllable::processInputAcceleration(float amount)
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, amount);
 	}
-	else if (amount < 0.1 && m_car->getCar().computeForwardSpeed() > 10.0)
-	{
-		//std::cout << "Applying break with : " << -amount << "\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
-		if (amount < 0)
-		{
-			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
-		}
-		else
-		{
-			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, amount);
-		}
-	}
+	//else if (amount < 0.1 && m_car->getCar().computeForwardSpeed() > 10.0)
+	//{
+	//	//std::cout << "Applying break with : " << -amount << "\n";
+	//	m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
+	//	if (amount < 0)
+	//	{
+	//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
+	//	}
+	//	else
+	//	{
+	//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, amount);
+	//	}
+	//}
 	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
 	{
 		//std::cout << "Applying acceleration : " << -amount << "\n";
@@ -378,7 +326,7 @@ void AIControllable::checkStuckInWall()
 		m_car->getCar().computeForwardSpeed() < 0.5)
 	{
 		m_counter++;
-		if (m_counter > 120)
+		if (m_counter > 5)
 		{
 			m_needsToBackup = !m_needsToBackup;
 			if (m_needsToBackup)

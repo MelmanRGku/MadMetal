@@ -9,11 +9,13 @@ Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, R
 {
 	
 	ObjModelLoader *loader = new ObjModelLoader();
-	NavigationalGrid *model = loader->loadNavGridFromFile("Assets/NavigationalGrid/trackv3ground.obj");
+	NavigationalGrid *model = loader->loadNavGridFromFile("Assets/NavigationalGrid/trackv3ground4.obj");
 
 	std::cout << "hello";
 
 	WaypointSystem * navigationalGrid = new WaypointSystem(*model);
+
+	m_waypointList = navigationalGrid->getWaypointList();
 
 	m_waypointSystems.push_back(navigationalGrid);
 
@@ -45,7 +47,7 @@ void Track::setupCollisionVolumes() {
 		*entranceToTheTrafficCircle = NULL,
 		*topOfTheTrafficCircle = NULL,
 		*bottomOfTheTrafficCircle = NULL;
-
+	
 	PxTransform * pos;
 	PxGeometry **geom1 = new PxGeometry *[1];
 	geom1[0] = new PxBoxGeometry(50, 10, 10);
@@ -53,6 +55,8 @@ void Track::setupCollisionVolumes() {
 	//startLine
 	pos = new PxTransform(PxVec3(4, 0, -35));
 	startLine = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
+	startLine->setGoalWaypointIndex(getWaypointAt(7));
+	startLine->setCurrentWaypointIndex(getWaypointAt(48));
 	m_collisionVolumes.push_back(startLine);
 	respawnLocations.push_back(PxVec3(25, 20, -35));
 	respawnLocations.push_back(PxVec3(5, 20, -35));
@@ -72,6 +76,8 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(25, 20, 200));
 	respawnLocations.push_back(PxVec3(5, 20, 200));
 	pathBranchLeadingIntoTheDessert = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
+	pathBranchLeadingIntoTheDessert->setGoalWaypointIndex(getWaypointAt(7));
+	pathBranchLeadingIntoTheDessert->setCurrentWaypointIndex(getWaypointAt(84));
 	m_collisionVolumes.push_back(pathBranchLeadingIntoTheDessert);
 	pathBranchLeadingIntoTheDessert->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -82,13 +88,15 @@ void Track::setupCollisionVolumes() {
 	m_collisionVolumes.push_back(topOfTheJumpRampInTheDesert);
 
 	//deathPit 1
-	geom1[0] = new PxBoxGeometry(40, 15, 50);
+	geom1[0] = new PxBoxGeometry(40, 15, 48);
 	respawnLocations.push_back(PxVec3(25, 20, 525));
 	respawnLocations.push_back(PxVec3(5, 20, 525));
 	respawnLocations.push_back(PxVec3(25, 20, 500));
 	respawnLocations.push_back(PxVec3(5, 20, 500));
 	pos = new PxTransform(PxVec3(15, 0, 450));
 	deathPit1 = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
+	deathPit1->setGoalWaypointIndex(getWaypointAt(216));
+	deathPit1->setCurrentWaypointIndex(getWaypointAt(1014));
 	m_collisionVolumes.push_back(deathPit1);
 	deathPit1->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -103,9 +111,10 @@ void Track::setupCollisionVolumes() {
 	deathPit2 = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(deathPit2);
 	deathPit2->setRespawnLocations(respawnLocations);
+	deathPit2->setGoalWaypointIndex(getWaypointAt(19));
+	deathPit2->setCurrentWaypointIndex(getWaypointAt(16));
 	respawnLocations.clear();
-
-
+	
 	//start of the canyon
 	geom1[0] = new PxBoxGeometry(40, 15, 55);
 	respawnLocations.push_back(PxVec3(-15, 20, 1100));
@@ -134,7 +143,7 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-870, 20, 1575));
 	respawnLocations.push_back(PxVec3(-870, 20, 1550));
 	respawnLocations.push_back(PxVec3(-870, 20, 1525));
-
+	
 	respawnLocations.push_back(PxVec3(-840, 20, 1575));
 	respawnLocations.push_back(PxVec3(-840, 20, 1550));
 	respawnLocations.push_back(PxVec3(-840, 20, 1525));

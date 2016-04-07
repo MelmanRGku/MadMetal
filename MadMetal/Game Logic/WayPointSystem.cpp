@@ -157,7 +157,7 @@ WaypointSystem::WaypointSystem(NavigationalGrid& drivingMesh)
 	for (unsigned int i = 0; i < drivingMesh.getVertices()->size(); i++)
 	{
 		PxGeometry **geom = new PxGeometry *[1];
-		geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_LENGTH_COLLISION, WAYPOINT_HEIGHT_COLLISION, WAYPOINT_WIDTH_COLLISION));
+		geom[0] = new PxSphereGeometry(2.40);
 		PxTransform *pos = new PxTransform(drivingMesh.getVertices()->at(i).x,
 			drivingMesh.getVertices()->at(i).y,
 			drivingMesh.getVertices()->at(i).z);

@@ -5,14 +5,10 @@
 #include <iostream>
 #include "Objects\Object3D.h"
 
+class Waypoint;
 
 class CollisionVolume : public Object3D
 {
-	int m_respawnIndex;
-	std::vector<PxTransform> m_respawnLocations;
-	std::vector<CollisionVolume *> m_nextVolumes;
-	bool m_isStartCollisionVolume;
-
 public:
 	CollisionVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable);
 	~CollisionVolume();
@@ -24,5 +20,20 @@ public:
 	void addNextVolume(CollisionVolume * toAdd);
 	bool isPrevVolumeOf(CollisionVolume *toCheck);
 	
+	void setCurrentWaypointIndex(Waypoint* waypoint);
+	void setGoalWaypointIndex(Waypoint* waypoint);
+
+	Waypoint* getCurrentWaypointIndex();
+	Waypoint* getGoalWaypointIndex();
+	
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
+
+private: //members
+	Waypoint* m_currentWaypoint;
+	Waypoint* m_goalWaypoint;
+	int m_respawnIndex;
+	std::vector<CollisionVolume *> m_nextVolumes;
+	std::vector<PxTransform> m_respawnLocations;
+	bool m_isStartCollisionVolume;
+
 };

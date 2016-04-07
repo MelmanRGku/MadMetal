@@ -60,8 +60,27 @@ void CollisionVolume::setIsStartCollisionVolume(bool isStartCollisionVolume) {
 	m_isStartCollisionVolume = isStartCollisionVolume;
 }
 
+void CollisionVolume::setCurrentWaypointIndex(Waypoint* waypoint)
+{
+	m_currentWaypoint = waypoint;
+}
+
+void CollisionVolume::setGoalWaypointIndex(Waypoint* waypoint)
+{
+	m_goalWaypoint = waypoint;
+}
+
 bool CollisionVolume::getIsStartCollisionVolume() {
 	return m_isStartCollisionVolume;
+}
+
+Waypoint* CollisionVolume::getCurrentWaypointIndex()
+{
+	return m_currentWaypoint;
+}
+Waypoint* CollisionVolume::getGoalWaypointIndex()
+{
+	return m_goalWaypoint;
 }
 
 

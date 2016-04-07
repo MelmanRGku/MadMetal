@@ -319,7 +319,7 @@ void Car::update(float dt) {
 		ui->gaugeBar->setGaugePercentage(getSuperGauge());
 
 		{
-			std::stringstream s;
+	std::stringstream s;
 			s << "Lap: " << getLap();
 			ui->lap->setString(s.str());
 		}
