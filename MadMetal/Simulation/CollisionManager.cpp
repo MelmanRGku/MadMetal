@@ -211,7 +211,9 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 
 	if (car != NULL)
 	{
-		/*if (car->getLastHitCollisionVolume() == NULL)
+		car->setLastHitCollisionVolume(collisionVolume);
+		/*
+		if (car->getLastHitCollisionVolume() == NULL)
 		{
 			//std::cout << "set first time way point of " << collisionVolume->getIndex() << std::endl;
 			car->setLastHitCollisionVolume(collisionVolume);
@@ -229,6 +231,7 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 			}
 		}
 		*/
+		
 		//std::cout << "car: " << car->getIndex() << " collided with volume: " << collisionVolume->getIndex() << std::endl;
 	}
 }
