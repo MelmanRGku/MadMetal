@@ -25,13 +25,10 @@
 #define RACE_FINISH_DELAY 30
 
 using namespace std;
-bool gIsVehicleInAir = true;
-static const float TRACK_DIMENSIONS = 200;
-
-bool temporary = false;
 
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audioHandle(audioHandle)
 {
+	Waypoint::resetGlobalId();
 	Car::resetGlobalPositionID();
 	newMessage.setTag(SceneMessage::eNone);
 	createPhysicsScene();
@@ -208,7 +205,7 @@ void GameSimulation::simulatePhysics(double dt)
 				PxVehicleUpdates(dt, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
 			//Work out if the vehicle is in the air.
-			m_players[i]->getCar()->setIsInAir(gIsVehicleInAir = m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]));
+			m_players[i]->getCar()->setIsInAir(m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]));
 		}
 
 		m_scene->simulate(dt);

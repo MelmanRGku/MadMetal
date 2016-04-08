@@ -96,6 +96,7 @@ public:
 		RENDERABLE_OBJECT_CATICON,
 
 		RENDERABLE_OBJECT_GOO_MONSTER_KILLER,
+		RENDERABLE_OBJECT_GOO_MONSTER_PUSHER,
 	};
 
 	
@@ -246,7 +247,9 @@ public:
 		case RENDERABLE_OBJECT_CATICON:
 			return new Model2D(Assets::getTexture("Meowicon"));
 		case RENDERABLE_OBJECT_GOO_MONSTER_KILLER:
-			return Assets::getModel("Creature");
+			return Assets::getModel("headcrabclassic");
+		case RENDERABLE_OBJECT_GOO_MONSTER_PUSHER:
+			return Assets::getModel("Slime");
 		}
 	}
 	

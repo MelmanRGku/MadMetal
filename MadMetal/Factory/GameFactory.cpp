@@ -691,7 +691,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							 Model3D *model = NULL;
 							 model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_DEATH_PIT));
 							 Renderable3D *renderable = new Renderable3D(model, true, true);
-							 //renderable->setModel(NULL);
+							 renderable->setModel(NULL);
 							 Animatable *animatable = new Animatable();
 							 Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 

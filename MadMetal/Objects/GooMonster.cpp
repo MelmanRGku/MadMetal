@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GooMonster.h"
+#include "Global\Assets.h"
 
 GooMonster::GooMonster(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
@@ -9,6 +10,7 @@ GooMonster::GooMonster(long id, Audioable *aable, Physicable *pable, Animatable 
 	
 	m_spawnLocation = m_physicable->getActor().getGlobalPose().p;
 	m_needsRespawn = false;
+	type = GOO_MONSTER_TYPE_KILLER;
 }
 
 GooMonster::~GooMonster()
@@ -41,21 +43,35 @@ void GooMonster::update(float dt)
 		PxActor &px = p->getActor();
 		PxActor *px2 = &px;
 		PxRigidDynamic * actor = static_cast<PxRigidDynamic *>(px2);
-		if (actor == NULL)
-		{
-			//std::cout << "actor is null \n";
-		}
-		else
-		{
 
+		actor->setLinearVelocity(m_spawnVelocity);
+		actor->setGlobalPose(PxTransform(m_spawnLocation));
 
-			actor->setLinearVelocity(m_spawnVelocity);
-			actor->setGlobalPose(PxTransform(m_spawnLocation));
-			//std::cout << "Respawning\n";
+		//change the monster type
+		GooMonsterType newType = (GooMonsterType)(rand() % TOTAL_NUMBER_OF_MONSTER_TYPES);
+
+		if (newType == GOO_MONSTER_TYPE_KILLER && type != GOO_MONSTER_TYPE_KILLER) {
+			m_renderable->setModel(Assets::getModel("headcrabclassic"));
+			static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 		}
+		else if (newType == GOO_MONSTER_TYPE_PUSHER && type != GOO_MONSTER_TYPE_PUSHER) {
+			m_renderable->setModel(Assets::getModel("Slime"));
+			static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
+		}
+
+		setMonsterType(newType);
+
 	} else {
 		m_respawnCounter -= dt;
 	}
 
+}
+
+GooMonster::GooMonsterType GooMonster::getMonsterType() {
+	return type;
+}
+
+void GooMonster::setMonsterType(GooMonsterType type) {
+	this->type = type;
 }
 
