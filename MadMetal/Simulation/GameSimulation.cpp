@@ -586,7 +586,7 @@ void GameSimulation::setupDeathPit() {
 	PxGeometry **deathPitGeom = new PxGeometry*[1];
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 10, 45));
 	PxTransform *pos = new PxTransform(15, -20, 445);
-	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->setRespawnLocation(pos->p + PxVec3(0,21,465));
+	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->setRespawnLocation(pos->p + PxVec3(0, 21, 465));
 
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 10, 60));
 	pos = new PxTransform(-25, -20, 765);
@@ -595,6 +595,10 @@ void GameSimulation::setupDeathPit() {
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(350, 5, 200));
 	pos = new PxTransform(-713, -40, 1560);
 	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->getRenderable()->setModel(NULL);
+
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(5000, 10, 5000));
+	pos = new PxTransform(0, -50, 0);
+	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
 
 
 	delete pos;
