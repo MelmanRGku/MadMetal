@@ -8,6 +8,7 @@ private:
 	GamePad * m_gamePad;
 	Object3D *singlePlayerButton,
 		*multiPlayerButton,
+		*controlsButton,
 		*exitButton,
 		*background,
 		*selectedButton;

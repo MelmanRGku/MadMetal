@@ -127,7 +127,7 @@ void Car::usePowerUp()
 			break;
 		case (PowerUpType::DEFENSE) :
 			
-			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
+			geom[0] = new PxBoxGeometry(dim.x, dim.y / 2, dim.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(pos.x,pos.y,pos.x)), geom, this);
 			delete geom[0];
 			m_audioable->getAudioHandle().queAudioSource(&getActor(), ShieldPowerupSound());
@@ -135,7 +135,7 @@ void Car::usePowerUp()
 		case (PowerUpType::SPEED) :
 			//add particle system
 			
-			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
+			geom[0] = new PxBoxGeometry(dim.x, dim.y / 2, dim.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SPEED_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), geom, this);
 			PxRigidDynamic* actor = static_cast<PxRigidDynamic*>(&getActor());
 			glm::vec3 direction = glm::normalize(getForwardVector());
@@ -270,22 +270,31 @@ void Car::updateOrientation(float dt)
 
 	m_shadow->getActor().setGlobalPose(PxTransform(getActor().getGlobalPose().p + PxVec3(0, lastKnownDistanceBetweenCarAndShadow, 0), getActor().getGlobalPose().q));
 
+	PxVec3 extraOffset = PxVec3(0, 0, 0);
+	bool groundFound = false;
 	PxRaycastBuffer hit;
 	PxQueryFilterData fd = PxQueryFilterData(PxQueryFlag::eSTATIC);
-	GameFactory::instance()->sceneRayCast(m_car.getRigidDynamicActor()->getGlobalPose().p + PxVec3(0,1,0), PxVec3(0, -1, 0), 500, hit, PxHitFlag::eDEFAULT, fd);
-	if (hit.hasBlock)
-	{
-		if (hit.block.actor != NULL)
+	do {
+		GameFactory::instance()->sceneRayCast(m_car.getRigidDynamicActor()->getGlobalPose().p + extraOffset, PxVec3(0, -1, 0), 500, hit, PxHitFlag::eDEFAULT, fd);
+		if (hit.hasBlock)
 		{
 			PxShape * shapes[1];
 			hit.block.actor->getShapes(shapes, 1);
-			//if (shapes[0]->getSimulationFilterData().word0 == COLLISION_FLAG_GROUND)
-			//{
-				lastKnownDistanceBetweenCarAndShadow = -hit.block.distance;
-			//}
+			if (shapes[0]->getSimulationFilterData().word0 == COLLISION_FLAG_GROUND)
+			{
+				lastKnownDistanceBetweenCarAndShadow = extraOffset.y - hit.block.distance + 1.f;
+				groundFound = true;
+			}
+			else {
+				extraOffset += PxVec3(0, -hit.block.distance - 0.1f, 0);
+			}
 		}
-	}
-	
+		else {
+			if (extraOffset.y != 0)
+				lastKnownDistanceBetweenCarAndShadow = extraOffset.y;
+			groundFound = true;
+		}
+	} while (!groundFound);
 	
 }
 

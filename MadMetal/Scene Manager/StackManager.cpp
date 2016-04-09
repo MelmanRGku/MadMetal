@@ -6,6 +6,8 @@
 #include "Simulation\MultiPlayerMenu.h"
 #include "Simulation\PauseMenu.h"
 #include "Simulation\EndingScene.h"
+#include "Simulation\ControlsMenu.h"
+#include "Simulation\MadMetalPresentsScreen.h"
 #include <windows.h>
 #include "winbase.h"
 #include "wingdi.h"
@@ -100,7 +102,7 @@ StackManager::StackManager()
 
 	//create stack with loadingScreen on top
 	m_mailBox->setTag(SceneMessage::eMainMenu);
-	m_stack = new SceneStack(new LoadingScreen(*m_mailBox, *m_audio, Assets::status, new std::thread(Assets::loadBeforeGameStarts, wglGetCurrentDC(), shared)));
+	m_stack = new SceneStack(new MadMetalPresentsScreen(*m_audio, Assets::status, new std::thread(Assets::loadBeforeGameStarts, wglGetCurrentDC(), shared)));
 }
 
 StackManager::~StackManager()
@@ -167,7 +169,9 @@ void StackManager::readMailBox()
 		m_stack->clearStack();
 		m_stack->pushScene(new MainMenu(m_input, m_audio));
 		break;
-
+	case (SceneMessage::eControls):
+		m_stack->pushScene(new ControlsMenu(m_input, m_audio));
+		break;
 	case (SceneMessage::ePop) :
 		m_stack->popScene();
 		m_stack->getTopScene()->onResume();

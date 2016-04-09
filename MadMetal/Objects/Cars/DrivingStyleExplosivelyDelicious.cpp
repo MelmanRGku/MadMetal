@@ -35,8 +35,8 @@ DrivingStyleExplosivelyDelicious::DrivingStyleExplosivelyDelicious()
 	m_clutchStrength = 20.0f;
 	m_suspensionSpringStrength = 300.0f; // !
 	m_suspensionSpringDamperRate = 30000.0f;
-	m_suspensionMaxCompression = 5.f;
-	m_suspensionMaxDroop = 6.0f;
+	m_suspensionMaxCompression = 2.5f;
+	m_suspensionMaxDroop = 3.0f;
 	m_suspensionCamberAngleAtRest = 0.0;
 	m_suspensionCamberAngleAtMaxDroop = 2.14;
 	m_suspensionCamberAngleAtMaxCompression = -2.14;

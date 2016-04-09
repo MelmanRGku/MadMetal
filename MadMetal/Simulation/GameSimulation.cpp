@@ -614,7 +614,8 @@ void GameSimulation::setupDeathPit() {
 	//death pit below the map
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(5000, 10, 5000));
 	pos = new PxTransform(0, -50, 0);
-	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit->getRenderable()->setModel(NULL);
 
 
 	delete pos;

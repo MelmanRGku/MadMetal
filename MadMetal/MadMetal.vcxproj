@@ -84,12 +84,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Simulation\MadMetalPresentsScreen.cpp" />
+    <ClCompile Include="Simulation\ControlsMenu.cpp" />
     <ClCompile Include="Objects\DeathPit.cpp" />
     <ClCompile Include="Objects\BombExplosion.cpp" />
     <ClCompile Include="Objects\EndingScreenUIScoreTable.cpp" />
     <ClCompile Include="Objects\EndingScreenCarInfoManager.cpp" />
     <ClCompile Include="Objects\GooMonster.cpp" />
     <ClCompile Include="Objects\ExplosivelyDeliciousBullet.cpp" />
+    <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Objects\NavigationalGrid.cpp" />
     <ClCompile Include="Simulation\EndingScene.cpp" />
     <ClCompile Include="Game Logic\AIControllable.cpp" />
@@ -116,7 +119,6 @@
     <ClCompile Include="Objects\Object3D.cpp" />
     <ClCompile Include="Objects\BulletCarCollision.cpp" />
     <ClCompile Include="Objects\CollisionVolume.cpp" />
-    <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Objects\MeowMixBullet.cpp" />
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
@@ -184,11 +186,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Simulation\MadMetalPresentsScreen.h" />
+    <ClInclude Include="Simulation\ControlsMenu.h" />
     <ClInclude Include="Game Logic\AIDefinitions.h" />
     <ClInclude Include="Objects\DeathPit.h" />
     <ClInclude Include="Objects\BombExplosion.h" />
     <ClInclude Include="Objects\EndingScreenUIScoreTable.h" />
     <ClInclude Include="Objects\EndingScreenCarInfoManager.h" />
+    <ClInclude Include="Objects\LoadingBar.h" />
     <ClInclude Include="Objects\NavigationalGrid.h" />
     <ClInclude Include="Objects\GooMonster.h" />
     <ClInclude Include="Simulation\EndingScene.h" />
@@ -233,7 +238,6 @@
     <ClInclude Include="Objects\BulletCarCollision.h" />
     <ClInclude Include="Objects\DisplayMessage.h" />
     <ClInclude Include="Objects\CollisionVolume.h" />
-    <ClInclude Include="Objects\LoadingBar.h" />
     <ClInclude Include="Objects\MeowMixBullet.h" />
     <ClInclude Include="Objects\GaugeBar.h" />
     <ClInclude Include="Objects\HealthBar2D.h" />

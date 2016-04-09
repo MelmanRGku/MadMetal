@@ -22,6 +22,7 @@ public:
 		eRestart,
 		eEnd,
 		ePop,
+		eControls,
 		eDefault,
 		eNone,
 		eExit,

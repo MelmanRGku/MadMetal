@@ -48,6 +48,19 @@ MainMenu::MainMenu(Input * input, Audio *audio)
 		a->updatePosition(glm::vec3(0, -2, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Multiplayer.obj"));
+		model->setupVAOs();
+		Renderable3D *r = new Renderable3D(model, true, true);
+		controlsButton = new Object3D(2, au, p, a, r, NULL);
+		m_world->addGameObject(controlsButton);
+	}
+
+	{
+		Physicable *p = new Physicable(NULL);
+		Animatable *a = new Animatable();
+		a->updatePosition(glm::vec3(0, -4, -25));
+		a->setScale(glm::vec3(5, 1, 1));
+		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Quit.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
@@ -95,8 +108,11 @@ void MainMenu::upPressed() {
 	else if (selectedButton == multiPlayerButton) {
 		selectedButton = singlePlayerButton;
 	}
-	else if (selectedButton == exitButton) {
+	else if (selectedButton == controlsButton) {
 		selectedButton = multiPlayerButton;
+	}
+	else if (selectedButton == exitButton) {
+		selectedButton = controlsButton;
 	}
 	selectMenuItem(selectedButton);
 }
@@ -108,6 +124,9 @@ void MainMenu::downPressed() {
 		selectedButton = multiPlayerButton;
 	}
 	else if (selectedButton == multiPlayerButton) {
+		selectedButton = controlsButton;
+	}
+	else if (selectedButton == controlsButton) {
 		selectedButton = exitButton;
 	}
 	else if (selectedButton == exitButton) {
@@ -123,6 +142,9 @@ void MainMenu::aPressed() {
 	}
 	else if (selectedButton == multiPlayerButton) {
 		messageToReturn = SceneMessage::eMultiCharSelect;
+	}
+	else if (selectedButton == controlsButton) {
+		messageToReturn = SceneMessage::eControls;
 	}
 	else if (selectedButton == exitButton) {
 		messageToReturn = SceneMessage::eExit;

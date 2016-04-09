@@ -130,6 +130,13 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 										 physicalCar->mDriveDynData.setUseAutoGears(true);
 
 										 car->setSoundChassis(ChassisCrashSound());
+
+										 PxGeometry *geom[1];
+										 geom[0] = new PxBoxGeometry(1, 1, 1);
+										 Object3D *shadow = static_cast<Object3D *>(makeObject(OBJECT_BLOB_SHADOW, pos, geom, car));
+										 car->setShadow(shadow);
+										 shadow->setScale(glm::vec3(car->getScale().x * 1.5f, 3, car->getScale().z * 1.5f));
+
 										 return car;
 	}
 	case OBJECT_GARGANTULOUS:
@@ -161,6 +168,11 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							physicalCar->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 							physicalCar->mDriveDynData.setUseAutoGears(true);
 
+							PxGeometry *geom[1];
+							geom[0] = new PxBoxGeometry(1, 1, 1);
+							Object3D *shadow = static_cast<Object3D *>(makeObject(OBJECT_BLOB_SHADOW, pos, geom, car));
+							car->setShadow(shadow);
+							shadow->setScale(glm::vec3(car->getScale().x, 3, car->getScale().z));
 
 							car->setSoundChassis(ChassisCrashSound());
 							return car;
