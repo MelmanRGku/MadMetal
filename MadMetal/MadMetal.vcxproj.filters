@@ -198,9 +198,6 @@
     <ClCompile Include="Objects\UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\LoadingBar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\Text3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -310,6 +307,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\NavigationalGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\LoadingBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulation\ControlsMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -527,9 +530,6 @@
     <ClInclude Include="Objects\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\LoadingBar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\DisplayMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -714,6 +714,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\NavigationalGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\LoadingBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation\ControlsMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
