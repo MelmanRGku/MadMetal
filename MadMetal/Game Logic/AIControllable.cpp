@@ -12,7 +12,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
 	m_lastKnowCollisionVolue = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(7);
+	m_goalWaypoint = m_track.getWaypointAt(42);
 	m_currentPath.clear();
 	setHighCostWaypointsToHigh();
 	m_needsToBackup = false;
@@ -71,23 +71,23 @@ void AIControllable::playFrame(double dt)
 	switch (m_AiTrackAreaPosition)
 	{
 	case AiPlaceInTrack::DESSERT:
-		updateMovementState(0.80);
+		updateMovementState(0.80, 0.80);
 		break;
 	case AiPlaceInTrack::CANYON:
-		updateMovementState(0.65);
+		updateMovementState(0.65, 0.65);
 		break;
 	case AiPlaceInTrack::SUBWAY:
-		updateMovementState(0.7);
+		updateMovementState(0.7, 0.7);
 		break;
 	case AiPlaceInTrack::CITY:
-		updateMovementState(1.0);
+		updateMovementState(1.0, 1.0);
 		break;
 	default:
 		break;
 	}
 }
 
-void AIControllable::accelerateToNextWaypoint(float speedDamping)
+void AIControllable::accelerateToNextWaypoint(float speedDamping, float steeringDamping)
 {
 	//glm::vec4 vectorToNextWaypoint4 = glm::vec4(m_nextWaypoint->getPosition() - m_car->getPosition(), 1.0);
 	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
@@ -114,7 +114,7 @@ void AIControllable::accelerateToNextWaypoint(float speedDamping)
 	float amountToAccelerate;
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
-	changeTurning(crossProductResult.y, amountToSteerBy);
+	changeTurning(crossProductResult.y, amountToSteerBy * steeringDamping);
 	accelerate(amountToAccelerate * speedDamping);
 
 	//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
@@ -170,14 +170,14 @@ void AIControllable::recalculatePath()
 	m_currentPath.clear();
 	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-	//std::cout << "THe new path is: ";
+	std::cout << "THe new path is: ";
 
-	//for (int i = 0; i < m_currentPath.size(); i++)
-	//{
-	//	std::cout << m_currentPath[i]->getIndex() << ", ";
-	//}
+	for (int i = 0; i < m_currentPath.size(); i++)
+	{
+		std::cout << m_currentPath[i]->getIndex() << ", ";
+	}
 
-	//std::cout << "\n";
+	std::cout << "\n";
 	updateNextWaypoint();
 }
 
@@ -229,16 +229,21 @@ void AIControllable::checkCollisionVolumes()
 	{
 		return;
 	}
-	else if (m_lastKnowCollisionVolue == NULL)
+	else
 	{
-		m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
-	}
-	else if(m_lastKnowCollisionVolue != m_car->getLastHitCollisionVolume())
-	{
-		m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
-
-		m_goalWaypoint = m_lastKnowCollisionVolue->getGoalWaypointIndex();
-		recalculatePath();
+		if (m_lastKnowCollisionVolue == NULL)
+		{
+			m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
+			m_goalWaypoint = m_lastKnowCollisionVolue->getGoalWaypointIndex();
+			m_AiTrackAreaPosition = m_lastKnowCollisionVolue->getAiPlaceInTrack();
+		}
+		else if (m_lastKnowCollisionVolue != m_car->getLastHitCollisionVolume())
+		{
+			m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
+			m_goalWaypoint = m_lastKnowCollisionVolue->getGoalWaypointIndex();
+			recalculatePath();
+			m_AiTrackAreaPosition = m_lastKnowCollisionVolue->getAiPlaceInTrack();
+		}
 	}
 
 }
@@ -361,7 +366,7 @@ void AIControllable::checkStuckInWall()
 	}
 }
 
-void AIControllable::updateMovementState(float speedDamping)
+void AIControllable::updateMovementState(float speedDamping, float steeringdamping)
 {
 	switch (m_movementState)
 	{

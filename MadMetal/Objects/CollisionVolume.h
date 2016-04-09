@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include "Objects\Object3D.h"
+#include "Game Logic\AIDefinitions.h"
 
 class Waypoint;
 
@@ -23,10 +24,13 @@ public:
 	void setCurrentWaypointIndex(Waypoint* waypoint);
 	void setLastWaypointIndex(Waypoint* waypoint);
 	void setGoalWaypointIndex(Waypoint* waypoint);
+	void setAiPlaceInTrack(AiPlaceInTrack movement);
 
 	Waypoint* getCurrentWaypointIndex();
 	Waypoint* getLastWaypointIndex();
 	Waypoint* getGoalWaypointIndex();
+
+	AiPlaceInTrack getAiPlaceInTrack();
 	
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 
@@ -34,6 +38,7 @@ private: //members
 	Waypoint* m_lastWaypoint;
 	Waypoint* m_currentWaypoint;
 	Waypoint* m_goalWaypoint;
+	AiPlaceInTrack m_aiPlaceInTrack;
 	int m_respawnIndex;
 	std::vector<CollisionVolume *> m_nextVolumes;
 	std::vector<PxTransform> m_respawnLocations;

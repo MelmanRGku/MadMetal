@@ -30,11 +30,11 @@ private: //helper functions
 	void setHighCostWaypointsToLow();
 	void backUp(float amount);
 	void processInputAcceleration(float amount);
-	void accelerateToNextWaypoint(float speedDamping);
+	void accelerateToNextWaypoint(float speedDamping, float steeringDamping);
 	void reverseToPreviousWaypoint();
 	void changeTurning(float turningDirectionValue, float turningAmountValue);
 	void checkStuckInWall();
-	void updateMovementState(float speedDamping);
+	void updateMovementState(float speedDamping, float steeringDamping);
 
 private: //members
 	//Car* m_car;

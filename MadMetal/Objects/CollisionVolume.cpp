@@ -7,6 +7,7 @@ CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, A
 {
 	m_respawnIndex = 0;
 	m_isStartCollisionVolume = false;
+	m_aiPlaceInTrack = AiPlaceInTrack::CITY;
 }
 
 
@@ -70,6 +71,16 @@ void CollisionVolume::setGoalWaypointIndex(Waypoint* waypoint)
 	m_goalWaypoint = waypoint;
 }
 
+void CollisionVolume::setAiPlaceInTrack(AiPlaceInTrack movement)
+{
+	m_aiPlaceInTrack = movement;
+}
+
+void CollisionVolume::setLastWaypointIndex(Waypoint* waypoint)
+{
+	m_lastWaypoint = waypoint;
+}
+
 bool CollisionVolume::getIsStartCollisionVolume() {
 	return m_isStartCollisionVolume;
 }
@@ -83,6 +94,15 @@ Waypoint* CollisionVolume::getGoalWaypointIndex()
 	return m_goalWaypoint;
 }
 
+Waypoint* CollisionVolume::getLastWaypointIndex()
+{
+	return m_lastWaypoint;
+}
+
+AiPlaceInTrack CollisionVolume::getAiPlaceInTrack()
+{
+	return m_aiPlaceInTrack;
+}
 
 bool CollisionVolume::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 #ifdef _RENDER_COLLISION_VOLUME
