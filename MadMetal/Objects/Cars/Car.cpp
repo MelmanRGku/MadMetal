@@ -305,8 +305,6 @@ void Car::updateOrientation(float dt)
 
 void Car::update(float dt) {
 	
-	std::cout << getCar().computeForwardSpeed() << std::endl;
-	
 	m_invincibilityTimeRemaining -= dt;
 	updateHealth(dt);
 	if (m_currentHealth > 0)

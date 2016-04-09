@@ -33,4 +33,6 @@ public:
 
 	void setHighCost(float highCost);
 	float getHighCost();
+
+	static void resetGlobalId();
 };

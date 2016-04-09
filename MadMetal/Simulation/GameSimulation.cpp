@@ -22,16 +22,13 @@
 
 #define NUM_OF_PLAYERS 12
 #define NUM_LAPS_FOR_VICTORY 3
-#define RACE_FINISH_DELAY 10
+#define RACE_FINISH_DELAY 30
 
 using namespace std;
-bool gIsVehicleInAir = true;
-static const float TRACK_DIMENSIONS = 200;
-
-bool temporary = false;
 
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audioHandle(audioHandle)
 {
+	Waypoint::resetGlobalId();
 	Car::resetGlobalPositionID();
 	newMessage.setTag(SceneMessage::eNone);
 	createPhysicsScene();
@@ -94,7 +91,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
 			PxTransform *pos = spawnLocations.at(i);
 			Car *car = NULL;
-			if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {
+			/*if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {
 				car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
 			}
 			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_EXPLOSIVELY_DELICIOUS) {
@@ -102,7 +99,8 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			}
 			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_GARGANTULOUS) {
 				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_GARGANTULOUS, pos, NULL, NULL));
-			}
+			}*/
+			car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
 			ai->setCar(car);
 			m_aiPlayers.push_back(ai);
 			m_players.push_back(ai);
@@ -207,7 +205,7 @@ void GameSimulation::simulatePhysics(double dt)
 				PxVehicleUpdates(dt, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
 			//Work out if the vehicle is in the air.
-			m_players[i]->getCar()->setIsInAir(gIsVehicleInAir = m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]));
+			m_players[i]->getCar()->setIsInAir(m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]));
 		}
 
 		m_scene->simulate(dt);
@@ -379,7 +377,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 				{
 					for (int j = 0; j < m_humanPlayers.size(); j++) {
 						if (m_players[i]->getCar() != m_humanPlayers[j]->getCar())
-							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("You Better Hurry...", 2);
+							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("You have 30 seconds to finish!", 2);
 					else 
 							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("First Across... Like a Boss", 2);
 					}
@@ -388,7 +386,14 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 				else if (RACE_FINISH_DELAY - m_raceFinishedCountdownSeconds >= 2)
 				{
 					for (int j = 0; j < m_humanPlayers.size(); j++) {
-						m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage(std::to_string((int)m_raceFinishedCountdownSeconds), 1);
+						if ((int)m_raceFinishedCountdownSeconds % 10 == 0 && (int)m_raceFinishedCountdownSeconds) {
+							std::stringstream ss;
+							ss << (int)m_raceFinishedCountdownSeconds << " seconds left!";
+							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage(ss.str(), 1);
+						}
+						else if (m_raceFinishedCountdownSeconds <= 5) {
+							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage(std::to_string((int)m_raceFinishedCountdownSeconds), 1);
+						}
 					}
 				}
 				if (!m_players[i]->getCar()->isFinishedRace())
@@ -402,8 +407,8 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 		}
 
 		if (m_raceFinishedCountdownSeconds) {
-			//have all players crossed the finish line or count down done?
-			if (m_numPlayersFinishedRace == m_players.size() || (m_raceFinishedCountdownSeconds -= dt) <= 0)
+			//have first 3 players crossed the finish line or count down done?
+			if (m_numPlayersFinishedRace == m_players.size() || m_numPlayersFinishedRace == 3 || (m_raceFinishedCountdownSeconds -= dt) <= 0)
 			{
 				m_raceFinished = true;
 				//m_displayMessage->initializeMessage("FINISHED", 3);
@@ -581,7 +586,7 @@ void GameSimulation::setupDeathPit() {
 	PxGeometry **deathPitGeom = new PxGeometry*[1];
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 10, 45));
 	PxTransform *pos = new PxTransform(15, -20, 445);
-	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->setRespawnLocation(pos->p + PxVec3(0,21,465));
+	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->setRespawnLocation(pos->p + PxVec3(0, 21, 465));
 
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 10, 60));
 	pos = new PxTransform(-25, -20, 765);
@@ -590,6 +595,10 @@ void GameSimulation::setupDeathPit() {
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(350, 5, 200));
 	pos = new PxTransform(-713, -40, 1560);
 	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->getRenderable()->setModel(NULL);
+
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(5000, 10, 5000));
+	pos = new PxTransform(0, -50, 0);
+	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
 
 
 	delete pos;

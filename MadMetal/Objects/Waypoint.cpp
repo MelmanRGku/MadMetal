@@ -122,3 +122,7 @@ bool Waypoint::draw(Renderer *renderer, Renderer::ShaderType type, int passNumbe
 	return false;
 #endif
 }
+
+void Waypoint::resetGlobalId() {
+	globalID = 0;
+}

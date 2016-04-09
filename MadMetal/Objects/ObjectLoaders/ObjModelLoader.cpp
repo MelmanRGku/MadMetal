@@ -171,7 +171,7 @@ NavigationalGrid *ObjModelLoader::createNavigationalGrid(const aiScene *scene)
 		for (unsigned int j = 0; j < mesh->mNumFaces; j++)
 		{
 			aiFace face = mesh->mFaces[j];
-			assert(face.mNumIndices == 4);
+			//assert(face.mNumIndices == 4);
 
 			std::vector<unsigned int> indicesVector;
 

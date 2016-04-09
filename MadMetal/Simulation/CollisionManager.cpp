@@ -165,8 +165,13 @@ void CollisionManager::processGooMonsterVolumeHit(long volumeId, long otherId)
 	{
 		PxVec3 direction = static_cast<PxRigidDynamic *>(&gooMonster->getActor())->getLinearVelocity();
 
-		car->getCar().getRigidDynamicActor()->addForce(direction * 5000, PxForceMode::eIMPULSE);
-		car->takeDamage(52);
+		if (gooMonster->getMonsterType() == GooMonster::GOO_MONSTER_TYPE_KILLER) {
+			car->takeDamage(200);
+		}
+		else if (gooMonster->getMonsterType() == GooMonster::GOO_MONSTER_TYPE_PUSHER) {
+			car->getCar().getRigidDynamicActor()->addForce(direction * 5000, PxForceMode::eIMPULSE);
+			car->takeDamage(52);
+		}
 	}
 }
 
@@ -196,7 +201,7 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 		car->setCurrentWaypoint(waypoint);
 	}
 
-	std::cout << "Current Waypoint" << waypoint->getIndex() << "\n";
+	//std::cout << "Current Waypoint" << waypoint->getIndex() << "\n";
 }
 
 void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
@@ -211,28 +216,20 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 
 	if (car != NULL)
 	{
+		car->setCurrentWaypoint(collisionVolume->getCurrentWaypointIndex());
+		if (car->getLastHitCollisionVolume() == NULL) {
 		car->setLastHitCollisionVolume(collisionVolume);
-		/*
-		if (car->getLastHitCollisionVolume() == NULL)
-		{
-			//std::cout << "set first time way point of " << collisionVolume->getIndex() << std::endl;
-			car->setLastHitCollisionVolume(collisionVolume);
 		}
 		else {
-			if ((car->getLastHitCollisionVolume()->getIndex() + 1) % (CollisionVolume::globalID) == (collisionVolume->getIndex()))
-			{
-				//std::cout << "set Next way point of " << collisionVolume->getIndex() << std::endl;
+			CollisionVolume *oldVolume = car->getLastHitCollisionVolume();
+			if (oldVolume->isPrevVolumeOf(collisionVolume)) {
 				car->setLastHitCollisionVolume(collisionVolume);
-				if (collisionVolume->getIndex() == 0)
-				{
-					//std::cout << "incremented lap \n";
+				if (collisionVolume->getIsStartCollisionVolume()) {
 					car->incrementLap();
 				}
 			}
 		}
-		*/
 		
-		//std::cout << "car: " << car->getIndex() << " collided with volume: " << collisionVolume->getIndex() << std::endl;
 	}
 }
 
