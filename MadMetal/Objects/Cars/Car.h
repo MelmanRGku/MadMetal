@@ -58,6 +58,9 @@ protected: //members
 	float m_invincibilityTimeRemaining;
 	float m_timeSinceLastTimeHit;
 	float m_timeSinceRespawn;
+
+	Object3D *m_shadow;
+	float lastKnownDistanceBetweenCarAndShadow;
 private:
 	//update functions
 	void updatePowerUp(float dt);
@@ -132,6 +135,8 @@ public:
 	float getInvinsibilityTimeRemaining();
 	void setInvincibility(float time);
 	float getTimeSinceLastTimeHit();
+
+	void setShadow(Object3D *shadow);
 
 };
 

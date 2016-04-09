@@ -267,39 +267,25 @@ void Car::updateOrientation(float dt)
 	else
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, angVel.y, 0), true);
 	
-	
-	
+
+	m_shadow->getActor().setGlobalPose(PxTransform(getActor().getGlobalPose().p + PxVec3(0, lastKnownDistanceBetweenCarAndShadow, 0), getActor().getGlobalPose().q));
+
 	PxRaycastBuffer hit;
 	PxQueryFilterData fd = PxQueryFilterData(PxQueryFlag::eSTATIC);
-	GameFactory::instance()->sceneRayCast(m_car.getRigidDynamicActor()->getGlobalPose().p + PxVec3(0,1,0), PxVec3(0, -1, 0), 100, hit, PxHitFlag::eDEFAULT, fd);
+	GameFactory::instance()->sceneRayCast(m_car.getRigidDynamicActor()->getGlobalPose().p + PxVec3(0,1,0), PxVec3(0, -1, 0), 500, hit, PxHitFlag::eDEFAULT, fd);
 	if (hit.hasBlock)
 	{
 		if (hit.block.actor != NULL)
 		{
 			PxShape * shapes[1];
 			hit.block.actor->getShapes(shapes, 1);
-			if (shapes[0]->getSimulationFilterData().word0 == 1)
-			{
-				//std::cout << shapes[0]->getSimulationFilterData().word0 << std::endl;
-				PxVec3 up = hit.block.normal;
-				//std::cout << hit.block.distance << std::endl;
-				
-
-				PxQuat initQuat(angle, PxVec3(0, abs(axis.y) / axis.y, 0));
-				PxVec3 rotationVector = up.cross(PxVec3(0, 1, 0)).getNormalized();
-				//std::cout << rotationVector.x << "," << rotationVector.y << "," << rotationVector.z << std::endl;
-				PxReal rotationAngle = acos(PxVec3(0, 1, 0).dot(up.getNormalized()));
-				//std::cout << rotationAngle * 180 / 3.14 << std::endl;
-				PxQuat rotationQuat(rotationAngle, rotationVector);
-
-				//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, PxQuat(-rotationAngle, rotationVector)));// +rotationQuat));
-				//std::cout << normal.x << "," << normal.y << "," << normal.z << std::endl;
-				//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, initQuat * rotationQuat));// +rotationQuat));
-			}
+			//if (shapes[0]->getSimulationFilterData().word0 == COLLISION_FLAG_GROUND)
+			//{
+				lastKnownDistanceBetweenCarAndShadow = -hit.block.distance;
+			//}
 		}
 	}
 	
-	//std::cout << angle << "  :  " << axis.x << "," << axis.y << "," << axis.z << std::endl;
 	
 }
 
@@ -457,4 +443,8 @@ void Car::setInvincibility(float time) {
 
 float Car::getTimeSinceLastTimeHit() {
 	return m_timeSinceLastTimeHit;
+}
+
+void Car::setShadow(Object3D *shadow) {
+	m_shadow = shadow;
 }

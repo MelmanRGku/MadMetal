@@ -34,6 +34,7 @@ public:
 		DEATH_VOLUME,
 		PHYSICAL_OBJECT_GOO_MONSTER,
 		PHYSICAL_OBJECT_BOMB_EXPLOSION,
+		PHYSICAL_OBJECT_BLOB_SHADOW,
 	};
 
 public:
@@ -567,6 +568,28 @@ public:
 			setFilterDataId(objectId, explosion);
 
 			toReturn = explosion;
+			break;
+		}
+		case PHYSICAL_OBJECT_BLOB_SHADOW:
+		{
+			PxRigidDynamic * shadow = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+			shadow->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+
+			PxFilterData simFilterData;
+			simFilterData.word0 = COLLISION_FLAG_BOMB_EXPLOSION;
+			simFilterData.word1 = COLLISION_FLAG_BOMB_EXPLOSION_AGAINST;
+
+			shadow->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			shadow->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, false);
+
+			setFilterDataId(objectId, shadow);
+
+			toReturn = shadow;
 			break;
 		}
 		}
