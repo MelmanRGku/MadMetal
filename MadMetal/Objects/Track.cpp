@@ -53,7 +53,7 @@ void Track::setupCollisionVolumes() {
 	geom1[0] = new PxBoxGeometry(50, 10, 10);
 	std::vector<PxVec3> respawnLocations;
 	//startLine
-	pos = new PxTransform(PxVec3(4, 0, -35));
+	pos = new PxTransform(PxVec3(4, 15, -35));
 	startLine = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	startLine->setGoalWaypointIndex(getWaypointAt(7));
 	startLine->setCurrentWaypointIndex(getWaypointAt(48));
@@ -69,7 +69,7 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.clear();
 
 	//path branch leading into the dessert
-	pos = new PxTransform(PxVec3(15, 0, 225));
+	pos = new PxTransform(PxVec3(15, 15, 225));
 	geom1[0] = new PxBoxGeometry(25, 10, 10);
 	respawnLocations.push_back(PxVec3(25, 20, 225));
 	respawnLocations.push_back(PxVec3(5, 20, 225));
@@ -83,7 +83,7 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.clear();
 
 	//top of the jump ramp in the dessert
-	pos = new PxTransform(PxVec3(-30, 25, 325));
+	pos = new PxTransform(PxVec3(-30, 37, 325));
 	topOfTheJumpRampInTheDesert = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(topOfTheJumpRampInTheDesert);
 
@@ -116,12 +116,12 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.clear();
 	
 	//start of the canyon
-	geom1[0] = new PxBoxGeometry(40, 15, 55);
+	geom1[0] = new PxBoxGeometry(40, 10, 55);
 	respawnLocations.push_back(PxVec3(-15, 20, 1100));
 	respawnLocations.push_back(PxVec3(15, 20, 1100));
 	respawnLocations.push_back(PxVec3(-15, 20, 1075));
 	respawnLocations.push_back(PxVec3(15, 20, 1075));
-	pos = new PxTransform(PxVec3(0, -5, 1100));
+	pos = new PxTransform(PxVec3(0, 15, 1100));
 	startOfTheCanyon = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(startOfTheCanyon);
 	startOfTheCanyon->setRespawnLocations(respawnLocations);
@@ -132,14 +132,14 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-20, 20, 1560));
 	respawnLocations.push_back(PxVec3(-45, 20, 1540));
 	respawnLocations.push_back(PxVec3(-25, 20, 1540));
-	pos = new PxTransform(PxVec3(-45, 0, 1555), PxQuat(1.6203, PxVec3(0, -1, 0)));
+	pos = new PxTransform(PxVec3(-45, 15, 1555), PxQuat(1.6203, PxVec3(0, -1, 0)));
 	branchPathInTheCanyon = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(branchPathInTheCanyon);
 	branchPathInTheCanyon->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
 
 	//landing platform in the goo pit
-	geom1[0] = new PxBoxGeometry(300, 15, 300);
+	geom1[0] = new PxBoxGeometry(300, 10, 300);
 	respawnLocations.push_back(PxVec3(-870, 20, 1575));
 	respawnLocations.push_back(PxVec3(-870, 20, 1550));
 	respawnLocations.push_back(PxVec3(-870, 20, 1525));
@@ -147,19 +147,19 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-840, 20, 1575));
 	respawnLocations.push_back(PxVec3(-840, 20, 1550));
 	respawnLocations.push_back(PxVec3(-840, 20, 1525));
-	pos = new PxTransform(PxVec3(-640, -30, 1550), PxQuat(1.6203, PxVec3(0, -1, 0)));
+	pos = new PxTransform(PxVec3(-640, -18, 1550), PxQuat(1.6203, PxVec3(0, -1, 0)));
 	landingPlatformInTheGooPit = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(landingPlatformInTheGooPit);
 	landingPlatformInTheGooPit->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
 
 	//end of the first train tunnel
-	geom1[0] = new PxBoxGeometry(50, 15, 50);
+	geom1[0] = new PxBoxGeometry(50, 10, 50);
 	respawnLocations.push_back(PxVec3(-900, -15, 771));
 	respawnLocations.push_back(PxVec3(-875, -15, 755));
 	respawnLocations.push_back(PxVec3(-900, -15, 740));
 	respawnLocations.push_back(PxVec3(-875, -15, 725));
-	pos = new PxTransform(PxVec3(-856, -30, 751), PxQuat(2.04, PxVec3(0, 1, 0)));
+	pos = new PxTransform(PxVec3(-856, -18, 751), PxQuat(2.04, PxVec3(0, 1, 0)));
 	endOfTheFirstTrainTunnel = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(endOfTheFirstTrainTunnel);
 	endOfTheFirstTrainTunnel->setRespawnLocations(respawnLocations);
@@ -170,7 +170,7 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-710, 20, 95));
 	respawnLocations.push_back(PxVec3(-760, 20, 120));
 	respawnLocations.push_back(PxVec3(-760, 20, 95));
-	pos = new PxTransform(PxVec3(-730, 0, 120), PxQuat(3.14, PxVec3(0, 1, 0)));
+	pos = new PxTransform(PxVec3(-730, 10, 120), PxQuat(3.14, PxVec3(0, 1, 0)));
 	maybeTheRampExitInTheTunnel = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(maybeTheRampExitInTheTunnel);
 	maybeTheRampExitInTheTunnel->setRespawnLocations(respawnLocations);
@@ -181,7 +181,7 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-625, 20, -120));
 	respawnLocations.push_back(PxVec3(-600, 20, -95));
 	respawnLocations.push_back(PxVec3(-600, 20, -120));
-	pos = new PxTransform(PxVec3(-625, 0, -105), PxQuat(1.53, PxVec3(0, 1, 0)));
+	pos = new PxTransform(PxVec3(-625, 15, -105), PxQuat(1.53, PxVec3(0, 1, 0)));
 	entranceToTheTrafficCircle = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(entranceToTheTrafficCircle);
 	entranceToTheTrafficCircle->setRespawnLocations(respawnLocations);
@@ -192,7 +192,7 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-348, 20, 0));
 	respawnLocations.push_back(PxVec3(-348, 20, 21.5));
 	respawnLocations.push_back(PxVec3(-348, 20, 41.5));
-	pos = new PxTransform(PxVec3(-378, 6, 21.5), PxQuat(2.22962, PxVec3(0, 1, 0)));
+	pos = new PxTransform(PxVec3(-378, 17, 21.5), PxQuat(2.22962, PxVec3(0, 1, 0)));
 	topOfTheTrafficCircle = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(topOfTheTrafficCircle);
 	topOfTheTrafficCircle->setRespawnLocations(respawnLocations);
@@ -202,7 +202,7 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-348, 20, -211.5));
 	respawnLocations.push_back(PxVec3(-348, 20, -231.5));
 	respawnLocations.push_back(PxVec3(-348, 20, -251.5));
-	pos = new PxTransform(PxVec3(-378, 6, -231.5), PxQuat(0.685, PxVec3(0, 1, 0)));
+	pos = new PxTransform(PxVec3(-378, 17, -231.5), PxQuat(0.685, PxVec3(0, 1, 0)));
 	bottomOfTheTrafficCircle = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(bottomOfTheTrafficCircle);
 	bottomOfTheTrafficCircle->setRespawnLocations(respawnLocations);
