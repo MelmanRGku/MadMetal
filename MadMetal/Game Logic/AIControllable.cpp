@@ -170,14 +170,14 @@ void AIControllable::recalculatePath()
 	m_currentPath.clear();
 	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-	std::cout << "THe new path is: ";
+	//std::cout << "THe new path is: ";
 
-	for (int i = 0; i < m_currentPath.size(); i++)
-	{
-		std::cout << m_currentPath[i]->getIndex() << ", ";
-	}
+	//for (int i = 0; i < m_currentPath.size(); i++)
+	//{
+	//	std::cout << m_currentPath[i]->getIndex() << ", ";
+	//}
 
-	std::cout << "\n";
+	//std::cout << "\n";
 	updateNextWaypoint();
 }
 
@@ -323,14 +323,16 @@ void AIControllable::checkStuckInWall()
 	float forwardSpeed = static_cast<float>(m_car->getCar().computeForwardSpeed());
 	// Car is stuck in a wall
 	if (engineRotationSpeed > 50.0 &&
-		m_car->getCar().computeForwardSpeed() < 0.5)
+		forwardSpeed < 5.0 &&
+		!(m_car->getInvinsibilityTimeRemaining() > 0))
 	{
 		m_counter++;
-		if (m_counter > 5)
+		if (m_counter > 30)
 		{
 			m_needsToBackup = !m_needsToBackup;
 			if (m_needsToBackup)
 			{
+				m_movementState = AiStateMovement::MOVE_BACKWARDS;
 				m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 				// Reverse to Last Waypoint
 				if (m_car->getLastWaypoint() != NULL)
@@ -339,13 +341,14 @@ void AIControllable::checkStuckInWall()
 				}
 				else
 				{
-					// STUPID MELVIN
-					m_nextWaypoint = m_track.getWaypointAt(13);
+					m_nextWaypoint = m_lastKnowCollisionVolue->getCurrentWaypointIndex();
 				}
+
 			}
 			// Move forward
 			else
 			{
+				m_movementState = AiStateMovement::MOVE_FORWARD;
 				recalculatePath();
 				m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 			}
@@ -459,20 +462,24 @@ void AIControllable::updateMovementState(float speedDamping)
 			m_counter = 0;
 			m_movementState = AiStateMovement::MOVE_FORWARD;
 		}
+		else
+		{
+			reverseToPreviousWaypoint();
+		}
 
-		reverseToPreviousWaypoint();
 		break;
 	case AiStateMovement::DEAD:
 		if (m_car->isAlive())
 		{
-			if (m_needsToBackup)
-			{
-				m_movementState = AiStateMovement::MOVE_BACKWARDS;
-			}
-			else
-			{
-				m_movementState = AiStateMovement::MOVE_FORWARD;
-			}
+				if (m_needsToBackup)
+				{
+					m_movementState = AiStateMovement::MOVE_BACKWARDS;
+				}
+				else
+				{
+					m_movementState = AiStateMovement::MOVE_FORWARD;
+				}
+
 		}
 		break;
 	}

@@ -360,6 +360,11 @@ Waypoint* Car::getLastWaypoint()
 	return m_lastWayPoint;
 }
 
+void Car::setLastWaypoint(Waypoint* waypoint)
+{
+	m_lastWayPoint = waypoint;
+}
+
 Waypoint* Car::getCurrentWaypoint()
 {
 	return m_currentWaypoint;

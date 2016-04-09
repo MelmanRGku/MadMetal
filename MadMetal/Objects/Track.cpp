@@ -88,7 +88,7 @@ void Track::setupCollisionVolumes() {
 	m_collisionVolumes.push_back(topOfTheJumpRampInTheDesert);
 
 	//deathPit 1
-	geom1[0] = new PxBoxGeometry(40, 15, 48);
+	geom1[0] = new PxBoxGeometry(40, 15, 45);
 	respawnLocations.push_back(PxVec3(25, 20, 525));
 	respawnLocations.push_back(PxVec3(5, 20, 525));
 	respawnLocations.push_back(PxVec3(25, 20, 500));
@@ -102,7 +102,7 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.clear();
 
 	//second death pit
-	geom1[0] = new PxBoxGeometry(40, 15, 55);
+	geom1[0] = new PxBoxGeometry(40, 15, 38);
 	respawnLocations.push_back(PxVec3(-35, 20, 865));
 	respawnLocations.push_back(PxVec3(-15, 20, 865));
 	respawnLocations.push_back(PxVec3(-35, 20, 840));
@@ -111,8 +111,8 @@ void Track::setupCollisionVolumes() {
 	deathPit2 = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(deathPit2);
 	deathPit2->setRespawnLocations(respawnLocations);
-	deathPit2->setGoalWaypointIndex(getWaypointAt(260));
-	deathPit2->setCurrentWaypointIndex(getWaypointAt(16));
+	deathPit2->setGoalWaypointIndex(getWaypointAt(487));
+	deathPit2->setCurrentWaypointIndex(getWaypointAt(448));
 	respawnLocations.clear();
 	
 	//start of the canyon
@@ -124,7 +124,7 @@ void Track::setupCollisionVolumes() {
 	pos = new PxTransform(PxVec3(0, -5, 1100));
 	startOfTheCanyon = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(startOfTheCanyon);
-	startOfTheCanyon->setGoalWaypointIndex(getWaypointAt(229));
+	startOfTheCanyon->setGoalWaypointIndex(getWaypointAt(246));
 	startOfTheCanyon->setCurrentWaypointIndex(getWaypointAt(260));
 	startOfTheCanyon->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -136,8 +136,8 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-25, 20, 1540));
 	pos = new PxTransform(PxVec3(-45, 0, 1555), PxQuat(1.6203, PxVec3(0, -1, 0)));
 	branchPathInTheCanyon = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	branchPathInTheCanyon->setGoalWaypointIndex(getWaypointAt(229));
-	branchPathInTheCanyon->setCurrentWaypointIndex(getWaypointAt(260));
+	branchPathInTheCanyon->setGoalWaypointIndex(getWaypointAt(290));
+	branchPathInTheCanyon->setCurrentWaypointIndex(getWaypointAt(228));
 	m_collisionVolumes.push_back(branchPathInTheCanyon);
 	branchPathInTheCanyon->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -154,7 +154,7 @@ void Track::setupCollisionVolumes() {
 	pos = new PxTransform(PxVec3(-640, -30, 1550), PxQuat(1.6203, PxVec3(0, -1, 0)));
 	landingPlatformInTheGooPit = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	landingPlatformInTheGooPit->setGoalWaypointIndex(getWaypointAt(564));
-	landingPlatformInTheGooPit->setCurrentWaypointIndex(getWaypointAt(559));
+	landingPlatformInTheGooPit->setCurrentWaypointIndex(getWaypointAt(597));
 	m_collisionVolumes.push_back(landingPlatformInTheGooPit);
 	landingPlatformInTheGooPit->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -167,8 +167,8 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-875, -15, 725));
 	pos = new PxTransform(PxVec3(-856, -30, 751), PxQuat(2.04, PxVec3(0, 1, 0)));
 	endOfTheFirstTrainTunnel = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	endOfTheFirstTrainTunnel->setGoalWaypointIndex(getWaypointAt(339));
-	endOfTheFirstTrainTunnel->setCurrentWaypointIndex(getWaypointAt(332));
+	endOfTheFirstTrainTunnel->setGoalWaypointIndex(getWaypointAt(342));
+	endOfTheFirstTrainTunnel->setCurrentWaypointIndex(getWaypointAt(331));
 	m_collisionVolumes.push_back(endOfTheFirstTrainTunnel);
 	endOfTheFirstTrainTunnel->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -180,7 +180,7 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-760, 20, 95));
 	pos = new PxTransform(PxVec3(-730, 0, 120), PxQuat(3.14, PxVec3(0, 1, 0)));
 	maybeTheRampExitInTheTunnel = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	maybeTheRampExitInTheTunnel->setGoalWaypointIndex(getWaypointAt(826));
+	maybeTheRampExitInTheTunnel->setGoalWaypointIndex(getWaypointAt(821));
 	maybeTheRampExitInTheTunnel->setCurrentWaypointIndex(getWaypointAt(850));
 	m_collisionVolumes.push_back(maybeTheRampExitInTheTunnel);
 	maybeTheRampExitInTheTunnel->setRespawnLocations(respawnLocations);
@@ -193,8 +193,8 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-600, 20, -120));
 	pos = new PxTransform(PxVec3(-625, 0, -105), PxQuat(1.53, PxVec3(0, 1, 0)));
 	entranceToTheTrafficCircle = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	entranceToTheTrafficCircle->setGoalWaypointIndex(getWaypointAt(768));
-	entranceToTheTrafficCircle->setCurrentWaypointIndex(getWaypointAt(813));
+	entranceToTheTrafficCircle->setGoalWaypointIndex(getWaypointAt(767));
+	entranceToTheTrafficCircle->setCurrentWaypointIndex(getWaypointAt(822));
 	m_collisionVolumes.push_back(entranceToTheTrafficCircle);
 	entranceToTheTrafficCircle->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -216,8 +216,8 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-348, 20, -251.5));
 	pos = new PxTransform(PxVec3(-378, 6, -231.5), PxQuat(0.685, PxVec3(0, 1, 0)));
 	bottomOfTheTrafficCircle = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	bottomOfTheTrafficCircle->setGoalWaypointIndex(getWaypointAt(48));
-	bottomOfTheTrafficCircle->setCurrentWaypointIndex(getWaypointAt(768));
+	bottomOfTheTrafficCircle->setGoalWaypointIndex(getWaypointAt(152));
+	bottomOfTheTrafficCircle->setCurrentWaypointIndex(getWaypointAt(755));
 	m_collisionVolumes.push_back(bottomOfTheTrafficCircle);
 	bottomOfTheTrafficCircle->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();

@@ -212,6 +212,7 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 	if (car != NULL)
 	{
 		car->setCurrentWaypoint(collisionVolume->getCurrentWaypointIndex());
+		car->setLastWaypoint(NULL);
 		if (car->getLastHitCollisionVolume() == NULL) {
 		car->setLastHitCollisionVolume(collisionVolume);
 		}

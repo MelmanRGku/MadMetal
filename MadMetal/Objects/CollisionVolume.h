@@ -21,14 +21,17 @@ public:
 	bool isPrevVolumeOf(CollisionVolume *toCheck);
 	
 	void setCurrentWaypointIndex(Waypoint* waypoint);
+	void setLastWaypointIndex(Waypoint* waypoint);
 	void setGoalWaypointIndex(Waypoint* waypoint);
 
 	Waypoint* getCurrentWaypointIndex();
+	Waypoint* getLastWaypointIndex();
 	Waypoint* getGoalWaypointIndex();
 	
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 
 private: //members
+	Waypoint* m_lastWaypoint;
 	Waypoint* m_currentWaypoint;
 	Waypoint* m_goalWaypoint;
 	int m_respawnIndex;

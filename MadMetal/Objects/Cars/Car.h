@@ -101,6 +101,7 @@ public:
 	bool isAtMidCollisionVolume();
 	int tallyScore() { return m_score; }
 	Waypoint* Car::getLastWaypoint();
+	void setLastWaypoint(Waypoint* waypoint);
 	bool isFinishedRace() { return m_finishedRace; }
 	void setFinishedRace(bool finished) { m_finishedRace = finished; }
 	void setStartingCollisionVolumeFlag(bool isHit);
