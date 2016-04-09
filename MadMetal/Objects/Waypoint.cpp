@@ -8,8 +8,8 @@ Waypoint::Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *ana
 	m_index = Waypoint::globalID;
 	m_id = m_index;
 	Waypoint::globalID++;
-	m_highCost = 999999.0;
-	m_isValid = false;
+	m_highCost = 99999.0;
+	m_isValid = true;
 }
 
 
@@ -76,8 +76,8 @@ float Waypoint::getHighCost()
 
 bool Waypoint::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 #ifdef _RENDER_WAYPOINT
-	//if (!isValid())
-	//	return false;
+	if (!isValid())
+		return false;
 	if (passNumber < 2)
 		return true;
 

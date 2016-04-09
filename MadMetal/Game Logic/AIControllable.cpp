@@ -12,7 +12,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
 	m_lastKnowCollisionVolue = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(42);
+	m_goalWaypoint = m_track.getWaypointAt(129);
 	m_currentPath.clear();
 	setHighCostWaypointsToHigh();
 	m_needsToBackup = false;
@@ -71,7 +71,7 @@ void AIControllable::playFrame(double dt)
 	switch (m_AiTrackAreaPosition)
 	{
 	case AiPlaceInTrack::DESSERT:
-		updateMovementState(0.80, 0.80);
+		updateMovementState(0.80, 0.75);
 		break;
 	case AiPlaceInTrack::CANYON:
 		updateMovementState(0.65, 0.65);
@@ -89,12 +89,8 @@ void AIControllable::playFrame(double dt)
 
 void AIControllable::accelerateToNextWaypoint(float speedDamping, float steeringDamping)
 {
-	//glm::vec4 vectorToNextWaypoint4 = glm::vec4(m_nextWaypoint->getPosition() - m_car->getPosition(), 1.0);
 	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
-	//glm::normalize(vectorToNextWaypoint4);
 	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
-	//glm::vec4 vectorOfSideOfCar = m_car->getModelMatrix() * glm::vec4(1.0, 0.0, 0.0, 1.0);
-	//glm::normalize(vectorOfSideOfCar);
 	glm::vec3 forwardVector = m_car->getForwardVector();
 	forwardVector = glm::normalize(forwardVector);
 
@@ -170,14 +166,14 @@ void AIControllable::recalculatePath()
 	m_currentPath.clear();
 	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-	std::cout << "THe new path is: ";
+	//std::cout << "THe new path is: ";
 
-	for (int i = 0; i < m_currentPath.size(); i++)
-	{
-		std::cout << m_currentPath[i]->getIndex() << ", ";
-	}
+	//for (int i = 0; i < m_currentPath.size(); i++)
+	//{
+	//	std::cout << m_currentPath[i]->getIndex() << ", ";
+	//}
 
-	std::cout << "\n";
+	//std::cout << "\n";
 	updateNextWaypoint();
 }
 
@@ -332,11 +328,12 @@ void AIControllable::checkStuckInWall()
 		!(m_car->getInvinsibilityTimeRemaining() > 0))
 	{
 		m_counter++;
-		if (m_counter > 30)
+		if (m_counter > 20)
 		{
 			m_needsToBackup = !m_needsToBackup;
 			if (m_needsToBackup)
 			{
+				rotateTowardsNextWaypoint();
 				m_movementState = AiStateMovement::MOVE_BACKWARDS;
 				m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 				// Reverse to Last Waypoint
@@ -364,6 +361,28 @@ void AIControllable::checkStuckInWall()
 	{
 		m_counter = 0;
 	}
+}
+
+void AIControllable::rotateTowardsNextWaypoint()
+{
+	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
+	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
+	glm::vec3 forwardVector = m_car->getForwardVector();
+	forwardVector = glm::normalize(forwardVector);
+
+	glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
+	PxQuat tempQauternion;
+	if (crossProductResult.y > 0)
+	{
+		std::cout << "turning right" << std::endl;
+		tempQauternion = PxQuat(0.0873, PxVec3(0, 1, 0));
+	}
+	else if (crossProductResult.y < 0)
+	{
+		tempQauternion = PxQuat(-0.0873, PxVec3(0, 1, 0));
+		std::cout << "turning left" << std::endl;
+	}
+	m_car->getCar().getRigidDynamicActor()->setGlobalPose(PxTransform(m_car->getCar().getRigidDynamicActor()->getGlobalPose().p, m_car->getCar().getRigidDynamicActor()->getGlobalPose().q * tempQauternion));
 }
 
 void AIControllable::updateMovementState(float speedDamping, float steeringdamping)
@@ -444,7 +463,7 @@ void AIControllable::updateMovementState(float speedDamping, float steeringdampi
 		}
 		else
 		{
-			accelerateToNextWaypoint(speedDamping);
+			accelerateToNextWaypoint(speedDamping, steeringdamping);
 		}
 
 		break;
@@ -459,7 +478,8 @@ void AIControllable::updateMovementState(float speedDamping, float steeringdampi
 			m_movementState = AiStateMovement::DEAD;
 			break;
 		}
-		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex())
+		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() &&
+			m_car->getCurrentWaypoint()->isValid())
 		{
 			recalculatePath();
 			m_needsToBackup = false;

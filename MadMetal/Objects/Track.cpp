@@ -77,9 +77,9 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(25, 20, 200));
 	respawnLocations.push_back(PxVec3(5, 20, 200));
 	pathBranchLeadingIntoTheDessert = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	pathBranchLeadingIntoTheDessert->setGoalWaypointIndex(getWaypointAt(42));
+	pathBranchLeadingIntoTheDessert->setGoalWaypointIndex(getWaypointAt(129));
 	pathBranchLeadingIntoTheDessert->setCurrentWaypointIndex(getWaypointAt(19));
-	pathBranchLeadingIntoTheDessert->setLastWaypointIndex(getWaypointAt(16));
+	pathBranchLeadingIntoTheDessert->setLastWaypointIndex(getWaypointAt(847));
 	pathBranchLeadingIntoTheDessert->setAiPlaceInTrack(AiPlaceInTrack::CITY);
 
 	m_collisionVolumes.push_back(pathBranchLeadingIntoTheDessert);
@@ -99,9 +99,9 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(5, 20, 500));
 	pos = new PxTransform(PxVec3(15, 0, 450));
 	deathPit1 = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	deathPit1->setGoalWaypointIndex(getWaypointAt(60));
-	deathPit1->setCurrentWaypointIndex(getWaypointAt(49));
-	deathPit1->setLastWaypointIndex(getWaypointAt(49));
+	deathPit1->setGoalWaypointIndex(getWaypointAt(199));
+	deathPit1->setCurrentWaypointIndex(getWaypointAt(873));
+	deathPit1->setLastWaypointIndex(getWaypointAt(873));
 	deathPit1->setAiPlaceInTrack(AiPlaceInTrack::DESSERT);
 	m_collisionVolumes.push_back(deathPit1);
 	deathPit1->setRespawnLocations(respawnLocations);
@@ -117,9 +117,9 @@ void Track::setupCollisionVolumes() {
 	deathPit2 = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(deathPit2);
 	deathPit2->setRespawnLocations(respawnLocations);
-	deathPit2->setGoalWaypointIndex(getWaypointAt(28));
-	deathPit2->setCurrentWaypointIndex(getWaypointAt(44));
-	deathPit2->setLastWaypointIndex(getWaypointAt(48));
+	deathPit2->setGoalWaypointIndex(getWaypointAt(911));
+	deathPit2->setCurrentWaypointIndex(getWaypointAt(219));
+	deathPit2->setLastWaypointIndex(getWaypointAt(219));
 	deathPit2->setAiPlaceInTrack(AiPlaceInTrack::DESSERT);
 	respawnLocations.clear();
 	
@@ -132,9 +132,9 @@ void Track::setupCollisionVolumes() {
 	pos = new PxTransform(PxVec3(0, -5, 1100));
 	startOfTheCanyon = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(startOfTheCanyon);
-	startOfTheCanyon->setGoalWaypointIndex(getWaypointAt(79));
-	startOfTheCanyon->setCurrentWaypointIndex(getWaypointAt(28));
-	startOfTheCanyon->setLastWaypointIndex(getWaypointAt(24));
+	startOfTheCanyon->setGoalWaypointIndex(getWaypointAt(258));
+	startOfTheCanyon->setCurrentWaypointIndex(getWaypointAt(911));
+	startOfTheCanyon->setLastWaypointIndex(getWaypointAt(911));
 	startOfTheCanyon->setAiPlaceInTrack(AiPlaceInTrack::CANYON);
 	startOfTheCanyon->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -146,9 +146,9 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-25, 20, 1540));
 	pos = new PxTransform(PxVec3(-45, 0, 1555), PxQuat(1.6203, PxVec3(0, -1, 0)));
 	branchPathInTheCanyon = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	branchPathInTheCanyon->setGoalWaypointIndex(getWaypointAt(95));
-	branchPathInTheCanyon->setCurrentWaypointIndex(getWaypointAt(84));
-	branchPathInTheCanyon->setLastWaypointIndex(getWaypointAt(79));
+	//branchPathInTheCanyon->setGoalWaypointIndex(getWaypointAt(95));
+	//branchPathInTheCanyon->setCurrentWaypointIndex(getWaypointAt(84));
+	//branchPathInTheCanyon->setLastWaypointIndex(getWaypointAt(79));
 	m_collisionVolumes.push_back(branchPathInTheCanyon);
 	branchPathInTheCanyon->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();

@@ -35,6 +35,7 @@ private: //helper functions
 	void changeTurning(float turningDirectionValue, float turningAmountValue);
 	void checkStuckInWall();
 	void updateMovementState(float speedDamping, float steeringDamping);
+	void rotateTowardsNextWaypoint();
 
 private: //members
 	//Car* m_car;
