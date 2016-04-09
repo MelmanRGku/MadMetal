@@ -1,5 +1,5 @@
 # Blender MTL File: 'trackv3.blend'
-# Material Count: 49
+# Material Count: 51
 
 newmtl Material
 Ns 96.078431
@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd asphalt_texture441.jpg
+map_Kd broken_building_8.jpg
 
 newmtl Material.001
 Ns 96.078431
@@ -42,6 +42,17 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd Saltwater_Croc_Warning_Sign.jpg
+
+newmtl Material_asphalt_texture441.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd asphalt_texture441.jpg
 
 newmtl Material_broken_building_10.jpg
 Ns 96.078431
@@ -130,17 +141,6 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd broken_building_7.jpg
-
-newmtl Material_broken_building_8.jpg
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.000000 0.000000 0.000000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd broken_building_8.jpg
 
 newmtl Material_broken_building_9.jpg
 Ns 96.078431
@@ -459,6 +459,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd road_7.jpg
 
 newmtl None_NONE.001
 Ns 0.000000
@@ -472,6 +473,16 @@ illum 2
 map_Kd blokade.jpg
 
 newmtl None_NONE.001_NONE
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.800000 0.800000 0.800000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl None_NONE_NONE
 Ns 0.000000
 Ka 0.000000 0.000000 0.000000
 Kd 0.800000 0.800000 0.800000
@@ -509,6 +520,17 @@ Ks 0.8 0.8 0.8
 d 1
 illum 2
 map_Kd road_6.jpg
+
+newmtl None_road_7.jpg
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.800000 0.800000 0.800000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd road_7.jpg
 
 newmtl None_seamless_concrete_texture.jpg
 Ns 0.000000

@@ -606,7 +606,7 @@ void GameSimulation::setupDeathPit() {
 	pit->getRenderable()->setModel(NULL);
 
 	//ramp at tunnel
-	deathPitGeom[0] = new PxBoxGeometry(PxVec3(30, 10, 20));
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(30, 5, 20));
 	pos = new PxTransform(-730, -30, 180);
 	pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
 	pit->getRenderable()->setModel(NULL);
