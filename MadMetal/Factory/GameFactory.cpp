@@ -209,7 +209,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Model3D *model = NULL;
 		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRACK_DRIVABLE));
 		Renderable3D *renderable = new Renderable3D(model);
-		//renderable->setModel(NULL);
+		
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
 
@@ -228,6 +228,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Physicable *physicable = new Physicable(physicalDrivableTrack);
 		drivableTrack = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
 
+		renderable->setModel(Assets::getModel("trackv3enviro"));
 		m_scene.addActor(*physicalDrivableTrack);
 		m_world.addGameObject(drivableTrack);
 
