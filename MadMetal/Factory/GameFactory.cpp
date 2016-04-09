@@ -87,7 +87,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		physicalCar->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 		physicalCar->mDriveDynData.setUseAutoGears(true);
 
-							car->setSoundChassis(ChassisCrashSound());
+		car->setSoundChassis(ChassisCrashSound());
+
+		PxGeometry *geom[1];
+		geom[0] = new PxBoxGeometry(1, 1, 1);
+		Object3D *shadow = static_cast<Object3D *>(makeObject(OBJECT_BLOB_SHADOW, pos, geom, car));
+		car->setShadow(shadow);
+		shadow->setScale(glm::vec3(car->getScale().x, 3, car->getScale().z));
+		
+
 		return car;
 	}
 #define EXPLOSIVELY_DELICIOUS_HEIGHT_ADDITION 3
@@ -122,6 +130,13 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 										 physicalCar->mDriveDynData.setUseAutoGears(true);
 
 										 car->setSoundChassis(ChassisCrashSound());
+
+										 PxGeometry *geom[1];
+										 geom[0] = new PxBoxGeometry(1, 1, 1);
+										 Object3D *shadow = static_cast<Object3D *>(makeObject(OBJECT_BLOB_SHADOW, pos, geom, car));
+										 car->setShadow(shadow);
+										 shadow->setScale(glm::vec3(car->getScale().x * 1.5f, 3, car->getScale().z * 1.5f));
+
 										 return car;
 	}
 	case OBJECT_GARGANTULOUS:
@@ -153,6 +168,11 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							physicalCar->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 							physicalCar->mDriveDynData.setUseAutoGears(true);
 
+							PxGeometry *geom[1];
+							geom[0] = new PxBoxGeometry(1, 1, 1);
+							Object3D *shadow = static_cast<Object3D *>(makeObject(OBJECT_BLOB_SHADOW, pos, geom, car));
+							car->setShadow(shadow);
+							shadow->setScale(glm::vec3(car->getScale().x, 3, car->getScale().z));
 
 							car->setSoundChassis(ChassisCrashSound());
 							return car;
@@ -192,7 +212,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	{
 		Object3D *drivableTrack = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_DRIVABLE, pos, geom, parent));
 		//Object3D *nonDrivableTrack = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_NON_DRIVABLE, pos, geom, parent));
-		//Object3D *trackWalls = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_WALLS, pos, geom, parent));
+		Object3D *trackWalls = static_cast<Object3D *>(makeObject(GameFactory::OBJECT_TRACK_WALLS, pos, geom, parent));
 
 		Track *track;
 		
@@ -266,33 +286,35 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	}
 	case OBJECT_TRACK_WALLS:
 	{
-									  Object3D *trackWalls;
-									  Model3D *model = NULL;
-									  model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_TRACK_WALLS));
-									  Renderable3D *renderable = new Renderable3D(NULL);
-									  Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
-									  Animatable *animatable = new Animatable();
+		for (int i = RenderFactory::RENDERABLE_OBJECT_TRACK_WALL_1; i <= RenderFactory::RENDERABLE_OBJECT_TRACK_WALL_17; i ++) {
+			Object3D *trackWalls;
+			Model3D *model = NULL;
+			model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RenderableObjects(i)));
+			Renderable3D *renderable = new Renderable3D(NULL);
+			Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+			Animatable *animatable = new Animatable();
 
-									  PxMaterial* material = PhysicsManager::createMaterial(0, 0, 0);    //static friction, dynamic friction, restitution
-									  PxTriangleMesh ** mesh = model->getPhysicsTriangleMesh();
-									  PxGeometry ** geom = new PxGeometry *[model->getMeshes()->size()];
-									  for (unsigned int i = 0; i < model->getMeshes()->size(); i++) {
-										  geom[i] = new PxTriangleMeshGeometry(mesh[i]);
-									  }
-									  delete[] mesh;
-									  PxRigidStatic *physicalTrackWalls = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_TRACK_WALLS, objectId, pos, geom, model->getMeshes()->size(), material, NULL, NULL));
-									  for (unsigned int i = 0; i < model->getMeshes()->size(); i++) {
-										  delete geom[i];
-									  }
-									  delete geom;
+			PxMaterial* material = PhysicsManager::createMaterial(0, 0, 0);    //static friction, dynamic friction, restitution
+			PxTriangleMesh ** mesh = model->getPhysicsTriangleMesh();
+			PxGeometry ** geom = new PxGeometry *[model->getMeshes()->size()];
+			for (unsigned int i = 0; i < model->getMeshes()->size(); i++) {
+				geom[i] = new PxTriangleMeshGeometry(mesh[i]);
+			}
+			delete[] mesh;
+			PxRigidStatic *physicalTrackWalls = static_cast<PxRigidStatic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_TRACK_WALLS, objectId, pos, geom, model->getMeshes()->size(), material, NULL, NULL));
+			for (unsigned int i = 0; i < model->getMeshes()->size(); i++) {
+				delete geom[i];
+			}
+			delete geom;
 
-									  Physicable *physicable = new Physicable(physicalTrackWalls);
-									  trackWalls = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
+			Physicable *physicable = new Physicable(physicalTrackWalls);
+			trackWalls = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
 
-									  m_scene.addActor(*physicalTrackWalls);
-									  m_world.addGameObject(trackWalls);
+			m_scene.addActor(*physicalTrackWalls);
+			m_world.addGameObject(trackWalls);
+		}
 
-									  return trackWalls;
+		return NULL;
 	}
 	case OBJECT_BULLET_MEOW_MIX:
 	{
@@ -627,7 +649,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		PxRigidDynamic *waypointTriggerVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::WAYPOINT_COLLISION_VOLUME, objectId, pos, geom, 1, NULL, NULL, NULL));
 		Physicable *physicable = new Physicable(waypointTriggerVolume);
-		animatable->setScale(glm::vec3(waypointTriggerVolume->getWorldBounds().getDimensions().x, waypointTriggerVolume->getWorldBounds().getDimensions().y, waypointTriggerVolume->getWorldBounds().getDimensions().z));
+		animatable->setScale(glm::vec3(waypointTriggerVolume->getWorldBounds().getDimensions().x, 3, waypointTriggerVolume->getWorldBounds().getDimensions().z));
 
 		Waypoint *waypoint = new Waypoint(objectId, audioable, physicable, animatable, renderable);
 
@@ -692,7 +714,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							 Model3D *model = NULL;
 							 model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_DEATH_PIT));
 							 Renderable3D *renderable = new Renderable3D(model, true, true);
-							 renderable->setModel(NULL);
+							// renderable->setModel(NULL);
 							 Animatable *animatable = new Animatable();
 							 Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
@@ -1088,6 +1110,26 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		m_world.addGameObject(explosion);
 		m_scene.addActor(*explosionVolume);
+
+		return explosion;
+	}
+	case OBJECT_BLOB_SHADOW:
+	{
+		Model3D *model = NULL;
+		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_BLOB_SHADOW));
+		Renderable3D *renderable = new Renderable3D(model, true, true);
+		Animatable *animatable = new Animatable();
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+		PxRigidDynamic *shadowVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_BLOB_SHADOW, objectId, pos, geom, 0, NULL, NULL, NULL));
+		Physicable *physicable = new Physicable(shadowVolume);
+
+		animatable->setScale(glm::vec3(shadowVolume->getWorldBounds().getDimensions().x, shadowVolume->getWorldBounds().getDimensions().y, shadowVolume->getWorldBounds().getDimensions().z));
+
+		Object3D *explosion = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
+
+		m_world.addGameObject(explosion);
+		m_scene.addActor(*shadowVolume);
 
 		return explosion;
 	}

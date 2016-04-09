@@ -125,7 +125,7 @@ void Car::usePowerUp()
 			break;
 		case (PowerUpType::DEFENSE) :
 			
-			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
+			geom[0] = new PxBoxGeometry(dim.x, dim.y / 2, dim.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(pos.x,pos.y,pos.x)), geom, this);
 			delete geom[0];
 			m_audioable->getAudioHandle().queAudioSource(&getActor(), ShieldPowerupSound());
@@ -133,7 +133,7 @@ void Car::usePowerUp()
 		case (PowerUpType::SPEED) :
 			//add particle system
 			
-			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
+			geom[0] = new PxBoxGeometry(dim.x, dim.y / 2, dim.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SPEED_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), geom, this);
 			PxRigidDynamic* actor = static_cast<PxRigidDynamic*>(&getActor());
 			glm::vec3 direction = glm::normalize(getForwardVector());
@@ -266,38 +266,33 @@ void Car::updateOrientation(float dt)
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, angVel.y, 0), true);
 	
 	
+	m_shadow->getActor().setGlobalPose(PxTransform(getActor().getGlobalPose().p + PxVec3(0, lastKnownDistanceBetweenCarAndShadow, 0), getActor().getGlobalPose().q));
 	
+	PxVec3 extraOffset = PxVec3(0, 0, 0);
+	bool groundFound = false;
 	PxRaycastBuffer hit;
 	PxQueryFilterData fd = PxQueryFilterData(PxQueryFlag::eSTATIC);
-	GameFactory::instance()->sceneRayCast(m_car.getRigidDynamicActor()->getGlobalPose().p + PxVec3(0,1,0), PxVec3(0, -1, 0), 100, hit, PxHitFlag::eDEFAULT, fd);
+	do {
+		GameFactory::instance()->sceneRayCast(m_car.getRigidDynamicActor()->getGlobalPose().p + extraOffset, PxVec3(0, -1, 0), 500, hit, PxHitFlag::eDEFAULT, fd);
 	if (hit.hasBlock)
 	{
-		if (hit.block.actor != NULL)
-		{
 			PxShape * shapes[1];
 			hit.block.actor->getShapes(shapes, 1);
-			if (shapes[0]->getSimulationFilterData().word0 == 1)
+			if (shapes[0]->getSimulationFilterData().word0 == COLLISION_FLAG_GROUND)
 			{
-				//std::cout << shapes[0]->getSimulationFilterData().word0 << std::endl;
-				PxVec3 up = hit.block.normal;
-				//std::cout << hit.block.distance << std::endl;
-				
-
-				PxQuat initQuat(angle, PxVec3(0, abs(axis.y) / axis.y, 0));
-				PxVec3 rotationVector = up.cross(PxVec3(0, 1, 0)).getNormalized();
-				//std::cout << rotationVector.x << "," << rotationVector.y << "," << rotationVector.z << std::endl;
-				PxReal rotationAngle = acos(PxVec3(0, 1, 0).dot(up.getNormalized()));
-				//std::cout << rotationAngle * 180 / 3.14 << std::endl;
-				PxQuat rotationQuat(rotationAngle, rotationVector);
-
-				//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, PxQuat(-rotationAngle, rotationVector)));// +rotationQuat));
-				//std::cout << normal.x << "," << normal.y << "," << normal.z << std::endl;
-				//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, initQuat * rotationQuat));// +rotationQuat));
+				lastKnownDistanceBetweenCarAndShadow = extraOffset.y - hit.block.distance + 1.f;
+				groundFound = true;
+			}
+			else {
+				extraOffset += PxVec3(0, -hit.block.distance - 0.1f, 0);
 			}
 		}
+		else {
+			if (extraOffset.y != 0)
+				lastKnownDistanceBetweenCarAndShadow = extraOffset.y;
+			groundFound = true;
 	}
-	
-	//std::cout << angle << "  :  " << axis.x << "," << axis.y << "," << axis.z << std::endl;
+	} while (!groundFound);
 	
 }
 
@@ -348,7 +343,7 @@ void Car::setCurrentCollisionVolume(CollisionVolume* toSet)
 		if (toSet == m_currentCollisionVolume->getNextCollisionVolume())
 		{
 			m_currentCollisionVolume = toSet;
-		}
+	}
 	}
 	else {
 		m_currentCollisionVolume = toSet;
@@ -406,4 +401,8 @@ void Car::setInvincibility(float time) {
 
 float Car::getTimeSinceLastTimeHit() {
 	return m_timeSinceLastTimeHit;
+}
+
+void Car::setShadow(Object3D *shadow) {
+	m_shadow = shadow;
 }

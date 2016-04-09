@@ -584,21 +584,38 @@ void GameSimulation::setupTrains() {
 
 void GameSimulation::setupDeathPit() {
 	PxGeometry **deathPitGeom = new PxGeometry*[1];
+
+	//first death pit
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 10, 45));
 	PxTransform *pos = new PxTransform(15, -20, 445);
-	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->setRespawnLocation(pos->p + PxVec3(0, 21, 465));
+	DeathPit *pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit->setRespawnLocation(pos->p + PxVec3(0, 21, 465));
+	pit->getRenderable()->setModel(NULL);
 
+	//second death pit
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 10, 60));
 	pos = new PxTransform(-25, -20, 765);
-	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->setRespawnLocation(pos->p + PxVec3(0, 21, 465));
+	pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit->setRespawnLocation(pos->p + PxVec3(0, 21, 465));
+	pit->getRenderable()->setModel(NULL);
 
+	//green death pit
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(350, 5, 200));
 	pos = new PxTransform(-713, -40, 1560);
-	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL))->getRenderable()->setModel(NULL);
+	pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit->getRenderable()->setModel(NULL);
 
+	//ramp at tunnel
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(30, 5, 20));
+	pos = new PxTransform(-730, -30, 180);
+	pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit->getRenderable()->setModel(NULL);
+
+	//death pit below the map
 	deathPitGeom[0] = new PxBoxGeometry(PxVec3(5000, 10, 5000));
 	pos = new PxTransform(0, -50, 0);
-	static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit->getRenderable()->setModel(NULL);
 
 
 	delete pos;

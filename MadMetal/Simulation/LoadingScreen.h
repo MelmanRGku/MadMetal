@@ -13,13 +13,16 @@ private:
 	std::thread *t;
 	LoadingStatus *status;
 	LoadingBar *bar;
-	Text3D *loadingString, *loadingInfoString;
 	SceneMessage m_toDeliver;
 	Audio &m_audio;
 
+	Object3D *background;
+	Model3D *backgroundPic1 = NULL,
+		*backgroundPic2 = NULL,
+		*backgroundPic3 = NULL,
+		*backgroundPic4 = NULL;
+
 	void createProgressBar();
-	void createLoadingString();
-	void createLoadingInfoString();
 public:
 	LoadingScreen(SceneMessage &toDeliver, Audio &audio, LoadingStatus *status, std::thread *t);
 	~LoadingScreen();

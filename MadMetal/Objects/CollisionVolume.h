@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include "Objects\Object3D.h"
+#include "Game Logic\AIDefinitions.h"
 
 class Waypoint;
 
@@ -20,14 +21,23 @@ public:
 	CollisionVolume * getNextCollisionVolume();
 	void setNextCollisionVolume(CollisionVolume* toSet);
 	void setCurrentWaypointIndex(Waypoint* waypoint);
+	void setLastWaypointIndex(Waypoint* waypoint);
 	void setGoalWaypointIndex(Waypoint* waypoint);
+	void setSectionSpeedDamping(float damping);
+	void setSectionSteeringDamping(float damping);
 
 	Waypoint* getCurrentWaypointIndex();
+	Waypoint* getLastWaypointIndex();
 	Waypoint* getGoalWaypointIndex();
+	float getSpeedDamping();
+	float getSteeringDamping();
 	
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 
 private: //members
+
+	float m_speedDamping;
+	float m_steeringDamping;
 	int m_respawnIndex;
 	CollisionVolume * m_next;
 	std::vector<PxTransform> m_respawnLocations;

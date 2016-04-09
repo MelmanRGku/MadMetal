@@ -93,8 +93,6 @@ void PlayerControllable::playFrame(double dt)
 								m_car->getDrivingStyle().getMaxSpeed() > m_car->getCar().computeForwardSpeed() ? m_gamePad->getRightTrigger() : 0);
 						}
 					}
-					
-
 
 				}
 				else if (m_gamePad->getLeftTrigger())
