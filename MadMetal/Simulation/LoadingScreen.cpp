@@ -18,7 +18,7 @@ LoadingScreen::LoadingScreen(SceneMessage& toDeliver, Audio &audio, LoadingStatu
 		a->updatePosition(glm::vec3(0, 0, -30));
 		a->setScale(glm::vec3(33, 24.5, 1));
 		Audioable *au = new Audioable(audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/BackgroundControls1.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/BackgroundControls0.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		background = new Object3D(3, au, p, a, r, NULL);

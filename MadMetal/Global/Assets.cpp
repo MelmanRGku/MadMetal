@@ -24,11 +24,12 @@ void Assets::init() {
 	models = new std::map<std::string, Model*>();
 	textures = new std::map<std::string, Texture*>();
 	modelsToBeLoadedBeforeTheGameStarts = new std::vector<std::string>();
-	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/BackgroundControls.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/MadMetalPresents.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/BackgroundControls0.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/BackgroundControls1.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/BackgroundControls2.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/BackgroundControls3.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/BackgroundControls.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Meowmix.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/twisted1.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Gargantulous.obj");
@@ -172,7 +173,8 @@ void Assets::loadBeforeGameStarts(HDC dc, HGLRC sharedOpenglContext) {
 		
 		status->setStatus(loadedFilesSize / totalFilesSize, "Loading file " + objectName);
 
-		Model3D *model = static_cast<Model3D *>(loadObjFromDirectory(modelsToBeLoadedBeforeTheGameStarts->at(i)));
+		if (getModel(objectName) == NULL)
+			loadObjFromDirectory(modelsToBeLoadedBeforeTheGameStarts->at(i));
 
 		loadedFilesSize += (std::ifstream((modelsToBeLoadedBeforeTheGameStarts->at(i)), std::ifstream::ate | std::ifstream::binary)).tellg();
 

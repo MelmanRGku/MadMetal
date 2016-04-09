@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Simulation\MadMetalPresentsScreen.cpp" />
     <ClCompile Include="Simulation\ControlsMenu.cpp" />
     <ClCompile Include="Objects\DeathPit.cpp" />
     <ClCompile Include="Objects\BombExplosion.cpp" />
@@ -185,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Simulation\MadMetalPresentsScreen.h" />
     <ClInclude Include="Simulation\ControlsMenu.h" />
     <ClInclude Include="Game Logic\AIDefinitions.h" />
     <ClInclude Include="Objects\DeathPit.h" />
