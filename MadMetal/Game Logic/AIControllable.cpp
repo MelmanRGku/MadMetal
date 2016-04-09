@@ -4,6 +4,9 @@
 #include "Objects\CollisionVolume.h"
 #include "Objects\Track.h"
 
+static const float BACKUP_DAMPING = 0.7;
+static const int NUMBER_OF_WRONG_HITS = 10; 
+
 AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	: Controllable(aiTemplate)
 	, m_track(track)
@@ -12,7 +15,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
 	m_lastKnowCollisionVolue = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(129);
+	m_goalWaypoint = m_track.getWaypointAt(1946);
 	m_currentPath.clear();
 	setHighCostWaypointsToHigh();
 	m_needsToBackup = false;
@@ -20,6 +23,8 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_movementState = AiStateMovement::INITIAL_STATE;
 	m_speedDamping = 1.0;
 	m_steeringDamping = 1.0;
+	m_counterReverse = 60;
+	m_wrongHits = NUMBER_OF_WRONG_HITS;
 }
 AIControllable::~AIControllable()
 {
@@ -114,7 +119,7 @@ void AIControllable::reverseToPreviousWaypoint()
 	float amountToAccelerate;
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
-	changeTurning(-crossProductResult.y, amountToSteerBy);
+	changeTurning(-crossProductResult.y, amountToSteerBy * BACKUP_DAMPING);
 	backUp(amountToAccelerate);
 
 }
@@ -133,14 +138,14 @@ void AIControllable::recalculatePath()
 	m_currentPath.clear();
 	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
 
-	//std::cout << "THe new path is: ";
+	std::cout << "THe new path is: ";
 
-	//for (int i = 0; i < m_currentPath.size(); i++)
-	//{
-	//	std::cout << m_currentPath[i]->getIndex() << ", ";
-	//}
+	for (int i = 0; i < m_currentPath.size(); i++)
+	{
+		std::cout << m_currentPath[i]->getIndex() << ", ";
+	}
 
-	//std::cout << "\n";
+	std::cout << "\n";
 	updateNextWaypoint();
 }
 
@@ -231,59 +236,63 @@ void AIControllable::setHighCostWaypointsToLow()
 
 void AIControllable::processInputAcceleration(float amount)
 {
-	if (amount > 0.1)
-	{
-		//std::cout << "Applying acceleration : " << -amount << "\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, amount);
-	}
-	//else if (amount < 0.1 && m_car->getCar().computeForwardSpeed() > 10.0)
-	//{
-	//	//std::cout << "Applying break with : " << -amount << "\n";
-	//	m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
-	//	if (amount < 0)
-	//	{
-	//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
-	//	}
-	//	else
-	//	{
-	//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, amount);
-	//	}
-	//}
-	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
-	{
-		//std::cout << "Applying acceleration : " << -amount << "\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount));
-	}
-	else
-	{
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-	}
+	if (m_car->getCar().getRigidDynamicActor()->isSleeping())
+		m_car->getCar().getRigidDynamicActor()->wakeUp();
+
+		if (amount > 0.1)
+		{
+			//std::cout << "Applying acceleration : " << -amount << "\n";
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, amount);
+		}
+		//else if (amount < 0.1 && m_car->getCar().computeForwardSpeed() > 10.0)
+		//{
+		//	//std::cout << "Applying break with : " << -amount << "\n";
+		//	m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
+		//	if (amount < 0)
+		//	{
+		//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
+		//	}
+		//	else
+		//	{
+		//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, amount);
+		//	}
+		//}
+		else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
+		{
+			//std::cout << "Applying acceleration : " << -amount << "\n";
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount));
+		}
+		else
+		{
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+		}
 }
 
 void AIControllable::changeTurning(float turningDirectionValue, float turningAmountValue)
 {
-
-	if (turningDirectionValue < 0)
-	{
-		//std::cout << "turning Left\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, turningAmountValue);
-	}
-	else if (turningDirectionValue > 0)
-	{
-		//std::cout << "turning right\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, turningAmountValue);
-	}
-	else
-	{
-		//std::cout << "Do not turn\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
-	}
+	if (m_car->getCar().getRigidDynamicActor()->isSleeping()) 
+		m_car->getCar().getRigidDynamicActor()->wakeUp();
+		if (turningDirectionValue < 0)
+		{
+			//std::cout << "turning Left\n";
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, turningAmountValue);
+		}
+		else if (turningDirectionValue > 0)
+		{
+			//std::cout << "turning right\n";
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, turningAmountValue);
+		}
+		else
+		{
+			//std::cout << "Do not turn\n";
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
+		}
 }
 
 void AIControllable::checkStuckInWall()
@@ -296,7 +305,7 @@ void AIControllable::checkStuckInWall()
 		!(m_car->getInvinsibilityTimeRemaining() > 0))
 	{
 		m_counter++;
-		if (m_counter > 20)
+		if (m_counter > 30)
 		{
 			m_needsToBackup = !m_needsToBackup;
 			if (m_needsToBackup)
@@ -403,7 +412,11 @@ void AIControllable::updateMovementState()
 		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() &&
 			m_car->getCurrentWaypoint()->getIndex() != m_nextWaypoint->getIndex())
 		{
-			recalculatePath();
+			m_wrongHits--;
+			if (m_wrongHits <= 0)
+			{
+				recalculatePath();
+			}
 			//m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 		}
 		// Hit the goal node
@@ -420,6 +433,7 @@ void AIControllable::updateMovementState()
 		if (m_car->getCurrentWaypoint()->getIndex() == m_nextWaypoint->getIndex())
 		{
 			//std::cout << "Reached Next Waypoint\n";
+			m_wrongHits = NUMBER_OF_WRONG_HITS;
 			updateNextWaypoint();
 		}
 
@@ -436,6 +450,7 @@ void AIControllable::updateMovementState()
 
 		break;
 	case AiStateMovement::MOVE_BACKWARDS:
+		m_counterReverse--;
 		if (m_controlsPaused)
 		{
 			m_movementState = AiStateMovement::CONTROLS_PAUSED;
@@ -446,13 +461,15 @@ void AIControllable::updateMovementState()
 			m_movementState = AiStateMovement::DEAD;
 			break;
 		}
-		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() &&
-			m_car->getCurrentWaypoint()->isValid())
+		if (m_counterReverse <= 0)
+		//if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() &&
+		//	m_car->getCurrentWaypoint()->isValid())
 		{
 			recalculatePath();
 			m_needsToBackup = false;
 			m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 			m_counter = 0;
+			m_counterReverse = 60;
 			m_movementState = AiStateMovement::MOVE_FORWARD;
 		}
 		else

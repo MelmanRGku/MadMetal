@@ -6,7 +6,7 @@
 
 static const float WAYPOINT_WIDTH_COLLISION = 2;
 static const float WAYPOINT_LENGTH_COLLISION = 2;
-static const float WAYPOINT_HEIGHT_COLLISION = 40;
+static const float WAYPOINT_HEIGHT_COLLISION = 80;
 static const float WAYPOINT_TRUE_WIDTH = 10;
 static const float WAYPOINT_TRUE_LENGTH = 10;
 
@@ -162,7 +162,7 @@ WaypointSystem::WaypointSystem(NavigationalGrid& drivingMesh)
 			0,
 			drivingMesh.getVertices()->at(i).z);
 		Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
-		if (drivingMesh.getVertices()->at(i).y > 99)
+		if (drivingMesh.getVertices()->at(i).y > 50)
 		{
 			tempWaypoint->setValid(false);
 		}
@@ -181,6 +181,10 @@ WaypointSystem::WaypointSystem(NavigationalGrid& drivingMesh)
 		{
 			for (unsigned int k = j + 1; k < drivingMesh.getFaces()->at(i).size(); k++)
 			{
+				if (drivingMesh.getFaces()->at(i).at(j) == 2940)
+				{
+					std::cout << "here";
+				}
 				std::vector<Waypoint*>& adjecencyList = m_waypoints[drivingMesh.getFaces()->at(i).at(j)]->getListOfAdjacentWaypoints();
 				Waypoint* temp = m_waypoints[drivingMesh.getFaces()->at(i).at(j)];
 				Waypoint* valueToLookFor = m_waypoints[drivingMesh.getFaces()->at(i).at(k)];

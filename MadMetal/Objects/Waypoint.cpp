@@ -10,6 +10,8 @@ Waypoint::Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *ana
 	Waypoint::globalID++;
 	m_highCost = 99999.0;
 	m_isValid = true;
+
+	m_position = pable->getActor().getGlobalPose().p;
 }
 
 

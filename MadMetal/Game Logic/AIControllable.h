@@ -51,6 +51,8 @@ private: //members
 	std::vector<int> m_listOfWaypointsHighCost;
 	bool m_needsToBackup;
 	int m_counter;
+	int m_counterReverse;
+	int m_wrongHits;
 	float m_speedDamping;
 	float m_steeringDamping;
 };
