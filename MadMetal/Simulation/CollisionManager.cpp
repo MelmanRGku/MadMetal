@@ -201,7 +201,7 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 		car->setCurrentWaypoint(waypoint);
 	}
 
-	//std::cout << "Current Waypoint" << waypoint->getIndex() << "\n";
+	std::cout << "Current Waypoint" << waypoint->getIndex() << "\n";
 }
 
 void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)

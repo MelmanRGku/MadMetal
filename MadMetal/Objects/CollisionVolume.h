@@ -24,13 +24,14 @@ public:
 	void setCurrentWaypointIndex(Waypoint* waypoint);
 	void setLastWaypointIndex(Waypoint* waypoint);
 	void setGoalWaypointIndex(Waypoint* waypoint);
-	void setAiPlaceInTrack(AiPlaceInTrack movement);
+	void setSectionSpeedDamping(float damping);
+	void setSectionSteeringDamping(float damping);
 
 	Waypoint* getCurrentWaypointIndex();
 	Waypoint* getLastWaypointIndex();
 	Waypoint* getGoalWaypointIndex();
-
-	AiPlaceInTrack getAiPlaceInTrack();
+	float getSpeedDamping();
+	float getSteeringDamping();
 	
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 
@@ -38,7 +39,8 @@ private: //members
 	Waypoint* m_lastWaypoint;
 	Waypoint* m_currentWaypoint;
 	Waypoint* m_goalWaypoint;
-	AiPlaceInTrack m_aiPlaceInTrack;
+	float m_speedDamping;
+	float m_steeringDamping;
 	int m_respawnIndex;
 	std::vector<CollisionVolume *> m_nextVolumes;
 	std::vector<PxTransform> m_respawnLocations;

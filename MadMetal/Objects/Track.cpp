@@ -57,7 +57,6 @@ void Track::setupCollisionVolumes() {
 	//startLine->setGoalWaypointIndex(getWaypointAt(222));
 	//startLine->setCurrentWaypointIndex(getWaypointAt(182));
 	//startLine->setLastWaypointIndex(getWaypointAt(157));
-	startLine->setAiPlaceInTrack(AiPlaceInTrack::CITY);
 	m_collisionVolumes.push_back(startLine);
 	respawnLocations.push_back(PxVec3(25, 20, -35));
 	respawnLocations.push_back(PxVec3(5, 20, -35));
@@ -78,9 +77,10 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(5, 20, 200));
 	pathBranchLeadingIntoTheDessert = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	pathBranchLeadingIntoTheDessert->setGoalWaypointIndex(getWaypointAt(129));
-	pathBranchLeadingIntoTheDessert->setCurrentWaypointIndex(getWaypointAt(19));
-	pathBranchLeadingIntoTheDessert->setLastWaypointIndex(getWaypointAt(847));
-	pathBranchLeadingIntoTheDessert->setAiPlaceInTrack(AiPlaceInTrack::CITY);
+	pathBranchLeadingIntoTheDessert->setCurrentWaypointIndex(getWaypointAt(847));
+	pathBranchLeadingIntoTheDessert->setLastWaypointIndex(getWaypointAt(114));
+	pathBranchLeadingIntoTheDessert->setSectionSpeedDamping(1.0);
+	pathBranchLeadingIntoTheDessert->setSectionSteeringDamping(0.6);
 
 	m_collisionVolumes.push_back(pathBranchLeadingIntoTheDessert);
 	pathBranchLeadingIntoTheDessert->setRespawnLocations(respawnLocations);
@@ -102,7 +102,8 @@ void Track::setupCollisionVolumes() {
 	deathPit1->setGoalWaypointIndex(getWaypointAt(199));
 	deathPit1->setCurrentWaypointIndex(getWaypointAt(873));
 	deathPit1->setLastWaypointIndex(getWaypointAt(873));
-	deathPit1->setAiPlaceInTrack(AiPlaceInTrack::DESSERT);
+	deathPit1->setSectionSpeedDamping(1.0);
+	deathPit1->setSectionSteeringDamping(0.4);
 	m_collisionVolumes.push_back(deathPit1);
 	deathPit1->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -120,7 +121,8 @@ void Track::setupCollisionVolumes() {
 	deathPit2->setGoalWaypointIndex(getWaypointAt(911));
 	deathPit2->setCurrentWaypointIndex(getWaypointAt(219));
 	deathPit2->setLastWaypointIndex(getWaypointAt(219));
-	deathPit2->setAiPlaceInTrack(AiPlaceInTrack::DESSERT);
+	deathPit2->setSectionSpeedDamping(1.0);
+	deathPit2->setSectionSteeringDamping(0.8);
 	respawnLocations.clear();
 	
 	//start of the canyon
@@ -132,10 +134,11 @@ void Track::setupCollisionVolumes() {
 	pos = new PxTransform(PxVec3(0, -5, 1100));
 	startOfTheCanyon = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
 	m_collisionVolumes.push_back(startOfTheCanyon);
-	startOfTheCanyon->setGoalWaypointIndex(getWaypointAt(258));
+	startOfTheCanyon->setGoalWaypointIndex(getWaypointAt(1592));
 	startOfTheCanyon->setCurrentWaypointIndex(getWaypointAt(911));
 	startOfTheCanyon->setLastWaypointIndex(getWaypointAt(911));
-	startOfTheCanyon->setAiPlaceInTrack(AiPlaceInTrack::CANYON);
+	startOfTheCanyon->setSectionSpeedDamping(1.0);
+	startOfTheCanyon->setSectionSteeringDamping(0.5);
 	startOfTheCanyon->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
 
@@ -146,9 +149,11 @@ void Track::setupCollisionVolumes() {
 	respawnLocations.push_back(PxVec3(-25, 20, 1540));
 	pos = new PxTransform(PxVec3(-45, 0, 1555), PxQuat(1.6203, PxVec3(0, -1, 0)));
 	branchPathInTheCanyon = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	//branchPathInTheCanyon->setGoalWaypointIndex(getWaypointAt(95));
-	//branchPathInTheCanyon->setCurrentWaypointIndex(getWaypointAt(84));
-	//branchPathInTheCanyon->setLastWaypointIndex(getWaypointAt(79));
+	branchPathInTheCanyon->setGoalWaypointIndex(getWaypointAt(2139));
+	branchPathInTheCanyon->setCurrentWaypointIndex(getWaypointAt(1580));
+	branchPathInTheCanyon->setLastWaypointIndex(getWaypointAt(1548));
+	branchPathInTheCanyon->setSectionSpeedDamping(1.0);
+	branchPathInTheCanyon->setSectionSteeringDamping(0.7);
 	m_collisionVolumes.push_back(branchPathInTheCanyon);
 	branchPathInTheCanyon->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -167,6 +172,8 @@ void Track::setupCollisionVolumes() {
 	//landingPlatformInTheGooPit->setGoalWaypointIndex(getWaypointAt(564));
 	//landingPlatformInTheGooPit->setCurrentWaypointIndex(getWaypointAt(597));
 	//landingPlatformInTheGooPit->setLastWaypointIndex(getWaypointAt(611));
+	//landingPlatformInTheGooPit->setSectionSpeedDamping(1.0);
+	//landingPlatformInTheGooPit->setSectionSteeringDamping(1.0);
 	m_collisionVolumes.push_back(landingPlatformInTheGooPit);
 	landingPlatformInTheGooPit->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -182,6 +189,8 @@ void Track::setupCollisionVolumes() {
 	//endOfTheFirstTrainTunnel->setGoalWaypointIndex(getWaypointAt(342));
 	//endOfTheFirstTrainTunnel->setCurrentWaypointIndex(getWaypointAt(331));
 	//endOfTheFirstTrainTunnel->setLastWaypointIndex(getWaypointAt(566));
+	//endOfTheFirstTrainTunnel->setSectionSpeedDamping(1.0);
+	//endOfTheFirstTrainTunnel->setSectionSteeringDamping(1.0);
 	m_collisionVolumes.push_back(endOfTheFirstTrainTunnel);
 	endOfTheFirstTrainTunnel->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -196,6 +205,8 @@ void Track::setupCollisionVolumes() {
 	//maybeTheRampExitInTheTunnel->setGoalWaypointIndex(getWaypointAt(821));
 	//maybeTheRampExitInTheTunnel->setCurrentWaypointIndex(getWaypointAt(850));
 	//maybeTheRampExitInTheTunnel->setLastWaypointIndex(getWaypointAt(846));
+	//maybeTheRampExitInTheTunnel->setSectionSpeedDamping(1.0);
+	//maybeTheRampExitInTheTunnel->setSectionSteeringDamping(1.0);
 	m_collisionVolumes.push_back(maybeTheRampExitInTheTunnel);
 	maybeTheRampExitInTheTunnel->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();
@@ -210,6 +221,8 @@ void Track::setupCollisionVolumes() {
 	//entranceToTheTrafficCircle->setGoalWaypointIndex(getWaypointAt(767));
 	//entranceToTheTrafficCircle->setCurrentWaypointIndex(getWaypointAt(822));
 	//entranceToTheTrafficCircle->setLastWaypointIndex(getWaypointAt(825));
+	//entranceToTheTrafficCircle->setSectionSpeedDamping(1.0);
+	//entranceToTheTrafficCircle->setSectionSteeringDamping(1.0);
 	m_collisionVolumes.push_back(entranceToTheTrafficCircle);
 	entranceToTheTrafficCircle->setRespawnLocations(respawnLocations);
 	respawnLocations.clear();

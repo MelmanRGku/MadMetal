@@ -18,7 +18,8 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_needsToBackup = false;
 	m_counter = 0;
 	m_movementState = AiStateMovement::INITIAL_STATE;
-	m_AiTrackAreaPosition = AiPlaceInTrack::CITY;
+	m_speedDamping = 1.0;
+	m_steeringDamping = 1.0;
 }
 AIControllable::~AIControllable()
 {
@@ -68,26 +69,10 @@ void AIControllable::processFire(std::vector<Controllable *> *players) {
 
 void AIControllable::playFrame(double dt)
 {
-	switch (m_AiTrackAreaPosition)
-	{
-	case AiPlaceInTrack::DESSERT:
-		updateMovementState(0.80, 0.75);
-		break;
-	case AiPlaceInTrack::CANYON:
-		updateMovementState(0.65, 0.65);
-		break;
-	case AiPlaceInTrack::SUBWAY:
-		updateMovementState(0.7, 0.7);
-		break;
-	case AiPlaceInTrack::CITY:
-		updateMovementState(1.0, 1.0);
-		break;
-	default:
-		break;
-	}
+	updateMovementState();
 }
 
-void AIControllable::accelerateToNextWaypoint(float speedDamping, float steeringDamping)
+void AIControllable::accelerateToNextWaypoint()
 {
 	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
 	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
@@ -95,51 +80,35 @@ void AIControllable::accelerateToNextWaypoint(float speedDamping, float steering
 	forwardVector = glm::normalize(forwardVector);
 
 	glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
-	//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
 	vectorToNextWaypoint3.y = 0;
 	forwardVector.y = 0;
 	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
 	forwardVector = glm::normalize(forwardVector);
 	float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
-
-
-	//std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
-	//std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
 	float amountToSteerBy = fabs(amountOfDotProduct - 1);
 	amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
 	float amountToAccelerate;
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
-	changeTurning(crossProductResult.y, amountToSteerBy * steeringDamping);
-	accelerate(amountToAccelerate * speedDamping);
-
-	//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
-	//std::cout << "z value: " << crossProductResult.z << "\n";
+	changeTurning(crossProductResult.y, amountToSteerBy * m_steeringDamping);
+	accelerate(amountToAccelerate * m_speedDamping);
 }
 
 void AIControllable::reverseToPreviousWaypoint()
 {
-	//glm::vec4 vectorToNextWaypoint4 = glm::vec4(m_nextWaypoint->getPosition() - m_car->getPosition(), 1.0);
 	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
-	//glm::normalize(vectorToNextWaypoint4);
+
 	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
-	//glm::vec4 vectorOfSideOfCar = m_car->getModelMatrix() * glm::vec4(1.0, 0.0, 0.0, 1.0);
-	//glm::normalize(vectorOfSideOfCar);
 	glm::vec3 forwardVector = m_car->getForwardVector();
 	glm::vec3 reverseForwardVector = -forwardVector;
 	reverseForwardVector = glm::normalize(reverseForwardVector);
 
 	glm::vec3 crossProductResult = glm::cross(reverseForwardVector, vectorToNextWaypoint3);
-	//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
 	vectorToNextWaypoint3.y = 0;
 	reverseForwardVector.y = 0;
 	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
 	reverseForwardVector = glm::normalize(reverseForwardVector);
 	float amountOfDotProduct = glm::dot(reverseForwardVector, vectorToNextWaypoint3);
-
-
-	//std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
-	//std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
 	float amountToSteerBy = fabs(amountOfDotProduct - 1);
 	amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
 	float amountToAccelerate;
@@ -148,8 +117,6 @@ void AIControllable::reverseToPreviousWaypoint()
 	changeTurning(-crossProductResult.y, amountToSteerBy);
 	backUp(amountToAccelerate);
 
-	//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
-	//std::cout << "z value: " << crossProductResult.z << "\n";
 }
 
 void AIControllable::updateNextWaypoint()
@@ -181,7 +148,6 @@ void AIControllable::accelerate(float amount)
 {
 	if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
 	{
-		//std::cout << "changing gear\n";
 		m_car->getCar().mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 	}
 	if (m_car->getCar().computeForwardSpeed() > 0)
@@ -231,14 +197,16 @@ void AIControllable::checkCollisionVolumes()
 		{
 			m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
 			m_goalWaypoint = m_lastKnowCollisionVolue->getGoalWaypointIndex();
-			m_AiTrackAreaPosition = m_lastKnowCollisionVolue->getAiPlaceInTrack();
+			m_speedDamping = m_lastKnowCollisionVolue->getSpeedDamping();
+			m_steeringDamping = m_lastKnowCollisionVolue->getSteeringDamping();
 		}
 		else if (m_lastKnowCollisionVolue != m_car->getLastHitCollisionVolume())
 		{
 			m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
 			m_goalWaypoint = m_lastKnowCollisionVolue->getGoalWaypointIndex();
 			recalculatePath();
-			m_AiTrackAreaPosition = m_lastKnowCollisionVolue->getAiPlaceInTrack();
+			m_speedDamping = m_lastKnowCollisionVolue->getSpeedDamping();
+			m_steeringDamping = m_lastKnowCollisionVolue->getSteeringDamping();
 		}
 	}
 
@@ -385,7 +353,7 @@ void AIControllable::rotateTowardsNextWaypoint()
 	m_car->getCar().getRigidDynamicActor()->setGlobalPose(PxTransform(m_car->getCar().getRigidDynamicActor()->getGlobalPose().p, m_car->getCar().getRigidDynamicActor()->getGlobalPose().q * tempQauternion));
 }
 
-void AIControllable::updateMovementState(float speedDamping, float steeringdamping)
+void AIControllable::updateMovementState()
 {
 	switch (m_movementState)
 	{
@@ -463,7 +431,7 @@ void AIControllable::updateMovementState(float speedDamping, float steeringdampi
 		}
 		else
 		{
-			accelerateToNextWaypoint(speedDamping, steeringdamping);
+			accelerateToNextWaypoint();
 		}
 
 		break;
