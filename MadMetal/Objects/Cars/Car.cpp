@@ -14,15 +14,13 @@ void Car::resetGlobalPositionID()
 
 Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL), m_car(car), m_drivingStyle(style)
 {
-	m_currentWaypoint = NULL;
-	m_isAtMidCollisionVolume = false;
-	m_isAtStartingCollisionVolume = false;
-	m_lastCollisionVolume = NULL;
+	m_currentCollisionVolume = NULL;
+	
 	m_newLap = true;
 	m_powerUpRemaining = 0;
 	Car::positionGlobalID++;
 	m_positionInRace = positionGlobalID;
-	m_waypointHitList.clear();
+	
 	m_invincibilityTimeRemaining = 0;
 }
 
@@ -51,9 +49,9 @@ void Car::respawn()
 	}
 	m_timeSinceRespawn = 0;
 	
-	if (m_lastCollisionVolume != NULL)
+	if (m_currentCollisionVolume != NULL)
 	{
-		m_car.getRigidDynamicActor()->setGlobalPose(m_lastCollisionVolume->getRespawnLocation());
+		m_car.getRigidDynamicActor()->setGlobalPose(m_currentCollisionVolume->getRespawnLocation());
 		
 	}
 	else {
@@ -344,26 +342,24 @@ void Car::addDamageDealt(float damage, bool addToSuper) {
 }
 
 
-bool Car::setCurrentWaypoint(Waypoint* waypoint)
+void Car::setCurrentCollisionVolume(CollisionVolume* toSet)
 {
-	if (waypoint != m_currentWaypoint) {
-		m_lastWayPoint = m_currentWaypoint;
-	m_currentWaypoint = waypoint;
-		return true;
+	if (m_currentCollisionVolume != NULL) {
+		if (toSet == m_currentCollisionVolume->getNextCollisionVolume())
+		{
+			m_currentCollisionVolume = toSet;
+		}
 	}
 	else {
-		return false;
+		m_currentCollisionVolume = toSet;
 	}
 }
-Waypoint* Car::getLastWaypoint()
+
+CollisionVolume * Car::getCurrentCollisionVolume()
 {
-	return m_lastWayPoint;
+	return m_currentCollisionVolume;
 }
 
-Waypoint* Car::getCurrentWaypoint()
-{
-	return m_currentWaypoint;
-}
 
 
 void Car::incrementLap() {
@@ -393,53 +389,6 @@ void Car::playSoundChassis()
 {
 
 	m_audioable->getAudioHandle().queAudioSource(&this->getActor(), soundChassis);
-}
-
-void Car::setStartingCollisionVolumeFlag(bool isHit)
-{
-	m_isAtStartingCollisionVolume = isHit;
-	if (m_isAtStartingCollisionVolume && !m_newLap)
-	{
-		incrementLap();
-		m_newLap = true;
-	}
-		
-	
-		
-}
-void Car::setMidCollisionVolumeFlag(bool isHit)
-{
-	m_isAtMidCollisionVolume = isHit;
-	if (m_isAtMidCollisionVolume)
-	{
-		m_newLap = false;
-	}
-	
-	
-}
-
-bool Car::isAtStartingCollisionVolume()
-{
-	return m_isAtStartingCollisionVolume;
-}
-bool Car::isAtMidCollisionVolume()
-{
-	return m_isAtMidCollisionVolume;
-}
-
-void Car::addWaypointHit(Waypoint* waypoint)
-{
-	m_waypointHitList.push_back(waypoint);
-}
-
-void Car::setLastHitCollisionVolume(CollisionVolume* collisionVolume)
-{
-	m_lastCollisionVolume = collisionVolume;
-}
-
-CollisionVolume* Car::getLastHitCollisionVolume()
-{
-	return m_lastCollisionVolume;
 }
 
 

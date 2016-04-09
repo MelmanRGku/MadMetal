@@ -17,9 +17,8 @@ public:
 	void setIsStartCollisionVolume(bool isStartCollisionVolume);
 	bool getIsStartCollisionVolume();
 
-	void addNextVolume(CollisionVolume * toAdd);
-	bool isPrevVolumeOf(CollisionVolume *toCheck);
-	
+	CollisionVolume * getNextCollisionVolume();
+	void setNextCollisionVolume(CollisionVolume* toSet);
 	void setCurrentWaypointIndex(Waypoint* waypoint);
 	void setGoalWaypointIndex(Waypoint* waypoint);
 
@@ -29,10 +28,8 @@ public:
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 
 private: //members
-	Waypoint* m_currentWaypoint;
-	Waypoint* m_goalWaypoint;
 	int m_respawnIndex;
-	std::vector<CollisionVolume *> m_nextVolumes;
+	CollisionVolume * m_next;
 	std::vector<PxTransform> m_respawnLocations;
 	bool m_isStartCollisionVolume;
 

@@ -198,7 +198,7 @@ void CollisionManager::processWaypointHit(long waypointId, long otherId)
 
 	if (car != NULL) 
 	{
-		car->setCurrentWaypoint(waypoint);
+		//car->setCurrentWaypoint(waypoint);
 	}
 
 	//std::cout << "Current Waypoint" << waypoint->getIndex() << "\n";
@@ -216,19 +216,8 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 
 	if (car != NULL)
 	{
-		car->setCurrentWaypoint(collisionVolume->getCurrentWaypointIndex());
-		if (car->getLastHitCollisionVolume() == NULL) {
-		car->setLastHitCollisionVolume(collisionVolume);
-		}
-		else {
-			CollisionVolume *oldVolume = car->getLastHitCollisionVolume();
-			if (oldVolume->isPrevVolumeOf(collisionVolume)) {
-				car->setLastHitCollisionVolume(collisionVolume);
-				if (collisionVolume->getIsStartCollisionVolume()) {
-					car->incrementLap();
-				}
-			}
-		}
+		car->setCurrentCollisionVolume(collisionVolume->getNextCollisionVolume());
+		//do increment lap stuff!
 		
 	}
 }

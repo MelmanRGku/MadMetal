@@ -14,6 +14,17 @@ CollisionVolume::~CollisionVolume()
 {
 }
 
+CollisionVolume * CollisionVolume::getNextCollisionVolume()
+{
+	return m_next;
+}
+
+void CollisionVolume::setNextCollisionVolume(CollisionVolume * toSet)
+{
+	m_next = toSet;
+
+}
+
 void CollisionVolume::setRespawnLocations(std::vector<PxVec3> locations)
 {
 	m_respawnLocations.clear();
@@ -38,7 +49,7 @@ PxTransform CollisionVolume::getRespawnLocation()
 	return transform;
 }
 
-void CollisionVolume::addNextVolume(CollisionVolume * toAdd)
+/*void CollisionVolume::addNextVolume(CollisionVolume * toAdd)
 {
 	m_nextVolumes.push_back(toAdd);
 }
@@ -54,13 +65,13 @@ bool CollisionVolume::isPrevVolumeOf(CollisionVolume * toCheck)
 	}
 	return false;
 	
-}
+}*/
 
 void CollisionVolume::setIsStartCollisionVolume(bool isStartCollisionVolume) {
 	m_isStartCollisionVolume = isStartCollisionVolume;
 }
 
-void CollisionVolume::setCurrentWaypointIndex(Waypoint* waypoint)
+/*void CollisionVolume::setCurrentWaypointIndex(Waypoint* waypoint)
 {
 	m_currentWaypoint = waypoint;
 }
@@ -68,20 +79,20 @@ void CollisionVolume::setCurrentWaypointIndex(Waypoint* waypoint)
 void CollisionVolume::setGoalWaypointIndex(Waypoint* waypoint)
 {
 	m_goalWaypoint = waypoint;
-}
+}*/
 
 bool CollisionVolume::getIsStartCollisionVolume() {
 	return m_isStartCollisionVolume;
 }
 
-Waypoint* CollisionVolume::getCurrentWaypointIndex()
+/*Waypoint* CollisionVolume::getCurrentWaypointIndex()
 {
 	return m_currentWaypoint;
 }
 Waypoint* CollisionVolume::getGoalWaypointIndex()
 {
 	return m_goalWaypoint;
-}
+}*/
 
 
 bool CollisionVolume::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {

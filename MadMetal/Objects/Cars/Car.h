@@ -37,12 +37,10 @@ protected: //members
 	float m_superMaxDurationSeconds; //seconds
 	float m_superDurationRemainingSeconds; //seconds
 	float m_deathTimerMillis;
-	Waypoint* m_currentWaypoint, *m_lastWayPoint;
-	Waypoint *m_nextWaypoint;
-	bool m_isAtStartingCollisionVolume;
-	bool m_isAtMidCollisionVolume;
+	
 	bool m_isInAir;
-	CollisionVolume* m_lastCollisionVolume;
+	CollisionVolume * m_currentCollisionVolume;
+	
 
 	bool m_newLap;
 
@@ -89,22 +87,18 @@ public:
 	int getScore() { return m_score; }
 	void addToScore(int points) { m_score += points; }
 	void respawn();
-	bool setCurrentWaypoint(Waypoint* waypoint);							//true if the waypoint is new, false otherwise
-	Waypoint* getCurrentWaypoint();
+							
+
 	void incrementLap();
 	int getLap();
 	int getPositionInRace();
 	void setPositionInRace(int position);
 	void setSoundChassis(Sound sound);
 	void playSoundChassis();
-	bool isAtStartingCollisionVolume();
-	bool isAtMidCollisionVolume();
+
 	int tallyScore() { return m_score; }
-	Waypoint* Car::getLastWaypoint();
 	bool isFinishedRace() { return m_finishedRace; }
 	void setFinishedRace(bool finished) { m_finishedRace = finished; }
-	void setStartingCollisionVolumeFlag(bool isHit);
-	void setMidCollisionVolumeFlag(bool isHit);
 	void pickUpPowerUp(PowerUpType type);
 	void usePowerUp();
 	PowerUpType getActivePowerUpType();
@@ -118,12 +112,11 @@ public:
 	
 	float getHealthRemaining(){ return m_currentHealth; }
 
-	void addWaypointHit(Waypoint* waypoint);
-	std::vector<Waypoint*> m_waypointHitList;
 	void setIsInAir(bool inAir) { m_isInAir = inAir; }
 
-	void setLastHitCollisionVolume(CollisionVolume* collisionVolume);
-	CollisionVolume* getLastHitCollisionVolume();
+	void setCurrentCollisionVolume(CollisionVolume * toSet);
+	CollisionVolume * getCurrentCollisionVolume();
+
 
 	static void resetGlobalPositionID();
 
