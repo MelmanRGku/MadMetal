@@ -165,8 +165,13 @@ void CollisionManager::processGooMonsterVolumeHit(long volumeId, long otherId)
 	{
 		PxVec3 direction = static_cast<PxRigidDynamic *>(&gooMonster->getActor())->getLinearVelocity();
 
-		car->getCar().getRigidDynamicActor()->addForce(direction * 5000, PxForceMode::eIMPULSE);
-		car->takeDamage(52);
+		if (gooMonster->getMonsterType() == GooMonster::GOO_MONSTER_TYPE_KILLER) {
+			car->takeDamage(200);
+		}
+		else if (gooMonster->getMonsterType() == GooMonster::GOO_MONSTER_TYPE_PUSHER) {
+			car->getCar().getRigidDynamicActor()->addForce(direction * 5000, PxForceMode::eIMPULSE);
+			car->takeDamage(52);
+		}
 	}
 }
 

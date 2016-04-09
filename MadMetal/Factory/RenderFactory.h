@@ -96,6 +96,27 @@ public:
 		RENDERABLE_OBJECT_CATICON,
 
 		RENDERABLE_OBJECT_GOO_MONSTER_KILLER,
+		RENDERABLE_OBJECT_GOO_MONSTER_PUSHER,
+
+		RENDERABLE_OBJECT_BLOB_SHADOW,
+
+		RENDERABLE_OBJECT_TRACK_WALL_1,
+		RENDERABLE_OBJECT_TRACK_WALL_2,
+		RENDERABLE_OBJECT_TRACK_WALL_3,
+		RENDERABLE_OBJECT_TRACK_WALL_4,
+		RENDERABLE_OBJECT_TRACK_WALL_5,
+		RENDERABLE_OBJECT_TRACK_WALL_6,
+		RENDERABLE_OBJECT_TRACK_WALL_7,
+		RENDERABLE_OBJECT_TRACK_WALL_8,
+		RENDERABLE_OBJECT_TRACK_WALL_9,
+		RENDERABLE_OBJECT_TRACK_WALL_10,
+		RENDERABLE_OBJECT_TRACK_WALL_11,
+		RENDERABLE_OBJECT_TRACK_WALL_12,
+		RENDERABLE_OBJECT_TRACK_WALL_13,
+		RENDERABLE_OBJECT_TRACK_WALL_14,
+		RENDERABLE_OBJECT_TRACK_WALL_15,
+		RENDERABLE_OBJECT_TRACK_WALL_16,
+		RENDERABLE_OBJECT_TRACK_WALL_17,
 	};
 
 	
@@ -129,7 +150,7 @@ public:
 		case RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO:
 			return Assets::getModel("scareMoon");
 		case RENDERABLE_OBJECT_TRACK_DRIVABLE:
-			return Assets::getModel("trackv3");
+			return Assets::getModel("trackv3ground");
 		case RENDERABLE_OBJECT_TRACK_NON_DRIVABLE:
 			return Assets::getModel("trackv3enviro");
 		case RENDERABLE_OBJECT_TRACK_WALLS:
@@ -246,7 +267,46 @@ public:
 		case RENDERABLE_OBJECT_CATICON:
 			return new Model2D(Assets::getTexture("Meowicon"));
 		case RENDERABLE_OBJECT_GOO_MONSTER_KILLER:
-			return Assets::getModel("Creature");
+			return Assets::getModel("headcrabclassic");
+		case RENDERABLE_OBJECT_GOO_MONSTER_PUSHER:
+			return Assets::getModel("Slime");
+		case RENDERABLE_OBJECT_BLOB_SHADOW:
+			return Assets::getModel("blob_shadow");
+
+		case RENDERABLE_OBJECT_TRACK_WALL_1:
+			return Assets::getModel("someShit1");
+		case RENDERABLE_OBJECT_TRACK_WALL_2:
+			return Assets::getModel("someShit2");
+		case RENDERABLE_OBJECT_TRACK_WALL_3:
+			return Assets::getModel("someShit3");
+		case RENDERABLE_OBJECT_TRACK_WALL_4:
+			return Assets::getModel("someShit4");
+		case RENDERABLE_OBJECT_TRACK_WALL_5:
+			return Assets::getModel("someShit5");
+		case RENDERABLE_OBJECT_TRACK_WALL_6:
+			return Assets::getModel("someShit6");
+		case RENDERABLE_OBJECT_TRACK_WALL_7:
+			return Assets::getModel("someShit7");
+		case RENDERABLE_OBJECT_TRACK_WALL_8:
+			return Assets::getModel("someShit8");
+		case RENDERABLE_OBJECT_TRACK_WALL_9:
+			return Assets::getModel("someShit9");
+		case RENDERABLE_OBJECT_TRACK_WALL_10:
+			return Assets::getModel("someShit10");
+		case RENDERABLE_OBJECT_TRACK_WALL_11:
+			return Assets::getModel("someShit11");
+		case RENDERABLE_OBJECT_TRACK_WALL_12:
+			return Assets::getModel("someShit12");
+		case RENDERABLE_OBJECT_TRACK_WALL_13:
+			return Assets::getModel("someShit13");
+		case RENDERABLE_OBJECT_TRACK_WALL_14:
+			return Assets::getModel("someShit14");
+		case RENDERABLE_OBJECT_TRACK_WALL_15:
+			return Assets::getModel("someShit15");
+		case RENDERABLE_OBJECT_TRACK_WALL_16:
+			return Assets::getModel("someShit16");
+		case RENDERABLE_OBJECT_TRACK_WALL_17:
+			return Assets::getModel("someShit17");
 		}
 	}
 	
