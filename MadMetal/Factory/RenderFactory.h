@@ -311,7 +311,7 @@ public:
 		case RENDERABLE_OBJECT_CATICON:
 			return new Model2D(Assets::getTexture("Meowicon"));
 		case RENDERABLE_OBJECT_GOO_MONSTER_KILLER:
-			return Assets::getModel("headcrabclassic");
+			return Assets::getModel("Creature");
 		case RENDERABLE_OBJECT_GOO_MONSTER_PUSHER:
 			return Assets::getModel("Slime");
 		case RENDERABLE_OBJECT_BLOB_SHADOW:

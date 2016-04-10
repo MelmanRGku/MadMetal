@@ -626,11 +626,13 @@ void GameSimulation::setupDeathPit() {
 	gooMonsterGeom[0] = new PxBoxGeometry(10,20,25);
 	pos = new PxTransform(-700, -40, 1555);
 	GooMonster * monster = static_cast<GooMonster *>(m_gameFactory->makeObject(GameFactory::OBJECT_GOO_MONSTER, pos, gooMonsterGeom, NULL));
+	monster->setPlayers(m_players);
 	monster->setSpawnVelocity(PxVec3(0, 55,-30));
 
 	gooMonsterGeom[0] = new PxBoxGeometry(10, 20, 25);
 	pos = new PxTransform(-600, -40, 1565);
 	monster = static_cast<GooMonster *>(m_gameFactory->makeObject(GameFactory::OBJECT_GOO_MONSTER, pos, gooMonsterGeom, NULL));
+	monster->setPlayers(m_players);
 	monster->setSpawnVelocity(PxVec3(0, 55, 20));
 
 	delete pos;

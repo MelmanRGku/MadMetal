@@ -3,6 +3,8 @@
 #include "GooMonster.h"
 #include "Global\Assets.h"
 #include "Factory\GameFactory.h"
+#include "Game Logic\Controllable.h"
+#include "Libraries\glm\gtx\vector_angle.hpp"
 
 GooMonster::GooMonster(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
@@ -52,7 +54,7 @@ void GooMonster::update(float dt)
 		GooMonsterType newType = (GooMonsterType)(rand() % TOTAL_NUMBER_OF_MONSTER_TYPES);
 
 		if (newType == GOO_MONSTER_TYPE_KILLER && type != GOO_MONSTER_TYPE_KILLER) {
-			m_renderable->setModel(Assets::getModel("headcrabclassic"));
+			m_renderable->setModel(Assets::getModel("Creature"));
 			static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
 		}
 		else if (newType == GOO_MONSTER_TYPE_PUSHER && type != GOO_MONSTER_TYPE_PUSHER) {
@@ -70,6 +72,8 @@ void GooMonster::update(float dt)
 
 	if (type == GooMonsterType::GOO_MONSTER_TYPE_PUSHER)
 		processRoll();
+	else
+		processLookAt();
 }
 
 void GooMonster::processRoll() {
@@ -89,3 +93,29 @@ void GooMonster::setMonsterType(GooMonsterType type) {
 	this->type = type;
 }
 
+
+void GooMonster::setPlayers(std::vector<Controllable *> players) {
+	this->players = players;
+}
+
+void GooMonster::processLookAt() {
+
+	//get the player to look at
+	float minDistance = 90000000;
+	float minDistancePlayer = -1;
+	for (int i = 0; i < players.size(); i++) {
+		float dist = glm::distance2(getGlobalPose(), players.at(i)->getCar()->getGlobalPose());
+		if (dist < minDistance) {
+			minDistance = dist;
+			minDistancePlayer = i;
+		}
+	}
+
+	//get the angle of rotation and the vector to rotate around
+	glm::vec3 viewDirectionOfTheMonster = glm::vec3(1, 0, 0);
+	glm::vec3 requiredViewDirection = glm::normalize(players.at(minDistancePlayer)->getCar()->getGlobalPose() - getGlobalPose());
+	float angle = std::acos(glm::dot(viewDirectionOfTheMonster, requiredViewDirection));
+	glm::vec3 rotationAxis = glm::normalize(glm::cross(viewDirectionOfTheMonster, requiredViewDirection));
+
+	getActor().setGlobalPose(PxTransform(PxVec3(getActor().getGlobalPose().p), PxQuat(angle, PxVec3(rotationAxis.x, rotationAxis.y, rotationAxis.z))));
+}
