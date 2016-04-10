@@ -36,6 +36,7 @@ public:
 		PHYSICAL_OBJECT_GOO_MONSTER,
 		PHYSICAL_OBJECT_BOMB_EXPLOSION,
 		PHYSICAL_OBJECT_BLOB_SHADOW,
+		PHYSICAL_OBJECT_MEOW_MIX_BEAM_CUT,
 	};
 
 public:
@@ -613,6 +614,28 @@ public:
 			setFilterDataId(objectId, shadow);
 
 			toReturn = shadow;
+			break;
+		}
+		case PHYSICAL_OBJECT_MEOW_MIX_BEAM_CUT:
+		{
+			PxRigidDynamic * volume = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+			volume->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+
+			PxFilterData simFilterData;
+			simFilterData.word0 = 0;
+			simFilterData.word1 = 0;
+
+			volume->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			volume->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, false);
+
+			setFilterDataId(objectId, volume);
+
+			toReturn = volume;
 			break;
 		}
 		}

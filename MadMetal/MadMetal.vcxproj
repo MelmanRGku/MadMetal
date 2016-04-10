@@ -108,8 +108,6 @@
     <ClCompile Include="Objects\Cars\ExplosivelyDelicious.cpp" />
     <ClCompile Include="Objects\Cars\Gargantulous.cpp" />
     <ClCompile Include="Objects\Cars\DrivingStyleGargantulous.cpp" />
-    <ClCompile Include="Objects\VehicleSpecifications.cpp" />
-    <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp" />
     <ClCompile Include="Renderer\CellTireShaderProgram.cpp" />
     <ClCompile Include="Simulation\MainMenu.cpp" />
     <ClCompile Include="Objects\MapUI.cpp" />
@@ -225,8 +223,6 @@
     <ClInclude Include="Game Logic\WaypointDefinitions.h" />
     <ClInclude Include="Objects\MainMenuSystem.h" />
     <ClInclude Include="Objects\MenuSystem.h" />
-    <ClInclude Include="Objects\VehicleSpecifications.h" />
-    <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h" />
     <ClInclude Include="Objects\TrainCar.h" />
     <ClInclude Include="Renderer\CellTireShaderProgram.h" />
     <ClInclude Include="Simulation\MainMenu.h" />

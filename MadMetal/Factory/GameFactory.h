@@ -46,7 +46,6 @@
 #include "Objects\AnimatedExplosion.h"
 #include "Objects\TrainCar.h"
 #include "PxQueryReport.h"
-#include "Objects\VehicleSpecificationsMeowMix.h"
 
 class GameFactory
 {
@@ -101,6 +100,7 @@ public:
 		OBJECT_GOO_MONSTER,
 		OBJECT_BOMB_EXPLOSION,
 		OBJECT_BLOB_SHADOW,
+		OBJECT_MEOWMIX_BEAM_CUT,
 	};
 
 	

@@ -27,3 +27,4 @@
 26 CarBrake.wav
 27 Weeeeee.wav
 28 BrakeSound.wav
+29 beamcut.wav

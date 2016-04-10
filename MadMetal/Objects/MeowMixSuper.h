@@ -24,6 +24,8 @@ public:
 	virtual void update(float dtMillis)
 	{
 
+		Object3D::update(dtMillis);
+
 		if (m_owner->getSuperDurationRemaining() <= 0)
 		{
 			setHasToBeDeleted(true);
@@ -126,9 +128,18 @@ public:
 		getActor().setGlobalPose(PxTransform(newPosition, m_owner->getCar().getRigidDynamicActor()->getGlobalPose().q));
 		m_animatable->setRotation(glm::vec3(0, 0, 0));
 		m_animatable->setScale(glm::vec3(BEAM_RADIUS, BEAM_RADIUS, beamDistance));
+
+		if (beamDistance < BEAM_MAX_DISTANCE && lastSoundPlayTime + 0.1f <= totalLifeTime) {
+			PxGeometry *geom[1];
+			geom[0] = new PxSphereGeometry(5);
+			GameFactory::instance()->makeObject(GameFactory::OBJECT_MEOWMIX_BEAM_CUT, &PxTransform(PxVec3(initialPosition + forwardPhysx * beamDistance), m_owner->getCar().getRigidDynamicActor()->getGlobalPose().q), geom, NULL);
+			delete geom[0];
+			lastSoundPlayTime = totalLifeTime;
+		}
 	}
 
 private:
 	Car * m_owner;
+	float lastSoundPlayTime;
 	
 };

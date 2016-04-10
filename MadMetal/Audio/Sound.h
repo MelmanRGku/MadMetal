@@ -300,6 +300,16 @@ public:
 	virtual ~WeeeeeSound(){};
 };
 
+class BeamCutSound : public Sound
+{
+public:
+	BeamCutSound() : Sound()
+	{
+		m_libraryIndex = 29;
+	};
+	virtual ~BeamCutSound(){};
+};
+
 //-----------------------------------------------------------------
 //--------------------------END SOUNDS-----------------------------
 //-----------------------------------------------------------------

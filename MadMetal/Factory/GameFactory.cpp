@@ -1154,6 +1154,30 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		return explosion;
 	}
+	case OBJECT_MEOWMIX_BEAM_CUT:
+	{
+	
+		Model3D *model = NULL;
+		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_MEOW_MIX_BEAM_CUT));
+		Renderable3D *renderable = new Renderable3D(model, true, true);
+		Animatable *animatable = new Animatable();
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+		PxRigidDynamic *volume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_MEOW_MIX_BEAM_CUT, objectId, pos, geom, 0, NULL, NULL, NULL));
+		Physicable *physicable = new Physicable(volume);
+
+		animatable->setScale(glm::vec3(volume->getWorldBounds().getDimensions().x, volume->getWorldBounds().getDimensions().y, volume->getWorldBounds().getDimensions().z));
+
+		Object3D *beamcut = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
+		beamcut->setMaxLifeTime(0.1f);
+
+		m_audioFactory->getAudioHandle().queAudioSource(volume, BeamCutSound());
+
+		m_world.addGameObject(beamcut);
+		m_scene.addActor(*volume);
+
+		return beamcut;
+	}
 	}
 }
 

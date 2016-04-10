@@ -267,12 +267,6 @@
     <ClCompile Include="Objects\Cars\DrivingStyleGargantulous.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\VehicleSpecifications.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer\CellTireShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -663,12 +657,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Cars\DrivingStyleGargantulous.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\VehicleSpecifications.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\CellTireShaderProgram.h">
