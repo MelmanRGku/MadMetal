@@ -55,8 +55,20 @@ void PositionManager::updatePlayerPositions()
 				}
 				else if (m_players.at(i)->getCar()->getCurrentCollisionVolume()->getId() == m_players.at(j)->getCar()->getCurrentCollisionVolume()->getId())
 				{
-					float distanceToGoalPlayer1 = glm::distance2(m_players.at(i)->getCar()->getGlobalPose(), m_players.at(i)->getCar()->getCurrentCollisionVolume()->getNextCollisionVolume()->getGlobalPose());
-					float distanceToGoalPlayer2 = glm::distance2(m_players.at(j)->getCar()->getGlobalPose(), m_players.at(j)->getCar()->getCurrentCollisionVolume()->getNextCollisionVolume()->getGlobalPose());
+					glm::vec3 player1Position = m_players.at(i)->getCar()->getGlobalPose();
+					player1Position.y = 0;
+
+					glm::vec3 player2Position = m_players.at(j)->getCar()->getGlobalPose();
+					player2Position.y = 0;
+
+					glm::vec3 player1Goal = m_players.at(i)->getCar()->getCurrentCollisionVolume()->getNextCollisionVolume()->getGlobalPose();
+					player1Goal.y = 0;
+
+					glm::vec3 player2Goal = m_players.at(j)->getCar()->getCurrentCollisionVolume()->getNextCollisionVolume()->getGlobalPose();
+					player2Goal.y = 0;
+
+					float distanceToGoalPlayer1 = glm::distance2(player1Position, player1Goal);
+					float distanceToGoalPlayer2 = glm::distance2(player2Position, player2Goal);
 
 					if (distanceToGoalPlayer1 > distanceToGoalPlayer2 && m_players.at(j)->getCar()->getPositionInRace() > m_players.at(i)->getCar()->getPositionInRace())
 					{
