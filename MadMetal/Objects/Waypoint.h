@@ -30,6 +30,7 @@ public:
 	void addAdjecentWaypoint(Waypoint* waypoint);
 	int getId();
 	void setId(int id);
+	PxVec3 m_position;
 
 	void setHighCost(float highCost);
 	float getHighCost();

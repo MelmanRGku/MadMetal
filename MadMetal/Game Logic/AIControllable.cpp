@@ -4,6 +4,9 @@
 #include "Objects\CollisionVolume.h"
 #include "Objects\Track.h"
 
+static const float BACKUP_DAMPING = 0.7;
+static const int NUMBER_OF_WRONG_HITS = 10; 
+
 AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	: Controllable(aiTemplate)
 	, m_track(track)
@@ -12,13 +15,16 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
 	m_nextWaypoint = NULL;
 	m_currentKnownWaypoint = NULL;
 	m_lastKnowCollisionVolue = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(7);
+	m_goalWaypoint = m_track.getWaypointAt(1946);
 	m_currentPath.clear();
 	setHighCostWaypointsToHigh();
 	m_needsToBackup = false;
 	m_counter = 0;
 	m_movementState = AiStateMovement::INITIAL_STATE;
-	m_AiTrackAreaPosition = AiPlaceInTrack::CITY;
+	m_speedDamping = 1.0;
+	m_steeringDamping = 1.0;
+	m_counterReverse = 60;
+	m_wrongHits = NUMBER_OF_WRONG_HITS;
 }
 AIControllable::~AIControllable()
 {
@@ -68,92 +74,54 @@ void AIControllable::processFire(std::vector<Controllable *> *players) {
 
 void AIControllable::playFrame(double dt)
 {
-	switch (m_AiTrackAreaPosition)
-	{
-	case AiPlaceInTrack::DESSERT:
-		updateMovementState(0.80);
-		break;
-	case AiPlaceInTrack::CANYON:
-		updateMovementState(0.65);
-		break;
-	case AiPlaceInTrack::SUBWAY:
-		updateMovementState(0.7);
-		break;
-	case AiPlaceInTrack::CITY:
-		updateMovementState(1.0);
-		break;
-	default:
-		break;
-	}
+	updateMovementState();
 }
 
-void AIControllable::accelerateToNextWaypoint(float speedDamping)
+void AIControllable::accelerateToNextWaypoint()
 {
-	//glm::vec4 vectorToNextWaypoint4 = glm::vec4(m_nextWaypoint->getPosition() - m_car->getPosition(), 1.0);
 	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
-	//glm::normalize(vectorToNextWaypoint4);
 	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
-	//glm::vec4 vectorOfSideOfCar = m_car->getModelMatrix() * glm::vec4(1.0, 0.0, 0.0, 1.0);
-	//glm::normalize(vectorOfSideOfCar);
 	glm::vec3 forwardVector = m_car->getForwardVector();
 	forwardVector = glm::normalize(forwardVector);
 
 	glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
-	//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
 	vectorToNextWaypoint3.y = 0;
 	forwardVector.y = 0;
 	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
 	forwardVector = glm::normalize(forwardVector);
 	float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
-
-
-	//std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
-	//std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
 	float amountToSteerBy = fabs(amountOfDotProduct - 1);
 	amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
 	float amountToAccelerate;
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
-	changeTurning(crossProductResult.y, amountToSteerBy);
-	accelerate(amountToAccelerate * speedDamping);
-
-	//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
-	//std::cout << "z value: " << crossProductResult.z << "\n";
+	changeTurning(crossProductResult.y, amountToSteerBy * m_steeringDamping);
+	accelerate(amountToAccelerate * m_speedDamping);
 }
 
 void AIControllable::reverseToPreviousWaypoint()
 {
-	//glm::vec4 vectorToNextWaypoint4 = glm::vec4(m_nextWaypoint->getPosition() - m_car->getPosition(), 1.0);
 	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
-	//glm::normalize(vectorToNextWaypoint4);
+
 	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
-	//glm::vec4 vectorOfSideOfCar = m_car->getModelMatrix() * glm::vec4(1.0, 0.0, 0.0, 1.0);
-	//glm::normalize(vectorOfSideOfCar);
 	glm::vec3 forwardVector = m_car->getForwardVector();
 	glm::vec3 reverseForwardVector = -forwardVector;
 	reverseForwardVector = glm::normalize(reverseForwardVector);
 
 	glm::vec3 crossProductResult = glm::cross(reverseForwardVector, vectorToNextWaypoint3);
-	//float dotVectorResult = - glm::dot(vectorToNextWaypoint4, vectorOfSideOfCar);
 	vectorToNextWaypoint3.y = 0;
 	reverseForwardVector.y = 0;
 	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
 	reverseForwardVector = glm::normalize(reverseForwardVector);
 	float amountOfDotProduct = glm::dot(reverseForwardVector, vectorToNextWaypoint3);
-
-
-	//std::cout << "length of forward: " << forwardVector.length() << " | " << "length of vectorToPosition: " << vectorToNextWaypoint3.length() << "\n";
-	//std::cout << "Amount of dot product: " << amountOfDotProduct << "\n";
 	float amountToSteerBy = fabs(amountOfDotProduct - 1);
 	amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
 	float amountToAccelerate;
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
-	changeTurning(-crossProductResult.y, amountToSteerBy);
+	changeTurning(-crossProductResult.y, amountToSteerBy * BACKUP_DAMPING);
 	backUp(amountToAccelerate);
 
-	//std::cout << "amount to accelerate: " << amountToAccelerate << " amount to steer by: " << amountToSteerBy<< "\n";
-	//std::cout << "z value: " << crossProductResult.z << "\n";
 }
 
 void AIControllable::updateNextWaypoint()
@@ -185,7 +153,6 @@ void AIControllable::accelerate(float amount)
 {
 	if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
 	{
-		//std::cout << "changing gear\n";
 		m_car->getCar().mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 	}
 	if (m_car->getCar().computeForwardSpeed() > 0)
@@ -229,16 +196,23 @@ void AIControllable::checkCollisionVolumes()
 	{
 		return;
 	}
-	else if (m_lastKnowCollisionVolue == NULL)
+	else
 	{
-		m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
-	}
-	else if(m_lastKnowCollisionVolue != m_car->getLastHitCollisionVolume())
-	{
-		m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
-
-		m_goalWaypoint = m_lastKnowCollisionVolue->getGoalWaypointIndex();
-		recalculatePath();
+		if (m_lastKnowCollisionVolue == NULL)
+		{
+			m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
+			m_goalWaypoint = m_lastKnowCollisionVolue->getGoalWaypointIndex();
+			m_speedDamping = m_lastKnowCollisionVolue->getSpeedDamping();
+			m_steeringDamping = m_lastKnowCollisionVolue->getSteeringDamping();
+		}
+		else if (m_lastKnowCollisionVolue != m_car->getLastHitCollisionVolume())
+		{
+			m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
+			m_goalWaypoint = m_lastKnowCollisionVolue->getGoalWaypointIndex();
+			recalculatePath();
+			m_speedDamping = m_lastKnowCollisionVolue->getSpeedDamping();
+			m_steeringDamping = m_lastKnowCollisionVolue->getSteeringDamping();
+		}
 	}
 
 }
@@ -262,59 +236,63 @@ void AIControllable::setHighCostWaypointsToLow()
 
 void AIControllable::processInputAcceleration(float amount)
 {
-	if (amount > 0.1)
-	{
-		//std::cout << "Applying acceleration : " << -amount << "\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, amount);
-	}
-	//else if (amount < 0.1 && m_car->getCar().computeForwardSpeed() > 10.0)
-	//{
-	//	//std::cout << "Applying break with : " << -amount << "\n";
-	//	m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
-	//	if (amount < 0)
-	//	{
-	//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
-	//	}
-	//	else
-	//	{
-	//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, amount);
-	//	}
-	//}
-	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
-	{
-		//std::cout << "Applying acceleration : " << -amount << "\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount));
-	}
-	else
-	{
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-	}
+	if (m_car->getCar().getRigidDynamicActor()->isSleeping())
+		m_car->getCar().getRigidDynamicActor()->wakeUp();
+
+		if (amount > 0.1)
+		{
+			//std::cout << "Applying acceleration : " << -amount << "\n";
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, amount);
+		}
+		//else if (amount < 0.1 && m_car->getCar().computeForwardSpeed() > 10.0)
+		//{
+		//	//std::cout << "Applying break with : " << -amount << "\n";
+		//	m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
+		//	if (amount < 0)
+		//	{
+		//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
+		//	}
+		//	else
+		//	{
+		//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, amount);
+		//	}
+		//}
+		else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
+		{
+			//std::cout << "Applying acceleration : " << -amount << "\n";
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount));
+		}
+		else
+		{
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+		}
 }
 
 void AIControllable::changeTurning(float turningDirectionValue, float turningAmountValue)
 {
-
-	if (turningDirectionValue < 0)
-	{
-		//std::cout << "turning Left\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, turningAmountValue);
-	}
-	else if (turningDirectionValue > 0)
-	{
-		//std::cout << "turning right\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, turningAmountValue);
-	}
-	else
-	{
-		//std::cout << "Do not turn\n";
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
-	}
+	if (m_car->getCar().getRigidDynamicActor()->isSleeping()) 
+		m_car->getCar().getRigidDynamicActor()->wakeUp();
+		if (turningDirectionValue < 0)
+		{
+			//std::cout << "turning Left\n";
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, turningAmountValue);
+		}
+		else if (turningDirectionValue > 0)
+		{
+			//std::cout << "turning right\n";
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, turningAmountValue);
+		}
+		else
+		{
+			//std::cout << "Do not turn\n";
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, 0);
+			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, 0);
+		}
 }
 
 void AIControllable::checkStuckInWall()
@@ -323,14 +301,17 @@ void AIControllable::checkStuckInWall()
 	float forwardSpeed = static_cast<float>(m_car->getCar().computeForwardSpeed());
 	// Car is stuck in a wall
 	if (engineRotationSpeed > 50.0 &&
-		m_car->getCar().computeForwardSpeed() < 0.5)
+		forwardSpeed < 5.0 &&
+		!(m_car->getInvinsibilityTimeRemaining() > 0))
 	{
 		m_counter++;
-		if (m_counter > 5)
+		if (m_counter > 30)
 		{
 			m_needsToBackup = !m_needsToBackup;
 			if (m_needsToBackup)
 			{
+				rotateTowardsNextWaypoint();
+				m_movementState = AiStateMovement::MOVE_BACKWARDS;
 				m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 				// Reverse to Last Waypoint
 				if (m_car->getLastWaypoint() != NULL)
@@ -339,13 +320,14 @@ void AIControllable::checkStuckInWall()
 				}
 				else
 				{
-					// STUPID MELVIN
-					m_nextWaypoint = m_track.getWaypointAt(13);
+					m_nextWaypoint = m_lastKnowCollisionVolue->getCurrentWaypointIndex();
 				}
+
 			}
 			// Move forward
 			else
 			{
+				m_movementState = AiStateMovement::MOVE_FORWARD;
 				recalculatePath();
 				m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 			}
@@ -358,7 +340,29 @@ void AIControllable::checkStuckInWall()
 	}
 }
 
-void AIControllable::updateMovementState(float speedDamping)
+void AIControllable::rotateTowardsNextWaypoint()
+{
+	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
+	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
+	glm::vec3 forwardVector = m_car->getForwardVector();
+	forwardVector = glm::normalize(forwardVector);
+
+	glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
+	PxQuat tempQauternion;
+	if (crossProductResult.y > 0)
+	{
+		std::cout << "turning right" << std::endl;
+		tempQauternion = PxQuat(0.0873, PxVec3(0, 1, 0));
+	}
+	else if (crossProductResult.y < 0)
+	{
+		tempQauternion = PxQuat(-0.0873, PxVec3(0, 1, 0));
+		std::cout << "turning left" << std::endl;
+	}
+	m_car->getCar().getRigidDynamicActor()->setGlobalPose(PxTransform(m_car->getCar().getRigidDynamicActor()->getGlobalPose().p, m_car->getCar().getRigidDynamicActor()->getGlobalPose().q * tempQauternion));
+}
+
+void AIControllable::updateMovementState()
 {
 	switch (m_movementState)
 	{
@@ -408,7 +412,11 @@ void AIControllable::updateMovementState(float speedDamping)
 		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() &&
 			m_car->getCurrentWaypoint()->getIndex() != m_nextWaypoint->getIndex())
 		{
-			recalculatePath();
+			m_wrongHits--;
+			if (m_wrongHits <= 0)
+			{
+				recalculatePath();
+			}
 			//m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 		}
 		// Hit the goal node
@@ -425,6 +433,7 @@ void AIControllable::updateMovementState(float speedDamping)
 		if (m_car->getCurrentWaypoint()->getIndex() == m_nextWaypoint->getIndex())
 		{
 			//std::cout << "Reached Next Waypoint\n";
+			m_wrongHits = NUMBER_OF_WRONG_HITS;
 			updateNextWaypoint();
 		}
 
@@ -436,11 +445,12 @@ void AIControllable::updateMovementState(float speedDamping)
 		}
 		else
 		{
-			accelerateToNextWaypoint(speedDamping);
+			accelerateToNextWaypoint();
 		}
 
 		break;
 	case AiStateMovement::MOVE_BACKWARDS:
+		m_counterReverse--;
 		if (m_controlsPaused)
 		{
 			m_movementState = AiStateMovement::CONTROLS_PAUSED;
@@ -451,28 +461,35 @@ void AIControllable::updateMovementState(float speedDamping)
 			m_movementState = AiStateMovement::DEAD;
 			break;
 		}
-		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex())
+		if (m_counterReverse <= 0)
+		//if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() &&
+		//	m_car->getCurrentWaypoint()->isValid())
 		{
 			recalculatePath();
 			m_needsToBackup = false;
 			m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 			m_counter = 0;
+			m_counterReverse = 60;
 			m_movementState = AiStateMovement::MOVE_FORWARD;
 		}
+		else
+		{
+			reverseToPreviousWaypoint();
+		}
 
-		reverseToPreviousWaypoint();
 		break;
 	case AiStateMovement::DEAD:
 		if (m_car->isAlive())
 		{
-			if (m_needsToBackup)
-			{
-				m_movementState = AiStateMovement::MOVE_BACKWARDS;
-			}
-			else
-			{
-				m_movementState = AiStateMovement::MOVE_FORWARD;
-			}
+				if (m_needsToBackup)
+				{
+					m_movementState = AiStateMovement::MOVE_BACKWARDS;
+				}
+				else
+				{
+					m_movementState = AiStateMovement::MOVE_FORWARD;
+				}
+
 		}
 		break;
 	}

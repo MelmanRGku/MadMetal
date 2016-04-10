@@ -155,6 +155,7 @@ void PathFinding::continuePath()
 {
 	if (m_openList.empty())
 	{
+		std::cout << "Could Not find path between waypoints" << std::endl;
 		return;
 	}
 

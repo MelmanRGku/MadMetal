@@ -30,11 +30,12 @@ private: //helper functions
 	void setHighCostWaypointsToLow();
 	void backUp(float amount);
 	void processInputAcceleration(float amount);
-	void accelerateToNextWaypoint(float speedDamping);
+	void accelerateToNextWaypoint();
 	void reverseToPreviousWaypoint();
 	void changeTurning(float turningDirectionValue, float turningAmountValue);
 	void checkStuckInWall();
-	void updateMovementState(float speedDamping);
+	void updateMovementState();
+	void rotateTowardsNextWaypoint();
 
 private: //members
 	//Car* m_car;
@@ -45,10 +46,13 @@ private: //members
 	Waypoint* m_potentialWaypoint;
 	Waypoint* m_currentKnownWaypoint;
 	AiStateMovement m_movementState;
-	AiPlaceInTrack m_AiTrackAreaPosition;
 	CollisionVolume* m_lastKnowCollisionVolue;
 	std::vector<Waypoint*> m_currentPath;
 	std::vector<int> m_listOfWaypointsHighCost;
 	bool m_needsToBackup;
 	int m_counter;
+	int m_counterReverse;
+	int m_wrongHits;
+	float m_speedDamping;
+	float m_steeringDamping;
 };

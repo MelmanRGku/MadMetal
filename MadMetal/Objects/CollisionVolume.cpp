@@ -7,6 +7,8 @@ CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, A
 {
 	m_respawnIndex = 0;
 	m_isStartCollisionVolume = false;
+	float m_speedDamping;
+	float m_steeringDamping;
 }
 
 
@@ -70,6 +72,11 @@ void CollisionVolume::setGoalWaypointIndex(Waypoint* waypoint)
 	m_goalWaypoint = waypoint;
 }
 
+void CollisionVolume::setLastWaypointIndex(Waypoint* waypoint)
+{
+	m_lastWaypoint = waypoint;
+}
+
 bool CollisionVolume::getIsStartCollisionVolume() {
 	return m_isStartCollisionVolume;
 }
@@ -83,6 +90,29 @@ Waypoint* CollisionVolume::getGoalWaypointIndex()
 	return m_goalWaypoint;
 }
 
+float CollisionVolume::getSpeedDamping()
+{
+	return m_speedDamping;
+}
+float CollisionVolume::getSteeringDamping()
+{
+	return m_steeringDamping;
+}
+
+void CollisionVolume::setSectionSpeedDamping(float damping)
+{
+	m_speedDamping = damping;
+}
+
+void CollisionVolume::setSectionSteeringDamping(float damping)
+{
+	m_steeringDamping = damping;
+}
+
+Waypoint* CollisionVolume::getLastWaypointIndex()
+{
+	return m_lastWaypoint;
+}
 
 bool CollisionVolume::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 #ifdef _RENDER_COLLISION_VOLUME

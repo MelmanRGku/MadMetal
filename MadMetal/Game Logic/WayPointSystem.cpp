@@ -4,9 +4,9 @@
 #include "Objects\NavigationalGrid.h"
 #include <algorithm>
 
-static const float WAYPOINT_WIDTH_COLLISION = 8;
-static const float WAYPOINT_LENGTH_COLLISION = 8;
-static const float WAYPOINT_HEIGHT_COLLISION = 2;
+static const float WAYPOINT_WIDTH_COLLISION = 2;
+static const float WAYPOINT_LENGTH_COLLISION = 2;
+static const float WAYPOINT_HEIGHT_COLLISION = 80;
 static const float WAYPOINT_TRUE_WIDTH = 10;
 static const float WAYPOINT_TRUE_LENGTH = 10;
 
@@ -157,11 +157,19 @@ WaypointSystem::WaypointSystem(NavigationalGrid& drivingMesh)
 	for (unsigned int i = 0; i < drivingMesh.getVertices()->size(); i++)
 	{
 		PxGeometry **geom = new PxGeometry *[1];
-		geom[0] = new PxSphereGeometry(2.40);
+		geom[0] = new PxBoxGeometry(PxVec3(WAYPOINT_LENGTH_COLLISION, WAYPOINT_HEIGHT_COLLISION, WAYPOINT_WIDTH_COLLISION));
 		PxTransform *pos = new PxTransform(drivingMesh.getVertices()->at(i).x,
-			drivingMesh.getVertices()->at(i).y,
+			0,
 			drivingMesh.getVertices()->at(i).z);
 		Waypoint* tempWaypoint = dynamic_cast<Waypoint*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_WAYPOINT, pos, geom, NULL));
+		if (drivingMesh.getVertices()->at(i).y > 50)
+		{
+			tempWaypoint->setValid(false);
+		}
+		else
+		{
+			tempWaypoint->setValid(true);
+		}
 		delete pos;
 		delete geom[0];
 		delete[] geom;
@@ -173,6 +181,10 @@ WaypointSystem::WaypointSystem(NavigationalGrid& drivingMesh)
 		{
 			for (unsigned int k = j + 1; k < drivingMesh.getFaces()->at(i).size(); k++)
 			{
+				if (drivingMesh.getFaces()->at(i).at(j) == 2940)
+				{
+					std::cout << "here";
+				}
 				std::vector<Waypoint*>& adjecencyList = m_waypoints[drivingMesh.getFaces()->at(i).at(j)]->getListOfAdjacentWaypoints();
 				Waypoint* temp = m_waypoints[drivingMesh.getFaces()->at(i).at(j)];
 				Waypoint* valueToLookFor = m_waypoints[drivingMesh.getFaces()->at(i).at(k)];
