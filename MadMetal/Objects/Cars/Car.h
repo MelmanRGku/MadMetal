@@ -58,9 +58,11 @@ protected: //members
 	float m_invincibilityTimeRemaining;
 	float m_timeSinceLastTimeHit;
 	float m_timeSinceRespawn;
+	float m_smokeCounterTime;
 
 	Object3D *m_shadow;
 	float lastKnownDistanceBetweenCarAndShadow;
+	void createSmoke(float dt);
 private:
 	//update functions
 	void updatePowerUp(float dt);

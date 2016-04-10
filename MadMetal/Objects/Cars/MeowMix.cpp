@@ -116,7 +116,6 @@ bool MeowMix::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber
 				// Draw mesh
 				glBindVertexArray(mesh->getVAO());
 				glDrawElements(GL_TRIANGLES, mesh->getIndices()->size(), GL_UNSIGNED_INT, 0);
-				//glDrawArrays(GL_TRIANGLES, 0, mesh->getVertices()->size());
 				glBindVertexArray(0);
 				if (mesh->hasTexture()) {
 					mesh->getTexture()->unBind(GL_TEXTURE0);
@@ -146,7 +145,6 @@ bool MeowMix::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber
 				// Draw mesh
 				glBindVertexArray(mesh->getVAO());
 				glDrawElements(GL_TRIANGLES, mesh->getIndices()->size(), GL_UNSIGNED_INT, 0);
-				//glDrawArrays(GL_TRIANGLES, 0, mesh->getVertices()->size());
 				glBindVertexArray(0);
 				if (mesh->hasTexture()) {
 					mesh->getTexture()->unBind(GL_TEXTURE0);

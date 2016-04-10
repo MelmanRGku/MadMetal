@@ -45,6 +45,22 @@ public:
 		RENDERABLE_OBJECT_EXPLOSION1_11,
 		RENDERABLE_OBJECT_EXPLOSION1_12,
 		RENDERABLE_OBJECT_EXPLOSION1_13,
+
+		RENDERABLE_OBJECT_SMOKE_1,
+		RENDERABLE_OBJECT_SMOKE_2,
+		RENDERABLE_OBJECT_SMOKE_3,
+		RENDERABLE_OBJECT_SMOKE_4,
+		RENDERABLE_OBJECT_SMOKE_5,
+		RENDERABLE_OBJECT_SMOKE_6,
+		RENDERABLE_OBJECT_SMOKE_7,
+		RENDERABLE_OBJECT_SMOKE_8,
+		RENDERABLE_OBJECT_SMOKE_9,
+		RENDERABLE_OBJECT_SMOKE_10,
+		RENDERABLE_OBJECT_SMOKE_11,
+		RENDERABLE_OBJECT_SMOKE_12,
+		RENDERABLE_OBJECT_SMOKE_13,
+		RENDERABLE_OBJECT_SMOKE_14,
+
 		RENDERABLE_OBJECT_TRAIN_CAR,
 		RENDERABLE_OBJECT_DEATH_PIT,
 		RENDERABLE_OBJECT_GOO_MONSTER,
@@ -213,6 +229,34 @@ public:
 			return Assets::getModel("explosion1_12");
 		case RENDERABLE_OBJECT_EXPLOSION1_13:
 			return Assets::getModel("explosion1_13");
+		case RENDERABLE_OBJECT_SMOKE_1:
+			return Assets::getModel("smoke_1");
+		case RENDERABLE_OBJECT_SMOKE_2:
+			return Assets::getModel("smoke_2");
+		case RENDERABLE_OBJECT_SMOKE_3:
+			return Assets::getModel("smoke_3");
+		case RENDERABLE_OBJECT_SMOKE_4:
+			return Assets::getModel("smoke_4");
+		case RENDERABLE_OBJECT_SMOKE_5:
+			return Assets::getModel("smoke_5");
+		case RENDERABLE_OBJECT_SMOKE_6:
+			return Assets::getModel("smoke_6");
+		case RENDERABLE_OBJECT_SMOKE_7:
+			return Assets::getModel("smoke_7");
+		case RENDERABLE_OBJECT_SMOKE_8:
+			return Assets::getModel("smoke_8");
+		case RENDERABLE_OBJECT_SMOKE_9:
+			return Assets::getModel("smoke_9");
+		case RENDERABLE_OBJECT_SMOKE_10:
+			return Assets::getModel("smoke_10");
+		case RENDERABLE_OBJECT_SMOKE_11:
+			return Assets::getModel("smoke_11");
+		case RENDERABLE_OBJECT_SMOKE_12:
+			return Assets::getModel("smoke_12");
+		case RENDERABLE_OBJECT_SMOKE_13:
+			return Assets::getModel("smoke_13");
+		case RENDERABLE_OBJECT_SMOKE_14:
+			return Assets::getModel("smoke_14");
 		case RENDERABLE_OBJECT_SKY_BOX:
 			return Assets::getModel("Skybox");
 		case RENDERABLE_OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE:

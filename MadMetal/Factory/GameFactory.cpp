@@ -9,6 +9,7 @@
 #include "Objects\HomingBullet.h"
 #include "Objects\GargantulousBullet.h"
 #include "Objects\BombExplosion.h"
+#include "Objects\AnimatedSmoke.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include "Objects\DeathPit.h"
@@ -849,23 +850,43 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	}
 	case OBJECT_EXPLOSION_1:
 	{
-							   Model3D *model = NULL;
-							   model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_EXPLOSION1_1));
-							   Renderable3D *renderable = new Renderable3D(model, true, true);
-							   Animatable *animatable = new Animatable();
-							   Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+		Model3D *model = NULL;
+		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_EXPLOSION1_1));
+		Renderable3D *renderable = new Renderable3D(model, true, true);
+		Animatable *animatable = new Animatable();
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
-							   PxRigidDynamic *explosionVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_EXPLOSION, objectId, pos, geom, 0, NULL, NULL, NULL));
-							   Physicable *physicable = new Physicable(explosionVolume);
+		PxRigidDynamic *explosionVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_EXPLOSION, objectId, pos, geom, 0, NULL, NULL, NULL));
+		Physicable *physicable = new Physicable(explosionVolume);
 
-							   animatable->setScale(glm::vec3(explosionVolume->getWorldBounds().getDimensions().x, explosionVolume->getWorldBounds().getDimensions().y, explosionVolume->getWorldBounds().getDimensions().z));
+		animatable->setScale(glm::vec3(explosionVolume->getWorldBounds().getDimensions().x, explosionVolume->getWorldBounds().getDimensions().y, explosionVolume->getWorldBounds().getDimensions().z));
 
-							   AnimatedExplosion *explosion = new AnimatedExplosion(objectId, audioable, physicable, animatable, renderable, .5);
+		AnimatedExplosion *explosion = new AnimatedExplosion(objectId, audioable, physicable, animatable, renderable, .5);
 
-							   m_world.addGameObject(explosion);
-							   m_scene.addActor(*explosionVolume);
+		m_world.addGameObject(explosion);
+		m_scene.addActor(*explosionVolume);
 
-							   return explosion;
+		return explosion;
+	}
+	case OBJECT_SMOKE_1:
+	{
+		Model3D *model = NULL;
+		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_SMOKE_1));
+		Renderable3D *renderable = new Renderable3D(model, true, true);
+		Animatable *animatable = new Animatable();
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+		PxRigidDynamic *explosionVolume = static_cast<PxRigidDynamic *>(m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_EXPLOSION, objectId, pos, geom, 0, NULL, NULL, NULL));
+		Physicable *physicable = new Physicable(explosionVolume);
+
+		animatable->setScale(glm::vec3(explosionVolume->getWorldBounds().getDimensions().x, explosionVolume->getWorldBounds().getDimensions().y, explosionVolume->getWorldBounds().getDimensions().z));
+
+		AnimatedSmoke *explosion = new AnimatedSmoke(objectId, audioable, physicable, animatable, renderable, .7);
+
+		m_world.addGameObject(explosion);
+		m_scene.addActor(*explosionVolume);
+
+		return explosion;
 	}
 	case OBJECT_COLLISION_VOLUME:
 	{

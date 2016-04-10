@@ -318,6 +318,9 @@
     <ClCompile Include="Simulation\MadMetalPresentsScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\AnimatedSmoke.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global\Settings.h">
@@ -726,6 +729,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Simulation\MadMetalPresentsScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\AnimatedSmoke.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
