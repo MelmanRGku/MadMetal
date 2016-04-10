@@ -22,23 +22,31 @@ public:
 	void setNextCollisionVolume(CollisionVolume* toSet);
 	void setSectionSpeedDamping(float damping);
 	void setSectionSteeringDamping(float damping);
-
-	Waypoint* getCurrentWaypointIndex();
-	Waypoint* getLastWaypointIndex();
-	Waypoint* getGoalWaypointIndex();
 	float getSpeedDamping();
 	float getSteeringDamping();
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	static void resetGlobalId();
+	void addVolumeToNextCollsionVolumeList(CollisionVolume* toAdd);
+	int getId();
+
+	void setPathNumber(int pathNumber);
+	void setIsParthOfMainPath(bool part);
+	void setId(int id);
+
+	int getPathNumber();
+	bool getIsPartOfMainPath();
 
 private: //members
 
 	float m_speedDamping;
 	float m_steeringDamping;
 	int m_respawnIndex;
+	std::vector<CollisionVolume*> m_possibleNextCollisionVolumes;
 	CollisionVolume * m_next;
 	std::vector<PxTransform> m_respawnLocations;
 	bool m_isStartCollisionVolume;
-	int m_volumeIndex;
+	int m_volumeId;
 	static int globalID;
+	bool m_isPartOfMainPath;
+	int m_pathNumber;
 };

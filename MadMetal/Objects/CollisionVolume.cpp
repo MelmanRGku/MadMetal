@@ -13,8 +13,11 @@ CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, A
 	m_isStartCollisionVolume = false;
 	m_speedDamping = 1.0;
 	m_steeringDamping = 1.0;
-	m_volumeIndex = CollisionVolume::globalID;
+	m_volumeId = CollisionVolume::globalID;
 	CollisionVolume::globalID++;
+	m_isPartOfMainPath = true;
+	m_pathNumber = 1;
+	static_cast<Model3D *>(m_renderable->getModel())->setAlpha(0.3);
 }
 
 
@@ -24,7 +27,15 @@ CollisionVolume::~CollisionVolume()
 
 CollisionVolume * CollisionVolume::getNextCollisionVolume()
 {
-	return m_next;
+	srand(time(NULL));
+	if (m_possibleNextCollisionVolumes.empty())
+	{
+		return NULL;
+	}
+	else
+	{
+		return m_possibleNextCollisionVolumes[rand() % m_possibleNextCollisionVolumes.size()];
+	}
 }
 
 void CollisionVolume::setNextCollisionVolume(CollisionVolume * toSet)
@@ -118,6 +129,37 @@ void CollisionVolume::setSectionSteeringDamping(float damping)
 	m_steeringDamping = damping;
 }
 
+void CollisionVolume::addVolumeToNextCollsionVolumeList(CollisionVolume* toAdd)
+{
+	m_possibleNextCollisionVolumes.push_back(toAdd);
+}
+
+int CollisionVolume::getId()
+{
+	return m_volumeId;
+}
+
+void CollisionVolume::setPathNumber(int pathNumber)
+{
+	m_pathNumber = pathNumber;
+}
+void CollisionVolume::setIsParthOfMainPath(bool part)
+{
+	m_isPartOfMainPath = part;
+}
+void CollisionVolume::setId(int id)
+{
+	m_volumeId = id;
+}
+
+int CollisionVolume::getPathNumber()
+{
+	return m_pathNumber;
+}
+bool CollisionVolume::getIsPartOfMainPath()
+{
+	return m_isPartOfMainPath;
+}
 
 bool CollisionVolume::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
 #ifdef _RENDER_COLLISION_VOLUME
