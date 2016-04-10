@@ -22,20 +22,25 @@ uniform vec3 lightPosArray[10];
 
 uniform vec3 lightColorArray[10];
 
-uniform constants
-{
-  float constArray[10];
-};
+ uniform float constArray[10];
+ uniform float linearArray[10];
+ uniform float quadArray[10];
 
-uniform linears
-{
-  float linearArray[10];
-};
+ uniform float cutoffArray[10];
 
-uniform quads
-{
-  float quadArray[10];
-};
+
+
+ uniform vec3 lightPosArrayDynamic[32];
+
+ uniform vec3 lightColorArrayDynamic[32];
+
+ uniform float constArrayDynamic[32];
+ uniform float linearArrayDynamic[32];
+ uniform float quadArrayDynamic[32];
+
+ uniform float cutoffArrayDynamic[32];
+
+
 
 
 
@@ -76,10 +81,16 @@ float specularLighting(in vec3 N, in vec3 L, in vec3 V)
 // THIS CODE IS NEEDED FOR DROPPING OFF LIGHTING, IMPORTANT FOR MULTIPLE LIGHTS
 //float dropoffFunction (1/k0 + k1d + k2d^2)
 
-float dropoffFunction(float constant1, float constant2, float constant3, vec3 lightPosition, vec4 position)
+float dropoffFunction(float constant1, float constant2, float constant3, vec3 lightPosition, vec4 position, float cutoff)
 {
+	int specialValue = 1;
+	if(constant1 == 0 && constant2 == 0 && constant3 == 0)
+	{
+		return 0;
+	}
 	float dist = distance(lightPosition, position.xyz);
-	return 1/(constant1 + constant2 * dist + constant3 * pow(dist, 2));
+	if (dist > cutoff) specialValue = 0;
+	return (1/(constant1 + constant2 * dist + constant3 * pow(dist, 2))) * specialValue;
 
 }
 
@@ -101,20 +112,41 @@ void main(void)
    vec4 resultingColor;
    resultingColor.xyz = diffuseColor;
 
-   for (int i = 0; i < 1; i++)
+   vec3 lighting = vec3(0.0, 0.0, 0.0);
+
+   int specialValue;
+
+   for (int i = 0; i < 10; i++)
    {
 
-	   L = normalize(lightPosArray[0] - fs_in.position_attr.xyz);
+	   L = normalize(lightPosArray[i] - fs_in.position_attr.xyz);
 
 	   // get Blinn-Phong reflectance components
 	   float Iamb = ambientLighting();
 	   float Idif = diffuseLighting(N, L);
 	   float Ispe = specularLighting(N, L, V);
 
-   
-	 resultingColor.xyz *= (Iamb + Idif + Ispe) * dropoffFunction(0, 0.01, 0,lightPosArray[0] , fs_in.position_attr) * lightColorArray[0];      
+
+	 lighting += (Iamb + Idif + Ispe) * dropoffFunction(constArray[i], linearArray[i], quadArray[i],lightPosArray[i] , fs_in.position_attr, cutoffArray[i]) * lightColorArray[i];      
 
    }
+
+   for (int i = 0; i < 32; i++)
+   {
+
+	   L = normalize(lightPosArrayDynamic[i] - fs_in.position_attr.xyz);
+
+	   // get Blinn-Phong reflectance components
+	   float Iamb = ambientLighting();
+	   float Idif = diffuseLighting(N, L);
+	   float Ispe = specularLighting(N, L, V);
+
+
+	 lighting += (Iamb + Idif + Ispe) * dropoffFunction(constArrayDynamic[i], linearArrayDynamic[i], quadArrayDynamic[i],lightPosArrayDynamic[i] , fs_in.position_attr, cutoffArrayDynamic[i]) * lightColorArrayDynamic[i];      
+
+   }
+
+   resultingColor.xyz *= lighting;
 
    if (!texValid)
 	 resultingColor.a = fs_in.C.w;

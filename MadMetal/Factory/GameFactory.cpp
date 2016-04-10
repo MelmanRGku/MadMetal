@@ -782,6 +782,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		AnimatedExplosion *explosion = new AnimatedExplosion(objectId, audioable, physicable, animatable, renderable, .5);
 
+		Light * testLight = new Light(explosion, .5);
+		testLight->dynamicColour = glm::vec3(0.3, 0.1, 0);
+		testLight->dynamicConstant = 0.0;
+		testLight->dynamicLinear = 0.1;
+		testLight->dynamicQuad = 0.1;
+		testLight->dynamicCutoff = 50.0f;
+
+
+		m_world.addLightObject(testLight);
 		m_world.addGameObject(explosion);
 		m_scene.addActor(*explosionVolume);
 

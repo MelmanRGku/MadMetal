@@ -33,7 +33,7 @@ CellTireShaderProgram::~CellTireShaderProgram()
 {
 }
 
-void CellTireShaderProgram::start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatrix, glm::vec3 *cameraPos) {
+void CellTireShaderProgram::start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatrix, glm::vec3 *cameraPos, std::vector<Light *> *thelights) {
 	//tether the program
 
 

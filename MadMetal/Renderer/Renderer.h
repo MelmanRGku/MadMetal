@@ -31,7 +31,7 @@ public:
 	Renderer();
 	~Renderer();
 	void setShader(ShaderType type, ShaderProgram *sp);
-	void draw(std::vector<TestObject *> *objects, std::vector<PlayerControllable *> *players = NULL);
+	void draw(std::vector<TestObject *> *objects, std::vector<PlayerControllable *> *players = NULL, std::vector<Light *> *thelights = NULL);
 	void setViewMatrixLookAt(std::vector<Camera *> cameras);
 	void setViewMatrixLookAt(glm::vec3 pos, glm::vec3 up, glm::vec3 lookAt);
 	ShaderProgram *getShaderProgram(ShaderType type) { return shader[type]; }

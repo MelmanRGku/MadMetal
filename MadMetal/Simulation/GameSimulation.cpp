@@ -179,6 +179,7 @@ bool PxVehicleIsInAir(const PxVehicleWheelQueryResult& vehWheelQueryResults)
 
 void GameSimulation::simulatePhysics(double dt)
 {
+	//std::cout << m_players[0]->getCar()->getGlobalPose().x << "    " << m_players[0]->getCar()->getGlobalPose().z << std::endl;
 	int numSteps = 1;
 	while (dt > 1.f / 50.f) {
 		dt /= 2.f;

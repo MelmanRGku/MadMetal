@@ -18,7 +18,7 @@ public:
 
 	CellTireShaderProgram(const char* vertexShaderPath, const char* fragmentShaderPath);
 	~CellTireShaderProgram();
-	void start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatrix, glm::vec3 *cameraPos);
+	void start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatrix, glm::vec3 *cameraPos, std::vector<Light *> *thelights = NULL);
 	void end();
 };
 

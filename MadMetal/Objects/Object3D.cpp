@@ -39,6 +39,7 @@ bool Object3D::draw(Renderer *renderer, Renderer::ShaderType type, int passNumbe
 
 	CellShaderProgram *program = static_cast<CellShaderProgram *>(renderer->getShaderProgram(Renderer::ShaderType::SHADER_TYPE_CELL));
 
+
 	glUniform1i(program->textureUniform, 0);
 	glUniformMatrix4fv(program->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
 	for (unsigned int i = 0; i < meshes->size(); i++) {

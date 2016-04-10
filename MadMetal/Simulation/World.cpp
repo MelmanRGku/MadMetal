@@ -3,6 +3,8 @@
 
 World::World() {
 	gameObjects = new std::vector<TestObject*>;
+	lightObjects = new std::vector<Light*>;
+
 }
 
 
@@ -70,7 +72,23 @@ void World::deleteObjectByIndex(int index) {
 	delete obj;
 }
 
-void World::update(float dt) {
+void World::deleteLightByIndex(int index) {
+	Light *lgt = lightObjects->at(index);
+	lightObjects->erase(lightObjects->begin() + index);
+}
+
+
+void World::update(float dt) 
+{
+	for (int i = 0; i < lightObjects->size(); i++) {
+		Light *lgt = lightObjects->at(i);
+
+		if (lgt->getObject()->getHasToBeDeleted()) {
+			deleteLightByIndex(i);
+			continue;
+		}
+	}
+
 	for (int i = 0; i < gameObjects->size(); i++) {
 		TestObject *obj = gameObjects->at(i);
 
@@ -85,4 +103,5 @@ void World::update(float dt) {
 	for (unsigned int i = 0; i < updaters.size(); i++) {
 		updaters.at(i)->update(dt);
 	}
+
 }

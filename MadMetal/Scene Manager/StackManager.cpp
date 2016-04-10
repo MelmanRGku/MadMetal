@@ -200,10 +200,11 @@ bool StackManager::progressScene(int newTime)
 	m_renderer->setViewMatrixLookAt(m_stack->getTopScene()->getSceneCameras());
 	//get objects from the scene and draw
 	GameSimulation *sim = dynamic_cast<GameSimulation *>(m_stack->getTopScene());
+	
 	if (sim != NULL)
-		m_renderer->draw(sim->getWorld()->getGameObjects(), sim->getHumanPlayers());
+		m_renderer->draw(sim->getWorld()->getGameObjects(), sim->getHumanPlayers(), sim->getWorld()->getLights());
 	else 
-	m_renderer->draw(m_stack->getTopScene()->getWorld()->getGameObjects());
+		m_renderer->draw(m_stack->getTopScene()->getWorld()->getGameObjects());
 		
 	if (m_mailBox->getTag() == SceneMessage::eExit)
 		return true;

@@ -98,7 +98,7 @@ void Renderer::setShader(ShaderType type, ShaderProgram *sp) {
 	shader[type] = sp;
 }
 
-void Renderer::draw(std::vector<TestObject *> *objects, std::vector<PlayerControllable *> *players) {
+void Renderer::draw(std::vector<TestObject *> *objects, std::vector<PlayerControllable *> *players, std::vector<Light *> *thelights) {
 	std::vector<glm::vec4> viewPortDesc;
 
 	if (players == NULL) {
@@ -131,7 +131,7 @@ void Renderer::draw(std::vector<TestObject *> *objects, std::vector<PlayerContro
 			keepGoing = false;
 			for (int i = 0; i < NUMBER_OF_SHADER_TYPES; i++) {
 				if (shader[i] != NULL) {
-					shader[i]->start(&viewMatrix, &projectionMatrix, &cameraPos);
+					shader[i]->start(&viewMatrix, &projectionMatrix, &cameraPos, thelights);
 					for (unsigned int j = 0; j < objects->size(); j++) {
 						TestObject *obj = objects->at(j);
 						keepGoing = obj->draw(this, (ShaderType)i, passNumber) || keepGoing;
