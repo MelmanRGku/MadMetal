@@ -4,8 +4,9 @@
 #include "Objects\CollisionVolume.h"
 #include "Objects\Track.h"
 
-static const float BACKUP_DAMPING = 0.7;
+static const float BACKUP_DAMPING = 0.8;
 static const int NUMBER_OF_WRONG_HITS = 10; 
+static const int REVERSE_TIMER_AMOUNT = 90;
 
 AIControllable::AIControllable(ControllableTemplate& aiTemplate)
 : Controllable(aiTemplate)
@@ -13,7 +14,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate)
 	m_needsToBackup = false;
 	m_counter = 0;
 	m_movementState = AiStateMovement::INITIAL_STATE;
-	m_counterReverse = 60;
+	m_counterReverse = REVERSE_TIMER_AMOUNT;
 }
 AIControllable::~AIControllable()
 {
@@ -106,7 +107,7 @@ void AIControllable::reverse()
 	float amountToAccelerate;
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
-	changeTurning(crossProductResult.y, amountToSteerBy * BACKUP_DAMPING);
+	changeTurning(-crossProductResult.y, amountToSteerBy * BACKUP_DAMPING);
 	backUp(amountToAccelerate);
 
 }
@@ -222,7 +223,7 @@ void AIControllable::checkStuckInWall()
 	float forwardSpeed = static_cast<float>(m_car->getCar().computeForwardSpeed());
 	// Car is stuck in a wall
 	if (engineRotationSpeed > 50.0 &&
-		forwardSpeed < 10.0 &&
+		forwardSpeed < 5.0 &&
 		!(m_car->getInvinsibilityTimeRemaining() > 0))
 	{
 		m_counter++;
@@ -332,7 +333,7 @@ void AIControllable::updateMovementState()
 		{
 			m_needsToBackup = false;
 			m_counter = 0;
-			m_counterReverse = 60;
+			m_counterReverse = REVERSE_TIMER_AMOUNT;
 			m_movementState = AiStateMovement::MOVE_FORWARD;
 		}
 		else

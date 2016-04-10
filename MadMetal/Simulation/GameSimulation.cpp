@@ -29,6 +29,7 @@ using namespace std;
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audioHandle(audioHandle)
 {
 	Waypoint::resetGlobalId();
+	Waypoint::resetGlobalId();
 	Car::resetGlobalPositionID();
 	newMessage.setTag(SceneMessage::eNone);
 	createPhysicsScene();

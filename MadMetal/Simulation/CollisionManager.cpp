@@ -216,7 +216,7 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 
 	if (car != NULL)
 	{
-		car->setCurrentCollisionVolume(collisionVolume->getNextCollisionVolume());
+		car->setCurrentCollisionVolume(collisionVolume);
 		//do increment lap stuff!
 		
 	}

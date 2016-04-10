@@ -28,8 +28,8 @@ public:
 	Waypoint* getGoalWaypointIndex();
 	float getSpeedDamping();
 	float getSteeringDamping();
-	
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
+	static void resetGlobalId();
 
 private: //members
 
@@ -39,5 +39,6 @@ private: //members
 	CollisionVolume * m_next;
 	std::vector<PxTransform> m_respawnLocations;
 	bool m_isStartCollisionVolume;
-
+	int m_volumeIndex;
+	static int globalID;
 };

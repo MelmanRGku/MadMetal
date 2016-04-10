@@ -57,11 +57,12 @@ void Track::setupCollisionVolumes() {
 
 	for (int i = 0; i < m_collisionVolumes.size(); i++)
 	{
-		if (i == m_collisionVolumes.size() - 1)
+		if (i == (m_collisionVolumes.size() - 1))
 		{
 			m_collisionVolumes[i]->setNextCollisionVolume(m_collisionVolumes[0]);
 		}
-		else {
+		else 
+		{
 			m_collisionVolumes[i]->setNextCollisionVolume(m_collisionVolumes[i + 1]);
 		}
 	}

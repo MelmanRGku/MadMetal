@@ -1,7 +1,11 @@
 #include "CollisionVolume.h"
 #include "Settings.h"
 
+int CollisionVolume::globalID = 0;
 
+void CollisionVolume::resetGlobalId() {
+	CollisionVolume::globalID = 0;
+}
 
 CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
@@ -9,6 +13,8 @@ CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, A
 	m_isStartCollisionVolume = false;
 	m_speedDamping = 1.0;
 	m_steeringDamping = 1.0;
+	m_volumeIndex = CollisionVolume::globalID;
+	CollisionVolume::globalID++;
 }
 
 
