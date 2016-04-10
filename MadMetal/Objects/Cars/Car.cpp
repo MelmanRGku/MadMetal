@@ -4,6 +4,7 @@
 #include <sstream>
 #include "Objects\Waypoint.h"
 #include "Objects\CollisionVolume.h"
+#include "Objects\AnimatedSmoke.h"
 
 int Car::positionGlobalID = 0;
 
@@ -282,7 +283,7 @@ void Car::updateOrientation(float dt)
 			hit.block.actor->getShapes(shapes, 1);
 			if (shapes[0]->getSimulationFilterData().word0 == COLLISION_FLAG_GROUND)
 			{
-				lastKnownDistanceBetweenCarAndShadow = extraOffset.y - hit.block.distance + 1.f;
+				lastKnownDistanceBetweenCarAndShadow = extraOffset.y - hit.block.distance;
 				groundFound = true;
 			}
 			else {
@@ -298,12 +299,37 @@ void Car::updateOrientation(float dt)
 	
 }
 
+#define TIME_BETWEEN_SMOKES 0.2f
+void Car::createSmoke(float dt) {
+	m_smokeCounterTime += dt;
+	if (m_smokeCounterTime > TIME_BETWEEN_SMOKES) {
+		PxGeometry **smokeGeom = new PxGeometry*[1];
+		smokeGeom[0] = new PxSphereGeometry(2);
+		float actorSpeed = getCar().computeForwardSpeed();
+		PxVec3 forwardVector = PxVec3(getForwardVector().x, getForwardVector().y, getForwardVector().z);
+		PxVec3 pos = getActor().getGlobalPose().p - forwardVector * std::max(getActor().getWorldBounds().getDimensions().x, getActor().getWorldBounds().getDimensions().z) / 2;
+		//randomize y pos
+		pos.y = pos.y + ((float(rand()) / float(RAND_MAX)) - .25f) * getActor().getWorldBounds().getDimensions().x;
+		PxTransform t = PxTransform(pos, getActor().getGlobalPose().q);
+		AnimatedSmoke *smoke = static_cast<AnimatedSmoke *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_SMOKE_1, &t, smokeGeom, this));
+#undef min
+		static_cast<PxRigidDynamic*>(&smoke->getActor())->setLinearVelocity(((actorSpeed > 0) ? std::max(0.f, actorSpeed - 5.f) : std::min(0.f, actorSpeed + 5.f)) * forwardVector);
+		delete smokeGeom[0];
+		delete[] smokeGeom;
+		m_smokeCounterTime = 0;
+	}
+}
+
 void Car::update(float dt) {
 	
 	m_invincibilityTimeRemaining -= dt;
 	updateHealth(dt);
 	if (m_currentHealth > 0)
 		updateOrientation(dt);
+
+	if (m_currentHealth > 0 && m_currentHealth <= 35)
+		createSmoke(dt);
+
 	m_reloadRemainingSeconds -= dt;
 	m_timeSinceLastTimeHit += dt;
 	m_timeSinceRespawn += dt;

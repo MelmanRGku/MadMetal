@@ -24,6 +24,7 @@ public:
 		SHIELD_POWERUP,
 		PHYSICAL_OBJECT_PARTICLE,
 		PHYSICAL_OBJECT_EXPLOSION,
+		PHYSICAL_OBJECT_SMOKE,
 		PHYSICAL_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
 		PHYSICAL_OBJECT_GARGANTULOUS_SUPER_BULLET,
 		PHYSICAL_OBJECT_GARGANTULOUS_BULLET,
@@ -528,25 +529,47 @@ public:
 
 		case PHYSICAL_OBJECT_EXPLOSION:
 		{
-										 PxRigidDynamic * explosion = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
-										 explosion->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+			PxRigidDynamic * explosion = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+			explosion->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 
-										 PxFilterData simFilterData;
-										 simFilterData.word0 = 0;
-										 simFilterData.word1 = 0;
+			PxFilterData simFilterData;
+			simFilterData.word0 = 0;
+			simFilterData.word1 = 0;
 
-										 explosion->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
+			explosion->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
-										 PxShape* shapes[1];
-										 explosion->getShapes(shapes, 1);
-										 shapes[0]->setSimulationFilterData(simFilterData);
-										 shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
-										 shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+			PxShape* shapes[1];
+			explosion->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
 
-										 setFilterDataId(objectId, explosion);
+			setFilterDataId(objectId, explosion);
 
-										 toReturn = explosion;
-										 break;
+			toReturn = explosion;
+			break;
+		}
+		case PHYSICAL_OBJECT_SMOKE:
+		{
+			PxRigidDynamic * explosion = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+			explosion->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+
+			PxFilterData simFilterData;
+			simFilterData.word0 = 0;
+			simFilterData.word1 = 0;
+
+			explosion->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			explosion->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+			setFilterDataId(objectId, explosion);
+
+			toReturn = explosion;
+			break;
 		}
 		case PHYSICAL_OBJECT_BOMB_EXPLOSION:
 		{

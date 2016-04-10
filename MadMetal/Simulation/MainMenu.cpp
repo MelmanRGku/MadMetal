@@ -48,7 +48,7 @@ MainMenu::MainMenu(Input * input, Audio *audio)
 		a->updatePosition(glm::vec3(0, -2, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Multiplayer.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Controls.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		controlsButton = new Object3D(2, au, p, a, r, NULL);

@@ -44,6 +44,7 @@ bool ControlsMenu::simulateScene(double dt, SceneMessage &newMessage) {
 	m_world->update(dt);
 	
 	if (m_gamePad->isPressed(GamePad::BButton) && m_sceneGameTimeSeconds > 1) {
+		m_audio->queAudioSource(NULL, MenuBackButtonSound());
 		newMessage.setTag(SceneMessage::ePop);
 		return true;
 	}

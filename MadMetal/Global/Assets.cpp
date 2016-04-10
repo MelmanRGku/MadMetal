@@ -30,6 +30,7 @@ void Assets::init() {
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/BackgroundControls2.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/BackgroundControls3.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/BackgroundControls.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Background.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Meowmix.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/twisted1.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Gargantulous.obj");
@@ -39,6 +40,11 @@ void Assets::init() {
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Player2.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Player3.obj");
 	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Player4.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Multiplayer.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Singleplayer.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Quit.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Controls.obj");
+	modelsToBeLoadedBeforeTheGameStarts->push_back("Assets/Models/Back.obj");
 }
 
 void Assets::release() {

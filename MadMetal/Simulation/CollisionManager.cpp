@@ -44,6 +44,10 @@ PxFilterFlags CollisionManager::TestFilterShader(
 		return PxFilterFlag::eSUPPRESS;
 	}
 
+	if (filterData0.word0 == 0 || filterData1.word0 == 0) {
+		return PxFilterFlag::eKILL;
+	}
+
 	if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET ||
 		filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET) {
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
@@ -130,7 +134,7 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	if (bullet == NULL)
 		return;
 
-	TestObject *otherObj = m_world.findObject(otherId);
+	Object3D *otherObj = static_cast<Object3D *>(m_world.findObject(otherId));
 	Car *car = dynamic_cast<Car *>(otherObj);
 
 	//self hit - ignore

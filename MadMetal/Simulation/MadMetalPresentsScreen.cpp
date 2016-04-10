@@ -6,6 +6,7 @@ MadMetalPresentsScreen::MadMetalPresentsScreen(Audio &audio, LoadingStatus *stat
 
 
 	m_defaultSceneCamera->setLookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -3), glm::vec3(0, 1, 0));
+	m_audio.setMusicVolume(128);
 
 	this->status = status;
 	this->t = t;
@@ -58,6 +59,11 @@ MadMetalPresentsScreen::~MadMetalPresentsScreen()
 #define DotSwitchDelay 0.5f
 bool MadMetalPresentsScreen::simulateScene(double dt, SceneMessage &newMessage) {
 	m_sceneGameTimeSeconds += dt;
+
+	//music
+	if (m_audio.getMusicFinished()) {
+		m_audio.playMusic(CrysisTwoThemeSong(), 1);
+	}
 
 	loadingPic->updateRotation(glm::vec3(0, 0, -dt * 600));
 
