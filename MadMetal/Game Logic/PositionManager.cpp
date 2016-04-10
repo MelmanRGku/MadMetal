@@ -16,7 +16,7 @@ PositionManager::~PositionManager()
 
 void PositionManager::updatePlayerPositions()
 {
-	for (int i = 0; i < m_players.size(); i++)
+	/*for (int i = 0; i < m_players.size(); i++)
 	{
 		for (int j = i + 1; j < m_players.size(); j++)
 		{
@@ -61,7 +61,7 @@ void PositionManager::updatePlayerPositions()
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void PositionManager::swap(Controllable& player1, Controllable& player2)

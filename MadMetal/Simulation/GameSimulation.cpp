@@ -88,7 +88,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 		}
 		else {
-			AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
+			AIControllable *ai = new AIControllable(*playerTemplates[i]);
 			PxTransform *pos = spawnLocations.at(i);
 			Car *car = NULL;
 			/*if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {

@@ -20,9 +20,6 @@ public:
 
 	CollisionVolume * getNextCollisionVolume();
 	void setNextCollisionVolume(CollisionVolume* toSet);
-	void setCurrentWaypointIndex(Waypoint* waypoint);
-	void setLastWaypointIndex(Waypoint* waypoint);
-	void setGoalWaypointIndex(Waypoint* waypoint);
 	void setSectionSpeedDamping(float damping);
 	void setSectionSteeringDamping(float damping);
 

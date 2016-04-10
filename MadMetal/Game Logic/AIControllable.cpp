@@ -7,28 +7,17 @@
 static const float BACKUP_DAMPING = 0.7;
 static const int NUMBER_OF_WRONG_HITS = 10; 
 
-AIControllable::AIControllable(ControllableTemplate& aiTemplate, Track& track)
-	: Controllable(aiTemplate)
-	, m_track(track)
+AIControllable::AIControllable(ControllableTemplate& aiTemplate)
+: Controllable(aiTemplate)
 {
-	m_pathFinder = new PathFinding();
-	m_nextWaypoint = NULL;
-	m_currentKnownWaypoint = NULL;
-	m_lastKnowCollisionVolue = NULL;
-	m_goalWaypoint = m_track.getWaypointAt(1946);
-	m_currentPath.clear();
-	setHighCostWaypointsToHigh();
 	m_needsToBackup = false;
 	m_counter = 0;
 	m_movementState = AiStateMovement::INITIAL_STATE;
-	m_speedDamping = 1.0;
-	m_steeringDamping = 1.0;
 	m_counterReverse = 60;
-	m_wrongHits = NUMBER_OF_WRONG_HITS;
 }
 AIControllable::~AIControllable()
 {
-	delete m_pathFinder;
+	
 }
 
 void AIControllable::processPowerups() {
@@ -77,77 +66,52 @@ void AIControllable::playFrame(double dt)
 	updateMovementState();
 }
 
-void AIControllable::accelerateToNextWaypoint()
+void AIControllable::accelerateToNextCollisionVolume()
 {
-	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
-	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
-	glm::vec3 forwardVector = m_car->getForwardVector();
-	forwardVector = glm::normalize(forwardVector);
+	PxVec3 newDirection = (m_car->getCurrentCollisionVolume()->getNextCollisionVolume()->getActor().getGlobalPose().p - m_car->getActor().getGlobalPose().p).getNormalized();
+	PxVec3 forwardVector = PxVec3(m_car->getForwardVector().x, m_car->getForwardVector().y, m_car->getForwardVector().z).getNormalized();
+	
 
-	glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
-	vectorToNextWaypoint3.y = 0;
+	PxVec3 crossProductResult = forwardVector.cross(newDirection);
+	newDirection.y = 0;
 	forwardVector.y = 0;
-	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
-	forwardVector = glm::normalize(forwardVector);
-	float amountOfDotProduct = glm::dot(forwardVector, vectorToNextWaypoint3);
+	newDirection = newDirection.getNormalized();
+	forwardVector = forwardVector.getNormalized();
+
+	float amountOfDotProduct = forwardVector.dot( newDirection);
 	float amountToSteerBy = fabs(amountOfDotProduct - 1);
 	amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
 	float amountToAccelerate;
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
-	changeTurning(crossProductResult.y, amountToSteerBy * m_steeringDamping);
-	accelerate(amountToAccelerate * m_speedDamping);
+	changeTurning(crossProductResult.y, amountToSteerBy * m_car->getCurrentCollisionVolume()->getSteeringDamping());
+	accelerate(amountToAccelerate *  m_car->getCurrentCollisionVolume()->getSpeedDamping());
 }
 
-void AIControllable::reverseToPreviousWaypoint()
+void AIControllable::reverse()
 {
-	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
+	PxVec3 newDirection = (m_car->getCurrentCollisionVolume()->getNextCollisionVolume()->getActor().getGlobalPose().p - m_car->getActor().getGlobalPose().p).getNormalized();
+	PxVec3 forwardVector = PxVec3(m_car->getForwardVector().x, m_car->getForwardVector().y, m_car->getForwardVector().z).getNormalized();
 
-	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
-	glm::vec3 forwardVector = m_car->getForwardVector();
-	glm::vec3 reverseForwardVector = -forwardVector;
-	reverseForwardVector = glm::normalize(reverseForwardVector);
 
-	glm::vec3 crossProductResult = glm::cross(reverseForwardVector, vectorToNextWaypoint3);
-	vectorToNextWaypoint3.y = 0;
-	reverseForwardVector.y = 0;
-	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
-	reverseForwardVector = glm::normalize(reverseForwardVector);
-	float amountOfDotProduct = glm::dot(reverseForwardVector, vectorToNextWaypoint3);
+	PxVec3 crossProductResult = forwardVector.cross(newDirection);
+	newDirection.y = 0;
+	forwardVector.y = 0;
+	newDirection = newDirection.getNormalized();
+	forwardVector = forwardVector.getNormalized();
+
+	float amountOfDotProduct = forwardVector.dot(newDirection);
 	float amountToSteerBy = fabs(amountOfDotProduct - 1);
 	amountToSteerBy > 1.0 ? amountToSteerBy = 1.0 : amountToSteerBy = amountToSteerBy;
 	float amountToAccelerate;
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
-	changeTurning(-crossProductResult.y, amountToSteerBy * BACKUP_DAMPING);
+	changeTurning(crossProductResult.y, amountToSteerBy * BACKUP_DAMPING);
 	backUp(amountToAccelerate);
 
 }
 
-void AIControllable::updateNextWaypoint()
-{
-	if (!m_currentPath.empty())
-	{
-		m_nextWaypoint = m_currentPath[m_currentPath.size() - 1];
-		m_currentPath.pop_back();
-	}
-}
 
-void AIControllable::recalculatePath()
-{
-	m_currentPath.clear();
-	m_currentPath = m_pathFinder->findPath(m_car->getCurrentWaypoint(), m_goalWaypoint);
-
-	std::cout << "THe new path is: ";
-
-	for (int i = 0; i < m_currentPath.size(); i++)
-	{
-		std::cout << m_currentPath[i]->getIndex() << ", ";
-	}
-
-	std::cout << "\n";
-	updateNextWaypoint();
-}
 
 void AIControllable::accelerate(float amount)
 {
@@ -190,49 +154,6 @@ void AIControllable::setCar(Car * toAdd)
 }
 
 
-void AIControllable::checkCollisionVolumes()
-{
-	if (m_car->getLastHitCollisionVolume() == NULL)
-	{
-		return;
-	}
-	else
-	{
-		if (m_lastKnowCollisionVolue == NULL)
-		{
-			m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
-			m_goalWaypoint = m_lastKnowCollisionVolue->getGoalWaypointIndex();
-			m_speedDamping = m_lastKnowCollisionVolue->getSpeedDamping();
-			m_steeringDamping = m_lastKnowCollisionVolue->getSteeringDamping();
-		}
-		else if (m_lastKnowCollisionVolue != m_car->getLastHitCollisionVolume())
-		{
-			m_lastKnowCollisionVolue = m_car->getLastHitCollisionVolume();
-			m_goalWaypoint = m_lastKnowCollisionVolue->getGoalWaypointIndex();
-			recalculatePath();
-			m_speedDamping = m_lastKnowCollisionVolue->getSpeedDamping();
-			m_steeringDamping = m_lastKnowCollisionVolue->getSteeringDamping();
-		}
-	}
-
-}
-
-void AIControllable::setHighCostWaypointsToHigh()
-{
-	for (int i = 0; i < m_listOfWaypointsHighCost.size(); i++)
-	{
-		//m_pathFinder->setWaypointCostOf(m_listOfWaypointsHighCost);
-	}
-}
-
-void AIControllable::setHighCostWaypointsToLow()
-{
-	for (int i = 0; i < m_listOfWaypointsHighCost.size(); i++)
-	{
-		std::vector<int> temp;
-		//m_pathFinder->setWaypointCostOf(temp);
-	}
-}
 
 void AIControllable::processInputAcceleration(float amount)
 {
@@ -301,7 +222,7 @@ void AIControllable::checkStuckInWall()
 	float forwardSpeed = static_cast<float>(m_car->getCar().computeForwardSpeed());
 	// Car is stuck in a wall
 	if (engineRotationSpeed > 50.0 &&
-		forwardSpeed < 5.0 &&
+		forwardSpeed < 10.0 &&
 		!(m_car->getInvinsibilityTimeRemaining() > 0))
 	{
 		m_counter++;
@@ -310,26 +231,13 @@ void AIControllable::checkStuckInWall()
 			m_needsToBackup = !m_needsToBackup;
 			if (m_needsToBackup)
 			{
-				rotateTowardsNextWaypoint();
+				rotateTowardsNextCollisionVolume();
 				m_movementState = AiStateMovement::MOVE_BACKWARDS;
-				m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-				// Reverse to Last Waypoint
-				if (m_car->getLastWaypoint() != NULL)
-				{
-					m_nextWaypoint = m_car->getLastWaypoint();
-				}
-				else
-				{
-					m_nextWaypoint = m_lastKnowCollisionVolue->getCurrentWaypointIndex();
-				}
-
 			}
 			// Move forward
 			else
 			{
 				m_movementState = AiStateMovement::MOVE_FORWARD;
-				recalculatePath();
-				m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 			}
 			m_counter = 0;
 		}
@@ -340,14 +248,12 @@ void AIControllable::checkStuckInWall()
 	}
 }
 
-void AIControllable::rotateTowardsNextWaypoint()
+void AIControllable::rotateTowardsNextCollisionVolume()
 {
-	glm::vec3 vectorToNextWaypoint3 = glm::vec3(m_nextWaypoint->getPosition() - m_car->getPosition());
-	vectorToNextWaypoint3 = glm::normalize(vectorToNextWaypoint3);
-	glm::vec3 forwardVector = m_car->getForwardVector();
-	forwardVector = glm::normalize(forwardVector);
+	PxVec3 toCollisionVolume = (m_car->getCurrentCollisionVolume()->getActor().getGlobalPose().p- m_car->getActor().getGlobalPose().p).getNormalized();
+	PxVec3 forwardVector = PxVec3(m_car->getForwardVector().x, m_car->getForwardVector().y, m_car->getForwardVector().z).getNormalized();
 
-	glm::vec3 crossProductResult = glm::cross(forwardVector, vectorToNextWaypoint3);
+	PxVec3 crossProductResult = forwardVector.cross(toCollisionVolume);
 	PxQuat tempQauternion;
 	if (crossProductResult.y > 0)
 	{
@@ -367,15 +273,7 @@ void AIControllable::updateMovementState()
 	switch (m_movementState)
 	{
 	case AiStateMovement::INITIAL_STATE:
-		if (m_currentKnownWaypoint == NULL)
-		{
-			m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-		}
-		if (m_car->getCurrentWaypoint() != NULL && m_goalWaypoint != NULL)
-		{
-			recalculatePath();
-		}
-		if (m_nextWaypoint != NULL && !m_currentPath.empty())
+		if (m_car->getCurrentCollisionVolume() != NULL)
 		{
 			m_movementState = AiStateMovement::CONTROLS_PAUSED;
 		}
@@ -406,37 +304,6 @@ void AIControllable::updateMovementState()
 			break;
 		}
 
-		checkCollisionVolumes();
-
-		// Waypoint hit is not the next waypoint
-		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() &&
-			m_car->getCurrentWaypoint()->getIndex() != m_nextWaypoint->getIndex())
-		{
-			m_wrongHits--;
-			if (m_wrongHits <= 0)
-			{
-				recalculatePath();
-			}
-			//m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-		}
-		// Hit the goal node
-		if (m_car->getCurrentWaypoint()->getIndex() == m_goalWaypoint->getIndex())
-		{
-			recalculatePath();
-		}
-		// Update the last known waypoint
-		if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex())
-		{
-			m_currentKnownWaypoint = m_car->getCurrentWaypoint();
-		}
-
-		if (m_car->getCurrentWaypoint()->getIndex() == m_nextWaypoint->getIndex())
-		{
-			//std::cout << "Reached Next Waypoint\n";
-			m_wrongHits = NUMBER_OF_WRONG_HITS;
-			updateNextWaypoint();
-		}
-
 		checkStuckInWall();
 
 		if (m_needsToBackup)
@@ -445,7 +312,7 @@ void AIControllable::updateMovementState()
 		}
 		else
 		{
-			accelerateToNextWaypoint();
+			accelerateToNextCollisionVolume();
 		}
 
 		break;
@@ -462,19 +329,15 @@ void AIControllable::updateMovementState()
 			break;
 		}
 		if (m_counterReverse <= 0)
-		//if (m_currentKnownWaypoint->getIndex() != m_car->getCurrentWaypoint()->getIndex() &&
-		//	m_car->getCurrentWaypoint()->isValid())
 		{
-			recalculatePath();
 			m_needsToBackup = false;
-			m_currentKnownWaypoint = m_car->getCurrentWaypoint();
 			m_counter = 0;
 			m_counterReverse = 60;
 			m_movementState = AiStateMovement::MOVE_FORWARD;
 		}
 		else
 		{
-			reverseToPreviousWaypoint();
+			reverse();
 		}
 
 		break;
