@@ -328,8 +328,9 @@ void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, lon
 
 	if (car != NULL  && car != super->getOwner() && super->addCarHit(carId)) // if the car hasn't already been hit by the super
 	{
+		float pointsToAssign = car->getHealthRemaining();
 		if (car->takeDamage(super->getDamage())) {
-			super->getOwner()->addDamageDealt(super->getDamage(), false);
+			super->getOwner()->addDamageDealt(pointsToAssign, false);
 		}
 	}
 }
@@ -348,9 +349,10 @@ void CollisionManager::processGargantulousSuperBulletHit(long bulletId, long car
 
 	if (car != NULL  && car != super->getOwner()) // if the car hasn't already been hit by the super
 	{
+		float pointsToAssign = car->getHealthRemaining();
 		float damageToDeal = 200.f;
 		if (car->takeDamage(damageToDeal)) {
-			super->getOwner()->addDamageDealt(damageToDeal);
+			super->getOwner()->addDamageDealt(pointsToAssign, false);
 		}
 		
 		super->setHasToBeDeleted(true);
