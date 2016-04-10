@@ -20,9 +20,12 @@ public :
 	void setMonsterType(GooMonsterType type);
 
 private:
+	void processRoll();
+
 	bool m_needsRespawn;
 	float m_respawnCounter;
 	PxVec3 m_spawnLocation;
 	PxVec3 m_spawnVelocity;
 	GooMonsterType type;
+	bool rollStarted;
 };

@@ -290,6 +290,16 @@ public:
 	virtual ~CarBrakeSound(){};
 };
 
+class WeeeeeSound : public Sound
+{
+public:
+	WeeeeeSound() : Sound()
+	{
+		m_libraryIndex = 27;
+	};
+	virtual ~WeeeeeSound(){};
+};
+
 //-----------------------------------------------------------------
 //--------------------------END SOUNDS-----------------------------
 //-----------------------------------------------------------------

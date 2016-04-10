@@ -2,6 +2,7 @@
 
 #include "GooMonster.h"
 #include "Global\Assets.h"
+#include "Factory\GameFactory.h"
 
 GooMonster::GooMonster(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
@@ -32,7 +33,7 @@ void GooMonster::update(float dt)
 		{
 			
 			m_needsRespawn = true;
-			m_respawnCounter = 1 + (float) (rand() % 2) / 2;
+			m_respawnCounter = (float) (rand() % 5) / 2;
 			//std::cout << "Respawning in " << m_respawnCounter << " seconds \n";
 		}
 	}
@@ -60,11 +61,24 @@ void GooMonster::update(float dt)
 		}
 
 		setMonsterType(newType);
+		rollStarted = false;
+		m_animatable->setRotation(glm::vec3(0, 0, 0));
 
 	} else {
 		m_respawnCounter -= dt;
 	}
 
+	if (type == GooMonsterType::GOO_MONSTER_TYPE_PUSHER)
+		processRoll();
+}
+
+void GooMonster::processRoll() {
+	if (std::abs(static_cast<PxRigidDynamic*>(&m_physicable->getActor())->getLinearVelocity().y) < 22.5f && !rollStarted) {
+		m_audioable->getAudioHandle().queAudioSource(&m_physicable->getActor(), WeeeeeSound(), 3.f);
+		rollStarted = true;
+		ObjectRotationUpdater *upd = new ObjectRotationUpdater(this, glm::vec3(360, 0, 0), 1.5f, ObjectRotationUpdater::ANGLE_TYPE_DEGREES);
+		GameFactory::instance()->getWorld().addObjectUpdater(upd);
+	}
 }
 
 GooMonster::GooMonsterType GooMonster::getMonsterType() {
