@@ -491,6 +491,9 @@ void Car::setShadow(Object3D *shadow) {
 }
 
 void Car::onBrake() {
+	if (std::abs(getCar().computeForwardSpeed()) < 5.f || m_isInAir)
+		return;
+
 	if (brakeChannelNumber != -1 && brakeStartTime + BRAKE_SOUND_DURATION >= totalLifeTime) {
 		m_audioable->getAudioHandle().stopSource(brakeChannelNumber);
 	}

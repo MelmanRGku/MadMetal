@@ -64,6 +64,9 @@ void PlayerControllable::playFrame(double dt)
 						m_car->deactivatePowerUp();
 					}
 
+					if (std::abs(m_car->getCar().computeForwardSpeed()) < 5.f)
+						m_car->onUnbrake();
+
 				}
 				else {
 					m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 0);
