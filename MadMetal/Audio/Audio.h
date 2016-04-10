@@ -76,7 +76,7 @@ public:
 	void resumeSources();
 	void initializeChunkLibrary(char * fileToLoad = "Audio/ChunkLibrary.txt");
 	void initializeMusicLibrary(char * fileToLoad = "Audio/MusicLibrary.txt");
-	void queAudioSource(PxRigidActor * sourcePosition, Sound toPlay, float volumeScalar = 1, bool updatePosition = false, int loopCount = 0);
+	void queAudioSource(PxRigidActor * sourcePosition, Sound toPlay, float volumeScalar = 1, bool updatePosition = false, int loopCount = 0, int *channelToPassBack = NULL);
 //	bool queAudioSource(int sourceID);
 	void update();
 	void playMusic(Sound toPlay, int loopCount = -1);

@@ -151,7 +151,7 @@ void Audio::update()
 	
 }
 		
-void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound toPlay, float volumeScalar, bool updatePosition, int loopCount)
+void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound toPlay, float volumeScalar, bool updatePosition, int loopCount, int *channelToPassBack)
 {
 	
 	AudioChannel * toAdd = new AudioChannel(sourcePosition, updatePosition, volumeScalar);
@@ -160,7 +160,11 @@ void Audio::queAudioSource(PxRigidActor * sourcePosition, Sound toPlay, float vo
 	
 	toAdd->setChannel(Mix_FadeInChannel(-1, m_chunkLibrary[toPlay.getLibraryIndex()], loopCount, 200));
 	toAdd->setAudioPosition(m_listeners);
-	toPlay.setChannel(toAdd->getChannel());
+
+	if (channelToPassBack != NULL) {
+		*channelToPassBack = toAdd->getChannel();
+	}
+
 	//add new channel to the list of currently playing sounds
 	m_audioChannels.push_back(toAdd);
 	

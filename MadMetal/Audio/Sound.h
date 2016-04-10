@@ -285,7 +285,7 @@ class CarBrakeSound : public Sound
 public:
 	CarBrakeSound() : Sound()
 	{
-		m_libraryIndex = 26;
+		m_libraryIndex = 28;
 	};
 	virtual ~CarBrakeSound(){};
 };

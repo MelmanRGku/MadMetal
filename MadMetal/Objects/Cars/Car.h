@@ -8,6 +8,7 @@
 #include "Global\Definitions.h"
 
 #define INVINICIBILITY_FLASH_PERIOD 0.2f
+#define BRAKE_SOUND_DURATION 2.2f
 
 class Waypoint;
 class CollisionVolume;
@@ -62,13 +63,16 @@ protected: //members
 
 	Object3D *m_shadow;
 	float lastKnownDistanceBetweenCarAndShadow;
-	void createSmoke(float dt);
+
+	int brakeChannelNumber;
+	float brakeStartTime;
 private:
 	//update functions
 	void updatePowerUp(float dt);
 	void updateReload(float dt);
 	void updateSuper(float dt);
 	void updateOrientation(float dt);
+	void createSmoke(float dt);
 
 public:
 
@@ -140,6 +144,8 @@ public:
 	float getTimeSinceLastTimeHit();
 
 	void setShadow(Object3D *shadow);
+	void onBrake();
+	void onUnbrake();
 
 };
 

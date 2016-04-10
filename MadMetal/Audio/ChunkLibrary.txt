@@ -26,3 +26,4 @@
 25 PowerupPickup.wav
 26 CarBrake.wav
 27 Weeeeee.wav
+28 BrakeSound.wav

@@ -15,6 +15,7 @@ void Car::resetGlobalPositionID()
 
 Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL), m_car(car), m_drivingStyle(style)
 {
+	brakeChannelNumber = -1;
 	m_currentWaypoint = NULL;
 	m_isAtMidCollisionVolume = false;
 	m_isAtStartingCollisionVolume = false;
@@ -321,7 +322,7 @@ void Car::createSmoke(float dt) {
 }
 
 void Car::update(float dt) {
-	
+	Object3D::update(dt);
 	m_invincibilityTimeRemaining -= dt;
 	updateHealth(dt);
 	if (m_currentHealth > 0)
@@ -487,4 +488,20 @@ float Car::getTimeSinceLastTimeHit() {
 
 void Car::setShadow(Object3D *shadow) {
 	m_shadow = shadow;
+}
+
+void Car::onBrake() {
+	if (brakeChannelNumber != -1 && brakeStartTime + BRAKE_SOUND_DURATION >= totalLifeTime) {
+		m_audioable->getAudioHandle().stopSource(brakeChannelNumber);
+	}
+
+	m_audioable->getAudioHandle().queAudioSource(&m_physicable->getActor(), CarBrakeSound(), .4f, false, 0, &brakeChannelNumber);
+	brakeStartTime = totalLifeTime;
+}
+
+void Car::onUnbrake() {
+	if (brakeChannelNumber != -1 && brakeStartTime + BRAKE_SOUND_DURATION >= totalLifeTime) {
+		m_audioable->getAudioHandle().stopSource(brakeChannelNumber);
+		brakeChannelNumber = -1;
+	}
 }
