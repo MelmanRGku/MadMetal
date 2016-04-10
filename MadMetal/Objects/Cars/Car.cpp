@@ -339,15 +339,15 @@ void Car::addDamageDealt(float damage, bool addToSuper) {
 
 void Car::setCurrentCollisionVolume(CollisionVolume* toSet)
 {
-	if (m_currentCollisionVolume != NULL) {
-		if (toSet == m_currentCollisionVolume->getNextCollisionVolume())
-		{
-			m_currentCollisionVolume = toSet;
-	}
-	}
-	else {
+	//if (m_currentCollisionVolume != NULL) {
+	//	if (toSet == m_currentCollisionVolume->getNextCollisionVolume())
+	//	{
+	//		m_currentCollisionVolume = toSet;
+	//	}
+	//}
+	//else {
 		m_currentCollisionVolume = toSet;
-	}
+	//}
 }
 
 CollisionVolume * Car::getCurrentCollisionVolume()
