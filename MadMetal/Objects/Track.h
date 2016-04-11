@@ -18,7 +18,7 @@ public:
 	Object3D *getDrivablePart() { return drivablePart; }
 	
 	void playTrackMusic();
-
+	CollisionVolume * getStartLine();
 private: //members
 	Object3D *drivablePart,
 		*nonDrivablePart,
@@ -27,6 +27,7 @@ private: //members
 private: //helper functions 
 
 	void setupCollisionVolumes();
+	
 	void attachNextCollsionVolumes();
 	void attachReachableCollsionVolumes();
 };

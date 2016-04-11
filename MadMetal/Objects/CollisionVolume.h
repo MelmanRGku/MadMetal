@@ -36,7 +36,11 @@ public:
 
 	int getPathNumber();
 	bool getIsPartOfMainPath();
+	bool getIsRespawnLocation();
+	void setIsRespawnLocation(bool isRespawn);
 	std::vector<CollisionVolume*>& getListOfReachableCollisionVolume();
+	void generateRespawnLocations(PxVec3 forwardVector, PxVec3 center, int numWide, int numDeep);
+
 
 private: //members
 
@@ -51,5 +55,6 @@ private: //members
 	int m_volumeId;
 	static int globalID;
 	bool m_isPartOfMainPath;
+	bool m_isRespawnLocation;
 	int m_pathNumber;
 };

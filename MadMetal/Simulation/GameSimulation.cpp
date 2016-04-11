@@ -38,6 +38,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	GameFactory::resetId();
 	PxTransform *pos = new PxTransform(PxVec3(0, 0, 0));
 	m_track = static_cast<Track *>(m_gameFactory->makeObject(GameFactory::OBJECT_TRACK, pos, NULL, NULL));
+	CollisionVolume* startLine = m_track->getStartLine();
 	delete pos;
 
 	m_isPaused = false;
@@ -107,6 +108,8 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			m_players.push_back(ai);
 			//make a car for ai based off template
 		}
+		m_players[m_players.size() - 1]->getCar()->setCurrentCollisionVolume(startLine);
+		m_players[m_players.size() - 1]->getCar()->respawn();
 	}
 
 	//delete all spawn locations

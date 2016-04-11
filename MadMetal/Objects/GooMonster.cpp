@@ -112,6 +112,8 @@ void GooMonster::processLookAt() {
 	}
 
 	//get the angle of rotation and the vector to rotate around
+	if (minDistancePlayer == -1)
+		return;
 	glm::vec3 viewDirectionOfTheMonster = glm::vec3(1, 0, 0);
 	glm::vec3 requiredViewDirection = glm::normalize(players.at(minDistancePlayer)->getCar()->getGlobalPose() - getGlobalPose());
 	float angle = std::acos(glm::dot(viewDirectionOfTheMonster, requiredViewDirection));

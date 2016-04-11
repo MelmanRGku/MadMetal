@@ -41,6 +41,7 @@ protected: //members
 	
 	bool m_isInAir;
 	CollisionVolume * m_currentCollisionVolume;
+	CollisionVolume * m_respawnCollisionVolume;
 
 
 	bool m_newLap;

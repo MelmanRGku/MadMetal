@@ -37,20 +37,23 @@ void PlayerControllable::playFrame(double dt)
 					m_car->getCar().getRigidDynamicActor()->getGlobalPose().q.toRadiansAndUnitAxis(angle, axis);
 
 					m_car->fire();
-					std::cout << "position  x:" << m_car->getCar().getRigidDynamicActor()->getGlobalPose().p.x
+					/*std::cout << "position  x:" << m_car->getCar().getRigidDynamicActor()->getGlobalPose().p.x
 						<< " y :" << m_car->getCar().getRigidDynamicActor()->getGlobalPose().p.y
 						<< " z :" << m_car->getCar().getRigidDynamicActor()->getGlobalPose().p.z
 						<< " rotation: " << angle
 						<< std::endl;
+					*/
 				}
 				if (m_gamePad->isPressed(GamePad::DPadUp))
 				{
 					float angle;
 					PxVec3 axis;
+					glm::vec3 forwardVector = m_car->getForwardVector();
 					m_car->getCar().getRigidDynamicActor()->getGlobalPose().q.toRadiansAndUnitAxis(angle, axis);
 					PxVec3 position = m_car->getCar().getRigidDynamicActor()->getGlobalPose().p;
 					std::cout << "Position " << position.x << "," << position.y << "," << position.z << std::endl;
 					std::cout << "Angle " << angle << "    " << axis.x << "," << axis.y << "," << axis.z << std::endl;
+					std::cout << "Forward Vector " << forwardVector.x << "," << forwardVector.y << "," << forwardVector.z << std::endl;
 				}
 
 				if (m_gamePad->isPressed(GamePad::YButton)) {

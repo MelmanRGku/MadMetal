@@ -11,11 +11,13 @@ CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, A
 {
 	m_respawnIndex = 0;
 	m_isStartCollisionVolume = false;
+	
 	m_speedDamping = 1.0;
 	m_steeringDamping = 1.0;
 	m_volumeId = CollisionVolume::globalID;
 	CollisionVolume::globalID++;
 	m_isPartOfMainPath = true;
+	m_isRespawnLocation = true;
 	m_pathNumber = 1;
 	static_cast<Model3D *>(m_renderable->getModel())->setAlpha(0.3);
 }
@@ -23,6 +25,16 @@ CollisionVolume::CollisionVolume(long id, Audioable *aable, Physicable *pable, A
 
 CollisionVolume::~CollisionVolume()
 {
+}
+
+void CollisionVolume::setIsRespawnLocation(bool isRespawn )
+{
+	m_isRespawnLocation = isRespawn;
+}
+
+bool CollisionVolume::getIsRespawnLocation()
+{
+	return m_isRespawnLocation;
 }
 
 CollisionVolume * CollisionVolume::getNextCollisionVolume()
@@ -90,25 +102,24 @@ void CollisionVolume::setIsStartCollisionVolume(bool isStartCollisionVolume) {
 	m_isStartCollisionVolume = isStartCollisionVolume;
 }
 
-/*void CollisionVolume::setCurrentWaypointIndex(Waypoint* waypoint)
+#define WIDTH_SPACING 25
+#define DEPTH_SPACING 25
+void CollisionVolume::generateRespawnLocations(PxVec3 forwardVector, PxVec3 center, int numWide, int numDeep)
 {
-	m_currentWaypoint = waypoint;
+	PxQuat quat = m_physicable->getActor().getGlobalPose().q;
+
+
+	PxVec3 lateralDirection = forwardVector.cross(PxVec3(0, 1, 0)).getNormalized();
+	PxVec3 offsetStart = center - lateralDirection * WIDTH_SPACING / 2;
+	for (int i = 0; i < numWide; i++)
+	{
+		for (int j = 0; j < numDeep; j++)
+		{
+			PxVec3 respawnLocation = offsetStart + lateralDirection *WIDTH_SPACING * i - forwardVector * DEPTH_SPACING * j;
+			m_respawnLocations.push_back(PxTransform(respawnLocation, quat));
+		}
+	}
 }
-
-void CollisionVolume::setGoalWaypointIndex(Waypoint* waypoint)
-{
-	m_goalWaypoint = waypoint;
-}*/
-
-
-/*Waypoint* CollisionVolume::getCurrentWaypointIndex()
-{
-	return m_currentWaypoint;
-}
-Waypoint* CollisionVolume::getGoalWaypointIndex()
-{
-	return m_goalWaypoint;
-}*/
 
 float CollisionVolume::getSpeedDamping()
 {

@@ -51,10 +51,10 @@ void Car::respawn()
 	}
 	m_timeSinceRespawn = 0;
 	
-	if (m_currentCollisionVolume != NULL)
+	if (m_respawnCollisionVolume != NULL)
 	{
-		m_car.getRigidDynamicActor()->setGlobalPose(m_currentCollisionVolume->getRespawnLocation());
-		
+		m_car.getRigidDynamicActor()->setGlobalPose(m_respawnCollisionVolume->getRespawnLocation());
+		m_currentCollisionVolume = m_respawnCollisionVolume;
 	}
 	else {
 		
@@ -375,17 +375,24 @@ void Car::setCurrentCollisionVolume(CollisionVolume* toSet)
 				if (toSet->getIsStartCollisionVolume())
 				{
 					incrementLap();
-	}
+				}
 				m_currentCollisionVolume = toSet;
+				if (toSet->getIsRespawnLocation())
+				{
+					m_respawnCollisionVolume = toSet;
+				}
 				
-				return;
-	}
-}
-}
-	else
-{
+			}
+		}
+	} else {
 		m_currentCollisionVolume = toSet;
-}
+		if (toSet->getIsRespawnLocation())
+		{
+			m_respawnCollisionVolume = toSet;
+		}
+	}
+
+	
 }
 
 CollisionVolume * Car::getCurrentCollisionVolume()
