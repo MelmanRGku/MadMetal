@@ -61,10 +61,10 @@ void PositionManager::updatePlayerPositions()
 					glm::vec3 player2Position = m_players.at(j)->getCar()->getGlobalPose();
 					player2Position.y = 0;
 
-					glm::vec3 player1Goal = m_players.at(i)->getCar()->getCurrentCollisionVolume()->getNextCollisionVolume()->getGlobalPose();
+					glm::vec3 player1Goal = m_players.at(i)->getCar()->getCurrentCollisionVolume()->getGlobalPose();
 					player1Goal.y = 0;
 
-					glm::vec3 player2Goal = m_players.at(j)->getCar()->getCurrentCollisionVolume()->getNextCollisionVolume()->getGlobalPose();
+					glm::vec3 player2Goal = m_players.at(j)->getCar()->getCurrentCollisionVolume()->getGlobalPose();
 					player2Goal.y = 0;
 
 					float distanceToGoalPlayer1 = glm::distance2(player1Position, player1Goal);
