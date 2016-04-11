@@ -84,11 +84,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\AnimatedSmoke.cpp" />
+    <ClCompile Include="Simulation\MadMetalPresentsScreen.cpp" />
+    <ClCompile Include="Simulation\ControlsMenu.cpp" />
+    <ClCompile Include="Objects\DeathPit.cpp" />
     <ClCompile Include="Objects\DynamicLight.cpp" />
     <ClCompile Include="Objects\BombExplosion.cpp" />
     <ClCompile Include="Objects\EndingScreenUIScoreTable.cpp" />
     <ClCompile Include="Objects\EndingScreenCarInfoManager.cpp" />
+    <ClCompile Include="Objects\GooMonster.cpp" />
     <ClCompile Include="Objects\ExplosivelyDeliciousBullet.cpp" />
+    <ClCompile Include="Objects\LoadingBar.cpp" />
+    <ClCompile Include="Objects\NavigationalGrid.cpp" />
     <ClCompile Include="Objects\Light.cpp" />
     <ClCompile Include="Simulation\EndingScene.cpp" />
     <ClCompile Include="Game Logic\AIControllable.cpp" />
@@ -103,8 +110,6 @@
     <ClCompile Include="Objects\Cars\ExplosivelyDelicious.cpp" />
     <ClCompile Include="Objects\Cars\Gargantulous.cpp" />
     <ClCompile Include="Objects\Cars\DrivingStyleGargantulous.cpp" />
-    <ClCompile Include="Objects\VehicleSpecifications.cpp" />
-    <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp" />
     <ClCompile Include="Renderer\CellTireShaderProgram.cpp" />
     <ClCompile Include="Simulation\MainMenu.cpp" />
     <ClCompile Include="Objects\MapUI.cpp" />
@@ -115,7 +120,6 @@
     <ClCompile Include="Objects\Object3D.cpp" />
     <ClCompile Include="Objects\BulletCarCollision.cpp" />
     <ClCompile Include="Objects\CollisionVolume.cpp" />
-    <ClCompile Include="Objects\LoadingBar.cpp" />
     <ClCompile Include="Objects\MeowMixBullet.cpp" />
     <ClCompile Include="Objects\GaugeBar.cpp" />
     <ClCompile Include="Objects\HealthBar2D.cpp" />
@@ -182,12 +186,20 @@
     <ClCompile Include="Objects\UIScoreTable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Objects\AnimatedSmoke.h" />
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="Objects\DynamicLight.h" />
+    <ClInclude Include="Simulation\MadMetalPresentsScreen.h" />
+    <ClInclude Include="Simulation\ControlsMenu.h" />
+    <ClInclude Include="Game Logic\AIDefinitions.h" />
+    <ClInclude Include="Objects\DeathPit.h" />
     <ClInclude Include="Objects\BombExplosion.h" />
     <ClInclude Include="Objects\EndingScreenUIScoreTable.h" />
     <ClInclude Include="Objects\EndingScreenCarInfoManager.h" />
     <ClInclude Include="Objects\Light.h" />
+    <ClInclude Include="Objects\LoadingBar.h" />
+    <ClInclude Include="Objects\NavigationalGrid.h" />
+    <ClInclude Include="Objects\GooMonster.h" />
     <ClInclude Include="Simulation\EndingScene.h" />
     <ClInclude Include="Factory\AnimationFactory.h" />
     <ClInclude Include="Game Logic\PathFinding.h" />
@@ -215,8 +227,6 @@
     <ClInclude Include="Game Logic\WaypointDefinitions.h" />
     <ClInclude Include="Objects\MainMenuSystem.h" />
     <ClInclude Include="Objects\MenuSystem.h" />
-    <ClInclude Include="Objects\VehicleSpecifications.h" />
-    <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h" />
     <ClInclude Include="Objects\TrainCar.h" />
     <ClInclude Include="Renderer\CellTireShaderProgram.h" />
     <ClInclude Include="Simulation\MainMenu.h" />
@@ -230,7 +240,6 @@
     <ClInclude Include="Objects\BulletCarCollision.h" />
     <ClInclude Include="Objects\DisplayMessage.h" />
     <ClInclude Include="Objects\CollisionVolume.h" />
-    <ClInclude Include="Objects\LoadingBar.h" />
     <ClInclude Include="Objects\MeowMixBullet.h" />
     <ClInclude Include="Objects\GaugeBar.h" />
     <ClInclude Include="Objects\HealthBar2D.h" />

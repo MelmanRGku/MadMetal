@@ -1,0 +1,12 @@
+#
+#
+#
+
+newmtl (null) Mesh_Material__10
+illum 2
+Ka 0.600000 0.600000 0.600000
+Kd 0.600000 0.600000 0.600000
+Ks 0.900000 0.900000 0.900000
+Ns 0.000000
+map_Kd headcrabsheet.tga
+

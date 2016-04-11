@@ -13,6 +13,8 @@
 #include "Game Logic\PositionManager.h"
 #include "Global\Definitions.h"
 #include "Objects\UIScoreTable.h"
+#include "Objects\DeathPit.h"
+#include "Objects\GooMonster.h"
 #include <sstream>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
@@ -20,16 +22,13 @@
 
 #define NUM_OF_PLAYERS 12
 #define NUM_LAPS_FOR_VICTORY 3
-#define RACE_FINISH_DELAY 10
+#define RACE_FINISH_DELAY 30
 
 using namespace std;
-bool gIsVehicleInAir = true;
-static const float TRACK_DIMENSIONS = 200;
-
-bool temporary = false;
 
 GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, Audio& audioHandle) : m_audioHandle(audioHandle)
 {
+	Waypoint::resetGlobalId();
 	Car::resetGlobalPositionID();
 	newMessage.setTag(SceneMessage::eNone);
 	createPhysicsScene();
@@ -42,10 +41,11 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 
 	m_isPaused = false;
 	m_numLapsVictory = NUM_LAPS_FOR_VICTORY;
+	audioHandle.resetMusicVolume();
 
 
 	PxMaterial* mMaterial;
-	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
+	mMaterial = PhysicsManager::createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
 	std::vector<PxTransform *> spawnLocations;
 	spawnLocations.push_back(new PxTransform(-15, 1, 0));
@@ -74,6 +74,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_GARGANTULOUS, pos, NULL, NULL));
 			} 
 			humanPlayer->setCar(car);
+			m_audioHandle.assignListener(car);
 
 			UI *ui = dynamic_cast<UI *>(m_gameFactory->makeObject(GameFactory::OBJECT_UI, NULL, NULL, NULL));
 			humanPlayer->getCar()->ui = ui;
@@ -90,7 +91,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			AIControllable *ai = new AIControllable(*playerTemplates[i], *m_track);
 			PxTransform *pos = spawnLocations.at(i);
 			Car *car = NULL;
-			if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {
+			/*if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {
 				car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
 			}
 			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_EXPLOSIVELY_DELICIOUS) {
@@ -98,7 +99,8 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			}
 			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_GARGANTULOUS) {
 				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_GARGANTULOUS, pos, NULL, NULL));
-			}
+			}*/
+			car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
 			ai->setCar(car);
 			m_aiPlayers.push_back(ai);
 			m_players.push_back(ai);
@@ -116,8 +118,6 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		m_humanPlayers.at(i)->getCar()->getUI()->adjustStringsForViewport(i + 1, m_humanPlayers.size());
 	}
 
-	m_audioHandle.assignListener(m_humanPlayers[0]->getCar());
-	
 	initialize();
 	m_scoreTable = new ScoreTable(m_players);
 
@@ -206,26 +206,11 @@ void GameSimulation::simulatePhysics(double dt)
 			PxVehicleUpdates(dt, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
 		//Work out if the vehicle is in the air.
-		gIsVehicleInAir = m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]);
-
-
-		PxShape *tempBuffer[PX_MAX_NB_WHEELS + 1];
-		m_players[i]->getCar()->getCar().getRigidDynamicActor()->getShapes(tempBuffer, m_players[i]->getCar()->getCar().getRigidDynamicActor()->getNbShapes());
-
-		PxVec3 test = m_players[i]->getCar()->getCar().getRigidDynamicActor()->getGlobalPose().q.getBasisVector1();
-
-		if (test.y < 0.9 && gIsVehicleInAir)
-		{
-			//cout << "PITCH ME" << endl;
-			m_players[i]->getCar()->getCar().getRigidDynamicActor()->setAngularVelocity(m_players[i]->getCar()->getCar().getRigidDynamicActor()->getAngularVelocity() + PxVec3(-0.01, 0, 0));
-
+			m_players[i]->getCar()->setIsInAir(m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]));
 		}
-	}
 
 	m_scene->simulate(dt);
 	m_scene->fetchResults(true);
-	
-
 }
 }
 
@@ -248,6 +233,7 @@ void GameSimulation::simulatePlayers(double dt)
 	}
 
 	for (unsigned int i = 0; i < m_aiPlayers.size(); i++) {
+		m_aiPlayers[i]->processPowerups();
 		m_aiPlayers[i]->processFire(&m_players);
 	}
 
@@ -270,9 +256,9 @@ void GameSimulation::initialize() {
 void GameSimulation::createPhysicsScene()
 {
 	PxSceneDesc sceneDesc(PhysicsManager::getScale());
-	sceneDesc.gravity = PxVec3(0.0f, -18.0f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -30.0f, 0.0f);
 
-	manager = new CollisionManager(*m_world);
+	manager = new CollisionManager(*m_world, m_audioHandle);
 	sceneDesc.simulationEventCallback = manager;
 	sceneDesc.filterCallback = manager;
 	sceneDesc.cpuDispatcher = &PhysicsManager::getCpuDispatcher();
@@ -296,7 +282,7 @@ void GameSimulation::createPhysicsScene()
 
 
 	PxMaterial* mMaterial;
-	mMaterial = PhysicsManager::getPhysicsInstance().createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
+	mMaterial = PhysicsManager::createMaterial(0, 0, 0.1f);    //static friction, dynamic friction, restitution
 
 	//Create the batched scene queries for the suspension raycasts.
 	gVehicleSceneQueryData = VehicleSceneQueryData::allocate(NUM_OF_PLAYERS, PX_MAX_NB_WHEELS, NUM_OF_PLAYERS, *PhysicsManager::getAllocator());
@@ -310,7 +296,8 @@ void GameSimulation::processInput() {
 	//check for pause button
 	for (int i = 0; i < m_humanPlayers.size(); i++)
 	{
-		if (m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
+		//no pausing in the first 3 seconds
+		if (m_sceneGameTimeSeconds > 3 && m_humanPlayers[i]->getGamePad() != NULL && m_humanPlayers[i]->getGamePad()->isPressed(GamePad::StartButton))
 		{
 			newMessage.setTag(SceneMessage::ePause);
 			std::vector<ControllableTemplate *> playerTemplates;
@@ -323,11 +310,11 @@ void GameSimulation::processInput() {
 			playerTemplates.push_back(new ControllableTemplate(m_humanPlayers[i]->getGamePad()));
 			newMessage.setPlayerTemplates(playerTemplates);
 		}
-	}
 
-	if (m_humanPlayers[0]->getGamePad() != NULL && (m_humanPlayers[0]->getGamePad()->isPressed(GamePad::DPadLeft) || m_humanPlayers[0]->getGamePad()->isPressed(GamePad::DPadRight))) {
+		if (m_humanPlayers[i]->getGamePad() != NULL && (m_humanPlayers[i]->getGamePad()->isPressed(GamePad::DPadLeft) || m_humanPlayers[i]->getGamePad()->isPressed(GamePad::DPadRight))) {
 		musicManager->changeSong();
 	}
+}
 }
 
 bool GameSimulation::simulateScene(double dt, SceneMessage &message)
@@ -337,6 +324,11 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 	m_sceneGameTimeSeconds += dt;
 	if (m_sceneGameTimeSeconds > 3 && m_controlsPaused) {
 		pauseControls(false);
+
+		//make everyone invincible for 3 seconds
+		for (int i = 0; i < m_players.size(); i++) {
+			m_players.at(i)->getCar()->setInvincibility(2.5f);
+	}
 	}
 	if (m_sceneGameTimeSeconds < 4 )
 	{
@@ -386,7 +378,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 				{
 					for (int j = 0; j < m_humanPlayers.size(); j++) {
 						if (m_players[i]->getCar() != m_humanPlayers[j]->getCar())
-							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("You Better Hurry...", 2);
+							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("You have 30 seconds to finish!", 2);
 					else 
 							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("First Across... Like a Boss", 2);
 					}
@@ -395,8 +387,15 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 				else if (RACE_FINISH_DELAY - m_raceFinishedCountdownSeconds >= 2)
 				{
 					for (int j = 0; j < m_humanPlayers.size(); j++) {
+						if ((int)m_raceFinishedCountdownSeconds % 10 == 0 && (int)m_raceFinishedCountdownSeconds) {
+							std::stringstream ss;
+							ss << (int)m_raceFinishedCountdownSeconds << " seconds left!";
+							m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage(ss.str(), 1);
+						}
+						else if (m_raceFinishedCountdownSeconds <= 5) {
 						m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage(std::to_string((int)m_raceFinishedCountdownSeconds), 1);
 					}
+				}
 				}
 				if (!m_players[i]->getCar()->isFinishedRace())
 				{
@@ -409,8 +408,8 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 		}
 
 		if (m_raceFinishedCountdownSeconds) {
-			//have all players crossed the finish line or count down done?
-			if (m_numPlayersFinishedRace == m_players.size() || (m_raceFinishedCountdownSeconds -= dt) <= 0)
+			//have first 3 players crossed the finish line or count down done?
+			if (m_numPlayersFinishedRace == m_players.size() || m_numPlayersFinishedRace == 3 || (m_raceFinishedCountdownSeconds -= dt) <= 0)
 			{
 				m_raceFinished = true;
 				//m_displayMessage->initializeMessage("FINISHED", 3);
@@ -500,17 +499,17 @@ void GameSimulation::setupPowerups() {
 	PxGeometry **powerGeom = new PxGeometry*[1];
 	powerGeom[0] = new PxBoxGeometry(PxVec3(4.5, 4.5, 1.5));
 
-	pos = new PxTransform(0, 6, 20);
+	pos = new PxTransform(-25, 6, 30);
 	PowerUp * powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
 	delete pos;
 
-	pos = new PxTransform(-15, 6, 20);
+	pos = new PxTransform(0, 6, 30);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
 	delete pos;
 
-	pos = new PxTransform(15, 6, 20);
+	pos = new PxTransform(25, 6, 30);
 	powerup = static_cast<PowerUp *>(m_gameFactory->makeObject(GameFactory::OBJECT_POWERUP, pos, powerGeom, NULL));
 	powerup->setActiveType(2);
 	delete pos;
@@ -519,25 +518,40 @@ void GameSimulation::setupPowerups() {
 	//now setup all other powerup locations
 	std::vector<PxTransform *> powerupLocations;
 	//sand
-	powerupLocations.push_back(new PxTransform(61, 6, 494));
-	powerupLocations.push_back(new PxTransform(86, 6, 504));
-	powerupLocations.push_back(new PxTransform(111, 6, 514));
+	powerupLocations.push_back(new PxTransform(-9, 6, 606));
+	powerupLocations.push_back(new PxTransform(-40,31, 450));
+	powerupLocations.push_back(new PxTransform(-8.75, 26, 1050));
 
 	//caves
-	powerupLocations.push_back(new PxTransform(-34, 6, 1406));
-	powerupLocations.push_back(new PxTransform(1, 6, 1410));
-	powerupLocations.push_back(new PxTransform(36, 6, 1415));
+	powerupLocations.push_back(new PxTransform(14.5, 6, 1502.5));
+	powerupLocations.push_back(new PxTransform(-19.375, 6, 1507.5));
+	powerupLocations.push_back(new PxTransform(-250, 6, 1550));
+	powerupLocations.push_back(new PxTransform(-600, 16, 1600));
+	powerupLocations.push_back(new PxTransform(-650, 9, 1500));
 
 	//first tunnel
-	powerupLocations.push_back(new PxTransform(-454, 6, 841));
-	powerupLocations.push_back(new PxTransform(-452, 6, 635));
+	powerupLocations.push_back(new PxTransform(-960, -24, 1350));
+	powerupLocations.push_back(new PxTransform(-964, -24, 950));
+
+	//middle tunnel 
+	powerupLocations.push_back(new PxTransform(-862, -24, 775));
+	powerupLocations.push_back(new PxTransform(-862, -24, 745));
 
 	//second tunnel
-	powerupLocations.push_back(new PxTransform(-589, 6, -19));
+	powerupLocations.push_back(new PxTransform(-762, -24, 525));
+	powerupLocations.push_back(new PxTransform(-762, -24, 394));
 
-	//before finish line
-	powerupLocations.push_back(new PxTransform(-279, 6, -201));
-	powerupLocations.push_back(new PxTransform(-279, 6, -160));
+	//before circle
+	//powerupLocations.push_back(new PxTransform(-543, 6, -87.5));
+	//powerupLocations.push_back(new PxTransform(-543, 6, -122.5));
+
+	//circle 
+	powerupLocations.push_back(new PxTransform(-378, 6, 21.5));
+	powerupLocations.push_back(new PxTransform(-378, 6, -231.5));
+
+	//after circle
+	//powerupLocations.push_back(new PxTransform(-210, 6, -87.5));
+	//powerupLocations.push_back(new PxTransform(-219, 6, -122.5));
 
 	srand(time(NULL));
 	for (PxTransform *t : powerupLocations) {
@@ -552,16 +566,17 @@ void GameSimulation::setupPowerups() {
 
 void GameSimulation::setupTrains() {
 	PxGeometry **trainGeom = new PxGeometry*[1];
-	trainGeom[0] = new PxBoxGeometry(PxVec3(6, 5, 50));
-	PxTransform *pos = new PxTransform(-450, 0, 360);
-	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
+	trainGeom[0] = new PxBoxGeometry(PxVec3(10, 10, 50));
+	PxTransform *pos = new PxTransform(-960, -30, 665);
+	static_cast<TrainCar*>(m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL))->setTravelDistance(1200);
+	
 	delete trainGeom[0];
 	delete[] trainGeom;
 	delete pos;
 
 	trainGeom = new PxGeometry*[1];
-	trainGeom[0] = new PxBoxGeometry(PxVec3(6, 5, 50));
-	pos = new PxTransform(-579, 0, -260.85);
+	trainGeom[0] = new PxBoxGeometry(PxVec3(10, 10, 50));
+	pos = new PxTransform(-765, -30, 125);
 	m_gameFactory->makeObject(GameFactory::OBJECT_TRAIN_CAR, pos, trainGeom, NULL);
 	delete pos;
 	delete trainGeom[0];
@@ -570,12 +585,60 @@ void GameSimulation::setupTrains() {
 
 void GameSimulation::setupDeathPit() {
 	PxGeometry **deathPitGeom = new PxGeometry*[1];
-	deathPitGeom[0] = new PxBoxGeometry(PxVec3(400, 5, 70));
-	PxTransform *pos = new PxTransform(-275, -40, 1500);
-	m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL);
+
+	//first death pit
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 10, 45));
+	PxTransform *pos = new PxTransform(15, -20, 445);
+	DeathPit *pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit->setRespawnLocation(pos->p + PxVec3(0, 21, 465));
+	pit->getRenderable()->setModel(NULL);
+
+	//second death pit
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 10, 60));
+	pos = new PxTransform(-25, -20, 765);
+	pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit->setRespawnLocation(pos->p + PxVec3(0, 21, 465));
+	pit->getRenderable()->setModel(NULL);
+
+	//green death pit
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(350, 5, 200));
+	pos = new PxTransform(-713, -40, 1560);
+	pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit->getRenderable()->setModel(NULL);
+
+	//ramp at tunnel
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(30, 5, 20));
+	pos = new PxTransform(-730, -30, 180);
+	pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit->getRenderable()->setModel(NULL);
+
+	//death pit below the map
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(5000, 10, 5000));
+	pos = new PxTransform(0, -50, 0);
+	pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
+	pit->getRenderable()->setModel(NULL);
+
+
 	delete pos;
 	delete deathPitGeom[0];
 	delete[] deathPitGeom;
+
+	PxGeometry ** gooMonsterGeom = new PxGeometry*[1];
+	gooMonsterGeom[0] = new PxBoxGeometry(10,20,25);
+	pos = new PxTransform(-700, -40, 1555);
+	GooMonster * monster = static_cast<GooMonster *>(m_gameFactory->makeObject(GameFactory::OBJECT_GOO_MONSTER, pos, gooMonsterGeom, NULL));
+	monster->setPlayers(m_players);
+	monster->setSpawnVelocity(PxVec3(0, 55,-30));
+
+	gooMonsterGeom[0] = new PxBoxGeometry(10, 20, 25);
+	pos = new PxTransform(-600, -40, 1565);
+	monster = static_cast<GooMonster *>(m_gameFactory->makeObject(GameFactory::OBJECT_GOO_MONSTER, pos, gooMonsterGeom, NULL));
+	monster->setPlayers(m_players);
+	monster->setSpawnVelocity(PxVec3(0, 55, 20));
+
+	delete pos;
+	delete gooMonsterGeom[0];
+	delete[] gooMonsterGeom;
 }
 
 void GameSimulation::setupBasicGameWorldObjects() {
@@ -619,6 +682,16 @@ int GameSimulation::getFirstPlace()
 
 }
 
+
+void GameSimulation::onPause() {
+	m_audioHandle.clearListeners();
+}
+
+void GameSimulation::onResume() {
+	for (PlayerControllable *p : m_humanPlayers) {
+		m_audioHandle.assignListener(p->getCar());
+	}
+}
 void GameSimulation::setupSceneLights() {
 	{
 		Animatable *anable = new Animatable();

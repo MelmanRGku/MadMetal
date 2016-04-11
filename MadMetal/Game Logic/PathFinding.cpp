@@ -3,8 +3,8 @@
 #include "Objects\Waypoint.h"
 
 static const float BIG_VALUE = 999999999.9;
-static const float ADDED_G_VALUE_DIAGONAL = 14.14213;
-static const float ADDED_G_VALUE_NORMAL = 10.0;
+static const float ADDED_G_VALUE_DIAGONAL = 140.14213;
+static const float ADDED_G_VALUE_NORMAL = 130.0;
 
 PathFinding::PathFinding()
 {
@@ -155,6 +155,7 @@ void PathFinding::continuePath()
 {
 	if (m_openList.empty())
 	{
+		std::cout << "Could Not find path between waypoints" << std::endl;
 		return;
 	}
 
@@ -180,17 +181,17 @@ void PathFinding::continuePath()
 		for (int i = 0; i < currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().size(); i++)
 		{
 			// Not Diagonal 
-			if (fabs(currentWaypoint->getWaypoint().getGlobalPose().x - currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)->getGlobalPose().x) == 0 ||
-				fabs(currentWaypoint->getWaypoint().getGlobalPose().z - currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)->getGlobalPose().z) == 0)
+			if (fabs(currentWaypoint->getWaypoint().getGlobalPose().x - currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)->getGlobalPose().x) < 10 ||
+				fabs(currentWaypoint->getWaypoint().getGlobalPose().z - currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)->getGlobalPose().z) < 10)
 			{
 				pathOpened(*(currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)),
-					currentWaypoint->getG() + ADDED_G_VALUE_NORMAL,
+					currentWaypoint->getG() + ADDED_G_VALUE_NORMAL + glm::distance2(currentWaypoint->getWaypoint().getGlobalPose(), currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)->getGlobalPose()),
 					currentWaypoint);
 			}
 			else
 			{
 				pathOpened(*(currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)),
-					currentWaypoint->getG() + ADDED_G_VALUE_DIAGONAL,
+					currentWaypoint->getG() + ADDED_G_VALUE_DIAGONAL + glm::distance2(currentWaypoint->getWaypoint().getGlobalPose(), currentWaypoint->getWaypoint().getListOfAdjacentWaypoints().at(i)->getGlobalPose()),
 					currentWaypoint);
 			}
 		}

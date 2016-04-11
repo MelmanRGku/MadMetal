@@ -1,0 +1,92 @@
+#
+#
+#
+
+newmtl  Mesh_Material
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078430
+map_Kd desert_1.jpg
+
+newmtl  Mesh_Material_desert_groun2.jpg
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078430
+map_Kd desert_groun2.jpg
+
+newmtl  Mesh_Material_dirt_road_1.jpg
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078430
+map_Kd dirt_road_1.jpg
+
+newmtl  Mesh_Material_dirt_road_2.jpg
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078430
+map_Kd dirt_road_2.jpg
+
+newmtl  Mesh_Material_rail_road_tracks.png
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078430
+map_Kd rail_road_tracks.png
+
+newmtl  Mesh_Material_road3.jpg
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078430
+map_Kd road3.jpg
+
+newmtl  Mesh_Material_road_1.jpg
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078430
+map_Kd road_1.jpg
+
+newmtl  Mesh_Material_road_3.jpg
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078430
+map_Kd road_3.jpg
+
+newmtl  Mesh_Material_road_5.jpg
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078430
+map_Kd road_5.jpg
+
+newmtl  Mesh_Material_road_7.jpg
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078430
+map_Kd road_7.jpg
+
+newmtl  Mesh_Material_wooden_board.jpg
+illum 2
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078430
+map_Kd wooden_board.jpg
+

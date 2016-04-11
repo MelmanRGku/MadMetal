@@ -4,6 +4,7 @@
 #include <sstream>
 #include "Objects\Waypoint.h"
 #include "Objects\CollisionVolume.h"
+#include "Objects\AnimatedSmoke.h"
 
 int Car::positionGlobalID = 0;
 
@@ -14,6 +15,7 @@ void Car::resetGlobalPositionID()
 
 Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL), m_car(car), m_drivingStyle(style)
 {
+	brakeChannelNumber = -1;
 	m_currentWaypoint = NULL;
 	m_isAtMidCollisionVolume = false;
 	m_isAtStartingCollisionVolume = false;
@@ -23,6 +25,7 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 	Car::positionGlobalID++;
 	m_positionInRace = positionGlobalID;
 	m_waypointHitList.clear();
+	m_invincibilityTimeRemaining = 0;
 }
 
 
@@ -39,23 +42,26 @@ DrivingStyle& Car::getDrivingStyle()
 
 void Car::respawn()
 {
-	//std::cout << "Respawned? \n";
+	//if the car is alive and it respawned recently
+	//if (m_timeSinceRespawn <= 3 && m_currentHealth > 0)
+	//	return;
+
+	//if player is not alive
+	if (m_currentHealth <= 0) {
 	m_currentHealth = m_maxHealth;
+		m_invincibilityTimeRemaining = 3;
+	}
+	m_timeSinceRespawn = 0;
 	
 	if (m_lastCollisionVolume != NULL)
 	{
-		
-		
-		m_car.getRigidDynamicActor()->setGlobalPose(m_lastCollisionVolume->getActor().getGlobalPose());
+		m_car.getRigidDynamicActor()->setGlobalPose(m_lastCollisionVolume->getRespawnLocation());
 		
 	}
 	else {
-		//std::cout << "Invalid Waypoint Respawn" << std::endl;
-		PxTransform currentPosition = m_car.getRigidDynamicActor()->getGlobalPose();
-		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(currentPosition.p.x, 5, currentPosition.p.z)));
+		
+		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(0, 5, 0)));
 	}
-
-	//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(PxVec3(0, 5, 0)));
 
 	m_car.getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 0, 0));
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0));
@@ -78,23 +84,27 @@ PowerUpType Car::getActivePowerUpType()
 	return m_activePowerUp;
 }
 
+PowerUpType Car::getHeldPowerUp() {
+	return m_heldPowerUp;
+}
+
 void Car::pickUpPowerUp(PowerUpType type)
 {
 	if (m_heldPowerUp == PowerUpType::NONE)
 	{
-		std::cout << "Picked up Power up " << type << std::endl;
 		m_heldPowerUp = type;
 		if (ui != NULL)
 		{
 			ui->setPowerup(type);
 		}
+		m_audioable->getAudioHandle().queAudioSource(&getActor(), PowerupPickupSound());
 	}
 	
 }
 
 void Car::usePowerUp()
 {
-	if (m_heldPowerUp != PowerUpType::NONE)
+	if (m_heldPowerUp != PowerUpType::NONE && m_activePowerUp == PowerUpType::NONE)
 	{
 		if (ui != NULL)
 		{
@@ -115,17 +125,19 @@ void Car::usePowerUp()
 			geom[0] = new PxSphereGeometry(.1);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_ATTACK_POWERUP, &PxTransform(PxVec3(pos.x, pos.y, pos.x)), geom, this);
 			delete geom[0];
+			m_audioable->getAudioHandle().queAudioSource(&getActor(), RegenSound());
 			break;
 		case (PowerUpType::DEFENSE) :
 			
-			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
+			geom[0] = new PxBoxGeometry(dim.x, dim.y / 2, dim.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SHIELD_POWERUP, &PxTransform(PxVec3(pos.x,pos.y,pos.x)), geom, this);
 			delete geom[0];
+			m_audioable->getAudioHandle().queAudioSource(&getActor(), ShieldPowerupSound());
 			break;
 		case (PowerUpType::SPEED) :
 			//add particle system
 			
-			geom[0] = new PxBoxGeometry(dim.x, dim.y, dim.z);
+			geom[0] = new PxBoxGeometry(dim.x, dim.y / 2, dim.z);
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_SPEED_POWERUP, &PxTransform(PxVec3(getGlobalPose().p)), geom, this);
 			PxRigidDynamic* actor = static_cast<PxRigidDynamic*>(&getActor());
 			glm::vec3 direction = glm::normalize(getForwardVector());
@@ -136,6 +148,7 @@ void Car::usePowerUp()
 			actor->setAngularVelocity(PxVec3(0, 0, 0));
 			actor->addForce(PxVec3(direction.x, direction.y, direction.z), PxForceMode::eIMPULSE);
 			delete geom[0];
+			m_audioable->getAudioHandle().queAudioSource(&getActor(), CarAccelerationSound());
 			break;
 
 		}
@@ -146,12 +159,24 @@ void Car::usePowerUp()
 
 }
 
+bool Car::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
+	if (m_invincibilityTimeRemaining <= 0 || std::fmod(m_invincibilityTimeRemaining, (INVINICIBILITY_FLASH_PERIOD * 2)) < INVINICIBILITY_FLASH_PERIOD) {
+		return Object3D::draw(renderer, type, passNumber);
+	}
+	else return false;
+}
 
-void Car::takeDamage(float damage)
+bool Car::takeDamage(float damage, bool applyAnyway)
 {
+	if (m_invincibilityTimeRemaining <= 0 || applyAnyway) {
 	m_currentHealth -= damage;
 	if (m_currentHealth > m_maxHealth)
 		m_currentHealth = m_maxHealth;
+		m_timeSinceLastTimeHit = 0;
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -173,7 +198,7 @@ void Car::updatePowerUp(float dt)
 		else {
 			if (m_activePowerUp == PowerUpType::SPEED)
 			{
-				std::cout << "Speed: " << getCar().computeForwardSpeed() << std::endl;
+				//std::cout << "Speed: " << getCar().computeForwardSpeed() << std::endl;
 			}
 		}
 	}
@@ -219,25 +244,96 @@ void Car::updateHealth(float dtMillis)
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSION_1, &getCar().getRigidDynamicActor()->getGlobalPose(), explosionGeom, NULL);
 			delete explosionGeom[0];
 			delete[] explosionGeom;
+			m_audioable->getAudioHandle().queAudioSource(getCar().getRigidDynamicActor(), CarExplodeSound(), 2);
 		}
 		m_superDurationRemainingSeconds = 0.1;
 	}
 	
 }
 
-void Car::update(float dt) {
+void Car::updateOrientation(float dt)
+{
+
+
+	
 	float angle;
 	PxVec3 axis;
 	m_car.getRigidDynamicActor()->getGlobalPose().q.toRadiansAndUnitAxis(angle, axis);
-	//std::cout << angle << "  :  " << axis.x << "," << axis.y << "," << axis.z << std::endl;
-	if (abs(axis.y) != 0)
+	//m_car.getRigidDynamicActor()->setAngularDamping(5);
+	//m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, PxQuat(0, axis)));
+	if (axis.y != 0)
 		m_car.getRigidDynamicActor()->setGlobalPose(PxTransform(m_car.getRigidDynamicActor()->getGlobalPose().p, PxQuat(angle, PxVec3(0, abs(axis.y) / axis.y, 0))));
 	PxVec3 angVel = m_car.getRigidDynamicActor()->getAngularVelocity();
+	if (m_isInAir)
+		m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, 0, 0), true);
+	else
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, angVel.y, 0), true);
 	
+
+	m_shadow->getActor().setGlobalPose(PxTransform(getActor().getGlobalPose().p + PxVec3(0, lastKnownDistanceBetweenCarAndShadow, 0), getActor().getGlobalPose().q));
+
+	PxVec3 extraOffset = PxVec3(0, 0, 0);
+	bool groundFound = false;
+	PxRaycastBuffer hit;
+	PxQueryFilterData fd = PxQueryFilterData(PxQueryFlag::eSTATIC);
+	do {
+		GameFactory::instance()->sceneRayCast(m_car.getRigidDynamicActor()->getGlobalPose().p + extraOffset, PxVec3(0, -1, 0), 500, hit, PxHitFlag::eDEFAULT, fd);
+		if (hit.hasBlock)
+		{
+			PxShape * shapes[1];
+			hit.block.actor->getShapes(shapes, 1);
+			if (shapes[0]->getSimulationFilterData().word0 == COLLISION_FLAG_GROUND)
+			{
+				lastKnownDistanceBetweenCarAndShadow = extraOffset.y - hit.block.distance;
+				groundFound = true;
+			}
+			else {
+				extraOffset += PxVec3(0, -hit.block.distance - 0.1f, 0);
+			}
+		}
+		else {
+			if (extraOffset.y != 0)
+				lastKnownDistanceBetweenCarAndShadow = extraOffset.y;
+			groundFound = true;
+		}
+	} while (!groundFound);
 	
+}
+
+#define TIME_BETWEEN_SMOKES 0.2f
+void Car::createSmoke(float dt) {
+	m_smokeCounterTime += dt;
+	if (m_smokeCounterTime > TIME_BETWEEN_SMOKES) {
+		PxGeometry **smokeGeom = new PxGeometry*[1];
+		smokeGeom[0] = new PxSphereGeometry(2);
+		float actorSpeed = getCar().computeForwardSpeed();
+		PxVec3 forwardVector = PxVec3(getForwardVector().x, getForwardVector().y, getForwardVector().z);
+		PxVec3 pos = getActor().getGlobalPose().p - forwardVector * std::max(getActor().getWorldBounds().getDimensions().x, getActor().getWorldBounds().getDimensions().z) / 2;
+		//randomize y pos
+		pos.y = pos.y + ((float(rand()) / float(RAND_MAX)) - .25f) * getActor().getWorldBounds().getDimensions().x;
+		PxTransform t = PxTransform(pos, getActor().getGlobalPose().q);
+		AnimatedSmoke *smoke = static_cast<AnimatedSmoke *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_SMOKE_1, &t, smokeGeom, this));
+#undef min
+		static_cast<PxRigidDynamic*>(&smoke->getActor())->setLinearVelocity(((actorSpeed > 0) ? std::max(0.f, actorSpeed - 5.f) : std::min(0.f, actorSpeed + 5.f)) * forwardVector);
+		delete smokeGeom[0];
+		delete[] smokeGeom;
+		m_smokeCounterTime = 0;
+	}
+}
+
+void Car::update(float dt) {
+	Object3D::update(dt);
+	m_invincibilityTimeRemaining -= dt;
 	updateHealth(dt);
+	if (m_currentHealth > 0)
+		updateOrientation(dt);
+
+	if (m_currentHealth > 0 && m_currentHealth <= 35)
+		createSmoke(dt);
+
 	m_reloadRemainingSeconds -= dt;
+	m_timeSinceLastTimeHit += dt;
+	m_timeSinceRespawn += dt;
 	updateSuper(dt);
 	updatePowerUp(dt);
 	if (ui != NULL) {
@@ -253,7 +349,7 @@ void Car::update(float dt) {
 	}
 }
 
-void Car::addDamageDealt(float damage) {
+void Car::addDamageDealt(float damage, bool addToSuper) {
 	m_damageDealt += damage;
 	m_score += damage;
 	
@@ -264,7 +360,7 @@ void Car::addDamageDealt(float damage) {
 		if (m_currentHealth > m_maxHealth) m_currentHealth = m_maxHealth;
 	}
 	
-	if (m_superDurationRemainingSeconds <= 0) {
+	if (m_superDurationRemainingSeconds <= 0 && addToSuper) {
 		m_superGauge += damage / 100;
 	}
 }
@@ -272,7 +368,6 @@ void Car::addDamageDealt(float damage) {
 
 bool Car::setCurrentWaypoint(Waypoint* waypoint)
 {
-	//std::cout << "current waypoint is " << waypoint->getIndex() << "\n";
 	if (waypoint != m_currentWaypoint) {
 		m_lastWayPoint = m_currentWaypoint;
 	m_currentWaypoint = waypoint;
@@ -287,9 +382,13 @@ Waypoint* Car::getLastWaypoint()
 	return m_lastWayPoint;
 }
 
+void Car::setLastWaypoint(Waypoint* waypoint)
+{
+	m_lastWayPoint = waypoint;
+}
+
 Waypoint* Car::getCurrentWaypoint()
 {
-	//if (m_currentWaypoint!=NULL)
 	return m_currentWaypoint;
 }
 
@@ -368,4 +467,44 @@ void Car::setLastHitCollisionVolume(CollisionVolume* collisionVolume)
 CollisionVolume* Car::getLastHitCollisionVolume()
 {
 	return m_lastCollisionVolume;
+}
+
+
+bool Car::isInvincible() {
+	return m_invincibilityTimeRemaining > 0;
+}
+
+float Car::getInvinsibilityTimeRemaining() {
+	return m_invincibilityTimeRemaining;
+}
+
+void Car::setInvincibility(float time) {
+	m_invincibilityTimeRemaining = time;
+}
+
+float Car::getTimeSinceLastTimeHit() {
+	return m_timeSinceLastTimeHit;
+}
+
+void Car::setShadow(Object3D *shadow) {
+	m_shadow = shadow;
+}
+
+void Car::onBrake() {
+	if (std::abs(getCar().computeForwardSpeed()) < 5.f || m_isInAir)
+		return;
+
+	if (brakeChannelNumber != -1 && brakeStartTime + BRAKE_SOUND_DURATION >= totalLifeTime) {
+		m_audioable->getAudioHandle().stopSource(brakeChannelNumber);
+	}
+
+	m_audioable->getAudioHandle().queAudioSource(&m_physicable->getActor(), CarBrakeSound(), .4f, false, 0, &brakeChannelNumber);
+	brakeStartTime = totalLifeTime;
+}
+
+void Car::onUnbrake() {
+	if (brakeChannelNumber != -1 && brakeStartTime + BRAKE_SOUND_DURATION >= totalLifeTime) {
+		m_audioable->getAudioHandle().stopSource(brakeChannelNumber);
+		brakeChannelNumber = -1;
+	}
 }

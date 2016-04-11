@@ -89,72 +89,72 @@ void MeowMix::unuseSuper() {
 
 bool MeowMix::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber)
 {
-	if (type == Renderer::ShaderType::SHADER_TYPE_CELLTIRE || passNumber > 1)
-	{
-		if (type != Renderer::ShaderType::SHADER_TYPE_CELLTIRE || passNumber > 1)
-			return false;
+	if (m_invincibilityTimeRemaining <= 0 || std::fmod(m_invincibilityTimeRemaining, (INVINICIBILITY_FLASH_PERIOD * 2)) < INVINICIBILITY_FLASH_PERIOD) {
+		if (type == Renderer::ShaderType::SHADER_TYPE_CELLTIRE && passNumber == 1)
+		{
 
-		if (rableWheel->getModel() == NULL)
-			return false;
+			if (rableWheel->getModel() == NULL)
+				return false;
 
-		std::vector<Mesh *> *meshes = static_cast<Model3D *>(rableWheel->getModel())->getMeshes();
+			std::vector<Mesh *> *meshes = static_cast<Model3D *>(rableWheel->getModel())->getMeshes();
 
-		glm::mat4x4 modelMatrix = getModelMatrix();
+			glm::mat4x4 modelMatrix = getModelMatrix();
 
-		CellTireShaderProgram *program = static_cast<CellTireShaderProgram *>(renderer->getShaderProgram(Renderer::ShaderType::SHADER_TYPE_CELLTIRE));
+			CellTireShaderProgram *program = static_cast<CellTireShaderProgram *>(renderer->getShaderProgram(Renderer::ShaderType::SHADER_TYPE_CELLTIRE));
 
-		glUniform1f(program->distanceTraveledUniform, distanceTraveled);
+			glUniform1f(program->distanceTraveledUniform, distanceTraveled);
 
-		glUniform1i(program->textureUniform, 0);
-		glUniformMatrix4fv(program->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
-		for (unsigned int i = 0; i < meshes->size(); i++) {
-			Mesh *mesh = meshes->at(i);
-			if (mesh->hasTexture()) {
-				mesh->getTexture()->Bind(GL_TEXTURE0);
-				glUniform1i(program->textureValidUniform, true);
+			glUniform1i(program->textureUniform, 0);
+			glUniformMatrix4fv(program->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
+			for (unsigned int i = 0; i < meshes->size(); i++) {
+				Mesh *mesh = meshes->at(i);
+				if (mesh->hasTexture()) {
+					mesh->getTexture()->Bind(GL_TEXTURE0);
+					glUniform1i(program->textureValidUniform, true);
+				}
+				else {
+					glUniform1i(program->textureValidUniform, false);
+				}
+				// Draw mesh
+				glBindVertexArray(mesh->getVAO());
+				glDrawElements(GL_TRIANGLES, mesh->getIndices()->size(), GL_UNSIGNED_INT, 0);
+				glBindVertexArray(0);
+				if (mesh->hasTexture()) {
+					mesh->getTexture()->unBind(GL_TEXTURE0);
+				}
 			}
-			else {
-				glUniform1i(program->textureValidUniform, false);
-			}
-			// Draw mesh
-			glBindVertexArray(mesh->getVAO());
-			glDrawElements(GL_TRIANGLES, mesh->getIndices()->size(), GL_UNSIGNED_INT, 0);
-			//glDrawArrays(GL_TRIANGLES, 0, mesh->getVertices()->size());
-			glBindVertexArray(0);
-			if (mesh->hasTexture()) {
-				mesh->getTexture()->unBind(GL_TEXTURE0);
+
+		}
+		else if (type == Renderer::ShaderType::SHADER_TYPE_CELL && passNumber == 1)
+		{
+
+			std::vector<Mesh *> *meshes = static_cast<Model3D *>(m_renderable->getModel())->getMeshes();
+			CellShaderProgram *program = static_cast<CellShaderProgram *>(renderer->getShaderProgram(Renderer::ShaderType::SHADER_TYPE_CELL));
+			glUniform1i(program->textureUniform, 0);
+
+			glm::mat4x4 modelMatrix = getModelMatrix();
+
+			glUniformMatrix4fv(program->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
+			for (unsigned int i = 0; i < meshes->size(); i++) {
+				Mesh *mesh = meshes->at(i);
+				if (mesh->hasTexture()) {
+					mesh->getTexture()->Bind(GL_TEXTURE0);
+					glUniform1i(program->textureValidUniform, true);
+				}
+				else {
+					glUniform1i(program->textureValidUniform, false);
+				}
+				// Draw mesh
+				glBindVertexArray(mesh->getVAO());
+				glDrawElements(GL_TRIANGLES, mesh->getIndices()->size(), GL_UNSIGNED_INT, 0);
+				glBindVertexArray(0);
+				if (mesh->hasTexture()) {
+					mesh->getTexture()->unBind(GL_TEXTURE0);
+				}
 			}
 		}
-
+		return false;
 	}
-	else if (type == Renderer::ShaderType::SHADER_TYPE_CELL || passNumber > 1)
-	{
-
-		std::vector<Mesh *> *meshes = static_cast<Model3D *>(m_renderable->getModel())->getMeshes();
-		CellShaderProgram *program = static_cast<CellShaderProgram *>(renderer->getShaderProgram(Renderer::ShaderType::SHADER_TYPE_CELL));
-		glUniform1i(program->textureUniform, 0);
-
-		glm::mat4x4 modelMatrix = getModelMatrix();
-
-		glUniformMatrix4fv(program->modelMatrixUniform, 1, false, &modelMatrix[0][0]);
-		for (unsigned int i = 0; i < meshes->size(); i++) {
-			Mesh *mesh = meshes->at(i);
-			if (mesh->hasTexture()) {
-				mesh->getTexture()->Bind(GL_TEXTURE0);
-				glUniform1i(program->textureValidUniform, true);
-			}
-			else {
-				glUniform1i(program->textureValidUniform, false);
-			}
-			// Draw mesh
-			glBindVertexArray(mesh->getVAO());
-			glDrawElements(GL_TRIANGLES, mesh->getIndices()->size(), GL_UNSIGNED_INT, 0);
-			//glDrawArrays(GL_TRIANGLES, 0, mesh->getVertices()->size());
-			glBindVertexArray(0);
-			if (mesh->hasTexture()) {
-				mesh->getTexture()->unBind(GL_TEXTURE0);
-			}
-		}
-	}
+ else 
 	return false;
 }

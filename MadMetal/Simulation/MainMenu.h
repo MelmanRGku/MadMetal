@@ -8,10 +8,12 @@ private:
 	GamePad * m_gamePad;
 	Object3D *singlePlayerButton,
 		*multiPlayerButton,
+		*controlsButton,
 		*exitButton,
 		*background,
 		*selectedButton;
 	SceneMessage::SceneEnum messageToReturn = SceneMessage::eNone;
+	Audio *m_audio;
 
 public:
 	MainMenu(Input * input, Audio *audio);

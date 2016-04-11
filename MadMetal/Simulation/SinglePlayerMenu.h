@@ -20,6 +20,7 @@ private:
 	SceneMessage::SceneEnum messageToReturn = SceneMessage::eNone;
 	TexturedObject2D *aToStart;
 	int numberOfAIs = 4;
+	Audio *m_audio;
 
 public:
 	SinglePlayerMenu(Input * input, Audio *audio);

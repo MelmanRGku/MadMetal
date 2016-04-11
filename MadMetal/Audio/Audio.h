@@ -16,7 +16,7 @@ class Audio
 private:
 	std::vector<Mix_Chunk *> m_chunkLibrary;
 	std::vector<Mix_Music *> m_musicLibrary;
-	Car * m_listener;
+	std::vector<Car *> m_listeners;
 	static bool m_musicPlaying;
 
 
@@ -62,13 +62,13 @@ public:
 			Mix_FreeMusic(m_musicLibrary[i]);
 		}
 		m_musicLibrary.clear();
-		
-		m_listener = NULL;
+
 		Mix_CloseAudio();
 		SDL_Quit();
 	}
 
-	void assignListener(Car* listener) { m_listener = listener; }
+	void assignListener(Car* listener) { m_listeners.push_back(listener); }
+	void clearListeners() { m_listeners.clear(); }
 	void removeListener();
 	void stopSources();
 	void stopSource(int channel);
@@ -76,11 +76,13 @@ public:
 	void resumeSources();
 	void initializeChunkLibrary(char * fileToLoad = "Audio/ChunkLibrary.txt");
 	void initializeMusicLibrary(char * fileToLoad = "Audio/MusicLibrary.txt");
-	void queAudioSource(PxRigidActor * sourcePosition, Sound toPlay, float volumeScalar = 1, bool updatePosition = false, int loopCount = 0);
+	void queAudioSource(PxRigidActor * sourcePosition, Sound toPlay, float volumeScalar = 1, bool updatePosition = false, int loopCount = 0, int *channelToPassBack = NULL);
 //	bool queAudioSource(int sourceID);
 	void update();
 	void playMusic(Sound toPlay, int loopCount = -1);
 	void stopMusic();
+	void setMusicVolume(int value);
+	void resetMusicVolume();
 
 	static void setMusicFinished();
 	static bool getMusicFinished();
@@ -106,7 +108,7 @@ public:
 		
 	}
 
-	bool setAudioPosition(Car * listener);
+	bool setAudioPosition(std::vector<Car *> listeners);
 	bool needsUpdate(){ return m_updatePosition; }
 	void setChannel(int channel)
 	{

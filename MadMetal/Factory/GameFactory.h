@@ -46,7 +46,6 @@
 #include "Objects\AnimatedExplosion.h"
 #include "Objects\TrainCar.h"
 #include "PxQueryReport.h"
-#include "Objects\VehicleSpecificationsMeowMix.h"
 
 class GameFactory
 {
@@ -88,6 +87,7 @@ public:
 		OBJECT_UI_MAP,
 		OBJECT_PARTICLE,
 		OBJECT_EXPLOSION_1,
+		OBJECT_SMOKE_1,
 		OBJECT_TRAIN_CAR,
 		OBJECT_DEATH_PIT,
 		OBJECT_ANIMATION_TEST,
@@ -97,7 +97,10 @@ public:
 		OBJECT_UI_SPEED_POWERUP_ICON,
 		OBJECT_UI_SCORE_TABLE,
 		OBJECT_SKY_BOX,
+		OBJECT_GOO_MONSTER,
 		OBJECT_BOMB_EXPLOSION,
+		OBJECT_BLOB_SHADOW,
+		OBJECT_MEOWMIX_BEAM_CUT,
 		OBJECT_LIGHT,
 		OBJECT_DYNAMIC_LIGHT,
 	};
@@ -107,7 +110,7 @@ public:
 	TestObject * makeObject(Objects objectToMake, PxTransform *pos, PxGeometry **geom, TestObject *parent);
 	World& getWorld() { return m_world; }
 	bool sceneRayCast(PxVec3 origin, PxVec3 direction, PxReal MaxDistance, PxRaycastBuffer &hit, PxHitFlags flag = PxHitFlags(PxHitFlag::eDEFAULT), PxQueryFilterData fd = PxQueryFilterData());
-	bool sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit);
+	bool sceneSweep(PxGeometry sweepShape, PxTransform origin, PxVec3 sweepDirection, float maxDistance, PxSweepBuffer& hit, PxHitFlags	hitFlags = PxHitFlags(PxHitFlag::eDEFAULT),	const PxQueryFilterData &filterData = PxQueryFilterData());
 
 	static long getNextId() { 
 		return ++lastId; 

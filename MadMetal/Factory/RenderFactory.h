@@ -45,7 +45,25 @@ public:
 		RENDERABLE_OBJECT_EXPLOSION1_11,
 		RENDERABLE_OBJECT_EXPLOSION1_12,
 		RENDERABLE_OBJECT_EXPLOSION1_13,
+
+		RENDERABLE_OBJECT_SMOKE_1,
+		RENDERABLE_OBJECT_SMOKE_2,
+		RENDERABLE_OBJECT_SMOKE_3,
+		RENDERABLE_OBJECT_SMOKE_4,
+		RENDERABLE_OBJECT_SMOKE_5,
+		RENDERABLE_OBJECT_SMOKE_6,
+		RENDERABLE_OBJECT_SMOKE_7,
+		RENDERABLE_OBJECT_SMOKE_8,
+		RENDERABLE_OBJECT_SMOKE_9,
+		RENDERABLE_OBJECT_SMOKE_10,
+		RENDERABLE_OBJECT_SMOKE_11,
+		RENDERABLE_OBJECT_SMOKE_12,
+		RENDERABLE_OBJECT_SMOKE_13,
+		RENDERABLE_OBJECT_SMOKE_14,
+
 		RENDERABLE_OBJECT_TRAIN_CAR,
+		RENDERABLE_OBJECT_DEATH_PIT,
+		RENDERABLE_OBJECT_GOO_MONSTER,
 
 		
 		RENDERABLE_OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE,
@@ -92,6 +110,31 @@ public:
 		RENDERABLE_OBJECT_MASKICON,
 		RENDERABLE_OBJECT_BOMBICON,
 		RENDERABLE_OBJECT_CATICON,
+
+		RENDERABLE_OBJECT_GOO_MONSTER_KILLER,
+		RENDERABLE_OBJECT_GOO_MONSTER_PUSHER,
+
+		RENDERABLE_OBJECT_BLOB_SHADOW,
+
+		RENDERABLE_OBJECT_TRACK_WALL_1,
+		RENDERABLE_OBJECT_TRACK_WALL_2,
+		RENDERABLE_OBJECT_TRACK_WALL_3,
+		RENDERABLE_OBJECT_TRACK_WALL_4,
+		RENDERABLE_OBJECT_TRACK_WALL_5,
+		RENDERABLE_OBJECT_TRACK_WALL_6,
+		RENDERABLE_OBJECT_TRACK_WALL_7,
+		RENDERABLE_OBJECT_TRACK_WALL_8,
+		RENDERABLE_OBJECT_TRACK_WALL_9,
+		RENDERABLE_OBJECT_TRACK_WALL_10,
+		RENDERABLE_OBJECT_TRACK_WALL_11,
+		RENDERABLE_OBJECT_TRACK_WALL_12,
+		RENDERABLE_OBJECT_TRACK_WALL_13,
+		RENDERABLE_OBJECT_TRACK_WALL_14,
+		RENDERABLE_OBJECT_TRACK_WALL_15,
+		RENDERABLE_OBJECT_TRACK_WALL_16,
+		RENDERABLE_OBJECT_TRACK_WALL_17,
+
+		RENDERABLE_OBJECT_MEOW_MIX_BEAM_CUT,
 	};
 
 	
@@ -125,11 +168,15 @@ public:
 		case RENDERABLE_OBJECT_BULLET_SUPER_VOLCANO:
 			return Assets::getModel("scareMoon");
 		case RENDERABLE_OBJECT_TRACK_DRIVABLE:
-			return Assets::getModel("trackv2ground");
+			return Assets::getModel("trackv3ground");
 		case RENDERABLE_OBJECT_TRACK_NON_DRIVABLE:
-			return Assets::getModel("trackv2enviro");
+			return Assets::getModel("trackv3enviro");
 		case RENDERABLE_OBJECT_TRACK_WALLS:
-			return Assets::getModel("trackv2walls");
+			return Assets::getModel("trackv3");
+		case RENDERABLE_OBJECT_DEATH_PIT:
+			return Assets::getModel("death_pit");
+		case RENDERABLE_OBJECT_GOO_MONSTER:
+			return Assets::getModel("Gargantulous");
 		case RENDERABLE_OBJECT_BULLET_EXPLOSIVELY_DELICIOUS:
 			return Assets::getModel("explosively_delicious_bullet");
 		case RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER:
@@ -184,6 +231,34 @@ public:
 			return Assets::getModel("explosion1_12");
 		case RENDERABLE_OBJECT_EXPLOSION1_13:
 			return Assets::getModel("explosion1_13");
+		case RENDERABLE_OBJECT_SMOKE_1:
+			return Assets::getModel("smoke_1");
+		case RENDERABLE_OBJECT_SMOKE_2:
+			return Assets::getModel("smoke_2");
+		case RENDERABLE_OBJECT_SMOKE_3:
+			return Assets::getModel("smoke_3");
+		case RENDERABLE_OBJECT_SMOKE_4:
+			return Assets::getModel("smoke_4");
+		case RENDERABLE_OBJECT_SMOKE_5:
+			return Assets::getModel("smoke_5");
+		case RENDERABLE_OBJECT_SMOKE_6:
+			return Assets::getModel("smoke_6");
+		case RENDERABLE_OBJECT_SMOKE_7:
+			return Assets::getModel("smoke_7");
+		case RENDERABLE_OBJECT_SMOKE_8:
+			return Assets::getModel("smoke_8");
+		case RENDERABLE_OBJECT_SMOKE_9:
+			return Assets::getModel("smoke_9");
+		case RENDERABLE_OBJECT_SMOKE_10:
+			return Assets::getModel("smoke_10");
+		case RENDERABLE_OBJECT_SMOKE_11:
+			return Assets::getModel("smoke_11");
+		case RENDERABLE_OBJECT_SMOKE_12:
+			return Assets::getModel("smoke_12");
+		case RENDERABLE_OBJECT_SMOKE_13:
+			return Assets::getModel("smoke_13");
+		case RENDERABLE_OBJECT_SMOKE_14:
+			return Assets::getModel("smoke_14");
 		case RENDERABLE_OBJECT_SKY_BOX:
 			return Assets::getModel("Skybox");
 		case RENDERABLE_OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE:
@@ -237,6 +312,49 @@ public:
 			return new Model2D(Assets::getTexture("Bombcone"));
 		case RENDERABLE_OBJECT_CATICON:
 			return new Model2D(Assets::getTexture("Meowicon"));
+		case RENDERABLE_OBJECT_GOO_MONSTER_KILLER:
+			return Assets::getModel("Creature");
+		case RENDERABLE_OBJECT_GOO_MONSTER_PUSHER:
+			return Assets::getModel("Slime");
+		case RENDERABLE_OBJECT_BLOB_SHADOW:
+			return Assets::getModel("blob_shadow");
+
+		case RENDERABLE_OBJECT_TRACK_WALL_1:
+			return Assets::getModel("someShit1");
+		case RENDERABLE_OBJECT_TRACK_WALL_2:
+			return Assets::getModel("someShit2");
+		case RENDERABLE_OBJECT_TRACK_WALL_3:
+			return Assets::getModel("someShit3");
+		case RENDERABLE_OBJECT_TRACK_WALL_4:
+			return Assets::getModel("someShit4");
+		case RENDERABLE_OBJECT_TRACK_WALL_5:
+			return Assets::getModel("someShit5");
+		case RENDERABLE_OBJECT_TRACK_WALL_6:
+			return Assets::getModel("someShit6");
+		case RENDERABLE_OBJECT_TRACK_WALL_7:
+			return Assets::getModel("someShit7");
+		case RENDERABLE_OBJECT_TRACK_WALL_8:
+			return Assets::getModel("someShit8");
+		case RENDERABLE_OBJECT_TRACK_WALL_9:
+			return Assets::getModel("someShit9");
+		case RENDERABLE_OBJECT_TRACK_WALL_10:
+			return Assets::getModel("someShit10");
+		case RENDERABLE_OBJECT_TRACK_WALL_11:
+			return Assets::getModel("someShit11");
+		case RENDERABLE_OBJECT_TRACK_WALL_12:
+			return Assets::getModel("someShit12");
+		case RENDERABLE_OBJECT_TRACK_WALL_13:
+			return Assets::getModel("someShit13");
+		case RENDERABLE_OBJECT_TRACK_WALL_14:
+			return Assets::getModel("someShit14");
+		case RENDERABLE_OBJECT_TRACK_WALL_15:
+			return Assets::getModel("someShit15");
+		case RENDERABLE_OBJECT_TRACK_WALL_16:
+			return Assets::getModel("someShit16");
+		case RENDERABLE_OBJECT_TRACK_WALL_17:
+			return Assets::getModel("someShit17");
+		case RENDERABLE_OBJECT_MEOW_MIX_BEAM_CUT:
+			return Assets::getModel("beamcut");
 		}
 	}
 	

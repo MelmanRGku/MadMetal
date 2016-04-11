@@ -94,6 +94,8 @@ public:
 	void initialize();
 
 	void setupBasicGameWorldObjects();
+	void onPause();
+	void onResume();
 
 	std::vector<PlayerControllable*> *getHumanPlayers() { return &m_humanPlayers; }
 	void setupSceneLights();

@@ -7,11 +7,14 @@
 #include "Objects\PowerUpShield.h"
 #include "Objects\PowerUpSpeed.h"
 #include "Objects\GargantulousSuper.h"
+#include "Objects\GooMonster.h"
 #include "Objects\HomingBullet.h"
 #include "Objects\BombExplosion.h"
+#include "Objects\GargantulousBullet.h"
 #include "PxQueryReport.h"
+#include "Audio\Audio.h"
 
-CollisionManager::CollisionManager(World &world) : m_world(world)
+CollisionManager::CollisionManager(World &world, Audio &audioHandle) : m_world(world), m_audioHandle(audioHandle)
 {
 }
 
@@ -41,8 +44,12 @@ PxFilterFlags CollisionManager::TestFilterShader(
 		return PxFilterFlag::eSUPPRESS;
 	}
 
-	if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData1.word0 == COLLISION_FLAG_CHASSIS ||
-		filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData0.word0 == COLLISION_FLAG_CHASSIS) {
+	if (filterData0.word0 == 0 || filterData1.word0 == 0) {
+		return PxFilterFlag::eKILL;
+	}
+
+	if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET ||
+		filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET) {
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
@@ -74,6 +81,12 @@ PxFilterFlags CollisionManager::TestFilterShader(
 	}
 
 	if (filterData0.word0 == COLLISION_FLAG_DEATH_VOLUME || filterData1.word0 == COLLISION_FLAG_DEATH_VOLUME){
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+		return PxFilterFlag::eCALLBACK;
+	}
+
+	if (filterData0.word0 == COLLISION_FLAG_GOO_MONSTER || filterData1.word0 == COLLISION_FLAG_GOO_MONSTER){
+		//std::cout << "registered \n";
 		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 		return PxFilterFlag::eCALLBACK;
 	}
@@ -121,20 +134,19 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	if (bullet == NULL)
 		return;
 
-	TestObject *otherObj = m_world.findObject(otherId);
+	Object3D *otherObj = static_cast<Object3D *>(m_world.findObject(otherId));
 	Car *car = dynamic_cast<Car *>(otherObj);
 
-	if (car == NULL){ //if dynamic cast to car returns NULL its probably a wall so get rid of it
-		bullet->setHasToBeDeleted(true);
-	}
 	//self hit - ignore
-	else if (car != NULL && (car->getId() == bullet->getOwner()->getId())) {
+	if (car != NULL && (car->getId() == bullet->getOwner()->getId())) {
 		//ignore
 	}
 	else if (car != NULL && (car->getId() != bullet->getOwner()->getId()) && car->getActivePowerUpType() != PowerUpType::DEFENSE) {
-		car->takeDamage(bullet->getDamage());
-		bullet->getOwner()->addDamageDealt(bullet->getDamage());
+		if (car->takeDamage(bullet->getDamage())) {
+			bullet->getOwner()->addDamageDealt(bullet->getDamage());
+		}
 		bullet->setHasToBeDeleted(true);
+
 
 		PxGeometry **explosionGeom = new PxGeometry*[1];
 		explosionGeom[0] = new PxSphereGeometry(1);
@@ -146,6 +158,27 @@ void CollisionManager::processBulletHit(long bulletId, long otherId) {
 	
 }
 
+void CollisionManager::processGooMonsterVolumeHit(long volumeId, long otherId)
+{
+	GooMonster * gooMonster = static_cast<GooMonster *>(m_world.findObject(volumeId));
+
+	TestObject * otherObj = m_world.findObject(otherId);
+	Car * car = dynamic_cast<Car *>(otherObj);
+
+	if (car != NULL)
+	{
+		PxVec3 direction = static_cast<PxRigidDynamic *>(&gooMonster->getActor())->getLinearVelocity();
+
+		if (gooMonster->getMonsterType() == GooMonster::GOO_MONSTER_TYPE_KILLER) {
+			car->takeDamage(200);
+		}
+		else if (gooMonster->getMonsterType() == GooMonster::GOO_MONSTER_TYPE_PUSHER) {
+			car->getCar().getRigidDynamicActor()->addForce(direction * 5000, PxForceMode::eIMPULSE);
+			car->takeDamage(52);
+		}
+	}
+}
+
 void CollisionManager::processDeathVolumeHit(long deathVolumeId, long otherId)
 {
 
@@ -153,7 +186,7 @@ void CollisionManager::processDeathVolumeHit(long deathVolumeId, long otherId)
 	Car *car = dynamic_cast<Car *>(otherObj);
 
 	if (car != NULL) {
-		car->takeDamage(10000);
+		car->takeDamage(10000, true);
 	}
 }
 
@@ -187,25 +220,21 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 
 	if (car != NULL)
 	{
-		if (car->getLastHitCollisionVolume() == NULL)
-		{
-			std::cout << "set first time way point of " << collisionVolume->getIndex() << std::endl;
-			car->setLastHitCollisionVolume(collisionVolume);
+		car->setCurrentWaypoint(collisionVolume->getCurrentWaypointIndex());
+		car->setLastWaypoint(collisionVolume->getLastWaypointIndex());
+		if (car->getLastHitCollisionVolume() == NULL) {
+		car->setLastHitCollisionVolume(collisionVolume);
 		}
 		else {
-			if ((car->getLastHitCollisionVolume()->getIndex() + 1) % (CollisionVolume::globalID) == (collisionVolume->getIndex()))
-			{
-				std::cout << "set Next way point of " << collisionVolume->getIndex() << std::endl;
+			CollisionVolume *oldVolume = car->getLastHitCollisionVolume();
+			if (oldVolume->isPrevVolumeOf(collisionVolume)) {
 				car->setLastHitCollisionVolume(collisionVolume);
-				if (collisionVolume->getIndex() == 0)
-				{
-					std::cout << "incremented lap \n";
+				if (collisionVolume->getIsStartCollisionVolume()) {
 					car->incrementLap();
 				}
 			}
 		}
 		
-		//std::cout << "car: " << car->getIndex() << " collided with volume: " << collisionVolume->getIndex() << std::endl;
 	}
 }
 
@@ -244,7 +273,6 @@ void CollisionManager::processShieldPowerUpHit(long shieldPowerUpId, long bullet
 
 	if (bullet != NULL && !shield->isOwner(bullet->getOwner()))
 	{
-		
 		PxRigidDynamic * bulletActor = static_cast<PxRigidDynamic*>(&bullet->getActor());
 		bullet->setOwner(shield->getOwner());
 		PxVec3 bulletVelocity = bulletActor->getLinearVelocity();
@@ -254,7 +282,12 @@ void CollisionManager::processShieldPowerUpHit(long shieldPowerUpId, long bullet
 		directionVec *= bulletSpeed;
 		bulletActor->setLinearVelocity(PxVec3(directionVec.x, directionVec.y, directionVec.z));
 		bullet->resetLifeTime();
-		//bullets need to be rotated
+		m_audioHandle.queAudioSource(&shield->getActor(), BulletReflectSound());
+		
+		//if it is gargantulous' bullet then it should stop following the target 
+		GargantulousBullet *gBullet = dynamic_cast<GargantulousBullet *>(bullet);
+		if (gBullet != NULL)
+			gBullet->setToFollow(NULL);
 		
 	}
 }
@@ -274,9 +307,10 @@ void CollisionManager::processSpeedPowerUpHit(long speedPowerUpId, long carId)
 	if (car != NULL && !shield->isOwner(car))
 	{
 		car->getCar().getRigidDynamicActor()->setGlobalPose(PxTransform(car->getCar().getRigidDynamicActor()->getGlobalPose().p + PxVec3(0, 15, 0)));
-		car->getCar().getRigidDynamicActor()->setLinearVelocity(PxVec3(0, 20, 0));
-		car->takeDamage(PowerUp::getSpeedImpactDamage());
-		shield->getOwner()->addDamageDealt(PowerUp::getSpeedImpactDamage());
+		car->getCar().getRigidDynamicActor()->setLinearVelocity(car->getCar().getRigidDynamicActor()->getLinearVelocity() + PxVec3(0, 20, 0));
+		if (car->takeDamage(PowerUp::getSpeedImpactDamage())) {
+			shield->getOwner()->addDamageDealt(PowerUp::getSpeedImpactDamage());
+		}
 	}
 }
 
@@ -294,8 +328,10 @@ void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, lon
 
 	if (car != NULL  && car != super->getOwner() && super->addCarHit(carId)) // if the car hasn't already been hit by the super
 	{
-		car->takeDamage(super->getDamage());
-		super->getOwner()->addDamageDealt(super->getDamage());
+		float pointsToAssign = car->getHealthRemaining();
+		if (car->takeDamage(super->getDamage())) {
+			super->getOwner()->addDamageDealt(pointsToAssign, false);
+		}
 	}
 }
 
@@ -313,8 +349,11 @@ void CollisionManager::processGargantulousSuperBulletHit(long bulletId, long car
 
 	if (car != NULL  && car != super->getOwner()) // if the car hasn't already been hit by the super
 	{
-		super->getOwner()->addDamageDealt(car->getHealthRemaining());
-		car->takeDamage(car->getHealthRemaining());
+		float pointsToAssign = car->getHealthRemaining();
+		float damageToDeal = 200.f;
+		if (car->takeDamage(damageToDeal)) {
+			super->getOwner()->addDamageDealt(pointsToAssign, false);
+		}
 		
 		super->setHasToBeDeleted(true);
 	}
@@ -464,6 +503,14 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 	{
 		processDeathVolumeHit(filterData1.word2, filterData0.word2);
 	}
+	else if (filterData0.word0 == COLLISION_FLAG_GOO_MONSTER && filterData1.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processGooMonsterVolumeHit(filterData0.word2, filterData1.word2);
+	}
+	else if (filterData1.word0 == COLLISION_FLAG_GOO_MONSTER && filterData0.word0 == COLLISION_FLAG_CHASSIS)
+	{
+		processGooMonsterVolumeHit(filterData1.word2, filterData0.word2);
+	}
 	else if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER && filterData1.word0 == COLLISION_FLAG_CHASSIS)
 	{
 		processExplosivelyDeliciousSuperHit(filterData0.word2, filterData1.word2);
@@ -488,13 +535,15 @@ PxFilterFlags CollisionManager::pairFound(PxU32 pairID, PxFilterObjectAttributes
 	{
 		processGargantulousSuperBulletHit(filterData1.word2, filterData0.word2);
 	}
-	else if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData1.word0 == COLLISION_FLAG_CHASSIS)
+	else if (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && (filterData0.word1 & filterData1.word0) || filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && (filterData1.word1 & filterData0.word0))
 	{
-		processExplosivelyDeliciousBulletChassisHit(filterData0.word2, filterData1.word2);
-	}
-	else if (filterData1.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET && filterData0.word0 == COLLISION_FLAG_CHASSIS)
-	{
-		processExplosivelyDeliciousBulletChassisHit(filterData1.word2, filterData0.word2);
+		long bulletId = (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET) ? filterData0.word2 : filterData1.word2;
+		long otherId = (filterData0.word0 == COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET) ? filterData1.word2 : filterData0.word2;
+
+		if (filterData0.word0 == COLLISION_FLAG_SHIELD_POWERUP || filterData1.word0 == COLLISION_FLAG_SHIELD_POWERUP)
+			processShieldPowerUpHit(otherId, bulletId);
+		else
+			processExplosivelyDeliciousBulletChassisHit(bulletId, otherId);
 	}
 	
 	return PxFilterFlags(PxFilterFlag::eDEFAULT);

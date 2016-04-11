@@ -24,6 +24,7 @@ public:
 		SHIELD_POWERUP,
 		PHYSICAL_OBJECT_PARTICLE,
 		PHYSICAL_OBJECT_EXPLOSION,
+		PHYSICAL_OBJECT_SMOKE,
 		PHYSICAL_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER,
 		PHYSICAL_OBJECT_GARGANTULOUS_SUPER_BULLET,
 		PHYSICAL_OBJECT_GARGANTULOUS_BULLET,
@@ -32,7 +33,10 @@ public:
 		SPEED_POWERUP,
 		ANIMATION_TEST,
 		DEATH_VOLUME,
+		PHYSICAL_OBJECT_GOO_MONSTER,
 		PHYSICAL_OBJECT_BOMB_EXPLOSION,
+		PHYSICAL_OBJECT_BLOB_SHADOW,
+		PHYSICAL_OBJECT_MEOW_MIX_BEAM_CUT,
 	};
 
 public:
@@ -128,6 +132,7 @@ public:
 			PxTransform startTransform(PxVec3(0, 3 + (style->getChassisDimensions().y*0.5f + style->getWheelRadius() + 1.0f), 0), PxQuat(PxIdentity));
 			PxTransform anotherTransform = pos == NULL ? PxTransform(PxVec3(0), PxQuat(PxIdentity)) : *pos;
 			car->getRigidDynamicActor()->setGlobalPose(PxTransform(startTransform.p.x + anotherTransform.p.x, startTransform.p.y + anotherTransform.p.y, startTransform.p.z + anotherTransform.p.z));
+			//car->getRigidDynamicActor()->setAngularDamping(PX_MAX_F32);
 			setFilterDataId(objectId, car->getRigidDynamicActor());
 			toReturn = car;
 			break;
@@ -135,11 +140,12 @@ public:
 		case PHYSICAL_OBJECT_BULLET_MEOW_MIX:
 		{
 			PxRigidDynamic * bullet = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+			bullet->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 			PxFilterData simFilterData;
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
 			
-			bullet->createShape(PxBoxGeometry(.3, .3, 1), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			bullet->createShape(PxBoxGeometry(.3, .3, 1), *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			bullet->getShapes(shapes, 1);
@@ -162,7 +168,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_BULLET_AGAINST;
 
-			bullet->createShape(PxBoxGeometry(2, 2, 4), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			bullet->createShape(PxBoxGeometry(2, 2, 4), *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			bullet->getShapes(shapes, 1);
@@ -185,7 +191,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_GARGANTULOUS_SUPER_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_GARGANTULOUS_SUPER_BULLET_AGAINST;
 
-			bullet->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			bullet->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			bullet->getShapes(shapes, 1);
@@ -208,7 +214,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_GARGANTULOUS_SUPER_VOLUME;
 			simFilterData.word1 = COLLISION_FLAG_GARGANTULOUS_SUPER_VOLUME_AGAINST;
 
-			volume->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			volume->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			volume->getShapes(shapes, 1);
@@ -229,7 +235,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_MEOW_MIX_SUPER;
 			simFilterData.word1 = COLLISION_FLAG_MEOW_MIX_SUPER_AGAINST;
 
-			beam->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			beam->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			beam->getShapes(shapes, 1);
@@ -238,7 +244,7 @@ public:
 			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
 
 			setFilterDataId(objectId, beam);
-							 
+											   
 			toReturn = beam;
 			break;
 		}
@@ -249,7 +255,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET;
 			simFilterData.word1 = COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_BULLET_AGAINST;
 			
-			bullet->createShape(PxSphereGeometry(3.f), *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			bullet->createShape(PxSphereGeometry(3.f), *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			bullet->getShapes(shapes, 1);
@@ -268,7 +274,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_WAYPOINT;
 			simFilterData.word1 = COLLISION_FLAG_WAYPOINT_AGAINST;
 
-			wapoint->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			PxShape* temp = wapoint->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			wapoint->getShapes(shapes, 1);
@@ -349,7 +355,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_COLLISION_VOLUME;
 			simFilterData.word1 = COLLISION_FLAG_COLLISION_VOLUME_AGAINST;
 
-			wapoint->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			wapoint->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			wapoint->getShapes(shapes, 1);
@@ -369,7 +375,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_POWERUP;
 			simFilterData.word1 = COLLISION_FLAG_POWERUP_AGAINST;
 
-			powerup->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			powerup->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			powerup->getShapes(shapes, 1);
@@ -384,122 +390,142 @@ public:
 		}
 		case DEATH_VOLUME:
 		{
-			PxRigidDynamic * deathVolume = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
-			deathVolume->setActorFlag(PxActorFlag::eDISABLE_GRAVITY,true);
-			deathVolume->setLinearDamping(0);
-			PxFilterData simFilterData;
-			simFilterData.word0 = COLLISION_FLAG_DEATH_VOLUME;
-			simFilterData.word1 = COLLISION_FLAG_DEATH_VOLUME_AGAINST;
+							 PxRigidDynamic * deathVolume = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+							 deathVolume->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+							 PxFilterData simFilterData;
+							 simFilterData.word0 = COLLISION_FLAG_DEATH_VOLUME;
+							 simFilterData.word1 = COLLISION_FLAG_DEATH_VOLUME_AGAINST;
 
-			deathVolume->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+							 deathVolume->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
-			PxShape* shapes[1];
-			deathVolume->getShapes(shapes, 1);
-			shapes[0]->setSimulationFilterData(simFilterData);
-			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
-			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
-			
+							 PxShape* shapes[1];
+							 deathVolume->getShapes(shapes, 1);
+							 shapes[0]->setSimulationFilterData(simFilterData);
+							 shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+							 shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+							 
 
-			setFilterDataId(objectId, deathVolume);
+							 setFilterDataId(objectId, deathVolume);
 
-			toReturn = deathVolume;
-			break;
+							 toReturn = deathVolume;
+							 break;
+		}
+		case PHYSICAL_OBJECT_GOO_MONSTER:
+		{
+							 PxRigidDynamic * gooMonster = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+							 PxFilterData simFilterData;
+							 simFilterData.word0 = COLLISION_FLAG_GOO_MONSTER;
+							 simFilterData.word1 = COLLISION_FLAG_GOO_MONSTER_AGAINST;
+
+							 gooMonster->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
+
+							 PxShape* shapes[1];
+							 gooMonster->getShapes(shapes, 1);
+							 shapes[0]->setSimulationFilterData(simFilterData);
+							 shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+							 shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+
+							 setFilterDataId(objectId, gooMonster);
+
+							 toReturn = gooMonster;
+							 break;
 		}
 		case PHYSICAL_OBJECT_EXPLOSIVELY_DELICIOUS_SUPER:
 		{
-			PxRigidDynamic * explosion = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
-			explosion->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
-			explosion->setLinearDamping(0);
-			PxFilterData simFilterData;
-			simFilterData.word0 = COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER;
-			simFilterData.word1 = COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER_AGAINST;
+															PxRigidDynamic * explosion = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+															explosion->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+															explosion->setLinearDamping(0);
+															PxFilterData simFilterData;
+															simFilterData.word0 = COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER;
+															simFilterData.word1 = COLLISION_FLAG_EXPLOSIVELY_DELICIOUS_SUPER_AGAINST;
 
-			explosion->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+															explosion->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
-			PxShape* shapes[1];
-			explosion->getShapes(shapes, 1);
-			shapes[0]->setSimulationFilterData(simFilterData);
-			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
-			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+															PxShape* shapes[1];
+															explosion->getShapes(shapes, 1);
+															shapes[0]->setSimulationFilterData(simFilterData);
+															shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+															shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
 
 
-			setFilterDataId(objectId, explosion);
+															setFilterDataId(objectId, explosion);
 
-			toReturn = explosion;
-			break;
+															toReturn = explosion;
+															break;
 		}
 		case SHIELD_POWERUP:
 		{
-			PxRigidStatic * powerup = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
-			PxFilterData simFilterData;
-			simFilterData.word0 = COLLISION_FLAG_SHIELD_POWERUP;
-			simFilterData.word1 = COLLISION_FLAG_SHIELD_POWERUP_AGAINST;
+							   PxRigidStatic * powerup = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+							   PxFilterData simFilterData;
+							   simFilterData.word0 = COLLISION_FLAG_SHIELD_POWERUP;
+							   simFilterData.word1 = COLLISION_FLAG_SHIELD_POWERUP_AGAINST;
 
-			powerup->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+							   powerup->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
-			PxShape* shapes[1];
-			powerup->getShapes(shapes, 1);
-			shapes[0]->setSimulationFilterData(simFilterData);
-			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
-			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+							   PxShape* shapes[1];
+							   powerup->getShapes(shapes, 1);
+							   shapes[0]->setSimulationFilterData(simFilterData);
+							   shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+							   shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
 
-			setFilterDataId(objectId, powerup);
+							   setFilterDataId(objectId, powerup);
 
-			toReturn = powerup;
-			break;
+							   toReturn = powerup;
+							   break;
 		}
 		case SPEED_POWERUP:
 		{
-			PxRigidStatic * powerup = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
-			PxFilterData simFilterData;
-			simFilterData.word0 = COLLISION_FLAG_SPEED_POWERUP;
-			simFilterData.word1 = COLLISION_FLAG_POWERUP_AGAINST;
+							  PxRigidStatic * powerup = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
+							  PxFilterData simFilterData;
+							  simFilterData.word0 = COLLISION_FLAG_SPEED_POWERUP;
+							  simFilterData.word1 = COLLISION_FLAG_POWERUP_AGAINST;
 
-			powerup->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+							  powerup->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
-			PxShape* shapes[1];
-			powerup->getShapes(shapes, 1);
-			shapes[0]->setSimulationFilterData(simFilterData);
-			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
-			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+							  PxShape* shapes[1];
+							  powerup->getShapes(shapes, 1);
+							  shapes[0]->setSimulationFilterData(simFilterData);
+							  shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+							  shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
 
-			setFilterDataId(objectId, powerup);
+							  setFilterDataId(objectId, powerup);
 
-			toReturn = powerup;
-			break;
+							  toReturn = powerup;
+							  break;
 		}
 		case ANIMATION_TEST:
 		{
 			PxRigidStatic * powerup = PhysicsManager::getPhysicsInstance().createRigidStatic(*pos);
 
-			powerup->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			powerup->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			toReturn = powerup;
 			break;
 		}
 		case PHYSICAL_OBJECT_PARTICLE:
 		{
-			PxRigidDynamic * particle = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
-			particle->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
-			
-			particle->setLinearDamping(0);
-			
-			PxFilterData simFilterData;
-			simFilterData.word0 = COLLISION_FLAG_PARTICLE;
-			simFilterData.word1 = 0;
+										 PxRigidDynamic * particle = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+										 particle->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+										 
+										 particle->setLinearDamping(0);
+										 
+										 PxFilterData simFilterData;
+										 simFilterData.word0 = COLLISION_FLAG_PARTICLE;
+										 simFilterData.word1 = 0;
 
-			particle->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+										 particle->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
-			PxShape* shapes[1];
-			particle->getShapes(shapes, 1);
-			shapes[0]->setSimulationFilterData(simFilterData);
-			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
-			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+										 PxShape* shapes[1];
+										 particle->getShapes(shapes, 1);
+										 shapes[0]->setSimulationFilterData(simFilterData);
+										 shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+										 shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
 
-			setFilterDataId(objectId, particle);
-			
-			toReturn = particle;
-			break;
+										 setFilterDataId(objectId, particle);
+										 
+										 toReturn = particle;
+										 break;
 		}
 
 		case PHYSICAL_OBJECT_EXPLOSION:
@@ -511,7 +537,29 @@ public:
 			simFilterData.word0 = 0;
 			simFilterData.word1 = 0;
 
-			explosion->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			explosion->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			explosion->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+
+			setFilterDataId(objectId, explosion);
+
+			toReturn = explosion;
+			break;
+		}
+		case PHYSICAL_OBJECT_SMOKE:
+		{
+			PxRigidDynamic * explosion = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+			explosion->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+
+			PxFilterData simFilterData;
+			simFilterData.word0 = 0;
+			simFilterData.word1 = 0;
+
+			explosion->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			explosion->getShapes(shapes, 1);
@@ -533,7 +581,7 @@ public:
 			simFilterData.word0 = COLLISION_FLAG_BOMB_EXPLOSION;
 			simFilterData.word1 = COLLISION_FLAG_BOMB_EXPLOSION_AGAINST;
 
-			explosion->createShape(*geom[0], *PhysicsManager::getPhysicsInstance().createMaterial(0.5, 0.3, 0.1f));
+			explosion->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
 
 			PxShape* shapes[1];
 			explosion->getShapes(shapes, 1);
@@ -544,6 +592,50 @@ public:
 			setFilterDataId(objectId, explosion);
 
 			toReturn = explosion;
+			break;
+		}
+		case PHYSICAL_OBJECT_BLOB_SHADOW:
+		{
+			PxRigidDynamic * shadow = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+			shadow->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+
+			PxFilterData simFilterData;
+			simFilterData.word0 = COLLISION_FLAG_BOMB_EXPLOSION;
+			simFilterData.word1 = COLLISION_FLAG_BOMB_EXPLOSION_AGAINST;
+
+			shadow->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			shadow->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, false);
+
+			setFilterDataId(objectId, shadow);
+
+			toReturn = shadow;
+			break;
+		}
+		case PHYSICAL_OBJECT_MEOW_MIX_BEAM_CUT:
+		{
+			PxRigidDynamic * volume = PhysicsManager::getPhysicsInstance().createRigidDynamic(*pos);
+			volume->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+
+			PxFilterData simFilterData;
+			simFilterData.word0 = 0;
+			simFilterData.word1 = 0;
+
+			volume->createShape(*geom[0], *PhysicsManager::createMaterial(0.5, 0.3, 0.1f));
+
+			PxShape* shapes[1];
+			volume->getShapes(shapes, 1);
+			shapes[0]->setSimulationFilterData(simFilterData);
+			shapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			shapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, false);
+
+			setFilterDataId(objectId, volume);
+
+			toReturn = volume;
 			break;
 		}
 		}

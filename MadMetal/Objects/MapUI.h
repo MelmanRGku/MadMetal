@@ -1,6 +1,6 @@
 #pragma once
 
-#define PERCENTAGE_OF_MAP_TO_DISPLAY 40
+#define PERCENTAGE_OF_MAP_TO_DISPLAY 60
 
 #include "TexturedObject2D.h"
 

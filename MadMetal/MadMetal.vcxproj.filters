@@ -198,9 +198,6 @@
     <ClCompile Include="Objects\UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\LoadingBar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\Text3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -270,12 +267,6 @@
     <ClCompile Include="Objects\Cars\DrivingStyleGargantulous.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\VehicleSpecifications.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\VehicleSpecificationsMeowMix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer\CellTireShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -297,10 +288,31 @@
     <ClCompile Include="Objects\EndingScreenUIScoreTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\DeathPit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\GooMonster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Objects\BombExplosion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\ExplosivelyDeliciousBullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\NavigationalGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\LoadingBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulation\ControlsMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulation\MadMetalPresentsScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\AnimatedSmoke.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects\Light.cpp">
@@ -521,9 +533,6 @@
     <ClInclude Include="Objects\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\LoadingBar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\DisplayMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -653,12 +662,6 @@
     <ClInclude Include="Objects\Cars\DrivingStyleGargantulous.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\VehicleSpecifications.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\VehicleSpecificationsMeowMix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\CellTireShaderProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -689,7 +692,37 @@
     <ClInclude Include="Objects\TrainCar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game Logic\AIDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\TrainCar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\DeathPit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GooMonster.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Objects\BombExplosion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\NavigationalGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\LoadingBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation\ControlsMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation\MadMetalPresentsScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\AnimatedSmoke.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Light.h">

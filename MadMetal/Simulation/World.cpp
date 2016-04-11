@@ -4,6 +4,7 @@
 World::World() {
 	gameObjects = new std::vector<TestObject*>;
 	lights = new std::vector<Light*>;
+	worldTime = 0;
 }
 
 
@@ -54,8 +55,10 @@ void World::deleteObjectById(long id) {
 			TestObject *obj = gameObjects->at(mid);
 			gameObjects->erase(gameObjects->begin()+mid);
 			Object3D *object3D = dynamic_cast<Object3D *>(obj);
-			if (object3D != NULL)
+			if (object3D != NULL) {
+				actorsToDelete.push_back(std::pair<PxActor *, float>(&object3D->getActor(), worldTime + 1));
 				scene->removeActor(object3D->getActor());
+			}
 			delete obj;
 			break;
 		}
@@ -66,8 +69,10 @@ void World::deleteObjectByIndex(int index) {
 	TestObject *obj = gameObjects->at(index);
 	gameObjects->erase(gameObjects->begin() + index);
 	Object3D *object3D = dynamic_cast<Object3D *>(obj);
-	if (object3D != NULL)
+	if (object3D != NULL) {
+		actorsToDelete.push_back(std::pair<PxActor *, float>(&object3D->getActor(), worldTime + 1));
 		scene->removeActor(object3D->getActor());
+	}
 	delete obj;
 }
 
@@ -79,6 +84,7 @@ void World::deleteLightByIndex(int index) {
 
 void World::update(float dt) 
 {
+	worldTime += dt;
 	for (int i = 0; i < lights->size(); i++) {
 		Light *lgt = lights->at(i);
 
@@ -105,4 +111,14 @@ void World::update(float dt)
 		updaters.at(i)->update(dt);
 	}
 
+	for (unsigned int i = 0; i < actorsToDelete.size(); i++) {
+		if (worldTime >= actorsToDelete.at(i).second) {
+			actorsToDelete.at(i).first->release();
+			actorsToDelete.erase(actorsToDelete.begin() + i);
+			i--;
+		}
+		else {
+			break;
+		}
+	}
 }

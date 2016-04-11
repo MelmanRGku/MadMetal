@@ -15,3 +15,16 @@
 14 regen.wav
 15 Rocketlaunch.wav
 16 ExplosivelyDeliciousSuper.wav
+17 menuButtonClick.wav
+18 menuButtonChange.wav
+19 menuBackButton.wav
+20 menuButtonNextPrev.wav
+21 CarExplode.wav
+22 BulletReflect.wav
+23 PowerUpAcceleration.wav
+24 PowerUpShield.wav
+25 PowerupPickup.wav
+26 CarBrake.wav
+27 Weeeeee.wav
+28 BrakeSound.wav
+29 beamcut.wav

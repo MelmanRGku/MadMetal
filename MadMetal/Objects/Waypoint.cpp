@@ -8,8 +8,10 @@ Waypoint::Waypoint(long id, Audioable *aable, Physicable *pable, Animatable *ana
 	m_index = Waypoint::globalID;
 	m_id = m_index;
 	Waypoint::globalID++;
-	m_highCost = 999999.0;
-	m_isValid = false;
+	m_highCost = 99999.0;
+	m_isValid = true;
+
+	m_position = pable->getActor().getGlobalPose().p;
 }
 
 
@@ -121,4 +123,8 @@ bool Waypoint::draw(Renderer *renderer, Renderer::ShaderType type, int passNumbe
 #else
 	return false;
 #endif
+}
+
+void Waypoint::resetGlobalId() {
+	globalID = 0;
 }

@@ -10,6 +10,10 @@
 MainMenu::MainMenu(Input * input, Audio *audio)
 {
 	m_gamePad = input->getGamePadHandle();
+	m_audio = audio;
+	m_audio->clearListeners();
+	m_audio->setMusicVolume(128);
+
 	m_defaultSceneCamera->setLookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -3), glm::vec3(0, 1, 0));
 	{
 		Physicable *p = new Physicable(NULL);
@@ -42,6 +46,19 @@ MainMenu::MainMenu(Input * input, Audio *audio)
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
 		a->updatePosition(glm::vec3(0, -2, -25));
+		a->setScale(glm::vec3(5, 1, 1));
+		Audioable *au = new Audioable(*audio);
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Controls.obj"));
+		model->setupVAOs();
+		Renderable3D *r = new Renderable3D(model, true, true);
+		controlsButton = new Object3D(2, au, p, a, r, NULL);
+		m_world->addGameObject(controlsButton);
+	}
+
+	{
+		Physicable *p = new Physicable(NULL);
+		Animatable *a = new Animatable();
+		a->updatePosition(glm::vec3(0, -4, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Quit.obj"));
@@ -84,6 +101,7 @@ MainMenu::~MainMenu() {
 
 
 void MainMenu::upPressed() {
+	m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 	unselectMenuItem(selectedButton);
 	if (selectedButton == singlePlayerButton) {
 		selectedButton = exitButton;
@@ -91,18 +109,25 @@ void MainMenu::upPressed() {
 	else if (selectedButton == multiPlayerButton) {
 		selectedButton = singlePlayerButton;
 	}
-	else if (selectedButton == exitButton) {
+	else if (selectedButton == controlsButton) {
 		selectedButton = multiPlayerButton;
+	}
+	else if (selectedButton == exitButton) {
+		selectedButton = controlsButton;
 	}
 	selectMenuItem(selectedButton);
 }
 
 void MainMenu::downPressed() {
+	m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 	unselectMenuItem(selectedButton);
 	if (selectedButton == singlePlayerButton) {
 		selectedButton = multiPlayerButton;
 	}
 	else if (selectedButton == multiPlayerButton) {
+		selectedButton = controlsButton;
+	}
+	else if (selectedButton == controlsButton) {
 		selectedButton = exitButton;
 	}
 	else if (selectedButton == exitButton) {
@@ -112,11 +137,15 @@ void MainMenu::downPressed() {
 }
 
 void MainMenu::aPressed() {
+	m_audio->queAudioSource(NULL, MenuButtonClickSound());
 	if (selectedButton == singlePlayerButton) {
 		messageToReturn = SceneMessage::eSingleCharSelect;
 	}
 	else if (selectedButton == multiPlayerButton) {
 		messageToReturn = SceneMessage::eMultiCharSelect;
+	}
+	else if (selectedButton == controlsButton) {
+		messageToReturn = SceneMessage::eControls;
 	}
 	else if (selectedButton == exitButton) {
 		messageToReturn = SceneMessage::eExit;
@@ -147,6 +176,12 @@ bool MainMenu::simulateScene(double dt, SceneMessage &message)
 		messageToReturn = SceneMessage::eNone;
 		return true;
 	}
+
+	//music
+	if (m_audio->getMusicFinished()) {
+		m_audio->playMusic(CrysisTwoThemeSong(), 1);
+	}
+
 	//check gamepad stuff
 	if (m_gamePad->checkConnection() && m_sceneGameTimeSeconds > 1)
 	{
@@ -179,16 +214,16 @@ void MainMenu::setupSceneLights() {
 	}
 
 	{
-	Animatable *anable = new Animatable();
-	Light *light = new Light(1, anable);
-	anable->setPosition(glm::vec3(-2, 5, -40));
-	light->colour = glm::vec3(1, 1, 1);
-	light->constant = 0.5;
-	light->linear = 0.1;
-	light->quad = 0.01;
-	light->cutoff = 500.0;
-	m_world->addLightObject(light);
-}
+		Animatable *anable = new Animatable();
+		Light *light = new Light(1, anable);
+		anable->setPosition(glm::vec3(-2, 5, -40));
+		light->colour = glm::vec3(1, 1, 1);
+		light->constant = 0.5;
+		light->linear = 0.1;
+		light->quad = 0.01;
+		light->cutoff = 500.0;
+		m_world->addLightObject(light);
+	}
 
 	{
 		Animatable *anable = new Animatable();

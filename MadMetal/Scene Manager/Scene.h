@@ -22,6 +22,7 @@ public:
 		eRestart,
 		eEnd,
 		ePop,
+		eControls,
 		eDefault,
 		eNone,
 		eExit,
@@ -101,6 +102,9 @@ public:
 		}
 		return m_sceneCameras; 
 	}
+
+	virtual void onPause() {}
+	virtual void onResume() {}
 	//virtual void loadFromFile();
 	virtual void setupSceneLights() = 0;
 };

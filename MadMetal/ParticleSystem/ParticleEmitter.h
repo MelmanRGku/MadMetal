@@ -84,7 +84,7 @@ public:
 		} 
 			PxGeometry * geom[1];
 			geom[0] = new PxBoxGeometry(.5, 1,.5);
-			Particle * particle = static_cast<Particle*> (GameFactory::instance()->makeObject(GameFactory::OBJECT_PARTICLE, &PxTransform(PxVec3(m_position.x + rotate.x, 0, m_position.z + rotate.z)), geom, NULL));
+			Particle * particle = static_cast<Particle*> (GameFactory::instance()->makeObject(GameFactory::OBJECT_PARTICLE, &PxTransform(PxVec3(m_position.x + rotate.x, m_position.y, m_position.z + rotate.z)), geom, NULL));
 			delete geom[0];
 			particle->setMaxLifeTime(m_particleLifeTime);
 			particle->getRenderable()->setModel(Assets::getModel(m_model));
