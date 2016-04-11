@@ -758,9 +758,17 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							 PxVec3 dim = gooMonsterVolume->getWorldBounds().getDimensions();
 
 							 animatable->setScale(glm::vec3(dim.x, dim.y, dim.z));
-							 //pos->p.y += dim.y / 2;
+							 
 							 GooMonster *gooMonster = new GooMonster(objectId, audioable, physicable, animatable, renderable);
 
+							 DynamicLight* light = static_cast<DynamicLight *>(makeObject(GameFactory::OBJECT_DYNAMIC_LIGHT, pos, NULL, gooMonster));
+							 light->colour = glm::vec3(0, 1, 0);
+							 light->constant = 0.0;
+							 light->linear = 0.0;
+							 light->quad = 0.02;
+							 light->cutoff = 30.0f;
+
+							 m_world.addLightObject(light);
 							 m_world.addGameObject(gooMonster);
 							 m_scene.addActor(*gooMonsterVolume);
 							 return gooMonster;

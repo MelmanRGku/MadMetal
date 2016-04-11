@@ -4,6 +4,7 @@
 
 DynamicLight::DynamicLight(long id, Animatable *anable, Object3D *parent) : Light(id, anable), m_parent(parent)
 {
+	m_initialPosition = glm::vec4(0, 0, 0, 1);
 }
 
 
@@ -16,5 +17,11 @@ bool DynamicLight::getParentHasToBeDeleted() {
 }
 
 void DynamicLight::update(float dt){
-	m_animatable->setPosition(m_parent->getPosition());
+	Light::update(dt);
+
+	m_animatable->setPosition(glm::vec3(m_parent->getModelMatrix() * m_initialPosition));
+}
+
+void DynamicLight::setInitialPosition(glm::vec3 pos) {
+	m_initialPosition = glm::vec4(pos, 1);
 }

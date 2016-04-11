@@ -624,13 +624,12 @@ void GameSimulation::setupDeathPit() {
 	delete[] deathPitGeom;
 
 	PxGeometry ** gooMonsterGeom = new PxGeometry*[1];
-	gooMonsterGeom[0] = new PxBoxGeometry(10,20,25);
+	gooMonsterGeom[0] = new PxSphereGeometry(25);
 	pos = new PxTransform(-700, -40, 1555);
 	GooMonster * monster = static_cast<GooMonster *>(m_gameFactory->makeObject(GameFactory::OBJECT_GOO_MONSTER, pos, gooMonsterGeom, NULL));
 	monster->setPlayers(m_players);
 	monster->setSpawnVelocity(PxVec3(0, 55,-30));
 
-	gooMonsterGeom[0] = new PxBoxGeometry(10, 20, 25);
 	pos = new PxTransform(-600, -40, 1565);
 	monster = static_cast<GooMonster *>(m_gameFactory->makeObject(GameFactory::OBJECT_GOO_MONSTER, pos, gooMonsterGeom, NULL));
 	monster->setPlayers(m_players);
@@ -727,9 +726,10 @@ void GameSimulation::setupSceneLights() {
 		anable->setPosition(glm::vec3(-650, -50, 1663));
 		firstLight->colour = glm::vec3(0, 1, 0);
 		firstLight->constant = 0.02;
-		firstLight->linear = 0.05;
+		firstLight->linear = 0.1;
 		firstLight->quad = 0;
 		firstLight->cutoff = 200.0;
+		firstLight->setLinearPulsation(0.1, 0.3, 1);
 		m_world->addLightObject(firstLight);
 	}
 
@@ -743,6 +743,7 @@ void GameSimulation::setupSceneLights() {
 		firstLight->linear = 0.1;
 		firstLight->quad = 0;
 		firstLight->cutoff = 70.0;
+		firstLight->setLinearPulsation(0.1, 0.3, 1);
 		m_world->addLightObject(firstLight);
 	}
 
@@ -753,9 +754,10 @@ void GameSimulation::setupSceneLights() {
 		anable->setPosition(glm::vec3(-740, -50, 1435));
 		firstLight->colour = glm::vec3(0, 1, 0);
 		firstLight->constant = 0.02;
-		firstLight->linear = 0.05;
+		firstLight->linear = 0.1;
 		firstLight->quad = 0;
 		firstLight->cutoff = 200.0;
+		firstLight->setLinearPulsation(0.1, 0.3, 1);
 		m_world->addLightObject(firstLight);
 	}
 
@@ -766,9 +768,10 @@ void GameSimulation::setupSceneLights() {
 		anable->setPosition(glm::vec3(-430, -50, 1564));
 		firstLight->colour = glm::vec3(0, 1, 0);
 		firstLight->constant = 0.02;
-		firstLight->linear = 0.05;
+		firstLight->linear = 0.1;
 		firstLight->quad = 0;
 		firstLight->cutoff = 200.0;
+		firstLight->setLinearPulsation(0.1, 0.3, 1);
 		m_world->addLightObject(firstLight);
 	}
 
@@ -779,9 +782,10 @@ void GameSimulation::setupSceneLights() {
 		anable->setPosition(glm::vec3(-589, -2, 1401));
 		firstLight->colour = glm::vec3(0, 1, 0);
 		firstLight->constant = 0.02;
-		firstLight->linear = 0.05;
+		firstLight->linear = 0.1;
 		firstLight->quad = 0.01;
 		firstLight->cutoff = 50.0;
+		firstLight->setLinearPulsation(0.1, 0.3, 1);
 		m_world->addLightObject(firstLight);
 	}
 
@@ -792,9 +796,10 @@ void GameSimulation::setupSceneLights() {
 		anable->setPosition(glm::vec3(-660, -2, 1401));
 		firstLight->colour = glm::vec3(0, 1, 0);
 		firstLight->constant = 0.02;
-		firstLight->linear = 0.05;
+		firstLight->linear = 0.1;
 		firstLight->quad = 0.01;
 		firstLight->cutoff = 50.0;
+		firstLight->setLinearPulsation(0.1, 0.3, 1);
 		m_world->addLightObject(firstLight);
 	}
 
