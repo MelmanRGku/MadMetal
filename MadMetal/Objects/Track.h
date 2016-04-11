@@ -27,5 +27,6 @@ private: //members
 private: //helper functions 
 
 	void setupCollisionVolumes();
-	void attachCollsionVolumes();
+	void attachNextCollsionVolumes();
+	void attachReachableCollsionVolumes();
 };

@@ -40,6 +40,7 @@ void Track::setupCollisionVolumes() {
 	geom1[0] = new PxBoxGeometry(50, 10, 50);
 	pos = new PxTransform(PxVec3(0, 10, -40));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsStartCollisionVolume(true);
 	delete pos;
 	delete geom1[0];
 
@@ -382,7 +383,8 @@ void Track::setupCollisionVolumes() {
 	delete pos;
 	delete geom1[0];
 
-	attachCollsionVolumes();
+	attachNextCollsionVolumes();
+	attachReachableCollsionVolumes();
 
 	delete[] geom1;
 
@@ -400,9 +402,8 @@ void Track::playTrackMusic()
 	m_audioable->getAudioHandle().playMusic(m_sound);
 }
 
-void Track::attachCollsionVolumes()
+void Track::attachNextCollsionVolumes()
 {
-	
 	for (unsigned int i = 0; i < m_collisionVolumes.size(); i++)
 	{
 		int indexToAdd = 1;
@@ -423,5 +424,27 @@ void Track::attachCollsionVolumes()
 			nextCollisionVolume = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
 		} while (collisionVolumeToCheck->getId() == nextCollisionVolume->getId());
 		
+	}
+}
+
+void Track::attachReachableCollsionVolumes()
+{
+	for (unsigned int i = 0; i < m_collisionVolumes.size(); i++)
+	{
+		int indexToAdd = 1;
+		CollisionVolume* collisionVolumeToCheck = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
+		while (collisionVolumeToCheck->getId() == m_collisionVolumes[i]->getId())
+		{
+			indexToAdd++;
+			collisionVolumeToCheck = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
+		}
+		CollisionVolume* nextCollisionVolume = collisionVolumeToCheck;
+		do
+		{
+			m_collisionVolumes[i]->addVolumeToReachableCollsionVolumeList(nextCollisionVolume);
+			indexToAdd++;
+			nextCollisionVolume = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
+		} while (collisionVolumeToCheck->getId() == nextCollisionVolume->getId());
+
 	}
 }

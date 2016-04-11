@@ -27,6 +27,7 @@ public:
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 	static void resetGlobalId();
 	void addVolumeToNextCollsionVolumeList(CollisionVolume* toAdd);
+	void addVolumeToReachableCollsionVolumeList(CollisionVolume* toAdd);
 	int getId();
 
 	void setPathNumber(int pathNumber);
@@ -35,6 +36,7 @@ public:
 
 	int getPathNumber();
 	bool getIsPartOfMainPath();
+	std::vector<CollisionVolume*>& getListOfReachableCollisionVolume();
 
 private: //members
 
@@ -42,6 +44,7 @@ private: //members
 	float m_steeringDamping;
 	int m_respawnIndex;
 	std::vector<CollisionVolume*> m_possibleNextCollisionVolumes;
+	std::vector<CollisionVolume*> m_reachableCollisionVolumes;
 	CollisionVolume * m_next;
 	std::vector<PxTransform> m_respawnLocations;
 	bool m_isStartCollisionVolume;

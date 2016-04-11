@@ -217,8 +217,6 @@ void CollisionManager::processCollisionVolumeHit(long volumeId, long otherId)
 	if (car != NULL)
 	{
 		car->setCurrentCollisionVolume(collisionVolume);
-		std::cout << "Collided with " << collisionVolume->getId() << "\n";
-		
 	}
 }
 

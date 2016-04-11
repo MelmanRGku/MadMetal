@@ -134,6 +134,11 @@ void CollisionVolume::addVolumeToNextCollsionVolumeList(CollisionVolume* toAdd)
 	m_possibleNextCollisionVolumes.push_back(toAdd);
 }
 
+void CollisionVolume::addVolumeToReachableCollsionVolumeList(CollisionVolume* toAdd)
+{
+	m_reachableCollisionVolumes.push_back(toAdd);
+}
+
 int CollisionVolume::getId()
 {
 	return m_volumeId;
@@ -159,6 +164,16 @@ int CollisionVolume::getPathNumber()
 bool CollisionVolume::getIsPartOfMainPath()
 {
 	return m_isPartOfMainPath;
+}
+
+std::vector<CollisionVolume*>& CollisionVolume::getListOfReachableCollisionVolume()
+{
+	return m_reachableCollisionVolumes;
+}
+
+bool CollisionVolume::getIsStartCollisionVolume()
+{
+	return m_isStartCollisionVolume;
 }
 
 bool CollisionVolume::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
