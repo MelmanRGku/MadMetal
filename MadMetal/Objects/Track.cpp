@@ -446,5 +446,15 @@ void Track::attachReachableCollsionVolumes()
 			nextCollisionVolume = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
 		} while (collisionVolumeToCheck->getId() == nextCollisionVolume->getId());
 
+		// Do a second go around to make sure you account for collisionvolumes on the next next way.
+
+		collisionVolumeToCheck = nextCollisionVolume;
+		do
+		{
+			m_collisionVolumes[i]->addVolumeToReachableCollsionVolumeList(nextCollisionVolume);
+			indexToAdd++;
+			nextCollisionVolume = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
+		} while (collisionVolumeToCheck->getId() == nextCollisionVolume->getId());
+
 	}
 }
