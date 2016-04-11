@@ -69,5 +69,6 @@ public:
 	MultiPlayerMenu(Input * input, Audio *audio);
 	~MultiPlayerMenu();
 	bool simulateScene(double dt, SceneMessage &newMessage);
+	void setupSceneLights();
 };
 

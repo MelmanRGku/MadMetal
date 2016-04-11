@@ -1,5 +1,6 @@
 #include "CellShaderProgram.h"
 #include <iostream>
+#include "Objects\Light.h"
 /*
 	Constructor. Takes path to the vertex shader and fragment shader,
 	loads them, links them and stores all the needed information (programID, attributes
@@ -35,13 +36,6 @@ CellShaderProgram::CellShaderProgram(const char* vertexShaderPath, const char* f
 	lightUniform = glGetUniformLocation(programID, "lightColorArray");
 	cutoffUniform = glGetUniformLocation(programID, "cutoffArray");
 
-	lightPosDynamic = glGetUniformLocation(programID, "lightPosArrayDynamic");
-	constDynamic = glGetUniformLocation(programID, "constArrayDynamic");
-	linearDynamic = glGetUniformLocation(programID, "linearArrayDynamic");
-	quadDynamic = glGetUniformLocation(programID, "quadArrayDynamic");
-	lightDynamic = glGetUniformLocation(programID, "lightColorArrayDynamic");
-	cutoffDynamic = glGetUniformLocation(programID, "cutoffArrayDynamic");
-
 
 }
 
@@ -60,38 +54,52 @@ void CellShaderProgram::start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatrix, 
 	glUniformMatrix4fv(viewMatrixUniform, 1, false, glm::value_ptr(*viewMatrix));
 	glUniformMatrix4fv(projectionMatrixUniform, 1, false, glm::value_ptr(*projMatrix));
 	glUniformMatrix3fv(cameraPosUniform, 1, false, glm::value_ptr(*cameraPos));
-	GLfloat testArray[30] = { 100, 10, 100, 130, 10, 440, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	GLfloat lightArray[30] = { 1.0, 1.0, 1.0, 0.0, 1.0, 0.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-	GLfloat testArray2[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	GLfloat testArray3[10] = { 0.01, 0.01, 0, 0, 0, 0, 0, 0, 0, 0 };
-	GLfloat testArray4[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-
-	glUniform3fv(lightPosUniform, 10, testArray);
-
-//	glm::vec3 lightArray[10] = { glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0) };
-
-	glUniform3fv(lightUniform, 10, lightArray);
-
-	glUniform1fv(constUniform, 10, testArray2);
-	glUniform1fv(linearUniform, 10, testArray3);
-	glUniform1fv(quadUniform, 10, testArray4);
-
-	GLfloat cutArray[10] = { 500.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	glUniform1fv(cutoffUniform, 10, cutArray);
-
-	glUniform3fv(lightPosDynamic, 32, dynamicPositions);
-	glUniform3fv(lightDynamic, 32, dynamicColours);
-
-	glUniform1fv(constDynamic, 10, dynamicConstants);
-	glUniform1fv(linearDynamic, 10, dynamicLinears);
-	glUniform1fv(quadDynamic, 10, dynamicQuads);
-
-	glUniform1fv(cutoffDynamic, 10, dynamicCutoffs);
+	glUniform3fv(lightPosUniform, MAX_NUM_OF_LIGHTS, lightPositions);
+	glUniform3fv(lightUniform, MAX_NUM_OF_LIGHTS, lightColours);
+	glUniform1fv(constUniform, MAX_NUM_OF_LIGHTS, lightConstants);
+	glUniform1fv(linearUniform, MAX_NUM_OF_LIGHTS, lightLinears);
+	glUniform1fv(quadUniform, MAX_NUM_OF_LIGHTS, lightQuads);
+	glUniform1fv(cutoffUniform, MAX_NUM_OF_LIGHTS, lightCutoffs);
 
 
 }
 
 void CellShaderProgram::end() {
 	glUseProgram(0);
+}
+
+void CellShaderProgram::loadLights(std::vector<Light *> *lights)
+{
+	for (int i = 0; i < MAX_NUM_OF_LIGHTS; i++)
+	{
+		lightCutoffs[i],
+			lightConstants[i],
+			lightLinears[i],
+			lightQuads[i] = 0.0;
+	}
+	for (int i = 0; i < MAX_NUM_OF_LIGHTS * 3; i++)
+	{
+		lightPositions[i],
+			lightColours[i] = 0.0;
+	}
+
+	if (lights != NULL)
+	{
+		for (int i = 0; i < lights->size() || i == MAX_NUM_OF_LIGHTS; i++)
+		{
+			lightPositions[i * 3] = lights->at(i)->getAnimatablePos().x;
+			lightPositions[i * 3 + 1] = lights->at(i)->getAnimatablePos().y;
+			lightPositions[i * 3 + 2] = lights->at(i)->getAnimatablePos().z;
+			std::cout << lights->at(i)->getAnimatablePos().x << "   " << lights->at(i)->getAnimatablePos().y << "    " << lights->at(i)->getAnimatablePos().y << std::endl;
+			lightColours[i * 3] = lights->at(i)->colour.x;
+			lightColours[i * 3 + 1] = lights->at(i)->colour.y;
+			lightColours[i * 3 + 2] = lights->at(i)->colour.z;
+			lightCutoffs[i] = lights->at(i)->cutoff;
+			lightConstants[i] = lights->at(i)->constant;
+			lightLinears[i] = lights->at(i)->linear;
+			lightQuads[i] = lights->at(i)->quad;
+
+		}
+	}
 }

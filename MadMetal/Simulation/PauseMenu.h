@@ -27,5 +27,6 @@ public:
 	void aPressed();
 	void selectMenuItem(Object3D *menuItem);
 	void unselectMenuItem(Object3D *menuItem);
+	void setupSceneLights();
 };
 

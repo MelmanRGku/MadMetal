@@ -9,6 +9,7 @@
 #include "Objects\HomingBullet.h"
 #include "Objects\GargantulousBullet.h"
 #include "Objects\BombExplosion.h"
+#include "Objects\DynamicLight.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 
@@ -659,6 +660,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		trainCar->setSound(TrainSound());
 		trainCar->playSound();
 
+
+		DynamicLight* light = static_cast<DynamicLight *>(makeObject(GameFactory::OBJECT_DYNAMIC_LIGHT, pos, NULL, trainCar));
+		light->colour = glm::vec3(0.3, 0.1, 0);
+		light->constant = 0.0;
+		light->linear = 0.1;
+		light->quad = 0.1;
+		light->cutoff = 50.0f;
+
+
 		m_world.addGameObject(trainCar);
 		m_scene.addActor(*trainCarTriggerVolume);
 		return trainCar;
@@ -782,15 +792,13 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		AnimatedExplosion *explosion = new AnimatedExplosion(objectId, audioable, physicable, animatable, renderable, .5);
 
-		Light * testLight = new Light(explosion, .5);
-		testLight->dynamicColour = glm::vec3(0.3, 0.1, 0);
-		testLight->dynamicConstant = 0.0;
-		testLight->dynamicLinear = 0.1;
-		testLight->dynamicQuad = 0.1;
-		testLight->dynamicCutoff = 50.0f;
+		Light* light = static_cast<Light *>(makeObject(GameFactory::OBJECT_LIGHT, pos, NULL, NULL));
+		light->colour = glm::vec3(0.3, 0.1, 0);
+		light->constant = 0.0;
+		light->linear = 0.1;
+		light->quad = 0.1;
+		light->cutoff = 50.0f;
 
-
-		m_world.addLightObject(testLight);
 		m_world.addGameObject(explosion);
 		m_scene.addActor(*explosionVolume);
 
@@ -1041,6 +1049,26 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		m_scene.addActor(*explosionVolume);
 
 		return explosion;
+	}
+	case OBJECT_LIGHT:
+	{
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(pos->p.x, pos->p.y, pos->p.z));
+		Light *light = new Light(objectId, animatable);
+
+		m_world.addLightObject(light);
+
+		return light;
+	}
+	case OBJECT_DYNAMIC_LIGHT:
+	{
+		Animatable *animatable = new Animatable();
+		animatable->setPosition(glm::vec3(pos->p.x, pos->p.y, pos->p.z));
+		DynamicLight *light = new DynamicLight(objectId, animatable, static_cast<Object3D *>(parent));
+
+		m_world.addLightObject(light);
+
+		return light;
 	}
 	}
 }

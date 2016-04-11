@@ -204,7 +204,7 @@ bool StackManager::progressScene(int newTime)
 	if (sim != NULL)
 		m_renderer->draw(sim->getWorld()->getGameObjects(), sim->getHumanPlayers(), sim->getWorld()->getLights());
 	else 
-		m_renderer->draw(m_stack->getTopScene()->getWorld()->getGameObjects());
+		m_renderer->draw(m_stack->getTopScene()->getWorld()->getGameObjects(), NULL, m_stack->getTopScene()->getWorld()->getLights());
 		
 	if (m_mailBox->getTag() == SceneMessage::eExit)
 		return true;

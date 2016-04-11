@@ -139,6 +139,8 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 		aToStart = new TexturedObject2D(1, au, a, r);
 		m_world->addGameObject(aToStart);
 	}
+
+	setupSceneLights();
 }
 
 SinglePlayerMenu::~SinglePlayerMenu() {
@@ -329,5 +331,43 @@ void SinglePlayerMenu::unselectMenuItem(Object3D *menuItem) {
 			ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsString, offset, .5);
 			m_world->addObjectUpdater(upd);
 		}
+	}
+}
+
+void SinglePlayerMenu::setupSceneLights() {
+	{
+		Animatable *anable = new Animatable();
+		Light *light = new Light(1, anable);
+		anable->setPosition(glm::vec3(0, -10, -40));
+		light->colour = glm::vec3(1, 1, 1);
+		light->constant = 0.0;
+		light->linear = 0.2;
+		light->quad = 0.2;
+		light->cutoff = 500.0;
+		m_world->addLightObject(light);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *light = new Light(1, anable);
+		anable->setPosition(glm::vec3(-2, 5, -40));
+		light->colour = glm::vec3(1, 1, 1);
+		light->constant = 0.5;
+		light->linear = 0.1;
+		light->quad = 0.01;
+		light->cutoff = 500.0;
+		m_world->addLightObject(light);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *light = new Light(1, anable);
+		anable->setPosition(glm::vec3(2, 5, -40));
+		light->colour = glm::vec3(1, 1, 1);
+		light->constant = 0.5;
+		light->linear = 0.1;
+		light->quad = 0.01;
+		light->cutoff = 500.0;
+		m_world->addLightObject(light);
 	}
 }

@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\DynamicLight.cpp" />
     <ClCompile Include="Objects\BombExplosion.cpp" />
     <ClCompile Include="Objects\EndingScreenUIScoreTable.cpp" />
     <ClCompile Include="Objects\EndingScreenCarInfoManager.cpp" />
@@ -182,6 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Objects\DynamicLight.h" />
     <ClInclude Include="Objects\BombExplosion.h" />
     <ClInclude Include="Objects\EndingScreenUIScoreTable.h" />
     <ClInclude Include="Objects\EndingScreenCarInfoManager.h" />
@@ -266,7 +268,6 @@
     <ClInclude Include="Game Logic\Controllable.h" />
     <ClInclude Include="Game Logic\PlayerControllable.h" />
     <ClInclude Include="Objects\PowerUp.h" />
-    <ClInclude Include="Game Logic\Projectile.h" />
     <ClInclude Include="Game Logic\WayPointSystem.h" />
     <ClInclude Include="Libraries\stb_image.h" />
     <ClInclude Include="Objects\Camera.h" />

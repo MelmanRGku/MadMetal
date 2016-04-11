@@ -138,7 +138,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 	m_positionManager = new PositionManager(m_players);
 	audioHandle.queAudioSource(m_humanPlayers[0]->getCar()->getCar().getRigidDynamicActor(), StartBeepSound());
 	pauseControls(true);
-
+	setupSceneLights();
 }
 
 GameSimulation::~GameSimulation()
@@ -619,3 +619,28 @@ int GameSimulation::getFirstPlace()
 
 }
 
+void GameSimulation::setupSceneLights() {
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(100, 10, 100));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0;
+		firstLight->linear = 0.01;
+		firstLight->quad = 0;
+		firstLight->cutoff = 500.0;
+		m_world->addLightObject(firstLight);
+	}
+	
+	{
+		Animatable *anable = new Animatable();
+		Light *secondLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(130, 10, 440));
+		secondLight->colour = glm::vec3(0, 1, 0.3);
+		secondLight->constant = 0;
+		secondLight->linear = 0.01;
+		secondLight->quad = 0;
+		secondLight->cutoff = 100.0;
+		m_world->addLightObject(secondLight);
+	}
+}

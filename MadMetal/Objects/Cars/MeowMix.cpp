@@ -1,5 +1,7 @@
 #include "MeowMix.h"
 #include "Factory\GameFactory.h"
+#include "Renderer\CellShaderProgram.h"
+#include "Renderer\CellTireShaderProgram.h"
 
 
 MeowMix::MeowMix(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Renderable3D *rable2) : Car(id, style, car, aable, pable, anable, rable)

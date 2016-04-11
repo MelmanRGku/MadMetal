@@ -1,6 +1,7 @@
 #define M_PI (3.14159265359)
 
 #include "Object3D.h"
+#include "Renderer\CellShaderProgram.h"
 
 Object3D::Object3D(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Animation *aniable) : TestObject(id, aable, anable, rable)
 , m_physicable(pable), m_animation(aniable)

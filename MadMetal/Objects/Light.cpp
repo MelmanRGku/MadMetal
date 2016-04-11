@@ -1,18 +1,12 @@
 #include "Light.h"
-#include "TestObject.h"
 #include "Object3D.h"
 
-Light::Light(TestObject * myObject, float maximumLife, float totallife)
+Light::Light(long id, Animatable *anable) : TestObject(id, NULL, anable, NULL)
 { 
-	m_object = myObject; 
 }
 
-TestObject * Light::getObject()
-{
-	return m_object;
+bool Light::getParentHasToBeDeleted() {
+	return false;
 }
 
-glm::vec3 Light::getPosition()
-{
-	return static_cast<Object3D *>(m_object)->getPosition();
-}
+void Light::update(float dt) { TestObject::update(dt); }

@@ -96,6 +96,7 @@ PauseMenu::PauseMenu(std::vector<ControllableTemplate *> players, Audio *audio)
 		background = new Object3D(3, au, p, a, r, NULL);
 		m_world->addGameObject(background);
 	}
+	setupSceneLights();
 }
 
 
@@ -202,4 +203,43 @@ bool PauseMenu::simulateScene(double dt, SceneMessage &message)
 
 	}
 	return false;
+}
+
+void PauseMenu::setupSceneLights() {
+
+	{
+		Animatable *anable = new Animatable();
+		Light *light = new Light(1, anable);
+		anable->setPosition(glm::vec3(0, -10, -40));
+		light->colour = glm::vec3(1, 1, 1);
+		light->constant = 0.0;
+		light->linear = 0.2;
+		light->quad = 0.2;
+		light->cutoff = 500.0;
+		m_world->addLightObject(light);
+	}
+
+	{
+	Animatable *anable = new Animatable();
+	Light *light = new Light(1, anable);
+	anable->setPosition(glm::vec3(-2, 5, -40));
+	light->colour = glm::vec3(1, 1, 1);
+	light->constant = 0.5;
+	light->linear = 0.1;
+	light->quad = 0.01;
+	light->cutoff = 500.0;
+	m_world->addLightObject(light);
+}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *light = new Light(1, anable);
+		anable->setPosition(glm::vec3(2, 5, -40));
+		light->colour = glm::vec3(1, 1, 1);
+		light->constant = 0.5;
+		light->linear = 0.1;
+		light->quad = 0.01;
+		light->cutoff = 500.0;
+		m_world->addLightObject(light);
+	}
 }

@@ -3,6 +3,7 @@
 #include "Global\Fonts.h"
 #include "Objects\Camera.h"
 #include "Objects\TestObject.h"
+#include "Objects\Light.h"
 #include "Game Logic\PlayerControllable.h"
 #include "Libraries\freeglut\freeglut.h"
 

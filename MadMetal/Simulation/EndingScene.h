@@ -24,5 +24,6 @@ public:
 	~EndingScene();
 	void sortPlayers();
 	bool simulateScene(double dt, SceneMessage &message);
+	void setupSceneLights();
 };
 

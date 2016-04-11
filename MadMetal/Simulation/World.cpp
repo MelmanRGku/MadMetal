@@ -3,8 +3,7 @@
 
 World::World() {
 	gameObjects = new std::vector<TestObject*>;
-	lightObjects = new std::vector<Light*>;
-
+	lights = new std::vector<Light*>;
 }
 
 
@@ -73,20 +72,22 @@ void World::deleteObjectByIndex(int index) {
 }
 
 void World::deleteLightByIndex(int index) {
-	Light *lgt = lightObjects->at(index);
-	lightObjects->erase(lightObjects->begin() + index);
+	Light *lgt = lights->at(index);
+	lights->erase(lights->begin() + index);
 }
 
 
 void World::update(float dt) 
 {
-	for (int i = 0; i < lightObjects->size(); i++) {
-		Light *lgt = lightObjects->at(i);
+	for (int i = 0; i < lights->size(); i++) {
+		Light *lgt = lights->at(i);
 
-		if (lgt->getObject()->getHasToBeDeleted()) {
+		if (lgt->getHasToBeDeleted() || lgt->getParentHasToBeDeleted()) {
 			deleteLightByIndex(i);
 			continue;
 		}
+
+		lgt->update(dt);
 	}
 
 	for (int i = 0; i < gameObjects->size(); i++) {

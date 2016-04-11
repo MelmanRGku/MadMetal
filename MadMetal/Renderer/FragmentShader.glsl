@@ -1,5 +1,7 @@
 #version 410 core
 
+#define MAX_NUM_OF_LIGHTS 100
+
 // Input from vertex shader
 in VS_OUT
 {
@@ -18,30 +20,15 @@ uniform float ambient = 0.3f;
 
 uniform int bitmask = 0x00000001;
 
-uniform vec3 lightPosArray[10];
+uniform vec3 lightPosArray[MAX_NUM_OF_LIGHTS];
 
-uniform vec3 lightColorArray[10];
+uniform vec3 lightColorArray[MAX_NUM_OF_LIGHTS];
 
- uniform float constArray[10];
- uniform float linearArray[10];
- uniform float quadArray[10];
+ uniform float constArray[MAX_NUM_OF_LIGHTS];
+ uniform float linearArray[MAX_NUM_OF_LIGHTS];
+ uniform float quadArray[MAX_NUM_OF_LIGHTS];
 
- uniform float cutoffArray[10];
-
-
-
- uniform vec3 lightPosArrayDynamic[32];
-
- uniform vec3 lightColorArrayDynamic[32];
-
- uniform float constArrayDynamic[32];
- uniform float linearArrayDynamic[32];
- uniform float quadArrayDynamic[32];
-
- uniform float cutoffArrayDynamic[32];
-
-
-
+ uniform float cutoffArray[MAX_NUM_OF_LIGHTS];
 
 
 // Texture Mapping
@@ -83,14 +70,10 @@ float specularLighting(in vec3 N, in vec3 L, in vec3 V)
 
 float dropoffFunction(float constant1, float constant2, float constant3, vec3 lightPosition, vec4 position, float cutoff)
 {
-	int specialValue = 1;
-	if(constant1 == 0 && constant2 == 0 && constant3 == 0)
-	{
+	float dist = distance(lightPosition, position.xyz) / 4;
+	if (dist > cutoff) 
 		return 0;
-	}
-	float dist = distance(lightPosition, position.xyz);
-	if (dist > cutoff) specialValue = 0;
-	return (1/(constant1 + constant2 * dist + constant3 * pow(dist, 2))) * specialValue;
+	return 1/(constant1 + constant2 * dist + constant3 * pow(dist, 2));
 
 }
 
@@ -116,7 +99,7 @@ void main(void)
 
    int specialValue;
 
-   for (int i = 0; i < 10; i++)
+   for (int i = 0; i < MAX_NUM_OF_LIGHTS; i++)
    {
 
 	   L = normalize(lightPosArray[i] - fs_in.position_attr.xyz);
@@ -128,21 +111,6 @@ void main(void)
 
 
 	 lighting += (Iamb + Idif + Ispe) * dropoffFunction(constArray[i], linearArray[i], quadArray[i],lightPosArray[i] , fs_in.position_attr, cutoffArray[i]) * lightColorArray[i];      
-
-   }
-
-   for (int i = 0; i < 32; i++)
-   {
-
-	   L = normalize(lightPosArrayDynamic[i] - fs_in.position_attr.xyz);
-
-	   // get Blinn-Phong reflectance components
-	   float Iamb = ambientLighting();
-	   float Idif = diffuseLighting(N, L);
-	   float Ispe = specularLighting(N, L, V);
-
-
-	 lighting += (Iamb + Idif + Ispe) * dropoffFunction(constArrayDynamic[i], linearArrayDynamic[i], quadArrayDynamic[i],lightPosArrayDynamic[i] , fs_in.position_attr, cutoffArrayDynamic[i]) * lightColorArrayDynamic[i];      
 
    }
 

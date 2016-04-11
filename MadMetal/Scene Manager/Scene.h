@@ -102,5 +102,5 @@ public:
 		return m_sceneCameras; 
 	}
 	//virtual void loadFromFile();
-
+	virtual void setupSceneLights() = 0;
 };

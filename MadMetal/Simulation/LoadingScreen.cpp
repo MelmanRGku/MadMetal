@@ -13,6 +13,7 @@ LoadingScreen::LoadingScreen(SceneMessage& toDeliver, Audio &audio, LoadingStatu
 	createLoadingInfoString();
 	this->status = status;
 	this->t = t;	
+	setupSceneLights();
 }
 
 
@@ -73,4 +74,18 @@ void LoadingScreen::createLoadingInfoString() {
 	loadingInfoString = new Text3D(4, audioable, physicable, animatable, renderable, 1);
 	loadingInfoString->setPosition(glm::vec3(0, -4.5, -20));
 	m_world->addGameObject(loadingInfoString);
+}
+
+void LoadingScreen::setupSceneLights() {
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(0, 0, 0));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.9;
+		firstLight->linear = 0.1;
+		firstLight->quad = 0.0;
+		firstLight->cutoff = 500.0;
+		m_world->addLightObject(firstLight);
+	}
 }

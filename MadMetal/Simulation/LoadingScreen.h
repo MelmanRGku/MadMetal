@@ -24,5 +24,6 @@ public:
 	LoadingScreen(SceneMessage &toDeliver, Audio &audio, LoadingStatus *status, std::thread *t);
 	~LoadingScreen();
 	bool simulateScene(double dt, SceneMessage &newMessage);
+	void setupSceneLights();
 };
 

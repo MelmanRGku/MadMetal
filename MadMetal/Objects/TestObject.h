@@ -14,9 +14,6 @@
 #include "Audio\Sound.h"
 #include "Renderer\Animation.h"
 #include <time.h>
-#include "Renderer\CellShaderProgram.h"
-#include "Renderer\CellTireShaderProgram.h"
-#include "Renderer\NoShaderProgram.h"
 
 class TestObject
 {

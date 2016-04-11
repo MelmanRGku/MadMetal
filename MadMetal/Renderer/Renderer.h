@@ -8,6 +8,7 @@
 class PlayerControllable;
 class TestObject;
 class Camera;
+class Light;
 
 class Renderer
 {
