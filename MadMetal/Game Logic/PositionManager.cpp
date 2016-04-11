@@ -1,5 +1,6 @@
 #include "Game Logic\PositionManager.h"
 #include "Game Logic\Controllable.h"
+#include "Objects\CollisionVolume.h"
 PositionManager::PositionManager() : m_players(std::vector<Controllable*>())
 {
 
@@ -20,7 +21,7 @@ void PositionManager::updatePlayerPositions()
 	{
 		for (int j = i + 1; j < m_players.size(); j++)
 		{
-			if (m_players.at(i)->getCar()->getCurrentWaypoint() == NULL || m_players.at(j)->getCar()->getCurrentWaypoint() == NULL)
+			if (m_players.at(i)->getCar()->getCurrentCollisionVolume() == NULL || m_players.at(j)->getCar()->getCurrentCollisionVolume() == NULL)
 				continue;
 			if (m_players.at(i)->getCar()->getLap() < m_players.at(j)->getCar()->getLap())
 			{
@@ -38,25 +39,44 @@ void PositionManager::updatePlayerPositions()
 			}
 			else
 			{
-				if (m_players.at(i)->getCar()->getCurrentWaypoint()->getId() > m_players.at(j)->getCar()->getCurrentWaypoint()->getId())
+				if (m_players.at(i)->getCar()->getCurrentCollisionVolume()->getId() > m_players.at(j)->getCar()->getCurrentCollisionVolume()->getId())
 				{
 					if (m_players.at(i)->getCar()->getPositionInRace() > m_players.at(j)->getCar()->getPositionInRace())
 					{
 						swap(*m_players.at(i), *m_players.at(j));
 					}
 				}
-				else if (m_players.at(i)->getCar()->getCurrentWaypoint()->getId() < m_players.at(j)->getCar()->getCurrentWaypoint()->getId())
+				else if (m_players.at(i)->getCar()->getCurrentCollisionVolume()->getId() < m_players.at(j)->getCar()->getCurrentCollisionVolume()->getId())
 				{
 					if (m_players.at(i)->getCar()->getPositionInRace() < m_players.at(j)->getCar()->getPositionInRace())
 					{
 						swap(*m_players.at(i), *m_players.at(j));
 					}
 				}
-				else if (m_players.at(i)->getCar()->getCurrentWaypoint()->getId() == m_players.at(j)->getCar()->getCurrentWaypoint()->getId())
+				else if (m_players.at(i)->getCar()->getCurrentCollisionVolume()->getId() == m_players.at(j)->getCar()->getCurrentCollisionVolume()->getId())
 				{
-					if (i == 0)
+					glm::vec3 player1Position = m_players.at(i)->getCar()->getGlobalPose();
+					player1Position.y = 0;
+
+					glm::vec3 player2Position = m_players.at(j)->getCar()->getGlobalPose();
+					player2Position.y = 0;
+
+					glm::vec3 player1Goal = m_players.at(i)->getCar()->getCurrentCollisionVolume()->getGlobalPose();
+					player1Goal.y = 0;
+
+					glm::vec3 player2Goal = m_players.at(j)->getCar()->getCurrentCollisionVolume()->getGlobalPose();
+					player2Goal.y = 0;
+
+					float distanceToGoalPlayer1 = glm::distance2(player1Position, player1Goal);
+					float distanceToGoalPlayer2 = glm::distance2(player2Position, player2Goal);
+
+					if (distanceToGoalPlayer1 > distanceToGoalPlayer2 && m_players.at(j)->getCar()->getPositionInRace() > m_players.at(i)->getCar()->getPositionInRace())
 					{
-						//std::cout << "in same waypoint\n";
+						swap(*m_players.at(i), *m_players.at(j));
+					}
+					else if (distanceToGoalPlayer1 < distanceToGoalPlayer2 && m_players.at(j)->getCar()->getPositionInRace() < m_players.at(i)->getCar()->getPositionInRace())
+					{
+						swap(*m_players.at(i), *m_players.at(j));
 					}
 				}
 			}

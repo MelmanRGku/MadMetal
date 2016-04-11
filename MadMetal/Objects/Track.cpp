@@ -8,28 +8,12 @@
 
 Track::Track(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Object3D *drivablePart, Object3D *nonDrivablePart, Object3D* trackWalls) : Object3D(id, aable, pable, anable, rable, NULL), drivablePart(drivablePart), nonDrivablePart(nonDrivablePart), trackWalls(trackWalls)
 {
-	
-	ObjModelLoader *loader = new ObjModelLoader();
-	NavigationalGrid *model = loader->loadNavGridFromFile("Assets/NavigationalGrid/trackNavMesh.obj");
-
-	WaypointSystem * navigationalGrid = new WaypointSystem(*model);
-
-	m_waypointList = navigationalGrid->getWaypointList();
-
-	m_waypointSystems.push_back(navigationalGrid);
-
-	delete model;
-	delete loader;
-	
 	setupCollisionVolumes();
 }
 
 Track::~Track()
 {
-	for (std::vector<WaypointSystem*>::iterator it = m_waypointSystems.begin(); it != m_waypointSystems.end(); ++it)
-	{
-		delete *it;
-	}
+	
 }
 
 void Track::setupCollisionVolumes() {
@@ -47,244 +31,436 @@ void Track::setupCollisionVolumes() {
 		*topOfTheTrafficCircle = NULL,
 		*bottomOfTheTrafficCircle = NULL;
 	
-	PxTransform * pos;
+	PxTransform * pos = NULL;
 	PxGeometry **geom1 = new PxGeometry *[1];
-	geom1[0] = new PxBoxGeometry(50, 10, 10);
+	CollisionVolume::resetGlobalId();
+	int sameIndex = 0;
 	std::vector<PxVec3> respawnLocations;
-	//startLine
-	pos = new PxTransform(PxVec3(4, 15, -35));
-	startLine = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	//startLine->setGoalWaypointIndex(getWaypointAt(222));
-	//startLine->setCurrentWaypointIndex(getWaypointAt(182));
-	//startLine->setLastWaypointIndex(getWaypointAt(157));
-	m_collisionVolumes.push_back(startLine);
-	respawnLocations.push_back(PxVec3(25, 20, -35));
-	respawnLocations.push_back(PxVec3(5, 20, -35));
-	respawnLocations.push_back(PxVec3(-15, 20, -35));
-	respawnLocations.push_back(PxVec3(25, 20, -60));
-	respawnLocations.push_back(PxVec3(5, 20, -60));
-	respawnLocations.push_back(PxVec3(-15, 20, -60));
-	startLine->setRespawnLocations(respawnLocations);
-	startLine->setIsStartCollisionVolume(true);
-	respawnLocations.clear();
 
-	//path branch leading into the dessert
-	pos = new PxTransform(PxVec3(15, 15, 225));
-	geom1[0] = new PxBoxGeometry(25, 10, 10);
-	respawnLocations.push_back(PxVec3(25, 20, 225));
-	respawnLocations.push_back(PxVec3(5, 20, 225));
-	respawnLocations.push_back(PxVec3(25, 20, 200));
-	respawnLocations.push_back(PxVec3(5, 20, 200));
-	pathBranchLeadingIntoTheDessert = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	pathBranchLeadingIntoTheDessert->setGoalWaypointIndex(getWaypointAt(1946));
-	pathBranchLeadingIntoTheDessert->setCurrentWaypointIndex(getWaypointAt(1844));
-	pathBranchLeadingIntoTheDessert->setLastWaypointIndex(getWaypointAt(1980));
-	pathBranchLeadingIntoTheDessert->setSectionSpeedDamping(1.0);
-	pathBranchLeadingIntoTheDessert->setSectionSteeringDamping(0.6);
-
-	m_collisionVolumes.push_back(pathBranchLeadingIntoTheDessert);
-	pathBranchLeadingIntoTheDessert->setRespawnLocations(respawnLocations);
-	respawnLocations.clear();
-
-	//top of the jump ramp in the dessert
-	pos = new PxTransform(PxVec3(-30, 37, 325));
-	topOfTheJumpRampInTheDesert = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	m_collisionVolumes.push_back(topOfTheJumpRampInTheDesert);
-
-	//deathPit 1
-	geom1[0] = new PxBoxGeometry(40, 15, 45);
-	respawnLocations.push_back(PxVec3(25, 20, 525));
-	respawnLocations.push_back(PxVec3(5, 20, 525));
-	respawnLocations.push_back(PxVec3(25, 20, 500));
-	respawnLocations.push_back(PxVec3(5, 20, 500));
-	pos = new PxTransform(PxVec3(15, 0, 450));
-	deathPit1 = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	deathPit1->setGoalWaypointIndex(getWaypointAt(2004));
-	deathPit1->setCurrentWaypointIndex(getWaypointAt(1895));
-	deathPit1->setLastWaypointIndex(getWaypointAt(1895));
-	deathPit1->setSectionSpeedDamping(1.0);
-	deathPit1->setSectionSteeringDamping(0.4);
-	m_collisionVolumes.push_back(deathPit1);
-	deathPit1->setRespawnLocations(respawnLocations);
-	respawnLocations.clear();
-
-	//second death pit
-	geom1[0] = new PxBoxGeometry(40, 15, 38);
-	respawnLocations.push_back(PxVec3(-35, 20, 865));
-	respawnLocations.push_back(PxVec3(-15, 20, 865));
-	respawnLocations.push_back(PxVec3(-35, 20, 840));
-	respawnLocations.push_back(PxVec3(-15, 20, 840));
-	pos = new PxTransform(PxVec3(-25, 0, 760));
-	deathPit2 = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	m_collisionVolumes.push_back(deathPit2);
-	deathPit2->setRespawnLocations(respawnLocations);
-	deathPit2->setGoalWaypointIndex(getWaypointAt(2103));
-	deathPit2->setCurrentWaypointIndex(getWaypointAt(1915));
-	deathPit2->setLastWaypointIndex(getWaypointAt(1915));
-	deathPit2->setSectionSpeedDamping(1.0);
-	deathPit2->setSectionSteeringDamping(0.8);
-	respawnLocations.clear();
-	
-	//start of the canyon
-	geom1[0] = new PxBoxGeometry(40, 10, 55);
-	respawnLocations.push_back(PxVec3(-15, 20, 1100));
-	respawnLocations.push_back(PxVec3(15, 20, 1100));
-	respawnLocations.push_back(PxVec3(-15, 20, 1075));
-	respawnLocations.push_back(PxVec3(15, 20, 1075));
-	pos = new PxTransform(PxVec3(0, 15, 1100));
-	startOfTheCanyon = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	m_collisionVolumes.push_back(startOfTheCanyon);
-	startOfTheCanyon->setGoalWaypointIndex(getWaypointAt(3358));
-	startOfTheCanyon->setCurrentWaypointIndex(getWaypointAt(2651));
-	startOfTheCanyon->setLastWaypointIndex(getWaypointAt(1915));
-	startOfTheCanyon->setSectionSpeedDamping(1.0);
-	startOfTheCanyon->setSectionSteeringDamping(0.35);
-	startOfTheCanyon->setRespawnLocations(respawnLocations);
-	respawnLocations.clear();
-
-	//branch path in the canyon
-	respawnLocations.push_back(PxVec3(-45, 20, 1560));
-	respawnLocations.push_back(PxVec3(-20, 20, 1560));
-	respawnLocations.push_back(PxVec3(-45, 20, 1540));
-	respawnLocations.push_back(PxVec3(-25, 20, 1540));
-	pos = new PxTransform(PxVec3(-45, 15, 1555), PxQuat(1.6203, PxVec3(0, -1, 0)));
-	branchPathInTheCanyon = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	branchPathInTheCanyon->setGoalWaypointIndex(getWaypointAt(3590));
-	branchPathInTheCanyon->setCurrentWaypointIndex(getWaypointAt(3409));
-	branchPathInTheCanyon->setLastWaypointIndex(getWaypointAt(3358));
-	branchPathInTheCanyon->setSectionSpeedDamping(1.0);
-	branchPathInTheCanyon->setSectionSteeringDamping(0.7);
-	m_collisionVolumes.push_back(branchPathInTheCanyon);
-	branchPathInTheCanyon->setRespawnLocations(respawnLocations);
-	respawnLocations.clear();
-
-	//landing platform in the goo pit
-	geom1[0] = new PxBoxGeometry(300, 10, 300);
-	respawnLocations.push_back(PxVec3(-870, 20, 1575));
-	respawnLocations.push_back(PxVec3(-870, 20, 1550));
-	respawnLocations.push_back(PxVec3(-870, 20, 1525));
-	
-	respawnLocations.push_back(PxVec3(-840, 20, 1575));
-	respawnLocations.push_back(PxVec3(-840, 20, 1550));
-	respawnLocations.push_back(PxVec3(-840, 20, 1525));
-	pos = new PxTransform(PxVec3(-640, -18, 1550), PxQuat(1.6203, PxVec3(0, -1, 0)));
-	landingPlatformInTheGooPit = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	landingPlatformInTheGooPit->setGoalWaypointIndex(getWaypointAt(1484));
-	landingPlatformInTheGooPit->setCurrentWaypointIndex(getWaypointAt(408));
-	landingPlatformInTheGooPit->setLastWaypointIndex(getWaypointAt(408));
-	landingPlatformInTheGooPit->setSectionSpeedDamping(1.0);
-	landingPlatformInTheGooPit->setSectionSteeringDamping(0.8);
-	m_collisionVolumes.push_back(landingPlatformInTheGooPit);
-	landingPlatformInTheGooPit->setRespawnLocations(respawnLocations);
-	respawnLocations.clear();
-
-	//end of the first train tunnel
+	// 0
 	geom1[0] = new PxBoxGeometry(50, 10, 50);
-	respawnLocations.push_back(PxVec3(-900, -15, 771));
-	respawnLocations.push_back(PxVec3(-875, -15, 755));
-	respawnLocations.push_back(PxVec3(-900, -15, 740));
-	respawnLocations.push_back(PxVec3(-875, -15, 725));
-	pos = new PxTransform(PxVec3(-856, -18, 751), PxQuat(2.04, PxVec3(0, 1, 0)));
-	endOfTheFirstTrainTunnel = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	endOfTheFirstTrainTunnel->setGoalWaypointIndex(getWaypointAt(1808));
-	endOfTheFirstTrainTunnel->setCurrentWaypointIndex(getWaypointAt(1478));
-	endOfTheFirstTrainTunnel->setLastWaypointIndex(getWaypointAt(1484));
-	endOfTheFirstTrainTunnel->setSectionSpeedDamping(1.0);
-	endOfTheFirstTrainTunnel->setSectionSteeringDamping(0.7);
-	m_collisionVolumes.push_back(endOfTheFirstTrainTunnel);
-	endOfTheFirstTrainTunnel->setRespawnLocations(respawnLocations);
+	pos = new PxTransform(PxVec3(0, 10, -40));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsStartCollisionVolume(true);
 	respawnLocations.clear();
-
-	//maybe the ramp exit of tunnel :p
-	respawnLocations.push_back(PxVec3(-710, 20, 120));
-	respawnLocations.push_back(PxVec3(-710, 20, 95));
-	respawnLocations.push_back(PxVec3(-760, 20, 120));
-	respawnLocations.push_back(PxVec3(-760, 20, 95));
-	pos = new PxTransform(PxVec3(-730, 10, 120), PxQuat(3.14, PxVec3(0, 1, 0)));
-	maybeTheRampExitInTheTunnel = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	//maybeTheRampExitInTheTunnel->setGoalWaypointIndex(getWaypointAt(821));
-	//maybeTheRampExitInTheTunnel->setCurrentWaypointIndex(getWaypointAt(850));
-	//maybeTheRampExitInTheTunnel->setLastWaypointIndex(getWaypointAt(846));
-	//maybeTheRampExitInTheTunnel->setSectionSpeedDamping(1.0);
-	//maybeTheRampExitInTheTunnel->setSectionSteeringDamping(1.0);
-	m_collisionVolumes.push_back(maybeTheRampExitInTheTunnel);
-	maybeTheRampExitInTheTunnel->setRespawnLocations(respawnLocations);
-	respawnLocations.clear();
-
-	//entrence to the trafic circle
-	respawnLocations.push_back(PxVec3(-625, 20, -95));
-	respawnLocations.push_back(PxVec3(-625, 20, -120));
-	respawnLocations.push_back(PxVec3(-600, 20, -95));
-	respawnLocations.push_back(PxVec3(-600, 20, -120));
-	pos = new PxTransform(PxVec3(-625, 15, -105), PxQuat(1.53, PxVec3(0, 1, 0)));
-	entranceToTheTrafficCircle = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	//entranceToTheTrafficCircle->setGoalWaypointIndex(getWaypointAt(767));
-	//entranceToTheTrafficCircle->setCurrentWaypointIndex(getWaypointAt(822));
-	//entranceToTheTrafficCircle->setLastWaypointIndex(getWaypointAt(825));
-	//entranceToTheTrafficCircle->setSectionSpeedDamping(1.0);
-	//entranceToTheTrafficCircle->setSectionSteeringDamping(1.0);
-	m_collisionVolumes.push_back(entranceToTheTrafficCircle);
-	entranceToTheTrafficCircle->setRespawnLocations(respawnLocations);
-	respawnLocations.clear();
-
-	//top of the traffic circle
-	geom1[0] = new PxBoxGeometry(25, 15, 25);
-	respawnLocations.push_back(PxVec3(-348, 20, 0));
-	respawnLocations.push_back(PxVec3(-348, 20, 21.5));
-	respawnLocations.push_back(PxVec3(-348, 20, 41.5));
-	pos = new PxTransform(PxVec3(-378, 17, 21.5), PxQuat(2.22962, PxVec3(0, 1, 0)));
-	topOfTheTrafficCircle = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	m_collisionVolumes.push_back(topOfTheTrafficCircle);
-	topOfTheTrafficCircle->setRespawnLocations(respawnLocations);
-	respawnLocations.clear();
-
-	//bottom of the traffic circle
-	respawnLocations.push_back(PxVec3(-348, 20, -211.5));
-	respawnLocations.push_back(PxVec3(-348, 20, -231.5));
-	respawnLocations.push_back(PxVec3(-348, 20, -251.5));
-	pos = new PxTransform(PxVec3(-378, 17, -231.5), PxQuat(0.685, PxVec3(0, 1, 0)));
-	bottomOfTheTrafficCircle = static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL));
-	//bottomOfTheTrafficCircle->setGoalWaypointIndex(getWaypointAt(152));
-	//bottomOfTheTrafficCircle->setCurrentWaypointIndex(getWaypointAt(755));
-	//bottomOfTheTrafficCircle->setLastWaypointIndex(getWaypointAt(770));
-	m_collisionVolumes.push_back(bottomOfTheTrafficCircle);
-	bottomOfTheTrafficCircle->setRespawnLocations(respawnLocations);
-	respawnLocations.clear();
-
 	delete pos;
 	delete geom1[0];
+
+	// 1a
+	geom1[0] = new PxBoxGeometry(19, 10, 20);
+	pos = new PxTransform(PxVec3(10, 10, 181.75), PxQuat(0, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 1b
+	geom1[0] = new PxBoxGeometry(19, 10, 20);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(-31.5, 35, 360), PxQuat(0, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 2a
+	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	pos = new PxTransform(PxVec3(10, 10, 436), PxQuat(0.52, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	respawnLocations.push_back(PxVec3(25, 20, 500));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 2b
+	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(-31.5, 35, 534), PxQuat(0.22, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 3a
+	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	pos = new PxTransform(PxVec3(-15, 10, 606));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+
+	// 3b
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	pos = new PxTransform(PxVec3(32, 35, 659), PxQuat(0.1, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 4a
+	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	pos = new PxTransform(PxVec3(-30, 10, 760));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	respawnLocations.push_back(PxVec3(-35, 20, 840));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 4b
+	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(32, 35, 908), PxQuat(0.05, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 5
+	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	pos = new PxTransform(PxVec3(-4, 10, 1050), PxQuat(0.1, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.8);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 6
+	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	pos = new PxTransform(PxVec3(-2, 10, 1430), PxQuat(0.0, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.3);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 7
+	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	pos = new PxTransform(PxVec3(-10, 10, 1505), PxQuat(1.17, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.6);
+	delete pos;
+	delete geom1[0];
+
+	// 8
+	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	pos = new PxTransform(PxVec3(-57, 10, 1555), PxQuat(1.5, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 9
+	geom1[0] = new PxBoxGeometry(50, 10, 40);
+	pos = new PxTransform(PxVec3(-245, 10, 1555), PxQuat(1.5, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 10a
+	geom1[0] = new PxBoxGeometry(10, 10, 30);
+	pos = new PxTransform(PxVec3(-341, 10, 1584), PxQuat(1.6, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	respawnLocations.push_back(PxVec3(-840, 20, 1575));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//10b
+	geom1[0] = new PxBoxGeometry(10, 10, 30);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(-338, 10, 1515), PxQuat(1.33, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	respawnLocations.push_back(PxVec3(-840, 20, 1575));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//11a
+	geom1[0] = new PxBoxGeometry(10, 10, 30);
+	pos = new PxTransform(PxVec3(-400, 10, 1599), PxQuat(1.5, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	respawnLocations.push_back(PxVec3(-840, 20, 1575));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 11b
+	geom1[0] = new PxBoxGeometry(10, 10, 30);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(-396, 10, 1500), PxQuat(0.1, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	respawnLocations.push_back(PxVec3(-840, 20, 1575));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//12a
+	geom1[0] = new PxBoxGeometry(10, 10, 30);
+	pos = new PxTransform(PxVec3(-594, 15, 1603), PxQuat(1.5, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	respawnLocations.push_back(PxVec3(-840, 20, 1575));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//12b
+	geom1[0] = new PxBoxGeometry(10, 10, 30);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(-591, 15, 1500), PxQuat(1.5, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	respawnLocations.push_back(PxVec3(-840, 20, 1575));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//13a
+	geom1[0] = new PxBoxGeometry(30, 10, 40);
+	pos = new PxTransform(PxVec3(-830, -20, 1603), PxQuat(1.5, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	respawnLocations.push_back(PxVec3(-840, 20, 1575));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//13b
+	geom1[0] = new PxBoxGeometry(30, 10, 40);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(-830, -20, 1500), PxQuat(1.95, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	respawnLocations.push_back(PxVec3(-840, 20, 1575));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//14a
+	geom1[0] = new PxBoxGeometry(30, 10, 40);
+	pos = new PxTransform(PxVec3(-934, -20, 1559), PxQuat(2.21, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	respawnLocations.push_back(PxVec3(-840, 20, 1575));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//14b
+	geom1[0] = new PxBoxGeometry(30, 10, 40);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(-923, -20, 1490), PxQuat(2.45, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 15
+	geom1[0] = new PxBoxGeometry(30, 10, 30);
+	pos = new PxTransform(PxVec3(-987, -20, 1436), PxQuat(3.10, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 16
+	geom1[0] = new PxBoxGeometry(30, 10, 30);
+	pos = new PxTransform(PxVec3(-989, -20, 840), PxQuat(3.10, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.6);
+	delete pos;
+	delete geom1[0];
+
+	//17
+	geom1[0] = new PxBoxGeometry(30, 10, 30);
+	pos = new PxTransform(PxVec3(-820, -20, 750), PxQuat(4.0, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.6);
+	delete pos;
+	delete geom1[0];
+
+	//18
+	geom1[0] = new PxBoxGeometry(30, 10, 30);
+	pos = new PxTransform(PxVec3(-720, -20, 659), PxQuat(3.01, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//19
+	geom1[0] = new PxBoxGeometry(30, 10, 30);
+	pos = new PxTransform(PxVec3(-736, 10, -59), PxQuat(3.01, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 20
+	geom1[0] = new PxBoxGeometry(10, 10, 20);
+	pos = new PxTransform(PxVec3(-713, 10, -91), PxQuat(4.7, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//21
+	geom1[0] = new PxBoxGeometry(10, 10, 20);
+	pos = new PxTransform(PxVec3(-557, 10, -104), PxQuat(4.7, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//22a
+	geom1[0] = new PxBoxGeometry(25, 10, 25);
+	pos = new PxTransform(PxVec3(-478, 10, -35), PxQuat(4.5, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.3);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//22b
+	geom1[0] = new PxBoxGeometry(25, 10, 25);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(-473, 10, -183), PxQuat(4.07, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.3);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	// 23a
+	geom1[0] = new PxBoxGeometry(25, 10, 25);
+	pos = new PxTransform(PxVec3(-383, 10, 4), PxQuat(5.83, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.3);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//23b
+	geom1[0] = new PxBoxGeometry(25, 10, 25);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(-380, 10, -219), PxQuat(5.11, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.3);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//24a
+	geom1[0] = new PxBoxGeometry(25, 10, 25);
+	pos = new PxTransform(PxVec3(-343, 10, -5), PxQuat(4.3, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.3);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//24b
+	geom1[0] = new PxBoxGeometry(25, 10, 25);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(-333, 10, -207), PxQuat(5.37, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.3);
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//25
+	geom1[0] = new PxBoxGeometry(40, 10, 40);
+	pos = new PxTransform(PxVec3(-184.2, 10, -100), PxQuat(4.7, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	//26
+	geom1[0] = new PxBoxGeometry(30, 10, 30);
+	pos = new PxTransform(PxVec3(-23, 10, -100), PxQuat(6.23, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	respawnLocations.clear();
+	delete pos;
+	delete geom1[0];
+
+	attachNextCollsionVolumes();
+	attachReachableCollsionVolumes();
+
 	delete[] geom1;
 
-	startLine->addNextVolume(pathBranchLeadingIntoTheDessert);
-	startLine->addNextVolume(topOfTheJumpRampInTheDesert);
-
-	pathBranchLeadingIntoTheDessert->addNextVolume(deathPit1);
-	pathBranchLeadingIntoTheDessert->addNextVolume(topOfTheJumpRampInTheDesert);
-
-	topOfTheJumpRampInTheDesert->addNextVolume(deathPit1);
-	topOfTheJumpRampInTheDesert->addNextVolume(deathPit2);
-	topOfTheJumpRampInTheDesert->addNextVolume(startOfTheCanyon);
-
-	deathPit1->addNextVolume(deathPit2);
-
-	deathPit2->addNextVolume(startOfTheCanyon);
-
-	startOfTheCanyon->addNextVolume(branchPathInTheCanyon);
-
-	branchPathInTheCanyon->addNextVolume(landingPlatformInTheGooPit);
-
-	landingPlatformInTheGooPit->addNextVolume(endOfTheFirstTrainTunnel);
-
-	endOfTheFirstTrainTunnel->addNextVolume(maybeTheRampExitInTheTunnel);
-
-	maybeTheRampExitInTheTunnel->addNextVolume(entranceToTheTrafficCircle);
-
-	entranceToTheTrafficCircle->addNextVolume(topOfTheTrafficCircle);
-	entranceToTheTrafficCircle->addNextVolume(bottomOfTheTrafficCircle);
-
-	topOfTheTrafficCircle->addNextVolume(startLine);
-
-	bottomOfTheTrafficCircle->addNextVolume(startLine);
 }
 
 bool Track::draw(Renderer *renderer, Renderer::ShaderType type, int passNumber) {
@@ -299,181 +475,59 @@ void Track::playTrackMusic()
 	m_audioable->getAudioHandle().playMusic(m_sound);
 }
 
-Waypoint * Track::getWaypointAt(int index)
+void Track::attachNextCollsionVolumes()
 {
-	if (index < m_waypointList.size())
+	for (unsigned int i = 0; i < m_collisionVolumes.size(); i++)
 	{
-		return m_waypointList[index];
-	}
-	else
-	{
-		std::cerr << "ERROR: trying to acquire out of index pointer\n";
-		return NULL;
+		int indexToAdd = 1;
+		CollisionVolume* collisionVolumeToCheck = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
+		while (collisionVolumeToCheck->getId() == m_collisionVolumes[i]->getId())
+		{
+			indexToAdd++;
+			collisionVolumeToCheck = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
+		}
+		CollisionVolume* nextCollisionVolume = collisionVolumeToCheck;
+		do
+		{
+			if (m_collisionVolumes[i]->getIsPartOfMainPath() || m_collisionVolumes[i]->getPathNumber() == nextCollisionVolume->getPathNumber() || nextCollisionVolume->getIsPartOfMainPath())
+			{
+				m_collisionVolumes[i]->addVolumeToNextCollsionVolumeList(nextCollisionVolume);
+			}
+			indexToAdd++;
+			nextCollisionVolume = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
+		} while (collisionVolumeToCheck->getId() == nextCollisionVolume->getId());
+		
 	}
 }
 
-void Track::stitchWaypointSystems(Boundry lastWaypointSystemLocation, Boundry newWaypointSystemPosition, WaypointSystem& lastWaypointSystem, WaypointSystem& newWaypointSystem, int lastWaypointSystemIntialPosition, int newWaypointSystemIntialPosition, bool recalculateIds)
+void Track::attachReachableCollsionVolumes()
 {
-	bool isStichingRowForLastWaypoint;
-	int lastWaypointRowIndex;
-	int lastWaypointColumnIndex;
-
-	determineStitchingBoundaries(lastWaypointSystemLocation, lastWaypointSystemIntialPosition, isStichingRowForLastWaypoint, lastWaypointRowIndex, lastWaypointColumnIndex, lastWaypointSystem);
-
-	bool isStichingRowForNewWaypoint;
-	int newWaypointRowIndex;
-	int newWaypointColumnIndex;
-
-	determineStitchingBoundaries(newWaypointSystemPosition, newWaypointSystemIntialPosition, isStichingRowForNewWaypoint, newWaypointRowIndex, newWaypointColumnIndex, newWaypointSystem);
-
-	if (isStichingRowForLastWaypoint)
+	for (unsigned int i = 0; i < m_collisionVolumes.size(); i++)
 	{
-		if (isStichingRowForNewWaypoint)
+		int indexToAdd = 1;
+		CollisionVolume* collisionVolumeToCheck = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
+		while (collisionVolumeToCheck->getId() == m_collisionVolumes[i]->getId())
 		{
-			stitch(lastWaypointSystem, isStichingRowForLastWaypoint, lastWaypointColumnIndex, lastWaypointRowIndex, newWaypointSystem, isStichingRowForNewWaypoint, newWaypointColumnIndex, newWaypointRowIndex);
-			recalculateWaypointSystemIds(lastWaypointSystem, newWaypointSystem, recalculateIds);
+			indexToAdd++;
+			collisionVolumeToCheck = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
 		}
-		else
+		CollisionVolume* nextCollisionVolume = collisionVolumeToCheck;
+		do
 		{
-			std::cerr << "Cannot Stitch row to column\n";
-		}
-	}
-	else
-	{
-		if (isStichingRowForNewWaypoint)
+			m_collisionVolumes[i]->addVolumeToReachableCollsionVolumeList(nextCollisionVolume);
+			indexToAdd++;
+			nextCollisionVolume = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
+		} while (collisionVolumeToCheck->getId() == nextCollisionVolume->getId());
+
+		// Do a second go around to make sure you account for collisionvolumes on the next next way.
+
+		collisionVolumeToCheck = nextCollisionVolume;
+		do
 		{
-			std::cerr << "Cannot Stitch column to row\n";
-		}
-		else
-		{
-			stitch(lastWaypointSystem, isStichingRowForLastWaypoint, lastWaypointRowIndex, lastWaypointColumnIndex, newWaypointSystem, isStichingRowForNewWaypoint, newWaypointRowIndex, newWaypointColumnIndex);
+			m_collisionVolumes[i]->addVolumeToReachableCollsionVolumeList(nextCollisionVolume);
+			indexToAdd++;
+			nextCollisionVolume = m_collisionVolumes[(i + indexToAdd) % m_collisionVolumes.size()];
+		} while (collisionVolumeToCheck->getId() == nextCollisionVolume->getId());
 
-			recalculateWaypointSystemIds(lastWaypointSystem, newWaypointSystem, recalculateIds);
-		}
-	}
-
-
-	//for (int i = 0; i < m_waypointList.size(); i++)
-	//{
-	//	std::cout << "waypoint: " << m_waypointList[i]->getIndex() << " " << " and is connected to ";
-	//	for (int k = 0; k < m_waypointList[i]->getListOfAdjacentWaypoints().size(); k++)
-	//	{
-	//		std::cout << m_waypointList[i]->getListOfAdjacentWaypoints().at(k)->getIndex() << ", ";
-	//	}
-	//	std::cout << "\n";
-	//}
-
-}
-
-void Track::determineStitchingBoundaries(Boundry locationOfStiching, int initialPosition,  bool& isStichingRow, int& RowIndex, int& ColumnIndex, WaypointSystem& system)
-{
-	switch (locationOfStiching)
-	{
-	case TOP:
-		isStichingRow = true;
-		RowIndex = 0;
-		ColumnIndex = initialPosition;
-		break;
-	case BOTTOM:
-		isStichingRow = true;
-		RowIndex = system.getWaypointMap().size() - 1;
-		ColumnIndex = initialPosition;
-		break;
-	case LEFT:
-		isStichingRow = false;
-		RowIndex = initialPosition;
-		ColumnIndex = 0;
-		break;
-	case RIGHT:
-		isStichingRow = false;
-		RowIndex = initialPosition;
-		ColumnIndex = system.getWaypointMap().at(0).size() - 1;
-		break;
-	}
-}
-
-void Track::stitch(WaypointSystem& waypointSystem1, bool isRowStiching1, int limitOfStichingIteration1, int indexOfEdge1, WaypointSystem& waypointSystem2, bool isRowStiching2, int limitOfStichingIteration2, int indexOfEdge2)
-{
-	int waypointSystem1EdgeLimit;
-	int waypointSystem2EdgeLimit;
-
-	isRowStiching1 ? waypointSystem1EdgeLimit = waypointSystem1.getWaypointMap().at(0).size() : waypointSystem1EdgeLimit = waypointSystem1.getWaypointMap().size();
-	isRowStiching2 ? waypointSystem2EdgeLimit = waypointSystem2.getWaypointMap().at(0).size() : waypointSystem2EdgeLimit = waypointSystem2.getWaypointMap().size();
-
-	for (int i = limitOfStichingIteration1, j = limitOfStichingIteration2;
-		i < waypointSystem1EdgeLimit &&
-		j < waypointSystem2EdgeLimit;
-	i++, j++)
-	{
-		if ((j - 1) >= 0)
-		{
-			determinePlaceInAdjecencyListAndPush(waypointSystem1, isRowStiching1, indexOfEdge1, i, waypointSystem2, isRowStiching2, indexOfEdge2, j - 1);
-		}
-
-		determinePlaceInAdjecencyListAndPush(waypointSystem1, isRowStiching1, indexOfEdge1, i, waypointSystem2, isRowStiching2, indexOfEdge2, j);
-
-		if ((j + 1) < waypointSystem2EdgeLimit)
-		{
-			determinePlaceInAdjecencyListAndPush(waypointSystem1, isRowStiching1, indexOfEdge1, i, waypointSystem2, isRowStiching2, indexOfEdge2, j + 1);
-		}
-
-		if ((i - 1) >= 0)
-		{
-			determinePlaceInAdjecencyListAndPush(waypointSystem2, isRowStiching2, indexOfEdge2, j, waypointSystem1, isRowStiching1, indexOfEdge1, i - 1);
-		}
-
-		determinePlaceInAdjecencyListAndPush(waypointSystem2, isRowStiching2, indexOfEdge2, j, waypointSystem1, isRowStiching1, indexOfEdge1, i);
-
-		if ((i + 1) < waypointSystem1EdgeLimit)
-		{
-			determinePlaceInAdjecencyListAndPush(waypointSystem2, isRowStiching2, indexOfEdge2, j, waypointSystem1, isRowStiching1, indexOfEdge1, i + 1);
-		}
-	}
-}
-
-void Track::determinePlaceInAdjecencyListAndPush(WaypointSystem& waypointSystem1, bool isRowStiching1, int indexOfEdge1, int indexOfIncrement1, WaypointSystem& waypointSystem2, bool isRowStiching2, int indexOfEdge2, int indexOfIncrement2)
-{
-	if (isRowStiching1 && isRowStiching2)
-	{
-		waypointSystem1.getWaypointMap().at(indexOfEdge1).at(indexOfIncrement1)->getListOfAdjacentWaypoints().push_back(
-			waypointSystem2.getWaypointMap().at(indexOfEdge2).at(indexOfIncrement2));
-	}
-	else if (isRowStiching1 && !isRowStiching2)
-	{
-		waypointSystem1.getWaypointMap().at(indexOfEdge1).at(indexOfIncrement1)->getListOfAdjacentWaypoints().push_back(
-			waypointSystem2.getWaypointMap().at(indexOfIncrement2).at(indexOfEdge2)); 
-	}
-	else if (isRowStiching2 && !isRowStiching1)
-	{
-		waypointSystem1.getWaypointMap().at(indexOfIncrement1).at(indexOfEdge1)->getListOfAdjacentWaypoints().push_back(
-			waypointSystem2.getWaypointMap().at(indexOfEdge2).at(indexOfIncrement2));
-	}
-	else
-	{
-		waypointSystem1.getWaypointMap().at(indexOfIncrement1).at(indexOfEdge1)->getListOfAdjacentWaypoints().push_back(
-			waypointSystem2.getWaypointMap().at(indexOfIncrement2).at(indexOfEdge2));
-	}
-}
-
-void Track::recalculateWaypointSystemIds(WaypointSystem& waypointSystem1, WaypointSystem& waypointSystem2, bool& recalculateIds)
-{
-	if (recalculateIds)
-	{
-		int difference1 = abs(waypointSystem1.getWaypointMap().at(waypointSystem1.getWaypointMap().size() - 1).at(waypointSystem1.getWaypointMap().at(0).size() - 1)->getId() -
-			waypointSystem2.getWaypointMap().at(0).at(waypointSystem2.getWaypointMap().at(0).size() - 1)->getId());
-		int secondValue = waypointSystem1.getWaypointMap().at(waypointSystem1.getWaypointMap().size() - 1).at(waypointSystem1.getWaypointMap().at(0).size() - 1)->getId() == waypointSystem1.getWaypointMap().at(0).at(waypointSystem1.getWaypointMap().at(0).size() - 1)->getId() ?
-			waypointSystem1.getWaypointMap().at(0).at(0)->getId() :
-			waypointSystem1.getWaypointMap().at(0).at(waypointSystem1.getWaypointMap().at(0).size() - 1)->getId();
-		int difference2 = abs(secondValue -
-			waypointSystem2.getWaypointMap().at(0).at(waypointSystem2.getWaypointMap().at(0).size() - 1)->getId());
-
-		if (difference1 > difference2)
-		{
-			waypointSystem2.addIdToAllWaypointsInTheSystem(waypointSystem1.getWaypointMap().at(waypointSystem1.getWaypointMap().size() - 1).at(waypointSystem1.getWaypointMap().at(0).size() - 1)->getId());
-		}
-		else
-		{
-			waypointSystem2.addIdToAllWaypointsInTheSystem(secondValue);
-		}
 	}
 }
