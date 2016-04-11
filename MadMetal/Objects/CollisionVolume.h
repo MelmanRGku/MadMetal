@@ -18,32 +18,38 @@ public:
 	void setIsStartCollisionVolume(bool isStartCollisionVolume);
 	bool getIsStartCollisionVolume();
 
-	void addNextVolume(CollisionVolume * toAdd);
-	bool isPrevVolumeOf(CollisionVolume *toCheck);
-	
-	void setCurrentWaypointIndex(Waypoint* waypoint);
-	void setLastWaypointIndex(Waypoint* waypoint);
-	void setGoalWaypointIndex(Waypoint* waypoint);
+	CollisionVolume * getNextCollisionVolume();
+	void setNextCollisionVolume(CollisionVolume* toSet);
 	void setSectionSpeedDamping(float damping);
 	void setSectionSteeringDamping(float damping);
-
-	Waypoint* getCurrentWaypointIndex();
-	Waypoint* getLastWaypointIndex();
-	Waypoint* getGoalWaypointIndex();
 	float getSpeedDamping();
 	float getSteeringDamping();
-	
 	bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
+	static void resetGlobalId();
+	void addVolumeToNextCollsionVolumeList(CollisionVolume* toAdd);
+	void addVolumeToReachableCollsionVolumeList(CollisionVolume* toAdd);
+	int getId();
+
+	void setPathNumber(int pathNumber);
+	void setIsParthOfMainPath(bool part);
+	void setId(int id);
+
+	int getPathNumber();
+	bool getIsPartOfMainPath();
+	std::vector<CollisionVolume*>& getListOfReachableCollisionVolume();
 
 private: //members
-	Waypoint* m_lastWaypoint;
-	Waypoint* m_currentWaypoint;
-	Waypoint* m_goalWaypoint;
+
 	float m_speedDamping;
 	float m_steeringDamping;
 	int m_respawnIndex;
-	std::vector<CollisionVolume *> m_nextVolumes;
+	std::vector<CollisionVolume*> m_possibleNextCollisionVolumes;
+	std::vector<CollisionVolume*> m_reachableCollisionVolumes;
+	CollisionVolume * m_next;
 	std::vector<PxTransform> m_respawnLocations;
 	bool m_isStartCollisionVolume;
-
+	int m_volumeId;
+	static int globalID;
+	bool m_isPartOfMainPath;
+	int m_pathNumber;
 };
