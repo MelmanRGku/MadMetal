@@ -103,6 +103,8 @@ void main(void)
    vec3 lighting = vec3(0.0, 0.0, 0.0);
 
    int specialValue;
+   
+   float Iamb = ambientLighting();
 
    for (int i = 0; i < MAX_NUM_OF_LIGHTS; i++)
    {
@@ -110,7 +112,6 @@ void main(void)
 	   L = normalize(lightPosArray[i] - fs_in.position_attr.xyz);
 
 	   // get Blinn-Phong reflectance components
-	   float Iamb = ambientLighting();
 	   float Idif = diffuseLighting(N, L);
 	   float Ispe = specularLighting(N, L, V);
 
@@ -119,7 +120,7 @@ void main(void)
 
    }
 
-   resultingColor.xyz = max(resultingColor.xyz * lighting, resultingColor.xyz * ambientLighting());
+   resultingColor.xyz = max(resultingColor.xyz * lighting, resultingColor.xyz * Iamb);
 
    if (!texValid)
 	 resultingColor.a = fs_in.C.w;

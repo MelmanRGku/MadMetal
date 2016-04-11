@@ -18,7 +18,7 @@ MainMenu::MainMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, 2, -15));
+		a->updatePosition(glm::vec3(0, 1, -15));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Singleplayer.obj"));
@@ -32,7 +32,7 @@ MainMenu::MainMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, 0, -25));
+		a->updatePosition(glm::vec3(0, -1, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Multiplayer.obj"));
@@ -45,7 +45,7 @@ MainMenu::MainMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, -2, -25));
+		a->updatePosition(glm::vec3(0, -3, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Controls.obj"));
@@ -58,7 +58,7 @@ MainMenu::MainMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, -4, -25));
+		a->updatePosition(glm::vec3(0, -5, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Quit.obj"));
@@ -68,25 +68,13 @@ MainMenu::MainMenu(Input * input, Audio *audio)
 		m_world->addGameObject(exitButton);
 	}
 
-
-	{
-		Renderable3D *renderable = new Renderable3D(NULL);
-		Audioable *audioable = new Audioable(*audio);
-		Animatable *animatable = new Animatable();
-		Physicable *physicable = new Physicable(NULL);
-
-		Text3D *loadingInfoString = new Text3D(4, audioable, physicable, animatable, renderable, 3);
-		loadingInfoString->setPosition(glm::vec3(0, 5, -20));
-		loadingInfoString->setString("Mad Metal");
-		m_world->addGameObject(loadingInfoString);
-	}
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
 		a->updatePosition(glm::vec3(0, 0, -30));
 		a->setScale(glm::vec3(33, 24.5, 1));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Background.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/MainMenuBackground.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		background = new Object3D(3, au, p, a, r, NULL);
@@ -201,38 +189,15 @@ bool MainMenu::simulateScene(double dt, SceneMessage &message)
 }
 
 void MainMenu::setupSceneLights() {
-	{
-		Animatable *anable = new Animatable();
-		Light *light = new Light(1, anable);
-		anable->setPosition(glm::vec3(0, -10, -40));
-		light->colour = glm::vec3(1, 1, 1);
-		light->constant = 0.0;
-		light->linear = 0.2;
-		light->quad = 0.2;
-		light->cutoff = 500.0;
-		m_world->addLightObject(light);
-	}
 
 	{
 		Animatable *anable = new Animatable();
 		Light *light = new Light(1, anable);
-		anable->setPosition(glm::vec3(-2, 5, -40));
+		anable->setPosition(glm::vec3(0, 0, 20));
 		light->colour = glm::vec3(1, 1, 1);
-		light->constant = 0.5;
-		light->linear = 0.1;
-		light->quad = 0.01;
-		light->cutoff = 500.0;
-		m_world->addLightObject(light);
-	}
-
-	{
-		Animatable *anable = new Animatable();
-		Light *light = new Light(1, anable);
-		anable->setPosition(glm::vec3(2, 5, -40));
-		light->colour = glm::vec3(1, 1, 1);
-		light->constant = 0.5;
-		light->linear = 0.1;
-		light->quad = 0.01;
+		light->constant = 2;
+		light->linear = 0;
+		light->quad = 0;
 		light->cutoff = 500.0;
 		m_world->addLightObject(light);
 	}

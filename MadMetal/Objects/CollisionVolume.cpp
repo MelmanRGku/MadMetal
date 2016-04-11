@@ -102,7 +102,7 @@ void CollisionVolume::setIsStartCollisionVolume(bool isStartCollisionVolume) {
 	m_isStartCollisionVolume = isStartCollisionVolume;
 }
 
-#define WIDTH_SPACING 25
+#define WIDTH_SPACING 15
 #define DEPTH_SPACING 25
 void CollisionVolume::generateRespawnLocations(PxVec3 forwardVector, PxVec3 center, int numWide, int numDeep)
 {
@@ -110,7 +110,7 @@ void CollisionVolume::generateRespawnLocations(PxVec3 forwardVector, PxVec3 cent
 
 
 	PxVec3 lateralDirection = forwardVector.cross(PxVec3(0, 1, 0)).getNormalized();
-	PxVec3 offsetStart = center - lateralDirection * WIDTH_SPACING / 2;
+	PxVec3 offsetStart = center - lateralDirection * (WIDTH_SPACING  * numWide)/ 2;
 	for (int i = 0; i < numWide; i++)
 	{
 		for (int j = 0; j < numDeep; j++)

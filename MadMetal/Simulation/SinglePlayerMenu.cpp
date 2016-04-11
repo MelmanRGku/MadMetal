@@ -356,38 +356,15 @@ void SinglePlayerMenu::unselectMenuItem(Object3D *menuItem) {
 }
 
 void SinglePlayerMenu::setupSceneLights() {
-	{
-		Animatable *anable = new Animatable();
-		Light *light = new Light(1, anable);
-		anable->setPosition(glm::vec3(0, -10, -40));
-		light->colour = glm::vec3(1, 1, 1);
-		light->constant = 0.0;
-		light->linear = 0.2;
-		light->quad = 0.2;
-		light->cutoff = 500.0;
-		m_world->addLightObject(light);
-	}
 
 	{
 		Animatable *anable = new Animatable();
 		Light *light = new Light(1, anable);
-		anable->setPosition(glm::vec3(-2, 5, -40));
+		anable->setPosition(glm::vec3(0, 10, 30));
 		light->colour = glm::vec3(1, 1, 1);
-		light->constant = 0.5;
-		light->linear = 0.1;
-		light->quad = 0.01;
-		light->cutoff = 500.0;
-		m_world->addLightObject(light);
-	}
-
-	{
-		Animatable *anable = new Animatable();
-		Light *light = new Light(1, anable);
-		anable->setPosition(glm::vec3(2, 5, -40));
-		light->colour = glm::vec3(1, 1, 1);
-		light->constant = 0.5;
-		light->linear = 0.1;
-		light->quad = 0.01;
+		light->constant = 1.3;
+		light->linear = 0.01;
+		light->quad = 0;
 		light->cutoff = 500.0;
 		m_world->addLightObject(light);
 	}

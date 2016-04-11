@@ -185,7 +185,7 @@ void GameSimulation::simulatePhysics(double dt)
 {
 	//std::cout << m_players[0]->getCar()->getGlobalPose().x << "    " << m_players[0]->getCar()->getGlobalPose().z << std::endl;
 	int numSteps = 1;
-	while (dt > 1.f / 50.f) {
+	while (dt > 1.f / 58.f) {
 		dt /= 2.f;
 		numSteps *= 2;
 	}
@@ -697,7 +697,7 @@ void GameSimulation::onResume() {
 }
 void GameSimulation::setupSceneLights() {
 	//start line
-	{
+	/*{
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(5, 30, 35));
@@ -707,8 +707,33 @@ void GameSimulation::setupSceneLights() {
 		firstLight->quad = 0.0;
 		firstLight->cutoff = 100.0;
 		m_world->addLightObject(firstLight);
+	}*/
+
+	//above desert 1
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(320, 80, 650));
+		firstLight->colour = glm::vec3(1, 0.5, 0);
+		firstLight->constant = 1;
+		firstLight->linear = 0.001;
+		firstLight->quad = 0;
+		firstLight->cutoff = 200.0;
+		m_world->addLightObject(firstLight);
 	}
 
+	//above desert 2
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(300, 80, 0));
+		firstLight->colour = glm::vec3(1, 0.5, 0);
+		firstLight->constant = 1;
+		firstLight->linear = 0.001;
+		firstLight->quad = 0;
+		firstLight->cutoff = 200.0;
+		m_world->addLightObject(firstLight);
+	}
 
 	//goo pit top (on ceiling)
 	{
@@ -977,6 +1002,19 @@ void GameSimulation::setupSceneLights() {
 		m_world->addLightObject(firstLight);
 	}
 
+	//between trains and statue
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-900, 80, -140));
+		firstLight->colour = glm::vec3(1, 0.5, 0);
+		firstLight->constant = 1;
+		firstLight->linear = 0.001;
+		firstLight->quad = 0;
+		firstLight->cutoff = 150.0;
+		m_world->addLightObject(firstLight);
+	}
+
 
 
 	//---------------------------------
@@ -987,7 +1025,7 @@ void GameSimulation::setupSceneLights() {
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-465, 8, -105));
-		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->colour = glm::vec3(0.8, 0.8, 0.8);
 		firstLight->constant = 0.00;
 		firstLight->linear = 0.00;
 		firstLight->quad = 0.03;
@@ -999,7 +1037,7 @@ void GameSimulation::setupSceneLights() {
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-455, 8, -57));
-		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->colour = glm::vec3(0.8, 0.8, 0.8);
 		firstLight->constant = 0.00;
 		firstLight->linear = 0.00;
 		firstLight->quad = 0.03;
@@ -1011,7 +1049,7 @@ void GameSimulation::setupSceneLights() {
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-410, 8, -25));
-		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->colour = glm::vec3(0.8, 0.8, 0.8);
 		firstLight->constant = 0.00;
 		firstLight->linear = 0.00;
 		firstLight->quad = 0.03;
@@ -1023,7 +1061,7 @@ void GameSimulation::setupSceneLights() {
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-360, 8, -15));
-		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->colour = glm::vec3(0.8, 0.8, 0.8);
 		firstLight->constant = 0.00;
 		firstLight->linear = 0.00;
 		firstLight->quad = 0.03;
@@ -1035,7 +1073,7 @@ void GameSimulation::setupSceneLights() {
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-315, 8, -42));
-		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->colour = glm::vec3(0.8, 0.8, 0.8);
 		firstLight->constant = 0.00;
 		firstLight->linear = 0.00;
 		firstLight->quad = 0.03;
@@ -1047,7 +1085,7 @@ void GameSimulation::setupSceneLights() {
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-295, 8, -86));
-		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->colour = glm::vec3(0.8, 0.8, 0.8);
 		firstLight->constant = 0.00;
 		firstLight->linear = 0.00;
 		firstLight->quad = 0.03;
@@ -1059,7 +1097,7 @@ void GameSimulation::setupSceneLights() {
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-298, 8, -135));
-		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->colour = glm::vec3(0.8, 0.8, 0.8);
 		firstLight->constant = 0.00;
 		firstLight->linear = 0.00;
 		firstLight->quad = 0.03;
@@ -1071,7 +1109,7 @@ void GameSimulation::setupSceneLights() {
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-325, 8, -175));
-		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->colour = glm::vec3(0.8, 0.8, 0.8);
 		firstLight->constant = 0.00;
 		firstLight->linear = 0.00;
 		firstLight->quad = 0.03;
@@ -1083,7 +1121,7 @@ void GameSimulation::setupSceneLights() {
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-375, 8, -190));
-		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->colour = glm::vec3(0.8, 0.8, 0.8);
 		firstLight->constant = 0.00;
 		firstLight->linear = 0.00;
 		firstLight->quad = 0.03;
@@ -1095,7 +1133,7 @@ void GameSimulation::setupSceneLights() {
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-419, 8, -180));
-		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->colour = glm::vec3(0.8, 0.8, 0.8);
 		firstLight->constant = 0.00;
 		firstLight->linear = 0.00;
 		firstLight->quad = 0.03;
@@ -1107,7 +1145,7 @@ void GameSimulation::setupSceneLights() {
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-455, 8, -140));
-		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->colour = glm::vec3(0.8, 0.8, 0.8);
 		firstLight->constant = 0.00;
 		firstLight->linear = 0.00;
 		firstLight->quad = 0.03;
@@ -1116,7 +1154,7 @@ void GameSimulation::setupSceneLights() {
 	}
 
 	//top of the statue
-	{
+	/*{
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-388, 100, -108));
@@ -1126,7 +1164,7 @@ void GameSimulation::setupSceneLights() {
 		firstLight->quad = 0.01;
 		firstLight->cutoff = 300.0;
 		m_world->addLightObject(firstLight);
-	}
+	}*/
 
 	//---------------------------------
 	//--end light around the statue----

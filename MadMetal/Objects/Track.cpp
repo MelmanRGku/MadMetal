@@ -333,7 +333,7 @@ void Track::setupCollisionVolumes() {
 	geom1[0] = new PxBoxGeometry(30, 10, 30);
 	pos = new PxTransform(PxVec3(-987, -20, 1436), PxQuat(3.10, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->generateRespawnLocations(PxVec3(-983, -20, 1436), pos->p, 1, 3);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->generateRespawnLocations(PxVec3(0, 0, -1), pos->p, 1, 3);
 	
 	delete pos;
 	delete geom1[0];

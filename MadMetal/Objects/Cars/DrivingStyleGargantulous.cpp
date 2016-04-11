@@ -31,7 +31,7 @@ DrivingStyleGargantulous::DrivingStyleGargantulous()
 	m_maxSpeed = 100;
 	m_maxBrakeTorque = 1000.f;
 	m_maxHandBrakeTorque = 80000000.f;
-	m_frontWheelsMaxSteer = PxPi*0.06666f*0.75f;
+	m_frontWheelsMaxSteer = PxPi*0.06666f*0.80f;
 	m_enginePeakTorque = 14000.0f;
 	m_engineMaxOmega = 2500.0f;//approx 10000 rpm
 	m_gearsSwitchTime = 0.1f;

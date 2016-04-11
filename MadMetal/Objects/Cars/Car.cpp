@@ -268,7 +268,7 @@ void Car::updateOrientation(float dt)
 	m_car.getRigidDynamicActor()->setAngularVelocity(PxVec3(0, angVel.y, 0), true);
 	
 
-	m_shadow->getActor().setGlobalPose(PxTransform(getActor().getGlobalPose().p + PxVec3(0, lastKnownDistanceBetweenCarAndShadow, 0), getActor().getGlobalPose().q));
+	/*m_shadow->getActor().setGlobalPose(PxTransform(getActor().getGlobalPose().p + PxVec3(0, lastKnownDistanceBetweenCarAndShadow, 0), getActor().getGlobalPose().q));
 
 	PxVec3 extraOffset = PxVec3(0, 0, 0);
 	bool groundFound = false;
@@ -294,7 +294,7 @@ void Car::updateOrientation(float dt)
 				lastKnownDistanceBetweenCarAndShadow = extraOffset.y;
 			groundFound = true;
 		}
-	} while (!groundFound);
+	} while (!groundFound);*/
 	
 }
 
