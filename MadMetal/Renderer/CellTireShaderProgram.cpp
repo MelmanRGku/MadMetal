@@ -1,5 +1,6 @@
 #include "CellTireShaderProgram.h"
 #include <iostream>
+#include "Objects\Light.h"
 /*
 Constructor. Takes path to the vertex shader and fragment shader,
 loads them, links them and stores all the needed information (programID, attributes
@@ -26,6 +27,15 @@ CellTireShaderProgram::CellTireShaderProgram(const char* vertexShaderPath, const
 	textureValidUniform = glGetUniformLocation(programID, "texValid");
 	cameraPosUniform = glGetUniformLocation(programID, "camera_pos");
 	distanceTraveledUniform = glGetUniformLocation(programID, "distanceTraveled");
+
+
+	bitmaskUniform = glGetUniformLocation(programID, "bitmask");
+	lightPosUniform = glGetUniformLocation(programID, "lightPosArray");
+	constUniform = glGetUniformLocation(programID, "constArray");
+	linearUniform = glGetUniformLocation(programID, "linearArray");
+	quadUniform = glGetUniformLocation(programID, "quadArray");
+	lightUniform = glGetUniformLocation(programID, "lightColorArray");
+	cutoffUniform = glGetUniformLocation(programID, "cutoffArray");
 }
 
 
@@ -39,12 +49,50 @@ void CellTireShaderProgram::start(glm::mat4x4 *viewMatrix, glm::mat4x4 *projMatr
 
 	glUseProgram(programID);
 
+	loadLights(thelights);
+
 	//set view and projection matrices
 	glUniformMatrix4fv(viewMatrixUniform, 1, false, glm::value_ptr(*viewMatrix));
 	glUniformMatrix4fv(projectionMatrixUniform, 1, false, glm::value_ptr(*projMatrix));
 	glUniformMatrix3fv(cameraPosUniform, 1, false, glm::value_ptr(*cameraPos));
+
+	glUniform3fv(lightPosUniform, MAX_NUM_OF_LIGHTS, lightPositions);
+	glUniform3fv(lightUniform, MAX_NUM_OF_LIGHTS, lightColours);
+	glUniform1fv(constUniform, MAX_NUM_OF_LIGHTS, lightConstants);
+	glUniform1fv(linearUniform, MAX_NUM_OF_LIGHTS, lightLinears);
+	glUniform1fv(quadUniform, MAX_NUM_OF_LIGHTS, lightQuads);
+	glUniform1fv(cutoffUniform, MAX_NUM_OF_LIGHTS, lightCutoffs);
+
 }
 
 void CellTireShaderProgram::end() {
 	glUseProgram(0);
+}
+
+void CellTireShaderProgram::loadLights(std::vector<Light *> *lights)
+{
+	memset(lightCutoffs, 0, sizeof(lightCutoffs));
+	memset(lightConstants, 0, sizeof(lightConstants));
+	memset(lightLinears, 0, sizeof(lightLinears));
+	memset(lightQuads, 0, sizeof(lightQuads));
+	memset(lightPositions, 0, sizeof(lightPositions));
+	memset(lightColours, 0, sizeof(lightColours));
+
+	if (lights != NULL)
+	{
+		for (int i = 0; i < lights->size() || i == MAX_NUM_OF_LIGHTS; i++)
+		{
+			lightPositions[i * 3] = lights->at(i)->getAnimatablePos().x;
+			lightPositions[i * 3 + 1] = lights->at(i)->getAnimatablePos().y;
+			lightPositions[i * 3 + 2] = lights->at(i)->getAnimatablePos().z;
+			lightColours[i * 3] = lights->at(i)->colour.x;
+			lightColours[i * 3 + 1] = lights->at(i)->colour.y;
+			lightColours[i * 3 + 2] = lights->at(i)->colour.z;
+			lightCutoffs[i] = lights->at(i)->cutoff;
+			lightConstants[i] = lights->at(i)->constant;
+			lightLinears[i] = lights->at(i)->linear;
+			lightQuads[i] = lights->at(i)->quad;
+
+		}
+	}
 }

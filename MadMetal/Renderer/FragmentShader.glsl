@@ -114,7 +114,7 @@ void main(void)
 
    }
 
-   resultingColor.xyz *= lighting;
+   resultingColor.xyz = max(resultingColor.xyz * lighting, resultingColor.xyz * ambientLighting());
 
    if (!texValid)
 	 resultingColor.a = fs_in.C.w;

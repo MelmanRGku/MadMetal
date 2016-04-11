@@ -714,7 +714,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		light->quad = 0.1;
 		light->cutoff = 50.0f;
 
-
 		m_world.addGameObject(trainCar);
 		m_scene.addActor(*trainCarTriggerVolume);
 		return trainCar;
@@ -879,6 +878,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		light->linear = 0.1;
 		light->quad = 0.1;
 		light->cutoff = 50.0f;
+		light->setMaxLifeTime(.5f);
 
 		m_world.addGameObject(explosion);
 		m_scene.addActor(*explosionVolume);

@@ -693,27 +693,518 @@ void GameSimulation::onResume() {
 	}
 }
 void GameSimulation::setupSceneLights() {
+	//start line
 	{
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
-		anable->setPosition(glm::vec3(100, 10, 100));
-		firstLight->colour = glm::vec3(1, 1, 1);
-		firstLight->constant = 0;
+		anable->setPosition(glm::vec3(5, 30, 35));
+		firstLight->colour = glm::vec3(.7, .7, .7);
+		firstLight->constant = 0.05;
 		firstLight->linear = 0.01;
-		firstLight->quad = 0;
-		firstLight->cutoff = 500.0;
+		firstLight->quad = 0.0;
+		firstLight->cutoff = 100.0;
 		m_world->addLightObject(firstLight);
 	}
-	
+
+
+	//goo pit top (on ceiling)
 	{
 		Animatable *anable = new Animatable();
-		Light *secondLight = new Light(1, anable);
-		anable->setPosition(glm::vec3(130, 10, 440));
-		secondLight->colour = glm::vec3(0, 1, 0.3);
-		secondLight->constant = 0;
-		secondLight->linear = 0.01;
-		secondLight->quad = 0;
-		secondLight->cutoff = 100.0;
-		m_world->addLightObject(secondLight);
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-587, 150, 1562));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.03;
+		firstLight->quad = 0;
+		firstLight->cutoff = 200.0;
+		m_world->addLightObject(firstLight);
 	}
+
+	//goo pit left (in death pit)
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-650, -50, 1663));
+		firstLight->colour = glm::vec3(0, 1, 0);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 200.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//goo pit left 2 (in death pit)
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-882, -50, 1712));
+		firstLight->colour = glm::vec3(0, 1, 0);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.1;
+		firstLight->quad = 0;
+		firstLight->cutoff = 70.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//goo pit right (in death pit)
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-740, -50, 1435));
+		firstLight->colour = glm::vec3(0, 1, 0);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 200.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//goo pit close to cave entrance (in death pit)
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-430, -50, 1564));
+		firstLight->colour = glm::vec3(0, 1, 0);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 200.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//goo pit waterfall to the right closest
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-589, -2, 1401));
+		firstLight->colour = glm::vec3(0, 1, 0);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0.01;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//goo pit waterfall to the right furthest
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-660, -2, 1401));
+		firstLight->colour = glm::vec3(0, 1, 0);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0.01;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//train path 1 1st light
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-975, -10, 1372));
+		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//train path 1 2nd light
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-975, -10, 1243));
+		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//train path 1 3rd light
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-975, -10, 1115));
+		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//train path 1 4th light
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-975, -10, 988));
+		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//train path 1 5th light
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-975, -10, 859));
+		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//green arrow in the end of the tunnel
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-975, -7, 799));
+		firstLight->colour = glm::vec3(0.0, 1, 0.0);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0.04;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//path in between two train paths
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-854, -10, 752));
+		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//train path 2 1st light
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-749, -10, 694));
+		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//train path 2 2nd light
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-748, -10, 587));
+		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//train path 2 3rd light
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-747, -10, 484));
+		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//train path 2 4th light
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-746, -10, 375));
+		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	////train path 2 5th light
+	//{
+	//	Animatable *anable = new Animatable();
+	//	Light *firstLight = new Light(1, anable);
+	//	anable->setPosition(glm::vec3(-747, -10, 200));
+	//	firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+	//	firstLight->constant = 0.02;
+	//	firstLight->linear = 0.05;
+	//	firstLight->quad = 0;
+	//	firstLight->cutoff = 50.0;
+	//	m_world->addLightObject(firstLight);
+	//}
+
+
+	//train path 2 exit
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-738, 70, 63));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.01;
+		firstLight->cutoff = 200.0;
+		m_world->addLightObject(firstLight);
+	}
+
+
+
+	//---------------------------------
+	//----light around the statue------
+	//---------------------------------
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-465, 8, -105));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-455, 8, -57));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-410, 8, -25));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-360, 8, -15));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-315, 8, -42));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-295, 8, -86));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-298, 8, -135));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-325, 8, -175));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-375, 8, -190));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-419, 8, -180));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-455, 8, -140));
+		firstLight->colour = glm::vec3(1, 1, 1);
+		firstLight->constant = 0.00;
+		firstLight->linear = 0.00;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//top of the statue
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-388, 100, -108));
+		firstLight->colour = glm::vec3(1, 1, 0.3);
+		firstLight->constant = 0.04;
+		firstLight->linear = 0.02;
+		firstLight->quad = 0.01;
+		firstLight->cutoff = 300.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	//---------------------------------
+	//--end light around the statue----
+	//---------------------------------
+
+
+
+
+
+	//---------------------------------
+	//------finish line lights---------
+	//---------------------------------
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(38.5, 2, -52));
+		firstLight->colour = glm::vec3(0, 0, 1);
+		firstLight->constant = 0.1;
+		firstLight->linear = 0.0;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 20.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(25, 2, -52));
+		firstLight->colour = glm::vec3(0, 0, 1);
+		firstLight->constant = 0.1;
+		firstLight->linear = 0.0;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 20.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(11.5, 2, -52));
+		firstLight->colour = glm::vec3(0, 0, 1);
+		firstLight->constant = 0.1;
+		firstLight->linear = 0.0;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 20.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-2, 2, -52));
+		firstLight->colour = glm::vec3(0, 0, 1);
+		firstLight->constant = 0.1;
+		firstLight->linear = 0.0;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 20.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-15.5, 2, -52));
+		firstLight->colour = glm::vec3(0, 0, 1);
+		firstLight->constant = 0.1;
+		firstLight->linear = 0.0;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 20.0;
+		m_world->addLightObject(firstLight);
+	}
+
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(-29, 2, -52));
+		firstLight->colour = glm::vec3(0, 0, 1);
+		firstLight->constant = 0.1;
+		firstLight->linear = 0.0;
+		firstLight->quad = 0.03;
+		firstLight->cutoff = 20.0;
+		m_world->addLightObject(firstLight);
+	}
+
+
+	//---------------------------------
+	//----end finish line lights-------
+	//---------------------------------
 }

@@ -71,18 +71,12 @@ void CellShaderProgram::end() {
 
 void CellShaderProgram::loadLights(std::vector<Light *> *lights)
 {
-	for (int i = 0; i < MAX_NUM_OF_LIGHTS; i++)
-	{
-		lightCutoffs[i],
-			lightConstants[i],
-			lightLinears[i],
-			lightQuads[i] = 0.0;
-	}
-	for (int i = 0; i < MAX_NUM_OF_LIGHTS * 3; i++)
-	{
-		lightPositions[i],
-			lightColours[i] = 0.0;
-	}
+	memset(lightCutoffs, 0, sizeof(lightCutoffs));
+	memset(lightConstants, 0, sizeof(lightConstants));
+	memset(lightLinears, 0, sizeof(lightLinears));
+	memset(lightQuads, 0, sizeof(lightQuads));
+	memset(lightPositions, 0, sizeof(lightPositions));
+	memset(lightColours, 0, sizeof(lightColours));
 
 	if (lights != NULL)
 	{
@@ -91,7 +85,6 @@ void CellShaderProgram::loadLights(std::vector<Light *> *lights)
 			lightPositions[i * 3] = lights->at(i)->getAnimatablePos().x;
 			lightPositions[i * 3 + 1] = lights->at(i)->getAnimatablePos().y;
 			lightPositions[i * 3 + 2] = lights->at(i)->getAnimatablePos().z;
-			std::cout << lights->at(i)->getAnimatablePos().x << "   " << lights->at(i)->getAnimatablePos().y << "    " << lights->at(i)->getAnimatablePos().y << std::endl;
 			lightColours[i * 3] = lights->at(i)->colour.x;
 			lightColours[i * 3 + 1] = lights->at(i)->colour.y;
 			lightColours[i * 3 + 2] = lights->at(i)->colour.z;
