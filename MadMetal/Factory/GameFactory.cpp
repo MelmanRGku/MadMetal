@@ -177,6 +177,14 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							shadow->setScale(glm::vec3(car->getScale().x, 3, car->getScale().z));
 
 		car->setSoundChassis(ChassisCrashSound());
+
+		Light* light = static_cast<Light *>(makeObject(GameFactory::OBJECT_LIGHT, pos, NULL, NULL));
+		light->colour = glm::vec3(0.3, 0.1, 0);
+		light->constant = 0.0;
+		light->linear = 0.05;
+		light->quad = 0.1;
+		light->cutoff = 50.0f;
+		light->setMaxLifeTime(5.0f);
 		return car;
 	}
 
@@ -502,6 +510,15 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		superExplosion->setSound(ExplosivelyDeliciousSuperSound());
 		superExplosion->playSound();
 
+		Light* light = static_cast<Light *>(makeObject(GameFactory::OBJECT_LIGHT, pos, NULL, NULL));
+		light->colour = glm::vec3(0.3, 0.1, 0);
+		light->constant = 0.0;
+		light->linear = 0.01;
+		light->quad = 0.01;
+		light->cutoff = 50.0f;
+		light->setMaxLifeTime(5.0f);
+
+
 		m_world.addGameObject(superExplosion);
 		m_scene.addActor(*explosion);
 		return superExplosion;
@@ -708,11 +725,12 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 
 		DynamicLight* light = static_cast<DynamicLight *>(makeObject(GameFactory::OBJECT_DYNAMIC_LIGHT, pos, NULL, trainCar));
-		light->colour = glm::vec3(0.3, 0.1, 0);
+		light->colour = glm::vec3(0.5, 0.5, 0.3);
 		light->constant = 0.0;
-		light->linear = 0.1;
-		light->quad = 0.1;
-		light->cutoff = 50.0f;
+		light->linear = 0.001;
+		light->quad = 0.01;
+		light->cutoff = 200.0f;
+		light->setInitialPosition(glm::vec3(0, 0, 6.5));
 
 		m_world.addGameObject(trainCar);
 		m_scene.addActor(*trainCarTriggerVolume);
@@ -762,11 +780,12 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							 GooMonster *gooMonster = new GooMonster(objectId, audioable, physicable, animatable, renderable);
 
 							 DynamicLight* light = static_cast<DynamicLight *>(makeObject(GameFactory::OBJECT_DYNAMIC_LIGHT, pos, NULL, gooMonster));
-							 light->colour = glm::vec3(0, 1, 0);
+							 light->colour = glm::vec3(0.3, 0, 0);
 							 light->constant = 0.0;
 							 light->linear = 0.0;
 							 light->quad = 0.02;
-							 light->cutoff = 30.0f;
+							 light->cutoff = 15.0f;
+							 light->setInitialPosition(glm::vec3(3, 0, 0));
 
 							 m_world.addLightObject(light);
 							 m_world.addGameObject(gooMonster);
@@ -1153,6 +1172,14 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		animatable->setScale(glm::vec3(explosionVolume->getWorldBounds().getDimensions().x / 4, explosionVolume->getWorldBounds().getDimensions().y / 4, explosionVolume->getWorldBounds().getDimensions().z / 4));
 
 		BombExplosion *explosion = new BombExplosion(objectId, audioable, physicable, animatable, renderable, .5, static_cast<Car *>(parent));
+
+		Light* light = static_cast<Light *>(makeObject(GameFactory::OBJECT_LIGHT, pos, NULL, NULL));
+		light->colour = glm::vec3(0.3, 0.1, 0);
+		light->constant = 0.0;
+		light->linear = 0.1;
+		light->quad = 0.1;
+		light->cutoff = 50.0f;
+		light->setMaxLifeTime(.5f);
 
 		m_world.addGameObject(explosion);
 		m_scene.addActor(*explosionVolume);
