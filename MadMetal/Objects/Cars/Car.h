@@ -42,6 +42,7 @@ protected: //members
 	bool m_isInAir;
 	CollisionVolume * m_currentCollisionVolume;
 	CollisionVolume * m_respawnCollisionVolume;
+	CollisionVolume * m_goalCollisionVolume;
 
 
 	bool m_newLap;
@@ -126,6 +127,7 @@ public:
 
 	void setCurrentCollisionVolume(CollisionVolume * toSet);
 	CollisionVolume * getCurrentCollisionVolume();
+	CollisionVolume * getGoalCollisionVolume();
 
 
 	static void resetGlobalPositionID();
@@ -139,6 +141,8 @@ public:
 	void setShadow(Object3D *shadow);
 	void onBrake();
 	void onUnbrake();
+
+	
 
 };
 

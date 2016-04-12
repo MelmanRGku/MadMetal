@@ -69,7 +69,7 @@ void AIControllable::playFrame(double dt)
 
 void AIControllable::accelerateToNextCollisionVolume()
 {
-	PxVec3 newDirection = (m_car->getCurrentCollisionVolume()->getNextCollisionVolume()->getActor().getGlobalPose().p - m_car->getActor().getGlobalPose().p).getNormalized();
+	PxVec3 newDirection = (m_car->getGoalCollisionVolume()->getActor().getGlobalPose().p - m_car->getActor().getGlobalPose().p).getNormalized();
 	PxVec3 forwardVector = PxVec3(m_car->getForwardVector().x, m_car->getForwardVector().y, m_car->getForwardVector().z).getNormalized();
 	
 
@@ -91,7 +91,7 @@ void AIControllable::accelerateToNextCollisionVolume()
 
 void AIControllable::reverse()
 {
-	PxVec3 newDirection = (m_car->getCurrentCollisionVolume()->getNextCollisionVolume()->getActor().getGlobalPose().p - m_car->getActor().getGlobalPose().p).getNormalized();
+	PxVec3 newDirection = (m_car->getGoalCollisionVolume()->getActor().getGlobalPose().p - m_car->getActor().getGlobalPose().p).getNormalized();
 	PxVec3 forwardVector = PxVec3(m_car->getForwardVector().x, m_car->getForwardVector().y, m_car->getForwardVector().z).getNormalized();
 
 
