@@ -111,10 +111,12 @@ void CollisionVolume::generateRespawnLocations(PxVec3 forwardVector, PxVec3 cent
 
 	PxVec3 lateralDirection = forwardVector.cross(PxVec3(0, 1, 0)).getNormalized();
 	PxVec3 offsetStart = center - lateralDirection * (WIDTH_SPACING  * numWide)/ 2;
-	for (int i = 0; i < numWide; i++)
+
+	for (int j = 0; j < numDeep; j++)
 	{
-		for (int j = 0; j < numDeep; j++)
+		for (int i = 0; i < numWide; i++)
 		{
+
 			PxVec3 respawnLocation = offsetStart + lateralDirection *WIDTH_SPACING * i - forwardVector * DEPTH_SPACING * j;
 			m_respawnLocations.push_back(PxTransform(respawnLocation, quat));
 		}

@@ -366,6 +366,8 @@ void Car::addDamageDealt(float damage, bool addToSuper) {
 
 void Car::setCurrentCollisionVolume(CollisionVolume* toSet)
 {
+
+ 
 	if (m_currentCollisionVolume != NULL)
 	{
 		for (unsigned int i = 0; i < m_currentCollisionVolume->getListOfReachableCollisionVolume().size(); i++)
@@ -389,6 +391,8 @@ void Car::setCurrentCollisionVolume(CollisionVolume* toSet)
 					<< std::endl;
 			}
 		}
+
+
 	} else {
 		m_currentCollisionVolume = toSet;
 		m_goalCollisionVolume = toSet->getNextCollisionVolume();

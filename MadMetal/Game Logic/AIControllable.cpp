@@ -86,7 +86,7 @@ void AIControllable::accelerateToNextCollisionVolume()
 	amountToSteerBy < 0.5 ? amountToAccelerate = -((2 * amountToSteerBy) - 1) : amountToAccelerate = ((-2 * amountToSteerBy) + 1);
 
 	changeTurning(crossProductResult.y, amountToSteerBy * m_car->getCurrentCollisionVolume()->getSteeringDamping());
-	accelerate(amountToAccelerate *  m_car->getCurrentCollisionVolume()->getSpeedDamping());
+	accelerate(amountToAccelerate * m_car->getCurrentCollisionVolume()->getSpeedDamping());
 }
 
 void AIControllable::reverse()
@@ -161,36 +161,41 @@ void AIControllable::processInputAcceleration(float amount)
 	if (m_car->getCar().getRigidDynamicActor()->isSleeping())
 		m_car->getCar().getRigidDynamicActor()->wakeUp();
 
-		if (amount > 0.1)
-		{
-			//std::cout << "Applying acceleration : " << -amount << "\n";
-			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, amount);
-		}
-		//else if (amount < 0.1 && m_car->getCar().computeForwardSpeed() > 10.0)
-		//{
-		//	//std::cout << "Applying break with : " << -amount << "\n";
-		//	m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
-		//	if (amount < 0)
-		//	{
-		//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
-		//	}
-		//	else
-		//	{
-		//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, amount);
-		//	}
-		//}
-		else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
-		{
-			//std::cout << "Applying acceleration : " << -amount << "\n";
-			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount));
-		}
-		else
-		{
-			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
-			m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-		}
+	if ((m_car->getCurrentCollisionVolume()->getSpeedDamping() * m_car->getDrivingStyle().getMaxSpeed()) < m_car->getCar().computeForwardSpeed())
+	{
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+	}
+	else if (amount > 0.1)
+	{
+		//std::cout << "Applying acceleration : " << -amount << "\n";
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, amount);
+	}
+	//else if (amount < 0.1 && m_car->getCar().computeForwardSpeed() > 10.0)
+	//{
+	//	//std::cout << "Applying break with : " << -amount << "\n";
+	//	m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0.0);
+	//	if (amount < 0)
+	//	{
+	//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, -amount);
+	//	}
+	//	else
+	//	{
+	//		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, amount);
+	//	}
+	//}
+	else if (amount < 0 && m_car->getCar().computeForwardSpeed() < 20.0)
+	{
+		//std::cout << "Applying acceleration : " << -amount << "\n";
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, (-amount));
+	}
+	else
+	{
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
+	}
 }
 
 void AIControllable::changeTurning(float turningDirectionValue, float turningAmountValue)
@@ -222,7 +227,7 @@ void AIControllable::checkStuckInWall()
 	float engineRotationSpeed = static_cast<float>(m_car->getCar().mDriveDynData.getEngineRotationSpeed());
 	float forwardSpeed = static_cast<float>(m_car->getCar().computeForwardSpeed());
 	// Car is stuck in a wall
-	if (engineRotationSpeed > 50.0 &&
+	if (engineRotationSpeed > 70.0 &&
 		forwardSpeed < 5.0 &&
 		!(m_car->getInvinsibilityTimeRemaining() > 0))
 	{
