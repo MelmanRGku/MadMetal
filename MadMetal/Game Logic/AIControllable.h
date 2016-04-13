@@ -33,8 +33,8 @@ private: //helper functions
 private: //members
 	AiStateMovement m_movementState;
 	bool m_needsToBackup;
-	int m_counter;
+	int m_stuckWallCounter;
 	int m_counterReverse;
-	float m_stuckCounterMillis;
+	float m_stuckRespawnCounterMillis;
 	PxVec3 m_stuckPosition;
 };
