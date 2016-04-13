@@ -133,6 +133,7 @@ public:
 		RENDERABLE_OBJECT_TRACK_WALL_15,
 		RENDERABLE_OBJECT_TRACK_WALL_16,
 		RENDERABLE_OBJECT_TRACK_WALL_17,
+		RENDERABLE_OBJECT_TRACK_WALL_18,
 
 		RENDERABLE_OBJECT_MEOW_MIX_BEAM_CUT,
 	};
@@ -353,6 +354,8 @@ public:
 			return Assets::getModel("someShit16");
 		case RENDERABLE_OBJECT_TRACK_WALL_17:
 			return Assets::getModel("someShit17");
+		case RENDERABLE_OBJECT_TRACK_WALL_18:
+			return Assets::getModel("someShit18");
 		case RENDERABLE_OBJECT_MEOW_MIX_BEAM_CUT:
 			return Assets::getModel("beamcut");
 		}
