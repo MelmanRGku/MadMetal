@@ -591,14 +591,14 @@ void GameSimulation::setupDeathPit() {
 	PxGeometry **deathPitGeom = new PxGeometry*[1];
 
 	//first death pit
-	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 5, 45));
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 9, 45));
 	PxTransform *pos = new PxTransform(15, -20, 445);
 	DeathPit *pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
 	pit->setRespawnLocation(pos->p + PxVec3(0, 21, 465));
 	pit->getRenderable()->setModel(NULL);
 
 	//second death pit
-	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 5, 60));
+	deathPitGeom[0] = new PxBoxGeometry(PxVec3(35, 9, 60));
 	pos = new PxTransform(-25, -20, 765);
 	pit = static_cast<DeathPit*>(m_gameFactory->makeObject(GameFactory::OBJECT_DEATH_PIT, pos, deathPitGeom, NULL));
 	pit->setRespawnLocation(pos->p + PxVec3(0, 21, 465));
