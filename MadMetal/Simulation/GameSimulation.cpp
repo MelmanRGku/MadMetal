@@ -93,7 +93,7 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			AIControllable *ai = new AIControllable(*playerTemplates[i]);
 			PxTransform *pos = spawnLocations.at(i);
 			Car *car = NULL;
-			/*if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {
+			if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {
 				car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
 			}
 			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_EXPLOSIVELY_DELICIOUS) {
@@ -101,8 +101,8 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			}
 			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_GARGANTULOUS) {
 				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_GARGANTULOUS, pos, NULL, NULL));
-			}*/
-			car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS, pos, NULL, NULL));
+			}
+			//car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS, pos, NULL, NULL));
 			ai->setCar(car);
 			m_aiPlayers.push_back(ai);
 			m_players.push_back(ai);
