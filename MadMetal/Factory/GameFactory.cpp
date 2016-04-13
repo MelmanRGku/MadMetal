@@ -93,11 +93,11 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		car->setSoundChassis(ChassisCrashSound());
 
-		PxGeometry *geom[1];
+		/*PxGeometry *geom[1];
 		geom[0] = new PxBoxGeometry(1, 1, 1);
 		Object3D *shadow = static_cast<Object3D *>(makeObject(OBJECT_BLOB_SHADOW, pos, geom, car));
 		car->setShadow(shadow);
-		shadow->setScale(glm::vec3(car->getScale().x, 3, car->getScale().z));
+		shadow->setScale(glm::vec3(car->getScale().x, 3, car->getScale().z));*/
 		
 
 		return car;
@@ -141,12 +141,12 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		 car->setSoundChassis(ChassisCrashSound());
 
-										 PxGeometry *geom[1];
+										/* PxGeometry *geom[1];
 										 geom[0] = new PxBoxGeometry(1, 1, 1);
 										 Object3D *shadow = static_cast<Object3D *>(makeObject(OBJECT_BLOB_SHADOW, pos, geom, car));
 										 car->setShadow(shadow);
 										 shadow->setScale(glm::vec3(car->getScale().x * 1.5f, 3, car->getScale().z * 1.5f));
-
+*/
 		 return car;
 	}
 #define GARGANTULOUS_DIMENSIONS 10,5,10
@@ -184,21 +184,13 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		physicalCar->mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
 		physicalCar->mDriveDynData.setUseAutoGears(true);
 
-							PxGeometry *geom[1];
+							/*PxGeometry *geom[1];
 							geom[0] = new PxBoxGeometry(1, 1, 1);
 							Object3D *shadow = static_cast<Object3D *>(makeObject(OBJECT_BLOB_SHADOW, pos, geom, car));
 							car->setShadow(shadow);
-							shadow->setScale(glm::vec3(car->getScale().x, 3, car->getScale().z));
+							shadow->setScale(glm::vec3(car->getScale().x, 3, car->getScale().z));*/
 
 		car->setSoundChassis(ChassisCrashSound());
-
-		Light* light = static_cast<Light *>(makeObject(GameFactory::OBJECT_LIGHT, pos, NULL, NULL));
-		light->colour = glm::vec3(0.3, 0.1, 0);
-		light->constant = 0.0;
-		light->linear = 0.05;
-		light->quad = 0.1;
-		light->cutoff = 50.0f;
-		light->setMaxLifeTime(5.0f);
 		return car;
 	}
 

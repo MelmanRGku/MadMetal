@@ -63,6 +63,7 @@ private:
 		*numberOfAIsButton,
 		*startButton;
 	Text3D *numberOfAIsString;
+	Text3D *loadingInfoString;
 	SceneMessage::SceneEnum messageToReturn = SceneMessage::eNone;
 	int numberOfAIs = 4;
 	Audio *m_audio;

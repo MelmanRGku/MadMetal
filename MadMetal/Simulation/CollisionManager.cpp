@@ -292,7 +292,7 @@ void CollisionManager::processSpeedPowerUpHit(long speedPowerUpId, long carId)
 	
 	if (car != NULL && !shield->isOwner(car))
 	{
-		car->getCar().getRigidDynamicActor()->setGlobalPose(PxTransform(car->getCar().getRigidDynamicActor()->getGlobalPose().p + PxVec3(0, 15, 0)));
+		car->getCar().getRigidDynamicActor()->setGlobalPose(PxTransform(car->getCar().getRigidDynamicActor()->getGlobalPose().p + PxVec3(0, 15, 0), car->getCar().getRigidDynamicActor()->getGlobalPose().q));
 		car->getCar().getRigidDynamicActor()->setLinearVelocity(car->getCar().getRigidDynamicActor()->getLinearVelocity() + PxVec3(0, 20, 0));
 		if (car->takeDamage(PowerUp::getSpeedImpactDamage())) {
 			shield->getOwner()->addDamageDealt(PowerUp::getSpeedImpactDamage());

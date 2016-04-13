@@ -184,38 +184,34 @@ bool PxVehicleIsInAir(const PxVehicleWheelQueryResult& vehWheelQueryResults)
 void GameSimulation::simulatePhysics(double dt)
 {
 	//std::cout << m_players[0]->getCar()->getGlobalPose().x << "    " << m_players[0]->getCar()->getGlobalPose().z << std::endl;
-	int numSteps = 1;
-	while (dt > 1.f / 58.f) {
-		dt /= 2.f;
-		numSteps *= 2;
-	}
-	for (int i = 0; i < numSteps; i++) {
+	for (float time = dt; time > 0; time-= 1/60.f) {
 
-	for (unsigned int i = 0; i < m_players.size(); i++)
-	{
-		//This updates the ditance that the player has traveled. This is later used by the renderer ro render the tires.
-		m_players[i]->getCar()->distanceTraveled += m_players[i]->getCar()->getCar().computeForwardSpeed() * dt;
+		float timeFrame = std::min(1/60.f, time);
+		for (unsigned int i = 0; i < m_players.size(); i++)
+		{
+			//This updates the ditance that the player has traveled. This is later used by the renderer ro render the tires.
+			m_players[i]->getCar()->distanceTraveled += m_players[i]->getCar()->getCar().computeForwardSpeed() * timeFrame;
 
-		//Raycasts.
+			//Raycasts.
 
-		PxVehicleWheels* vehicles[1] = { &m_players[i]->getCar()->getCar() };
-		PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
-		const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
-		PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
+			PxVehicleWheels* vehicles[1] = { &m_players[i]->getCar()->getCar() };
+			PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
+			const PxU32 raycastResultsSize = gVehicleSceneQueryData->getRaycastQueryResultBufferSize();
+			PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
 
-		//Vehicle update.
-		const PxVec3 grav = m_scene->getGravity();
-		PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
-		PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, m_players[i]->getCar()->getCar().mWheelsSimData.getNbWheels() } };
-			PxVehicleUpdates(dt, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
+			//Vehicle update.
+			const PxVec3 grav = m_scene->getGravity();
+			PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
+			PxVehicleWheelQueryResult vehicleQueryResults[1] = { { wheelQueryResults, m_players[i]->getCar()->getCar().mWheelsSimData.getNbWheels() } };
+			PxVehicleUpdates(timeFrame, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
 
-		//Work out if the vehicle is in the air.
-			m_players[i]->getCar()->setIsInAir(m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]));
+			//Work out if the vehicle is in the air.
+				m_players[i]->getCar()->setIsInAir(m_players[i]->getCar()->getCar().getRigidDynamicActor()->isSleeping() ? false : PxVehicleIsInAir(vehicleQueryResults[0]));
 		}
 
-	m_scene->simulate(dt);
-	m_scene->fetchResults(true);
-}
+		m_scene->simulate(timeFrame);
+		m_scene->fetchResults(true);
+	}
 }
 
 void GameSimulation::simulateAnimation()
