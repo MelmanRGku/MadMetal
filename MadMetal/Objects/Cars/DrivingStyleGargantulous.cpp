@@ -28,7 +28,7 @@ DrivingStyleGargantulous::DrivingStyleGargantulous()
 	m_nbWheels = 4;
 
 	//handling variables
-	m_maxSpeed = 90;
+	m_maxSpeed = 95;
 	m_maxBrakeTorque = 1000.f;
 	m_maxHandBrakeTorque = 80000000.f;
 	m_frontWheelsMaxSteer = PxPi*0.06666f*0.80f;
