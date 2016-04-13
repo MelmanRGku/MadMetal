@@ -108,7 +108,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		 Renderable3D *renderable = new Renderable3D(model, true, true);
 		 Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		 Animatable *animatable = new Animatable();
-										 DrivingStyle * drivingStyle = new DrivingStyleExplosivelyDelicious();
+										 //DrivingStyle * drivingStyle = new DrivingStyleExplosivelyDelicious();
+		 DrivingStyle * drivingStyle = new DrivingStyleMeowMix();
 		 PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, 0, NULL, drivingStyle, NULL);
 
 		 PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
@@ -148,7 +149,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		Renderable3D *renderable = new Renderable3D(model, true, true);
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
-							DrivingStyle * drivingStyle = new DrivingStyleGargantulous();
+							//DrivingStyle * drivingStyle = new DrivingStyleGargantulous();
+		DrivingStyle * drivingStyle = new DrivingStyleMeowMix();
 		PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, 0, NULL, drivingStyle, NULL);
 
 		PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
