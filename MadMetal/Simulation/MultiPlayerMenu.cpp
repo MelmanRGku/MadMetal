@@ -307,8 +307,8 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 		Animatable *animatable = new Animatable();
 		Physicable *physicable = new Physicable(NULL);
 
-		Text3D *loadingInfoString = new Text3D(3, audioable, physicable, animatable, renderable, 1);
-		loadingInfoString->setPosition(glm::vec3(0, -3, -25));
+		loadingInfoString = new Text3D(3, audioable, physicable, animatable, renderable, 1);
+		loadingInfoString->setPosition(glm::vec3(0, -10000, -25));
 		loadingInfoString->setString("Computer Players");
 		m_world->addGameObject(loadingInfoString);
 	}
@@ -317,7 +317,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
 		a->updatePosition(glm::vec3(0, -6, -25));
-		a->setScale(glm::vec3(5, 1, 1));
+		a->setScale(glm::vec3(0, 0, 0));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Arrows.obj"));
 		model->setupVAOs();
@@ -329,7 +329,7 @@ MultiPlayerMenu::MultiPlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(0, -6, -25));
+		a->setPosition(glm::vec3(0, -10000, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
 		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/loadingBox.obj"));
@@ -518,10 +518,10 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 			//if together with this player everyone has selected the car 0 highlight the number of AI's
 			if (numOfPlayersWhoSelectedTheCar + 1 == numOfPlayersWhoJoinedTheGame) {
-				ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, 2), .5f);
-				m_world->addObjectUpdater(upd);
-				ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, 2), .5f);
-				m_world->addObjectUpdater(upd2);
+				//show the text and arrows
+				loadingInfoString->setPosition(glm::vec3(0, -3, -25));
+				numberOfAIsString->setPosition(glm::vec3(0, -6, -25));
+				numberOfAIsButton->setScale(glm::vec3(5, 1, 1));
 				aToStart -> setScale(glm::vec3(0.7f, 0.2f, 1));
 			}
 		}
@@ -534,10 +534,9 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 				//if AI selection has been selected - unhighlight it
 				if (numOfPlayersWhoSelectedTheCar == numOfPlayersWhoJoinedTheGame) {
-					ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, -2), .5f);
-					m_world->addObjectUpdater(upd);
-					ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, -2), .5f);
-					m_world->addObjectUpdater(upd2);
+					loadingInfoString->setPosition(glm::vec3(0, -10000, -25));
+					numberOfAIsString->setPosition(glm::vec3(0, -10000, -25));
+					numberOfAIsButton->setScale(glm::vec3(0, 0, 0));
 					aToStart->setScale(glm::vec3(0, 0, 0));
 				}
 			}
@@ -550,10 +549,9 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 				//if all the players that are left have selected the cars - select it
 				if (numOfPlayersWhoSelectedTheCar == numOfPlayersWhoJoinedTheGame - 1 && numOfPlayersWhoJoinedTheGame - 1 != 0) {
-					ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, 2), .5f);
-					m_world->addObjectUpdater(upd);
-					ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, 2), .5f);
-					m_world->addObjectUpdater(upd2);
+					loadingInfoString->setPosition(glm::vec3(0, -3, -25));
+					numberOfAIsString->setPosition(glm::vec3(0, -6, -25));
+					numberOfAIsButton->setScale(glm::vec3(5, 1, 1));
 					aToStart->setScale(glm::vec3(0.7f, 0.2f, 1));
 				}
 			}
@@ -612,10 +610,9 @@ bool MultiPlayerMenu::simulateScene(double dt, SceneMessage &message) {
 
 			//if AI selection has been selected - unhighlight it
 			if (numOfPlayersWhoSelectedTheCar == numOfPlayersWhoJoinedTheGame && numOfPlayersWhoJoinedTheGame != 0) {
-				ObjectPositionUpdater *upd = new ObjectPositionUpdater(numberOfAIsButton, glm::vec3(0, 0, -2), .5f);
-				m_world->addObjectUpdater(upd);
-				ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(numberOfAIsString, glm::vec3(0, 0, -2), .5f);
-				m_world->addObjectUpdater(upd2);
+				loadingInfoString->setPosition(glm::vec3(0, -10000, -25));
+				numberOfAIsString->setPosition(glm::vec3(0, -10000, -25));
+				numberOfAIsButton->setScale(glm::vec3(0, 0, 0));
 				aToStart->setScale(glm::vec3(0, 0, 0));
 			}
 
