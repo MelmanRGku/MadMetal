@@ -16,6 +16,7 @@
 #include "Objects\Cars\DrivingStyleMeowMix.h"
 #include "Objects\Cars\DrivingStyleExplosivelyDelicious.h"
 #include "Objects\Cars\DrivingStyleGargantulous.h"
+#include "Objects\Cars\AIDrivingStyle.h"
 
 
 #include "Objects\Cars\MeowMix.h"
@@ -52,8 +53,11 @@ class GameFactory
 public:
 	enum Objects {
 		OBJECT_MEOW_MIX,
+		OBJECT_MEOW_MIX_AI,
 		OBJECT_EXPLOSIVELY_DELICIOUS,
+		OBJECT_EXPLOSIVELY_DELICIOUS_AI,
 		OBJECT_GARGANTULOUS,
+		OBJECT_GARGANTULOUS_AI,
 		OBJECT_BULLET_MEOW_MIX,
 		OBJECT_MEOW_MIX_SUPER,
 		OBJECT_BULLET_EXPLOSIVELY_DELICIOUS,

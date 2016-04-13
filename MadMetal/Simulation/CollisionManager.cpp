@@ -336,6 +336,10 @@ void CollisionManager::processGargantulousSuperBulletHit(long bulletId, long car
 	if (car != NULL  && car != super->getOwner()) // if the car hasn't already been hit by the super
 	{
 		float pointsToAssign = car->getHealthRemaining();
+		if (pointsToAssign < 0)
+		{
+			pointsToAssign = 0;
+		}
 		float damageToDeal = 200.f;
 		if (car->takeDamage(damageToDeal)) {
 			super->getOwner()->addDamageDealt(pointsToAssign, false);

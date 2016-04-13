@@ -94,13 +94,13 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 			PxTransform *pos = spawnLocations.at(i);
 			Car *car = NULL;
 			if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_MEOW_MIX) {
-				car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX, pos, NULL, NULL));
+				car = static_cast<MeowMix *>(m_gameFactory->makeObject(GameFactory::OBJECT_MEOW_MIX_AI, pos, NULL, NULL));
 			}
 			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_EXPLOSIVELY_DELICIOUS) {
-				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS, pos, NULL, NULL));
+				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS_AI, pos, NULL, NULL));
 			}
 			else if (playerTemplates[i]->getCarSelection() == Characters::CHARACTER_GARGANTULOUS) {
-				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_GARGANTULOUS, pos, NULL, NULL));
+				car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_GARGANTULOUS_AI, pos, NULL, NULL));
 			}
 			//car = static_cast<ExplosivelyDelicious *>(m_gameFactory->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS, pos, NULL, NULL));
 			ai->setCar(car);

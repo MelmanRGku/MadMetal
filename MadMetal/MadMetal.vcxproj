@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Objects\AnimatedSmoke.cpp" />
+    <ClCompile Include="Objects\Cars\AIDrivingStyle.cpp" />
     <ClCompile Include="Simulation\MadMetalPresentsScreen.cpp" />
     <ClCompile Include="Simulation\ControlsMenu.cpp" />
     <ClCompile Include="Objects\DeathPit.cpp" />
@@ -188,6 +189,7 @@
   <ItemGroup>
     <ClInclude Include="Objects\AnimatedSmoke.h" />
     <ClInclude Include="Audio\Sound.h" />
+    <ClInclude Include="Objects\Cars\AIDrivingStyle.h" />
     <ClInclude Include="Objects\DynamicLight.h" />
     <ClInclude Include="Simulation\MadMetalPresentsScreen.h" />
     <ClInclude Include="Simulation\ControlsMenu.h" />
