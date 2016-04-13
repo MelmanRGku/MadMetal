@@ -149,7 +149,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 */
 		 return car;
 	}
-#define GARGANTULOUS_DIMENSIONS 10,5,10
+#define GARGANTULOUS_DIMENSIONS 10,6,10
 	case OBJECT_GARGANTULOUS:
 	case OBJECT_GARGANTULOUS_AI:
 	{
@@ -174,7 +174,12 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();
 		objectToMake == OBJECT_GARGANTULOUS ? physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions() : physicalCarDimensions = PxVec3(GARGANTULOUS_DIMENSIONS);
 		car->setScale(glm::vec3(physicalCarDimensions.x, physicalCarDimensions.y + k, physicalCarDimensions.z));
-
+		
+		if (objectToMake == OBJECT_GARGANTULOUS_AI)
+		{
+			car->updatePosition(glm::vec3(0, -2, 0));
+		}
+		
 		m_world.addGameObject(car);
 		m_scene.addActor(*physicalCar->getRigidDynamicActor());
 
