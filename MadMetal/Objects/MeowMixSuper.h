@@ -37,7 +37,7 @@ public:
 		PxVec3 forwardPhysx = PxVec3(forward.x, forward.y, forward.z);
 
 		PxRaycastBuffer hit;
-		PxQueryFilterData fd = PxQueryFilterData(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC);
+		PxQueryFilterData fd = PxQueryFilterData(PxQueryFlag::eDYNAMIC);
 		PxVec3 rayDirection = PxVec3(forward.x, forward.y, forward.z);
 		initialPosition += rayDirection * (m_owner->getCar().getRigidDynamicActor()->getWorldBounds().getDimensions().z + 1);
 		initialPosition.y += 1;
@@ -68,7 +68,7 @@ public:
 					}
 					else if (car->isAlive())
 					{
-						float damageToDeal = 200.f;
+						float damageToDeal = 000.f;
 						float pointsToGet = car->getHealthRemaining();
 						if (car->takeDamage(damageToDeal)) {
 							m_owner->addDamageDealt(pointsToGet);
@@ -108,11 +108,11 @@ public:
 				{
 					Object3D *volume = static_cast<Object3D *>(GameFactory::instance()->getWorld().findObject(shapes[0]->getSimulationFilterData().word2));
 					forceShutdownRaycast = false;
-					beamDistance += hit.block.distance + 0.2f + std::max(volume->getActor().getWorldBounds().getDimensions().x, volume->getActor().getWorldBounds().getDimensions().z) / 8;
+					beamDistance += hit.block.distance + 2.f;
 					break;
 				}
 				default:
-					beamDistance += hit.block.distance + 0.2f;
+					beamDistance += hit.block.distance + 1.f;
 					break;
 				}
 			}
