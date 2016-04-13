@@ -131,7 +131,7 @@ void PlayerControllable::playFrame(double dt)
 				}
 				else if (m_gamePad->getLeftTrigger())
 				{
-					if (m_car->getCar().computeForwardSpeed() > 0.1)
+					if (m_car->getCar().computeForwardSpeed() > 8)
 					{
 						m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 1);
 					} 
