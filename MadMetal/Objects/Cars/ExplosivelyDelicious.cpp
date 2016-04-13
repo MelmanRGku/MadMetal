@@ -67,15 +67,15 @@ void ExplosivelyDelicious::update(float dt) {
 
 		//last bomb sent out - explode
 		if (m_numOfBombs == 0) {
-			m_currentHealth = 1;
+			//m_currentHealth = 1;
 			PxGeometry* geom[1];
 			geom[0] = new PxBoxGeometry(PxVec3(20, 15, 20));
 			PxTransform * pos = &m_car.getRigidDynamicActor()->getGlobalPose();
 			GameFactory::instance()->makeObject(GameFactory::OBJECT_EXPLOSIVELY_DELICIOUS_SUPER, pos, geom, this);
 			delete geom[0];
 
-			getCar().getRigidDynamicActor()->addForce(PxVec3(0, CAR_LAUNCH_SPEED, 0), PxForceMode::eIMPULSE);
-			getCar().getRigidDynamicActor()->setAngularVelocity(PxVec3(LAUNCH_ANGLE));
+			//getCar().getRigidDynamicActor()->addForce(PxVec3(0, CAR_LAUNCH_SPEED, 0), PxForceMode::eIMPULSE);
+			//getCar().getRigidDynamicActor()->setAngularVelocity(PxVec3(LAUNCH_ANGLE));
 		}
 	}
 	
