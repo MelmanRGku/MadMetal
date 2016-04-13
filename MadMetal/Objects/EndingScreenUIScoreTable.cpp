@@ -8,7 +8,7 @@ EndingScreenUIScoreTable::EndingScreenUIScoreTable(long id, Audioable *aable, An
 {
 	this->playerTemplates = playerTemplates;
 	font = new FTBitmapFont("Assets/Fonts/OpenSans-Bold.ttf");
-	fontSize = glutGet(GLUT_WINDOW_HEIGHT) * 0.04;
+	fontSize = glutGet(GLUT_WINDOW_HEIGHT) * 0.03;
 	xDistBetweenNameAndPlace = fontSize * 5;
 	xDistBetweenPlaceAndScore = fontSize * 3;
 	yDistBetweenLines = fontSize;

@@ -54,7 +54,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	long objectId = getNextId();
 
 	switch (objectToMake) {
-	case OBJECT_MEOW_MIX:
+	case OBJECT_MEOW_MIX: 
+	case OBJECT_MEOW_MIX_AI:
 	{
 
 		Model3D *model = NULL;
@@ -67,7 +68,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
-		DrivingStyle * drivingStyle = new DrivingStyleMeowMix();
+		DrivingStyle * drivingStyle;
+		objectToMake == OBJECT_MEOW_MIX ? drivingStyle = new DrivingStyleMeowMix() : drivingStyle = new AIDrivingStyle();
 		PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, 0, NULL, drivingStyle, NULL);
 
 		PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
@@ -101,15 +103,19 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		return car;
 	}
 #define EXPLOSIVELY_DELICIOUS_HEIGHT_ADDITION 3
+#define EXPLOSIVELY_DELICIOUS_DIMENSIONS 5,5,7
 	case OBJECT_EXPLOSIVELY_DELICIOUS:
+	case OBJECT_EXPLOSIVELY_DELICIOUS_AI:
 	{
 		 Model3D *model = NULL;
 		 model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_EXPLOSIVELY_DELICIOUS));
 		 Renderable3D *renderable = new Renderable3D(model, true, true);
 		 Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		 Animatable *animatable = new Animatable();
-										 //DrivingStyle * drivingStyle = new DrivingStyleExplosivelyDelicious();
-		 DrivingStyle * drivingStyle = new DrivingStyleMeowMix();
+										 
+		 DrivingStyle * drivingStyle;
+		 objectToMake == OBJECT_EXPLOSIVELY_DELICIOUS ? drivingStyle = new DrivingStyleExplosivelyDelicious() : drivingStyle = new AIDrivingStyle();
+
 		 PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, 0, NULL, drivingStyle, NULL);
 
 		 PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
@@ -120,7 +126,8 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		 int k = (int)physicalCar->mWheelsSimData.getWheelData(0).mRadius * 2 + EXPLOSIVELY_DELICIOUS_HEIGHT_ADDITION;
 
-		 PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();
+		 PxVec3 physicalCarDimensions;
+		 objectToMake == OBJECT_EXPLOSIVELY_DELICIOUS ? physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions() : physicalCarDimensions = PxVec3(EXPLOSIVELY_DELICIOUS_DIMENSIONS);
 		 car->setScale(glm::vec3(physicalCarDimensions.x, physicalCarDimensions.y + k, physicalCarDimensions.z));
 
 		 m_world.addGameObject(car);
@@ -142,15 +149,19 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 */
 		 return car;
 	}
+#define GARGANTULOUS_DIMENSIONS 10,6,10
 	case OBJECT_GARGANTULOUS:
+	case OBJECT_GARGANTULOUS_AI:
 	{
 		Model3D *model = NULL;
 		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_GARGANTULOUS));
 		Renderable3D *renderable = new Renderable3D(model, true, true);
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 		Animatable *animatable = new Animatable();
-							//DrivingStyle * drivingStyle = new DrivingStyleGargantulous();
-		DrivingStyle * drivingStyle = new DrivingStyleMeowMix();
+							
+		DrivingStyle * drivingStyle;
+		objectToMake == OBJECT_GARGANTULOUS ? drivingStyle = new DrivingStyleGargantulous() : drivingStyle = new AIDrivingStyle();
+
 		PxBase *base = m_physicsFactory->makePhysicsObject(PhysicsFactory::PHYSICAL_OBJECT_CAR, objectId, pos, NULL, 0, NULL, drivingStyle, NULL);
 
 		PxVehicleDrive4W *physicalCar = static_cast<PxVehicleDrive4W *>(base);
@@ -161,8 +172,14 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		int k = (int)physicalCar->mWheelsSimData.getWheelData(0).mRadius * 2;
 		PxVec3 physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions();
+		objectToMake == OBJECT_GARGANTULOUS ? physicalCarDimensions = physicalCar->getRigidDynamicActor()->getWorldBounds().getDimensions() : physicalCarDimensions = PxVec3(GARGANTULOUS_DIMENSIONS);
 		car->setScale(glm::vec3(physicalCarDimensions.x, physicalCarDimensions.y + k, physicalCarDimensions.z));
-
+		
+		if (objectToMake == OBJECT_GARGANTULOUS_AI)
+		{
+			car->updatePosition(glm::vec3(0, -2, 0));
+		}
+		
 		m_world.addGameObject(car);
 		m_scene.addActor(*physicalCar->getRigidDynamicActor());
 
@@ -290,7 +307,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	}
 	case OBJECT_TRACK_WALLS:
 	{
-		for (int i = RenderFactory::RENDERABLE_OBJECT_TRACK_WALL_1; i <= RenderFactory::RENDERABLE_OBJECT_TRACK_WALL_17; i ++) {
+		for (int i = RenderFactory::RENDERABLE_OBJECT_TRACK_WALL_1; i <= RenderFactory::RENDERABLE_OBJECT_TRACK_WALL_18; i ++) {
 		Object3D *trackWalls;
 		Model3D *model = NULL;
 			model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RenderableObjects(i)));
@@ -773,15 +790,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							 
 							 GooMonster *gooMonster = new GooMonster(objectId, audioable, physicable, animatable, renderable);
 
-							 DynamicLight* light = static_cast<DynamicLight *>(makeObject(GameFactory::OBJECT_DYNAMIC_LIGHT, pos, NULL, gooMonster));
-							 light->colour = glm::vec3(0.3, 0, 0);
-							 light->constant = 0.0;
-							 light->linear = 0.0;
-							 light->quad = 0.02;
-							 light->cutoff = 15.0f;
-							 light->setInitialPosition(glm::vec3(3, 0, 0));
-
-							 m_world.addLightObject(light);
 							 m_world.addGameObject(gooMonster);
 							 m_scene.addActor(*gooMonsterVolume);
 							 return gooMonster;
@@ -1213,7 +1221,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	case OBJECT_DYNAMIC_LIGHT:
 	{
 		Animatable *animatable = new Animatable();
-		animatable->setPosition(glm::vec3(pos->p.x, pos->p.y, pos->p.z));
 		DynamicLight *light = new DynamicLight(objectId, animatable, static_cast<Object3D *>(parent));
 
 		m_world.addLightObject(light);

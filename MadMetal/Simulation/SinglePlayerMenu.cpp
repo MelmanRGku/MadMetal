@@ -21,19 +21,6 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
-		a->updatePosition(glm::vec3(-2.35, 1.95, -5.1));
-		a->setScale(glm::vec3(.7, .2, 0.00001));
-		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Back.obj"));
-		model->setupVAOs();
-		Renderable3D *r = new Renderable3D(model, true, true);
-		backButton = new Object3D(1, au, p, a, r, NULL);
-		m_world->addGameObject(backButton);
-	}
-
-	{
-		Physicable *p = new Physicable(NULL);
-		Animatable *a = new Animatable();
 		a->updatePosition(glm::vec3(0, 3, -25));
 		a->setScale(glm::vec3(5, 1, 1));
 		Audioable *au = new Audioable(*audio);
@@ -121,7 +108,7 @@ SinglePlayerMenu::SinglePlayerMenu(Input * input, Audio *audio)
 		a->updatePosition(glm::vec3(0, 0, -30));
 		a->setScale(glm::vec3(33, 24.5, 1));
 		Audioable *au = new Audioable(*audio);
-		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/Background.obj"));
+		Model3D *model = static_cast<Model3D *>(Assets::loadObjFromDirectory("Assets/Models/SinglePlayerBackground.obj"));
 		model->setupVAOs();
 		Renderable3D *r = new Renderable3D(model, true, true);
 		background = new Object3D(3, au, p, a, r, NULL);
@@ -213,15 +200,12 @@ bool SinglePlayerMenu::simulateScene(double dt, SceneMessage &message)
 void SinglePlayerMenu::upPressed() {
 	m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 	unselectMenuItem(selectedObject);
-	if (selectedObject == backButton) {
+	if (selectedObject == numberOfAIsButton) {
 		if (selectedCar != NULL)
 			selectedObject = selectedCar;
 		else
 			selectedObject = car2;
 		aToStart->setScale(glm::vec3(0.7f, 0.2f, 0));
-	}
-	else if (selectedObject == numberOfAIsButton) {
-		selectedObject = backButton;
 	}
 	else if (selectedObject == car1 || selectedObject == car2 || selectedObject == car3) {
 		selectedObject = numberOfAIsButton;
@@ -233,10 +217,7 @@ void SinglePlayerMenu::upPressed() {
 void SinglePlayerMenu::downPressed() {
 	m_audio->queAudioSource(NULL, MenuButtonChangeSound());
 	unselectMenuItem(selectedObject);
-	if (selectedObject == backButton) {
-		selectedObject = numberOfAIsButton;
-	}
-	else if (selectedObject == numberOfAIsButton) {
+	if (selectedObject == numberOfAIsButton) {
 		if (selectedCar != NULL)
 			selectedObject = selectedCar;
 		else
@@ -244,7 +225,7 @@ void SinglePlayerMenu::downPressed() {
 		aToStart->setScale(glm::vec3(0.7f, 0.2f, 0));
 	}
 	else if (selectedObject == car1 || selectedObject == car2 || selectedObject == car3) {
-		selectedObject = backButton;
+		selectedObject = numberOfAIsButton;
 		aToStart->setScale(glm::vec3(0, 0, 0));
 	}
 	selectMenuItem(selectedObject);
@@ -309,11 +290,7 @@ void SinglePlayerMenu::rightPressed() {
 }
 
 void SinglePlayerMenu::aPressed() {
-	if (selectedObject == backButton) {
-		messageToReturn = SceneMessage::ePop;
-		m_audio->queAudioSource(NULL, MenuBackButtonSound());
-	}
-	else if (selectedObject == car1 || selectedObject == car2 || selectedObject == car3) {
+	if (selectedObject == car1 || selectedObject == car2 || selectedObject == car3) {
 		m_audio->queAudioSource(NULL, MenuButtonClickSound());
 		m_audio->stopMusic();
 		messageToReturn = SceneMessage::eLoadScreen;
@@ -322,9 +299,6 @@ void SinglePlayerMenu::aPressed() {
 
 void SinglePlayerMenu::selectMenuItem(Object3D *menuItem) {
 	glm::vec3 offset = glm::vec3(0, 0, 5);
-	if (menuItem == backButton) {
-		offset = glm::vec3(0, 0, .1f);
-	}
 	{
 		ObjectPositionUpdater *upd = new ObjectPositionUpdater(menuItem, offset, .5);
 		m_world->addObjectUpdater(upd);
@@ -340,9 +314,6 @@ void SinglePlayerMenu::selectMenuItem(Object3D *menuItem) {
 
 void SinglePlayerMenu::unselectMenuItem(Object3D *menuItem) {
 	glm::vec3 offset = glm::vec3(0, 0, -5);
-	if (menuItem == backButton) {
-		offset = glm::vec3(0, 0, -.1f);
-	}
 	{
 		ObjectPositionUpdater *upd = new ObjectPositionUpdater(menuItem, offset, .5);
 		m_world->addObjectUpdater(upd);
@@ -360,10 +331,10 @@ void SinglePlayerMenu::setupSceneLights() {
 	{
 		Animatable *anable = new Animatable();
 		Light *light = new Light(1, anable);
-		anable->setPosition(glm::vec3(0, 10, 30));
+		anable->setPosition(glm::vec3(100, 100, 100));
 		light->colour = glm::vec3(1, 1, 1);
-		light->constant = 1.3;
-		light->linear = 0.01;
+		light->constant = .8f;
+		light->linear = 0;
 		light->quad = 0;
 		light->cutoff = 500.0;
 		m_world->addLightObject(light);

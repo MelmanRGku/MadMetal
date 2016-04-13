@@ -7,7 +7,7 @@
 #include "ShaderLoader.h"
 #include <iostream>
 
-#define MAX_NUM_OF_LIGHTS 100
+#define MAX_NUM_OF_LIGHTS 70
 
 class Light;
 

@@ -8,8 +8,7 @@ class SinglePlayerMenu : public Scene
 {
 private:
 	GamePad * m_gamePad;
-	Object3D *backButton,
-		*car1,
+	Object3D *car1,
 		*car2,
 		*car3,
 		*numberOfAIsButton,

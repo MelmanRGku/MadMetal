@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd cielingLightTexture.png
+map_Kd racoon_city.jpg
 
 newmtl Material.001
 Ns 96.078431
@@ -175,6 +175,17 @@ d 1.000000
 illum 2
 map_Kd cactus.jpg
 
+newmtl Material_cielingLightTexture.png
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd cielingLightTexture.png
+
 newmtl Material_desert_1.jpg
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
@@ -262,17 +273,6 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd nuclear-warning-signs-05-vector-8560.jpg
-
-newmtl Material_racoon_city.jpg
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.000000 0.000000 0.000000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd racoon_city.jpg
 
 newmtl Material_rail_road_tracks.png
 Ns 96.078431
@@ -426,7 +426,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd bloody_rock.jpg
+map_Kd road_7.jpg
 
 newmtl None.001
 Ns 0.000000
@@ -492,6 +492,17 @@ Ni 1.000000
 d 1.000000
 illum 2
 
+newmtl None_bloody_rock.jpg
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.800000 0.800000 0.800000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd bloody_rock.jpg
+
 newmtl None_do_not_enter.jpg
 Ns 0.000000
 Ka 0.000000 0.000000 0.000000
@@ -520,17 +531,6 @@ Ks 0.8 0.8 0.8
 d 1
 illum 2
 map_Kd road_6.jpg
-
-newmtl None_road_7.jpg
-Ns 0.000000
-Ka 0.000000 0.000000 0.000000
-Kd 0.800000 0.800000 0.800000
-Ks 0.800000 0.800000 0.800000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd road_7.jpg
 
 newmtl None_seamless_concrete_texture.jpg
 Ns 0.000000
