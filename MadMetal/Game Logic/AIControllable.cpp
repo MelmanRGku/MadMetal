@@ -134,34 +134,33 @@ void AIControllable::reverse()
 
 void AIControllable::accelerate(float amount)
 {
-	if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
+	if (m_car->getCar().computeForwardSpeed() < -0.1)
 	{
-		m_car->getCar().mDriveDynData.forceGearChange(PxVehicleGearsData::eFIRST);
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 1);
 	}
-	if (m_car->getCar().computeForwardSpeed() > 0)
+	else
 	{
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 1);
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 0);
+		if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eREVERSE)
+		{
+			m_car->getCar().mDriveDynData.setCurrentGear(PxVehicleGearsData::eFIRST);
+		}
+
+		processInputAcceleration(amount);
 	}
-	
-	processInputAcceleration(amount);
 }
 
 void AIControllable::backUp(float amount)
 {
-	if (m_car->getCar().computeForwardSpeed() > 0)
+	if (m_car->getCar().computeForwardSpeed() > 8)
 	{
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 1);
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 1);
 	}
 	else
 	{
-		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
-		if (m_car->getCar().mDriveDynData.getCurrentGear() != PxVehicleGearsData::eREVERSE) 
-		{
-			m_car->getCar().mDriveDynData.forceGearChange(PxVehicleGearsData::eREVERSE);
-		}
-		if (m_car->getCar().mDriveDynData.getCurrentGear() == PxVehicleGearsData::eNEUTRAL)
-		{
-			m_car->getCar().getRigidDynamicActor()->addForce(PxVec3(0, -1, 0));
+		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, 0);
+		if (m_car->getCar().mDriveDynData.getCurrentGear() != PxVehicleGearsData::eREVERSE) {
+			m_car->getCar().mDriveDynData.setCurrentGear(PxVehicleGearsData::eREVERSE);
 		}
 		processInputAcceleration(amount);
 	}
