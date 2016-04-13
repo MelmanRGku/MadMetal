@@ -7,16 +7,16 @@
 static const float BACKUP_DAMPING = 0.8;
 static const int NUMBER_OF_WRONG_HITS = 10; 
 static const int REVERSE_TIMER_AMOUNT = 90;
+static const int STUCK_TIMER_AMOUNT = 30;
 
 AIControllable::AIControllable(ControllableTemplate& aiTemplate)
 : Controllable(aiTemplate)
 {
 	m_needsToBackup = false;
-	m_counter = 0;
-	m_stuckCounterMillis = 0;
+	m_stuckWallCounter = STUCK_TIMER_AMOUNT;
+	m_stuckRespawnCounterMillis = 0;
 	m_movementState = AiStateMovement::INITIAL_STATE;
 	m_counterReverse = REVERSE_TIMER_AMOUNT;
-
 }
 AIControllable::~AIControllable()
 {
@@ -66,11 +66,11 @@ void AIControllable::processFire(std::vector<Controllable *> *players) {
 
 void AIControllable::playFrame(double dt)
 {
-	if (abs((m_stuckPosition - m_car->getCar().getRigidDynamicActor()->getGlobalPose().p).magnitude()) < 0.01)
+	if (abs((m_stuckPosition - m_car->getCar().getRigidDynamicActor()->getGlobalPose().p).magnitude()) < 0.1)
 	{
-		m_stuckCounterMillis+= dt;
+		m_stuckRespawnCounterMillis+= dt;
 		//std::cout << "Car is stuck\n";
-		if (m_stuckCounterMillis > 8)
+		if (m_stuckRespawnCounterMillis > 8)
 		{
 			std::cout << "AI respawned due to being stuck\n";
 			m_car->respawn();
@@ -79,7 +79,7 @@ void AIControllable::playFrame(double dt)
 	}
 	 else 
 	 {
-		 m_stuckCounterMillis = 0;
+		 m_stuckRespawnCounterMillis = 0;
 		 m_stuckPosition = m_car->getCar().getRigidDynamicActor()->getGlobalPose().p;
 	 }
 	updateMovementState();
@@ -247,30 +247,22 @@ void AIControllable::checkStuckInWall()
 	float engineRotationSpeed = static_cast<float>(m_car->getCar().mDriveDynData.getEngineRotationSpeed());
 	float forwardSpeed = static_cast<float>(m_car->getCar().computeForwardSpeed());
 	// Car is stuck in a wall
-	if (engineRotationSpeed > 70.0 &&
+	if (engineRotationSpeed > 100 &&
 		forwardSpeed < 5.0 &&
 		!(m_car->getInvinsibilityTimeRemaining() > 0))
 	{
-		m_counter++;
-		if (m_counter > 30)
+		m_stuckWallCounter--;
+		if (m_stuckWallCounter < 0)
 		{
-			m_needsToBackup = !m_needsToBackup;
-			if (m_needsToBackup)
-			{
-				rotateTowardsNextCollisionVolume();
-				m_movementState = AiStateMovement::MOVE_BACKWARDS;
-			}
-			// Move forward
-			else
-			{
-				m_movementState = AiStateMovement::MOVE_FORWARD;
-			}
-			m_counter = 0;
+			m_needsToBackup = true;
+			rotateTowardsNextCollisionVolume();
+			m_movementState = AiStateMovement::MOVE_BACKWARDS;
+			m_stuckWallCounter = STUCK_TIMER_AMOUNT;
 		}
 	}
 	else
 	{
-		m_counter = 0;
+		m_stuckWallCounter = STUCK_TIMER_AMOUNT;
 	}
 }
 
@@ -357,7 +349,7 @@ void AIControllable::updateMovementState()
 		if (m_counterReverse <= 0)
 		{
 			m_needsToBackup = false;
-			m_counter = 0;
+			m_stuckWallCounter = STUCK_TIMER_AMOUNT;
 			m_counterReverse = REVERSE_TIMER_AMOUNT;
 			m_movementState = AiStateMovement::MOVE_FORWARD;
 		}
