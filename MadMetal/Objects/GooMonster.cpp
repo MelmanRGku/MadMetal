@@ -5,6 +5,7 @@
 #include "Factory\GameFactory.h"
 #include "Game Logic\Controllable.h"
 #include "Libraries\glm\gtx\vector_angle.hpp"
+#include "DynamicLight.h"
 
 GooMonster::GooMonster(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable) : Object3D(id, aable, pable, anable, rable, NULL)
 {
@@ -36,7 +37,6 @@ void GooMonster::update(float dt)
 			
 			m_needsRespawn = true;
 			m_respawnCounter = (float) 3 + (rand() % 5);
-			//std::cout << "Respawning in " << m_respawnCounter << " seconds \n";
 		}
 	}
 	else if (m_respawnCounter <= 0)
@@ -60,6 +60,17 @@ void GooMonster::update(float dt)
 		else if (newType == GOO_MONSTER_TYPE_PUSHER && type != GOO_MONSTER_TYPE_PUSHER) {
 			m_renderable->setModel(Assets::getModel("Slime"));
 			static_cast<Renderable3D *>(m_renderable)->adjustModel(true, true);
+		}
+
+		if (newType == GOO_MONSTER_TYPE_KILLER) {
+			DynamicLight* light = static_cast<DynamicLight *>(GameFactory::instance()->makeObject(GameFactory::OBJECT_DYNAMIC_LIGHT, NULL, NULL, this));
+			light->colour = glm::vec3(0.3, 0, 0);
+			light->constant = 0.0;
+			light->linear = 0.0;
+			light->quad = 0.02;
+			light->cutoff = 15.0f;
+			light->setInitialPosition(glm::vec3(3, 0, 0));
+			light->setMaxLifeTime(4.f);
 		}
 
 		setMonsterType(newType);

@@ -785,15 +785,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 							 
 							 GooMonster *gooMonster = new GooMonster(objectId, audioable, physicable, animatable, renderable);
 
-							 DynamicLight* light = static_cast<DynamicLight *>(makeObject(GameFactory::OBJECT_DYNAMIC_LIGHT, pos, NULL, gooMonster));
-							 light->colour = glm::vec3(0.3, 0, 0);
-							 light->constant = 0.0;
-							 light->linear = 0.0;
-							 light->quad = 0.02;
-							 light->cutoff = 15.0f;
-							 light->setInitialPosition(glm::vec3(3, 0, 0));
-
-							 m_world.addLightObject(light);
 							 m_world.addGameObject(gooMonster);
 							 m_scene.addActor(*gooMonsterVolume);
 							 return gooMonster;
@@ -1225,7 +1216,6 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 	case OBJECT_DYNAMIC_LIGHT:
 	{
 		Animatable *animatable = new Animatable();
-		animatable->setPosition(glm::vec3(pos->p.x, pos->p.y, pos->p.z));
 		DynamicLight *light = new DynamicLight(objectId, animatable, static_cast<Object3D *>(parent));
 
 		m_world.addLightObject(light);
