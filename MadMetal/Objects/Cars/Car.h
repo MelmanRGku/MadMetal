@@ -43,6 +43,7 @@ protected: //members
 	CollisionVolume * m_currentCollisionVolume;
 	CollisionVolume * m_respawnCollisionVolume;
 	CollisionVolume * m_goalCollisionVolume;
+	CollisionVolume * m_lastMainPathCollisionVolume;
 
 
 	bool m_newLap;
@@ -128,6 +129,7 @@ public:
 	void setCurrentCollisionVolume(CollisionVolume * toSet);
 	CollisionVolume * getCurrentCollisionVolume();
 	CollisionVolume * getGoalCollisionVolume();
+	CollisionVolume * getLastMainPathCollisionVolume();
 
 
 	static void resetGlobalPositionID();

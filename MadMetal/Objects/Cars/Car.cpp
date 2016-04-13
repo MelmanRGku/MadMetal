@@ -17,7 +17,7 @@ Car::Car(long id, DrivingStyle* style, PxVehicleDrive4W &car, Audioable *aable, 
 {
 	brakeChannelNumber = -1;
 	m_currentCollisionVolume = NULL;
-	
+	m_lastMainPathCollisionVolume = NULL;
 	m_newLap = true;
 	m_powerUpRemaining = 0;
 	Car::positionGlobalID++;
@@ -384,6 +384,10 @@ void Car::setCurrentCollisionVolume(CollisionVolume* toSet)
 				{
 					m_respawnCollisionVolume = toSet;
 				}
+				if (toSet->getIsPartOfMainPath())
+				{
+					m_lastMainPathCollisionVolume = toSet;
+				}
 				m_goalCollisionVolume = toSet->getNextCollisionVolume();
 				std::cout << "picked up a new Collision Volume \n";
 				/*std::cout << "car: " << this->getIndex() << " goal:" << m_goalCollisionVolume->getId() << std::endl;*/
@@ -406,6 +410,10 @@ void Car::setCurrentCollisionVolume(CollisionVolume* toSet)
 		if (toSet->getIsRespawnLocation())
 		{
 			m_respawnCollisionVolume = toSet;
+		}
+		if (toSet->getIsPartOfMainPath())
+		{
+			m_lastMainPathCollisionVolume = toSet;
 		}
 	}
 
@@ -490,4 +498,9 @@ void Car::onUnbrake() {
 		m_audioable->getAudioHandle().stopSource(brakeChannelNumber);
 		brakeChannelNumber = -1;
 	}
+}
+
+CollisionVolume* Car::getLastMainPathCollisionVolume()
+{
+	return m_lastMainPathCollisionVolume;
 }
