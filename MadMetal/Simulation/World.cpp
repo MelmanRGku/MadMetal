@@ -1,5 +1,6 @@
 #include "World.h"
 
+int World::maxNumOfLights = 0;
 
 World::World() {
 	gameObjects = new std::vector<TestObject*>;
