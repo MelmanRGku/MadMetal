@@ -72,19 +72,6 @@ PauseMenu::PauseMenu(std::vector<ControllableTemplate *> players, Audio *audio)
 		m_world->addGameObject(exitToWindowsButton);
 	}
 
-
-	{
-		Renderable3D *renderable = new Renderable3D(NULL);
-		Audioable *audioable = new Audioable(*audio);
-		Animatable *animatable = new Animatable();
-		Physicable *physicable = new Physicable(NULL);
-
-		Text3D *loadingInfoString = new Text3D(5, audioable, physicable, animatable, renderable, 3);
-		loadingInfoString->setPosition(glm::vec3(0, 5, -20));
-		loadingInfoString->setString("Paused");
-		m_world->addGameObject(loadingInfoString);
-	}
-
 	{
 		Physicable *p = new Physicable(NULL);
 		Animatable *a = new Animatable();
