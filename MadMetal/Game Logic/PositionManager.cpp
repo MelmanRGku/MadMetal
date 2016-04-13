@@ -71,8 +71,32 @@ void PositionManager::updatePlayerPositions()
 					glm::vec3 player2Goal = m_players.at(j)->getCar()->getLastMainPathCollisionVolume()->getGlobalPose();
 					player2Goal.y = 0;
 
-					float distanceToGoalPlayer1 = glm::distance2(player1Position, player1Goal);
-					float distanceToGoalPlayer2 = glm::distance2(player2Position, player2Goal);
+					glm::vec3 vectorPlayer1CollisionVolumeToNextCollsionVolume = m_players.at(i)->getCar()->getGoalCollisionVolume()->getGlobalPose() - m_players.at(i)->getCar()->getLastMainPathCollisionVolume()->getGlobalPose();
+					glm::vec3 vectorPlayer2CollisionVolumeToNextCollsionVolume = m_players.at(j)->getCar()->getGoalCollisionVolume()->getGlobalPose() - m_players.at(j)->getCar()->getLastMainPathCollisionVolume()->getGlobalPose();
+
+					glm::vec3 vectorPlayer1CollisionVolumeToPlayer1Position = player1Position - m_players.at(i)->getCar()->getLastMainPathCollisionVolume()->getGlobalPose();
+					glm::vec3 vectorPlayer2CollisionVolumeToPlayer2Position = player2Position - m_players.at(j)->getCar()->getLastMainPathCollisionVolume()->getGlobalPose();
+
+					float distanceToGoalPlayer1;
+					float distanceToGoalPlayer2;
+
+					if (glm::dot(vectorPlayer1CollisionVolumeToNextCollsionVolume, vectorPlayer1CollisionVolumeToPlayer1Position) < 0)
+					{
+						distanceToGoalPlayer1 = 0;
+					}
+					else
+					{
+						distanceToGoalPlayer1 = glm::distance2(player1Position, player1Goal);
+					}
+
+					if (glm::dot(vectorPlayer2CollisionVolumeToNextCollsionVolume, vectorPlayer2CollisionVolumeToPlayer2Position) < 0)
+					{
+						distanceToGoalPlayer2 = 0;
+					}
+					else
+					{
+						distanceToGoalPlayer2 = glm::distance2(player2Position, player2Goal);
+					}
 
 					if (distanceToGoalPlayer1 < distanceToGoalPlayer2 && m_players.at(j)->getCar()->getPositionInRace() > m_players.at(i)->getCar()->getPositionInRace())
 					{
