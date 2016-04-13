@@ -360,10 +360,10 @@ void SinglePlayerMenu::setupSceneLights() {
 	{
 		Animatable *anable = new Animatable();
 		Light *light = new Light(1, anable);
-		anable->setPosition(glm::vec3(0, 10, 30));
+		anable->setPosition(glm::vec3(100, 100, 100));
 		light->colour = glm::vec3(1, 1, 1);
-		light->constant = 1.3;
-		light->linear = 0.01;
+		light->constant = .8f;
+		light->linear = 0;
 		light->quad = 0;
 		light->cutoff = 500.0;
 		m_world->addLightObject(light);

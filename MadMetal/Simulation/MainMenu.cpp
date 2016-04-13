@@ -193,9 +193,9 @@ void MainMenu::setupSceneLights() {
 	{
 		Animatable *anable = new Animatable();
 		Light *light = new Light(1, anable);
-		anable->setPosition(glm::vec3(0, 0, 20));
+		anable->setPosition(glm::vec3(100, 100, 100));
 		light->colour = glm::vec3(1, 1, 1);
-		light->constant = 2;
+		light->constant = .8f;
 		light->linear = 0;
 		light->quad = 0;
 		light->cutoff = 500.0;
