@@ -35,4 +35,6 @@ private: //members
 	bool m_needsToBackup;
 	int m_counter;
 	int m_counterReverse;
+	float m_stuckCounterMillis;
+	PxVec3 m_stuckPosition;
 };

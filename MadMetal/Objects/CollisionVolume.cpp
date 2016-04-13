@@ -184,6 +184,11 @@ std::vector<CollisionVolume*>& CollisionVolume::getListOfReachableCollisionVolum
 	return m_reachableCollisionVolumes;
 }
 
+std::vector<CollisionVolume*>& CollisionVolume::getListOfPossibleNextCollisionVolumes()
+{
+	return m_possibleNextCollisionVolumes;
+}
+
 bool CollisionVolume::getIsStartCollisionVolume()
 {
 	return m_isStartCollisionVolume;

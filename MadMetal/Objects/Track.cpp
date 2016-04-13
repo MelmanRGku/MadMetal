@@ -46,17 +46,18 @@ void Track::setupCollisionVolumes() {
 	std::vector<PxVec3> respawnLocations;
 
 	// 0 start line
-	geom1[0] = new PxBoxGeometry(50, 10, 10);
-	pos = new PxTransform(PxVec3(0, 10, -40));
+	geom1[0] = new PxBoxGeometry(50, 5, 10);
+	pos = new PxTransform(PxVec3(0, 6, -40));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsStartCollisionVolume(true);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->generateRespawnLocations(PxVec3(0, 0, 1), PxVec3(10, 10,-35), 4, 2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.9);
 	delete pos;
 	delete geom1[0];
 
 	//1a
-	geom1[0] = new PxBoxGeometry(25, 10, 10);
-	pos = new PxTransform(PxVec3(25, 10, 15), PxQuat(0, PxVec3(0, -1, 0)));
+	geom1[0] = new PxBoxGeometry(24, 5, 10);
+	pos = new PxTransform(PxVec3(23, 6, 124.7), PxQuat(0, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
@@ -65,9 +66,9 @@ void Track::setupCollisionVolumes() {
 	delete geom1[0];
 
 	//1b
-	geom1[0] = new PxBoxGeometry(25, 10, 10);
+	geom1[0] = new PxBoxGeometry(30, 5, 30);
 	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
-	pos = new PxTransform(PxVec3(-25, 10, 15));
+	pos = new PxTransform(PxVec3(-20, 6, 72));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
@@ -91,12 +92,12 @@ void Track::setupCollisionVolumes() {
 	// 2b
 	geom1[0] = new PxBoxGeometry(17, 10, 5);
 	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
-	pos = new PxTransform(PxVec3(-30, 35, 341), PxQuat(0, PxVec3(0, -1, 0)));
+	pos = new PxTransform(PxVec3(-28, 35, 341), PxQuat(0, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.6);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.9);
 	respawnLocations.clear();
 	delete pos;
 	delete geom1[0];
@@ -114,21 +115,21 @@ void Track::setupCollisionVolumes() {
 	delete geom1[0];
 
 	// 3b
-	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	geom1[0] = new PxBoxGeometry(15, 5, 10);
 	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
-	pos = new PxTransform(PxVec3(-31.5, 35, 534), PxQuat(0.22, PxVec3(0, -1, 0)));
+	pos = new PxTransform(PxVec3(-44, 31, 495));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
-	//m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.6);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.9);
 	respawnLocations.clear();
 	delete pos;
 	delete geom1[0];
 
-	// 3a
-	geom1[0] = new PxBoxGeometry(50, 10, 50);
-	pos = new PxTransform(PxVec3(-15, 10, 606));
+	// 4a
+	geom1[0] = new PxBoxGeometry(50, 10, 30);
+	pos = new PxTransform(PxVec3(-7.8, 10, 606));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
@@ -137,10 +138,10 @@ void Track::setupCollisionVolumes() {
 	delete geom1[0];
 
 
-	// 3b
+	// 4b
 	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
-	geom1[0] = new PxBoxGeometry(15, 10, 5);
-	pos = new PxTransform(PxVec3(32, 35, 659), PxQuat(0.1, PxVec3(0, -1, 0)));
+	geom1[0] = new PxBoxGeometry(30, 5, 10);
+	pos = new PxTransform(PxVec3(32, 31, 626));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
@@ -149,9 +150,9 @@ void Track::setupCollisionVolumes() {
 	delete pos;
 	delete geom1[0];
 
-	// 4a
+	// 5a
 	geom1[0] = new PxBoxGeometry(50, 10, 50);
-	pos = new PxTransform(PxVec3(-30, 10, 760));
+	pos = new PxTransform(PxVec3(-2, 10, 760));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
@@ -161,7 +162,7 @@ void Track::setupCollisionVolumes() {
 	delete pos;
 	delete geom1[0];
 
-	// 4b
+	// 5b
 	geom1[0] = new PxBoxGeometry(50, 10, 50);
 	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
 	pos = new PxTransform(PxVec3(32, 35, 908), PxQuat(0.05, PxVec3(0, -1, 0)));
@@ -185,167 +186,145 @@ void Track::setupCollisionVolumes() {
 	delete geom1[0];
 
 	// 6
-	geom1[0] = new PxBoxGeometry(50, 10, 50);
+	geom1[0] = new PxBoxGeometry(30, 5, 5);
 	pos = new PxTransform(PxVec3(-2, 10, 1430), PxQuat(0.0, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.3);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->generateRespawnLocations(PxVec3(0, 0, 1), pos->p, 2, 2);
 	delete pos;
 	delete geom1[0];
 
 	// 7
-	geom1[0] = new PxBoxGeometry(50, 10, 50);
-	pos = new PxTransform(PxVec3(-10, 10, 1505), PxQuat(1.17, PxVec3(0, -1, 0)));
+	geom1[0] = new PxBoxGeometry(30, 5, 5);
+	pos = new PxTransform(PxVec3(-8, 10, 1505));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	respawnLocations.clear();
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.6);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsRespawnLocation(false);
 	delete pos;
 	delete geom1[0];
 
 	// 8
-	geom1[0] = new PxBoxGeometry(50, 10, 50);
-	pos = new PxTransform(PxVec3(-57, 10, 1555), PxQuat(1.5, PxVec3(0, -1, 0)));
+	geom1[0] = new PxBoxGeometry(25, 5, 35);
+	pos = new PxTransform(PxVec3(-57, 10, 1530), PxQuat(1.5, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->generateRespawnLocations(PxVec3(-1, 0, 0), pos->p, 2, 2);
 	delete pos;
 	delete geom1[0];
 
 	// 9
-	geom1[0] = new PxBoxGeometry(50, 10, 40);
-	pos = new PxTransform(PxVec3(-162, 10, 1555), PxQuat(1.5, PxVec3(0, -1, 0)));
+	geom1[0] = new PxBoxGeometry(30, 5, 30);
+	pos = new PxTransform(PxVec3(-191, 10, 1550), PxQuat(1.5, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->generateRespawnLocations(PxVec3(-1, 0, 0), pos->p, 2, 2);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.9);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.8);
 	delete pos;
 	delete geom1[0];
 
-	// 10a
-	geom1[0] = new PxBoxGeometry(10, 10, 30);
-	pos = new PxTransform(PxVec3(-341, 10, 1590), PxQuat(1.6, PxVec3(0, -1, 0)));
+	// 11a
+	geom1[0] = new PxBoxGeometry(20, 5, 20);
+	pos = new PxTransform(PxVec3(-289, 10, 1579), PxQuat(1.5, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsRespawnLocation(false);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.7);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.9);
 	respawnLocations.clear();
 	delete pos;
 	delete geom1[0];
 
-	//10b
-	geom1[0] = new PxBoxGeometry(10, 10, 30);
+	//11b
+	geom1[0] = new PxBoxGeometry(20, 5, 25);
 	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
-	pos = new PxTransform(PxVec3(-338, 10, 1507), PxQuat(1.33, PxVec3(0, -1, 0)));
+	pos = new PxTransform(PxVec3(-286.8, 10, 1530), PxQuat(1.5, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsRespawnLocation(false);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.7);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.9);
 
 	delete pos;
 	delete geom1[0];
 
-	//11a
-	geom1[0] = new PxBoxGeometry(10, 10, 30);
-	pos = new PxTransform(PxVec3(-400, 10, 1599), PxQuat(1.5, PxVec3(0, -1, 0)));
+	//12a
+	geom1[0] = new PxBoxGeometry(20, 5, 25);
+	pos = new PxTransform(PxVec3(-341, 10, 1586), PxQuat(1.5, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsRespawnLocation(false);
-	//m_collisionVolumes[m_collisionVolumes.size() - 1]->generateRespawnLocations(PxVec3(-1, 0, 0), PxVec3(-858, -15,1550),  3, 2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.9);
+	
 	
 	delete pos;
 	delete geom1[0];
 
-	// 11b
-	geom1[0] = new PxBoxGeometry(10, 10, 30);
+	// 12b
+	geom1[0] = new PxBoxGeometry(20, 5, 20);
 	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
-	pos = new PxTransform(PxVec3(-396, 10, 1497), PxQuat(1.5, PxVec3(0, -1, 0)));
+	pos = new PxTransform(PxVec3(-338, 10, 1530), PxQuat(1.5, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsRespawnLocation(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.9);
+	
+	delete pos;
+	delete geom1[0];
+
+	//13a
+	geom1[0] = new PxBoxGeometry(25, 5, 30);
+	pos = new PxTransform(PxVec3(-400, 10, 1593), PxQuat(1.5, PxVec3(0, -1, 0)));
+	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
+	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsRespawnLocation(false);
+	//m_collisionVolumes[m_collisionVolumes.size() - 1]->generateRespawnLocations(PxVec3(-1, 0, 0), PxVec3(-858, -15, 1550), 3, 2);
+	
+	delete pos;
+	delete geom1[0];
+
+	//13b
+	geom1[0] = new PxBoxGeometry(25, 5, 30);
+	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
+	pos = new PxTransform(PxVec3(-395, 10, 1512.7), PxQuat(1.5, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsRespawnLocation(false);
 	//m_collisionVolumes[m_collisionVolumes.size() - 1]->generateRespawnLocations(PxVec3(-1, 0, 0), PxVec3(-858, -15, 1550), 3, 2);
-	respawnLocations.clear();
-	delete pos;
-	delete geom1[0];
-
-	//12a
-	geom1[0] = new PxBoxGeometry(10, 10, 30);
-	pos = new PxTransform(PxVec3(-500, 15, 1603), PxQuat(1.5, PxVec3(0, -1, 0)));
-	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsRespawnLocation(false);
 	
-	delete pos;
-	delete geom1[0];
-
-	//12b
-	geom1[0] = new PxBoxGeometry(10, 10, 30);
-	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
-	pos = new PxTransform(PxVec3(-591, 15, 1500), PxQuat(1.5, PxVec3(0, -1, 0)));
-	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsRespawnLocation(false);
-	
-	delete pos;
-	delete geom1[0];
-	/*
-	//13a
-	geom1[0] = new PxBoxGeometry(30, 10, 40);
-	pos = new PxTransform(PxVec3(-830, -20, 1603), PxQuat(1.5, PxVec3(0, -1, 0)));
-	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
-	respawnLocations.push_back(PxVec3(-840, 20, 1575));
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
-	respawnLocations.clear();
-	delete pos;
-	delete geom1[0];
-
-	//13b
-	geom1[0] = new PxBoxGeometry(30, 10, 40);
-	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
-	pos = new PxTransform(PxVec3(-830, -20, 1500), PxQuat(1.95, PxVec3(0, -1, 0)));
-	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
-	respawnLocations.push_back(PxVec3(-840, 20, 1575));
-	m_collisionVolumes[m_collisionVolumes.size() - 1]->setRespawnLocations(respawnLocations);
-	
-	respawnLocations.clear();
 	delete pos;
 	delete geom1[0];
 
 	//14a
-	geom1[0] = new PxBoxGeometry(30, 10, 40);
-	pos = new PxTransform(PxVec3(-934, -20, 1559), PxQuat(2.21, PxVec3(0, -1, 0)));
+	geom1[0] = new PxBoxGeometry(5, 5, 20);
+	pos = new PxTransform(PxVec3(-553, 10, 1591), PxQuat(1.5, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(1);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsRespawnLocation(false);
+
 	delete pos;
 	delete geom1[0];
 
 	//14b
-	geom1[0] = new PxBoxGeometry(30, 10, 40);
+	geom1[0] = new PxBoxGeometry(5, 5, 20);
 	sameIndex = m_collisionVolumes[m_collisionVolumes.size() - 1]->getId();
-	pos = new PxTransform(PxVec3(-923, -20, 1490), PxQuat(2.45, PxVec3(0, -1, 0)));
+	pos = new PxTransform(PxVec3(-640, 10, 1516), PxQuat(1.5, PxVec3(0, -1, 0)));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsParthOfMainPath(false);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setPathNumber(2);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setId(sameIndex);
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setIsRespawnLocation(false);
-	respawnLocations.clear();
+
 	delete pos;
 	delete geom1[0];
-	*/
+
+
+	//update numbers after this spot
+	
 	//13
 	geom1[0] = new PxBoxGeometry(300, 10, 400);
 	pos = new PxTransform(PxVec3(-500, -20, 1550), PxQuat(1.5, PxVec3(0, -1, 0)));

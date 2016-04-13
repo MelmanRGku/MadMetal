@@ -13,8 +13,10 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate)
 {
 	m_needsToBackup = false;
 	m_counter = 0;
+	m_stuckCounterMillis = 0;
 	m_movementState = AiStateMovement::INITIAL_STATE;
 	m_counterReverse = REVERSE_TIMER_AMOUNT;
+
 }
 AIControllable::~AIControllable()
 {
@@ -64,6 +66,22 @@ void AIControllable::processFire(std::vector<Controllable *> *players) {
 
 void AIControllable::playFrame(double dt)
 {
+	if (abs((m_stuckPosition - m_car->getCar().getRigidDynamicActor()->getGlobalPose().p).magnitude()) < 0.01)
+	{
+		m_stuckCounterMillis+= dt;
+		//std::cout << "Car is stuck\n";
+		if (m_stuckCounterMillis > 8)
+		{
+			std::cout << "AI respawned due to being stuck\n";
+			m_car->respawn();
+			m_stuckPosition = m_car->getCar().getRigidDynamicActor()->getGlobalPose().p;
+		}
+	}
+	 else 
+	 {
+		 m_stuckCounterMillis = 0;
+		 m_stuckPosition = m_car->getCar().getRigidDynamicActor()->getGlobalPose().p;
+	 }
 	updateMovementState();
 }
 
@@ -152,6 +170,8 @@ void AIControllable::backUp(float amount)
 void AIControllable::setCar(Car * toAdd)
 {
 	m_car = toAdd;
+	m_stuckPosition = m_car->getCar().getRigidDynamicActor()->getGlobalPose().p;
+	
 }
 
 

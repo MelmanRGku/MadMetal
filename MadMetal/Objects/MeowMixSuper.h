@@ -6,7 +6,7 @@
 
 #define BEAM_MAX_DISTANCE 300.f
 #define BEAM_RADIUS 3
-#define MAX_NUM_OF_RAYCAST_TESTS 100
+#define MAX_NUM_OF_RAYCAST_TESTS 10
 class MeowMixSuper : public Object3D
 {
 public:
@@ -54,7 +54,7 @@ public:
 
 				PxShape * shapes[1];
 				hit.block.actor->getShapes(shapes, 1);
-				std::cout << shapes[0]->getSimulationFilterData().word0 << std::endl;
+				//std::cout << shapes[0]->getSimulationFilterData().word0 << std::endl;
 				Car * car;
 				switch (shapes[0]->getSimulationFilterData().word0)
 				{
@@ -84,7 +84,7 @@ public:
 					if (toCar.magnitude() > BEAM_MAX_DISTANCE)
 						break;
 					PxVec3 forward = PxVec3(m_owner->getForwardVector().x, m_owner->getForwardVector().y, m_owner->getForwardVector().z).getNormalized();
-					std::cout << abs(forward.cross(toCar).magnitude() - 1) << std::endl;
+					//std::cout << abs(forward.cross(toCar).magnitude() - 1) << std::endl;
 					if (abs(forward.cross(toCar).magnitude() - 1) < 0.2)
 					{
 						float damageToDeal = 200.f;

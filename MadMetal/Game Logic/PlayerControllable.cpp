@@ -3,6 +3,7 @@
 #include <iostream>
 #include <Files\FIleHandlingHelpers.h>
 #include <string>
+#include "Objects\CollisionVolume.h"
 
 // assign car to player and set camera to follow it
 void PlayerControllable::setCar(Car * toAdd)
@@ -54,6 +55,16 @@ void PlayerControllable::playFrame(double dt)
 					std::cout << "Position " << position.x << "," << position.y << "," << position.z << std::endl;
 					std::cout << "Angle " << angle << "    " << axis.x << "," << axis.y << "," << axis.z << std::endl;
 					std::cout << "Forward Vector " << forwardVector.x << "," << forwardVector.y << "," << forwardVector.z << std::endl;
+				}
+				if (m_gamePad->isPressed(GamePad::DPadDown))
+				{
+					CollisionVolume * currentVolume = m_car->getCurrentCollisionVolume();
+					CollisionVolume * nextVolume = currentVolume->getNextCollisionVolume();
+					std::vector<CollisionVolume*> listOfNextVolumes = currentVolume->getListOfPossibleNextCollisionVolumes();
+					for (int i = 0; i < listOfNextVolumes.size(); i++)
+					{
+						std::cout << listOfNextVolumes[i]->getActor().getGlobalPose().p.x << "," << listOfNextVolumes[i]->getActor().getGlobalPose().p.z << std::endl;
+					}
 				}
 
 				if (m_gamePad->isPressed(GamePad::YButton)) {

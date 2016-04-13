@@ -55,6 +55,7 @@ void Car::respawn()
 	{
 		m_car.getRigidDynamicActor()->setGlobalPose(m_respawnCollisionVolume->getRespawnLocation());
 		m_currentCollisionVolume = m_respawnCollisionVolume;
+		m_goalCollisionVolume = m_currentCollisionVolume->getNextCollisionVolume();
 	}
 	else {
 		
@@ -384,8 +385,9 @@ void Car::setCurrentCollisionVolume(CollisionVolume* toSet)
 					m_respawnCollisionVolume = toSet;
 				}
 				m_goalCollisionVolume = toSet->getNextCollisionVolume();
-				std::cout << "car: " << this->getIndex() << " goal:" << m_goalCollisionVolume->getId() << std::endl;
-				std::cout << "x: " << m_goalCollisionVolume->getGlobalPose().x 
+				std::cout << "picked up a new Collision Volume \n";
+				/*std::cout << "car: " << this->getIndex() << " goal:" << m_goalCollisionVolume->getId() << std::endl;*/
+				std::cout << "New Goal = x: " << m_goalCollisionVolume->getGlobalPose().x 
 					<< " y: " << m_goalCollisionVolume->getGlobalPose().y
 					<< " z: " << m_goalCollisionVolume->getGlobalPose().z
 					<< std::endl;

@@ -35,7 +35,7 @@ void GooMonster::update(float dt)
 		{
 			
 			m_needsRespawn = true;
-			m_respawnCounter = (float) (rand() % 5) / 2;
+			m_respawnCounter = (float) 3 + (rand() % 5);
 			//std::cout << "Respawning in " << m_respawnCounter << " seconds \n";
 		}
 	}

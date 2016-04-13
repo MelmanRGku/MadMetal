@@ -39,6 +39,7 @@ public:
 	bool getIsRespawnLocation();
 	void setIsRespawnLocation(bool isRespawn);
 	std::vector<CollisionVolume*>& getListOfReachableCollisionVolume();
+	std::vector<CollisionVolume*>& getListOfPossibleNextCollisionVolumes();
 	void generateRespawnLocations(PxVec3 forwardVector, PxVec3 center, int numWide, int numDeep);
 
 
