@@ -1,6 +1,6 @@
 #version 410 core
 
-#define MAX_NUM_OF_LIGHTS 100
+#define MAX_NUM_OF_LIGHTS 70
 
 // Input from vertex shader
 in VS_OUT

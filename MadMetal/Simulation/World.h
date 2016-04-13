@@ -7,14 +7,14 @@
 #include "Objects\ObjectUpdaters\ObjectUpdater.h"
 #include "Objects\Light.h"
 
-#define MAX_NUM_OF_LIGHTS 100
+#define MAX_NUM_OF_LIGHTS 70
 
 class World
 {
 private:
 	std::vector<TestObject*> *gameObjects;
 	std::vector<Light*> *lights;
-
+	static int maxNumOfLights;
 	PxScene *scene;
 	std::vector<ObjectUpdater *> updaters;
 	std::vector<std::pair<PxActor *, float>> actorsToDelete;
@@ -28,7 +28,7 @@ public:
 	std::vector<TestObject*> * getGameObjects()	{ return gameObjects; }
 	std::vector<Light *> * getLights() { return lights; }
 	void addGameObject(TestObject *obj) { gameObjects->push_back(obj); }
-	void addLightObject(Light *light) { if (lights->size() == MAX_NUM_OF_LIGHTS) return; lights->push_back(light); }
+	void addLightObject(Light *light) { if (lights->size() > maxNumOfLights){ maxNumOfLights = lights->size(); std::cout << "New num of lights" << maxNumOfLights << std::endl; } if (lights->size() == MAX_NUM_OF_LIGHTS) return; lights->push_back(light); }
 	TestObject *findObject(long id);
 	void deleteObjectById(long id);
 	void deleteObjectByIndex(int index);
