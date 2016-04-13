@@ -14,8 +14,8 @@ bool Audio::m_musicPlaying = false;
 	#define SFX_VOLUME 0
 	#define MUSIC_VOLUME 0
 #else
-	#define SFX_VOLUME 128
-	#define MUSIC_VOLUME 70
+	#define SFX_VOLUME 70
+	#define MUSIC_VOLUME 128
 #endif
 
 
