@@ -1250,4 +1250,18 @@ void GameSimulation::setupSceneLights() {
 	//---------------------------------
 	//----end finish line lights-------
 	//---------------------------------
+
+
+	// Sun light
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
+		anable->setPosition(glm::vec3(4500, 1500, 1350));
+		firstLight->colour = glm::vec3(1.0, 0.5, 0);
+		firstLight->constant = 0.0;
+		firstLight->linear = 0.00008;
+		firstLight->quad = 0.000002;
+		firstLight->cutoff = 1800.0;
+		m_world->addLightObject(firstLight);
+	}
 }
