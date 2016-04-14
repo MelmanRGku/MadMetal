@@ -261,7 +261,7 @@ public:
 		case RENDERABLE_OBJECT_SMOKE_14:
 			return Assets::getModel("smoke_14");
 		case RENDERABLE_OBJECT_SKY_BOX:
-			return Assets::getModel("Skybox");
+			return Assets::getModel("SkyDome");
 		case RENDERABLE_OBJECT_UI_DISTURBED_SONG_TEXTURE_THE_VENGEFUL_ONE:
 			return new Model2D(Assets::getTexture("disturbed"));
 		case RENDERABLE_OBJECT_UI_SICK_PUPPIES_SONG_TEXTURE_YOURE_GOING_DOWN:

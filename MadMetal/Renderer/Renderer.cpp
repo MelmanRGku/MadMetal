@@ -6,6 +6,7 @@
 #include "Objects\Light.h"
 #include "Game Logic\PlayerControllable.h"
 #include "Libraries\freeglut\freeglut.h"
+#include "Objects\GooMonster.h"
 
 /*
 	Constructor.

@@ -214,7 +214,7 @@ void AIControllable::processInputAcceleration(float amount)
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
 	}
-	else if (amount > 0.1)
+	else if (amount > 0)
 	{
 		//std::cout << "Applying acceleration : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
@@ -285,12 +285,14 @@ void AIControllable::checkStuckInWall()
 			m_needsToBackup = true;
 			rotateTowardsNextCollisionVolume();
 			m_movementState = AiStateMovement::MOVE_BACKWARDS;
-			m_stuckWallCounter = STUCK_TIMER_AMOUNT;
 		}
 	}
 	else
 	{
-		m_stuckWallCounter = STUCK_TIMER_AMOUNT;
+		if (m_stuckWallCounter < STUCK_TIMER_AMOUNT)
+		{
+			m_stuckWallCounter = STUCK_TIMER_AMOUNT;
+		}
 	}
 }
 
@@ -377,7 +379,7 @@ void AIControllable::updateMovementState()
 		if (m_counterReverse <= 0)
 		{
 			m_needsToBackup = false;
-			m_stuckWallCounter = STUCK_TIMER_AMOUNT;
+			m_stuckWallCounter = 70;
 			m_counterReverse = REVERSE_TIMER_AMOUNT;
 			m_movementState = AiStateMovement::MOVE_FORWARD;
 		}
