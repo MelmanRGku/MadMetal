@@ -3,7 +3,7 @@
 #include "Libraries\freeglut\freeglut.h"
 #include <sstream>
 
-EndingScreenCarInfoManager::EndingScreenCarInfoManager(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Animation *aniable, Object3D *car, int playerNumber, int score, int pos) : Object3D(id, aable, pable, anable, rable, aniable)
+EndingScreenCarInfoManager::EndingScreenCarInfoManager(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Animation *aniable, Object3D *car, int playerNumber) : Object3D(id, aable, pable, anable, rable, aniable)
 {
 	this->car = car;
 	font = new FTPolygonFont("Assets/Fonts/OpenSans-Bold.ttf");
@@ -12,20 +12,6 @@ EndingScreenCarInfoManager::EndingScreenCarInfoManager(long id, Audioable *aable
 	std::stringstream ss;
 	ss << "Player " << playerNumber;
 	this->name = ss.str();
-	ss.str(std::string());
-	ss << "Score: " << score;
-	this->score = ss.str();
-	ss.str(std::string());
-	ss << "Finished ";
-	if (pos == 1)
-		ss << "1st";
-	else if (pos == 2)
-		ss << "2nd";
-	else if (pos == 3)
-		ss << "3rd";
-	else
-		ss << pos << "th";
-	this->pos = ss.str();
 }
 
 
@@ -51,9 +37,7 @@ bool EndingScreenCarInfoManager::draw(Renderer *renderer, Renderer::ShaderType t
 	// Set the font size and render a small text.
 
 	//FTPo
-	font->Render(name.c_str(), -1, FTPoint(car->getAnimatablePos().x - 2, car->getAnimatablePos().y + 5, car->getAnimatablePos().z));
-	font->Render(score.c_str(), -1, FTPoint(car->getAnimatablePos().x - 2.5, car->getAnimatablePos().y + 4, car->getAnimatablePos().z));
-	font->Render(pos.c_str(), -1, FTPoint(car->getAnimatablePos().x - 3, car->getAnimatablePos().y + 3, car->getAnimatablePos().z));
+	font->Render(name.c_str(), -1, FTPoint(car->getAnimatablePos().x - 2, car->getAnimatablePos().y + 3, car->getAnimatablePos().z));
 
 	glPopAttrib();
 

@@ -389,12 +389,6 @@ void Car::setCurrentCollisionVolume(CollisionVolume* toSet)
 					m_lastMainPathCollisionVolume = toSet;
 				}
 				m_goalCollisionVolume = toSet->getNextCollisionVolume();
-				std::cout << "picked up a new Collision Volume \n";
-				/*std::cout << "car: " << this->getIndex() << " goal:" << m_goalCollisionVolume->getId() << std::endl;*/
-				std::cout << "New Goal = x: " << m_goalCollisionVolume->getGlobalPose().x 
-					<< " y: " << m_goalCollisionVolume->getGlobalPose().y
-					<< " z: " << m_goalCollisionVolume->getGlobalPose().z
-					<< std::endl;
 			}
 		}
 
@@ -402,11 +396,6 @@ void Car::setCurrentCollisionVolume(CollisionVolume* toSet)
 	} else {
 		m_currentCollisionVolume = toSet;
 		m_goalCollisionVolume = toSet->getNextCollisionVolume();
-		std::cout << "car: " << this->getIndex() << " goal:" << m_goalCollisionVolume->getId() << std::endl;
-		std::cout << "x: " << m_goalCollisionVolume->getGlobalPose().x
-			<< " y: " << m_goalCollisionVolume->getGlobalPose().y
-			<< " z: " << m_goalCollisionVolume->getGlobalPose().z
-			<< std::endl;
 		if (toSet->getIsRespawnLocation())
 		{
 			m_respawnCollisionVolume = toSet;

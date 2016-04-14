@@ -21,7 +21,7 @@
 
 
 #define NUM_OF_PLAYERS 12
-#define NUM_LAPS_FOR_VICTORY 3
+#define NUM_LAPS_FOR_VICTORY 1
 #define RACE_FINISH_DELAY 30
 
 using namespace std;
@@ -372,7 +372,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 		//check for lap status
 		for (int i = 0; i < m_players.size(); i++)
 		{
-			if (m_players[i]->getCar()->getLap() == m_numLapsVictory)
+			if (m_players[i]->getCar()->getLap() == 0)
 			{
 				if (!m_raceFinishedCountdownSeconds)
 				{
@@ -400,7 +400,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 				if (!m_players[i]->getCar()->isFinishedRace())
 				{
 					m_players[i]->getCar()->setFinishedRace(true);
-				m_players[i]->getCar()->addToScore(getFinishLineBonus(m_numPlayersFinishedRace++));
+					m_players[i]->getCar()->addToScore(getFinishLineBonus(m_numPlayersFinishedRace++));
 					
 				}
 				
@@ -411,8 +411,11 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 			//have first 3 players crossed the finish line or count down done?
 			if (m_numPlayersFinishedRace == m_players.size() || m_numPlayersFinishedRace == 3 || (m_raceFinishedCountdownSeconds -= dt) <= 0)
 			{
-				m_raceFinished = true;
-				//m_displayMessage->initializeMessage("FINISHED", 3);
+				m_timeFinishedRace = 3;
+				m_raceFinished = true; 
+				for (int j = 0; j < m_humanPlayers.size(); j++) {
+					m_humanPlayers.at(j)->getCar()->getUI()->displayMessage->initializeMessage("GAME OVER", 3);
+				}
 			}
 		}
 	}
@@ -426,23 +429,27 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 	simulatePlayers(dt);
 	}
 	else {
-		std::vector<ControllableTemplate *> playerTemplates;
+		if (m_timeFinishedRace <= 0) {
+			std::vector<ControllableTemplate *> playerTemplates;
 
-		//put the controllables into the vector incase the player trys to restart
-		for (int i = 0; i < m_players.size(); i++)
-		{
-			playerTemplates.push_back(&m_players[i]->getControllableTemplate());
-		}
+			//put the controllables into the vector incase the player trys to restart
+			for (int i = 0; i < m_players.size(); i++)
+			{
+				playerTemplates.push_back(&m_players[i]->getControllableTemplate());
+			}
 
-		for (int i = 0; i < playerTemplates.size(); i++) {
-			playerTemplates.at(i)->setPlayerNumber(i+1);
-			playerTemplates.at(i)->setFinalPosition(m_players.at(i)->getCar()->getPositionInRace());
-			playerTemplates.at(i)->setFinalScore(m_players.at(i)->getCar()->tallyScore());
+			for (int i = 0; i < playerTemplates.size(); i++) {
+				playerTemplates.at(i)->setPlayerNumber(i + 1);
+				playerTemplates.at(i)->setFinalPosition(m_players.at(i)->getCar()->getPositionInRace());
+				playerTemplates.at(i)->setFinalScore(m_players.at(i)->getCar()->tallyScore());
+			}
+			message.setTag(SceneMessage::eEnd);
+			message.setPlayerTemplates(playerTemplates);
+			return true;
 		}
-		message.setTag(SceneMessage::eEnd);
-		message.setPlayerTemplates(playerTemplates);
-		return true;
-		
+		else {
+			m_timeFinishedRace -= dt;
+		}
 	}
 	simulatePhysics(dt);
 	simulateAnimation();
@@ -653,11 +660,11 @@ float GameSimulation::getFinishLineBonus(int position)
 	switch (position)
 	{
 	case (0) :
-		return 500;
+		return 500 + m_players.size() * 30;
 	case (1) :
-		return 250;
+		return 250 + m_players.size() * 15;
 	case(2) :
-		return 100;
+		return 100 + m_players.size() * 10;
 	default:
 		return 0;
 	}
