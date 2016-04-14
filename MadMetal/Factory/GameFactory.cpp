@@ -738,10 +738,10 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		DynamicLight* light = static_cast<DynamicLight *>(makeObject(GameFactory::OBJECT_DYNAMIC_LIGHT, pos, NULL, trainCar));
 		light->colour = glm::vec3(0.5, 0.3, 0.1);
 		light->constant = 0.0;
-		light->linear = 0.08;
-		light->quad = 0.0;
-		light->cutoff = 20.0f;
-		light->setInitialPosition(glm::vec3(0, 1, 6.5));
+		light->linear = 0.0001;
+		light->quad = 0.01;
+		light->cutoff = 50.0f;
+		light->setInitialPosition(glm::vec3(0, 0.3, 7.5));
 
 		m_world.addGameObject(trainCar);
 		m_scene.addActor(*trainCarTriggerVolume);
@@ -1250,6 +1250,54 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		m_scene.addActor(*volume);
 
 		return beamcut;
+	}
+	case OBJECT_EASTER_EGG_COIN:
+	{
+		Model3D *model = NULL;
+		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_EASTER_EGG_COIN));
+		Renderable3D *renderable = new Renderable3D(model, true, true);
+		Animatable *animatable = new Animatable();
+		animatable->setScale(glm::vec3(6, 6, 1));
+		animatable->setPosition(glm::vec3(pos->p.x, pos->p.y, pos->p.z));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+		Physicable *physicable = new Physicable(NULL);
+
+		Object3D *coin = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
+
+		ObjectRotationUpdater *upd = new ObjectRotationUpdater(coin, glm::vec3(0, 360, 0), .5f, ObjectRotationUpdater::ANGLE_TYPE_DEGREES);
+		ObjectUpdaterSequence *upd2 = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_INFINITE);
+		upd2->addObjectUpdater(upd);
+
+		m_world.addObjectUpdater(upd2);
+		m_world.addGameObject(coin);
+
+		return coin;
+	}
+	case OBJECT_EASTER_EGG_DUCK:
+	{
+		Model3D *model = NULL;
+		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_EASTER_EGG_DUCK));
+		Renderable3D *renderable = new Renderable3D(model, true, true);
+		Animatable *animatable = new Animatable();
+		animatable->setScale(glm::vec3(8, 12, 12));
+		animatable->setPosition(glm::vec3(pos->p.x, pos->p.y, pos->p.z));
+		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
+
+		Physicable *physicable = new Physicable(NULL);
+
+		Object3D *duck = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
+
+		ObjectPositionUpdater *upd1 = new ObjectPositionUpdater(duck, glm::vec3(0, 2, 0), 1.1f);
+		ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(duck, glm::vec3(0, -2, 0), 1.1f);
+		ObjectUpdaterSequence *seq = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_INFINITE);
+		seq->addObjectUpdater(upd1);
+		seq->addObjectUpdater(upd2);
+
+		m_world.addObjectUpdater(seq);
+		m_world.addGameObject(duck);
+
+		return duck;
 	}
 	}
 }

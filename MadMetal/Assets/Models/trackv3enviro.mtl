@@ -1,5 +1,5 @@
 # Blender MTL File: 'trackv3.blend'
-# Material Count: 52
+# Material Count: 55
 
 newmtl Material
 Ns 96.078431
@@ -31,6 +31,39 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+
+newmtl Material_PizzaBox-blue.png
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd PizzaBox-blue.png
+
+newmtl Material_PizzaBox-green.png
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd PizzaBox-green.png
+
+newmtl Material_PizzaBox-red.png
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd PizzaBox-red.png
 
 newmtl Material_Saltwater_Croc_Warning_Sign.jpg
 Ns 96.078431
