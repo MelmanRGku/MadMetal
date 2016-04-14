@@ -21,7 +21,7 @@
 
 
 #define NUM_OF_PLAYERS 12
-#define NUM_LAPS_FOR_VICTORY 1
+#define NUM_LAPS_FOR_VICTORY 3
 #define RACE_FINISH_DELAY 30
 
 using namespace std;
@@ -110,6 +110,14 @@ GameSimulation::GameSimulation(vector<ControllableTemplate *> playerTemplates, A
 		}
 		m_players[m_players.size() - 1]->getCar()->setCurrentCollisionVolume(startLine);
 		m_players[m_players.size() - 1]->getCar()->respawn();
+	}
+
+	if (m_players.size() > 3)
+	{
+		for (int i = 0; i < m_humanPlayers.size(); i++)
+		{
+			m_humanPlayers[i]->setRaceNeedsPenalty(true);
+		}
 	}
 
 	//delete all spawn locations
@@ -372,7 +380,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 		//check for lap status
 		for (int i = 0; i < m_players.size(); i++)
 		{
-			if (m_players[i]->getCar()->getLap() == 0)
+			if (m_players[i]->getCar()->getLap() == NUM_LAPS_FOR_VICTORY)
 			{
 				if (!m_raceFinishedCountdownSeconds)
 				{

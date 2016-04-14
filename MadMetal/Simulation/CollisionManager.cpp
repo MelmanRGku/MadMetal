@@ -314,7 +314,11 @@ void CollisionManager::processExplosivelyDeliciousSuperHit(long explosiveId, lon
 
 	if (car != NULL  && car != super->getOwner() && super->addCarHit(carId)) // if the car hasn't already been hit by the super
 	{
-		float pointsToAssign = car->getHealthRemaining();
+		float pointsToAssign = car->getHealthRemaining(); 
+		if (pointsToAssign < 0)
+		{
+			pointsToAssign = 0;
+		}
 		if (car->takeDamage(super->getDamage())) {
 			super->getOwner()->addDamageDealt(pointsToAssign, false);
 		}

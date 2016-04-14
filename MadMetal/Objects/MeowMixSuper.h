@@ -70,6 +70,10 @@ public:
 					{
 						float damageToDeal = 200.f;
 						float pointsToGet = car->getHealthRemaining();
+						if (pointsToGet < 0)
+						{
+							pointsToGet = 0;
+						}
 						if (car->takeDamage(damageToDeal)) {
 							m_owner->addDamageDealt(pointsToGet);
 						}
@@ -89,6 +93,10 @@ public:
 					{
 						float damageToDeal = 200.f;
 						float pointsToGet = car->getHealthRemaining();
+						if (pointsToGet < 0)
+						{
+							pointsToGet = 0;
+						}
 						if (car->takeDamage(damageToDeal)) {
 							m_owner->addDamageDealt(pointsToGet);
 						}

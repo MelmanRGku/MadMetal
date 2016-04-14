@@ -34,10 +34,21 @@ void PlayerControllable::assignPositionPenalty()
 	}
 }
 
+void PlayerControllable::setRaceNeedsPenalty(bool needsPenalty)
+{
+	m_raceNeedsPenalty = needsPenalty;
+}
+
 void PlayerControllable::playFrame(double dt)
 {
 	if (m_car->isAlive()) m_camera->update(dt);
-	assignPositionPenalty();
+	
+	
+	if (m_raceNeedsPenalty)
+	{
+		assignPositionPenalty();
+	}
+	
 
 	if (!m_controlsPaused) {
 			
