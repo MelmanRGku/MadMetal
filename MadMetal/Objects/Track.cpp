@@ -175,7 +175,7 @@ void Track::setupCollisionVolumes() {
 	delete geom1[0];
 
 	// 5
-	geom1[0] = new PxBoxGeometry(50, 10, 10);
+	geom1[0] = new PxBoxGeometry(50, 30, 10);
 	pos = new PxTransform(PxVec3(2.3, 10, 1230));
 	m_collisionVolumes.push_back(static_cast<CollisionVolume*>(GameFactory::instance()->makeObject(GameFactory::OBJECT_COLLISION_VOLUME, pos, geom1, NULL)));
 	m_collisionVolumes[m_collisionVolumes.size() - 1]->setSectionSpeedDamping(0.8);

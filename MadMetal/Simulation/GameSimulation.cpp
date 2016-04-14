@@ -21,7 +21,7 @@
 
 
 #define NUM_OF_PLAYERS 12
-#define NUM_LAPS_FOR_VICTORY 1
+#define NUM_LAPS_FOR_VICTORY 3
 #define RACE_FINISH_DELAY 30
 
 using namespace std;
@@ -372,7 +372,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 		//check for lap status
 		for (int i = 0; i < m_players.size(); i++)
 		{
-			if (m_players[i]->getCar()->getLap() == m_numLapsVictory)
+			if (m_players[i]->getCar()->getLap() == NUM_LAPS_FOR_VICTORY)
 			{
 				if (!m_raceFinishedCountdownSeconds)
 				{
@@ -652,6 +652,9 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	setupTrains();
 	setupDeathPit();
 	m_gameFactory->makeObject(GameFactory::OBJECT_SKY_BOX, NULL, NULL, NULL);
+	m_gameFactory->makeObject(GameFactory::OBJECT_EASTER_EGG_COIN, &PxTransform(PxVec3(-386, 38, -114)), NULL, NULL);
+	m_gameFactory->makeObject(GameFactory::OBJECT_EASTER_EGG_DUCK, &PxTransform(PxVec3(-854, -33.5, 1405)), NULL, NULL);
+	m_gameFactory->makeObject(GameFactory::OBJECT_EASTER_EGG_DUCK, &PxTransform(PxVec3(-774, -43.5, 1713)), NULL, NULL)->updateRotation(glm::vec3(0, 90, 0));
 }
 
 float GameSimulation::getFinishLineBonus(int position)
@@ -859,8 +862,8 @@ void GameSimulation::setupSceneLights() {
 				m_world->addLightObject(firstLight);
 				*/
 		/*
-		//train path 1 2nd light
-		{
+	//train path 1 2nd light
+	{
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-975, -10, 1243));
@@ -870,20 +873,20 @@ void GameSimulation::setupSceneLights() {
 		firstLight->quad = 0;
 		firstLight->cutoff = 50.0;
 		m_world->addLightObject(firstLight);
-		}
+	}
 		*/
-		//train path 1 3rd light
-		{
-			Animatable *anable = new Animatable();
-			Light *firstLight = new Light(1, anable);
+	//train path 1 3rd light
+	{
+		Animatable *anable = new Animatable();
+		Light *firstLight = new Light(1, anable);
 			anable->setPosition(glm::vec3(-975, -10, 1100));
-			firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
-			firstLight->constant = 0.02;
-			firstLight->linear = 0.05;
-			firstLight->quad = 0;
-			firstLight->cutoff = 50.0;
-			m_world->addLightObject(firstLight);
-		}
+		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+		firstLight->constant = 0.02;
+		firstLight->linear = 0.05;
+		firstLight->quad = 0;
+		firstLight->cutoff = 50.0;
+		m_world->addLightObject(firstLight);
+	}
 	/*
 	//train path 1 4th light
 	{
