@@ -136,6 +136,8 @@ public:
 		RENDERABLE_OBJECT_TRACK_WALL_18,
 
 		RENDERABLE_OBJECT_MEOW_MIX_BEAM_CUT,
+		RENDERABLE_OBJECT_EASTER_EGG_COIN,
+		RENDERABLE_OBJECT_EASTER_EGG_DUCK,
 	};
 
 	
@@ -358,6 +360,10 @@ public:
 			return Assets::getModel("someShit18");
 		case RENDERABLE_OBJECT_MEOW_MIX_BEAM_CUT:
 			return Assets::getModel("beamcut");
+		case RENDERABLE_OBJECT_EASTER_EGG_COIN:
+			return Assets::getModel("coin");
+		case RENDERABLE_OBJECT_EASTER_EGG_DUCK:
+			return Assets::getModel("Duck");
 		}
 	}
 	

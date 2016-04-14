@@ -110,7 +110,7 @@ Model3D *ObjModelLoader::processScene(const aiScene *scene) {
 			}
 			else {
 				for (unsigned int j = 0; j < vertices.size(); j++) {
-					colours.push_back(glm::vec4(0, 0, 0, 0));
+					colours.push_back(glm::vec4(1.0, 1.0, 0, 1));
 				}
 			}
 		}

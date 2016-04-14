@@ -645,6 +645,7 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	setupTrains();
 	setupDeathPit();
 	m_gameFactory->makeObject(GameFactory::OBJECT_SKY_BOX, NULL, NULL, NULL);
+	m_gameFactory->makeObject(GameFactory::OBJECT_EASTER_EGG_COIN, &PxTransform(PxVec3(-386, 38, -114)), NULL, NULL);
 }
 
 float GameSimulation::getFinishLineBonus(int position)
