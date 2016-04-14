@@ -29,6 +29,7 @@ private: //helper functions
 	void checkStuckInWall();
 	void updateMovementState();
 	void rotateTowardsNextCollisionVolume();
+	void resetStuckCounters();
 
 private: //members
 	AiStateMovement m_movementState;
@@ -36,5 +37,7 @@ private: //members
 	int m_stuckWallCounter;
 	int m_counterReverse;
 	float m_stuckRespawnCounterMillis;
+	float m_stuckCollisionVolumeCounterMillis;
+	CollisionVolume * m_collisionVolumeStuckReference;
 	PxVec3 m_stuckPosition;
 };

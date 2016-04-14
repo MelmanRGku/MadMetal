@@ -76,6 +76,7 @@ private: //members
 	bool m_raceFinished;
 	float m_raceFinishedCountdownSeconds;
 	bool m_controlsPaused;
+	float m_timeFinishedRace;
 
 	CollisionVolume * m_startingCollisionVolume;
 	CollisionVolume * m_midCollisionVolume;
