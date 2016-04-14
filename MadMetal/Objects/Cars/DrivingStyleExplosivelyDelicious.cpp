@@ -25,7 +25,7 @@ DrivingStyleExplosivelyDelicious::DrivingStyleExplosivelyDelicious()
 	m_nbWheels = 4;
 
 	//handling variables
-	m_maxSpeed = 95;
+	m_maxSpeed = 90;
 	m_maxBrakeTorque = 1000.f;
 	m_maxHandBrakeTorque = 100000.f;
 	m_frontWheelsMaxSteer = PxPi*0.06666f*0.8f;

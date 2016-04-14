@@ -68,7 +68,7 @@ public:
 					}
 					else if (car->isAlive())
 					{
-						float damageToDeal = 000.f;
+						float damageToDeal = 200.f;
 						float pointsToGet = car->getHealthRemaining();
 						if (car->takeDamage(damageToDeal)) {
 							m_owner->addDamageDealt(pointsToGet);

@@ -64,6 +64,9 @@ void renderScene(void)
 	int dt = currentDrawCallTime - lastDrawCallTime;
 	if (dt < MIN_DT)
 		return;
+	
+	if (dt > 1000 / 20.f)
+		dt = 1000 / 20.f;
 	//std::cout << "FPS: " << (1000.f / dt) << std::endl;
 	lastDrawCallTime = currentDrawCallTime;
 

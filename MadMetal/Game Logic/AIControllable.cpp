@@ -8,6 +8,9 @@ static const float BACKUP_DAMPING = 0.8;
 static const int NUMBER_OF_WRONG_HITS = 10; 
 static const int REVERSE_TIMER_AMOUNT = 90;
 static const int STUCK_TIMER_AMOUNT = 30;
+static const float MINIMUM_MOVEMENT_PER_FRAME = 1;
+static const float MINIMUM_MOVEMENT_COUNTER = 8;
+static const float NEXT_COLLISION_VOLUME_COUNTER = 15;
 
 AIControllable::AIControllable(ControllableTemplate& aiTemplate)
 : Controllable(aiTemplate)
@@ -15,6 +18,7 @@ AIControllable::AIControllable(ControllableTemplate& aiTemplate)
 	m_needsToBackup = false;
 	m_stuckWallCounter = STUCK_TIMER_AMOUNT;
 	m_stuckRespawnCounterMillis = 0;
+	m_stuckCollisionVolumeCounterMillis = 0;
 	m_movementState = AiStateMovement::INITIAL_STATE;
 	m_counterReverse = REVERSE_TIMER_AMOUNT;
 }
@@ -64,24 +68,49 @@ void AIControllable::processFire(std::vector<Controllable *> *players) {
 
 }
 
+void AIControllable::resetStuckCounters()
+{
+	m_stuckCollisionVolumeCounterMillis = 0;
+	m_stuckRespawnCounterMillis = 0;
+}
+
 void AIControllable::playFrame(double dt)
 {
-	if (abs((m_stuckPosition - m_car->getCar().getRigidDynamicActor()->getGlobalPose().p).magnitude()) < 0.1)
+	//check if ai is stuck in wall
+	if (abs((m_stuckPosition - m_car->getCar().getRigidDynamicActor()->getGlobalPose().p).magnitude()) < 1)
 	{
-		m_stuckRespawnCounterMillis+= dt;
+		m_stuckRespawnCounterMillis += dt;
 		//std::cout << "Car is stuck\n";
 		if (m_stuckRespawnCounterMillis > 8)
 		{
-			std::cout << "AI respawned due to being stuck\n";
+			std::cout << "AI respawned due to being stuck in place\n";
 			m_car->respawn();
 			m_stuckPosition = m_car->getCar().getRigidDynamicActor()->getGlobalPose().p;
+			m_stuckRespawnCounterMillis = 0;
 		}
 	}
-	 else 
-	 {
-		 m_stuckRespawnCounterMillis = 0;
-		 m_stuckPosition = m_car->getCar().getRigidDynamicActor()->getGlobalPose().p;
-	 }
+	else
+	{
+		m_stuckRespawnCounterMillis = 0;
+		m_stuckPosition = m_car->getCar().getRigidDynamicActor()->getGlobalPose().p;
+	}
+
+	//check if ai is stuck getting to the next collision Volume. Counter is reset when next CollisionVolume is reached
+	if (m_collisionVolumeStuckReference == m_car->getCurrentCollisionVolume())
+	{
+		m_stuckCollisionVolumeCounterMillis += dt;
+		if (m_stuckCollisionVolumeCounterMillis >= NEXT_COLLISION_VOLUME_COUNTER)
+		{
+			std::cout << "AI respawned due to not reaching next CollisionVolume\n";
+			m_car->respawn();
+			m_stuckCollisionVolumeCounterMillis = 0;
+		}
+	}
+	else
+	{
+		m_collisionVolumeStuckReference = m_car->getCurrentCollisionVolume();
+		m_stuckCollisionVolumeCounterMillis = 0;
+	}
 	updateMovementState();
 }
 
@@ -185,7 +214,7 @@ void AIControllable::processInputAcceleration(float amount)
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, 0);
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
 	}
-	else if (amount > 0.1)
+	else if (amount > 0)
 	{
 		//std::cout << "Applying acceleration : " << -amount << "\n";
 		m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, 0);
@@ -256,12 +285,14 @@ void AIControllable::checkStuckInWall()
 			m_needsToBackup = true;
 			rotateTowardsNextCollisionVolume();
 			m_movementState = AiStateMovement::MOVE_BACKWARDS;
-			m_stuckWallCounter = STUCK_TIMER_AMOUNT;
 		}
 	}
 	else
 	{
-		m_stuckWallCounter = STUCK_TIMER_AMOUNT;
+		if (m_stuckWallCounter < STUCK_TIMER_AMOUNT)
+		{
+			m_stuckWallCounter = STUCK_TIMER_AMOUNT;
+		}
 	}
 }
 
@@ -348,7 +379,7 @@ void AIControllable::updateMovementState()
 		if (m_counterReverse <= 0)
 		{
 			m_needsToBackup = false;
-			m_stuckWallCounter = STUCK_TIMER_AMOUNT;
+			m_stuckWallCounter = 70;
 			m_counterReverse = REVERSE_TIMER_AMOUNT;
 			m_movementState = AiStateMovement::MOVE_FORWARD;
 		}
