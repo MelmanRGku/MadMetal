@@ -45,6 +45,7 @@ public:
 			{
 				PxVec3 newVelocity = distanceToTarget.getNormalized()  * m_speed;
 				static_cast<PxRigidDynamic *>(&m_physicable->getActor())->setLinearVelocity(newVelocity);
+				m_speed += dt * 6;
 			}
 			else {
 				setHasToBeDeleted(true);
