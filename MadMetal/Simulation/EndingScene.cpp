@@ -52,7 +52,7 @@ EndingScene::EndingScene(std::vector<ControllableTemplate *> playerTemplates, Au
 		Animatable *a = new Animatable();
 		Audioable *au = new Audioable(audioHandle);
 		Renderable3D *r = new Renderable3D(NULL);
-		car1Manager = new EndingScreenCarInfoManager(1, au, p, a, r, NULL, car1, m_players.at(0)->getPlayerNumber(), m_players.at(0)->getFinalScore(), m_players.at(0)->getFinalPosition());
+		car1Manager = new EndingScreenCarInfoManager(1, au, p, a, r, NULL, car1, m_players.at(0)->getPlayerNumber());
 		m_world->addGameObject(car1Manager);
 	}
 
@@ -81,7 +81,7 @@ EndingScene::EndingScene(std::vector<ControllableTemplate *> playerTemplates, Au
 			Animatable *a = new Animatable();
 			Audioable *au = new Audioable(audioHandle);
 			Renderable3D *r = new Renderable3D(NULL);
-			car2Manager = new EndingScreenCarInfoManager(1, au, p, a, r, NULL, car2, m_players.at(1)->getPlayerNumber(), m_players.at(1)->getFinalScore(), m_players.at(1)->getFinalPosition());
+			car2Manager = new EndingScreenCarInfoManager(1, au, p, a, r, NULL, car2, m_players.at(1)->getPlayerNumber());
 			m_world->addGameObject(car2Manager);
 		}
 	}
@@ -111,7 +111,7 @@ EndingScene::EndingScene(std::vector<ControllableTemplate *> playerTemplates, Au
 			Animatable *a = new Animatable();
 			Audioable *au = new Audioable(audioHandle);
 			Renderable3D *r = new Renderable3D(NULL);
-			car3Manager = new EndingScreenCarInfoManager(1, au, p, a, r, NULL, car3, m_players.at(2)->getPlayerNumber(), m_players.at(2)->getFinalScore(), m_players.at(2)->getFinalPosition());
+			car3Manager = new EndingScreenCarInfoManager(1, au, p, a, r, NULL, car3, m_players.at(2)->getPlayerNumber());
 			m_world->addGameObject(car3Manager);
 		}
 	}
@@ -205,11 +205,33 @@ void EndingScene::setupSceneLights() {
 	{
 		Animatable *anable = new Animatable();
 		Light *light = new Light(1, anable);
-		anable->setPosition(glm::vec3(100, 100, 100));
-		light->colour = glm::vec3(1, 1, 1);
-		light->constant = .8f;
-		light->linear = 0;
-		light->quad = 0;
+		anable->setPosition(glm::vec3(0, -1.5, 1.70));
+		light->colour = glm::vec3(0.8549, 0.6471, 0.1255);
+		light->constant = 0.0f;
+		light->linear = 0.0f;
+		light->quad = 0.3f;
+		light->cutoff = 500.0;
+		m_world->addLightObject(light);
+	}
+	{
+		Animatable *anable = new Animatable();
+		Light *light = new Light(1, anable);
+		anable->setPosition(glm::vec3(-7.6, -4.0, 3.9));
+		light->colour = glm::vec3(0.2229, 0.3229, 0.80);
+		light->constant = 0.0f;
+		light->linear = 0.0f;
+		light->quad = 0.3f;
+		light->cutoff = 500.0;
+		m_world->addLightObject(light);
+	}
+	{
+		Animatable *anable = new Animatable();
+		Light *light = new Light(1, anable);
+		anable->setPosition(glm::vec3(7.7, -4.0, 4.0));
+		light->colour = glm::vec3(0.9015, 0.45, 0.2);
+		light->constant = 0.0f;
+		light->linear = 0.0f;
+		light->quad = 0.3f;
 		light->cutoff = 500.0;
 		m_world->addLightObject(light);
 	}

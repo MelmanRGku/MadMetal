@@ -372,7 +372,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 		//check for lap status
 		for (int i = 0; i < m_players.size(); i++)
 		{
-			if (m_players[i]->getCar()->getLap() == m_numLapsVictory)
+			if (m_players[i]->getCar()->getLap() == 0)
 			{
 				if (!m_raceFinishedCountdownSeconds)
 				{
