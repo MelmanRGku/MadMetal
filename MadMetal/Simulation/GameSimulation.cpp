@@ -21,7 +21,7 @@
 
 
 #define NUM_OF_PLAYERS 12
-#define NUM_LAPS_FOR_VICTORY 1
+#define NUM_LAPS_FOR_VICTORY 3
 #define RACE_FINISH_DELAY 30
 
 using namespace std;
@@ -372,7 +372,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 		//check for lap status
 		for (int i = 0; i < m_players.size(); i++)
 		{
-			if (m_players[i]->getCar()->getLap() == 0)
+			if (m_players[i]->getCar()->getLap() == NUM_LAPS_FOR_VICTORY)
 			{
 				if (!m_raceFinishedCountdownSeconds)
 				{
@@ -653,6 +653,8 @@ void GameSimulation::setupBasicGameWorldObjects() {
 	setupDeathPit();
 	m_gameFactory->makeObject(GameFactory::OBJECT_SKY_BOX, NULL, NULL, NULL);
 	m_gameFactory->makeObject(GameFactory::OBJECT_EASTER_EGG_COIN, &PxTransform(PxVec3(-386, 38, -114)), NULL, NULL);
+	m_gameFactory->makeObject(GameFactory::OBJECT_EASTER_EGG_DUCK, &PxTransform(PxVec3(-854, -33.5, 1405)), NULL, NULL);
+	m_gameFactory->makeObject(GameFactory::OBJECT_EASTER_EGG_DUCK, &PxTransform(PxVec3(-774, -43.5, 1713)), NULL, NULL)->updateRotation(glm::vec3(0, 90, 0));
 }
 
 float GameSimulation::getFinishLineBonus(int position)

@@ -1280,7 +1280,7 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		model = static_cast<Model3D *>(m_renderFactory->makeRenderableObject(RenderFactory::RENDERABLE_OBJECT_EASTER_EGG_DUCK));
 		Renderable3D *renderable = new Renderable3D(model, true, true);
 		Animatable *animatable = new Animatable();
-		animatable->setScale(glm::vec3(1, 3, 1));
+		animatable->setScale(glm::vec3(8, 12, 12));
 		animatable->setPosition(glm::vec3(pos->p.x, pos->p.y, pos->p.z));
 		Audioable *audioable = new Audioable(m_audioFactory->getAudioHandle());
 
@@ -1288,6 +1288,13 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 
 		Object3D *duck = new Object3D(objectId, audioable, physicable, animatable, renderable, NULL);
 
+		ObjectPositionUpdater *upd1 = new ObjectPositionUpdater(duck, glm::vec3(0, 2, 0), 1.1f);
+		ObjectPositionUpdater *upd2 = new ObjectPositionUpdater(duck, glm::vec3(0, -2, 0), 1.1f);
+		ObjectUpdaterSequence *seq = new ObjectUpdaterSequence(ObjectUpdaterSequence::TYPE_INFINITE);
+		seq->addObjectUpdater(upd1);
+		seq->addObjectUpdater(upd2);
+
+		m_world.addObjectUpdater(seq);
 		m_world.addGameObject(duck);
 
 		return duck;
