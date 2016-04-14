@@ -12,7 +12,7 @@ private:
 	float fontSize;
 	std::string name, pos, score;
 public:
-	EndingScreenCarInfoManager(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Animation *aniable, Object3D *car, int playerNumber, int score, int pos);
+	EndingScreenCarInfoManager(long id, Audioable *aable, Physicable *pable, Animatable *anable, Renderable3D *rable, Animation *aniable, Object3D *car, int playerNumber);
 	~EndingScreenCarInfoManager();
 	virtual bool draw(Renderer *renderer, Renderer::ShaderType type, int passNumber);
 };
