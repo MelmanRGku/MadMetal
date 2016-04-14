@@ -15,8 +15,8 @@ void PlayerControllable::setCar(Car * toAdd)
 
 GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
 
-#define FIRST_PLACE_SPEED_PENALTY 5
-#define SECOND_PLACE_SPEED_PENALTY 2.5
+#define FIRST_PLACE_SPEED_PENALTY 3
+#define SECOND_PLACE_SPEED_PENALTY 1.5
 
 
 void PlayerControllable::assignPositionPenalty()
