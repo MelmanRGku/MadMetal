@@ -10,7 +10,7 @@ class PlayerControllable : public Controllable
 {
 private:
 	GamePad * m_gamePad;
-	
+	float m_positionPenalty;
 	Camera* m_camera;
 	
 
@@ -20,6 +20,7 @@ public:
 	{
 		m_gamePad = controllableTemplate.getGamePad();
 		m_camera = new Camera();
+		m_positionPenalty = 0;
 	}
 
 	PlayerControllable::~PlayerControllable()
@@ -33,5 +34,6 @@ public:
 	void setCar(Car* toAdd);
 	GamePad * getGamePad();
 	Camera * getCamera() { return m_camera; }
+	void assignPositionPenalty();
 	
 };

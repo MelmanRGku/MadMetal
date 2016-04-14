@@ -15,9 +15,29 @@ void PlayerControllable::setCar(Car * toAdd)
 
 GamePad * PlayerControllable::getGamePad(){ return m_gamePad; }
 
+#define FIRST_PLACE_SPEED_PENALTY 5
+#define SECOND_PLACE_SPEED_PENALTY 2.5
+
+
+void PlayerControllable::assignPositionPenalty()
+{
+	switch (m_car->getPositionInRace())
+	{
+	case(1) :
+		m_positionPenalty = FIRST_PLACE_SPEED_PENALTY;
+		break;
+	case(2) :
+		m_positionPenalty = SECOND_PLACE_SPEED_PENALTY;
+		break;
+	default:
+		m_positionPenalty = 0;
+	}
+}
+
 void PlayerControllable::playFrame(double dt)
 {
 	if (m_car->isAlive()) m_camera->update(dt);
+	assignPositionPenalty();
 
 	if (!m_controlsPaused) {
 			
@@ -124,7 +144,7 @@ void PlayerControllable::playFrame(double dt)
 								m_car->getCar().mDriveDynData.setCurrentGear(PxVehicleGearsData::eFIRST);
 							}
 							m_car->getCar().mDriveDynData.setAnalogInput(PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL,
-								m_car->getDrivingStyle().getMaxSpeed() > m_car->getCar().computeForwardSpeed() ? m_gamePad->getRightTrigger() : 0);
+								(m_car->getDrivingStyle().getMaxSpeed() - m_positionPenalty) > m_car->getCar().computeForwardSpeed() ? m_gamePad->getRightTrigger() : 0);
 						}
 					}
 
