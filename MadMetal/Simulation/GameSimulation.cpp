@@ -372,7 +372,7 @@ bool GameSimulation::simulateScene(double dt, SceneMessage &message)
 		//check for lap status
 		for (int i = 0; i < m_players.size(); i++)
 		{
-			if (m_players[i]->getCar()->getLap() == 0)
+			if (m_players[i]->getCar()->getLap() == m_numLapsVictory)
 			{
 				if (!m_raceFinishedCountdownSeconds)
 				{
@@ -839,7 +839,7 @@ void GameSimulation::setupSceneLights() {
 	{
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
-		anable->setPosition(glm::vec3(-975, -10, 1372));
+		anable->setPosition(glm::vec3(-975, -10, 1355));
 		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
 		firstLight->constant = 0.02;
 		firstLight->linear = 0.05;
@@ -847,33 +847,44 @@ void GameSimulation::setupSceneLights() {
 		firstLight->cutoff = 50.0;
 		m_world->addLightObject(firstLight);
 	}
-
-	//train path 1 2nd light
-	{
+		/*
+				Animatable *anable = new Animatable();
+				Light *firstLight = new Light(1, anable);
+				anable->setPosition(glm::vec3(-975, -10, 1372));
+				firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+				firstLight->constant = 0.02;
+				firstLight->linear = 0.05;
+				firstLight->quad = 0;
+				firstLight->cutoff = 50.0;
+				m_world->addLightObject(firstLight);
+				*/
+		/*
+		//train path 1 2nd light
+		{
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
 		anable->setPosition(glm::vec3(-975, -10, 1243));
 		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
 		firstLight->constant = 0.02;
-		firstLight->linear = 0.05;
+		firstLight->linear = 0.25;
 		firstLight->quad = 0;
 		firstLight->cutoff = 50.0;
 		m_world->addLightObject(firstLight);
-	}
-
-	//train path 1 3rd light
-	{
-		Animatable *anable = new Animatable();
-		Light *firstLight = new Light(1, anable);
-		anable->setPosition(glm::vec3(-975, -10, 1115));
-		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
-		firstLight->constant = 0.02;
-		firstLight->linear = 0.05;
-		firstLight->quad = 0;
-		firstLight->cutoff = 50.0;
-		m_world->addLightObject(firstLight);
-	}
-
+		}
+		*/
+		//train path 1 3rd light
+		{
+			Animatable *anable = new Animatable();
+			Light *firstLight = new Light(1, anable);
+			anable->setPosition(glm::vec3(-975, -10, 1100));
+			firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
+			firstLight->constant = 0.02;
+			firstLight->linear = 0.05;
+			firstLight->quad = 0;
+			firstLight->cutoff = 50.0;
+			m_world->addLightObject(firstLight);
+		}
+	/*
 	//train path 1 4th light
 	{
 		Animatable *anable = new Animatable();
@@ -881,17 +892,17 @@ void GameSimulation::setupSceneLights() {
 		anable->setPosition(glm::vec3(-975, -10, 988));
 		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
 		firstLight->constant = 0.02;
-		firstLight->linear = 0.05;
+		firstLight->linear = 0.25;
 		firstLight->quad = 0;
 		firstLight->cutoff = 50.0;
-		m_world->addLightObject(firstLight);
+		//m_world->addLightObject(firstLight);
 	}
-
+	*/
 	//train path 1 5th light
 	{
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
-		anable->setPosition(glm::vec3(-975, -10, 859));
+		anable->setPosition(glm::vec3(-975, -10, 839));
 		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
 		firstLight->constant = 0.02;
 		firstLight->linear = 0.05;
@@ -912,7 +923,7 @@ void GameSimulation::setupSceneLights() {
 		firstLight->cutoff = 50.0;
 		m_world->addLightObject(firstLight);
 	}
-
+	/*
 	//path in between two train paths
 	{
 		Animatable *anable = new Animatable();
@@ -925,12 +936,12 @@ void GameSimulation::setupSceneLights() {
 		firstLight->cutoff = 50.0;
 		m_world->addLightObject(firstLight);
 	}
-
+	*/
 	//train path 2 1st light
 	{
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
-		anable->setPosition(glm::vec3(-749, -10, 694));
+		anable->setPosition(glm::vec3(-750, -10, 670));
 		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
 		firstLight->constant = 0.02;
 		firstLight->linear = 0.05;
@@ -939,6 +950,9 @@ void GameSimulation::setupSceneLights() {
 		m_world->addLightObject(firstLight);
 	}
 
+
+
+	/*
 	//train path 2 2nd light
 	{
 		Animatable *anable = new Animatable();
@@ -951,12 +965,12 @@ void GameSimulation::setupSceneLights() {
 		firstLight->cutoff = 50.0;
 		m_world->addLightObject(firstLight);
 	}
-
+	*/
 	//train path 2 3rd light
 	{
 		Animatable *anable = new Animatable();
 		Light *firstLight = new Light(1, anable);
-		anable->setPosition(glm::vec3(-747, -10, 484));
+		anable->setPosition(glm::vec3(-750, -10, 457));
 		firstLight->colour = glm::vec3(0.57, 0.93, 0.93);
 		firstLight->constant = 0.02;
 		firstLight->linear = 0.05;
@@ -964,7 +978,7 @@ void GameSimulation::setupSceneLights() {
 		firstLight->cutoff = 50.0;
 		m_world->addLightObject(firstLight);
 	}
-
+	/*
 	//train path 2 4th light
 	{
 		Animatable *anable = new Animatable();
@@ -977,7 +991,7 @@ void GameSimulation::setupSceneLights() {
 		firstLight->cutoff = 50.0;
 		m_world->addLightObject(firstLight);
 	}
-
+	*/
 	////train path 2 5th light
 	//{
 	//	Animatable *anable = new Animatable();

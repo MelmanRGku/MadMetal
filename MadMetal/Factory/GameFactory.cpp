@@ -738,10 +738,10 @@ TestObject * GameFactory::makeObject(Objects objectToMake, PxTransform *pos, PxG
 		DynamicLight* light = static_cast<DynamicLight *>(makeObject(GameFactory::OBJECT_DYNAMIC_LIGHT, pos, NULL, trainCar));
 		light->colour = glm::vec3(0.5, 0.3, 0.1);
 		light->constant = 0.0;
-		light->linear = 0.08;
-		light->quad = 0.0;
-		light->cutoff = 20.0f;
-		light->setInitialPosition(glm::vec3(0, 1, 6.5));
+		light->linear = 0.0001;
+		light->quad = 0.01;
+		light->cutoff = 50.0f;
+		light->setInitialPosition(glm::vec3(0, 0.3, 7.5));
 
 		m_world.addGameObject(trainCar);
 		m_scene.addActor(*trainCarTriggerVolume);
